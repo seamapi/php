@@ -15,6 +15,7 @@ final class Seam
       'headers'  => ['Authorization' => 'Bearer ' . $this->api_key],
     ]);
     $this->devices = new Devices($this);
+    $this->workspaces = new Workspaces($this);
   }
 }
 
@@ -29,5 +30,25 @@ final class Devices
   {
     $res = $this->seam->client->request("GET", "devices/list");
     return json_decode($res->getBody())->devices;
+  }
+}
+
+final class Workspaces
+{
+  public function __construct($seam)
+  {
+    $this->seam = $seam;
+  }
+
+  public function get()
+  {
+    $res = $this->seam->client->request("GET", "workspaces/get");
+    return json_decode($res->getBody())->workspace;
+  }
+
+  public function list()
+  {
+    $res = $this->seam->client->request("GET", "workspaces/list");
+    return json_decode($res->getBody())->workspaces;
   }
 }

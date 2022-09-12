@@ -9,7 +9,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Seam\\": "src/"
+      "Seam\\": "src/",
+      "Tests\\": "tests/"
     },
     "files": [
       "src/Seam.php"
