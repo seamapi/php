@@ -55,7 +55,7 @@ final class Workspaces
   public function reset_sandbox()
   {
     $res = $this->seam->client->request("POST", "workspaces/reset_sandbox");
-    return json_decode($res->getBody())->workspace;
+    return json_decode($res->getBody());
   }
 
   public function _internal_load_august_factory()
