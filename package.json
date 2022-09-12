@@ -1,0 +1,10 @@
+{
+  "name": "sdk1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@prettier/plugin-php": "^0.19.0",
+    "prettier": "^2.7.1"
+  }
+}

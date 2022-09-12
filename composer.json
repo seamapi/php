@@ -1,0 +1,27 @@
+{
+  "name": "seve/sdk1",
+  "type": "library",
+  "require": {
+    "phpunit/phpunit": "^9.5",
+    "squizlabs/php_codesniffer": "^3.7",
+    "pear/http_request2": "^2.5",
+    "guzzlehttp/guzzle": "^7.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Seam\\": "src/"
+    },
+    "files": [
+      "src/Seam.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "seveibar",
+      "email": "seveibar@gmail.com"
+    }
+  ],
+  "require-dev": {
+    "psr/http-client": "^1.0"
+  }
+}
