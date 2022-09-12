@@ -8,10 +8,8 @@ final class Fixture
 {
   public static function getTestServer()
   {
-    $client = new Seam(getenv('SEAM_API_KEY'));
-
-    // TODO clear sandbox
-
-    return $client;
+    $seam = new Seam(getenv('SEAM_API_KEY'));
+    $seam->workspaces->reset_sandbox();
+    return $seam;
   }
 }

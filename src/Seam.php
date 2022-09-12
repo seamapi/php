@@ -51,4 +51,24 @@ final class Workspaces
     $res = $this->seam->client->request("GET", "workspaces/list");
     return json_decode($res->getBody())->workspaces;
   }
+
+  public function reset_sandbox()
+  {
+    $res = $this->seam->client->request("POST", "workspaces/reset_sandbox");
+    return json_decode($res->getBody())->workspace;
+  }
+
+  public function _internal_load_august_factory()
+  {
+    $res = $this->seam->client->request("POST", "internal/scenarios/factories/load", [
+      'json' => [
+        'factory_name' => 'august',
+        'input' => ['num' => 1],
+        'sync' => true
+      ],
+    ]);
+
+    // sleep for 0.2 seconds
+    usleep(200000);
+  }
 }
