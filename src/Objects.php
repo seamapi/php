@@ -244,3 +244,29 @@ class ActionAttempt
   ) {
   }
 }
+
+class ConnectWebview
+{
+  public static function from_json(mixed $json): ConnectWebview | null
+  {
+    if (!$json) {
+      return null;
+    }
+    return new ConnectWebview(
+      connect_webview_id: $json->connect_webview_id ?? null,
+      workspace_id: $json->workspace_id ?? null,
+      created_at: $json->created_at ?? null,
+      status: $json->status ?? null,
+      error: SeamError::from_json($json->error ?? null),
+    );
+  }
+
+  public function __construct(
+    public string $connect_webview_id,
+    public string $workspace_id,
+    public string $status,
+    public string $created_at,
+    public SeamError $error
+  ) {
+  }
+}
