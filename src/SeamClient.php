@@ -23,6 +23,24 @@ final class SeamClient
     $this->devices = new DevicesClient($this);
     $this->workspaces = new WorkspacesClient($this);
   }
+
+  public function request($method, $path, $json = null, $query = null, $inner_object = null)
+  {
+    $options = [];
+    if ($json) {
+      $options['json'] = $json;
+    }
+    if ($query) {
+      $options['query'] = $query;
+    }
+
+    $response = $this->client->request($method, $path, $options);
+    $res_json = json_decode($response->getBody());
+    if ($inner_object) {
+      return $res_json->$inner_object;
+    }
+    return $res_json;
+  }
 }
 
 final class DevicesClient
@@ -31,6 +49,20 @@ final class DevicesClient
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
+  }
+
+  /**
+   * Get Device
+   */
+  public function get(string $device_id): Device | null
+  {
+    $device = Device::from_json($this->seam->request(
+      "GET",
+      "devices/get",
+      query: ['device_id' => $device_id],
+      inner_object: 'device'
+    ));
+    return $device;
   }
 
   /**
@@ -81,5 +113,24 @@ final class WorkspacesClient
 
     // sleep for 0.2 seconds
     usleep(200000);
+  }
+}
+
+final class ActionAttemptsClient
+{
+  private SeamClient $seam;
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+  }
+
+  /**
+   * List Action Attempts
+   * @return ActionAttempt[]
+   */
+  public function list(): array
+  {
+    $res = $this->seam->client->request("GET", "action_attempts/list");
+    return json_decode($res->getBody())->devices;
   }
 }

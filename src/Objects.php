@@ -2,56 +2,116 @@
 
 namespace Seam;
 
-class SeamError {
+class SeamError
+{
+  public static function from_json(mixed $json): SeamError | null
+  {
+    return null;
+  }
+
   public string $error_type;
   public string $message;
 }
 
-class DeviceProperties {
-  public bool $online;
-  public bool $locked;
-  public bool $door_open;
-  public float $battery_level;
+class DeviceProperties
+{
+  public static function from_json(mixed $json): DeviceProperties | null
+  {
+    if (!$json) {
+      return null;
+    }
+    return new DeviceProperties(
+      online: $json->online ?? null,
+      locked: $json->locked ?? null,
+      door_open: $json->door_open ?? null,
+      battery_level: $json->battery_level ?? null,
+      schlage_metadata: $json->schlage_metadata ?? null,
+      august_metadata: $json->august_metadata ?? null,
+      smartthings_metadata: $json->smartthings_metadata ?? null
+    );
+  }
 
-  public mixed $august_metadata;
-  public mixed $schlage_metadata;
-  public mixed $smartthings_metadata;
+  public function __construct(
+    public bool $online,
+    public bool $locked,
+    public bool $door_open,
+    public float $battery_level,
+
+    public mixed $august_metadata,
+    public mixed $schlage_metadata,
+    public mixed $smartthings_metadata
+  ) {
+  }
 }
 
-class Device {
-  public string $device_id;
-  public string $workspace_id;
+class Device
+{
+  public static function from_json(mixed $json): Device | null
+  {
+    if (!$json) {
+      return null;
+    }
+    return new Device(
+      device_id: $json->device_id,
+      workspace_id: $json->workspace_id,
+      device_type: $json->device_type,
+      // device_name: $json->device_name,
+      created_at: $json->created_at,
+      location: $json->location,
+      properties: DeviceProperties::from_json($json->properties),
+      errors: array_map(fn ($e) => SeamError::from_json($e), $json->device_errors ?? []),
+    );
+  }
 
-  public string $device_type;
+  public function __construct(
+    public string $device_id,
+    public string $workspace_id,
+    // public string $device_name,
 
-  public DeviceProperties $properties;
-  public mixed $location;
-  public string $created_at;
+    public string $device_type,
 
-  /* @var SeamError[] */
-  public array $errors;
+    public DeviceProperties $properties,
+    public mixed $location,
+    public string $created_at,
+
+    /* @var SeamError[] */
+    public array $errors
+  ) {
+  }
+
+  public function to_json(): mixed
+  {
+    return json_encode([
+      'device_id' => $this->device_id
+      // TODO more
+    ]);
+  }
 }
 
-class Workspace {
+class Workspace
+{
   public string $workspace_id;
   public string $name;
   public bool $is_sandbox;
   public string $created_at;
 }
 
-class UserIdentifier {
+class UserIdentifier
+{
   public string $email;
   public string $phone;
 }
 
-class ConnectedAccount {
+class ConnectedAccount
+{
   public string $connected_account_id;
   public string $workspace_id;
   public UserIdentifier $user_identifier;
   public string $created_at;
 }
 
-class AccessCode {
+class AccessCode
+{
   public string $access_code_id;
   public string $workspace_id;
 
@@ -78,7 +138,8 @@ class AccessCode {
   public string $created_at;
 }
 
-class ActionAttempt {
+class ActionAttempt
+{
   public string $action_attempt_id;
   public string $workspace_id;
 
