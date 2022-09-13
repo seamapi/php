@@ -11,12 +11,15 @@ Check out [the documentation](https://docs.seam.co) or some examples:
 ```php
 $seam = new Seam\SeamClient('YOUR_API_KEY');
 
-$seam->devices->list();
-// returns array of devices
+$devices = $seam->devices->list();
 
+print($devices[0]);
+// returns array of Device
 ```
 
 ## Installation
+
+TODO this needs to be packaged
 
 ## Development Setup
 
@@ -25,7 +28,6 @@ $seam->devices->list();
 3. Run `composer exec phpunit tests`
 
 > To run a specific test file, do `composer exec phpunit tests/MyTest.php`
-
 
 ### Running Tests
 

@@ -71,8 +71,10 @@ final class DevicesClient
    */
   public function list(): array
   {
-    $res = $this->seam->client->request("GET", "devices/list");
-    return json_decode($res->getBody())->devices;
+    return array_map(
+      fn ($d) => Device::from_json($d),
+      $this->seam->request("GET", "devices/list", inner_object: 'devices')
+    );
   }
 }
 

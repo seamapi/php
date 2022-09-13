@@ -23,6 +23,7 @@ class DeviceProperties
     return new DeviceProperties(
       online: $json->online ?? null,
       locked: $json->locked ?? null,
+      name: $json->name ?? null,
       door_open: $json->door_open ?? null,
       battery_level: $json->battery_level ?? null,
       schlage_metadata: $json->schlage_metadata ?? null,
@@ -36,6 +37,7 @@ class DeviceProperties
     public bool $locked,
     public bool $door_open,
     public float $battery_level,
+    public string $name,
 
     public mixed $august_metadata,
     public mixed $schlage_metadata,
@@ -54,6 +56,7 @@ class Device
     return new Device(
       device_id: $json->device_id,
       workspace_id: $json->workspace_id,
+      connected_account_id: $json->connected_account_id,
       device_type: $json->device_type,
       // device_name: $json->device_name,
       created_at: $json->created_at,
@@ -66,8 +69,7 @@ class Device
   public function __construct(
     public string $device_id,
     public string $workspace_id,
-    // public string $device_name,
-
+    public string $connected_account_id,
     public string $device_type,
 
     public DeviceProperties $properties,
@@ -81,10 +83,7 @@ class Device
 
   public function to_json(): mixed
   {
-    return json_encode([
-      'device_id' => $this->device_id
-      // TODO more
-    ]);
+    return json_encode($this);
   }
 }
 

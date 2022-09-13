@@ -15,9 +15,8 @@ final class TestDevices extends TestCase
     $devices = $seam->devices->list();
     $this->assertIsArray($devices);
 
-    $device_id = $devices[0]->device_id;
-
-    $device = $seam->devices->get(device_id: $device_id);
-    print(json_encode($device));
+    // $device_id = $devices[0]->device_id;
+    // $device = $seam->devices->get(device_id: $device_id);
+    // print(json_encode($device));
   }
 }
