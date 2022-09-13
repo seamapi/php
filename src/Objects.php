@@ -255,6 +255,7 @@ class ConnectWebview
     return new ConnectWebview(
       connect_webview_id: $json->connect_webview_id,
       workspace_id: $json->workspace_id,
+      url: $json->url,
       created_at: $json->created_at,
       status: $json->status,
       error: SeamError::from_json($json->error ?? null),
@@ -264,6 +265,9 @@ class ConnectWebview
   public function __construct(
     public string $connect_webview_id,
     public string $workspace_id,
+    public string $url,
+
+    /* Can be "pending", "authorized" or "error" */
     public string $status,
     public string $created_at,
     public SeamError | null $error
