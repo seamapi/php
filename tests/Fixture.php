@@ -2,14 +2,17 @@
 
 namespace Tests;
 
-use Seam\Seam;
+use Seam\SeamClient;
 
 final class Fixture
 {
-  public static function getTestServer()
+  public static function getTestServer($load_devices = false)
   {
-    $seam = new Seam(getenv('SEAM_API_KEY'));
+    $seam = new SeamClient(getenv('SEAM_API_KEY'));
     $seam->workspaces->reset_sandbox();
+    if ($load_devices) {
+      $seam->workspaces->_internal_load_august_factory();
+    }
     return $seam;
   }
 }

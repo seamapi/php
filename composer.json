@@ -13,7 +13,8 @@
       "Tests\\": "tests/"
     },
     "files": [
-      "src/Seam.php"
+      "src/SeamClient.php",
+      "src/Objects.php"
     ]
   },
   "authors": [

@@ -2,45 +2,56 @@
 
 namespace Seam;
 
-use GuzzleHttp\Client;
+use Seam\Workspace;
+use Seam\Device;
 
-final class Seam
+use GuzzleHttp\Client as HTTPClient;
+
+final class SeamClient
 {
+  public DevicesClient $devices;
+  public WorkspacesClient $workspaces;
+
   public function __construct($api_key, $endpoint = 'https://connect.getseam.com')
   {
     $this->api_key = $api_key;
-    $this->client = new Client([
+    $this->client = new HTTPClient([
       'base_uri' => $endpoint,
       'timeout'  => 10.0,
       'headers'  => ['Authorization' => 'Bearer ' . $this->api_key],
     ]);
-    $this->devices = new Devices($this);
-    $this->workspaces = new Workspaces($this);
+    $this->devices = new DevicesClient($this);
+    $this->workspaces = new WorkspacesClient($this);
   }
 }
 
-final class Devices
+final class DevicesClient
 {
-  public function __construct($seam)
+  private SeamClient $seam;
+  public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
   }
 
-  public function list()
+  /**
+   * List devices
+   * @return Device[]
+   */
+  public function list(): array
   {
     $res = $this->seam->client->request("GET", "devices/list");
     return json_decode($res->getBody())->devices;
   }
 }
 
-final class Workspaces
+final class WorkspacesClient
 {
   public function __construct($seam)
   {
     $this->seam = $seam;
   }
 
-  public function get()
+  public function get(): Workspace
   {
     $res = $this->seam->client->request("GET", "workspaces/get");
     return json_decode($res->getBody())->workspace;
@@ -62,7 +73,7 @@ final class Workspaces
   {
     $res = $this->seam->client->request("POST", "internal/scenarios/factories/load", [
       'json' => [
-        'factory_name' => 'august',
+        'factory_name' => 'create_august_devices',
         'input' => ['num' => 1],
         'sync' => true
       ],
