@@ -17,8 +17,11 @@ final class SeamClient
     $this->api_key = $api_key;
     $this->client = new HTTPClient([
       'base_uri' => $endpoint,
-      'timeout'  => 10.0,
-      'headers'  => ['Authorization' => 'Bearer ' . $this->api_key],
+      'timeout'  => 20.0,
+      'headers'  => [
+        'Authorization' => 'Bearer ' . $this->api_key,
+        'User-Agent' => 'Seam PHP Client 0.0.1'
+      ],
     ]);
     $this->devices = new DevicesClient($this);
     $this->action_attempts = new ActionAttemptsClient($this);

@@ -125,8 +125,8 @@ class UserIdentifier
   }
 
   public function __construct(
-    public string $email,
-    public string $phone
+    public string | null $email,
+    public string | null $phone
   ) {
   }
 }
@@ -139,17 +139,17 @@ class ConnectedAccount
       return null;
     }
     return new ConnectedAccount(
-      connected_account_id: $json->connected_account_id ?? null,
-      workspace_id: $json->workspace_id ?? null,
+      connected_account_id: $json->connected_account_id,
+      account_type: $json->account_type,
       user_identifier: UserIdentifier::from_json($json->user_identifier ?? null),
-      created_at: $json->created_at ?? null,
+      created_at: $json->created_at,
       errors: array_map(fn ($e) => SeamError::from_json($e), $json->connected_account_errors ?? []),
     );
   }
 
   public function __construct(
     public string $connected_account_id,
-    public string $workspace_id,
+    public string $account_type,
     public UserIdentifier $user_identifier,
     public array $errors,
     public string $created_at
@@ -253,10 +253,10 @@ class ConnectWebview
       return null;
     }
     return new ConnectWebview(
-      connect_webview_id: $json->connect_webview_id ?? null,
-      workspace_id: $json->workspace_id ?? null,
-      created_at: $json->created_at ?? null,
-      status: $json->status ?? null,
+      connect_webview_id: $json->connect_webview_id,
+      workspace_id: $json->workspace_id,
+      created_at: $json->created_at,
+      status: $json->status,
       error: SeamError::from_json($json->error ?? null),
     );
   }
@@ -266,7 +266,7 @@ class ConnectWebview
     public string $workspace_id,
     public string $status,
     public string $created_at,
-    public SeamError $error
+    public SeamError | null $error
   ) {
   }
 }
