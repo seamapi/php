@@ -89,67 +89,158 @@ class Device
 
 class Workspace
 {
-  public string $workspace_id;
-  public string $name;
-  public bool $is_sandbox;
-  public string $created_at;
+  public static function from_json(mixed $json): Workspace | null
+  {
+    if (!$json) {
+      return null;
+    }
+    return new Workspace(
+      workspace_id: $json->workspace_id ?? null,
+      is_sandbox: $json->is_sandbox ?? null,
+      name: $json->name ?? null,
+      created_at: $json->created_at ?? null,
+    );
+  }
+
+  public function __construct(
+    public string $workspace_id,
+    public string $name,
+    public bool $is_sandbox,
+    public string $created_at
+  ) {
+  }
 }
 
 class UserIdentifier
 {
-  public string $email;
-  public string $phone;
+  public static function from_json(mixed $json): UserIdentifier | null
+  {
+    if (!$json) {
+      return null;
+    }
+    return new UserIdentifier(
+      email: $json->email ?? null,
+      phone: $json->phone ?? null
+    );
+  }
+
+  public function __construct(
+    public string $email,
+    public string $phone
+  ) {
+  }
 }
 
 class ConnectedAccount
 {
-  public string $connected_account_id;
-  public string $workspace_id;
-  public UserIdentifier $user_identifier;
-  public string $created_at;
+  public static function from_json(mixed $json): ConnectedAccount | null
+  {
+    if (!$json) {
+      return null;
+    }
+    return new ConnectedAccount(
+      connected_account_id: $json->connected_account_id ?? null,
+      workspace_id: $json->workspace_id ?? null,
+      user_identifier: UserIdentifier::from_json($json->user_identifier ?? null),
+      created_at: $json->created_at ?? null,
+      errors: array_map(fn ($e) => SeamError::from_json($e), $json->connected_account_errors ?? []),
+    );
+  }
+
+  public function __construct(
+    public string $connected_account_id,
+    public string $workspace_id,
+    public UserIdentifier $user_identifier,
+    public array $errors,
+    public string $created_at
+  ) {
+  }
 }
 
 class AccessCode
 {
-  public string $access_code_id;
-  public string $workspace_id;
+  public static function from_json(mixed $json): AccessCode | null
+  {
+    if (!$json) {
+      return null;
+    }
+    return new AccessCode(
+      access_code_id: $json->access_code_id ?? null,
+      workspace_id: $json->workspace_id ?? null,
+      created_at: $json->created_at ?? null,
+      type: $json->type ?? null,
+      code: $json->code ?? null,
+      status: $json->status ?? null,
+      starts_at: $json->starts_at ?? null,
+      ends_at: $json->starts_at ?? null,
+      errors: array_map(fn ($e) => SeamError::from_json($e), $json->access_code_errors ?? []),
+    );
+  }
 
-  /* "time_bound" or "ongoing" */
-  public string $type;
+  public function __construct(
+    public string $access_code_id,
+    public string $workspace_id,
 
-  /*
+    /* "time_bound" or "ongoing" */
+    public string $type,
+
+    /*
    * The status of an access code on the device.
    * unset -> setting -> set -> unset OR "unknown" if the account is disconnected
    */
-  public string $status;
+    public string $status,
 
-  /* In ISO8601 timestamp format, only for time_bound codes */
-  public string $starts_at;
+    /* In ISO8601 timestamp format, only for time_bound codes */
+    public string $starts_at,
 
-  /* In ISO8601 timestamp format, only for time_bound codes */
-  public string $ends_at;
+    /* In ISO8601 timestamp format, only for time_bound codes */
+    public string $ends_at,
 
-  /*
+    /*
    * The 4-8 digit code assigned to the device, note that this isn't always
    * immediately available after creating the access code.
    */
-  public string $code;
-  public string $created_at;
+    public string $code,
+    public string $created_at,
+
+    /* @var SeamError[] */
+    public array $errors
+  ) {
+  }
 }
 
 class ActionAttempt
 {
-  public string $action_attempt_id;
-  public string $workspace_id;
+  public static function from_json(mixed $json): ActionAttempt | null
+  {
+    if (!$json) {
+      return null;
+    }
+    return new ActionAttempt(
+      action_attempt_id: $json->action_attempt_id ?? null,
+      workspace_id: $json->workspace_id ?? null,
+      created_at: $json->created_at ?? null,
+      action_type: $json->action_type ?? null,
+      status: $json->status ?? null,
+      error: SeamError::from_json($json->error ?? null),
+    );
+  }
 
-  /*
-   * CREATE_ACCESS_CODE, DELETE_ACCESS_CODE, LOCK_DOOR, UNLOCK_DOOR, etc.
-   */
-  public string $action_type;
+  public function __construct(
+    public string $action_attempt_id,
+    public string $workspace_id,
 
-  /*
-   * Can be "pending", "success", "error"
-   */
-  public string $status;
-  public string $created_at;
+    /*
+    * CREATE_ACCESS_CODE, DELETE_ACCESS_CODE, LOCK_DOOR, UNLOCK_DOOR, etc.
+    */
+    public string $action_type,
+
+    /*
+    * Can be "pending", "success", "error"
+    */
+    public string $status,
+    public string $created_at,
+    public SeamError $error
+  ) {
+  }
 }

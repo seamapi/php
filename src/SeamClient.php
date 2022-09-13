@@ -21,6 +21,7 @@ final class SeamClient
       'headers'  => ['Authorization' => 'Bearer ' . $this->api_key],
     ]);
     $this->devices = new DevicesClient($this);
+    $this->action_attempts = new ActionAttemptsClient($this);
     $this->workspaces = new WorkspacesClient($this);
   }
 
@@ -132,7 +133,50 @@ final class ActionAttemptsClient
    */
   public function list(): array
   {
-    $res = $this->seam->client->request("GET", "action_attempts/list");
-    return json_decode($res->getBody())->devices;
+    return array_map(
+      fn ($a) => ActionAttempt::from_json($a),
+      $this->seam->request("GET", "action_attempts/list", inner_object: 'action_attempts')
+    );
+  }
+
+  public function get(string $action_attempt_id): ActionAttempt
+  {
+    return ActionAttempt::from_json($this->seam->request(
+      "GET",
+      "action_attempts/get",
+      query: ['action_attempt_id' => $action_attempt_id],
+      inner_object: 'action_attempt'
+    ));
+  }
+}
+
+final class AccessCodesClient
+{
+  private SeamClient $seam;
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+  }
+
+  /**
+   * List Access Codes
+   * @return AccessCode[]
+   */
+  public function list(string $device_id = ""): array
+  {
+    return array_map(
+      fn ($a) => AccessCode::from_json($a),
+      $this->seam->request("GET", "access_codes/list", inner_object: 'access_codes')
+    );
+  }
+
+  public function get(string $access_code_id): AccessCode
+  {
+    return AccessCode::from_json($this->seam->request(
+      "GET",
+      "access_codes/get",
+      query: ['access_code_id' => $access_code_id],
+      inner_object: 'access_code'
+    ));
   }
 }
