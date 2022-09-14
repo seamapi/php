@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Tests\Fixture;
 use GuzzleHttp\Client;
 
-
-final class TestWorkspaces extends TestCase
+final class WorkspacesTest extends TestCase
 {
 }

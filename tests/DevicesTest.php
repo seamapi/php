@@ -6,8 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tests\Fixture;
 use GuzzleHttp\Client;
 
-
-final class TestDevices extends TestCase
+final class DevicesTest extends TestCase
 {
   public function testGetAndListDevices(): void
   {
