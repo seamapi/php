@@ -1,21 +1,13 @@
 {
-  "name": "seve/sdk1",
+  "name": "seamapi/seam",
   "type": "library",
   "require": {
-    "phpunit/phpunit": "^9.5",
-    "squizlabs/php_codesniffer": "^3.7",
-    "pear/http_request2": "^2.5",
     "guzzlehttp/guzzle": "^7.5"
   },
   "autoload": {
     "psr-4": {
-      "Seam\\": "src/",
-      "Tests\\": "tests/"
-    },
-    "files": [
-      "src/SeamClient.php",
-      "src/Objects.php"
-    ]
+      "Seam\\": "src/"
+    }
   },
   "authors": [
     {
@@ -24,6 +16,7 @@
     }
   ],
   "require-dev": {
-    "psr/http-client": "^1.0"
+    "phpunit/phpunit": "^9.5",
+    "squizlabs/php_codesniffer": "^3.7"
   }
 }
