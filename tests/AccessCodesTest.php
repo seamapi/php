@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tests\Fixture;
 use GuzzleHttp\Client;
 
-final class TestAccessCodes extends TestCase
+final class AccessCodesTest extends TestCase
 {
   public function testAccessCodes(): void
   {

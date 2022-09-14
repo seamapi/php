@@ -59,7 +59,6 @@ final class SeamClient
     // TODO handle request errors
     $response = $this->client->request($method, $path, $options);
     $statusCode = $response->getStatusCode();
-    var_dump($response);
 
     $res_json = null;
     try {
