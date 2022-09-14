@@ -4,7 +4,7 @@ namespace Seam;
 
 class SeamError
 {
-  public static function from_json(mixed $json): SeamError | null
+  public static function from_json(mixed $json): SeamError|null
   {
     return null;
   }
@@ -15,7 +15,7 @@ class SeamError
 
 class DeviceProperties
 {
-  public static function from_json(mixed $json): DeviceProperties | null
+  public static function from_json(mixed $json): DeviceProperties|null
   {
     if (!$json) {
       return null;
@@ -48,7 +48,7 @@ class DeviceProperties
 
 class Device
 {
-  public static function from_json(mixed $json): Device | null
+  public static function from_json(mixed $json): Device|null
   {
     if (!$json) {
       return null;
@@ -62,7 +62,10 @@ class Device
       created_at: $json->created_at,
       location: $json->location,
       properties: DeviceProperties::from_json($json->properties),
-      errors: array_map(fn ($e) => SeamError::from_json($e), $json->device_errors ?? []),
+      errors: array_map(
+        fn($e) => SeamError::from_json($e),
+        $json->device_errors ?? []
+      )
     );
   }
 
@@ -89,7 +92,7 @@ class Device
 
 class Workspace
 {
-  public static function from_json(mixed $json): Workspace | null
+  public static function from_json(mixed $json): Workspace|null
   {
     if (!$json) {
       return null;
@@ -98,7 +101,7 @@ class Workspace
       workspace_id: $json->workspace_id ?? null,
       is_sandbox: $json->is_sandbox ?? null,
       name: $json->name ?? null,
-      created_at: $json->created_at ?? null,
+      created_at: $json->created_at ?? null
     );
   }
 
@@ -113,7 +116,7 @@ class Workspace
 
 class UserIdentifier
 {
-  public static function from_json(mixed $json): UserIdentifier | null
+  public static function from_json(mixed $json): UserIdentifier|null
   {
     if (!$json) {
       return null;
@@ -125,15 +128,15 @@ class UserIdentifier
   }
 
   public function __construct(
-    public string | null $email,
-    public string | null $phone
+    public string|null $email,
+    public string|null $phone
   ) {
   }
 }
 
 class ConnectedAccount
 {
-  public static function from_json(mixed $json): ConnectedAccount | null
+  public static function from_json(mixed $json): ConnectedAccount|null
   {
     if (!$json) {
       return null;
@@ -141,9 +144,14 @@ class ConnectedAccount
     return new ConnectedAccount(
       connected_account_id: $json->connected_account_id,
       account_type: $json->account_type,
-      user_identifier: UserIdentifier::from_json($json->user_identifier ?? null),
+      user_identifier: UserIdentifier::from_json(
+        $json->user_identifier ?? null
+      ),
       created_at: $json->created_at,
-      errors: array_map(fn ($e) => SeamError::from_json($e), $json->connected_account_errors ?? []),
+      errors: array_map(
+        fn($e) => SeamError::from_json($e),
+        $json->connected_account_errors ?? []
+      )
     );
   }
 
@@ -159,47 +167,48 @@ class ConnectedAccount
 
 class AccessCode
 {
-  public static function from_json(mixed $json): AccessCode | null
+  public static function from_json(mixed $json): AccessCode|null
   {
     if (!$json) {
       return null;
     }
     return new AccessCode(
       access_code_id: $json->access_code_id ?? null,
-      workspace_id: $json->workspace_id ?? null,
       created_at: $json->created_at ?? null,
       type: $json->type ?? null,
       code: $json->code ?? null,
       status: $json->status ?? null,
       starts_at: $json->starts_at ?? null,
       ends_at: $json->starts_at ?? null,
-      errors: array_map(fn ($e) => SeamError::from_json($e), $json->access_code_errors ?? []),
+      errors: array_map(
+        fn($e) => SeamError::from_json($e),
+        $json->access_code_errors ?? []
+      )
     );
   }
 
   public function __construct(
     public string $access_code_id,
-    public string $workspace_id,
 
     /* "time_bound" or "ongoing" */
     public string $type,
 
     /*
-   * The status of an access code on the device.
-   * unset -> setting -> set -> unset OR "unknown" if the account is disconnected
-   */
+     * The status of an access code on the device.
+     * unset -> setting -> set -> unset OR "unknown" if the account is disconnected
+     */
     public string $status,
 
     /* In ISO8601 timestamp format, only for time_bound codes */
-    public string $starts_at,
+    public string|null $starts_at,
 
     /* In ISO8601 timestamp format, only for time_bound codes */
-    public string $ends_at,
+    public string|null $ends_at,
 
     /*
-   * The 4-8 digit code assigned to the device, note that this isn't always
-   * immediately available after creating the access code.
-   */
+     * The 4-8 digit code assigned to the device, note that this isn't always
+     * immediately available after creating the access code.
+     */
     public string $code,
     public string $created_at,
 
@@ -211,43 +220,41 @@ class AccessCode
 
 class ActionAttempt
 {
-  public static function from_json(mixed $json): ActionAttempt | null
+  public static function from_json(mixed $json): ActionAttempt|null
   {
     if (!$json) {
       return null;
     }
     return new ActionAttempt(
       action_attempt_id: $json->action_attempt_id ?? null,
-      workspace_id: $json->workspace_id ?? null,
-      created_at: $json->created_at ?? null,
+      result: $json->result ?? null,
       action_type: $json->action_type ?? null,
       status: $json->status ?? null,
-      error: SeamError::from_json($json->error ?? null),
+      error: SeamError::from_json($json->error ?? null)
     );
   }
 
   public function __construct(
     public string $action_attempt_id,
-    public string $workspace_id,
 
     /*
-    * CREATE_ACCESS_CODE, DELETE_ACCESS_CODE, LOCK_DOOR, UNLOCK_DOOR, etc.
-    */
+     * CREATE_ACCESS_CODE, DELETE_ACCESS_CODE, LOCK_DOOR, UNLOCK_DOOR, etc.
+     */
     public string $action_type,
 
     /*
-    * Can be "pending", "success", "error"
-    */
+     * Can be "pending", "success", "error"
+     */
     public string $status,
-    public string $created_at,
-    public SeamError $error
+    public mixed $result,
+    public SeamError|null $error
   ) {
   }
 }
 
 class ConnectWebview
 {
-  public static function from_json(mixed $json): ConnectWebview | null
+  public static function from_json(mixed $json): ConnectWebview|null
   {
     if (!$json) {
       return null;
@@ -258,7 +265,7 @@ class ConnectWebview
       url: $json->url,
       created_at: $json->created_at,
       status: $json->status,
-      error: SeamError::from_json($json->error ?? null),
+      error: SeamError::from_json($json->error ?? null)
     );
   }
 
@@ -270,7 +277,21 @@ class ConnectWebview
     /* Can be "pending", "authorized" or "error" */
     public string $status,
     public string $created_at,
-    public SeamError | null $error
+    public SeamError|null $error
   ) {
+  }
+}
+
+class Event
+{
+  public static function from_json(mixed $json): Event|null
+  {
+    if (!$json) {
+      return null;
+    }
+    return new Event(event_id: $json->event_id);
+  }
+  public function __construct(public string $event_id)
+  {
   }
 }

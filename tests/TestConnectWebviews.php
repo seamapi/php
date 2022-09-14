@@ -14,6 +14,7 @@ final class TestConnectWebviews extends TestCase
     $seam = Fixture::getTestServer(true);
     $connect_webview = $seam->connect_webviews->create(accepted_providers: ["august"]);
     $this->assertIsString($connect_webview->connect_webview_id);
+    $this->assertIsString($connect_webview->url);
     $this->assertTrue($connect_webview->status == 'pending');
   }
 
