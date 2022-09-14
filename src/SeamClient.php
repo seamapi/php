@@ -283,12 +283,6 @@ final class AccessCodesClient
       $json["ends_at"] = $ends_at;
     }
 
-    if (($starts_at || $ends_at) && $wait_for_access_code == null) {
-      $wait_for_access_code = false;
-    } elseif ($wait_for_access_code == null) {
-      $wait_for_access_code = true;
-    }
-
     // TODO future versions of the API will return the AccessCode immediately
     // return AccessCode::from_json($this->seam->request(
     //   "POST",
@@ -298,6 +292,12 @@ final class AccessCodesClient
     // ));
 
     // TODO remove everything under this when API returns AccessCode immediately
+    if (($starts_at || $ends_at) && $wait_for_access_code == null) {
+      $wait_for_access_code = false;
+    } elseif ($wait_for_access_code == null) {
+      $wait_for_access_code = true;
+    }
+
     $action_attempt = ActionAttempt::from_json(
       $this->seam->request(
         "POST",
