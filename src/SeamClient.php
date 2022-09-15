@@ -2,8 +2,16 @@
 
 namespace Seam;
 
-use Seam\Workspace;
-use Seam\Device;
+use Seam\Objects\AccessCode;
+use Seam\Objects\ActionAttempt;
+use Seam\Objects\ConnectedAccount;
+use Seam\Objects\ConnectWebview;
+use Seam\Objects\Device;
+use Seam\Objects\DeviceProperties;
+use Seam\Objects\Event;
+use Seam\Objects\SeamError;
+use Seam\Objects\UserIdentifier;
+use Seam\Objects\Workspace;
 
 use GuzzleHttp\Client as HTTPClient;
 use GuzzleHttp\Exception\RequestException as RequestException;
@@ -283,6 +291,12 @@ final class AccessCodesClient
       $json["ends_at"] = $ends_at;
     }
 
+    if (($starts_at || $ends_at) && $wait_for_access_code == null) {
+      $wait_for_access_code = false;
+    } elseif ($wait_for_access_code == null) {
+      $wait_for_access_code = true;
+    }
+
     // TODO future versions of the API will return the AccessCode immediately
     // return AccessCode::from_json($this->seam->request(
     //   "POST",
@@ -292,12 +306,6 @@ final class AccessCodesClient
     // ));
 
     // TODO remove everything under this when API returns AccessCode immediately
-    if (($starts_at || $ends_at) && $wait_for_access_code == null) {
-      $wait_for_access_code = false;
-    } elseif ($wait_for_access_code == null) {
-      $wait_for_access_code = true;
-    }
-
     $action_attempt = ActionAttempt::from_json(
       $this->seam->request(
         "POST",
