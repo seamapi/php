@@ -2,8 +2,16 @@
 
 namespace Seam;
 
-use Seam\Workspace;
-use Seam\Device;
+use Seam\Objects\AccessCode;
+use Seam\Objects\ActionAttempt;
+use Seam\Objects\ConnectedAccount;
+use Seam\Objects\ConnectWebview;
+use Seam\Objects\Device;
+use Seam\Objects\DeviceProperties;
+use Seam\Objects\Event;
+use Seam\Objects\SeamError;
+use Seam\Objects\UserIdentifier;
+use Seam\Objects\Workspace;
 
 use GuzzleHttp\Client as HTTPClient;
 use GuzzleHttp\Exception\RequestException as RequestException;
@@ -538,3 +546,4 @@ final class LocksClient
     );
   }
 }
+
