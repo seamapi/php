@@ -353,15 +353,20 @@ final class ConnectWebviewsClient
     $this->seam = $seam;
   }
 
-  public function create($accepted_providers = [])
+  public function create($accepted_providers = [], string $custom_redirect_url = null)
   {
+    $json = [
+      "accepted_providers" => $accepted_providers,
+    ];
+    if ($custom_redirect_url) {
+      $json["custom_redirect_url"] = $custom_redirect_url;
+    }
+
     return ConnectWebview::from_json(
       $this->seam->request(
         "POST",
         "connect_webviews/create",
-        json: [
-          "accepted_providers" => $accepted_providers,
-        ],
+        json: $json,
         inner_object: "connect_webview"
       )
     );
