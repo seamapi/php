@@ -19,6 +19,11 @@ use GuzzleHttp\Exception\ClientException as ClientException;
 use GuzzleHttp\Exception\ClientErrorResponseException as ClientErrorResponseException;
 use \Exception as Exception;
 
+function filter_out_null_params(array $params)
+{
+  return array_filter($params, fn ($p) => $p or $p === false ? true : false);
+}
+
 final class SeamClient
 {
   public DevicesClient $devices;
@@ -56,13 +61,7 @@ final class SeamClient
     $query = null,
     $inner_object = null
   ) {
-    $options = [];
-    if ($json) {
-      $options["json"] = $json;
-    }
-    if ($query) {
-      $options["query"] = $query;
-    }
+    $options = filter_out_null_params(["json" => $json, "query" => $query]);
 
     // TODO handle request errors
     $response = $this->client->request($method, $path, $options);
@@ -121,13 +120,15 @@ final class DevicesClient
   /**
    * Get Device
    */
-  public function get(string $device_id): Device|null
+  public function get(string $device_id = null, string $name = null): Device|null
   {
+    $query = filter_out_null_params(["device_id" => $device_id, "name" => $name]);
+
     $device = Device::from_json(
       $this->seam->request(
         "GET",
         "devices/get",
-        query: ["device_id" => $device_id],
+        query: $query,
         inner_object: "device"
       )
     );
@@ -138,11 +139,20 @@ final class DevicesClient
    * List devices
    * @return Device[]
    */
-  public function list(): array
-  {
+  public function list(
+    string $connected_account_id = null,
+    string $connect_webview_id = null,
+    string $device_type = null
+  ): array {
+    $query = filter_out_null_params([
+      "connected_account_id" => $connected_account_id,
+      "connect_webview_id" => $connect_webview_id,
+      "device_type" => $device_type
+    ]);
+
     return array_map(
-      fn($d) => Device::from_json($d),
-      $this->seam->request("GET", "devices/list", inner_object: "devices")
+      fn ($d) => Device::from_json($d),
+      $this->seam->request("GET", "devices/list", query: $query, inner_object: "devices")
     );
   }
 }
@@ -208,7 +218,7 @@ final class ActionAttemptsClient
   public function list(): array
   {
     return array_map(
-      fn($a) => ActionAttempt::from_json($a),
+      fn ($a) => ActionAttempt::from_json($a),
       $this->seam->request(
         "GET",
         "action_attempts/list",
@@ -245,7 +255,7 @@ final class AccessCodesClient
   public function list(string $device_id = ""): array
   {
     return array_map(
-      fn($a) => AccessCode::from_json($a),
+      fn ($a) => AccessCode::from_json($a),
       $this->seam->request(
         "GET",
         "access_codes/list",
@@ -275,21 +285,13 @@ final class AccessCodesClient
     string $ends_at = null,
     $wait_for_access_code = null
   ): ActionAttempt|AccessCode {
-    $json = [
+    $json = filter_out_null_params([
       "device_id" => $device_id,
-    ];
-    if ($name) {
-      $json["name"] = $name;
-    }
-    if ($code) {
-      $json["code"] = $code;
-    }
-    if ($starts_at) {
-      $json["starts_at"] = $starts_at;
-    }
-    if ($ends_at) {
-      $json["ends_at"] = $ends_at;
-    }
+      "name" => $name,
+      "code" => $code,
+      "starts_at" => $starts_at,
+      "ends_at" => $ends_at
+    ]);
 
     // TODO future versions of the API will return the AccessCode immediately
     // return AccessCode::from_json($this->seam->request(
@@ -372,7 +374,7 @@ final class ConnectWebviewsClient
   public function list(string $device_id = ""): array
   {
     return array_map(
-      fn($a) => ConnectWebview::from_json($a),
+      fn ($a) => ConnectWebview::from_json($a),
       $this->seam->request(
         "GET",
         "connect_webviews/list",
@@ -409,7 +411,7 @@ final class ConnectedAccountsClient
   public function list(): array
   {
     return array_map(
-      fn($a) => ConnectedAccount::from_json($a),
+      fn ($a) => ConnectedAccount::from_json($a),
       $this->seam->request(
         "GET",
         "connected_accounts/list",
@@ -462,7 +464,7 @@ final class EventsClient
   public function list(string $since): array
   {
     return array_map(
-      fn($d) => Event::from_json($d),
+      fn ($d) => Event::from_json($d),
       $this->seam->request(
         "GET",
         "events/list",
@@ -506,7 +508,7 @@ final class LocksClient
   public function list(string $connected_account_id = null): array
   {
     return array_map(
-      fn($d) => Device::from_json($d),
+      fn ($d) => Device::from_json($d),
       $this->seam->request(
         "GET",
         "locks/list",
@@ -546,4 +548,3 @@ final class LocksClient
     );
   }
 }
-
