@@ -14,3 +14,5 @@ jobs:
           php-version: "8.0"
       - run: composer install
       - run: composer exec phpunit tests
+        env:
+          SEAM_API_KEY: ${{ secrets.SEAM_API_KEY }}
