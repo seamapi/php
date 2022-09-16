@@ -1,0 +1,14 @@
+name: PHP Test
+on: ["pull_request"]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+      uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: nanasess/setup-php@v3
+        with:
+          php-version: 8.0
+      - run: composer install
+      - run: composer exec phpunit tests
