@@ -1,0 +1,18 @@
+name: PHP Test
+on: ["pull_request"]
+jobs:
+  test:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    name: Run PHP Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.0"
+      - run: composer install
+      - run: composer exec phpunit tests
+        env:
+          SEAM_API_KEY: ${{ secrets.SEAM_API_KEY }}

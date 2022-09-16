@@ -24,7 +24,6 @@ final class ConnectWebviewsTest extends TestCase
     $seam = Fixture::getTestServer(true);
     $connect_webviews = $seam->connect_webviews->list();
     $this->assertIsArray($connect_webviews);
-    print_r($connect_webviews);
 
     $connect_webview_id = $connect_webviews[0]->connect_webview_id;
     $connect_webview = $seam->connect_webviews->get(
