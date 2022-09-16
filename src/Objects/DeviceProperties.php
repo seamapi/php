@@ -22,11 +22,11 @@ class DeviceProperties
     }
 
     public function __construct(
-        public bool $online,
-        public bool $locked,
-        public bool $door_open,
-        public float $battery_level,
-        public string $name,
+        public bool | null $online,
+        public bool | null $locked,
+        public bool | null $door_open,
+        public float | null $battery_level,
+        public string | null $name,
 
         public mixed $august_metadata,
         public mixed $schlage_metadata,
