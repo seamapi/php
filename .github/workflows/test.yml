@@ -9,8 +9,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup PHP
-        uses: nanasess/setup-php@v3
+        uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: "8.0"
       - run: composer install
       - run: composer exec phpunit tests
