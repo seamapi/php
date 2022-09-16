@@ -19,7 +19,7 @@ use GuzzleHttp\Exception\ClientException as ClientException;
 use GuzzleHttp\Exception\ClientErrorResponseException as ClientErrorResponseException;
 use \Exception as Exception;
 
-function filter_params(array $params)
+function filter_out_null_params(array $params)
 {
   return array_filter($params, fn ($p) => $p or $p === false ? true : false);
 }
@@ -61,13 +61,7 @@ final class SeamClient
     $query = null,
     $inner_object = null
   ) {
-    $options = [];
-    if ($json) {
-      $options["json"] = $json;
-    }
-    if ($query) {
-      $options["query"] = $query;
-    }
+    $options = filter_out_null_params(["json" => $json, "query" => $query]);
 
     // TODO handle request errors
     $response = $this->client->request($method, $path, $options);
@@ -128,7 +122,7 @@ final class DevicesClient
    */
   public function get(string $device_id = null, string $name = null): Device|null
   {
-    $query = filter_params(["device_id" => $device_id, "name" => $name]);
+    $query = filter_out_null_params(["device_id" => $device_id, "name" => $name]);
 
     $device = Device::from_json(
       $this->seam->request(
@@ -150,7 +144,7 @@ final class DevicesClient
     string $connect_webview_id = null,
     string $device_type = null
   ): array {
-    $query = filter_params([
+    $query = filter_out_null_params([
       "connected_account_id" => $connected_account_id,
       "connect_webview_id" => $connect_webview_id,
       "device_type" => $device_type
@@ -291,21 +285,13 @@ final class AccessCodesClient
     string $ends_at = null,
     $wait_for_access_code = null
   ): ActionAttempt|AccessCode {
-    $json = [
+    $json = filter_out_null_params([
       "device_id" => $device_id,
-    ];
-    if ($name) {
-      $json["name"] = $name;
-    }
-    if ($code) {
-      $json["code"] = $code;
-    }
-    if ($starts_at) {
-      $json["starts_at"] = $starts_at;
-    }
-    if ($ends_at) {
-      $json["ends_at"] = $ends_at;
-    }
+      "name" => $name,
+      "code" => $code,
+      "starts_at" => $starts_at,
+      "ends_at" => $ends_at
+    ]);
 
     // TODO future versions of the API will return the AccessCode immediately
     // return AccessCode::from_json($this->seam->request(
