@@ -16,8 +16,23 @@ final class ConnectWebviewsTest extends TestCase
     );
     $this->assertIsString($connect_webview->connect_webview_id);
     $this->assertIsString($connect_webview->url);
+    $this->assertNull($connect_webview->custom_redirect_url);
     $this->assertTrue($connect_webview->status == "pending");
   }
+
+  public function testCreateWebviewWithRedirectUrl(): void
+  {
+    $seam = Fixture::getTestServer(true);
+    $connect_webview = $seam->connect_webviews->create(
+      accepted_providers: ["august"],
+      custom_redirect_url: "https://seam.co/"
+    );
+    $this->assertIsString($connect_webview->connect_webview_id);
+    $this->assertIsString($connect_webview->url);
+    $this->assertEquals($connect_webview->custom_redirect_url, "https://seam.co/");
+    $this->assertTrue($connect_webview->status == "pending");
+  }
+
 
   public function testGetAndListConnectWebviews(): void
   {
