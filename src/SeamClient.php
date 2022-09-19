@@ -164,17 +164,22 @@ final class WorkspacesClient
     $this->seam = $seam;
   }
 
-  public function get(): Workspace
+  public function get($workspace_id = null): Workspace
   {
+    $query = filter_out_null_params(["workspace_id" => $workspace_id]);
+
     return Workspace::from_json(
-      $this->seam->request("GET", "workspaces/get", inner_object: "workspace")
+      $this->seam->request("GET", "workspaces/get", query: $query, inner_object: "workspace")
     );
   }
 
-  public function list()
+  public function list($workspace_id = null)
   {
-    return Workspace::from_json(
-      $this->seam->request("GET", "workspaces/list", inner_object: "workspaces")
+    $query = filter_out_null_params(["workspace_id" => $workspace_id]);
+
+    return array_map(
+      fn ($w) => Workspace::from_json($w),
+      $this->seam->request("GET", "workspaces/list", query: $query,  inner_object: "workspaces")
     );
   }
 
@@ -355,12 +360,10 @@ final class ConnectWebviewsClient
 
   public function create($accepted_providers = [], string $custom_redirect_url = null)
   {
-    $json = [
+    $json = filter_out_null_params([
       "accepted_providers" => $accepted_providers,
-    ];
-    if ($custom_redirect_url) {
-      $json["custom_redirect_url"] = $custom_redirect_url;
-    }
+      "custom_redirect_url" => $custom_redirect_url
+    ]);
 
     return ConnectWebview::from_json(
       $this->seam->request(
