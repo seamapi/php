@@ -238,6 +238,32 @@ final class ActionAttemptsClient
       )
     );
   }
+
+  public function poll_until_ready(string $action_attempt_id): ActionAttempt
+  {
+    $seam = $this->seam;
+    $time_waiting = 0.0;
+    $action_attempt = $seam->action_attempts->get($action_attempt_id);
+
+    while ($action_attempt->status == "pending") {
+      $action_attempt = $seam->action_attempts->get(
+        $action_attempt->action_attempt_id
+      );
+      if ($time_waiting > 20.0) {
+        throw new Exception("Timed out waiting for access code to be created");
+      }
+      $time_waiting += 0.4;
+      usleep(400000); // sleep for 0.4 seconds
+    }
+
+    if ($action_attempt->status == "failed") {
+      throw new Exception(
+        "Action Attempt failed: " . $action_attempt->error->message
+      );
+    }
+
+    return ActionAttempt::from_json($action_attempt);
+  }
 }
 
 final class AccessCodesClient
@@ -300,13 +326,7 @@ final class AccessCodesClient
     //   json: $json,
     //   inner_object: 'access_code'
     // ));
-
     // TODO remove everything under this when API returns AccessCode immediately
-    if (($starts_at || $ends_at) && $wait_for_access_code == null) {
-      $wait_for_access_code = false;
-    } elseif ($wait_for_access_code == null) {
-      $wait_for_access_code = true;
-    }
 
     $action_attempt = ActionAttempt::from_json(
       $this->seam->request(
@@ -316,32 +336,52 @@ final class AccessCodesClient
         inner_object: "action_attempt"
       )
     );
+    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
 
-    $time_waiting = 0.0;
-    while ($action_attempt->status == "pending") {
-      $action_attempt = $this->seam->action_attempts->get(
-        $action_attempt->action_attempt_id
-      );
-      if ($time_waiting > 20.0) {
-        throw new Exception("Timed out waiting for access code to be created");
-      }
-      $time_waiting += 0.4;
-      usleep(400000); // sleep for 0.4 seconds
-    }
-
-    if ($action_attempt->status == "failed") {
-      throw new Exception(
-        "Failed to create access code: " . $action_attempt->error->message
-      );
-    }
-
-    if (!$action_attempt->result?->access_code) {
+    if (!$updated_action_attempt->result?->access_code) {
       throw new Exception(
         "Failed to create access code: no access code returned: " .
-          json_encode($action_attempt)
+          json_encode($updated_action_attempt)
       );
     }
-    return AccessCode::from_json($action_attempt->result->access_code);
+
+    return AccessCode::from_json($updated_action_attempt->result->access_code);
+  }
+
+  public function update(
+    string $access_code_id,
+    string $device_id = null,
+    string $name = null,
+    string $code = null,
+    string $starts_at = null,
+    string $ends_at = null
+  ): ActionAttempt|AccessCode {
+    $json = filter_out_null_params([
+      "access_code_id" => $access_code_id,
+      "device_id" => $device_id,
+      "name" => $name,
+      "code" => $code,
+      "starts_at" => $starts_at,
+      "ends_at" => $ends_at
+    ]);
+    $action_attempt = ActionAttempt::from_json(
+      $this->seam->request(
+        "POST",
+        "access_codes/update",
+        json: $json,
+        inner_object: "action_attempt"
+      )
+    );
+    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+
+    if (!$updated_action_attempt->result?->access_code) {
+      throw new Exception(
+        "Failed to update access code: no access code returned: " .
+          json_encode($updated_action_attempt)
+      );
+    }
+
+    return AccessCode::from_json($updated_action_attempt->result->access_code);
   }
 }
 
