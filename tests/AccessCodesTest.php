@@ -21,5 +21,8 @@ final class AccessCodesTest extends TestCase
     $access_code_id = $access_codes[0]->access_code_id;
     $access_code = $seam->access_codes->get(access_code_id: $access_code_id);
     $this->assertTrue($access_code->access_code_id === $access_code_id);
+
+    // $access_code = $seam->access_codes->get(device_id: $device_id);
+    // $this->assertIsObject($access_code);
   }
 }
