@@ -8,7 +8,7 @@ use GuzzleHttp\Client;
 
 final class WorkspacesTest extends TestCase
 {
-  public function testGetAndListDevices(): void
+  public function testGetAndListWorkspaces(): void
   {
     $seam = Fixture::getTestServer(true);
 
