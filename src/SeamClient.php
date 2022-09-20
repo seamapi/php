@@ -393,14 +393,16 @@ final class ConnectWebviewsClient
     $this->seam = $seam;
   }
 
-  public function create($accepted_providers = [], string $custom_redirect_url = null)
-  {
-    $json = [
+  public function create(
+    $accepted_providers = [],
+    string $custom_redirect_url = null,
+    string $device_selection_mode = null
+  ) {
+    $json = filter_out_null_params([
       "accepted_providers" => $accepted_providers,
-    ];
-    if ($custom_redirect_url) {
-      $json["custom_redirect_url"] = $custom_redirect_url;
-    }
+      "custom_redirect_url" => $custom_redirect_url,
+      "device_selection_mode" => $device_selection_mode
+    ]);
 
     return ConnectWebview::from_json(
       $this->seam->request(
@@ -533,13 +535,18 @@ final class LocksClient
   /**
    * Get Lock
    */
-  public function get(string $device_id): Device|null
+  public function get(string $device_id = null, string $name = null): Device|null
   {
+    $query = filter_out_null_params([
+      "device_id" => $device_id,
+      "name" => $name,
+    ]);
+
     $device = Device::from_json(
       $this->seam->request(
         "GET",
         "locks/get",
-        query: ["device_id" => $device_id],
+        $query,
         inner_object: "lock"
       )
     );
@@ -550,16 +557,21 @@ final class LocksClient
    * List Events
    * @return Device[]
    */
-  public function list(string $connected_account_id = null): array
-  {
+  public function list(
+    string $connected_account_id = null,
+    string $connect_webview_id = null
+  ): array {
+    $query = filter_out_null_params([
+      "connected_account_id" => $connected_account_id,
+      "connect_webview_id" => $connect_webview_id,
+    ]);
+
     return array_map(
       fn ($d) => Device::from_json($d),
       $this->seam->request(
         "GET",
         "locks/list",
-        query: [
-          "connected_account_id" => $connected_account_id,
-        ],
+        $query,
         inner_object: "locks"
       )
     );
