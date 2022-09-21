@@ -309,7 +309,7 @@ final class AccessCodesClient
     string $code = null,
     string $starts_at = null,
     string $ends_at = null,
-    boolean $wait_for_access_code = true
+    bool $wait_for_access_code = true
   ): ActionAttempt|AccessCode {
     $json = filter_out_null_params([
       "device_id" => $device_id,
@@ -358,7 +358,7 @@ final class AccessCodesClient
     string $code = null,
     string $starts_at = null,
     string $ends_at = null,
-    boolean $wait_for_access_code = true
+    bool $wait_for_access_code = true
   ): ActionAttempt|AccessCode {
     $json = filter_out_null_params([
       "access_code_id" => $access_code_id,
