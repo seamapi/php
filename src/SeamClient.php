@@ -362,6 +362,26 @@ final class AccessCodesClient
     return AccessCode::from_json($updated_action_attempt->result->access_code);
   }
 
+  public function delete(
+    string $access_code_id,
+    string $device_id = null,
+  ): ActionAttempt {
+    $json = filter_out_null_params([
+      "access_code_id" => $access_code_id,
+      "device_id" => $device_id,
+    ]);
+    $action_attempt = ActionAttempt::from_json(
+      $this->seam->request(
+        "POST",
+        "access_codes/delete",
+        json: $json,
+        inner_object: "action_attempt"
+      )
+    );
+    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+    return $updated_action_attempt;
+  }
+
   public function update(
     string $access_code_id,
     string $device_id = null,

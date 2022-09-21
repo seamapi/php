@@ -5,6 +5,7 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use Tests\Fixture;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientErrorResponseException as ClientErrorResponseException;
 
 final class AccessCodesTest extends TestCase
 {
@@ -29,5 +30,10 @@ final class AccessCodesTest extends TestCase
     $seam->access_codes->update(access_code_id: $access_code_id, code: "5678");
     $access_code = $seam->access_codes->get(access_code_id: $access_code_id);
     $this->assertTrue($access_code->code === "5678");
+
+    $action_attempt = $seam->access_codes->delete(access_code_id: $access_code_id);
+    $access_code = $seam->access_codes->get(access_code_id: $access_code_id);
+    $this->assertEquals($access_code->status, "removing");
+    $this->assertEquals($action_attempt->status, "success");
   }
 }
