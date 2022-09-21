@@ -19,10 +19,11 @@ final class AccessCodesTest extends TestCase
     $this->assertIsArray($access_codes);
 
     $access_code_id = $access_codes[0]->access_code_id;
+    print($access_code_id);
     $access_code = $seam->access_codes->get(access_code_id: $access_code_id);
     $this->assertTrue($access_code->access_code_id === $access_code_id);
 
-    // $access_code = $seam->access_codes->get(device_id: $device_id);
-    // $this->assertIsObject($access_code);
+    // $access_code = $seam->access_codes->get(device_id: $device_id, code: "1234");
+    // $this->assertTrue($access_code->code === "1234");
   }
 }

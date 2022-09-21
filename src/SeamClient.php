@@ -265,11 +265,15 @@ final class AccessCodesClient
     );
   }
 
-  public function get(string $access_code_id, string $device_id = null): AccessCode
-  {
+  public function get(
+    string $access_code_id = null,
+    string $device_id = null,
+    string $code = null
+  ): AccessCode {
     $query = filter_out_null_params([
       "access_code_id" => $access_code_id,
-      "device_id" => $device_id
+      "device_id" => $device_id,
+      "code" => $code
     ]);
 
     return AccessCode::from_json(
