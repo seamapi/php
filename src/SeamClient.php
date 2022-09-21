@@ -296,13 +296,22 @@ final class AccessCodesClient
     );
   }
 
-  public function get(string $access_code_id): AccessCode
-  {
+  public function get(
+    string $access_code_id = null,
+    string $device_id = null,
+    string $code = null
+  ): AccessCode {
+    $query = filter_out_null_params([
+      "access_code_id" => $access_code_id,
+      "device_id" => $device_id,
+      "code" => $code
+    ]);
+
     return AccessCode::from_json(
       $this->seam->request(
         "GET",
         "access_codes/get",
-        query: ["access_code_id" => $access_code_id],
+        query: $query,
         inner_object: "access_code"
       )
     );
