@@ -309,7 +309,7 @@ final class AccessCodesClient
     string $code = null,
     string $starts_at = null,
     string $ends_at = null,
-    $wait_for_access_code = null
+    boolean $wait_for_access_code = true
   ): ActionAttempt|AccessCode {
     $json = filter_out_null_params([
       "device_id" => $device_id,
@@ -336,6 +336,9 @@ final class AccessCodesClient
         inner_object: "action_attempt"
       )
     );
+    if (!$wait_for_access_code) {
+      return $action_attempt;
+    }
     $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
 
     if (!$updated_action_attempt->result?->access_code) {
@@ -354,7 +357,8 @@ final class AccessCodesClient
     string $name = null,
     string $code = null,
     string $starts_at = null,
-    string $ends_at = null
+    string $ends_at = null,
+    boolean $wait_for_access_code = true
   ): ActionAttempt|AccessCode {
     $json = filter_out_null_params([
       "access_code_id" => $access_code_id,
@@ -372,6 +376,9 @@ final class AccessCodesClient
         inner_object: "action_attempt"
       )
     );
+    if (!$wait_for_access_code) {
+      return $action_attempt;
+    }
     $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
 
     if (!$updated_action_attempt->result?->access_code) {
