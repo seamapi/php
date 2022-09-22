@@ -14,6 +14,11 @@ final class AccessCodesTest extends TestCase
     $seam = Fixture::getTestServer(true);
 
     $device_id = $seam->devices->list()[0]->device_id;
+
+    $access_codes = $seam->access_codes->list(device_id: $device_id);
+    $this->assertEmpty($access_codes);
+    $this->assertIsArray($access_codes);
+
     $seam->access_codes->create(device_id: $device_id, code: "1234");
 
     $access_codes = $seam->access_codes->list(device_id: $device_id);

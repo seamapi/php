@@ -93,7 +93,7 @@ final class SeamClient
     }
 
     if ($inner_object) {
-      if (($res_json->$inner_object ?? null) == null) {
+      if (!is_array($res_json->$inner_object) && ($res_json->$inner_object ?? null) == null) {
         throw new Exception(
           'Missing Inner Object "' .
             $inner_object .
