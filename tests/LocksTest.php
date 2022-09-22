@@ -18,6 +18,14 @@ final class LocksTest extends TestCase
     $lock = $seam->locks->get(device_id: $device_id);
     $this->assertTrue($lock->device_id === $device_id);
 
+    $lock_name = $lock->properties->name;
+    $lock = $seam->locks->get(name: $lock_name);
+    $this->assertTrue($lock->properties->name === $lock_name);
+
+    $connect_webview = $seam->connect_webviews->list()[0];
+    $locks = $seam->locks->list(connect_webview_id: $connect_webview->connect_webview_id);
+    $this->assertTrue(count($locks) > 0);
+
     // Unlock door and check properties.locked
     $seam->locks->lock_door($lock->device_id);
     $lock = $seam->locks->get(device_id: $device_id);
