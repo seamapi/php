@@ -546,7 +546,7 @@ final class LocksClient
       $this->seam->request(
         "GET",
         "locks/get",
-        $query,
+        query: $query,
         inner_object: "lock"
       )
     );
@@ -571,7 +571,7 @@ final class LocksClient
       $this->seam->request(
         "GET",
         "locks/list",
-        $query,
+        query: $query,
         inner_object: "locks"
       )
     );
