@@ -14,7 +14,6 @@ class Device
       workspace_id: $json->workspace_id,
       connected_account_id: $json->connected_account_id,
       device_type: $json->device_type,
-      // device_name: $json->device_name,
       created_at: $json->created_at,
       location: $json->location,
       capabilities_supported: $json->capabilities_supported,

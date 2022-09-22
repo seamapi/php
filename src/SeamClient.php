@@ -93,7 +93,7 @@ final class SeamClient
     }
 
     if ($inner_object) {
-      if (($res_json->$inner_object ?? null) == null) {
+      if (!is_array($res_json->$inner_object) && ($res_json->$inner_object ?? null) == null) {
         throw new Exception(
           'Missing Inner Object "' .
             $inner_object .
@@ -164,17 +164,22 @@ final class WorkspacesClient
     $this->seam = $seam;
   }
 
-  public function get(): Workspace
+  public function get($workspace_id = null): Workspace
   {
+    $query = filter_out_null_params(["workspace_id" => $workspace_id]);
+
     return Workspace::from_json(
-      $this->seam->request("GET", "workspaces/get", inner_object: "workspace")
+      $this->seam->request("GET", "workspaces/get", query: $query, inner_object: "workspace")
     );
   }
 
-  public function list()
+  public function list($workspace_id = null)
   {
-    return Workspace::from_json(
-      $this->seam->request("GET", "workspaces/list", inner_object: "workspaces")
+    $query = filter_out_null_params(["workspace_id" => $workspace_id]);
+
+    return array_map(
+      fn ($w) => Workspace::from_json($w),
+      $this->seam->request("GET", "workspaces/list", query: $query,  inner_object: "workspaces")
     );
   }
 
@@ -291,13 +296,22 @@ final class AccessCodesClient
     );
   }
 
-  public function get(string $access_code_id): AccessCode
-  {
+  public function get(
+    string $access_code_id = null,
+    string $device_id = null,
+    string $code = null
+  ): AccessCode {
+    $query = filter_out_null_params([
+      "access_code_id" => $access_code_id,
+      "device_id" => $device_id,
+      "code" => $code
+    ]);
+
     return AccessCode::from_json(
       $this->seam->request(
         "GET",
         "access_codes/get",
-        query: ["access_code_id" => $access_code_id],
+        query: $query,
         inner_object: "access_code"
       )
     );
@@ -309,7 +323,7 @@ final class AccessCodesClient
     string $code = null,
     string $starts_at = null,
     string $ends_at = null,
-    $wait_for_access_code = null
+    bool $wait_for_access_code = true
   ): ActionAttempt|AccessCode {
     $json = filter_out_null_params([
       "device_id" => $device_id,
@@ -336,6 +350,9 @@ final class AccessCodesClient
         inner_object: "action_attempt"
       )
     );
+    if (!$wait_for_access_code) {
+      return $action_attempt;
+    }
     $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
 
     if (!$updated_action_attempt->result?->access_code) {
@@ -348,13 +365,34 @@ final class AccessCodesClient
     return AccessCode::from_json($updated_action_attempt->result->access_code);
   }
 
+  public function delete(
+    string $access_code_id,
+    string $device_id = null,
+  ): ActionAttempt {
+    $json = filter_out_null_params([
+      "access_code_id" => $access_code_id,
+      "device_id" => $device_id,
+    ]);
+    $action_attempt = ActionAttempt::from_json(
+      $this->seam->request(
+        "POST",
+        "access_codes/delete",
+        json: $json,
+        inner_object: "action_attempt"
+      )
+    );
+    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+    return $updated_action_attempt;
+  }
+
   public function update(
     string $access_code_id,
     string $device_id = null,
     string $name = null,
     string $code = null,
     string $starts_at = null,
-    string $ends_at = null
+    string $ends_at = null,
+    bool $wait_for_access_code = true
   ): ActionAttempt|AccessCode {
     $json = filter_out_null_params([
       "access_code_id" => $access_code_id,
@@ -372,6 +410,9 @@ final class AccessCodesClient
         inner_object: "action_attempt"
       )
     );
+    if (!$wait_for_access_code) {
+      return $action_attempt;
+    }
     $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
 
     if (!$updated_action_attempt->result?->access_code) {
