@@ -11,6 +11,7 @@ class AccessCode
         }
         return new self(
             access_code_id: $json->access_code_id ?? null,
+            name: $json->name ?? null,
             created_at: $json->created_at ?? null,
             type: $json->type ?? null,
             code: $json->code ?? null,
@@ -26,6 +27,7 @@ class AccessCode
 
     public function __construct(
         public string $access_code_id,
+        public string | null $name,
 
         /* "time_bound" or "ongoing" */
         public string $type,
