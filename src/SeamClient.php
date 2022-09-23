@@ -216,22 +216,6 @@ final class ActionAttemptsClient
     $this->seam = $seam;
   }
 
-  /**
-   * List Action Attempts
-   * @return ActionAttempt[]
-   */
-  public function list(): array
-  {
-    return array_map(
-      fn ($a) => ActionAttempt::from_json($a),
-      $this->seam->request(
-        "GET",
-        "action_attempts/list",
-        inner_object: "action_attempts"
-      )
-    );
-  }
-
   public function get(string $action_attempt_id): ActionAttempt
   {
     return ActionAttempt::from_json(
