@@ -7,14 +7,18 @@ use Tests\Fixture;
 
 final class ActionAttemptsTest extends TestCase
 {
-  // public function testGetAndListActionAttempts(): void
-// {
-// $seam = Fixture::getTestServer(true);
-// $action_attempts = $seam->action_attempts->list();
-// $this->assertIsArray($action_attempts);
-// TODO use seam->locks->unlock_door or something to create action attempt
-// $action_attempt_id = $action_attempts[0]->action_attempt_id;
-// $action_attempt = $seam->action_attempts->get(action_attempt_id: $action_attempt_id);
-// $this->assertTrue($action_attempt->action_attempt_id === $action_attempt_id);
-// }
+  public function testGetAndListActionAttempts(): void
+  {
+    $seam = Fixture::getTestServer(true);
+
+    $device_id = $seam->devices->list()[0]->device_id;
+    $action_attempt = $seam->access_codes->create(device_id: $device_id, wait_for_access_code: false);
+
+    $action_attempt_id = $action_attempt->action_attempt_id;
+    $action_attempt = $seam->action_attempts->get(action_attempt_id: $action_attempt_id);
+    $this->assertTrue($action_attempt->action_attempt_id === $action_attempt_id);
+
+    $updated_action_attempt = $seam->action_attempts->poll_until_ready($action_attempt_id);
+    $this->assertEquals($updated_action_attempt->status, "success");
+  }
 }
