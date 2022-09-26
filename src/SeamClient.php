@@ -368,6 +368,7 @@ final class AccessCodesClient
   public function delete(
     string $access_code_id,
     string $device_id = null,
+    bool $wait_for_action_attempt = true,
   ): ActionAttempt {
     $json = filter_out_null_params([
       "access_code_id" => $access_code_id,
@@ -381,7 +382,13 @@ final class AccessCodesClient
         inner_object: "action_attempt"
       )
     );
+
+    if (!$wait_for_action_attempt) {
+      return $action_attempt;
+    }
+
     $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+
     return $updated_action_attempt;
   }
 
