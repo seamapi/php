@@ -24,7 +24,7 @@ function filter_out_null_params(array $params)
   return array_filter($params, fn ($p) => $p or $p === false ? true : false);
 }
 
-final class SeamClient
+class SeamClient
 {
   public DevicesClient $devices;
   public WorkspacesClient $workspaces;
@@ -109,7 +109,7 @@ final class SeamClient
   }
 }
 
-final class DevicesClient
+class DevicesClient
 {
   private SeamClient $seam;
   public function __construct(SeamClient $seam)
@@ -157,7 +157,7 @@ final class DevicesClient
   }
 }
 
-final class WorkspacesClient
+class WorkspacesClient
 {
   public function __construct($seam)
   {
@@ -208,7 +208,7 @@ final class WorkspacesClient
   }
 }
 
-final class ActionAttemptsClient
+class ActionAttemptsClient
 {
   private SeamClient $seam;
   public function __construct(SeamClient $seam)
@@ -255,7 +255,7 @@ final class ActionAttemptsClient
   }
 }
 
-final class AccessCodesClient
+class AccessCodesClient
 {
   private SeamClient $seam;
   public function __construct(SeamClient $seam)
@@ -417,7 +417,7 @@ final class AccessCodesClient
   }
 }
 
-final class ConnectWebviewsClient
+class ConnectWebviewsClient
 {
   private SeamClient $seam;
   public function __construct(SeamClient $seam)
@@ -475,7 +475,7 @@ final class ConnectWebviewsClient
   }
 }
 
-final class ConnectedAccountsClient
+class ConnectedAccountsClient
 {
   private SeamClient $seam;
   public function __construct(SeamClient $seam)
@@ -512,7 +512,7 @@ final class ConnectedAccountsClient
   }
 }
 
-final class EventsClient
+class EventsClient
 {
   private SeamClient $seam;
   public function __construct(SeamClient $seam)
@@ -556,7 +556,7 @@ final class EventsClient
   }
 }
 
-final class LocksClient
+class LocksClient
 {
   private SeamClient $seam;
   public function __construct(SeamClient $seam)
