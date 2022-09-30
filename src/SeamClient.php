@@ -228,9 +228,6 @@ class ActionAttemptsClient
    */
   public function list(array $action_attempt_ids): array
   {
-    echo "ids";
-    print_r($action_attempt_ids);
-
     return array_map(
       fn ($a) => ActionAttempt::from_json($a),
       $this->seam->request(
