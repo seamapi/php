@@ -228,6 +228,26 @@ class ActionAttemptsClient
     );
   }
 
+  /**
+   * List action attempts
+   * @return ActionAttempt[]
+   */
+  public function list(array $action_attempt_ids): array
+  {
+    echo "ids";
+    print_r($action_attempt_ids);
+
+    return array_map(
+      fn ($a) => ActionAttempt::from_json($a),
+      $this->seam->request(
+        "GET",
+        "action_attempts/list",
+        query: ["action_attempt_ids" => implode(',', $action_attempt_ids)],
+        inner_object: "action_attempts"
+      )
+    );
+  }
+
   public function poll_until_ready(string $action_attempt_id): ActionAttempt
   {
     $seam = $this->seam;

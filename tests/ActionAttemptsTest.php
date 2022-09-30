@@ -20,5 +20,8 @@ final class ActionAttemptsTest extends TestCase
 
     $updated_action_attempt = $seam->action_attempts->poll_until_ready($action_attempt_id);
     $this->assertEquals($updated_action_attempt->status, "success");
+
+    $action_attempts = $seam->action_attempts->list([$action_attempt_id]);
+    $this->assertTrue(count($action_attempts) > 0);
   }
 }
