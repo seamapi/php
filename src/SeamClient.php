@@ -7,16 +7,10 @@ use Seam\Objects\ActionAttempt;
 use Seam\Objects\ConnectedAccount;
 use Seam\Objects\ConnectWebview;
 use Seam\Objects\Device;
-use Seam\Objects\DeviceProperties;
 use Seam\Objects\Event;
-use Seam\Objects\SeamError;
-use Seam\Objects\UserIdentifier;
 use Seam\Objects\Workspace;
 
 use GuzzleHttp\Client as HTTPClient;
-use GuzzleHttp\Exception\RequestException as RequestException;
-use GuzzleHttp\Exception\ClientException as ClientException;
-use GuzzleHttp\Exception\ClientErrorResponseException as ClientErrorResponseException;
 use \Exception as Exception;
 
 function filter_out_null_params(array $params)
@@ -224,6 +218,23 @@ class ActionAttemptsClient
         "action_attempts/get",
         query: ["action_attempt_id" => $action_attempt_id],
         inner_object: "action_attempt"
+      )
+    );
+  }
+
+  /**
+   * List action attempts
+   * @return ActionAttempt[]
+   */
+  public function list(array $action_attempt_ids): array
+  {
+    return array_map(
+      fn ($a) => ActionAttempt::from_json($a),
+      $this->seam->request(
+        "GET",
+        "action_attempts/list",
+        query: ["action_attempt_ids" => implode(',', $action_attempt_ids)],
+        inner_object: "action_attempts"
       )
     );
   }
