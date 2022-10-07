@@ -136,12 +136,14 @@ class DevicesClient
   public function list(
     string $connected_account_id = null,
     string $connect_webview_id = null,
-    string $device_type = null
+    string $device_type = null,
+    string $manufacturer = null
   ): array {
     $query = filter_out_null_params([
       "connected_account_id" => $connected_account_id,
       "connect_webview_id" => $connect_webview_id,
-      "device_type" => $device_type
+      "device_type" => $device_type,
+      "manufacturer" => $manufacturer
     ]);
 
     return array_map(
