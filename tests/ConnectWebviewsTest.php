@@ -47,6 +47,10 @@ final class ConnectWebviewsTest extends TestCase
     $this->assertTrue(
       $connect_webview->connect_webview_id === $connect_webview_id
     );
-    $this->assertIsString($connect_webview->$connected_account_id);
+    $connect_webviews = $seam->connect_webviews->list();
+    $this->assertTrue(count(array_filter($connect_webviews, 
+      function($connect_webview) { 
+        return !empty($connect_webview->connected_account_id ?? ''); 
+      })) > 0);
   }
 }
