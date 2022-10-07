@@ -13,6 +13,7 @@ class ConnectWebview
             connect_webview_id: $json->connect_webview_id,
             workspace_id: $json->workspace_id,
             url: $json->url,
+            connected_account_id: $json->connected_account_id ?? null,
             created_at: $json->created_at,
             status: $json->status,
             custom_redirect_url: $json->custom_redirect_url ?? null,
@@ -25,6 +26,7 @@ class ConnectWebview
         public string $workspace_id,
         public string $url,
 
+        public string|null $connected_account_id,
         /* Can be "pending", "authorized" or "error" */
         public string $status,
         public string|null $custom_redirect_url,

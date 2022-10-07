@@ -47,5 +47,6 @@ final class ConnectWebviewsTest extends TestCase
     $this->assertTrue(
       $connect_webview->connect_webview_id === $connect_webview_id
     );
+    $this->assertIsString($connect_webview->$connected_account_id);
   }
 }
