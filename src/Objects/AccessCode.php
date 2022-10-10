@@ -17,7 +17,7 @@ class AccessCode
             code: $json->code ?? null,
             status: $json->status ?? null,
             starts_at: $json->starts_at ?? null,
-            ends_at: $json->starts_at ?? null,
+            ends_at: $json->ends_at ?? null,
             errors: array_map(
                 fn($e) => SeamError::from_json($e),
                 $json->access_code_errors ?? []
