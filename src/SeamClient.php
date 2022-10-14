@@ -512,6 +512,17 @@ class ConnectedAccountsClient
     );
   }
 
+  public function delete(string $connected_account_id)
+  {
+    $this->seam->request(
+      "DELETE",
+      "connected_accounts/delete",
+      json: [
+        "connected_account_id" => $connected_account_id,
+      ]
+    );
+  }
+
   public function get(string $connected_account_id): ConnectedAccount
   {
     return ConnectedAccount::from_json(
