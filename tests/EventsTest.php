@@ -29,7 +29,7 @@ final class EventsTest extends TestCase
       $this->assertTrue(
         str_contains(
           $e->getMessage(),
-          'Must be parsable date string for provided "since"'
+          'Must be parsable date string for "since"'
         )
       );
     }

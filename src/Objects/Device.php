@@ -13,7 +13,7 @@ class Device
       device_id: $json->device_id,
       workspace_id: $json->workspace_id,
       connected_account_id: $json->connected_account_id,
-      device_type: $json->device_type,
+      device_type: $json->device_type ?? null,
       created_at: $json->created_at,
       location: $json->location,
       capabilities_supported: $json->capabilities_supported,
@@ -29,7 +29,7 @@ class Device
     public string $device_id,
     public string $workspace_id,
     public string $connected_account_id,
-    public string $device_type,
+    public string | null $device_type,
 
     public DeviceProperties $properties,
     public mixed $location,
