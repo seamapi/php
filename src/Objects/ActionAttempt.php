@@ -24,7 +24,7 @@ class ActionAttempt
         /*
          * CREATE_ACCESS_CODE, DELETE_ACCESS_CODE, LOCK_DOOR, UNLOCK_DOOR, etc.
          */
-        public string $action_type,
+        public string | null $action_type,
 
         /*
          * Can be "pending", "success", "error"
