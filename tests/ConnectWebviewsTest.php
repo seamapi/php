@@ -17,6 +17,7 @@ final class ConnectWebviewsTest extends TestCase
     $this->assertIsString($connect_webview->connect_webview_id);
     $this->assertIsString($connect_webview->url);
     $this->assertNull($connect_webview->custom_redirect_url);
+    $this->assertNull($connect_webview->custom_redirect_failure_url);
     $this->assertTrue($connect_webview->status == "pending");
   }
 
