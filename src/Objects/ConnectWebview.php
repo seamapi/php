@@ -17,6 +17,7 @@ class ConnectWebview
             created_at: $json->created_at,
             status: $json->status,
             custom_redirect_url: $json->custom_redirect_url ?? null,
+            custom_redirect_failure_url: $json->custom_redirect_failure_url ?? null,
             error: SeamError::from_json($json->error ?? null)
         );
     }
@@ -30,6 +31,7 @@ class ConnectWebview
         /* Can be "pending", "authorized" or "error" */
         public string $status,
         public string|null $custom_redirect_url,
+        public string|null $custom_redirect_failure_url,
         public string $created_at,
         public SeamError|null $error
     ) {

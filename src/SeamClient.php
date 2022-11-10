@@ -441,11 +441,13 @@ class ConnectWebviewsClient
   public function create(
     $accepted_providers = [],
     string $custom_redirect_url = null,
+    string $custom_redirect_failure_url = null,
     string $device_selection_mode = null
   ) {
     $json = filter_out_null_params([
       "accepted_providers" => $accepted_providers,
       "custom_redirect_url" => $custom_redirect_url,
+      "custom_redirect_failure_url" => $custom_redirect_failure_url,
       "device_selection_mode" => $device_selection_mode
     ]);
 
