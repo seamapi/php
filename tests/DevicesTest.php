@@ -35,5 +35,9 @@ final class DevicesTest extends TestCase
     $manufacturer = $devices[0]->properties->manufacturer;
     $device = $seam->devices->get(name: $device_name);
     $this->assertTrue($device->properties->manufacturer === $manufacturer);
+
+    $device_ids = [$devices[0]->device_id, $devices[1]->device_id];
+    $device = $seam->devices->get(device_ids: $device_ids);
+    $this->assertTrue(count($devices) == 2);
   }
 }
