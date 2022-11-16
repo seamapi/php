@@ -14,6 +14,10 @@ final class DevicesTest extends TestCase
     $devices = $seam->devices->list();
     $this->assertTrue(count($devices) > 0);
 
+    $device_ids = [$devices[0]->device_id];
+    $device = $seam->devices->list(device_ids: $device_ids);
+    $this->assertTrue(count($devices) == 1);
+
     $connected_account = $seam->connected_accounts->list()[0];
     $devices = $seam->devices->list(connected_account_id: $connected_account->connected_account_id);
     $this->assertTrue(count($devices) > 0);

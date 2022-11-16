@@ -19,7 +19,7 @@ final class AccessCodesTest extends TestCase
     $this->assertEmpty($access_codes);
     $this->assertIsArray($access_codes);
 
-    $seam->access_codes->create(device_id: $device_id, code: "1234");
+    $seam->access_codes->create(device_id: $device_id, code: "1235");
 
     $access_codes = $seam->access_codes->list(device_id: $device_id);
     $this->assertIsArray($access_codes);
@@ -28,12 +28,12 @@ final class AccessCodesTest extends TestCase
     $access_code = $seam->access_codes->get(access_code_id: $access_code_id);
     $this->assertTrue($access_code->access_code_id === $access_code_id);
 
-    $access_code = $seam->access_codes->get(device_id: $device_id, code: "1234");
-    $this->assertTrue($access_code->code === "1234");
+    $access_code = $seam->access_codes->get(device_id: $device_id, code: "1235");
+    $this->assertTrue($access_code->code === "1235");
 
-    $seam->access_codes->update(access_code_id: $access_code_id, code: "5678");
+    $seam->access_codes->update(access_code_id: $access_code_id, code: "5679");
     $access_code = $seam->access_codes->get(access_code_id: $access_code_id);
-    $this->assertTrue($access_code->code === "5678");
+    $this->assertTrue($access_code->code === "5679");
 
     $action_attempt = $seam->access_codes->delete(access_code_id: $access_code_id);
     $access_code = $seam->access_codes->get(access_code_id: $access_code_id);
@@ -45,7 +45,7 @@ final class AccessCodesTest extends TestCase
 
     $seam->access_codes->create(
       device_id: $device_id,
-      code: "5678",
+      code: "5679",
       starts_at: $start_date->format(DateTime::ATOM),
       ends_at: $end_date->format(DateTime::ATOM)
     );
