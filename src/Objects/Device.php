@@ -20,7 +20,7 @@ class Device
       properties: DeviceProperties::from_json($json->properties),
       errors: array_map(
         fn ($e) => SeamError::from_json($e),
-        $json->device_errors ?? []
+        $json->errors ?? []
       )
     );
   }

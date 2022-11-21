@@ -20,7 +20,11 @@ class AccessCode
             ends_at: $json->ends_at ?? null,
             errors: array_map(
                 fn($e) => SeamError::from_json($e),
-                $json->access_code_errors ?? []
+                $json->errors ?? []
+            ),
+            warnings: array_map(
+                fn($e) => SeamWarning::from_json($e),
+                $json->warnings ?? []
             )
         );
     }
@@ -52,7 +56,10 @@ class AccessCode
         public string $created_at,
 
         /* @var SeamError[] */
-        public array $errors
-    ) {
+        public array $errors,
+
+        /* @var SeamWarning[] */
+        public array $warnings
+        ) {
     }
 }
