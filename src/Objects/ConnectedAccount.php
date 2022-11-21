@@ -18,7 +18,7 @@ class ConnectedAccount
             created_at: $json->created_at,
             errors: array_map(
                 fn($e) => SeamError::from_json($e),
-                $json->connected_account_errors ?? []
+                $json->errors ?? []
             )
         );
     }
