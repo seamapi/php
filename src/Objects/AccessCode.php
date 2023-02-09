@@ -52,7 +52,7 @@ class AccessCode
          * The 4-8 digit code assigned to the device, note that this isn't always
          * immediately available after creating the access code.
          */
-        public string $code,
+        public string|null $code,
         public string $created_at,
 
         /* @var SeamError[] */
