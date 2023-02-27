@@ -11,7 +11,7 @@ final class Fixture
     $seam = new SeamClient(getenv('SEAM_API_KEY'));
     $seam->workspaces->reset_sandbox();
     if ($load_devices) {
-      $seam->workspaces->_internal_load_august_factory();
+      $seam->workspaces->_internal_load_schlage_factory();
     }
     return $seam;
   }

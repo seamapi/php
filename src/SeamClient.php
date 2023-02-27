@@ -153,6 +153,21 @@ class DevicesClient
       $this->seam->request("GET", "devices/list", query: $query, inner_object: "devices")
     );
   }
+
+  /**
+   * Delete Device
+   * @return void
+   */
+  public function delete(string $device_id)
+  {
+    $this->seam->request(
+      "DELETE",
+      "devices/delete",
+      json: [
+        "device_id" => $device_id,
+      ]
+    );
+  }
 }
 
 class WorkspacesClient
@@ -187,14 +202,14 @@ class WorkspacesClient
     return json_decode($res->getBody());
   }
 
-  public function _internal_load_august_factory()
+  public function _internal_load_schlage_factory()
   {
     $res = $this->seam->client->request(
       "POST",
       "internal/scenarios/factories/load",
       [
         "json" => [
-          "factory_name" => "create_august_devices",
+          "factory_name" => "create_schlage_devices",
           "input" => ["num" => 1],
           "sync" => true,
         ],
