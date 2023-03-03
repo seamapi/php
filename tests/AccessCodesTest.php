@@ -36,9 +36,15 @@ final class AccessCodesTest extends TestCase
     $this->assertTrue($access_code->code === "5679");
 
     $action_attempt = $seam->access_codes->delete(access_code_id: $access_code_id);
-    $access_code = $seam->access_codes->get(access_code_id: $access_code_id);
-    $this->assertEquals($access_code->status, "removing");
     $this->assertEquals($action_attempt->status, "success");
+    
+    try {
+      $seam->access_codes->get(access_code_id: $access_code_id);
+
+      $this->fail('Expected the code to be deleted');
+    } catch (Exception $exception) {
+      $this->assertTrue(str_contains($exception->getMessage(), "access_code_not_found"));
+    }
 
     $start_date = new DateTime("+2 months");
     $end_date = new DateTime("+3 months");
