@@ -11,7 +11,7 @@ class SeamError
     }
 
     return new self(
-      error_code: $json->error_code,
+      error_code: $json->error_code ?? "500",
       message: $json->message,
       created_at: $json->created_at ?? null,
     );
