@@ -41,6 +41,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
 
+      - name: Install dependencies
+        run: npm i
+
       - name: Setup Test Container
         id: setup-test-container
         run: npx ts-node ./bin/setup-test-container.ts
