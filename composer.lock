@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbef2f8bca9faca558cad1eb1b7a1771",
+    "content-hash": "6959276162cae3b0a7fcfe94364196b0",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -2287,6 +2287,59 @@
             "time": "2020-09-28T06:39:44+00:00"
         },
         {
+            "name": "shyim/testcontainer",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shyim/testcontainer.git",
+                "reference": "b770cdf2baf40f90648abc14bd6e5be6edf84850"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shyim/testcontainer/zipball/b770cdf2baf40f90648abc14bd6e5be6edf84850",
+                "reference": "b770cdf2baf40f90648abc14bd6e5be6edf84850",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 8.1",
+                "symfony/process": "^5.3|^6.0"
+            },
+            "require-dev": {
+                "brianium/paratest": "^6.6",
+                "friendsofphp/php-cs-fixer": "^3.12",
+                "phpstan/extension-installer": "^1.2",
+                "phpstan/phpstan": "^1.8",
+                "phpstan/phpstan-phpunit": "^1.1",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Testcontainer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Soner Sayakci",
+                    "email": "github@shyim.de"
+                }
+            ],
+            "description": "Testcontainer implementation in PHP",
+            "keywords": [
+                "docker",
+                "testcontainer"
+            ],
+            "support": {
+                "issues": "https://github.com/shyim/testcontainer/issues",
+                "source": "https://github.com/shyim/testcontainer/tree/0.0.2"
+            },
+            "time": "2022-10-23T17:14:43+00:00"
+        },
+        {
             "name": "squizlabs/php_codesniffer",
             "version": "3.7.1",
             "source": {
@@ -2341,6 +2394,67 @@
                 "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
             },
             "time": "2022-06-18T07:21:10+00:00"
+        },
+        {
+            "name": "symfony/process",
+            "version": "v6.2.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/process.git",
+                "reference": "680e8a2ea6b3f87aecc07a6a65a203ae573d1902"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/process/zipball/680e8a2ea6b3f87aecc07a6a65a203ae573d1902",
+                "reference": "680e8a2ea6b3f87aecc07a6a65a203ae573d1902",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Process\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Executes commands in sub-processes",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/process/tree/v6.2.7"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-02-24T10:42:00+00:00"
         },
         {
             "name": "theseer/tokenizer",
