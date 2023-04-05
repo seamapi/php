@@ -45,10 +45,12 @@ jobs:
 
       - name: Setup Test Container
         id: setup-test-container
-        run: npx ts-node ./bin/setup-test-container.ts
+        # this should be kept running until php script is run
+        run: nohup npx ts-node ./bin/setup-test-container.ts &
         env:
           SEAM_CONNECT_IMAGE: ${{ env.SEAM_CONNECT_IMAGE }}
 
+      # TODO:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup PHP
