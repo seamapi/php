@@ -1,6 +1,5 @@
 name: PHP Test on Container
 on:
-  pull_request:
   workflow_dispatch:
     inputs:
       sdkSha:
@@ -59,5 +58,5 @@ jobs:
       - run: composer install
       - run: composer exec phpunit tests
         env:
-          SEAM_API_KEY: ${{ secrets.SEAM_API_KEY }}
+          SEAM_API_KEY: ${{ steps.setup-test-container.outputs.seam_api_key || secrets.SEAM_API_KEY }}
           SEAM_CONNECT_IMAGE: ${{ steps.setup-test-container.outputs.container_id || env.SEAM_CONNECT_IMAGE }}
