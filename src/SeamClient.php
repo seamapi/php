@@ -153,6 +153,21 @@ class DevicesClient
       $this->seam->request("GET", "devices/list", query: $query, inner_object: "devices")
     );
   }
+
+  /**
+   * Delete Device
+   * @return void
+   */
+  public function delete(string $device_id)
+  {
+    $this->seam->request(
+      "DELETE",
+      "devices/delete",
+      json: [
+        "device_id" => $device_id,
+      ]
+    );
+  }
 }
 
 class WorkspacesClient
@@ -187,14 +202,14 @@ class WorkspacesClient
     return json_decode($res->getBody());
   }
 
-  public function _internal_load_august_factory()
+  public function _internal_load_schlage_factory()
   {
     $res = $this->seam->client->request(
       "POST",
       "internal/scenarios/factories/load",
       [
         "json" => [
-          "factory_name" => "create_august_devices",
+          "factory_name" => "create_schlage_devices",
           "input" => ["num" => 1],
           "sync" => true,
         ],
@@ -322,6 +337,7 @@ class AccessCodesClient
     string $code = null,
     string $starts_at = null,
     string $ends_at = null,
+    bool $attempt_for_offline_device = null,
     bool $wait_for_access_code = true
   ): ActionAttempt|AccessCode {
     $json = filter_out_null_params([
@@ -329,7 +345,8 @@ class AccessCodesClient
       "name" => $name,
       "code" => $code,
       "starts_at" => $starts_at,
-      "ends_at" => $ends_at
+      "ends_at" => $ends_at,
+      "attempt_for_offline_device" => $attempt_for_offline_device
     ]);
 
     // TODO future versions of the API will return the AccessCode immediately
@@ -362,6 +379,47 @@ class AccessCodesClient
     }
 
     return AccessCode::from_json($updated_action_attempt->result->access_code);
+  }
+
+
+  /**
+   * Create Access Codes across multiple Devices that share a common code
+   * 
+   * @param string[] $device_ids
+   * @param string|null $name
+   * @param string|null $starts_at
+   * @param string|null $ends_at
+   * @param string|null $behavior_when_code_cannot_be_shared Accepts either "throw" or "create_random_code"
+   * @param bool|null $attempt_for_offline_device
+   * 
+   * @return AccessCode[]
+   */
+  public function create_multiple(
+    array $device_ids,
+    string $name = null,
+    string $starts_at = null,
+    string $ends_at = null,
+    string $behavior_when_code_cannot_be_shared = null,
+    bool $attempt_for_offline_device = null,
+  ): array {
+    $json = filter_out_null_params([
+      "device_ids" => $device_ids,
+      "name" => $name,
+      "starts_at" => $starts_at,
+      "ends_at" => $ends_at,
+      "behavior_when_code_cannot_be_shared" => $behavior_when_code_cannot_be_shared,
+      "attempt_for_offline_device" => $attempt_for_offline_device
+    ]);
+
+    return array_map(
+      fn ($a) => AccessCode::from_json($a),
+      $this->seam->request(
+        "POST",
+        "access_codes/create_multiple",
+        json: $json,
+        inner_object: "access_codes"
+      )
+    );
   }
 
   public function delete(
