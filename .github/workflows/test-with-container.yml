@@ -59,4 +59,4 @@ jobs:
       - run: composer exec phpunit tests
         env:
           SEAM_API_KEY: ${{ steps.setup-test-container.outputs.seam_api_key || secrets.SEAM_API_KEY }}
-          SEAM_CONNECT_IMAGE: ${{ steps.setup-test-container.outputs.container_id || env.SEAM_CONNECT_IMAGE }}
+          SEAM_URL: ${{ steps.setup-test-container.outputs.container_id || env.SEAM_CONNECT_IMAGE }}
