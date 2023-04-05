@@ -1,39 +1,64 @@
-name: PHP Composer
-
+name: PHP Test on Container
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-permissions:
-  contents: read
+  workflow_dispatch:
+    inputs:
+      sdkSha:
+        description: "SHA of the seamapi-PHP commit to run against"
+        type: string
+        required: false
+      connectSha:
+        description: "SHA of the seam-connect commit to run against"
+        type: string
+        required: false
 
 jobs:
-  build:
-
+  test:
+    name: Run PHP Tests on Container
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      packages: write
+    env:
+      SEAM_CONNECT_IMAGE: ghcr.io/seamapi/seam-connect:${{ github.event.inputs.connectSha || 'latest' }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.sdkSha }}
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
+      - name: Log in to GitHub registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.BOT_GH_TOKEN }}
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      - name: Pre-pull Seam Connect image
+        run: docker pull ${{ env.SEAM_CONNECT_IMAGE }}
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
+      - name: Install dependencies
+        run: npm i
 
-    # - name: Run test suite
-    #   run: composer run-script test
+      - name: Setup Test Container
+        id: setup-test-container
+        # this should be kept running until php script is run
+        run: nohup npx ts-node ./bin/setup-test-container.ts &
+        env:
+          SEAM_CONNECT_IMAGE: ${{ env.SEAM_CONNECT_IMAGE }}
+
+      # TODO:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.0"
+      - run: composer install
+      - run: composer exec phpunit tests
+        env:
+          SEAM_API_KEY: ${{ steps.setup-test-container.outputs.seam_api_key || secrets.SEAM_API_KEY }}
+          SEAM_URL: ${{ steps.setup-test-container.outputs.container_id || env.SEAM_CONNECT_IMAGE }}
