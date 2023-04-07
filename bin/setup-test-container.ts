@@ -4,11 +4,12 @@ import getPort from "get-port";
 import { GenericContainer, Wait } from "testcontainers";
 import getTestSvix from "./get-test-svix";
 import knex from "knex";
-import defaultAxios from "axios";
+import { spawn } from "child_process";
 
 const SEAM_ADMIN_PASSWORD = "1234";
 
 const startAndSeedServer = async () => {
+  console.log("Starting seed server.");
   const database = await getTestDatabase();
 
   const svix = await getTestSvix({
@@ -25,7 +26,7 @@ const startAndSeedServer = async () => {
   const seamConnectImage =
     process.env.SEAM_CONNECT_IMAGE ?? "ghcr.io/seamapi/seam-connect:latest";
 
-  const server = await new GenericContainer(seamConnectImage)
+  await new GenericContainer(seamConnectImage)
     .withExposedPorts({
       container: hostPort,
       host: hostPort,
@@ -49,7 +50,7 @@ const startAndSeedServer = async () => {
 
   const db = knex(database.externalDatabaseUrl);
 
-  const workspace = await db("seam.workspace")
+  await db("seam.workspace")
     .where({ is_sandbox: true })
     .innerJoin(
       "seam.user_workspace",
@@ -59,13 +60,37 @@ const startAndSeedServer = async () => {
     .innerJoin("seam.user", "seam.user_workspace.user_id", "seam.user.user_id")
     .first();
 
-  const axios = defaultAxios.create({
-    baseURL: serverUrl,
-  });
-
-  const api_key = "seam_sandykey_0000000000000000000sand";
-
-  (axios.defaults.headers as any).Authorization = `Bearer ${api_key}`;
+  return { hostPort, apiKey: "seam_sandykey_0000000000000000000sand" };
 };
 
-startAndSeedServer();
+startAndSeedServer()
+  .then(async ({ hostPort, apiKey }) => {
+    console.log("Server started. Running tests.");
+    await new Promise(() => {
+      const spawn_handle = spawn("composer", ["exec", "phpunit", "tests"], {
+        env: {
+          ...process.env,
+          SEAM_API_KEY: apiKey,
+          SEAM_API_URL: `http://localhost:${hostPort}`,
+        },
+      });
+
+      spawn_handle.stdout.on("data", (data) => {
+        console.log(data.toString());
+      });
+      spawn_handle.stderr.on("data", (data) => {
+        console.error(`stderr: ${data}`);
+      });
+      spawn_handle.on("close", (code) => {
+        console.log(`child process exited with code ${code}`);
+        if (code) {
+          process.exit(code);
+        }
+        process.exit(0);
+      });
+    });
+  })
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

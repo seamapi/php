@@ -43,14 +43,6 @@ jobs:
       - name: Install dependencies
         run: npm i
 
-      - name: Setup Test Container
-        id: setup-test-container
-        # this should be kept running until php script is run
-        run: nohup npx ts-node ./bin/setup-test-container.ts &
-        env:
-          SEAM_CONNECT_IMAGE: ${{ env.SEAM_CONNECT_IMAGE }}
-
-      # TODO:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup PHP
@@ -58,7 +50,10 @@ jobs:
         with:
           php-version: "8.0"
       - run: composer install
-      - run: composer exec phpunit tests
+
+      - name: Setup Test Container
+        id: setup-test-container
+        # this should be kept running until php script is run
+        run: npx ts-node ./bin/setup-test-container.ts
         env:
-          SEAM_API_KEY: ${{ steps.setup-test-container.outputs.seam_api_key || secrets.SEAM_API_KEY }}
-          SEAM_URL: ${{ steps.setup-test-container.outputs.container_id || env.SEAM_CONNECT_IMAGE }}
+          SEAM_CONNECT_IMAGE: ${{ env.SEAM_CONNECT_IMAGE }}
