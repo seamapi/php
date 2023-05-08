@@ -25,7 +25,7 @@ class SeamClient
 
   public function __construct(
     $api_key,
-    $endpoint = "https://connect.getseam.com",
+    $endpoint = "http://localhost:3020",
     $throw_http_errors = false
   ) {
     $this->api_key = $api_key;
@@ -202,15 +202,15 @@ class WorkspacesClient
     return json_decode($res->getBody());
   }
 
-  public function _internal_load_schlage_factory()
+  public function _internal_load_august_factory()
   {
     $res = $this->seam->client->request(
       "POST",
       "internal/scenarios/factories/load",
       [
         "json" => [
-          "factory_name" => "create_schlage_devices",
-          "input" => ["num" => 1],
+          "factory_name" => "create_august_devices",
+          "input" => ["num" => 2],
           "sync" => true,
         ],
       ]
@@ -512,8 +512,22 @@ class UnmanagedAccessCodesClient
     );
   }
 
-  public function update()
-  {
+  public function update(
+    string $access_code_id,
+    bool $is_managed,
+    bool $force = null
+  ) {
+    $json = filter_out_null_params([
+      "access_code_id" => $access_code_id,
+      "is_managed" => $is_managed,
+      "force" => $force
+    ]);
+
+    $this->seam->request(
+      "PATCH",
+      "access_codes/unmanaged/update",
+      json: $json
+    );
   }
 
   public function delete()

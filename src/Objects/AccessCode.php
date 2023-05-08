@@ -63,7 +63,7 @@ class AccessCode
 
         /* @var SeamWarning[] */
         public array $warnings,
-        public string|null $is_managed
+        public bool|null $is_managed
         ) {
     }
 }
