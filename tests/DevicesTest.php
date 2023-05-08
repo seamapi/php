@@ -22,7 +22,7 @@ final class DevicesTest extends TestCase
     $devices = $seam->devices->list(connected_account_id: $connected_account->connected_account_id);
     $this->assertTrue(count($devices) > 0);
 
-    $devices = $seam->devices->list(device_type: 'schlage_lock');
+    $devices = $seam->devices->list(device_type: 'august_lock');
     $this->assertTrue(count($devices) > 0);
 
     $device_id = $devices[0]->device_id;
@@ -33,7 +33,7 @@ final class DevicesTest extends TestCase
     $device = $seam->devices->get(name: $device_name);
     $this->assertTrue($device->properties->name === $device_name);
 
-    $devices = $seam->devices->list(manufacturer: 'schlage');
+    $devices = $seam->devices->list(manufacturer: 'august');
     $this->assertTrue(count($devices) > 0);
 
     $manufacturer = $devices[0]->properties->manufacturer;

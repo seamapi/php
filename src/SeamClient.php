@@ -202,15 +202,15 @@ class WorkspacesClient
     return json_decode($res->getBody());
   }
 
-  public function _internal_load_schlage_factory()
+  public function _internal_load_august_factory()
   {
     $res = $this->seam->client->request(
       "POST",
       "internal/scenarios/factories/load",
       [
         "json" => [
-          "factory_name" => "create_schlage_devices",
-          "input" => ["num" => 1],
+          "factory_name" => "create_august_devices",
+          "input" => ["num" => 2],
           "sync" => true,
         ],
       ]
@@ -291,6 +291,7 @@ class AccessCodesClient
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
+    $this->unmanaged = new UnmanagedAccessCodesClient($seam);
   }
 
   /**
@@ -487,6 +488,63 @@ class AccessCodesClient
     }
 
     return AccessCode::from_json($updated_action_attempt->result->access_code);
+  }
+}
+
+class UnmanagedAccessCodesClient
+{
+  private SeamClient $seam;
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+  }
+
+  public function list(string $device_id): array
+  {
+    return array_map(
+      fn ($a) => AccessCode::from_json($a),
+      $this->seam->request(
+        "GET",
+        "access_codes/unmanaged/list",
+        query: ["device_id" => $device_id],
+        inner_object: "access_codes"
+      )
+    );
+  }
+
+  public function update(
+    string $access_code_id,
+    bool $is_managed,
+    bool $force = null
+  ) {
+    $json = filter_out_null_params([
+      "access_code_id" => $access_code_id,
+      "is_managed" => $is_managed,
+      "force" => $force
+    ]);
+
+    $this->seam->request(
+      "PATCH",
+      "access_codes/unmanaged/update",
+      json: $json
+    );
+  }
+
+  public function delete(string $access_code_id, bool $sync = null): ActionAttempt
+  {
+    $json = filter_out_null_params([
+      "access_code_id" => $access_code_id,
+      "sync" => $sync
+    ]);
+
+    return ActionAttempt::from_json(
+      $this->seam->request(
+        "DELETE",
+        "access_codes/unmanaged/delete",
+        json: $json,
+        inner_object: "action_attempt"
+      )
+    );
   }
 }
 

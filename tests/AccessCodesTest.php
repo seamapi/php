@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tests\Fixture;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientErrorResponseException as ClientErrorResponseException;
+use GuzzleHttp\Promise\Is;
 
 final class AccessCodesTest extends TestCase
 {
@@ -39,7 +40,7 @@ final class AccessCodesTest extends TestCase
 
     $action_attempt = $seam->access_codes->delete(access_code_id: $access_code_id);
     $this->assertEquals($action_attempt->status, "success");
-    
+
     try {
       $seam->access_codes->get(access_code_id: $access_code_id);
 
@@ -68,5 +69,38 @@ final class AccessCodesTest extends TestCase
 
     $access_codes = $seam->access_codes->create_multiple(device_ids: [$first_device_id, $second_device_id]);
     $this->assertTrue(count($access_codes) === 2);
+  }
+
+  public function testUnmanagedAccessCodes(): void
+  {
+    $seam = Fixture::getTestServer(true);
+
+    $device_id = $seam->devices->list()[0]->device_id;
+    $seam->request(
+      "POST",
+      "access_codes/simulate/create_unmanaged_access_code",
+      json: [
+        "device_id" => $device_id,
+        "name" => "Test Unmanaged Code",
+        "code" => "1234"
+      ]
+    );
+
+    $unmanaged_access_codes = $seam->access_codes->unmanaged->list(device_id: $device_id);
+    $this->assertTrue(count($unmanaged_access_codes) === 1);
+    $this->assertTrue($unmanaged_access_codes[0]->is_managed === false);
+
+    $unmanaged_access_code_id = $unmanaged_access_codes[0]->access_code_id;
+    $seam->access_codes->unmanaged->update(
+      access_code_id: $unmanaged_access_code_id,
+      is_managed: true
+    );
+
+    usleep(200000);
+
+    $managed_access_codes = $seam->access_codes->list(device_id: $device_id);
+    $this->assertTrue(count($managed_access_codes) === 1);
+    $this->assertTrue($managed_access_codes[0]->is_managed === true);
+    $this->assertTrue($managed_access_codes[0]->access_code_id === $unmanaged_access_code_id);
   }
 }
