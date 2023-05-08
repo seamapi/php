@@ -11,6 +11,7 @@ class AccessCode
         }
         return new self(
             access_code_id: $json->access_code_id ?? null,
+            device_id: $json->device_id ?? null,
             name: $json->name ?? null,
             created_at: $json->created_at ?? null,
             type: $json->type ?? null,
@@ -25,12 +26,14 @@ class AccessCode
             warnings: array_map(
                 fn($e) => SeamWarning::from_json($e),
                 $json->warnings ?? []
-            )
+            ),
+            is_managed: $json->is_managed ?? null,
         );
     }
 
     public function __construct(
         public string $access_code_id,
+        public string $device_id,
         public string | null $name,
 
         /* "time_bound" or "ongoing" */
@@ -59,7 +62,8 @@ class AccessCode
         public array $errors,
 
         /* @var SeamWarning[] */
-        public array $warnings
+        public array $warnings,
+        public string|null $is_managed
         ) {
     }
 }

@@ -291,6 +291,7 @@ class AccessCodesClient
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
+    $this->unmanaged = new UnmanagedAccessCodesClient($seam);
   }
 
   /**
@@ -487,6 +488,36 @@ class AccessCodesClient
     }
 
     return AccessCode::from_json($updated_action_attempt->result->access_code);
+  }
+}
+
+class UnmanagedAccessCodesClient
+{
+  private SeamClient $seam;
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+  }
+
+  public function list(string $device_id): array
+  {
+    return array_map(
+      fn ($a) => AccessCode::from_json($a),
+      $this->seam->request(
+        "GET",
+        "access_codes/unmanaged/list",
+        query: ["device_id" => $device_id],
+        inner_object: "access_codes"
+      )
+    );
+  }
+
+  public function update()
+  {
+  }
+
+  public function delete()
+  {
   }
 }
 
