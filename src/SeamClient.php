@@ -530,8 +530,21 @@ class UnmanagedAccessCodesClient
     );
   }
 
-  public function delete()
+  public function delete(string $access_code_id, bool $sync = null): ActionAttempt
   {
+    $json = filter_out_null_params([
+      "access_code_id" => $access_code_id,
+      "sync" => $sync
+    ]);
+
+    return ActionAttempt::from_json(
+      $this->seam->request(
+        "DELETE",
+        "access_codes/unmanaged/delete",
+        json: $json,
+        inner_object: "action_attempt"
+      )
+    );
   }
 }
 
