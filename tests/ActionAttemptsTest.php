@@ -12,7 +12,7 @@ final class ActionAttemptsTest extends TestCase
     $seam = Fixture::getTestServer(true);
 
     $device_id = $seam->devices->list()[0]->device_id;
-    $action_attempt = $seam->access_codes->create(device_id: $device_id, wait_for_access_code: false);
+    $action_attempt = $seam->locks->lock_door(device_id: $device_id);
 
     $action_attempt_id = $action_attempt->action_attempt_id;
     $action_attempt = $seam->action_attempts->get(action_attempt_id: $action_attempt_id);

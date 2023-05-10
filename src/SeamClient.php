@@ -349,27 +349,19 @@ class AccessCodesClient
       "ends_at" => $ends_at,
       "attempt_for_offline_device" => $attempt_for_offline_device
     ]);
-
-    // TODO future versions of the API will return the AccessCode immediately
-    // return AccessCode::from_json($this->seam->request(
-    //   "POST",
-    //   "access_codes/create",
-    //   json: $json,
-    //   inner_object: 'access_code'
-    // ));
-    // TODO remove everything under this when API returns AccessCode immediately
-
-    $action_attempt = ActionAttempt::from_json(
-      $this->seam->request(
-        "POST",
-        "access_codes/create",
-        json: $json,
-        inner_object: "action_attempt"
-      )
+    [
+      'action_attempt' => $action_attempt,
+      'access_code' => $access_code
+    ] = (array) $this->seam->request(
+      "POST",
+      "access_codes/create",
+      json: $json,
     );
+
     if (!$wait_for_access_code) {
-      return $action_attempt;
+      return AccessCode::from_json($access_code);
     }
+
     $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
 
     if (!$updated_action_attempt->result?->access_code) {
