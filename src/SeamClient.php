@@ -339,7 +339,7 @@ class AccessCodesClient
     string $starts_at = null,
     string $ends_at = null,
     bool $attempt_for_offline_device = null,
-    bool $wait_for_access_code = true
+    bool $wait_for_action_attempt = true
   ): ActionAttempt|AccessCode {
     $json = filter_out_null_params([
       "device_id" => $device_id,
@@ -358,7 +358,7 @@ class AccessCodesClient
       json: $json,
     );
 
-    if (!$wait_for_access_code) {
+    if (!$wait_for_action_attempt) {
       return AccessCode::from_json($access_code);
     }
 
