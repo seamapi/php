@@ -339,7 +339,7 @@ class AccessCodesClient
     string $starts_at = null,
     string $ends_at = null,
     bool $attempt_for_offline_device = null,
-    bool $wait_for_access_code = true
+    bool $wait_for_action_attempt = true
   ): ActionAttempt|AccessCode {
     $json = filter_out_null_params([
       "device_id" => $device_id,
@@ -349,27 +349,19 @@ class AccessCodesClient
       "ends_at" => $ends_at,
       "attempt_for_offline_device" => $attempt_for_offline_device
     ]);
-
-    // TODO future versions of the API will return the AccessCode immediately
-    // return AccessCode::from_json($this->seam->request(
-    //   "POST",
-    //   "access_codes/create",
-    //   json: $json,
-    //   inner_object: 'access_code'
-    // ));
-    // TODO remove everything under this when API returns AccessCode immediately
-
-    $action_attempt = ActionAttempt::from_json(
-      $this->seam->request(
-        "POST",
-        "access_codes/create",
-        json: $json,
-        inner_object: "action_attempt"
-      )
+    [
+      'action_attempt' => $action_attempt,
+      'access_code' => $access_code
+    ] = (array) $this->seam->request(
+      "POST",
+      "access_codes/create",
+      json: $json,
     );
-    if (!$wait_for_access_code) {
-      return $action_attempt;
+
+    if (!$wait_for_action_attempt) {
+      return AccessCode::from_json($access_code);
     }
+
     $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
 
     if (!$updated_action_attempt->result?->access_code) {
