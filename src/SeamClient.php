@@ -9,6 +9,7 @@ use Seam\Objects\ConnectWebview;
 use Seam\Objects\Device;
 use Seam\Objects\Event;
 use Seam\Objects\Workspace;
+use Seam\Objects\ClientSession;
 
 use GuzzleHttp\Client as HTTPClient;
 use \Exception as Exception;
@@ -769,6 +770,36 @@ class LocksClient
           "device_id" => $device_id,
         ],
         inner_object: "action_attempt"
+      )
+    );
+  }
+}
+
+class ClientSessionsClient
+{
+  private SeamClient $seam;
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+  }
+  
+  public function create(
+    string $user_identifier_key = null,
+    $connect_webview_ids = null,
+    $connected_account_ids = null
+  ) {
+    $json = filter_out_null_params([
+      "user_identifier_key" => $user_identifier_key,
+      "connect_webview_ids" => $connect_webview_ids,
+      "connected_account_ids" => $connect_account_ids
+    ]);
+
+    return ClientSession::from_json(
+      $this->seam->request(
+        "POST",
+        "client_sessions/create",
+        json: $json,
+        inner_object: "client_session"
       )
     );
   }
