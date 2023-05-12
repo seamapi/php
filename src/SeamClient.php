@@ -47,6 +47,7 @@ class SeamClient
     $this->connect_webviews = new ConnectWebviewsClient($this);
     $this->connected_accounts = new ConnectedAccountsClient($this);
     $this->locks = new LocksClient($this);
+    $this->client_sessions = new ClientSessionsClient($this);
   }
 
   public function request(
