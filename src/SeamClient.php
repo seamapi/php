@@ -659,16 +659,26 @@ class EventsClient
   /**
    * Get Event
    */
-  public function get(string $event_id): Event|null
-  {
+  public function get(
+    string $event_id = null,
+    string $event_type = null,
+    string $device_id = null,
+  ): Event|null {
+    $query = filter_out_null_params([
+      "event_id" => $event_id,
+      "event_type" => $event_type,
+      "device_id" => $device_id,
+    ]);
+
     $event = Event::from_json(
       $this->seam->request(
         "GET",
         "events/get",
-        query: ["event_id" => $event_id],
+        query: $query,
         inner_object: "event"
       )
     );
+
     return $event;
   }
 
@@ -676,16 +686,35 @@ class EventsClient
    * List Events
    * @return Event[]
    */
-  public function list(string $since): array
-  {
+  public function list(
+    string $since = null,
+    array $between = null,
+    string $device_id = null,
+    array $device_ids = null,
+    string $access_code_id = null,
+    array $access_code_ids = null,
+    string $event_type = null,
+    array $event_types = null,
+    string $connected_account_id = null,
+  ): array {
+    $query = filter_out_null_params([
+      "since" => $since,
+      "between" => $between,
+      "device_id" => $device_id,
+      "device_ids" => is_null($device_ids) ? null : join(",", $device_ids),
+      "access_code_id" => $access_code_id,
+      "access_code_ids" => is_null($access_code_ids) ? null : join(",", $access_code_ids),
+      "event_type" => $event_type,
+      "event_types" => $event_types,
+      "connected_account_id" => $connected_account_id,
+    ]);
+
     return array_map(
       fn ($d) => Event::from_json($d),
       $this->seam->request(
         "GET",
         "events/list",
-        query: [
-          "since" => $since,
-        ],
+        query: $query,
         inner_object: "events"
       )
     );
