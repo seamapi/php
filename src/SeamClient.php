@@ -9,6 +9,7 @@ use Seam\Objects\ConnectWebview;
 use Seam\Objects\Device;
 use Seam\Objects\Event;
 use Seam\Objects\Workspace;
+use Seam\Objects\ClientSession;
 
 use GuzzleHttp\Client as HTTPClient;
 use \Exception as Exception;
@@ -22,6 +23,17 @@ class SeamClient
 {
   public DevicesClient $devices;
   public WorkspacesClient $workspaces;
+  public ActionAttemptsClient $action_attempts;
+  public AccessCodesClient $access_codes;
+  public EventsClient $events;
+  public ConnectWebviewsClient $connect_webviews;
+  public ConnectedAccountsClient $connected_accounts;
+  public LocksClient $locks;
+  public ClientSessionsClient $client_sessions;
+
+  public string $api_key;
+  public HTTPClient $client;
+
 
   public function __construct(
     $api_key,
@@ -31,7 +43,7 @@ class SeamClient
     $this->api_key = $api_key;
     $this->client = new HTTPClient([
       "base_uri" => $endpoint,
-      "timeout" => 20.0,
+      "timeout" => 60.0,
       "headers" => [
         "Authorization" => "Bearer " . $this->api_key,
         "User-Agent" => "Seam PHP Client 0.0.1",
@@ -46,6 +58,7 @@ class SeamClient
     $this->connect_webviews = new ConnectWebviewsClient($this);
     $this->connected_accounts = new ConnectedAccountsClient($this);
     $this->locks = new LocksClient($this);
+    $this->client_sessions = new ClientSessionsClient($this);
   }
 
   public function request(
@@ -172,6 +185,8 @@ class DevicesClient
 
 class WorkspacesClient
 {
+  private SeamClient $seam;
+
   public function __construct($seam)
   {
     $this->seam = $seam;
@@ -288,6 +303,7 @@ class ActionAttemptsClient
 class AccessCodesClient
 {
   private SeamClient $seam;
+  public UnmanagedAccessCodesClient $unmanaged;
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
@@ -798,6 +814,58 @@ class LocksClient
           "device_id" => $device_id,
         ],
         inner_object: "action_attempt"
+      )
+    );
+  }
+}
+
+class ClientSessionsClient
+{
+  private SeamClient $seam;
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+  }
+  
+  public function create(
+    string $user_identifier_key = null,
+    array | null $connect_webview_ids = null,
+    array | null $connected_account_ids = null
+  ) {
+    $json = filter_out_null_params([
+      "user_identifier_key" => $user_identifier_key,
+      "connect_webview_ids" => $connect_webview_ids,
+      "connected_account_ids" => $connected_account_ids
+    ]);
+
+    return ClientSession::from_json(
+      $this->seam->request(
+        "POST",
+        "client_sessions/create",
+        json: $json,
+        inner_object: "client_session"
+      )
+    );
+  }
+
+  public function get_or_create(
+    string $user_identifier_key = null,
+    array | null $connect_webview_ids = null,
+    array | null $connected_account_ids = null
+  ) {
+    $json = filter_out_null_params([
+      "user_identifier_key" => $user_identifier_key,
+      "connect_webview_ids" => $connect_webview_ids,
+      "connected_account_ids" => $connected_account_ids
+    ]);
+
+    // TODO change the /client_sessions/get_or_create when that's available
+    return ClientSession::from_json(
+      $this->seam->request(
+        "PUT",
+        "client_sessions/create",
+        json: $json,
+        inner_object: "client_session"
       )
     );
   }
