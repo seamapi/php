@@ -14,6 +14,7 @@ class ClientSession
             user_identifier_key: $json->user_identifier_key ?? null,
             connect_webview_ids: $json->connect_webview_ids ?? null,
             connected_account_ids: $json->connected_account_ids?? null,
+            token: $json->token ?? null,
         );
     }
 
@@ -23,6 +24,7 @@ class ClientSession
         public string | null $user_identifier_key,
         public mixed $connect_webview_ids,
         public mixed $connected_account_ids,
+        public string $token,
     ) {
     }
 }

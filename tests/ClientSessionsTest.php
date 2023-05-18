@@ -12,6 +12,7 @@ final class ClientSessionsTest extends TestCase
   {
     $seam = Fixture::getTestServer(true);
     $client_session = $seam->client_sessions->create();
+
     $this->assertIsString($client_session->client_session_id);
     $this->assertIsString($client_session->token);
   }
