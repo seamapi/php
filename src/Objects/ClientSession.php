@@ -22,8 +22,8 @@ class ClientSession
         public string $client_session_id,
 
         public string | null $user_identifier_key,
-        public mixed $connect_webview_ids,
-        public mixed $connected_account_ids,
+        public array | null $connect_webview_ids,
+        public array | null $connected_account_ids,
         public string $token,
     ) {
     }

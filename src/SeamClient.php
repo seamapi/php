@@ -31,6 +31,9 @@ class SeamClient
   public LocksClient $locks;
   public ClientSessionsClient $client_sessions;
 
+  public string $api_key;
+  public HTTPClient $client;
+
 
   public function __construct(
     $api_key,
@@ -40,7 +43,7 @@ class SeamClient
     $this->api_key = $api_key;
     $this->client = new HTTPClient([
       "base_uri" => $endpoint,
-      "timeout" => 20.0,
+      "timeout" => 60.0,
       "headers" => [
         "Authorization" => "Bearer " . $this->api_key,
         "User-Agent" => "Seam PHP Client 0.0.1",
@@ -182,6 +185,8 @@ class DevicesClient
 
 class WorkspacesClient
 {
+  private SeamClient $seam;
+
   public function __construct($seam)
   {
     $this->seam = $seam;
@@ -298,6 +303,7 @@ class ActionAttemptsClient
 class AccessCodesClient
 {
   private SeamClient $seam;
+  public UnmanagedAccessCodesClient $unmanaged;
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
@@ -823,8 +829,8 @@ class ClientSessionsClient
   
   public function create(
     string $user_identifier_key = null,
-    $connect_webview_ids = null,
-    $connected_account_ids = null
+    array | null $connect_webview_ids = null,
+    array | null $connected_account_ids = null
   ) {
     $json = filter_out_null_params([
       "user_identifier_key" => $user_identifier_key,
@@ -844,8 +850,8 @@ class ClientSessionsClient
 
   public function get_or_create(
     string $user_identifier_key = null,
-    $connect_webview_ids = null,
-    $connected_account_ids = null
+    array | null $connect_webview_ids = null,
+    array | null $connected_account_ids = null
   ) {
     $json = filter_out_null_params([
       "user_identifier_key" => $user_identifier_key,
