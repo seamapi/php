@@ -23,6 +23,14 @@ class SeamClient
 {
   public DevicesClient $devices;
   public WorkspacesClient $workspaces;
+  public ActionAttemptsClient $action_attempts;
+  public AccessCodesClient $access_codes;
+  public EventsClient $events;
+  public ConnectWebviewsClient $connect_webviews;
+  public ConnectedAccountsClient $connected_accounts;
+  public LocksClient $locks;
+  public ClientSessionsClient $client_sessions;
+
 
   public function __construct(
     $api_key,
@@ -821,12 +829,34 @@ class ClientSessionsClient
     $json = filter_out_null_params([
       "user_identifier_key" => $user_identifier_key,
       "connect_webview_ids" => $connect_webview_ids,
-      "connected_account_ids" => $connect_account_ids
+      "connected_account_ids" => $connected_account_ids
     ]);
 
     return ClientSession::from_json(
       $this->seam->request(
         "POST",
+        "client_sessions/create",
+        json: $json,
+        inner_object: "client_session"
+      )
+    );
+  }
+
+  public function get_or_create(
+    string $user_identifier_key = null,
+    $connect_webview_ids = null,
+    $connected_account_ids = null
+  ) {
+    $json = filter_out_null_params([
+      "user_identifier_key" => $user_identifier_key,
+      "connect_webview_ids" => $connect_webview_ids,
+      "connected_account_ids" => $connected_account_ids
+    ]);
+
+    // TODO change the /client_sessions/get_or_create when that's available
+    return ClientSession::from_json(
+      $this->seam->request(
+        "PUT",
         "client_sessions/create",
         json: $json,
         inner_object: "client_session"
