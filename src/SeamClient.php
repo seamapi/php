@@ -10,6 +10,7 @@ use Seam\Objects\Device;
 use Seam\Objects\Event;
 use Seam\Objects\Workspace;
 use Seam\Objects\ClientSession;
+use Seam\Objects\NoiseThreshold;
 
 use GuzzleHttp\Client as HTTPClient;
 use \Exception as Exception;
@@ -30,6 +31,7 @@ class SeamClient
   public ConnectedAccountsClient $connected_accounts;
   public LocksClient $locks;
   public ClientSessionsClient $client_sessions;
+  public NoiseSensorsClient $noise_sensors;
 
   public string $api_key;
   public HTTPClient $client;
@@ -59,6 +61,7 @@ class SeamClient
     $this->connected_accounts = new ConnectedAccountsClient($this);
     $this->locks = new LocksClient($this);
     $this->client_sessions = new ClientSessionsClient($this);
+    $this->noise_sensors = new NoiseSensorsClient($this);
   }
 
   public function request(
@@ -826,7 +829,7 @@ class ClientSessionsClient
   {
     $this->seam = $seam;
   }
-  
+
   public function create(
     string $user_identifier_key = null,
     array | null $connect_webview_ids = null,
@@ -868,5 +871,41 @@ class ClientSessionsClient
         inner_object: "client_session"
       )
     );
+  }
+}
+
+class NoiseSensorsClient
+{
+  private SeamClient $seam;
+  public NoiseThresholdsClient $noise_thresholds;
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+    $this->noise_thresholds = new NoiseThresholdsClient($seam);
+  }
+}
+
+class NoiseThresholdsClient
+{
+  private SeamClient $seam;
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+  }
+
+  public function list()
+  {
+  }
+
+  public function create()
+  {
+  }
+
+  public function update()
+  {
+  }
+
+  public function delete()
+  {
   }
 }
