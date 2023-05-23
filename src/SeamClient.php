@@ -913,7 +913,7 @@ class NoiseThresholdsClient
     string $name = null,
     float $noise_threshold_decibels = null,
     float $noise_threshold_nrs = null,
-    bool $wait_for_action_attempt = null,
+    bool $wait_for_action_attempt = true,
   ): ActionAttempt|NoiseThreshold {
     $json = filter_out_null_params([
       "device_id" => $device_id,
@@ -938,22 +938,87 @@ class NoiseThresholdsClient
     }
 
     $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+    $noise_threshold = $updated_action_attempt->result?->noise_threshold;
 
-    if (!$updated_action_attempt->result?->noise_threshold) {
+    if (!$noise_threshold) {
       throw new Exception(
         "Failed to create noise threshold: no noise threshold returned: " .
           json_encode($updated_action_attempt)
       );
     }
 
-    return NoiseThreshold::from_json($updated_action_attempt->result->noise_threshold);
+    return NoiseThreshold::from_json($noise_threshold);
   }
 
-  public function update()
-  {
+  public function update(
+    string $device_id,
+    string $noise_threshold_id,
+    string $name = null,
+    string $starts_daily_at = null,
+    string $ends_daily_at = null,
+    float $noise_threshold_decibels = null,
+    float $noise_threshold_nrs = null,
+    bool $wait_for_action_attempt = true,
+  ): ActionAttempt|NoiseThreshold {
+    $json = filter_out_null_params([
+      "device_id" => $device_id,
+      "noise_threshold_id" => $noise_threshold_id,
+      "name" => $name,
+      "starts_daily_at" => $starts_daily_at,
+      "ends_daily_at" => $ends_daily_at,
+      "noise_threshold_decibels" => $noise_threshold_decibels,
+      "noise_threshold_nrs" => $noise_threshold_nrs,
+    ]);
+
+    $action_attempt = ActionAttempt::from_json(
+      $this->seam->request(
+        "PUT",
+        "noise_sensors/noise_thresholds/update",
+        json: $json,
+        inner_object: "action_attempt"
+      )
+    );
+
+    if (!$wait_for_action_attempt) {
+      return $action_attempt;
+    }
+
+    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+    $noise_threshold = $updated_action_attempt->result?->noise_threshold;
+
+    if (!$noise_threshold) {
+      throw new Exception(
+        "Failed to update noise threshold: no noise threshold returned: " .
+          json_encode($updated_action_attempt)
+      );
+    }
+
+    return NoiseThreshold::from_json($noise_threshold);
   }
 
-  public function delete()
-  {
+  public function delete(
+    string $noise_threshold_id,
+    string $device_id,
+    bool $wait_for_action_attempt = true,
+  ) {
+    $action_attempt = ActionAttempt::from_json(
+      $this->seam->request(
+        "DELETE",
+        "noise_sensors/noise_thresholds/delete",
+        json: [
+          "noise_threshold_id" => $noise_threshold_id,
+          "device_id" => $device_id
+        ],
+        inner_object: "action_attempt"
+      )
+    );
+
+    if (!$wait_for_action_attempt) {
+      return $action_attempt;
+    }
+
+    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+
+    return $updated_action_attempt;
   }
 }
