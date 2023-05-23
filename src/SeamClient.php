@@ -893,12 +893,60 @@ class NoiseThresholdsClient
     $this->seam = $seam;
   }
 
-  public function list()
+  public function list(string $device_id): array
   {
+    return array_map(
+      fn ($nt) => NoiseThreshold::from_json($nt),
+      $this->seam->request(
+        "GET",
+        "noise_sensors/noise_thresholds/list",
+        query: ["device_id" => $device_id],
+        inner_object: "noise_thresholds"
+      )
+    );
   }
 
-  public function create()
-  {
+  public function create(
+    string $device_id,
+    string $starts_daily_at,
+    string $ends_daily_at,
+    string $name = null,
+    float $noise_threshold_decibels = null,
+    float $noise_threshold_nrs = null,
+    bool $wait_for_action_attempt = null,
+  ): ActionAttempt|NoiseThreshold {
+    $json = filter_out_null_params([
+      "device_id" => $device_id,
+      "starts_daily_at" => $starts_daily_at,
+      "ends_daily_at" => $ends_daily_at,
+      "name" => $name,
+      "noise_threshold_decibels" => $noise_threshold_decibels,
+      "noise_threshold_nrs" => $noise_threshold_nrs,
+    ]);
+
+    $action_attempt = ActionAttempt::from_json(
+      $this->seam->request(
+        "POST",
+        "noise_sensors/noise_thresholds/create",
+        json: $json,
+        inner_object: "action_attempt"
+      )
+    );
+
+    if (!$wait_for_action_attempt) {
+      return $action_attempt;
+    }
+
+    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+
+    if (!$updated_action_attempt->result?->noise_threshold) {
+      throw new Exception(
+        "Failed to create noise threshold: no noise threshold returned: " .
+          json_encode($updated_action_attempt)
+      );
+    }
+
+    return NoiseThreshold::from_json($updated_action_attempt->result->noise_threshold);
   }
 
   public function update()
