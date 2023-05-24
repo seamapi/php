@@ -222,16 +222,14 @@ class WorkspacesClient
 
   public function _internal_load_august_factory()
   {
-    $res = $this->seam->client->request(
+    $res = $this->seam->request(
       "POST",
       "internal/scenarios/factories/load",
-      [
-        "json" => [
-          "factory_name" => "create_august_devices",
-          "input" => ["num" => 2],
-          "sync" => true,
-        ],
-      ]
+      json: [
+        "factory_name" => "create_august_devices",
+        "input" => ["num" => 2],
+        "sync" => true,
+      ],
     );
 
     // sleep for 0.2 seconds
@@ -240,37 +238,34 @@ class WorkspacesClient
 
   public function _internal_load_minut_factory()
   {
-    $this->seam->client->request(
+    $this->seam->request(
       "POST",
       "internal/scenarios/factories/load",
-      [
-        "json" => [
-          "factory_name" => "create_minut_devices",
-          "input" => [
-            "devicesConfig" => [
-              [
-                "sound_level_high" => [
-                  "value" => 60,
-                  "duration_seconds" => 600,
-                  "notifications" => []
-                ],
-                "sound_level_high_quiet_hours" => [
-                  "value" => 60,
-                  "duration_seconds" => 600,
-                  "notifications" => [],
-                  "enabled" => True,
-                  "starts_at" => "20:00",
-                  "ends_at" => "08:00",
-                ]
+      json: [
+        "factory_name" => "create_minut_devices",
+        "input" => [
+          "devicesConfig" => [
+            [
+              "sound_level_high" => [
+                "value" => 60,
+                "duration_seconds" => 600,
+                "notifications" => []
+              ],
+              "sound_level_high_quiet_hours" => [
+                "value" => 60,
+                "duration_seconds" => 600,
+                "notifications" => [],
+                "enabled" => True,
+                "starts_at" => "20:00",
+                "ends_at" => "08:00",
               ]
             ]
           ],
           "sync" => true,
         ],
-      ]
+      ],
     );
 
-    // sleep for 0.2 seconds
     usleep(200000);
   }
 }
