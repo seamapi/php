@@ -11,9 +11,9 @@ class SeamWarning
     }
 
     return new self(
-      warning_code: $json->error_code,
-      message: $json->message,
-      created_at: $json->created_at ?? null,
+      warning_code: $json?->warning_code ?? null,
+      message: $json?->message ?? null,
+      created_at: $json?->created_at ?? null,
     );
   }
 
