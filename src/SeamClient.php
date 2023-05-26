@@ -10,6 +10,7 @@ use Seam\Objects\Device;
 use Seam\Objects\Event;
 use Seam\Objects\Workspace;
 use Seam\Objects\ClientSession;
+use Seam\Objects\NoiseThreshold;
 
 use GuzzleHttp\Client as HTTPClient;
 use \Exception as Exception;
@@ -30,6 +31,7 @@ class SeamClient
   public ConnectedAccountsClient $connected_accounts;
   public LocksClient $locks;
   public ClientSessionsClient $client_sessions;
+  public NoiseSensorsClient $noise_sensors;
 
   public string $api_key;
   public HTTPClient $client;
@@ -59,6 +61,7 @@ class SeamClient
     $this->connected_accounts = new ConnectedAccountsClient($this);
     $this->locks = new LocksClient($this);
     $this->client_sessions = new ClientSessionsClient($this);
+    $this->noise_sensors = new NoiseSensorsClient($this);
   }
 
   public function request(
@@ -219,19 +222,50 @@ class WorkspacesClient
 
   public function _internal_load_august_factory()
   {
-    $res = $this->seam->client->request(
+    $res = $this->seam->request(
       "POST",
       "internal/scenarios/factories/load",
-      [
-        "json" => [
-          "factory_name" => "create_august_devices",
-          "input" => ["num" => 2],
-          "sync" => true,
-        ],
-      ]
+      json: [
+        "factory_name" => "create_august_devices",
+        "input" => ["num" => 2],
+        "sync" => true,
+      ],
     );
 
     // sleep for 0.2 seconds
+    usleep(200000);
+  }
+
+  public function _internal_load_minut_factory()
+  {
+    $this->seam->request(
+      "POST",
+      "internal/scenarios/factories/load",
+      json: [
+        "factory_name" => "create_minut_devices",
+        "input" => [
+          "devicesConfig" => [
+            [
+              "sound_level_high" => [
+                "value" => 60,
+                "duration_seconds" => 600,
+                "notifications" => []
+              ],
+              "sound_level_high_quiet_hours" => [
+                "value" => 60,
+                "duration_seconds" => 600,
+                "notifications" => [],
+                "enabled" => True,
+                "starts_at" => "20:00",
+                "ends_at" => "08:00",
+              ]
+            ]
+          ],
+          "sync" => true,
+        ],
+      ],
+    );
+
     usleep(200000);
   }
 }
@@ -826,7 +860,7 @@ class ClientSessionsClient
   {
     $this->seam = $seam;
   }
-  
+
   public function create(
     string $user_identifier_key = null,
     array | null $connect_webview_ids = null,
@@ -868,5 +902,154 @@ class ClientSessionsClient
         inner_object: "client_session"
       )
     );
+  }
+}
+
+class NoiseSensorsClient
+{
+  private SeamClient $seam;
+  public NoiseThresholdsClient $noise_thresholds;
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+    $this->noise_thresholds = new NoiseThresholdsClient($seam);
+  }
+}
+
+class NoiseThresholdsClient
+{
+  private SeamClient $seam;
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+  }
+
+  public function list(string $device_id): array
+  {
+    return array_map(
+      fn ($nt) => NoiseThreshold::from_json($nt),
+      $this->seam->request(
+        "GET",
+        "noise_sensors/noise_thresholds/list",
+        query: ["device_id" => $device_id],
+        inner_object: "noise_thresholds"
+      )
+    );
+  }
+
+  public function create(
+    string $device_id,
+    string $starts_daily_at,
+    string $ends_daily_at,
+    string $name = null,
+    float $noise_threshold_decibels = null,
+    float $noise_threshold_nrs = null,
+    bool $wait_for_action_attempt = true,
+  ): ActionAttempt|NoiseThreshold {
+    $json = filter_out_null_params([
+      "device_id" => $device_id,
+      "starts_daily_at" => $starts_daily_at,
+      "ends_daily_at" => $ends_daily_at,
+      "name" => $name,
+      "noise_threshold_decibels" => $noise_threshold_decibels,
+      "noise_threshold_nrs" => $noise_threshold_nrs,
+    ]);
+
+    $action_attempt = ActionAttempt::from_json(
+      $this->seam->request(
+        "POST",
+        "noise_sensors/noise_thresholds/create",
+        json: $json,
+        inner_object: "action_attempt"
+      )
+    );
+
+    if (!$wait_for_action_attempt) {
+      return $action_attempt;
+    }
+
+    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+    $noise_threshold = $updated_action_attempt->result?->noise_threshold;
+
+    if (!$noise_threshold) {
+      throw new Exception(
+        "Failed to create noise threshold: no noise threshold returned: " .
+          json_encode($updated_action_attempt)
+      );
+    }
+
+    return NoiseThreshold::from_json($noise_threshold);
+  }
+
+  public function update(
+    string $device_id,
+    string $noise_threshold_id,
+    string $name = null,
+    string $starts_daily_at = null,
+    string $ends_daily_at = null,
+    float $noise_threshold_decibels = null,
+    float $noise_threshold_nrs = null,
+    bool $wait_for_action_attempt = true,
+  ): ActionAttempt|NoiseThreshold {
+    $json = filter_out_null_params([
+      "device_id" => $device_id,
+      "noise_threshold_id" => $noise_threshold_id,
+      "name" => $name,
+      "starts_daily_at" => $starts_daily_at,
+      "ends_daily_at" => $ends_daily_at,
+      "noise_threshold_decibels" => $noise_threshold_decibels,
+      "noise_threshold_nrs" => $noise_threshold_nrs,
+    ]);
+
+    $action_attempt = ActionAttempt::from_json(
+      $this->seam->request(
+        "PUT",
+        "noise_sensors/noise_thresholds/update",
+        json: $json,
+        inner_object: "action_attempt"
+      )
+    );
+
+    if (!$wait_for_action_attempt) {
+      return $action_attempt;
+    }
+
+    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+    $noise_threshold = $updated_action_attempt->result?->noise_threshold;
+
+    if (!$noise_threshold) {
+      throw new Exception(
+        "Failed to update noise threshold: no noise threshold returned: " .
+          json_encode($updated_action_attempt)
+      );
+    }
+
+    return NoiseThreshold::from_json($noise_threshold);
+  }
+
+  public function delete(
+    string $noise_threshold_id,
+    string $device_id,
+    bool $wait_for_action_attempt = true,
+  ) {
+    $action_attempt = ActionAttempt::from_json(
+      $this->seam->request(
+        "DELETE",
+        "noise_sensors/noise_thresholds/delete",
+        json: [
+          "noise_threshold_id" => $noise_threshold_id,
+          "device_id" => $device_id
+        ],
+        inner_object: "action_attempt"
+      )
+    );
+
+    if (!$wait_for_action_attempt) {
+      return $action_attempt;
+    }
+
+    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+
+    return $updated_action_attempt;
   }
 }
