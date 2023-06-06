@@ -11,6 +11,7 @@ use Seam\Objects\Event;
 use Seam\Objects\Workspace;
 use Seam\Objects\ClientSession;
 use Seam\Objects\NoiseThreshold;
+use Seam\Objects\ClimateSettingSchedule;
 
 use GuzzleHttp\Client as HTTPClient;
 use \Exception as Exception;
@@ -1062,6 +1063,7 @@ class ThermostatsClient
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
+    $this->climate_setting_schedules = new ClimateSettingSchedulesClient($seam);
   }
 
   /**
@@ -1139,9 +1141,107 @@ class ThermostatsClient
     ]);
 
     $this->seam->request(
-      "DELETE",
+      "POST",
       "thermostats/update",
       json: $json
     );
+  }
+}
+
+class ClimateSettingSchedulesClient
+{
+  private SeamClient $seam;
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+  }
+
+  /**
+   * Get Climate Setting Schedule
+   * @return ClimateSettingSchedule
+   */
+  public function get(
+    string $climate_setting_schedule_id = null,
+    string $device_id = null
+  ): ClimateSettingSchedule {
+    $query = filter_out_null_params([
+      "climate_setting_schedule_id" => $climate_setting_schedule_id,
+      "device_id" => $device_id
+    ]);
+
+    $climate_setting_schedule = ClimateSettingSchedule::from_json(
+      $this->seam->request(
+        "GET",
+        "thermostats/climate_setting_schedules/get",
+        query: $query,
+        inner_object: "climate_setting_schedule"
+      )
+    );
+
+    return $climate_setting_schedule;
+  }
+
+  /**
+   * List Climate Setting Schedules
+   * @return ClimateSettingSchedule[]
+   */
+  public function list(
+    string $device_id,
+  ): array {
+    return array_map(
+      fn ($t) => Device::from_json($t),
+      $this->seam->request(
+        "GET",
+        "thermostats/climate_setting_schedules/list",
+        query: ["device_id" => $device_id],
+        inner_object: "climate_setting_schedules"
+      )
+    );
+  }
+
+  /**
+   * Delete Climate Setting Schedule
+   * @return void
+   */
+  public function delete(string $climate_setting_schedule_id)
+  {
+    $this->seam->request(
+      "DELETE",
+      "thermostats/climate_setting_schedules/delete",
+      json: [
+        "climate_setting_schedule_id" => $climate_setting_schedule_id,
+      ]
+    );
+  }
+
+  /**
+   * Update Climate Setting Schedule
+   * @return ClimateSettingSchedule
+   */
+  public function update(
+    string $climate_setting_schedule_id,
+    string $schedule_type = null,
+    string $name = null,
+    string $schedule_starts_at = null,
+    string $schedule_ends_at = null
+  ): ClimateSettingSchedule {
+    $json = filter_out_null_params([
+      "climate_setting_schedule_id" => $climate_setting_schedule_id,
+      "schedule_type" => $schedule_type,
+      "name" => $name,
+      "schedule_starts_at" => $schedule_starts_at,
+      "schedule_ends_at" => $schedule_ends_at,
+    ]);
+
+    $updated_climate_setting_schedule = ClimateSettingSchedule::from_json(
+      $this->seam->request(
+        "PUT",
+        "thermostats/climate_setting_schedules/update",
+        json: $json,
+        inner_object: "climate_setting_schedule"
+      )
+    );
+
+    return $updated_climate_setting_schedule;
   }
 }
