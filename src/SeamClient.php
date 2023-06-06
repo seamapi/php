@@ -151,6 +151,7 @@ class DevicesClient
    */
   public function list(
     string $connected_account_id = null,
+    array $connected_account_ids = null,
     string $connect_webview_id = null,
     string $device_type = null,
     array $device_ids = null,
@@ -158,6 +159,7 @@ class DevicesClient
   ): array {
     $query = filter_out_null_params([
       "connected_account_id" => $connected_account_id,
+      "connected_account_ids" => is_null($connected_account_ids) ? null : join(",", $connected_account_ids),
       "connect_webview_id" => $connect_webview_id,
       "device_ids" => is_null($device_ids) ? null : join(",", $device_ids),
       "device_type" => $device_type,
@@ -1051,5 +1053,95 @@ class NoiseThresholdsClient
     $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
 
     return $updated_action_attempt;
+  }
+}
+
+class ThermostatsClient
+{
+  private SeamClient $seam;
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+  }
+
+  /**
+   * Get Thermostat
+   * @return Device
+   */
+  public function get(string $device_id = null, string $name = null): Device
+  {
+    $query = filter_out_null_params(["device_id" => $device_id, "name" => $name]);
+
+    $thermostat = Device::from_json(
+      $this->seam->request(
+        "GET",
+        "thermostats/get",
+        query: $query,
+        inner_object: "thermostat"
+      )
+    );
+    return $thermostat;
+  }
+
+  /**
+   * List Thermostats
+   * @return Device[]
+   */
+  public function list(
+    string $connected_account_id = null,
+    array $connected_account_ids = null,
+    string $connect_webview_id = null,
+    string $device_type = null,
+    array $device_ids = null,
+    string $manufacturer = null
+  ): array {
+    $query = filter_out_null_params([
+      "connected_account_id" => $connected_account_id,
+      "connected_account_ids" => is_null($connected_account_ids) ? null : join(",", $connected_account_ids),
+      "connect_webview_id" => $connect_webview_id,
+      "device_ids" => is_null($device_ids) ? null : join(",", $device_ids),
+      "device_type" => $device_type,
+      "manufacturer" => $manufacturer
+    ]);
+
+    return array_map(
+      fn ($t) => Device::from_json($t),
+      $this->seam->request("GET", "thermostats/list", query: $query, inner_object: "thermostats")
+    );
+  }
+
+  /**
+   * Delete Thermostat
+   * @return void
+   */
+  public function delete(string $device_id)
+  {
+    $this->seam->request(
+      "DELETE",
+      "thermostats/delete",
+      json: [
+        "device_id" => $device_id,
+      ]
+    );
+  }
+
+  /**
+   * Update Thermostat
+   * @return void
+   */
+  public function update(
+    string $device_id,
+    mixed $default_climate_setting = null
+  ) {
+    $json = filter_out_null_params([
+      "device_id" => $device_id,
+      "default_climate_setting" => $default_climate_setting,
+    ]);
+
+    $this->seam->request(
+      "DELETE",
+      "thermostats/update",
+      json: $json
+    );
   }
 }
