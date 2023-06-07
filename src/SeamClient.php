@@ -40,7 +40,7 @@ class SeamClient
 
   public function __construct(
     $api_key,
-    $endpoint = "https://connect.getseam.com",
+    $endpoint = "http://localhost:3020",
     $throw_http_errors = false
   ) {
     $this->api_key = $api_key;
@@ -63,6 +63,7 @@ class SeamClient
     $this->locks = new LocksClient($this);
     $this->client_sessions = new ClientSessionsClient($this);
     $this->noise_sensors = new NoiseSensorsClient($this);
+    $this->thermostats = new ThermostatsClient($this);
   }
 
   public function request(
@@ -272,13 +273,13 @@ class WorkspacesClient
     usleep(200000);
   }
 
-  public function _internal_load_nest_factory()
+  public function _internal_load_ecobee_factory()
   {
     $this->seam->request(
       "POST",
       "internal/scenarios/factories/load",
       json: [
-        "factory_name" => "create_nest_devices",
+        "factory_name" => "create_ecobee_devices",
         "input" => ["num" => 2],
         "sync" => true,
       ],
@@ -1215,6 +1216,51 @@ class ClimateSettingSchedulesClient
   }
 
   /**
+   * Create Climate Setting Schedule
+   * @return ClimateSettingSchedule
+   */
+  public function create(
+    string $device_id,
+    string $schedule_starts_at,
+    string $schedule_ends_at,
+    string $name = null,
+    string $schedule_type = null,
+    bool $automatic_heating_enabled = null,
+    bool $automatic_cooling_enabled = null,
+    string $hvac_mode_setting = null,
+    float $cooling_set_point_celsius = null,
+    float $heating_set_point_celsius = null,
+    float $cooling_set_point_fahrenheit = null,
+    float $heating_set_point_fahrenheit = null,
+    bool $manual_override_allowed = null,
+  ): ClimateSettingSchedule {
+    $json = filter_out_null_params([
+      "device_id" => $device_id,
+      "schedule_starts_at" => $schedule_starts_at,
+      "schedule_ends_at" => $schedule_ends_at,
+      "name" => $name,
+      "schedule_type" => $schedule_type,
+      "automatic_heating_enabled" => $automatic_heating_enabled,
+      "automatic_cooling_enabled" => $automatic_cooling_enabled,
+      "hvac_mode_setting" => $hvac_mode_setting,
+      "cooling_set_point_celsius" => $cooling_set_point_celsius,
+      "heating_set_point_celsius" => $heating_set_point_celsius,
+      "cooling_set_point_fahrenheit" => $cooling_set_point_fahrenheit,
+      "heating_set_point_fahrenheit" => $heating_set_point_fahrenheit,
+      "manual_override_allowed" => $manual_override_allowed,
+    ]);
+
+    return ClimateSettingSchedule::from_json(
+      $this->seam->request(
+        "POST",
+        "thermostats/climate_setting_schedules/create",
+        json: $json,
+        inner_object: "climate_setting_schedule"
+      )
+    );
+  }
+
+  /**
    * Delete Climate Setting Schedule
    * @return void
    */
@@ -1238,7 +1284,15 @@ class ClimateSettingSchedulesClient
     string $schedule_type = null,
     string $name = null,
     string $schedule_starts_at = null,
-    string $schedule_ends_at = null
+    string $schedule_ends_at = null,
+    bool $automatic_heating_enabled = null,
+    bool $automatic_cooling_enabled = null,
+    string $hvac_mode_setting = null,
+    float $cooling_set_point_celsius = null,
+    float $heating_set_point_celsius = null,
+    float $cooling_set_point_fahrenheit = null,
+    float $heating_set_point_fahrenheit = null,
+    bool $manual_override_allowed = null,
   ): ClimateSettingSchedule {
     $json = filter_out_null_params([
       "climate_setting_schedule_id" => $climate_setting_schedule_id,
@@ -1246,6 +1300,14 @@ class ClimateSettingSchedulesClient
       "name" => $name,
       "schedule_starts_at" => $schedule_starts_at,
       "schedule_ends_at" => $schedule_ends_at,
+      "automatic_heating_enabled" => $automatic_heating_enabled,
+      "automatic_cooling_enabled" => $automatic_cooling_enabled,
+      "hvac_mode_setting" => $hvac_mode_setting,
+      "cooling_set_point_celsius" => $cooling_set_point_celsius,
+      "heating_set_point_celsius" => $heating_set_point_celsius,
+      "cooling_set_point_fahrenheit" => $cooling_set_point_fahrenheit,
+      "heating_set_point_fahrenheit" => $heating_set_point_fahrenheit,
+      "manual_override_allowed" => $manual_override_allowed,
     ]);
 
     $updated_climate_setting_schedule = ClimateSettingSchedule::from_json(
