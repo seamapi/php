@@ -264,8 +264,23 @@ class WorkspacesClient
               ]
             ]
           ],
-          "sync" => true,
         ],
+        "sync" => true,
+      ],
+    );
+
+    usleep(200000);
+  }
+
+  public function _internal_load_nest_factory()
+  {
+    $this->seam->request(
+      "POST",
+      "internal/scenarios/factories/load",
+      json: [
+        "factory_name" => "create_nest_devices",
+        "input" => ["num" => 2],
+        "sync" => true,
       ],
     );
 
