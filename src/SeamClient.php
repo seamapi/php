@@ -1205,7 +1205,7 @@ class ClimateSettingSchedulesClient
     string $device_id,
   ): array {
     return array_map(
-      fn ($t) => Device::from_json($t),
+      fn ($t) => ClimateSettingSchedule::from_json($t),
       $this->seam->request(
         "GET",
         "thermostats/climate_setting_schedules/list",

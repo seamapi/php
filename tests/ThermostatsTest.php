@@ -11,7 +11,7 @@ final class ThermostatsTest extends TestCase
   public function testThermostats(): void
   {
     $seam = Fixture::getTestServer();
-    // $seam->workspaces->_internal_load_ecobee_factory();
+    $seam->workspaces->_internal_load_ecobee_factory();
 
     $devices = $seam->devices->list();
     $thermostat_id = $devices[0]->device_id;
