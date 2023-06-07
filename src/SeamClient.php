@@ -40,7 +40,7 @@ class SeamClient
 
   public function __construct(
     $api_key,
-    $endpoint = "http://localhost:3020",
+    $endpoint = "https://connect.getseam.com",
     $throw_http_errors = false
   ) {
     $this->api_key = $api_key;
