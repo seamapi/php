@@ -1223,6 +1223,7 @@ class ClimateSettingSchedulesClient
     string $device_id,
     string $schedule_starts_at,
     string $schedule_ends_at,
+    bool $manual_override_allowed,
     string $name = null,
     string $schedule_type = null,
     bool $automatic_heating_enabled = null,
@@ -1232,7 +1233,6 @@ class ClimateSettingSchedulesClient
     float $heating_set_point_celsius = null,
     float $cooling_set_point_fahrenheit = null,
     float $heating_set_point_fahrenheit = null,
-    bool $manual_override_allowed = null,
   ): ClimateSettingSchedule {
     $json = filter_out_null_params([
       "device_id" => $device_id,
