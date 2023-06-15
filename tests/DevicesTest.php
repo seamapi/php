@@ -48,6 +48,11 @@ final class DevicesTest extends TestCase
     } catch (Exception $exception) {
       $this->assertTrue(str_contains($exception->getMessage(), "device_not_found"));
     }
+
+    $stable_device_providers = $seam->devices->list_device_providers(
+      provider_category: "stable"
+    );
+    $this->assertTrue(count($stable_device_providers) > 0);
   }
 
   public function testUnmanagedDevices(): void

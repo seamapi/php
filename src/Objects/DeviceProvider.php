@@ -19,10 +19,10 @@ class DeviceProvider
   }
 
   public function __construct(
-    string $device_provider_name,
-    string $display_name,
-    string $image_url,
-    array $provider_categories,
+    public string $device_provider_name,
+    public string $display_name,
+    public string $image_url,
+    public array $provider_categories,
   ) {
   }
 }

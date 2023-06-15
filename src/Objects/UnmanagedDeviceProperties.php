@@ -20,11 +20,11 @@ class UnmanagedDeviceProperties
   }
 
   public function __construct(
-    string | null $name,
-    string | null $manufacturer,
-    string | null $image_url,
-    string | null $image_alt_text,
-    mixed $model,
+    public string | null $name,
+    public string | null $manufacturer,
+    public string | null $image_url,
+    public string | null $image_alt_text,
+    public mixed $model,
   ) {
   }
 }
