@@ -13,6 +13,7 @@ use Seam\Objects\Workspace;
 use Seam\Objects\ClientSession;
 use Seam\Objects\NoiseThreshold;
 use Seam\Objects\ClimateSettingSchedule;
+use Seam\Objects\DeviceProvider;
 
 use GuzzleHttp\Client as HTTPClient;
 use \Exception as Exception;
@@ -178,6 +179,30 @@ class DevicesClient
   }
 
   /**
+   * Update Device
+   * @return void
+   */
+  public function update(
+    string $device_id,
+    string $name = null,
+    mixed $location = null,
+    bool $is_managed = null
+  ) {
+    $json = filter_out_null_params([
+      "device_id" => $device_id,
+      "name" => $name,
+      "location" => $location,
+      "is_managed" => $is_managed,
+    ]);
+
+    $this->seam->request(
+      "PATCH",
+      "devices/update",
+      json: $json
+    );
+  }
+
+  /**
    * Delete Device
    * @return void
    */
@@ -190,6 +215,27 @@ class DevicesClient
         "device_id" => $device_id,
       ]
     );
+  }
+
+  /**
+   * List Device Providers
+   * @return DeviceProvider[]
+   */
+  public function list_device_providers(
+    string $provider_category = null,
+  ): array {
+    $query = filter_out_null_params([
+      "provider_category" => $provider_category,
+    ]);
+
+    return array_map(
+      fn ($dp) => DeviceProvider::from_json($dp),
+      $this->seam->request(
+        "GET",
+        "devices/list_device_providers",
+        query: $query,
+        inner_object: "device_providers"
+      ));
   }
 }
 
