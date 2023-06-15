@@ -29,6 +29,7 @@ final class ThermostatsTest extends TestCase
       default_climate_setting: [
         "hvac_mode_setting" => "cool",
         "cooling_set_point_celsius" => 20,
+        "manual_override_allowed" => true,
       ]
     );
 

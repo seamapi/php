@@ -28,6 +28,8 @@ class AccessCode
                 $json->warnings ?? []
             ),
             is_managed: $json->is_managed ?? null,
+            common_code_key: $json->common_code_key ?? null,
+            is_waiting_for_code_assignment: $json->is_waiting_for_code_assignment ?? null,
         );
     }
 
@@ -63,7 +65,9 @@ class AccessCode
 
         /* @var SeamWarning[] */
         public array $warnings,
-        public bool|null $is_managed
+        public bool|null $is_managed,
+        public string|null $common_code_key,
+        public bool|null $is_waiting_for_code_assignment,
         ) {
     }
 }

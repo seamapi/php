@@ -26,6 +26,7 @@ final class ClimateSettingSchedulesTest extends TestCase
       schedule_ends_at: $schedule_end_date->format(DateTime::ATOM),
       hvac_mode_setting: "cool",
       cooling_set_point_celsius: 20,
+      manual_override_allowed: true,
     );
     $this->assertTrue($climate_setting_schedule->name === "Test name");
 
