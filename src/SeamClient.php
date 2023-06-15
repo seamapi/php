@@ -124,9 +124,11 @@ class SeamClient
 class DevicesClient
 {
   private SeamClient $seam;
+  public UnmanagedDevicesClient $unmanaged;
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
+    $this->unmanaged = new UnmanagedDevicesClient($seam);
   }
 
   /**
@@ -185,6 +187,59 @@ class DevicesClient
       "devices/delete",
       json: [
         "device_id" => $device_id,
+      ]
+    );
+  }
+}
+
+class UnmanagedDevicesClient
+{
+  private SeamClient $seam;
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+  }
+
+  public function list(
+    string $connected_account_id,
+    array $connected_account_ids,
+    string $connect_webview_id,
+    string $device_type,
+    array $device_types,
+    string $manufacturer,
+    array $device_ids,
+  ): array {
+    $query = filter_out_null_params([
+      "connected_account_id" => $connected_account_id,
+      "connected_account_ids" => is_null($connected_account_ids) ? null : join(",", $connected_account_ids),
+      "connect_webview_id" => $connect_webview_id,
+      "device_type" => $device_type,
+      "device_types" => is_null($device_types) ? null : join(",", $device_types),
+      "manufacturer" => $manufacturer,
+      "device_ids" => is_null($device_ids) ? null : join(",", $device_ids),
+    ]);
+
+    return array_map(
+      fn ($a) => AccessCode::from_json($a),
+      $this->seam->request(
+        "GET",
+        "devices/unmanaged/list",
+        query: $query,
+        inner_object: "devices"
+      )
+    );
+  }
+
+  public function update(
+    string $device_id,
+    bool $is_managed,
+  ) {
+    $this->seam->request(
+      "PATCH",
+      "devices/unmanaged/update",
+      json: [
+        "device_id" => $device_id,
+        "is_managed" => $is_managed,
       ]
     );
   }
