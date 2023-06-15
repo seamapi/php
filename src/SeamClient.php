@@ -7,6 +7,7 @@ use Seam\Objects\ActionAttempt;
 use Seam\Objects\ConnectedAccount;
 use Seam\Objects\ConnectWebview;
 use Seam\Objects\Device;
+use Seam\Objects\UnmanagedDevice;
 use Seam\Objects\Event;
 use Seam\Objects\Workspace;
 use Seam\Objects\ClientSession;
@@ -220,7 +221,7 @@ class UnmanagedDevicesClient
     ]);
 
     return array_map(
-      fn ($a) => AccessCode::from_json($a),
+      fn ($d) => UnmanagedDevice::from_json($d),
       $this->seam->request(
         "GET",
         "devices/unmanaged/list",

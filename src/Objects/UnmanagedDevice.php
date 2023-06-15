@@ -2,22 +2,20 @@
 
 namespace Seam\Objects;
 
-class Device
+class UnmanagedDevice
 {
-  public static function from_json(mixed $json): Device|null
+  public static function from_json(mixed $json): UnmanagedDevice|null
   {
     if (!$json) {
       return null;
     }
     return new self(
       device_id: $json->device_id,
-      workspace_id: $json->workspace_id,
-      connected_account_id: $json->connected_account_id,
       device_type: $json->device_type ?? null,
+      connected_account_id: $json->connected_account_id,
+      workspace_id: $json->workspace_id,
       created_at: $json->created_at,
-      location: $json->location,
-      capabilities_supported: $json->capabilities_supported,
-      properties: DeviceProperties::from_json($json->properties),
+      properties: UnmanagedDeviceProperties::from_json($json->properties),
       errors: array_map(
         fn ($e) => SeamError::from_json($e),
         $json->errors ?? []
@@ -31,16 +29,11 @@ class Device
 
   public function __construct(
     public string $device_id,
-    public string $workspace_id,
-    public string $connected_account_id,
     public string | null $device_type,
-
-    public DeviceProperties $properties,
-    public mixed $location,
+    public string $connected_account_id,
+    public string $workspace_id,
     public string $created_at,
-
-    /** @var string[] */
-    public array $capabilities_supported,
+    public UnmanagedDeviceProperties $properties,
 
     /** @var SeamError[] */
     public array $errors,
