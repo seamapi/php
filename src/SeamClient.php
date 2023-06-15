@@ -248,13 +248,13 @@ class UnmanagedDevicesClient
   }
 
   public function list(
-    string $connected_account_id,
-    array $connected_account_ids,
-    string $connect_webview_id,
-    string $device_type,
-    array $device_types,
-    string $manufacturer,
-    array $device_ids,
+    string $connected_account_id = null,
+    array $connected_account_ids = null,
+    string $connect_webview_id = null,
+    string $device_type = null,
+    array $device_types = null,
+    string $manufacturer = null,
+    array $device_ids = null,
   ): array {
     $query = filter_out_null_params([
       "connected_account_id" => $connected_account_id,
