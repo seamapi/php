@@ -7,11 +7,13 @@ use Seam\Objects\ActionAttempt;
 use Seam\Objects\ConnectedAccount;
 use Seam\Objects\ConnectWebview;
 use Seam\Objects\Device;
+use Seam\Objects\UnmanagedDevice;
 use Seam\Objects\Event;
 use Seam\Objects\Workspace;
 use Seam\Objects\ClientSession;
 use Seam\Objects\NoiseThreshold;
 use Seam\Objects\ClimateSettingSchedule;
+use Seam\Objects\DeviceProvider;
 
 use GuzzleHttp\Client as HTTPClient;
 use \Exception as Exception;
@@ -124,9 +126,11 @@ class SeamClient
 class DevicesClient
 {
   private SeamClient $seam;
+  public UnmanagedDevicesClient $unmanaged;
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
+    $this->unmanaged = new UnmanagedDevicesClient($seam);
   }
 
   /**
@@ -156,8 +160,9 @@ class DevicesClient
     array $connected_account_ids = null,
     string $connect_webview_id = null,
     string $device_type = null,
+    array $device_types = null,
     array $device_ids = null,
-    string $manufacturer = null
+    string $manufacturer = null,
   ): array {
     $query = filter_out_null_params([
       "connected_account_id" => $connected_account_id,
@@ -165,12 +170,37 @@ class DevicesClient
       "connect_webview_id" => $connect_webview_id,
       "device_ids" => is_null($device_ids) ? null : join(",", $device_ids),
       "device_type" => $device_type,
+      "device_types" => is_null($device_types) ? null : join(",", $device_types),
       "manufacturer" => $manufacturer
     ]);
 
     return array_map(
       fn ($d) => Device::from_json($d),
       $this->seam->request("GET", "devices/list", query: $query, inner_object: "devices")
+    );
+  }
+
+  /**
+   * Update Device
+   * @return void
+   */
+  public function update(
+    string $device_id,
+    string $name = null,
+    mixed $location = null,
+    bool $is_managed = null
+  ) {
+    $json = filter_out_null_params([
+      "device_id" => $device_id,
+      "name" => $name,
+      "location" => $location,
+      "is_managed" => $is_managed,
+    ]);
+
+    $this->seam->request(
+      "PATCH",
+      "devices/update",
+      json: $json
     );
   }
 
@@ -185,6 +215,81 @@ class DevicesClient
       "devices/delete",
       json: [
         "device_id" => $device_id,
+      ]
+    );
+  }
+
+  /**
+   * List Device Providers
+   * @return DeviceProvider[]
+   */
+  public function list_device_providers(
+    string $provider_category = null,
+  ): array {
+    $query = filter_out_null_params([
+      "provider_category" => $provider_category,
+    ]);
+
+    return array_map(
+      fn ($dp) => DeviceProvider::from_json($dp),
+      $this->seam->request(
+        "GET",
+        "devices/list_device_providers",
+        query: $query,
+        inner_object: "device_providers"
+      )
+    );
+  }
+}
+
+class UnmanagedDevicesClient
+{
+  private SeamClient $seam;
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+  }
+
+  public function list(
+    string $connected_account_id = null,
+    array $connected_account_ids = null,
+    string $connect_webview_id = null,
+    string $device_type = null,
+    array $device_types = null,
+    string $manufacturer = null,
+    array $device_ids = null,
+  ): array {
+    $query = filter_out_null_params([
+      "connected_account_id" => $connected_account_id,
+      "connected_account_ids" => is_null($connected_account_ids) ? null : join(",", $connected_account_ids),
+      "connect_webview_id" => $connect_webview_id,
+      "device_type" => $device_type,
+      "device_types" => is_null($device_types) ? null : join(",", $device_types),
+      "manufacturer" => $manufacturer,
+      "device_ids" => is_null($device_ids) ? null : join(",", $device_ids),
+    ]);
+
+    return array_map(
+      fn ($d) => UnmanagedDevice::from_json($d),
+      $this->seam->request(
+        "GET",
+        "devices/unmanaged/list",
+        query: $query,
+        inner_object: "devices"
+      )
+    );
+  }
+
+  public function update(
+    string $device_id,
+    bool $is_managed,
+  ) {
+    $this->seam->request(
+      "PATCH",
+      "devices/unmanaged/update",
+      json: [
+        "device_id" => $device_id,
+        "is_managed" => $is_managed,
       ]
     );
   }

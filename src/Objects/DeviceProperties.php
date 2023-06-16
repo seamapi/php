@@ -24,6 +24,9 @@ class DeviceProperties
       "supported_code_lengths" => $json->supported_code_lengths ?? null,
       "code_constraints" => $json->code_constraints ?? null,
       "max_active_codes_supported" => $json->max_active_codes_supported ?? null,
+      "model" => $json->model ?? null,
+      "image_url" => $json->image_url ?? null,
+      "image_alt_text" => $json->image_alt_text ?? null,
 
       "schlage_metadata" => $json->schlage_metadata ?? null,
       "august_metadata" => $json->august_metadata ?? null,
@@ -43,6 +46,7 @@ class DeviceProperties
       "nest_metadata" => $json->nest_metadata ?? null,
 
       "is_climate_setting_schedule_active" => $json->is_climate_setting_schedule_active ?? null,
+      "active_climate_setting_schedule" => $json->active_climate_setting_schedule ?? null,
       "is_cooling" => $json->is_cooling ?? null,
       "is_heating" => $json->is_heating ?? null,
       "is_fan_running" => $json->is_fan_running ?? null,

@@ -48,5 +48,53 @@ final class DevicesTest extends TestCase
     } catch (Exception $exception) {
       $this->assertTrue(str_contains($exception->getMessage(), "device_not_found"));
     }
+
+    $stable_device_providers = $seam->devices->list_device_providers(
+      provider_category: "stable"
+    );
+    $this->assertTrue(count($stable_device_providers) > 0);
+  }
+
+  public function testUnmanagedDevices(): void
+  {
+    $seam = Fixture::getTestServer(true);
+
+    $devices = $seam->devices->list();
+    $this->assertTrue(count($devices) > 0);
+
+    $unmanaged_devices = $seam->devices->unmanaged->list();
+    $this->assertTrue(count($unmanaged_devices) == 0);
+
+    $device_id = $devices[0]->device_id;
+
+    $seam->devices->update(
+      device_id: $device_id,
+      is_managed: false
+    );
+    $unmanaged_devices = $seam->devices->unmanaged->list();
+    $this->assertTrue(count($unmanaged_devices) == 1);
+
+    $connected_account = $seam->connected_accounts->list()[0];
+    $devices = $seam->devices->unmanaged->list(connected_account_id: $connected_account->connected_account_id);
+    $this->assertTrue(count($devices) > 0);
+    $devices = $seam->devices->unmanaged->list(
+      connected_account_ids: array($connected_account->connected_account_id)
+    );
+    $this->assertTrue(count($devices) > 0);
+
+    $devices = $seam->devices->unmanaged->list(device_type: 'august_lock');
+    $this->assertTrue(count($devices) > 0);
+    $devices = $seam->devices->unmanaged->list(device_types: array('august_lock'));
+    $this->assertTrue(count($devices) > 0);
+
+    $devices = $seam->devices->unmanaged->list(manufacturer: 'august');
+    $this->assertTrue(count($devices) > 0);
+
+    $seam->devices->unmanaged->update(
+      device_id: $device_id,
+      is_managed: true
+    );
+    $unmanaged_devices = $seam->devices->unmanaged->list();
+    $this->assertTrue(count($unmanaged_devices) == 0);
   }
 }
