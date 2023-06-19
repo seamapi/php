@@ -1275,7 +1275,8 @@ class ThermostatsClient
       $this->seam->request(
         "POST",
         "thermostats/set_mode",
-        json: $json
+        json: $json,
+        inner_object: "action_attempt"
       )
     );
 
