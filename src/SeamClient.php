@@ -1252,6 +1252,41 @@ class ThermostatsClient
       json: $json
     );
   }
+
+  /**
+   * Sets a thermostat to a given mode
+   * @return ActionAttempt
+   */
+  public function set_mode(
+    string $device_id,
+    bool $automatic_heating_enabled = null,
+    bool $automatic_cooling_enabled = null,
+    string $hvac_mode_setting = null,
+    bool $wait_for_action_attempt = true,
+  ) {
+    $json = filter_out_null_params([
+      "device_id" => $device_id,
+      "automatic_heating_enabled" => $automatic_heating_enabled,
+      "automatic_cooling_enabled" => $automatic_cooling_enabled,
+      "hvac_mode_setting" => $hvac_mode_setting,
+    ]);
+
+    $action_attempt = ActionAttempt::from_json(
+      $this->seam->request(
+        "POST",
+        "thermostats/set_mode",
+        json: $json
+      )
+    );
+
+    if (!$wait_for_action_attempt) {
+      return $action_attempt;
+    }
+
+    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+
+    return $updated_action_attempt;
+  }
 }
 
 class ClimateSettingSchedulesClient
