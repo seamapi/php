@@ -39,17 +39,5 @@ final class ThermostatsTest extends TestCase
     $this->assertTrue(
       $updated_thermostat->properties?->default_climate_setting?->hvac_mode_setting === "cool"
     );
-
-    $seam->thermostats->delete(
-      device_id: $thermostat_id
-    );
-
-    try {
-      $seam->thermostats->get(device_id: $thermostat_id);
-
-      $this->fail("Expected device not to be found");
-    } catch (Exception $exception) {
-      $this->assertTrue(str_contains($exception->getMessage(), "device_not_found"));
-    }
   }
 }

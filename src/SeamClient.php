@@ -1234,21 +1234,6 @@ class ThermostatsClient
   }
 
   /**
-   * Delete Thermostat
-   * @return void
-   */
-  public function delete(string $device_id)
-  {
-    $this->seam->request(
-      "DELETE",
-      "thermostats/delete",
-      json: [
-        "device_id" => $device_id,
-      ]
-    );
-  }
-
-  /**
    * Update Thermostat
    * @return void
    */
