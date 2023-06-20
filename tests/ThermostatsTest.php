@@ -43,13 +43,20 @@ final class ThermostatsTest extends TestCase
     $this->assertTrue(
       $updated_thermostat->properties?->current_climate_setting?->hvac_mode_setting === "heatcool"
     );
-    $seam->thermostats->set_mode(device_id: $thermostat_id, hvac_mode_setting: "heat");
+    $seam->thermostats->set_mode(device_id: $thermostat_id, hvac_mode_setting: "cool");
     $updated_thermostat = $seam->thermostats->get(
       device_id: $thermostat_id
     );
-
     $this->assertTrue(
-      $updated_thermostat->properties?->current_climate_setting?->hvac_mode_setting === "heat"
+      $updated_thermostat->properties?->current_climate_setting?->hvac_mode_setting === "cool"
+    );
+
+    $seam->thermostats->set_cooling_set_point(device_id: $thermostat_id, cooling_set_point_fahrenheit: 74);
+    $updated_thermostat = $seam->thermostats->get(
+      device_id: $thermostat_id
+    );
+    $this->assertTrue(
+      $updated_thermostat->properties?->current_climate_setting?->cooling_set_point_fahrenheit === 74
     );
   }
 }
