@@ -513,6 +513,7 @@ class AccessCodesClient
     string $starts_at = null,
     string $ends_at = null,
     bool $attempt_for_offline_device = null,
+    bool $allow_external_modification = null,
     bool $wait_for_action_attempt = false
   ): ActionAttempt|AccessCode {
     $json = filter_out_null_params([
@@ -521,7 +522,8 @@ class AccessCodesClient
       "code" => $code,
       "starts_at" => $starts_at,
       "ends_at" => $ends_at,
-      "attempt_for_offline_device" => $attempt_for_offline_device
+      "attempt_for_offline_device" => $attempt_for_offline_device,
+      "allow_external_modification" => $allow_external_modification
     ]);
     [
       'action_attempt' => $action_attempt,
