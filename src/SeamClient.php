@@ -725,16 +725,24 @@ class ConnectWebviewsClient
   }
 
   public function create(
-    $accepted_providers = [],
+    array $accepted_providers = [],
     string $custom_redirect_url = null,
     string $custom_redirect_failure_url = null,
-    string $device_selection_mode = null
+    string $device_selection_mode = null,
+    string $provider_category = null,
+    mixed $custom_metadata = null,
+    bool $automatically_manage_new_devices = null,
+    bool $wait_for_device_creation = null
   ) {
     $json = filter_out_null_params([
       "accepted_providers" => $accepted_providers,
       "custom_redirect_url" => $custom_redirect_url,
       "custom_redirect_failure_url" => $custom_redirect_failure_url,
-      "device_selection_mode" => $device_selection_mode
+      "device_selection_mode" => $device_selection_mode,
+      "provider_category" => $provider_category,
+      "custom_metadata" => $custom_metadata,
+      "automatically_manage_new_devices" => $automatically_manage_new_devices,
+      "wait_for_device_creation" => $wait_for_device_creation,
     ]);
 
     return ConnectWebview::from_json(
@@ -751,7 +759,7 @@ class ConnectWebviewsClient
    * List Connect Webviews
    * @return ConnectWebview[]
    */
-  public function list(string $device_id = ""): array
+  public function list(): array
   {
     return array_map(
       fn ($a) => ConnectWebview::from_json($a),
