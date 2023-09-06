@@ -19,7 +19,12 @@ class ConnectedAccount
             errors: array_map(
                 fn($e) => SeamError::from_json($e),
                 $json->errors ?? []
-            )
+            ),
+            custom_metadata: $json->custom_metadata ?? null,
+            warnings: array_map(
+              fn ($e) => SeamWarning::from_json($e),
+              $json->warnings ?? []
+            ),
         );
     }
 
@@ -28,7 +33,9 @@ class ConnectedAccount
         public string $account_type,
         public UserIdentifier $user_identifier,
         public array $errors,
-        public string $created_at
+        public array $warnings,
+        public string $created_at,
+        public mixed $custom_metadata
     ) {
     }
 }
