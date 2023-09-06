@@ -250,6 +250,25 @@ class UnmanagedDevicesClient
     $this->seam = $seam;
   }
 
+  public function get(
+    string $device_id = null,
+    string $name = null,
+  ): UnmanagedDevice {
+    $query = filter_out_null_params([
+      "device_id" => $device_id,
+      "name" => $name,
+    ]);
+
+    return UnmanagedDevice::from_json(
+      $this->seam->request(
+        "GET",
+        "devices/unmanaged/get",
+        query: $query,
+        inner_object: "device"
+      )
+    );
+  }
+
   public function list(
     string $connected_account_id = null,
     array $connected_account_ids = null,

@@ -66,6 +66,7 @@ final class DevicesTest extends TestCase
     $this->assertTrue(count($unmanaged_devices) == 0);
 
     $device_id = $devices[0]->device_id;
+    $device_name = $devices[0]->properties->name;
 
     $seam->devices->update(
       device_id: $device_id,
@@ -73,6 +74,11 @@ final class DevicesTest extends TestCase
     );
     $unmanaged_devices = $seam->devices->unmanaged->list();
     $this->assertTrue(count($unmanaged_devices) == 1);
+
+    $unmanaged_device = $seam->devices->unmanaged->get(device_id: $device_id);
+    $this->assertTrue($unmanaged_device->device_id === $device_id);
+    $unmanaged_device = $seam->devices->unmanaged->get(name: $device_name);
+    $this->assertTrue($unmanaged_device->properties->name === $device_name);
 
     $connected_account = $seam->connected_accounts->list()[0];
     $devices = $seam->devices->unmanaged->list(connected_account_id: $connected_account->connected_account_id);

@@ -16,6 +16,8 @@ class UnmanagedDevice
       workspace_id: $json->workspace_id,
       created_at: $json->created_at,
       properties: UnmanagedDeviceProperties::from_json($json->properties),
+      is_managed: $json->is_managed,
+      capabilities_supported: $json->capabilities_supported,
       errors: array_map(
         fn ($e) => SeamError::from_json($e),
         $json->errors ?? []
@@ -34,6 +36,8 @@ class UnmanagedDevice
     public string $workspace_id,
     public string $created_at,
     public UnmanagedDeviceProperties $properties,
+    public bool $is_managed,
+    public array $capabilities_supported,
 
     /** @var SeamError[] */
     public array $errors,
