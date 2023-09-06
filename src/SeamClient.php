@@ -514,6 +514,9 @@ class AccessCodesClient
     string $ends_at = null,
     bool $attempt_for_offline_device = null,
     bool $allow_external_modification = null,
+    string $common_code_key = null,
+    bool $prefer_native_scheduling = null,
+    bool $use_backup_access_code_pool = null,
     bool $wait_for_action_attempt = false
   ): ActionAttempt|AccessCode {
     $json = filter_out_null_params([
@@ -523,7 +526,10 @@ class AccessCodesClient
       "starts_at" => $starts_at,
       "ends_at" => $ends_at,
       "attempt_for_offline_device" => $attempt_for_offline_device,
-      "allow_external_modification" => $allow_external_modification
+      "allow_external_modification" => $allow_external_modification,
+      "common_code_key" => $common_code_key,
+      "prefer_native_scheduling" => $prefer_native_scheduling,
+      "use_backup_access_code_pool" => $use_backup_access_code_pool
     ]);
     [
       'action_attempt' => $action_attempt,
@@ -656,6 +662,18 @@ class AccessCodesClient
     }
 
     return AccessCode::from_json($updated_action_attempt->result->access_code);
+  }
+
+  public function pull_backup_access_code(string $access_code_id): AccessCode
+  {
+    return AccessCode::from_json(
+      $this->seam->request(
+        "POST",
+        "access_codes/pull_backup_access_code",
+        json: ["access_code_id" => $access_code_id],
+        inner_object: "backup_access_code"
+      )
+    );
   }
 }
 
