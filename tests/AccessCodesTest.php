@@ -23,11 +23,15 @@ final class AccessCodesTest extends TestCase
     $this->assertIsArray($access_codes);
 
     $seam->access_codes->create(device_id: $first_device_id, code: "1235");
+    $seam->access_codes->create(device_id: $first_device_id, code: "3456");
 
     $access_codes = $seam->access_codes->list(device_id: $first_device_id);
     $this->assertTrue(count($access_codes) > 0);
 
     $access_code_id = $access_codes[0]->access_code_id;
+    $access_codes = $seam->access_codes->list(device_id: $first_device_id, access_code_ids: [$access_code_id]);
+    $this->assertTrue(count($access_codes) === 1);
+
     $access_code = $seam->access_codes->get(access_code_id: $access_code_id);
     $this->assertTrue($access_code->access_code_id === $access_code_id);
 
@@ -63,6 +67,9 @@ final class AccessCodesTest extends TestCase
 
     $formatted_starts_at = (new DateTime($access_code->starts_at))->format("Y-m-d");
     $formatted_ends_at = (new DateTime($access_code->ends_at))->format("Y-m-d");
+
+    $updated_access_code = $seam->access_codes->update(access_code_id: $access_code->access_code_id, type: "ongoing");
+    $this->assertTrue($updated_access_code->type === "ongoing");
 
     $this->assertTrue($formatted_starts_at === $start_date->format("Y-m-d"));
     $this->assertTrue($formatted_ends_at === $end_date->format("Y-m-d"));

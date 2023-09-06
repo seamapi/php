@@ -472,14 +472,21 @@ class AccessCodesClient
    * List Access Codes
    * @return AccessCode[]
    */
-  public function list(string $device_id = ""): array
-  {
+  public function list(
+    string $device_id = null,
+    array $access_code_ids = null
+  ): array {
+    $json = filter_out_null_params([
+      "device_id" => $device_id,
+      "access_code_ids" => $access_code_ids,
+    ]);
+
     return array_map(
       fn ($a) => AccessCode::from_json($a),
       $this->seam->request(
-        "GET",
+        "POST",
         "access_codes/list",
-        query: ["device_id" => $device_id],
+        json: $json,
         inner_object: "access_codes"
       )
     );
@@ -625,6 +632,7 @@ class AccessCodesClient
     string $code = null,
     string $starts_at = null,
     string $ends_at = null,
+    string $type = null,
     bool $wait_for_access_code = true
   ): ActionAttempt|AccessCode {
     $json = filter_out_null_params([
@@ -633,7 +641,8 @@ class AccessCodesClient
       "name" => $name,
       "code" => $code,
       "starts_at" => $starts_at,
-      "ends_at" => $ends_at
+      "ends_at" => $ends_at,
+      "type" => $type,
     ]);
     $action_attempt = ActionAttempt::from_json(
       $this->seam->request(
