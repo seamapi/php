@@ -26,6 +26,7 @@ class ConnectWebview
       login_successful: $json->login_successful ?? null,
       wait_for_device_creation: $json->wait_for_device_creation ?? null,
       automatically_manage_new_devices: $json->automatically_manage_new_devices ?? null,
+      custom_metadata: $json->custom_metadata ?? null,
       error: SeamError::from_json($json->error ?? null)
     );
   }
@@ -46,6 +47,7 @@ class ConnectWebview
     public bool|null $login_successful,
     public bool|null $wait_for_device_creation,
     public bool|null $automatically_manage_new_devices,
+    public mixed $custom_metadata,
 
     /* Can be "pending", "authorized" or "error" */
     public string $status,
