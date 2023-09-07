@@ -18,6 +18,7 @@ class Device
       location: $json->location,
       capabilities_supported: $json->capabilities_supported,
       properties: DeviceProperties::from_json($json->properties),
+      is_managed: $json->is_managed,
       errors: array_map(
         fn ($e) => SeamError::from_json($e),
         $json->errors ?? []
@@ -34,6 +35,7 @@ class Device
     public string $workspace_id,
     public string $connected_account_id,
     public string | null $device_type,
+    public bool $is_managed,
 
     public DeviceProperties $properties,
     public mixed $location,
