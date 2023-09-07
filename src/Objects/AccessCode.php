@@ -30,6 +30,10 @@ class AccessCode
             is_managed: $json->is_managed ?? null,
             common_code_key: $json->common_code_key ?? null,
             is_waiting_for_code_assignment: $json->is_waiting_for_code_assignment ?? null,
+            is_scheduled_on_device: $json->is_scheduled_on_device ?? null,
+            pulled_backup_access_code_id: $json->pulled_backup_access_code_id ?? null,
+            is_backup_access_code_available: $json->is_backup_access_code_available ?? null,
+            is_backup: $json->is_backup ?? null,
         );
     }
 
@@ -68,6 +72,10 @@ class AccessCode
         public bool|null $is_managed,
         public string|null $common_code_key,
         public bool|null $is_waiting_for_code_assignment,
+        public bool|null $is_scheduled_on_device,
+        public string|null $pulled_backup_access_code_id,
+        public bool|null $is_backup_access_code_available,
+        public bool|null $is_backup
         ) {
     }
 }
