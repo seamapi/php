@@ -658,6 +658,7 @@ class AccessCodesClient
     string $starts_at = null,
     string $ends_at = null,
     string $type = null,
+    bool $allow_external_modification = null,
     bool $wait_for_access_code = true
   ): ActionAttempt|AccessCode {
     $json = filter_out_null_params([
@@ -668,6 +669,7 @@ class AccessCodesClient
       "starts_at" => $starts_at,
       "ends_at" => $ends_at,
       "type" => $type,
+      "allow_external_modification" => $allow_external_modification
     ]);
     $action_attempt = ActionAttempt::from_json(
       $this->seam->request(
@@ -729,11 +731,13 @@ class UnmanagedAccessCodesClient
   public function update(
     string $access_code_id,
     bool $is_managed,
-    bool $force = null
+    bool $allow_external_modification = null,
+    bool $force = null,
   ) {
     $json = filter_out_null_params([
       "access_code_id" => $access_code_id,
       "is_managed" => $is_managed,
+      "allow_external_modification" => $allow_external_modification,
       "force" => $force
     ]);
 
