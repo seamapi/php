@@ -659,6 +659,7 @@ class AccessCodesClient
     string $ends_at = null,
     string $type = null,
     bool $allow_external_modification = null,
+    bool $is_managed = null,
     bool $wait_for_access_code = true
   ): ActionAttempt|AccessCode {
     $json = filter_out_null_params([
@@ -669,7 +670,8 @@ class AccessCodesClient
       "starts_at" => $starts_at,
       "ends_at" => $ends_at,
       "type" => $type,
-      "allow_external_modification" => $allow_external_modification
+      "allow_external_modification" => $allow_external_modification,
+      "is_managed" => $is_managed,
     ]);
     $action_attempt = ActionAttempt::from_json(
       $this->seam->request(
