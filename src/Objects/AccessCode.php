@@ -34,6 +34,7 @@ class AccessCode
             pulled_backup_access_code_id: $json->pulled_backup_access_code_id ?? null,
             is_backup_access_code_available: $json->is_backup_access_code_available ?? null,
             is_backup: $json->is_backup ?? null,
+            is_external_modification_allowed: $json->is_external_modification_allowed ?? false,
         );
     }
 
@@ -75,7 +76,8 @@ class AccessCode
         public bool|null $is_scheduled_on_device,
         public string|null $pulled_backup_access_code_id,
         public bool|null $is_backup_access_code_available,
-        public bool|null $is_backup
+        public bool|null $is_backup,
+        public bool $is_external_modification_allowed,
         ) {
     }
 }
