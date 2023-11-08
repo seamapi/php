@@ -10,7 +10,7 @@ final class ConnectedAccountsTest extends TestCase
 {
   public function testGetAndListConnectedAccounts(): void
   {
-    $seam = Fixture::getTestServer(true);
+    $seam = Fixture::getTestServer();
     $connected_accounts = $seam->connected_accounts->list();
     $this->assertIsArray($connected_accounts);
 
@@ -25,7 +25,7 @@ final class ConnectedAccountsTest extends TestCase
 
   public function testDeleteConnectedAccount(): void
   {
-    $seam = Fixture::getTestServer(true);
+    $seam = Fixture::getTestServer();
     $connected_accounts = $seam->connected_accounts->list();
 
     $connected_account_id = $connected_accounts[0]->connected_account_id;

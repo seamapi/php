@@ -10,7 +10,7 @@ final class WorkspacesTest extends TestCase
 {
   public function testGetAndListWorkspaces(): void
   {
-    $seam = Fixture::getTestServer(true);
+    $seam = Fixture::getTestServer();
 
     $workspaces = $seam->workspaces->list();
     $this->assertTrue(count($workspaces) > 0);

@@ -9,7 +9,7 @@ final class ActionAttemptsTest extends TestCase
 {
   public function testGetAndListActionAttempts(): void
   {
-    $seam = Fixture::getTestServer(true);
+    $seam = Fixture::getTestServer();
 
     $device_id = $seam->devices->list()[0]->device_id;
     $action_attempt = $seam->locks->lock_door(device_id: $device_id);

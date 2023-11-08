@@ -10,7 +10,6 @@ final class NoiseThresholdsTest extends TestCase
   public function testNoiseThresholds(): void
   {
     $seam = Fixture::getTestServer();
-    $seam->workspaces->_internal_load_minut_factory();
 
     function getMinutDeviceNoiseThresholds($seam, $device_id)
     {
@@ -21,7 +20,6 @@ final class NoiseThresholdsTest extends TestCase
 
     $devices = $seam->devices->list();
     $device_id = $devices[0]->device_id;
-    echo "id: $device_id\n";
 
     $noise_thresholds = getMinutDeviceNoiseThresholds($seam, $device_id);
     $this->assertTrue(count($noise_thresholds) === 2);

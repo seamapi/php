@@ -10,7 +10,7 @@ final class LocksTest extends TestCase
 {
   public function testGetAndListLocksUnlockAndLock(): void
   {
-    $seam = Fixture::getTestServer(true);
+    $seam = Fixture::getTestServer();
     $locks = $seam->locks->list();
     $this->assertIsArray($locks);
 

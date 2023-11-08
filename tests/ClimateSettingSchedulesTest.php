@@ -11,7 +11,6 @@ final class ClimateSettingSchedulesTest extends TestCase
   public function testClimateSettingSchedules(): void
   {
     $seam = Fixture::getTestServer();
-    $seam->workspaces->_internal_load_ecobee_factory();
 
     $devices = $seam->devices->list();
     $thermostat_id = $devices[0]->device_id;
@@ -47,6 +46,7 @@ final class ClimateSettingSchedulesTest extends TestCase
       climate_setting_schedule_id: $climate_setting_schedule_id,
       hvac_mode_setting: "cool",
       cooling_set_point_celsius: 21,
+      manual_override_allowed: true
     );
     $this->assertTrue($updated_climate_setting_schedule->cooling_set_point_celsius == 21);
 

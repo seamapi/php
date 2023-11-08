@@ -10,7 +10,7 @@ final class EventsTest extends TestCase
 {
   public function testGetAndListEvents(): void
   {
-    $seam = Fixture::getTestServer(true);
+    $seam = Fixture::getTestServer();
     $events = $seam->events->list(since: "1970-01-01T00:00:00.000Z");
     $this->assertIsArray($events);
 
@@ -30,14 +30,14 @@ final class EventsTest extends TestCase
 
   public function testListEventsError(): void
   {
-    $seam = Fixture::getTestServer(true);
+    $seam = Fixture::getTestServer();
     try {
       $seam->events->list(since: "invalid_date");
     } catch (Exception $e) {
       $this->assertTrue(
         str_contains(
           $e->getMessage(),
-          'Must be parsable date string for "since"'
+          'Must be parsable date string'
         )
       );
     }

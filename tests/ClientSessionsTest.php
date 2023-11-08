@@ -10,7 +10,7 @@ final class ClientSessionsTest extends TestCase
 {
   public function testCreateClientSession(): void
   {
-    $seam = Fixture::getTestServer(true);
+    $seam = Fixture::getTestServer();
     $client_session = $seam->client_sessions->create();
 
     $this->assertIsString($client_session->client_session_id);
