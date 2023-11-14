@@ -8,14 +8,14 @@ use GuzzleHttp\Client;
 
 final class WorkspacesTest extends TestCase
 {
-  public function testGetAndListWorkspaces(): void
-  {
-    $seam = Fixture::getTestServer();
+    public function testGetAndListWorkspaces(): void
+    {
+        $seam = Fixture::getTestServer();
 
-    $workspaces = $seam->workspaces->list();
-    $this->assertTrue(count($workspaces) > 0);
+        $workspaces = $seam->workspaces->list();
+        $this->assertTrue(count($workspaces) > 0);
 
-    $workspace = $seam->workspaces->get();
-    $this->assertIsObject($workspace);
-  }
+        $workspace = $seam->workspaces->get();
+        $this->assertIsObject($workspace);
+    }
 }

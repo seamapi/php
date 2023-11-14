@@ -3,1474 +3,3248 @@
 namespace Seam;
 
 use Seam\Objects\AccessCode;
+use Seam\Objects\UnmanagedAccessCode;
 use Seam\Objects\ActionAttempt;
-use Seam\Objects\ConnectedAccount;
+use Seam\Objects\ClientSession;
+use Seam\Objects\ClimateSettingSchedule;
 use Seam\Objects\ConnectWebview;
+use Seam\Objects\ConnectedAccount;
 use Seam\Objects\Device;
 use Seam\Objects\UnmanagedDevice;
-use Seam\Objects\Event;
-use Seam\Objects\Workspace;
-use Seam\Objects\ClientSession;
-use Seam\Objects\NoiseThreshold;
-use Seam\Objects\ClimateSettingSchedule;
 use Seam\Objects\DeviceProvider;
+use Seam\Objects\Event;
+use Seam\Objects\NoiseThreshold;
+use Seam\Objects\ServiceHealth;
+use Seam\Objects\Webhook;
+use Seam\Objects\Workspace;
+use Seam\Objects\AcsSystem;
+use Seam\Objects\AcsAccessGroup;
+use Seam\Objects\AcsUser;
 
 use GuzzleHttp\Client as HTTPClient;
 use \Exception as Exception;
 
-function filter_out_null_params(array $params)
-{
-  return array_filter($params, fn ($p) => $p or $p === false ? true : false);
-}
-
 class SeamClient
 {
-  public DevicesClient $devices;
-  public WorkspacesClient $workspaces;
-  public ActionAttemptsClient $action_attempts;
-  public AccessCodesClient $access_codes;
-  public EventsClient $events;
-  public ConnectWebviewsClient $connect_webviews;
-  public ConnectedAccountsClient $connected_accounts;
-  public LocksClient $locks;
-  public ClientSessionsClient $client_sessions;
-  public NoiseSensorsClient $noise_sensors;
+    public AccessCodesClient $access_codes;
+    public ActionAttemptsClient $action_attempts;
+    public ClientSessionsClient $client_sessions;
+    public ConnectWebviewsClient $connect_webviews;
+    public ConnectedAccountsClient $connected_accounts;
+    public DevicesClient $devices;
+    public EventsClient $events;
+    public HealthClient $health;
+    public LocksClient $locks;
+    public ThermostatsClient $thermostats;
+    public UserIdentitiesClient $user_identities;
+    public WebhooksClient $webhooks;
+    public WorkspacesClient $workspaces;
+    public AcsClient $acs;
+    public NoiseSensorsClient $noise_sensors;
 
-  public string $api_key;
-  public HTTPClient $client;
+    public string $api_key;
+    public HTTPClient $client;
 
-
-  public function __construct(
-    $api_key,
-    $endpoint = "https://connect.getseam.com",
-    $throw_http_errors = false
-  ) {
-    $this->api_key = $api_key;
-    $this->client = new HTTPClient([
-      "base_uri" => $endpoint,
-      "timeout" => 60.0,
-      "headers" => [
-        "Authorization" => "Bearer " . $this->api_key,
-        "User-Agent" => "Seam PHP Client 0.0.1",
-      ],
-      "http_errors" => $throw_http_errors,
-    ]);
-    $this->devices = new DevicesClient($this);
-    $this->action_attempts = new ActionAttemptsClient($this);
-    $this->workspaces = new WorkspacesClient($this);
-    $this->access_codes = new AccessCodesClient($this);
-    $this->events = new EventsClient($this);
-    $this->connect_webviews = new ConnectWebviewsClient($this);
-    $this->connected_accounts = new ConnectedAccountsClient($this);
-    $this->locks = new LocksClient($this);
-    $this->client_sessions = new ClientSessionsClient($this);
-    $this->noise_sensors = new NoiseSensorsClient($this);
-    $this->thermostats = new ThermostatsClient($this);
-  }
-
-  public function request(
-    $method,
-    $path,
-    $json = null,
-    $query = null,
-    $inner_object = null
-  ) {
-    $options = filter_out_null_params(["json" => $json, "query" => $query]);
-
-    // TODO handle request errors
-    $response = $this->client->request($method, $path, $options);
-    $statusCode = $response->getStatusCode();
-
-    $res_json = null;
-    try {
-      $res_json = json_decode($response->getBody());
-    } catch (Exception $ignoreError) {
+    public function __construct(
+        $api_key,
+        $endpoint = "https://connect.getseam.com",
+        $throw_http_errors = false
+    ) {
+        $this->api_key = $api_key;
+        $this->client = new HTTPClient([
+            "base_uri" => $endpoint,
+            "timeout" => 60.0,
+            "headers" => [
+                "Authorization" => "Bearer " . $this->api_key,
+                "User-Agent" => "Seam PHP Client 0.0.1",
+            ],
+            "http_errors" => $throw_http_errors,
+        ]);
+        $this->access_codes = new AccessCodesClient($this);
+        $this->action_attempts = new ActionAttemptsClient($this);
+        $this->client_sessions = new ClientSessionsClient($this);
+        $this->connect_webviews = new ConnectWebviewsClient($this);
+        $this->connected_accounts = new ConnectedAccountsClient($this);
+        $this->devices = new DevicesClient($this);
+        $this->events = new EventsClient($this);
+        $this->health = new HealthClient($this);
+        $this->locks = new LocksClient($this);
+        $this->thermostats = new ThermostatsClient($this);
+        $this->user_identities = new UserIdentitiesClient($this);
+        $this->webhooks = new WebhooksClient($this);
+        $this->workspaces = new WorkspacesClient($this);
+        $this->acs = new AcsClient($this);
+        $this->noise_sensors = new NoiseSensorsClient($this);
     }
 
-    if (($res_json->error ?? null) != null) {
-      throw new Exception(
-        "Error Calling \"" .
-          $method .
-          " " .
-          $path .
-          "\" : " .
-          ($res_json->error->type ?? "") .
-          ": " .
-          $res_json->error->message
-      );
+    public function request(
+        $method,
+        $path,
+        $json = null,
+        $query = null,
+        $inner_object = null
+    ) {
+        $options = [
+            "json" => $json,
+            "query" => $query,
+        ];
+        $options = array_filter($options, fn($option) => $option !== null);
+
+        // TODO handle request errors
+        $response = $this->client->request($method, $path, $options);
+        $statusCode = $response->getStatusCode();
+
+        $res_json = null;
+        try {
+            $res_json = json_decode($response->getBody());
+        } catch (Exception $ignoreError) {
+        }
+
+        if (($res_json->error ?? null) != null) {
+            throw new Exception(
+                "Error Calling \"" .
+                    $method .
+                    " " .
+                    $path .
+                    "\" : " .
+                    ($res_json->error->type ?? "") .
+                    ": " .
+                    $res_json->error->message
+            );
+        }
+
+        if ($statusCode >= 400) {
+            throw new Exception(
+                "HTTP Error: [" . $statusCode . "] " . $method . " " . $path
+            );
+        }
+
+        if ($inner_object) {
+            if (
+                !is_array($res_json->$inner_object) &&
+                ($res_json->$inner_object ?? null) == null
+            ) {
+                throw new Exception(
+                    'Missing Inner Object "' .
+                        $inner_object .
+                        '" for ' .
+                        $method .
+                        " " .
+                        $path
+                );
+            }
+            return $res_json->$inner_object;
+        }
+        return $res_json;
     }
-
-    if ($statusCode >= 400) {
-      throw new Exception(
-        "HTTP Error: [" . $statusCode . "] " . $method . " " . $path
-      );
-    }
-
-    if ($inner_object) {
-      if (!is_array($res_json->$inner_object) && ($res_json->$inner_object ?? null) == null) {
-        throw new Exception(
-          'Missing Inner Object "' .
-            $inner_object .
-            '" for ' .
-            $method .
-            " " .
-            $path
-        );
-      }
-      return $res_json->$inner_object;
-    }
-    return $res_json;
-  }
-}
-
-class DevicesClient
-{
-  private SeamClient $seam;
-  public UnmanagedDevicesClient $unmanaged;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-    $this->unmanaged = new UnmanagedDevicesClient($seam);
-  }
-
-  /**
-   * Get Device
-   */
-  public function get(string $device_id = null, string $name = null): Device|null
-  {
-    $query = filter_out_null_params(["device_id" => $device_id, "name" => $name]);
-
-    $device = Device::from_json(
-      $this->seam->request(
-        "GET",
-        "devices/get",
-        query: $query,
-        inner_object: "device"
-      )
-    );
-    return $device;
-  }
-
-  /**
-   * List devices
-   * @return Device[]
-   */
-  public function list(
-    string $connected_account_id = null,
-    array $connected_account_ids = null,
-    string $connect_webview_id = null,
-    string $device_type = null,
-    array $device_types = null,
-    array $device_ids = null,
-    string $manufacturer = null,
-  ): array {
-    $query = filter_out_null_params([
-      "connected_account_id" => $connected_account_id,
-      "connected_account_ids" => is_null($connected_account_ids) ? null : join(",", $connected_account_ids),
-      "connect_webview_id" => $connect_webview_id,
-      "device_ids" => is_null($device_ids) ? null : join(",", $device_ids),
-      "device_type" => $device_type,
-      "device_types" => is_null($device_types) ? null : join(",", $device_types),
-      "manufacturer" => $manufacturer
-    ]);
-
-    return array_map(
-      fn ($d) => Device::from_json($d),
-      $this->seam->request("GET", "devices/list", query: $query, inner_object: "devices")
-    );
-  }
-
-  /**
-   * Update Device
-   * @return void
-   */
-  public function update(
-    string $device_id,
-    string $name = null,
-    mixed $location = null,
-    bool $is_managed = null
-  ) {
-    $json = filter_out_null_params([
-      "device_id" => $device_id,
-      "name" => $name,
-      "location" => $location,
-      "is_managed" => $is_managed,
-    ]);
-
-    $this->seam->request(
-      "PATCH",
-      "devices/update",
-      json: $json
-    );
-  }
-
-  /**
-   * Delete Device
-   * @return void
-   */
-  public function delete(string $device_id)
-  {
-    $this->seam->request(
-      "DELETE",
-      "devices/delete",
-      json: [
-        "device_id" => $device_id,
-      ]
-    );
-  }
-
-  /**
-   * List Device Providers
-   * @return DeviceProvider[]
-   */
-  public function list_device_providers(
-    string $provider_category = null,
-  ): array {
-    $query = filter_out_null_params([
-      "provider_category" => $provider_category,
-    ]);
-
-    return array_map(
-      fn ($dp) => DeviceProvider::from_json($dp),
-      $this->seam->request(
-        "GET",
-        "devices/list_device_providers",
-        query: $query,
-        inner_object: "device_providers"
-      )
-    );
-  }
-}
-
-class UnmanagedDevicesClient
-{
-  private SeamClient $seam;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-  }
-
-  public function get(
-    string $device_id = null,
-    string $name = null,
-  ): UnmanagedDevice {
-    $query = filter_out_null_params([
-      "device_id" => $device_id,
-      "name" => $name,
-    ]);
-
-    return UnmanagedDevice::from_json(
-      $this->seam->request(
-        "GET",
-        "devices/unmanaged/get",
-        query: $query,
-        inner_object: "device"
-      )
-    );
-  }
-
-  public function list(
-    string $connected_account_id = null,
-    array $connected_account_ids = null,
-    string $connect_webview_id = null,
-    string $device_type = null,
-    array $device_types = null,
-    string $manufacturer = null,
-    array $device_ids = null,
-  ): array {
-    $query = filter_out_null_params([
-      "connected_account_id" => $connected_account_id,
-      "connected_account_ids" => is_null($connected_account_ids) ? null : join(",", $connected_account_ids),
-      "connect_webview_id" => $connect_webview_id,
-      "device_type" => $device_type,
-      "device_types" => is_null($device_types) ? null : join(",", $device_types),
-      "manufacturer" => $manufacturer,
-      "device_ids" => is_null($device_ids) ? null : join(",", $device_ids),
-    ]);
-
-    return array_map(
-      fn ($d) => UnmanagedDevice::from_json($d),
-      $this->seam->request(
-        "GET",
-        "devices/unmanaged/list",
-        query: $query,
-        inner_object: "devices"
-      )
-    );
-  }
-
-  public function update(
-    string $device_id,
-    bool $is_managed,
-  ) {
-    $this->seam->request(
-      "PATCH",
-      "devices/unmanaged/update",
-      json: [
-        "device_id" => $device_id,
-        "is_managed" => $is_managed,
-      ]
-    );
-  }
-}
-
-class WorkspacesClient
-{
-  private SeamClient $seam;
-
-  public function __construct($seam)
-  {
-    $this->seam = $seam;
-  }
-
-  public function get($workspace_id = null): Workspace
-  {
-    $query = filter_out_null_params(["workspace_id" => $workspace_id]);
-
-    return Workspace::from_json(
-      $this->seam->request("GET", "workspaces/get", query: $query, inner_object: "workspace")
-    );
-  }
-
-  public function list($workspace_id = null)
-  {
-    $query = filter_out_null_params(["workspace_id" => $workspace_id]);
-
-    return array_map(
-      fn ($w) => Workspace::from_json($w),
-      $this->seam->request("GET", "workspaces/list", query: $query,  inner_object: "workspaces")
-    );
-  }
-
-  public function reset_sandbox()
-  {
-    $res = $this->seam->client->request("POST", "workspaces/reset_sandbox");
-    return json_decode($res->getBody());
-  }
-
-  public function _internal_load_august_factory()
-  {
-    $res = $this->seam->request(
-      "POST",
-      "internal/scenarios/factories/load",
-      json: [
-        "factory_name" => "create_august_devices",
-        "input" => ["num" => 2],
-        "sync" => true,
-      ],
-    );
-
-    // sleep for 0.2 seconds
-    usleep(200000);
-  }
-
-  public function _internal_load_minut_factory()
-  {
-    $this->seam->request(
-      "POST",
-      "internal/scenarios/factories/load",
-      json: [
-        "factory_name" => "create_minut_devices",
-        "input" => [
-          "devicesConfig" => [
-            [
-              "sound_level_high" => [
-                "value" => 60,
-                "duration_seconds" => 600,
-                "notifications" => []
-              ],
-              "sound_level_high_quiet_hours" => [
-                "value" => 60,
-                "duration_seconds" => 600,
-                "notifications" => [],
-                "enabled" => True,
-                "starts_at" => "20:00",
-                "ends_at" => "08:00",
-              ]
-            ]
-          ],
-        ],
-        "sync" => true,
-      ],
-    );
-
-    usleep(200000);
-  }
-
-  public function _internal_load_ecobee_factory()
-  {
-    $this->seam->request(
-      "POST",
-      "internal/scenarios/factories/load",
-      json: [
-        "factory_name" => "create_ecobee_devices",
-        "input" => ["num" => 2],
-        "sync" => true,
-      ],
-    );
-
-    usleep(200000);
-  }
-}
-
-class ActionAttemptsClient
-{
-  private SeamClient $seam;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-  }
-
-  public function get(string $action_attempt_id): ActionAttempt
-  {
-    return ActionAttempt::from_json(
-      $this->seam->request(
-        "GET",
-        "action_attempts/get",
-        query: ["action_attempt_id" => $action_attempt_id],
-        inner_object: "action_attempt"
-      )
-    );
-  }
-
-  /**
-   * List action attempts
-   * @return ActionAttempt[]
-   */
-  public function list(array $action_attempt_ids): array
-  {
-    return array_map(
-      fn ($a) => ActionAttempt::from_json($a),
-      $this->seam->request(
-        "GET",
-        "action_attempts/list",
-        query: ["action_attempt_ids" => implode(',', $action_attempt_ids)],
-        inner_object: "action_attempts"
-      )
-    );
-  }
-
-  public function poll_until_ready(string $action_attempt_id): ActionAttempt
-  {
-    $seam = $this->seam;
-    $time_waiting = 0.0;
-    $action_attempt = $seam->action_attempts->get($action_attempt_id);
-
-    while ($action_attempt->status == "pending") {
-      $action_attempt = $seam->action_attempts->get(
-        $action_attempt->action_attempt_id
-      );
-      if ($time_waiting > 20.0) {
-        throw new Exception("Timed out waiting for access code to be created");
-      }
-      $time_waiting += 0.4;
-      usleep(400000); // sleep for 0.4 seconds
-    }
-
-    if ($action_attempt->status == "failed") {
-      throw new Exception(
-        "Action Attempt failed: " . $action_attempt->error->message
-      );
-    }
-
-    return ActionAttempt::from_json($action_attempt);
-  }
 }
 
 class AccessCodesClient
 {
-  private SeamClient $seam;
-  public UnmanagedAccessCodesClient $unmanaged;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-    $this->unmanaged = new UnmanagedAccessCodesClient($seam);
-  }
-
-  /**
-   * List Access Codes
-   * @return AccessCode[]
-   */
-  public function list(
-    string $device_id = null,
-    array $access_code_ids = null
-  ): array {
-    $json = filter_out_null_params([
-      "device_id" => $device_id,
-      "access_code_ids" => $access_code_ids,
-    ]);
-
-    return array_map(
-      fn ($a) => AccessCode::from_json($a),
-      $this->seam->request(
-        "POST",
-        "access_codes/list",
-        json: $json,
-        inner_object: "access_codes"
-      )
-    );
-  }
-
-  public function get(
-    string $access_code_id = null,
-    string $device_id = null,
-    string $code = null
-  ): AccessCode {
-    $query = filter_out_null_params([
-      "access_code_id" => $access_code_id,
-      "device_id" => $device_id,
-      "code" => $code
-    ]);
-
-    return AccessCode::from_json(
-      $this->seam->request(
-        "GET",
-        "access_codes/get",
-        query: $query,
-        inner_object: "access_code"
-      )
-    );
-  }
-
-  public function create(
-    string $device_id,
-    string $name = null,
-    string $code = null,
-    string $starts_at = null,
-    string $ends_at = null,
-    bool $attempt_for_offline_device = null,
-    bool $allow_external_modification = null,
-    string $common_code_key = null,
-    bool $prefer_native_scheduling = null,
-    bool $use_backup_access_code_pool = null,
-    bool $wait_for_action_attempt = false
-  ): ActionAttempt|AccessCode {
-    $json = filter_out_null_params([
-      "device_id" => $device_id,
-      "name" => $name,
-      "code" => $code,
-      "starts_at" => $starts_at,
-      "ends_at" => $ends_at,
-      "attempt_for_offline_device" => $attempt_for_offline_device,
-      "allow_external_modification" => $allow_external_modification,
-      "common_code_key" => $common_code_key,
-      "prefer_native_scheduling" => $prefer_native_scheduling,
-      "use_backup_access_code_pool" => $use_backup_access_code_pool
-    ]);
-    [
-      'action_attempt' => $action_attempt,
-      'access_code' => $access_code
-    ] = (array) $this->seam->request(
-      "POST",
-      "access_codes/create",
-      json: $json,
-    );
-
-    if (!$wait_for_action_attempt) {
-      return AccessCode::from_json($access_code);
+    private SeamClient $seam;
+    public AccessCodesSimulateClient $simulate;
+    public AccessCodesUnmanagedClient $unmanaged;
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+        $this->simulate = new AccessCodesSimulateClient($seam);
+        $this->unmanaged = new AccessCodesUnmanagedClient($seam);
     }
 
-    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+    public function create(
+        string $device_id,
+        string $name = null,
+        string $starts_at = null,
+        string $ends_at = null,
+        string $code = null,
+        bool $sync = null,
+        bool $attempt_for_offline_device = null,
+        string $common_code_key = null,
+        bool $prefer_native_scheduling = null,
+        bool $use_backup_access_code_pool = null,
+        bool $allow_external_modification = null,
+        bool $is_external_modification_allowed = null,
+        bool $use_offline_access_code = null,
+        bool $is_offline_access_code = null,
+        bool $is_one_time_use = null,
+        string $max_time_rounding = null
+    ): AccessCode {
+        $request_payload = [];
 
-    if (!$updated_action_attempt->result?->access_code) {
-      throw new Exception(
-        "Failed to create access code: no access code returned: " .
-          json_encode($updated_action_attempt)
-      );
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+        if ($starts_at !== null) {
+            $request_payload["starts_at"] = $starts_at;
+        }
+        if ($ends_at !== null) {
+            $request_payload["ends_at"] = $ends_at;
+        }
+        if ($code !== null) {
+            $request_payload["code"] = $code;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
+        if ($attempt_for_offline_device !== null) {
+            $request_payload[
+                "attempt_for_offline_device"
+            ] = $attempt_for_offline_device;
+        }
+        if ($common_code_key !== null) {
+            $request_payload["common_code_key"] = $common_code_key;
+        }
+        if ($prefer_native_scheduling !== null) {
+            $request_payload[
+                "prefer_native_scheduling"
+            ] = $prefer_native_scheduling;
+        }
+        if ($use_backup_access_code_pool !== null) {
+            $request_payload[
+                "use_backup_access_code_pool"
+            ] = $use_backup_access_code_pool;
+        }
+        if ($allow_external_modification !== null) {
+            $request_payload[
+                "allow_external_modification"
+            ] = $allow_external_modification;
+        }
+        if ($is_external_modification_allowed !== null) {
+            $request_payload[
+                "is_external_modification_allowed"
+            ] = $is_external_modification_allowed;
+        }
+        if ($use_offline_access_code !== null) {
+            $request_payload[
+                "use_offline_access_code"
+            ] = $use_offline_access_code;
+        }
+        if ($is_offline_access_code !== null) {
+            $request_payload[
+                "is_offline_access_code"
+            ] = $is_offline_access_code;
+        }
+        if ($is_one_time_use !== null) {
+            $request_payload["is_one_time_use"] = $is_one_time_use;
+        }
+        if ($max_time_rounding !== null) {
+            $request_payload["max_time_rounding"] = $max_time_rounding;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/access_codes/create",
+            json: $request_payload,
+            inner_object: "access_code"
+        );
+
+        return AccessCode::from_json($res);
     }
 
-    return AccessCode::from_json($updated_action_attempt->result->access_code);
-  }
+    public function create_multiple(
+        array $device_ids,
+        string $behavior_when_code_cannot_be_shared = null,
+        string $name = null,
+        string $starts_at = null,
+        string $ends_at = null,
+        string $code = null,
+        bool $attempt_for_offline_device = null,
+        bool $prefer_native_scheduling = null,
+        bool $use_backup_access_code_pool = null,
+        bool $allow_external_modification = null,
+        bool $is_external_modification_allowed = null,
+        bool $use_offline_access_code = null,
+        bool $is_offline_access_code = null,
+        bool $is_one_time_use = null,
+        string $max_time_rounding = null
+    ): array {
+        $request_payload = [];
 
+        if ($device_ids !== null) {
+            $request_payload["device_ids"] = $device_ids;
+        }
+        if ($behavior_when_code_cannot_be_shared !== null) {
+            $request_payload[
+                "behavior_when_code_cannot_be_shared"
+            ] = $behavior_when_code_cannot_be_shared;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+        if ($starts_at !== null) {
+            $request_payload["starts_at"] = $starts_at;
+        }
+        if ($ends_at !== null) {
+            $request_payload["ends_at"] = $ends_at;
+        }
+        if ($code !== null) {
+            $request_payload["code"] = $code;
+        }
+        if ($attempt_for_offline_device !== null) {
+            $request_payload[
+                "attempt_for_offline_device"
+            ] = $attempt_for_offline_device;
+        }
+        if ($prefer_native_scheduling !== null) {
+            $request_payload[
+                "prefer_native_scheduling"
+            ] = $prefer_native_scheduling;
+        }
+        if ($use_backup_access_code_pool !== null) {
+            $request_payload[
+                "use_backup_access_code_pool"
+            ] = $use_backup_access_code_pool;
+        }
+        if ($allow_external_modification !== null) {
+            $request_payload[
+                "allow_external_modification"
+            ] = $allow_external_modification;
+        }
+        if ($is_external_modification_allowed !== null) {
+            $request_payload[
+                "is_external_modification_allowed"
+            ] = $is_external_modification_allowed;
+        }
+        if ($use_offline_access_code !== null) {
+            $request_payload[
+                "use_offline_access_code"
+            ] = $use_offline_access_code;
+        }
+        if ($is_offline_access_code !== null) {
+            $request_payload[
+                "is_offline_access_code"
+            ] = $is_offline_access_code;
+        }
+        if ($is_one_time_use !== null) {
+            $request_payload["is_one_time_use"] = $is_one_time_use;
+        }
+        if ($max_time_rounding !== null) {
+            $request_payload["max_time_rounding"] = $max_time_rounding;
+        }
 
-  /**
-   * Create Access Codes across multiple Devices that share a common code
-   * 
-   * @param string[] $device_ids
-   * @param string|null $name
-   * @param string|null $starts_at
-   * @param string|null $ends_at
-   * @param string|null $behavior_when_code_cannot_be_shared Accepts either "throw" or "create_random_code"
-   * @param bool|null $attempt_for_offline_device
-   * 
-   * @return AccessCode[]
-   */
-  public function create_multiple(
-    array $device_ids,
-    string $name = null,
-    string $starts_at = null,
-    string $ends_at = null,
-    string $behavior_when_code_cannot_be_shared = null,
-    bool $attempt_for_offline_device = null,
-  ): array {
-    $json = filter_out_null_params([
-      "device_ids" => $device_ids,
-      "name" => $name,
-      "starts_at" => $starts_at,
-      "ends_at" => $ends_at,
-      "behavior_when_code_cannot_be_shared" => $behavior_when_code_cannot_be_shared,
-      "attempt_for_offline_device" => $attempt_for_offline_device
-    ]);
+        $res = $this->seam->request(
+            "POST",
+            "/access_codes/create_multiple",
+            json: $request_payload,
+            inner_object: "access_codes"
+        );
 
-    return array_map(
-      fn ($a) => AccessCode::from_json($a),
-      $this->seam->request(
-        "POST",
-        "access_codes/create_multiple",
-        json: $json,
-        inner_object: "access_codes"
-      )
-    );
-  }
-
-  public function delete(
-    string $access_code_id,
-    string $device_id = null,
-    bool $wait_for_action_attempt = true,
-  ): ActionAttempt {
-    $json = filter_out_null_params([
-      "access_code_id" => $access_code_id,
-      "device_id" => $device_id,
-    ]);
-    $action_attempt = ActionAttempt::from_json(
-      $this->seam->request(
-        "POST",
-        "access_codes/delete",
-        json: $json,
-        inner_object: "action_attempt"
-      )
-    );
-
-    if (!$wait_for_action_attempt) {
-      return $action_attempt;
+        return array_map(fn($r) => AccessCode::from_json($r), $res);
     }
 
-    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+    public function delete(
+        string $access_code_id,
+        string $device_id = null,
+        bool $sync = null,
+        bool $wait_for_action_attempt = true
+    ): ActionAttempt {
+        $request_payload = [];
 
-    return $updated_action_attempt;
-  }
+        if ($access_code_id !== null) {
+            $request_payload["access_code_id"] = $access_code_id;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
 
-  public function update(
-    string $access_code_id,
-    string $device_id = null,
-    string $name = null,
-    string $code = null,
-    string $starts_at = null,
-    string $ends_at = null,
-    string $type = null,
-    bool $allow_external_modification = null,
-    bool $is_managed = null,
-    bool $wait_for_access_code = true
-  ): ActionAttempt|AccessCode {
-    $json = filter_out_null_params([
-      "access_code_id" => $access_code_id,
-      "device_id" => $device_id,
-      "name" => $name,
-      "code" => $code,
-      "starts_at" => $starts_at,
-      "ends_at" => $ends_at,
-      "type" => $type,
-      "allow_external_modification" => $allow_external_modification,
-      "is_managed" => $is_managed,
-    ]);
-    $action_attempt = ActionAttempt::from_json(
-      $this->seam->request(
-        "POST",
-        "access_codes/update",
-        json: $json,
-        inner_object: "action_attempt"
-      )
-    );
-    if (!$wait_for_access_code) {
-      return $action_attempt;
-    }
-    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+        $res = $this->seam->request(
+            "POST",
+            "/access_codes/delete",
+            json: $request_payload,
+            inner_object: "action_attempt"
+        );
 
-    if (!$updated_action_attempt->result?->access_code) {
-      throw new Exception(
-        "Failed to update access code: no access code returned: " .
-          json_encode($updated_action_attempt)
-      );
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt_id
+        );
+
+        return $action_attempt;
     }
 
-    return AccessCode::from_json($updated_action_attempt->result->access_code);
-  }
+    public function generate_code(string $device_id): AccessCode
+    {
+        $request_payload = [];
 
-  public function pull_backup_access_code(string $access_code_id): AccessCode
-  {
-    return AccessCode::from_json(
-      $this->seam->request(
-        "POST",
-        "access_codes/pull_backup_access_code",
-        json: ["access_code_id" => $access_code_id],
-        inner_object: "backup_access_code"
-      )
-    );
-  }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/access_codes/generate_code",
+            json: $request_payload,
+            inner_object: "generated_code"
+        );
+
+        return AccessCode::from_json($res);
+    }
+
+    public function get(
+        string $device_id = null,
+        string $access_code_id = null,
+        string $code = null
+    ): AccessCode {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($access_code_id !== null) {
+            $request_payload["access_code_id"] = $access_code_id;
+        }
+        if ($code !== null) {
+            $request_payload["code"] = $code;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/access_codes/get",
+            json: $request_payload,
+            inner_object: "access_code"
+        );
+
+        return AccessCode::from_json($res);
+    }
+
+    public function list(
+        string $device_id = null,
+        array $access_code_ids = null,
+        string $user_identifier_key = null
+    ): array {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($access_code_ids !== null) {
+            $request_payload["access_code_ids"] = $access_code_ids;
+        }
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/access_codes/list",
+            json: $request_payload,
+            inner_object: "access_codes"
+        );
+
+        return array_map(fn($r) => AccessCode::from_json($r), $res);
+    }
+
+    public function pull_backup_access_code(string $access_code_id): AccessCode
+    {
+        $request_payload = [];
+
+        if ($access_code_id !== null) {
+            $request_payload["access_code_id"] = $access_code_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/access_codes/pull_backup_access_code",
+            json: $request_payload,
+            inner_object: "backup_access_code"
+        );
+
+        return AccessCode::from_json($res);
+    }
+
+    public function update(
+        string $access_code_id,
+        string $name = null,
+        string $starts_at = null,
+        string $ends_at = null,
+        string $code = null,
+        bool $sync = null,
+        bool $attempt_for_offline_device = null,
+        bool $prefer_native_scheduling = null,
+        bool $use_backup_access_code_pool = null,
+        bool $allow_external_modification = null,
+        bool $is_external_modification_allowed = null,
+        bool $use_offline_access_code = null,
+        bool $is_offline_access_code = null,
+        bool $is_one_time_use = null,
+        string $max_time_rounding = null,
+        string $device_id = null,
+        string $type = null,
+        bool $is_managed = null,
+        bool $wait_for_action_attempt = true
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($access_code_id !== null) {
+            $request_payload["access_code_id"] = $access_code_id;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+        if ($starts_at !== null) {
+            $request_payload["starts_at"] = $starts_at;
+        }
+        if ($ends_at !== null) {
+            $request_payload["ends_at"] = $ends_at;
+        }
+        if ($code !== null) {
+            $request_payload["code"] = $code;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
+        if ($attempt_for_offline_device !== null) {
+            $request_payload[
+                "attempt_for_offline_device"
+            ] = $attempt_for_offline_device;
+        }
+        if ($prefer_native_scheduling !== null) {
+            $request_payload[
+                "prefer_native_scheduling"
+            ] = $prefer_native_scheduling;
+        }
+        if ($use_backup_access_code_pool !== null) {
+            $request_payload[
+                "use_backup_access_code_pool"
+            ] = $use_backup_access_code_pool;
+        }
+        if ($allow_external_modification !== null) {
+            $request_payload[
+                "allow_external_modification"
+            ] = $allow_external_modification;
+        }
+        if ($is_external_modification_allowed !== null) {
+            $request_payload[
+                "is_external_modification_allowed"
+            ] = $is_external_modification_allowed;
+        }
+        if ($use_offline_access_code !== null) {
+            $request_payload[
+                "use_offline_access_code"
+            ] = $use_offline_access_code;
+        }
+        if ($is_offline_access_code !== null) {
+            $request_payload[
+                "is_offline_access_code"
+            ] = $is_offline_access_code;
+        }
+        if ($is_one_time_use !== null) {
+            $request_payload["is_one_time_use"] = $is_one_time_use;
+        }
+        if ($max_time_rounding !== null) {
+            $request_payload["max_time_rounding"] = $max_time_rounding;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($type !== null) {
+            $request_payload["type"] = $type;
+        }
+        if ($is_managed !== null) {
+            $request_payload["is_managed"] = $is_managed;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/access_codes/update",
+            json: $request_payload,
+            inner_object: "action_attempt"
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt_id
+        );
+
+        return $action_attempt;
+    }
 }
 
-class UnmanagedAccessCodesClient
+class ActionAttemptsClient
 {
-  private SeamClient $seam;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-  }
+    private SeamClient $seam;
 
-  public function list(string $device_id): array
-  {
-    return array_map(
-      fn ($a) => AccessCode::from_json($a),
-      $this->seam->request(
-        "GET",
-        "access_codes/unmanaged/list",
-        query: ["device_id" => $device_id],
-        inner_object: "access_codes"
-      )
-    );
-  }
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
 
-  public function update(
-    string $access_code_id,
-    bool $is_managed,
-    bool $allow_external_modification = null,
-    bool $force = null,
-  ) {
-    $json = filter_out_null_params([
-      "access_code_id" => $access_code_id,
-      "is_managed" => $is_managed,
-      "allow_external_modification" => $allow_external_modification,
-      "force" => $force
-    ]);
+    public function get(string $action_attempt_id): ActionAttempt
+    {
+        $request_payload = [];
 
-    $this->seam->request(
-      "PATCH",
-      "access_codes/unmanaged/update",
-      json: $json
-    );
-  }
+        if ($action_attempt_id !== null) {
+            $request_payload["action_attempt_id"] = $action_attempt_id;
+        }
 
-  public function delete(string $access_code_id, bool $sync = null): ActionAttempt
-  {
-    $json = filter_out_null_params([
-      "access_code_id" => $access_code_id,
-      "sync" => $sync
-    ]);
+        $res = $this->seam->request(
+            "POST",
+            "/action_attempts/get",
+            json: $request_payload,
+            inner_object: "action_attempt"
+        );
 
-    return ActionAttempt::from_json(
-      $this->seam->request(
-        "DELETE",
-        "access_codes/unmanaged/delete",
-        json: $json,
-        inner_object: "action_attempt"
-      )
-    );
-  }
-}
+        return ActionAttempt::from_json($res);
+    }
 
-class ConnectWebviewsClient
-{
-  private SeamClient $seam;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-  }
+    public function list(array $action_attempt_ids): array
+    {
+        $request_payload = [];
 
-  public function create(
-    array $accepted_providers = [],
-    string $custom_redirect_url = null,
-    string $custom_redirect_failure_url = null,
-    string $device_selection_mode = null,
-    string $provider_category = null,
-    mixed $custom_metadata = null,
-    bool $automatically_manage_new_devices = null,
-    bool $wait_for_device_creation = null
-  ) {
-    $json = filter_out_null_params([
-      "accepted_providers" => $accepted_providers,
-      "custom_redirect_url" => $custom_redirect_url,
-      "custom_redirect_failure_url" => $custom_redirect_failure_url,
-      "device_selection_mode" => $device_selection_mode,
-      "provider_category" => $provider_category,
-      "custom_metadata" => $custom_metadata,
-      "automatically_manage_new_devices" => $automatically_manage_new_devices,
-      "wait_for_device_creation" => $wait_for_device_creation,
-    ]);
+        if ($action_attempt_ids !== null) {
+            $request_payload["action_attempt_ids"] = $action_attempt_ids;
+        }
 
-    return ConnectWebview::from_json(
-      $this->seam->request(
-        "POST",
-        "connect_webviews/create",
-        json: $json,
-        inner_object: "connect_webview"
-      )
-    );
-  }
+        $res = $this->seam->request(
+            "POST",
+            "/action_attempts/list",
+            json: $request_payload,
+            inner_object: "action_attempts"
+        );
 
-  /**
-   * List Connect Webviews
-   * @return ConnectWebview[]
-   */
-  public function list(): array
-  {
-    return array_map(
-      fn ($a) => ConnectWebview::from_json($a),
-      $this->seam->request(
-        "GET",
-        "connect_webviews/list",
-        inner_object: "connect_webviews"
-      )
-    );
-  }
+        return array_map(fn($r) => ActionAttempt::from_json($r), $res);
+    }
+    public function poll_until_ready(string $action_attempt_id): ActionAttempt
+    {
+        $seam = $this->seam;
+        $time_waiting = 0.0;
+        $action_attempt = $seam->action_attempts->get($action_attempt_id);
 
-  public function get(string $connect_webview_id): ConnectWebview
-  {
-    return ConnectWebview::from_json(
-      $this->seam->request(
-        "GET",
-        "connect_webviews/get",
-        query: ["connect_webview_id" => $connect_webview_id],
-        inner_object: "connect_webview"
-      )
-    );
-  }
-}
+        while ($action_attempt->status == "pending") {
+            $action_attempt = $seam->action_attempts->get(
+                $action_attempt->action_attempt_id
+            );
+            if ($time_waiting > 20.0) {
+                throw new Exception(
+                    "Timed out waiting for access code to be created"
+                );
+            }
+            $time_waiting += 0.4;
+            usleep(400000); // sleep for 0.4 seconds
+        }
 
-class ConnectedAccountsClient
-{
-  private SeamClient $seam;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-  }
+        if ($action_attempt->status == "failed") {
+            throw new Exception(
+                "Action Attempt failed: " . $action_attempt->error->message
+            );
+        }
 
-  /**
-   * List Connected Accounts
-   * @return ConnectedAccount[]
-   */
-  public function list(): array
-  {
-    return array_map(
-      fn ($a) => ConnectedAccount::from_json($a),
-      $this->seam->request(
-        "GET",
-        "connected_accounts/list",
-        inner_object: "connected_accounts"
-      )
-    );
-  }
-
-  public function delete(string $connected_account_id)
-  {
-    $this->seam->request(
-      "DELETE",
-      "connected_accounts/delete",
-      json: [
-        "connected_account_id" => $connected_account_id,
-      ]
-    );
-  }
-
-  public function get(string $connected_account_id): ConnectedAccount
-  {
-    return ConnectedAccount::from_json(
-      $this->seam->request(
-        "GET",
-        "connected_accounts/get",
-        query: ["connected_account_id" => $connected_account_id],
-        inner_object: "connected_account"
-      )
-    );
-  }
-}
-
-class EventsClient
-{
-  private SeamClient $seam;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-  }
-
-  /**
-   * Get Event
-   */
-  public function get(
-    string $event_id = null,
-    string $event_type = null,
-    string $device_id = null,
-  ): Event|null {
-    $query = filter_out_null_params([
-      "event_id" => $event_id,
-      "event_type" => $event_type,
-      "device_id" => $device_id,
-    ]);
-
-    $event = Event::from_json(
-      $this->seam->request(
-        "GET",
-        "events/get",
-        query: $query,
-        inner_object: "event"
-      )
-    );
-
-    return $event;
-  }
-
-  /**
-   * List Events
-   * @return Event[]
-   */
-  public function list(
-    string $since = null,
-    array $between = null,
-    string $device_id = null,
-    array $device_ids = null,
-    string $access_code_id = null,
-    array $access_code_ids = null,
-    string $event_type = null,
-    array $event_types = null,
-    string $connected_account_id = null,
-  ): array {
-    $query = filter_out_null_params([
-      "since" => $since,
-      "between" => $between,
-      "device_id" => $device_id,
-      "device_ids" => is_null($device_ids) ? null : join(",", $device_ids),
-      "access_code_id" => $access_code_id,
-      "access_code_ids" => is_null($access_code_ids) ? null : join(",", $access_code_ids),
-      "event_type" => $event_type,
-      "event_types" => $event_types,
-      "connected_account_id" => $connected_account_id,
-    ]);
-
-    return array_map(
-      fn ($d) => Event::from_json($d),
-      $this->seam->request(
-        "GET",
-        "events/list",
-        query: $query,
-        inner_object: "events"
-      )
-    );
-  }
-}
-
-class LocksClient
-{
-  private SeamClient $seam;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-  }
-
-  /**
-   * Get Lock
-   */
-  public function get(string $device_id = null, string $name = null): Device|null
-  {
-    $query = filter_out_null_params([
-      "device_id" => $device_id,
-      "name" => $name,
-    ]);
-
-    $device = Device::from_json(
-      $this->seam->request(
-        "GET",
-        "locks/get",
-        query: $query,
-        inner_object: "lock"
-      )
-    );
-    return $device;
-  }
-
-  /**
-   * List Events
-   * @return Device[]
-   */
-  public function list(
-    string $connected_account_id = null,
-    string $connect_webview_id = null
-  ): array {
-    $query = filter_out_null_params([
-      "connected_account_id" => $connected_account_id,
-      "connect_webview_id" => $connect_webview_id,
-    ]);
-
-    return array_map(
-      fn ($d) => Device::from_json($d),
-      $this->seam->request(
-        "GET",
-        "locks/list",
-        query: $query,
-        inner_object: "locks"
-      )
-    );
-  }
-
-  public function lock_door(string $device_id): ActionAttempt
-  {
-    return ActionAttempt::from_json(
-      $this->seam->request(
-        "POST",
-        "locks/lock_door",
-        json: [
-          "device_id" => $device_id,
-        ],
-        inner_object: "action_attempt"
-      )
-    );
-  }
-
-  public function unlock_door(string $device_id): ActionAttempt
-  {
-    return ActionAttempt::from_json(
-      $this->seam->request(
-        "POST",
-        "locks/unlock_door",
-        json: [
-          "device_id" => $device_id,
-        ],
-        inner_object: "action_attempt"
-      )
-    );
-  }
+        return $action_attempt;
+    }
 }
 
 class ClientSessionsClient
 {
-  private SeamClient $seam;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-  }
+    private SeamClient $seam;
 
-  public function create(
-    string $user_identifier_key = null,
-    array | null $connect_webview_ids = null,
-    array | null $connected_account_ids = null
-  ) {
-    $json = filter_out_null_params([
-      "user_identifier_key" => $user_identifier_key,
-      "connect_webview_ids" => $connect_webview_ids,
-      "connected_account_ids" => $connected_account_ids
-    ]);
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
 
-    return ClientSession::from_json(
-      $this->seam->request(
-        "POST",
-        "client_sessions/create",
-        json: $json,
-        inner_object: "client_session"
-      )
-    );
-  }
+    public function create(
+        string $user_identifier_key = null,
+        array $connect_webview_ids = null,
+        array $connected_account_ids = null,
+        array $user_identity_ids = null,
+        string $expires_at = null
+    ): ClientSession {
+        $request_payload = [];
 
-  public function get_or_create(
-    string $user_identifier_key = null,
-    array | null $connect_webview_ids = null,
-    array | null $connected_account_ids = null
-  ) {
-    $json = filter_out_null_params([
-      "user_identifier_key" => $user_identifier_key,
-      "connect_webview_ids" => $connect_webview_ids,
-      "connected_account_ids" => $connected_account_ids
-    ]);
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
+        }
+        if ($connect_webview_ids !== null) {
+            $request_payload["connect_webview_ids"] = $connect_webview_ids;
+        }
+        if ($connected_account_ids !== null) {
+            $request_payload["connected_account_ids"] = $connected_account_ids;
+        }
+        if ($user_identity_ids !== null) {
+            $request_payload["user_identity_ids"] = $user_identity_ids;
+        }
+        if ($expires_at !== null) {
+            $request_payload["expires_at"] = $expires_at;
+        }
 
-    // TODO change the /client_sessions/get_or_create when that's available
-    return ClientSession::from_json(
-      $this->seam->request(
-        "PUT",
-        "client_sessions/create",
-        json: $json,
-        inner_object: "client_session"
-      )
-    );
-  }
+        $res = $this->seam->request(
+            "POST",
+            "/client_sessions/create",
+            json: $request_payload,
+            inner_object: "client_session"
+        );
+
+        return ClientSession::from_json($res);
+    }
+
+    public function delete(string $client_session_id): void
+    {
+        $request_payload = [];
+
+        if ($client_session_id !== null) {
+            $request_payload["client_session_id"] = $client_session_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/client_sessions/delete",
+            json: $request_payload
+        );
+    }
+
+    public function get(
+        string $client_session_id = null,
+        string $user_identifier_key = null
+    ): ClientSession {
+        $request_payload = [];
+
+        if ($client_session_id !== null) {
+            $request_payload["client_session_id"] = $client_session_id;
+        }
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/client_sessions/get",
+            json: $request_payload,
+            inner_object: "client_session"
+        );
+
+        return ClientSession::from_json($res);
+    }
+
+    public function get_or_create(
+        string $user_identifier_key = null,
+        array $connect_webview_ids = null,
+        array $connected_account_ids = null,
+        array $user_identity_ids = null,
+        string $expires_at = null
+    ): ClientSession {
+        $request_payload = [];
+
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
+        }
+        if ($connect_webview_ids !== null) {
+            $request_payload["connect_webview_ids"] = $connect_webview_ids;
+        }
+        if ($connected_account_ids !== null) {
+            $request_payload["connected_account_ids"] = $connected_account_ids;
+        }
+        if ($user_identity_ids !== null) {
+            $request_payload["user_identity_ids"] = $user_identity_ids;
+        }
+        if ($expires_at !== null) {
+            $request_payload["expires_at"] = $expires_at;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/client_sessions/get_or_create",
+            json: $request_payload,
+            inner_object: "client_session"
+        );
+
+        return ClientSession::from_json($res);
+    }
+
+    public function grant_access(
+        string $client_session_id = null,
+        string $user_identifier_key = null,
+        array $connected_account_ids = null,
+        array $connect_webview_ids = null,
+        array $user_identity_ids = null
+    ): void {
+        $request_payload = [];
+
+        if ($client_session_id !== null) {
+            $request_payload["client_session_id"] = $client_session_id;
+        }
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
+        }
+        if ($connected_account_ids !== null) {
+            $request_payload["connected_account_ids"] = $connected_account_ids;
+        }
+        if ($connect_webview_ids !== null) {
+            $request_payload["connect_webview_ids"] = $connect_webview_ids;
+        }
+        if ($user_identity_ids !== null) {
+            $request_payload["user_identity_ids"] = $user_identity_ids;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/client_sessions/grant_access",
+            json: $request_payload
+        );
+    }
+
+    public function list(
+        string $client_session_id = null,
+        string $user_identifier_key = null,
+        string $connect_webview_id = null,
+        bool $without_user_identifier_key = null
+    ): array {
+        $request_payload = [];
+
+        if ($client_session_id !== null) {
+            $request_payload["client_session_id"] = $client_session_id;
+        }
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
+        }
+        if ($connect_webview_id !== null) {
+            $request_payload["connect_webview_id"] = $connect_webview_id;
+        }
+        if ($without_user_identifier_key !== null) {
+            $request_payload[
+                "without_user_identifier_key"
+            ] = $without_user_identifier_key;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/client_sessions/list",
+            json: $request_payload,
+            inner_object: "client_sessions"
+        );
+
+        return array_map(fn($r) => ClientSession::from_json($r), $res);
+    }
+
+    public function revoke(string $client_session_id): void
+    {
+        $request_payload = [];
+
+        if ($client_session_id !== null) {
+            $request_payload["client_session_id"] = $client_session_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/client_sessions/revoke",
+            json: $request_payload
+        );
+    }
 }
 
-class NoiseSensorsClient
+class ConnectWebviewsClient
 {
-  private SeamClient $seam;
-  public NoiseThresholdsClient $noise_thresholds;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-    $this->noise_thresholds = new NoiseThresholdsClient($seam);
-  }
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function create(
+        string $device_selection_mode = null,
+        string $custom_redirect_url = null,
+        string $custom_redirect_failure_url = null,
+        array $accepted_providers = null,
+        string $provider_category = null,
+        mixed $custom_metadata = null,
+        bool $automatically_manage_new_devices = null,
+        bool $wait_for_device_creation = null
+    ): ConnectWebview {
+        $request_payload = [];
+
+        if ($device_selection_mode !== null) {
+            $request_payload["device_selection_mode"] = $device_selection_mode;
+        }
+        if ($custom_redirect_url !== null) {
+            $request_payload["custom_redirect_url"] = $custom_redirect_url;
+        }
+        if ($custom_redirect_failure_url !== null) {
+            $request_payload[
+                "custom_redirect_failure_url"
+            ] = $custom_redirect_failure_url;
+        }
+        if ($accepted_providers !== null) {
+            $request_payload["accepted_providers"] = $accepted_providers;
+        }
+        if ($provider_category !== null) {
+            $request_payload["provider_category"] = $provider_category;
+        }
+        if ($custom_metadata !== null) {
+            $request_payload["custom_metadata"] = $custom_metadata;
+        }
+        if ($automatically_manage_new_devices !== null) {
+            $request_payload[
+                "automatically_manage_new_devices"
+            ] = $automatically_manage_new_devices;
+        }
+        if ($wait_for_device_creation !== null) {
+            $request_payload[
+                "wait_for_device_creation"
+            ] = $wait_for_device_creation;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/connect_webviews/create",
+            json: $request_payload,
+            inner_object: "connect_webview"
+        );
+
+        return ConnectWebview::from_json($res);
+    }
+
+    public function delete(string $connect_webview_id): void
+    {
+        $request_payload = [];
+
+        if ($connect_webview_id !== null) {
+            $request_payload["connect_webview_id"] = $connect_webview_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/connect_webviews/delete",
+            json: $request_payload
+        );
+    }
+
+    public function get(string $connect_webview_id): ConnectWebview
+    {
+        $request_payload = [];
+
+        if ($connect_webview_id !== null) {
+            $request_payload["connect_webview_id"] = $connect_webview_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/connect_webviews/get",
+            json: $request_payload,
+            inner_object: "connect_webview"
+        );
+
+        return ConnectWebview::from_json($res);
+    }
+
+    public function list(string $user_identifier_key = null): array
+    {
+        $request_payload = [];
+
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/connect_webviews/list",
+            json: $request_payload,
+            inner_object: "connect_webviews"
+        );
+
+        return array_map(fn($r) => ConnectWebview::from_json($r), $res);
+    }
 }
 
-class NoiseThresholdsClient
+class ConnectedAccountsClient
 {
-  private SeamClient $seam;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-  }
+    private SeamClient $seam;
 
-  public function list(string $device_id): array
-  {
-    return array_map(
-      fn ($nt) => NoiseThreshold::from_json($nt),
-      $this->seam->request(
-        "GET",
-        "noise_sensors/noise_thresholds/list",
-        query: ["device_id" => $device_id],
-        inner_object: "noise_thresholds"
-      )
-    );
-  }
-
-  public function create(
-    string $device_id,
-    string $starts_daily_at,
-    string $ends_daily_at,
-    string $name = null,
-    float $noise_threshold_decibels = null,
-    float $noise_threshold_nrs = null,
-    bool $wait_for_action_attempt = true,
-  ): ActionAttempt|NoiseThreshold {
-    $json = filter_out_null_params([
-      "device_id" => $device_id,
-      "starts_daily_at" => $starts_daily_at,
-      "ends_daily_at" => $ends_daily_at,
-      "name" => $name,
-      "noise_threshold_decibels" => $noise_threshold_decibels,
-      "noise_threshold_nrs" => $noise_threshold_nrs,
-    ]);
-
-    $action_attempt = ActionAttempt::from_json(
-      $this->seam->request(
-        "POST",
-        "noise_sensors/noise_thresholds/create",
-        json: $json,
-        inner_object: "action_attempt"
-      )
-    );
-
-    if (!$wait_for_action_attempt) {
-      return $action_attempt;
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
     }
 
-    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
-    $noise_threshold = $updated_action_attempt->result?->noise_threshold;
+    public function delete(
+        string $connected_account_id,
+        bool $sync = null
+    ): void {
+        $request_payload = [];
 
-    if (!$noise_threshold) {
-      throw new Exception(
-        "Failed to create noise threshold: no noise threshold returned: " .
-          json_encode($updated_action_attempt)
-      );
+        if ($connected_account_id !== null) {
+            $request_payload["connected_account_id"] = $connected_account_id;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/connected_accounts/delete",
+            json: $request_payload
+        );
     }
 
-    return NoiseThreshold::from_json($noise_threshold);
-  }
+    public function get(
+        string $connected_account_id = null,
+        string $email = null
+    ): ConnectedAccount {
+        $request_payload = [];
 
-  public function update(
-    string $device_id,
-    string $noise_threshold_id,
-    string $name = null,
-    string $starts_daily_at = null,
-    string $ends_daily_at = null,
-    float $noise_threshold_decibels = null,
-    float $noise_threshold_nrs = null,
-    bool $wait_for_action_attempt = true,
-  ): ActionAttempt|NoiseThreshold {
-    $json = filter_out_null_params([
-      "device_id" => $device_id,
-      "noise_threshold_id" => $noise_threshold_id,
-      "name" => $name,
-      "starts_daily_at" => $starts_daily_at,
-      "ends_daily_at" => $ends_daily_at,
-      "noise_threshold_decibels" => $noise_threshold_decibels,
-      "noise_threshold_nrs" => $noise_threshold_nrs,
-    ]);
+        if ($connected_account_id !== null) {
+            $request_payload["connected_account_id"] = $connected_account_id;
+        }
+        if ($email !== null) {
+            $request_payload["email"] = $email;
+        }
 
-    $action_attempt = ActionAttempt::from_json(
-      $this->seam->request(
-        "PUT",
-        "noise_sensors/noise_thresholds/update",
-        json: $json,
-        inner_object: "action_attempt"
-      )
-    );
+        $res = $this->seam->request(
+            "POST",
+            "/connected_accounts/get",
+            json: $request_payload,
+            inner_object: "connected_account"
+        );
 
-    if (!$wait_for_action_attempt) {
-      return $action_attempt;
+        return ConnectedAccount::from_json($res);
     }
 
-    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
-    $noise_threshold = $updated_action_attempt->result?->noise_threshold;
+    public function list(): array
+    {
+        $request_payload = [];
 
-    if (!$noise_threshold) {
-      throw new Exception(
-        "Failed to update noise threshold: no noise threshold returned: " .
-          json_encode($updated_action_attempt)
-      );
+        $res = $this->seam->request(
+            "POST",
+            "/connected_accounts/list",
+            json: $request_payload,
+            inner_object: "connected_accounts"
+        );
+
+        return array_map(fn($r) => ConnectedAccount::from_json($r), $res);
+    }
+}
+
+class DevicesClient
+{
+    private SeamClient $seam;
+    public DevicesUnmanagedClient $unmanaged;
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+        $this->unmanaged = new DevicesUnmanagedClient($seam);
     }
 
-    return NoiseThreshold::from_json($noise_threshold);
-  }
+    public function delete(string $device_id): void
+    {
+        $request_payload = [];
 
-  public function delete(
-    string $noise_threshold_id,
-    string $device_id,
-    bool $wait_for_action_attempt = true,
-  ) {
-    $action_attempt = ActionAttempt::from_json(
-      $this->seam->request(
-        "DELETE",
-        "noise_sensors/noise_thresholds/delete",
-        json: [
-          "noise_threshold_id" => $noise_threshold_id,
-          "device_id" => $device_id
-        ],
-        inner_object: "action_attempt"
-      )
-    );
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
 
-    if (!$wait_for_action_attempt) {
-      return $action_attempt;
+        $this->seam->request("POST", "/devices/delete", json: $request_payload);
     }
 
-    $updated_action_attempt = $this->seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
+    public function get(string $device_id = null, string $name = null): Device
+    {
+        $request_payload = [];
 
-    return $updated_action_attempt;
-  }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/devices/get",
+            json: $request_payload,
+            inner_object: "device"
+        );
+
+        return Device::from_json($res);
+    }
+
+    public function list(
+        string $connected_account_id = null,
+        array $connected_account_ids = null,
+        string $connect_webview_id = null,
+        string $device_type = null,
+        array $device_types = null,
+        string $manufacturer = null,
+        array $device_ids = null,
+        float $limit = null,
+        string $created_before = null,
+        string $user_identifier_key = null
+    ): array {
+        $request_payload = [];
+
+        if ($connected_account_id !== null) {
+            $request_payload["connected_account_id"] = $connected_account_id;
+        }
+        if ($connected_account_ids !== null) {
+            $request_payload["connected_account_ids"] = $connected_account_ids;
+        }
+        if ($connect_webview_id !== null) {
+            $request_payload["connect_webview_id"] = $connect_webview_id;
+        }
+        if ($device_type !== null) {
+            $request_payload["device_type"] = $device_type;
+        }
+        if ($device_types !== null) {
+            $request_payload["device_types"] = $device_types;
+        }
+        if ($manufacturer !== null) {
+            $request_payload["manufacturer"] = $manufacturer;
+        }
+        if ($device_ids !== null) {
+            $request_payload["device_ids"] = $device_ids;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($created_before !== null) {
+            $request_payload["created_before"] = $created_before;
+        }
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/devices/list",
+            json: $request_payload,
+            inner_object: "devices"
+        );
+
+        return array_map(fn($r) => Device::from_json($r), $res);
+    }
+
+    public function list_device_providers(
+        string $provider_category = null
+    ): array {
+        $request_payload = [];
+
+        if ($provider_category !== null) {
+            $request_payload["provider_category"] = $provider_category;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/devices/list_device_providers",
+            json: $request_payload,
+            inner_object: "device_providers"
+        );
+
+        return array_map(fn($r) => DeviceProvider::from_json($r), $res);
+    }
+
+    public function update(
+        string $device_id,
+        mixed $properties = null,
+        string $name = null,
+        mixed $location = null,
+        bool $is_managed = null
+    ): void {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($properties !== null) {
+            $request_payload["properties"] = $properties;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+        if ($location !== null) {
+            $request_payload["location"] = $location;
+        }
+        if ($is_managed !== null) {
+            $request_payload["is_managed"] = $is_managed;
+        }
+
+        $this->seam->request("POST", "/devices/update", json: $request_payload);
+    }
+}
+
+class EventsClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(
+        string $event_id = null,
+        string $event_type = null,
+        string $device_id = null
+    ): Event {
+        $request_payload = [];
+
+        if ($event_id !== null) {
+            $request_payload["event_id"] = $event_id;
+        }
+        if ($event_type !== null) {
+            $request_payload["event_type"] = $event_type;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/events/get",
+            json: $request_payload,
+            inner_object: "event"
+        );
+
+        return Event::from_json($res);
+    }
+
+    public function list(
+        string $since = null,
+        array $between = null,
+        string $device_id = null,
+        array $device_ids = null,
+        string $access_code_id = null,
+        array $access_code_ids = null,
+        string $event_type = null,
+        array $event_types = null,
+        string $connected_account_id = null
+    ): array {
+        $request_payload = [];
+
+        if ($since !== null) {
+            $request_payload["since"] = $since;
+        }
+        if ($between !== null) {
+            $request_payload["between"] = $between;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($device_ids !== null) {
+            $request_payload["device_ids"] = $device_ids;
+        }
+        if ($access_code_id !== null) {
+            $request_payload["access_code_id"] = $access_code_id;
+        }
+        if ($access_code_ids !== null) {
+            $request_payload["access_code_ids"] = $access_code_ids;
+        }
+        if ($event_type !== null) {
+            $request_payload["event_type"] = $event_type;
+        }
+        if ($event_types !== null) {
+            $request_payload["event_types"] = $event_types;
+        }
+        if ($connected_account_id !== null) {
+            $request_payload["connected_account_id"] = $connected_account_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/events/list",
+            json: $request_payload,
+            inner_object: "events"
+        );
+
+        return array_map(fn($r) => Event::from_json($r), $res);
+    }
+}
+
+class HealthClient
+{
+    private SeamClient $seam;
+    public HealthServiceClient $service;
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+        $this->service = new HealthServiceClient($seam);
+    }
+
+    public function get_service_health(string $service): void
+    {
+        $request_payload = [];
+
+        if ($service !== null) {
+            $request_payload["service"] = $service;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/health/get_service_health",
+            json: $request_payload
+        );
+    }
+}
+
+class LocksClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(string $device_id = null, string $name = null): Device
+    {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/locks/get",
+            json: $request_payload,
+            inner_object: "device"
+        );
+
+        return Device::from_json($res);
+    }
+
+    public function list(
+        string $connected_account_id = null,
+        array $connected_account_ids = null,
+        string $connect_webview_id = null,
+        string $device_type = null,
+        array $device_types = null,
+        string $manufacturer = null,
+        array $device_ids = null,
+        float $limit = null,
+        string $created_before = null,
+        string $user_identifier_key = null
+    ): array {
+        $request_payload = [];
+
+        if ($connected_account_id !== null) {
+            $request_payload["connected_account_id"] = $connected_account_id;
+        }
+        if ($connected_account_ids !== null) {
+            $request_payload["connected_account_ids"] = $connected_account_ids;
+        }
+        if ($connect_webview_id !== null) {
+            $request_payload["connect_webview_id"] = $connect_webview_id;
+        }
+        if ($device_type !== null) {
+            $request_payload["device_type"] = $device_type;
+        }
+        if ($device_types !== null) {
+            $request_payload["device_types"] = $device_types;
+        }
+        if ($manufacturer !== null) {
+            $request_payload["manufacturer"] = $manufacturer;
+        }
+        if ($device_ids !== null) {
+            $request_payload["device_ids"] = $device_ids;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($created_before !== null) {
+            $request_payload["created_before"] = $created_before;
+        }
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/locks/list",
+            json: $request_payload,
+            inner_object: "devices"
+        );
+
+        return array_map(fn($r) => Device::from_json($r), $res);
+    }
+
+    public function lock_door(
+        string $device_id,
+        bool $sync = null,
+        bool $wait_for_action_attempt = true
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/locks/lock_door",
+            json: $request_payload,
+            inner_object: "action_attempt"
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt_id
+        );
+
+        return $action_attempt;
+    }
+
+    public function unlock_door(
+        string $device_id,
+        bool $sync = null,
+        bool $wait_for_action_attempt = true
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/locks/unlock_door",
+            json: $request_payload,
+            inner_object: "action_attempt"
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt_id
+        );
+
+        return $action_attempt;
+    }
 }
 
 class ThermostatsClient
 {
-  private SeamClient $seam;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-    $this->climate_setting_schedules = new ClimateSettingSchedulesClient($seam);
-  }
+    private SeamClient $seam;
+    public ThermostatsClimateSettingSchedulesClient $climate_setting_schedules;
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+        $this->climate_setting_schedules = new ThermostatsClimateSettingSchedulesClient(
+            $seam
+        );
+    }
 
-  /**
-   * Get Thermostat
-   * @return Device
-   */
-  public function get(string $device_id = null, string $name = null): Device
-  {
-    $query = filter_out_null_params(["device_id" => $device_id, "name" => $name]);
+    public function cool(
+        string $device_id,
+        float $cooling_set_point_celsius = null,
+        float $cooling_set_point_fahrenheit = null,
+        bool $sync = null
+    ): void {
+        $request_payload = [];
 
-    $thermostat = Device::from_json(
-      $this->seam->request(
-        "GET",
-        "thermostats/get",
-        query: $query,
-        inner_object: "thermostat"
-      )
-    );
-    return $thermostat;
-  }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($cooling_set_point_celsius !== null) {
+            $request_payload[
+                "cooling_set_point_celsius"
+            ] = $cooling_set_point_celsius;
+        }
+        if ($cooling_set_point_fahrenheit !== null) {
+            $request_payload[
+                "cooling_set_point_fahrenheit"
+            ] = $cooling_set_point_fahrenheit;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
 
-  /**
-   * List Thermostats
-   * @return Device[]
-   */
-  public function list(
-    string $connected_account_id = null,
-    array $connected_account_ids = null,
-    string $connect_webview_id = null,
-    string $device_type = null,
-    array $device_ids = null,
-    string $manufacturer = null
-  ): array {
-    $query = filter_out_null_params([
-      "connected_account_id" => $connected_account_id,
-      "connected_account_ids" => is_null($connected_account_ids) ? null : join(",", $connected_account_ids),
-      "connect_webview_id" => $connect_webview_id,
-      "device_ids" => is_null($device_ids) ? null : join(",", $device_ids),
-      "device_type" => $device_type,
-      "manufacturer" => $manufacturer
-    ]);
+        $this->seam->request(
+            "POST",
+            "/thermostats/cool",
+            json: $request_payload
+        );
+    }
 
-    return array_map(
-      fn ($t) => Device::from_json($t),
-      $this->seam->request("GET", "thermostats/list", query: $query, inner_object: "thermostats")
-    );
-  }
+    public function get(string $device_id = null, string $name = null): Device
+    {
+        $request_payload = [];
 
-  /**
-   * Update Thermostat
-   * @return void
-   */
-  public function update(
-    string $device_id,
-    mixed $default_climate_setting = null
-  ) {
-    $json = filter_out_null_params([
-      "device_id" => $device_id,
-      "default_climate_setting" => $default_climate_setting,
-    ]);
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
 
-    $this->seam->request(
-      "POST",
-      "thermostats/update",
-      json: $json
-    );
-  }
+        $res = $this->seam->request(
+            "POST",
+            "/thermostats/get",
+            json: $request_payload,
+            inner_object: "thermostat"
+        );
+
+        return Device::from_json($res);
+    }
+
+    public function heat(
+        string $device_id,
+        float $heating_set_point_celsius = null,
+        float $heating_set_point_fahrenheit = null,
+        bool $sync = null
+    ): void {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($heating_set_point_celsius !== null) {
+            $request_payload[
+                "heating_set_point_celsius"
+            ] = $heating_set_point_celsius;
+        }
+        if ($heating_set_point_fahrenheit !== null) {
+            $request_payload[
+                "heating_set_point_fahrenheit"
+            ] = $heating_set_point_fahrenheit;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/thermostats/heat",
+            json: $request_payload
+        );
+    }
+
+    public function heat_cool(
+        string $device_id,
+        float $heating_set_point_celsius = null,
+        float $heating_set_point_fahrenheit = null,
+        float $cooling_set_point_celsius = null,
+        float $cooling_set_point_fahrenheit = null,
+        bool $sync = null
+    ): void {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($heating_set_point_celsius !== null) {
+            $request_payload[
+                "heating_set_point_celsius"
+            ] = $heating_set_point_celsius;
+        }
+        if ($heating_set_point_fahrenheit !== null) {
+            $request_payload[
+                "heating_set_point_fahrenheit"
+            ] = $heating_set_point_fahrenheit;
+        }
+        if ($cooling_set_point_celsius !== null) {
+            $request_payload[
+                "cooling_set_point_celsius"
+            ] = $cooling_set_point_celsius;
+        }
+        if ($cooling_set_point_fahrenheit !== null) {
+            $request_payload[
+                "cooling_set_point_fahrenheit"
+            ] = $cooling_set_point_fahrenheit;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/thermostats/heat_cool",
+            json: $request_payload
+        );
+    }
+
+    public function list(
+        string $connected_account_id = null,
+        array $connected_account_ids = null,
+        string $connect_webview_id = null,
+        string $device_type = null,
+        array $device_types = null,
+        string $manufacturer = null,
+        array $device_ids = null,
+        float $limit = null,
+        string $created_before = null,
+        string $user_identifier_key = null
+    ): array {
+        $request_payload = [];
+
+        if ($connected_account_id !== null) {
+            $request_payload["connected_account_id"] = $connected_account_id;
+        }
+        if ($connected_account_ids !== null) {
+            $request_payload["connected_account_ids"] = $connected_account_ids;
+        }
+        if ($connect_webview_id !== null) {
+            $request_payload["connect_webview_id"] = $connect_webview_id;
+        }
+        if ($device_type !== null) {
+            $request_payload["device_type"] = $device_type;
+        }
+        if ($device_types !== null) {
+            $request_payload["device_types"] = $device_types;
+        }
+        if ($manufacturer !== null) {
+            $request_payload["manufacturer"] = $manufacturer;
+        }
+        if ($device_ids !== null) {
+            $request_payload["device_ids"] = $device_ids;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($created_before !== null) {
+            $request_payload["created_before"] = $created_before;
+        }
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/thermostats/list",
+            json: $request_payload,
+            inner_object: "thermostats"
+        );
+
+        return array_map(fn($r) => Device::from_json($r), $res);
+    }
+
+    public function off(string $device_id, bool $sync = null): void
+    {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/thermostats/off",
+            json: $request_payload
+        );
+    }
+
+    public function set_fan_mode(
+        string $device_id,
+        string $fan_mode = null,
+        string $fan_mode_setting = null,
+        bool $sync = null
+    ): void {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($fan_mode !== null) {
+            $request_payload["fan_mode"] = $fan_mode;
+        }
+        if ($fan_mode_setting !== null) {
+            $request_payload["fan_mode_setting"] = $fan_mode_setting;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/thermostats/set_fan_mode",
+            json: $request_payload
+        );
+    }
+
+    public function update(
+        string $device_id,
+        mixed $default_climate_setting
+    ): void {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($default_climate_setting !== null) {
+            $request_payload[
+                "default_climate_setting"
+            ] = $default_climate_setting;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/thermostats/update",
+            json: $request_payload
+        );
+    }
 }
 
-class ClimateSettingSchedulesClient
+class UserIdentitiesClient
 {
-  private SeamClient $seam;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-  }
+    private SeamClient $seam;
 
-  /**
-   * Get Climate Setting Schedule
-   * @return ClimateSettingSchedule
-   */
-  public function get(
-    string $climate_setting_schedule_id = null,
-    string $device_id = null
-  ): ClimateSettingSchedule {
-    $query = filter_out_null_params([
-      "climate_setting_schedule_id" => $climate_setting_schedule_id,
-      "device_id" => $device_id
-    ]);
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
 
-    $climate_setting_schedule = ClimateSettingSchedule::from_json(
-      $this->seam->request(
-        "GET",
-        "thermostats/climate_setting_schedules/get",
-        query: $query,
-        inner_object: "climate_setting_schedule"
-      )
-    );
+    public function add_acs_user(
+        string $user_identity_id,
+        string $acs_user_id
+    ): void {
+        $request_payload = [];
 
-    return $climate_setting_schedule;
-  }
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
 
-  /**
-   * List Climate Setting Schedules
-   * @return ClimateSettingSchedule[]
-   */
-  public function list(
-    string $device_id,
-  ): array {
-    return array_map(
-      fn ($t) => ClimateSettingSchedule::from_json($t),
-      $this->seam->request(
-        "GET",
-        "thermostats/climate_setting_schedules/list",
-        query: ["device_id" => $device_id],
-        inner_object: "climate_setting_schedules"
-      )
-    );
-  }
+        $this->seam->request(
+            "POST",
+            "/user_identities/add_acs_user",
+            json: $request_payload
+        );
+    }
 
-  /**
-   * Create Climate Setting Schedule
-   * @return ClimateSettingSchedule
-   */
-  public function create(
-    string $device_id,
-    string $schedule_starts_at,
-    string $schedule_ends_at,
-    bool $manual_override_allowed,
-    string $name = null,
-    string $schedule_type = null,
-    bool $automatic_heating_enabled = null,
-    bool $automatic_cooling_enabled = null,
-    string $hvac_mode_setting = null,
-    float $cooling_set_point_celsius = null,
-    float $heating_set_point_celsius = null,
-    float $cooling_set_point_fahrenheit = null,
-    float $heating_set_point_fahrenheit = null,
-  ): ClimateSettingSchedule {
-    $json = filter_out_null_params([
-      "device_id" => $device_id,
-      "schedule_starts_at" => $schedule_starts_at,
-      "schedule_ends_at" => $schedule_ends_at,
-      "name" => $name,
-      "schedule_type" => $schedule_type,
-      "automatic_heating_enabled" => $automatic_heating_enabled,
-      "automatic_cooling_enabled" => $automatic_cooling_enabled,
-      "hvac_mode_setting" => $hvac_mode_setting,
-      "cooling_set_point_celsius" => $cooling_set_point_celsius,
-      "heating_set_point_celsius" => $heating_set_point_celsius,
-      "cooling_set_point_fahrenheit" => $cooling_set_point_fahrenheit,
-      "heating_set_point_fahrenheit" => $heating_set_point_fahrenheit,
-      "manual_override_allowed" => $manual_override_allowed,
-    ]);
+    public function create(
+        string $user_identity_key = null,
+        string $email_address = null
+    ): void {
+        $request_payload = [];
 
-    return ClimateSettingSchedule::from_json(
-      $this->seam->request(
-        "POST",
-        "thermostats/climate_setting_schedules/create",
-        json: $json,
-        inner_object: "climate_setting_schedule"
-      )
-    );
-  }
+        if ($user_identity_key !== null) {
+            $request_payload["user_identity_key"] = $user_identity_key;
+        }
+        if ($email_address !== null) {
+            $request_payload["email_address"] = $email_address;
+        }
 
-  /**
-   * Delete Climate Setting Schedule
-   * @return void
-   */
-  public function delete(string $climate_setting_schedule_id)
-  {
-    $this->seam->request(
-      "DELETE",
-      "thermostats/climate_setting_schedules/delete",
-      json: [
-        "climate_setting_schedule_id" => $climate_setting_schedule_id,
-      ]
-    );
-  }
+        $this->seam->request(
+            "POST",
+            "/user_identities/create",
+            json: $request_payload
+        );
+    }
 
-  /**
-   * Update Climate Setting Schedule
-   * @return ClimateSettingSchedule
-   */
-  public function update(
-    string $climate_setting_schedule_id,
-    string $schedule_type = null,
-    string $name = null,
-    string $schedule_starts_at = null,
-    string $schedule_ends_at = null,
-    bool $automatic_heating_enabled = null,
-    bool $automatic_cooling_enabled = null,
-    string $hvac_mode_setting = null,
-    float $cooling_set_point_celsius = null,
-    float $heating_set_point_celsius = null,
-    float $cooling_set_point_fahrenheit = null,
-    float $heating_set_point_fahrenheit = null,
-    bool $manual_override_allowed = null,
-  ): ClimateSettingSchedule {
-    $json = filter_out_null_params([
-      "climate_setting_schedule_id" => $climate_setting_schedule_id,
-      "schedule_type" => $schedule_type,
-      "name" => $name,
-      "schedule_starts_at" => $schedule_starts_at,
-      "schedule_ends_at" => $schedule_ends_at,
-      "automatic_heating_enabled" => $automatic_heating_enabled,
-      "automatic_cooling_enabled" => $automatic_cooling_enabled,
-      "hvac_mode_setting" => $hvac_mode_setting,
-      "cooling_set_point_celsius" => $cooling_set_point_celsius,
-      "heating_set_point_celsius" => $heating_set_point_celsius,
-      "cooling_set_point_fahrenheit" => $cooling_set_point_fahrenheit,
-      "heating_set_point_fahrenheit" => $heating_set_point_fahrenheit,
-      "manual_override_allowed" => $manual_override_allowed,
-    ]);
+    public function get(
+        string $user_identity_id = null,
+        string $user_identity_key = null
+    ): void {
+        $request_payload = [];
 
-    $updated_climate_setting_schedule = ClimateSettingSchedule::from_json(
-      $this->seam->request(
-        "PUT",
-        "thermostats/climate_setting_schedules/update",
-        json: $json,
-        inner_object: "climate_setting_schedule"
-      )
-    );
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+        if ($user_identity_key !== null) {
+            $request_payload["user_identity_key"] = $user_identity_key;
+        }
 
-    return $updated_climate_setting_schedule;
-  }
+        $this->seam->request(
+            "POST",
+            "/user_identities/get",
+            json: $request_payload
+        );
+    }
+
+    public function grant_access_to_device(
+        string $user_identity_id,
+        string $device_id
+    ): void {
+        $request_payload = [];
+
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/user_identities/grant_access_to_device",
+            json: $request_payload
+        );
+    }
+
+    public function list_accessible_devices(string $user_identity_id): void
+    {
+        $request_payload = [];
+
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/user_identities/list_accessible_devices",
+            json: $request_payload
+        );
+    }
+
+    public function list_acs_users(string $user_identity_id): void
+    {
+        $request_payload = [];
+
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/user_identities/list_acs_users",
+            json: $request_payload
+        );
+    }
+
+    public function remove_acs_user(
+        string $user_identity_id,
+        string $acs_user_id
+    ): void {
+        $request_payload = [];
+
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/user_identities/remove_acs_user",
+            json: $request_payload
+        );
+    }
+
+    public function revoke_access_to_device(
+        string $user_identity_id,
+        string $device_id
+    ): void {
+        $request_payload = [];
+
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/user_identities/revoke_access_to_device",
+            json: $request_payload
+        );
+    }
+}
+
+class WebhooksClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function create(string $url, array $event_types = null): Webhook
+    {
+        $request_payload = [];
+
+        if ($url !== null) {
+            $request_payload["url"] = $url;
+        }
+        if ($event_types !== null) {
+            $request_payload["event_types"] = $event_types;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/webhooks/create",
+            json: $request_payload,
+            inner_object: "webhook"
+        );
+
+        return Webhook::from_json($res);
+    }
+
+    public function delete(string $webhook_id): void
+    {
+        $request_payload = [];
+
+        if ($webhook_id !== null) {
+            $request_payload["webhook_id"] = $webhook_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/webhooks/delete",
+            json: $request_payload
+        );
+    }
+
+    public function get(string $webhook_id): Webhook
+    {
+        $request_payload = [];
+
+        if ($webhook_id !== null) {
+            $request_payload["webhook_id"] = $webhook_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/webhooks/get",
+            json: $request_payload,
+            inner_object: "webhook"
+        );
+
+        return Webhook::from_json($res);
+    }
+
+    public function list(): array
+    {
+        $request_payload = [];
+
+        $res = $this->seam->request(
+            "POST",
+            "/webhooks/list",
+            json: $request_payload,
+            inner_object: "webhooks"
+        );
+
+        return array_map(fn($r) => Webhook::from_json($r), $res);
+    }
+}
+
+class WorkspacesClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(): Workspace
+    {
+        $request_payload = [];
+
+        $res = $this->seam->request(
+            "POST",
+            "/workspaces/get",
+            json: $request_payload,
+            inner_object: "workspace"
+        );
+
+        return Workspace::from_json($res);
+    }
+
+    public function list(): array
+    {
+        $request_payload = [];
+
+        $res = $this->seam->request(
+            "POST",
+            "/workspaces/list",
+            json: $request_payload,
+            inner_object: "workspaces"
+        );
+
+        return array_map(fn($r) => Workspace::from_json($r), $res);
+    }
+
+    public function reset_sandbox(): void
+    {
+        $request_payload = [];
+
+        $this->seam->request(
+            "POST",
+            "/workspaces/reset_sandbox",
+            json: $request_payload,
+            inner_object: "message"
+        );
+    }
+}
+
+class AccessCodesSimulateClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function create_unmanaged_access_code(
+        string $device_id,
+        string $name,
+        string $code
+    ): UnmanagedAccessCode {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+        if ($code !== null) {
+            $request_payload["code"] = $code;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/access_codes/simulate/create_unmanaged_access_code",
+            json: $request_payload,
+            inner_object: "access_code"
+        );
+
+        return UnmanagedAccessCode::from_json($res);
+    }
+}
+
+class AccessCodesUnmanagedClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function convert_to_managed(
+        string $access_code_id,
+        bool $is_external_modification_allowed = null,
+        bool $allow_external_modification = null,
+        bool $force = null,
+        bool $sync = null
+    ): void {
+        $request_payload = [];
+
+        if ($access_code_id !== null) {
+            $request_payload["access_code_id"] = $access_code_id;
+        }
+        if ($is_external_modification_allowed !== null) {
+            $request_payload[
+                "is_external_modification_allowed"
+            ] = $is_external_modification_allowed;
+        }
+        if ($allow_external_modification !== null) {
+            $request_payload[
+                "allow_external_modification"
+            ] = $allow_external_modification;
+        }
+        if ($force !== null) {
+            $request_payload["force"] = $force;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/access_codes/unmanaged/convert_to_managed",
+            json: $request_payload
+        );
+    }
+
+    public function delete(
+        string $access_code_id,
+        bool $sync = null,
+        bool $wait_for_action_attempt = true
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($access_code_id !== null) {
+            $request_payload["access_code_id"] = $access_code_id;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/access_codes/unmanaged/delete",
+            json: $request_payload,
+            inner_object: "action_attempt"
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt_id
+        );
+
+        return $action_attempt;
+    }
+
+    public function get(
+        string $device_id = null,
+        string $access_code_id = null,
+        string $code = null
+    ): UnmanagedAccessCode {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($access_code_id !== null) {
+            $request_payload["access_code_id"] = $access_code_id;
+        }
+        if ($code !== null) {
+            $request_payload["code"] = $code;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/access_codes/unmanaged/get",
+            json: $request_payload,
+            inner_object: "access_code"
+        );
+
+        return UnmanagedAccessCode::from_json($res);
+    }
+
+    public function list(
+        string $device_id,
+        string $user_identifier_key = null
+    ): array {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/access_codes/unmanaged/list",
+            json: $request_payload,
+            inner_object: "access_codes"
+        );
+
+        return array_map(fn($r) => UnmanagedAccessCode::from_json($r), $res);
+    }
+
+    public function update(
+        string $access_code_id,
+        bool $is_managed,
+        bool $allow_external_modification = null,
+        bool $is_external_modification_allowed = null,
+        bool $force = null
+    ): void {
+        $request_payload = [];
+
+        if ($access_code_id !== null) {
+            $request_payload["access_code_id"] = $access_code_id;
+        }
+        if ($is_managed !== null) {
+            $request_payload["is_managed"] = $is_managed;
+        }
+        if ($allow_external_modification !== null) {
+            $request_payload[
+                "allow_external_modification"
+            ] = $allow_external_modification;
+        }
+        if ($is_external_modification_allowed !== null) {
+            $request_payload[
+                "is_external_modification_allowed"
+            ] = $is_external_modification_allowed;
+        }
+        if ($force !== null) {
+            $request_payload["force"] = $force;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/access_codes/unmanaged/update",
+            json: $request_payload
+        );
+    }
+}
+
+class AcsAccessGroupsClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function add_user(
+        string $acs_access_group_id,
+        string $acs_user_id
+    ): void {
+        $request_payload = [];
+
+        if ($acs_access_group_id !== null) {
+            $request_payload["acs_access_group_id"] = $acs_access_group_id;
+        }
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/access_groups/add_user",
+            json: $request_payload
+        );
+    }
+
+    public function get(string $acs_access_group_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_access_group_id !== null) {
+            $request_payload["acs_access_group_id"] = $acs_access_group_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/access_groups/get",
+            json: $request_payload
+        );
+    }
+
+    public function list(
+        string $acs_system_id = null,
+        string $acs_user_id = null
+    ): void {
+        $request_payload = [];
+
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/access_groups/list",
+            json: $request_payload
+        );
+    }
+
+    public function list_users(string $acs_access_group_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_access_group_id !== null) {
+            $request_payload["acs_access_group_id"] = $acs_access_group_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/access_groups/list_users",
+            json: $request_payload
+        );
+    }
+
+    public function remove_user(
+        string $acs_access_group_id,
+        string $acs_user_id
+    ): void {
+        $request_payload = [];
+
+        if ($acs_access_group_id !== null) {
+            $request_payload["acs_access_group_id"] = $acs_access_group_id;
+        }
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/access_groups/remove_user",
+            json: $request_payload
+        );
+    }
+}
+
+class AcsClient
+{
+    private SeamClient $seam;
+    public AcsAccessGroupsClient $access_groups;
+    public AcsCredentialsClient $credentials;
+    public AcsEntrancesClient $entrances;
+    public AcsSystemsClient $systems;
+    public AcsUsersClient $users;
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+        $this->access_groups = new AcsAccessGroupsClient($seam);
+        $this->credentials = new AcsCredentialsClient($seam);
+        $this->entrances = new AcsEntrancesClient($seam);
+        $this->systems = new AcsSystemsClient($seam);
+        $this->users = new AcsUsersClient($seam);
+    }
+}
+
+class AcsCredentialsClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function assign(string $acs_user_id, string $acs_credential_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+        if ($acs_credential_id !== null) {
+            $request_payload["acs_credential_id"] = $acs_credential_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/credentials/assign",
+            json: $request_payload
+        );
+    }
+
+    public function create(string $acs_user_id, string $code): void
+    {
+        $request_payload = [];
+
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+        if ($code !== null) {
+            $request_payload["code"] = $code;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/credentials/create",
+            json: $request_payload
+        );
+    }
+
+    public function delete(string $acs_credential_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_credential_id !== null) {
+            $request_payload["acs_credential_id"] = $acs_credential_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/credentials/delete",
+            json: $request_payload
+        );
+    }
+
+    public function get(string $acs_credential_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_credential_id !== null) {
+            $request_payload["acs_credential_id"] = $acs_credential_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/credentials/get",
+            json: $request_payload
+        );
+    }
+
+    public function list(
+        string $acs_user_id = null,
+        string $acs_system_id = null
+    ): void {
+        $request_payload = [];
+
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/credentials/list",
+            json: $request_payload
+        );
+    }
+
+    public function unassign(
+        string $acs_user_id,
+        string $acs_credential_id
+    ): void {
+        $request_payload = [];
+
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+        if ($acs_credential_id !== null) {
+            $request_payload["acs_credential_id"] = $acs_credential_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/credentials/unassign",
+            json: $request_payload
+        );
+    }
+}
+
+class AcsEntrancesClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(string $acs_entrance_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_entrance_id !== null) {
+            $request_payload["acs_entrance_id"] = $acs_entrance_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/entrances/get",
+            json: $request_payload
+        );
+    }
+
+    public function list(string $acs_system_id = null): void
+    {
+        $request_payload = [];
+
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/entrances/list",
+            json: $request_payload
+        );
+    }
+}
+
+class AcsSystemsClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(string $acs_system_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/systems/get",
+            json: $request_payload
+        );
+    }
+
+    public function list(string $connected_account_id = null): void
+    {
+        $request_payload = [];
+
+        if ($connected_account_id !== null) {
+            $request_payload["connected_account_id"] = $connected_account_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/systems/list",
+            json: $request_payload
+        );
+    }
+}
+
+class AcsUsersClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function create(
+        string $acs_system_id,
+        array $acs_access_group_ids = null,
+        string $full_name = null,
+        string $email = null,
+        string $phone_number = null,
+        string $email_address = null
+    ): void {
+        $request_payload = [];
+
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($acs_access_group_ids !== null) {
+            $request_payload["acs_access_group_ids"] = $acs_access_group_ids;
+        }
+        if ($full_name !== null) {
+            $request_payload["full_name"] = $full_name;
+        }
+        if ($email !== null) {
+            $request_payload["email"] = $email;
+        }
+        if ($phone_number !== null) {
+            $request_payload["phone_number"] = $phone_number;
+        }
+        if ($email_address !== null) {
+            $request_payload["email_address"] = $email_address;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/users/create",
+            json: $request_payload
+        );
+    }
+
+    public function delete(string $acs_user_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/users/delete",
+            json: $request_payload
+        );
+    }
+
+    public function get(string $acs_user_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+
+        $this->seam->request("POST", "/acs/users/get", json: $request_payload);
+    }
+
+    public function list(string $acs_system_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+
+        $this->seam->request("POST", "/acs/users/list", json: $request_payload);
+    }
+
+    public function suspend(string $acs_user_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/users/suspend",
+            json: $request_payload
+        );
+    }
+
+    public function unsuspend(string $acs_user_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/users/unsuspend",
+            json: $request_payload
+        );
+    }
+
+    public function update(
+        string $acs_user_id,
+        string $full_name = null,
+        string $email = null,
+        string $phone_number = null,
+        string $email_address = null
+    ): void {
+        $request_payload = [];
+
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+        if ($full_name !== null) {
+            $request_payload["full_name"] = $full_name;
+        }
+        if ($email !== null) {
+            $request_payload["email"] = $email;
+        }
+        if ($phone_number !== null) {
+            $request_payload["phone_number"] = $phone_number;
+        }
+        if ($email_address !== null) {
+            $request_payload["email_address"] = $email_address;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/users/update",
+            json: $request_payload
+        );
+    }
+}
+
+class DevicesUnmanagedClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(
+        string $device_id = null,
+        string $name = null
+    ): UnmanagedDevice {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/devices/unmanaged/get",
+            json: $request_payload,
+            inner_object: "device"
+        );
+
+        return UnmanagedDevice::from_json($res);
+    }
+
+    public function list(
+        string $connected_account_id = null,
+        array $connected_account_ids = null,
+        string $connect_webview_id = null,
+        string $device_type = null,
+        array $device_types = null,
+        string $manufacturer = null,
+        array $device_ids = null,
+        float $limit = null,
+        string $created_before = null,
+        string $user_identifier_key = null
+    ): array {
+        $request_payload = [];
+
+        if ($connected_account_id !== null) {
+            $request_payload["connected_account_id"] = $connected_account_id;
+        }
+        if ($connected_account_ids !== null) {
+            $request_payload["connected_account_ids"] = $connected_account_ids;
+        }
+        if ($connect_webview_id !== null) {
+            $request_payload["connect_webview_id"] = $connect_webview_id;
+        }
+        if ($device_type !== null) {
+            $request_payload["device_type"] = $device_type;
+        }
+        if ($device_types !== null) {
+            $request_payload["device_types"] = $device_types;
+        }
+        if ($manufacturer !== null) {
+            $request_payload["manufacturer"] = $manufacturer;
+        }
+        if ($device_ids !== null) {
+            $request_payload["device_ids"] = $device_ids;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($created_before !== null) {
+            $request_payload["created_before"] = $created_before;
+        }
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/devices/unmanaged/list",
+            json: $request_payload,
+            inner_object: "devices"
+        );
+
+        return array_map(fn($r) => UnmanagedDevice::from_json($r), $res);
+    }
+
+    public function update(string $device_id, bool $is_managed): void
+    {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($is_managed !== null) {
+            $request_payload["is_managed"] = $is_managed;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/devices/unmanaged/update",
+            json: $request_payload
+        );
+    }
+}
+
+class HealthServiceClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function by_service_name(string $service_name): void
+    {
+        $request_payload = [];
+
+        if ($service_name !== null) {
+            $request_payload["service_name"] = $service_name;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/health/service/[service_name]",
+            json: $request_payload
+        );
+    }
+}
+
+class NoiseSensorsNoiseThresholdsClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function create(
+        string $device_id,
+        string $starts_daily_at,
+        string $ends_daily_at,
+        bool $sync = null,
+        string $name = null,
+        float $noise_threshold_decibels = null,
+        float $noise_threshold_nrs = null,
+        bool $wait_for_action_attempt = true
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($starts_daily_at !== null) {
+            $request_payload["starts_daily_at"] = $starts_daily_at;
+        }
+        if ($ends_daily_at !== null) {
+            $request_payload["ends_daily_at"] = $ends_daily_at;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+        if ($noise_threshold_decibels !== null) {
+            $request_payload[
+                "noise_threshold_decibels"
+            ] = $noise_threshold_decibels;
+        }
+        if ($noise_threshold_nrs !== null) {
+            $request_payload["noise_threshold_nrs"] = $noise_threshold_nrs;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/noise_sensors/noise_thresholds/create",
+            json: $request_payload,
+            inner_object: "action_attempt"
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt_id
+        );
+
+        return $action_attempt;
+    }
+
+    public function delete(
+        string $noise_threshold_id,
+        string $device_id,
+        bool $sync = null,
+        bool $wait_for_action_attempt = true
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($noise_threshold_id !== null) {
+            $request_payload["noise_threshold_id"] = $noise_threshold_id;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/noise_sensors/noise_thresholds/delete",
+            json: $request_payload,
+            inner_object: "action_attempt"
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt_id
+        );
+
+        return $action_attempt;
+    }
+
+    public function get(string $noise_threshold_id): NoiseThreshold
+    {
+        $request_payload = [];
+
+        if ($noise_threshold_id !== null) {
+            $request_payload["noise_threshold_id"] = $noise_threshold_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/noise_sensors/noise_thresholds/get",
+            json: $request_payload,
+            inner_object: "noise_threshold"
+        );
+
+        return NoiseThreshold::from_json($res);
+    }
+
+    public function list(string $device_id): array
+    {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/noise_sensors/noise_thresholds/list",
+            json: $request_payload,
+            inner_object: "noise_thresholds"
+        );
+
+        return array_map(fn($r) => NoiseThreshold::from_json($r), $res);
+    }
+
+    public function update(
+        string $noise_threshold_id,
+        string $device_id,
+        bool $sync = null,
+        string $name = null,
+        string $starts_daily_at = null,
+        string $ends_daily_at = null,
+        float $noise_threshold_decibels = null,
+        float $noise_threshold_nrs = null,
+        bool $wait_for_action_attempt = true
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($noise_threshold_id !== null) {
+            $request_payload["noise_threshold_id"] = $noise_threshold_id;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($sync !== null) {
+            $request_payload["sync"] = $sync;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+        if ($starts_daily_at !== null) {
+            $request_payload["starts_daily_at"] = $starts_daily_at;
+        }
+        if ($ends_daily_at !== null) {
+            $request_payload["ends_daily_at"] = $ends_daily_at;
+        }
+        if ($noise_threshold_decibels !== null) {
+            $request_payload[
+                "noise_threshold_decibels"
+            ] = $noise_threshold_decibels;
+        }
+        if ($noise_threshold_nrs !== null) {
+            $request_payload["noise_threshold_nrs"] = $noise_threshold_nrs;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/noise_sensors/noise_thresholds/update",
+            json: $request_payload,
+            inner_object: "action_attempt"
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt_id
+        );
+
+        return $action_attempt;
+    }
+}
+
+class NoiseSensorsClient
+{
+    private SeamClient $seam;
+    public NoiseSensorsNoiseThresholdsClient $noise_thresholds;
+    public NoiseSensorsSimulateClient $simulate;
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+        $this->noise_thresholds = new NoiseSensorsNoiseThresholdsClient($seam);
+        $this->simulate = new NoiseSensorsSimulateClient($seam);
+    }
+}
+
+class NoiseSensorsSimulateClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function trigger_noise_threshold(string $device_id): void
+    {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/noise_sensors/simulate/trigger_noise_threshold",
+            json: $request_payload
+        );
+    }
+}
+
+class ThermostatsClimateSettingSchedulesClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function create(
+        string $device_id,
+        string $schedule_starts_at,
+        string $schedule_ends_at,
+        string $schedule_type = null,
+        string $name = null,
+        bool $automatic_heating_enabled = null,
+        bool $automatic_cooling_enabled = null,
+        string $hvac_mode_setting = null,
+        float $cooling_set_point_celsius = null,
+        float $heating_set_point_celsius = null,
+        float $cooling_set_point_fahrenheit = null,
+        float $heating_set_point_fahrenheit = null,
+        bool $manual_override_allowed = null
+    ): ClimateSettingSchedule {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($schedule_starts_at !== null) {
+            $request_payload["schedule_starts_at"] = $schedule_starts_at;
+        }
+        if ($schedule_ends_at !== null) {
+            $request_payload["schedule_ends_at"] = $schedule_ends_at;
+        }
+        if ($schedule_type !== null) {
+            $request_payload["schedule_type"] = $schedule_type;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+        if ($automatic_heating_enabled !== null) {
+            $request_payload[
+                "automatic_heating_enabled"
+            ] = $automatic_heating_enabled;
+        }
+        if ($automatic_cooling_enabled !== null) {
+            $request_payload[
+                "automatic_cooling_enabled"
+            ] = $automatic_cooling_enabled;
+        }
+        if ($hvac_mode_setting !== null) {
+            $request_payload["hvac_mode_setting"] = $hvac_mode_setting;
+        }
+        if ($cooling_set_point_celsius !== null) {
+            $request_payload[
+                "cooling_set_point_celsius"
+            ] = $cooling_set_point_celsius;
+        }
+        if ($heating_set_point_celsius !== null) {
+            $request_payload[
+                "heating_set_point_celsius"
+            ] = $heating_set_point_celsius;
+        }
+        if ($cooling_set_point_fahrenheit !== null) {
+            $request_payload[
+                "cooling_set_point_fahrenheit"
+            ] = $cooling_set_point_fahrenheit;
+        }
+        if ($heating_set_point_fahrenheit !== null) {
+            $request_payload[
+                "heating_set_point_fahrenheit"
+            ] = $heating_set_point_fahrenheit;
+        }
+        if ($manual_override_allowed !== null) {
+            $request_payload[
+                "manual_override_allowed"
+            ] = $manual_override_allowed;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/thermostats/climate_setting_schedules/create",
+            json: $request_payload,
+            inner_object: "climate_setting_schedule"
+        );
+
+        return ClimateSettingSchedule::from_json($res);
+    }
+
+    public function delete(string $climate_setting_schedule_id): void
+    {
+        $request_payload = [];
+
+        if ($climate_setting_schedule_id !== null) {
+            $request_payload[
+                "climate_setting_schedule_id"
+            ] = $climate_setting_schedule_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/thermostats/climate_setting_schedules/delete",
+            json: $request_payload
+        );
+    }
+
+    public function get(
+        string $climate_setting_schedule_id = null,
+        string $device_id = null
+    ): ClimateSettingSchedule {
+        $request_payload = [];
+
+        if ($climate_setting_schedule_id !== null) {
+            $request_payload[
+                "climate_setting_schedule_id"
+            ] = $climate_setting_schedule_id;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/thermostats/climate_setting_schedules/get",
+            json: $request_payload,
+            inner_object: "climate_setting_schedule"
+        );
+
+        return ClimateSettingSchedule::from_json($res);
+    }
+
+    public function list(
+        string $device_id,
+        string $user_identifier_key = null
+    ): array {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/thermostats/climate_setting_schedules/list",
+            json: $request_payload,
+            inner_object: "climate_setting_schedules"
+        );
+
+        return array_map(fn($r) => ClimateSettingSchedule::from_json($r), $res);
+    }
+
+    public function update(
+        string $climate_setting_schedule_id,
+        string $schedule_type = null,
+        string $name = null,
+        string $schedule_starts_at = null,
+        string $schedule_ends_at = null,
+        bool $automatic_heating_enabled = null,
+        bool $automatic_cooling_enabled = null,
+        string $hvac_mode_setting = null,
+        float $cooling_set_point_celsius = null,
+        float $heating_set_point_celsius = null,
+        float $cooling_set_point_fahrenheit = null,
+        float $heating_set_point_fahrenheit = null,
+        bool $manual_override_allowed = null
+    ): ClimateSettingSchedule {
+        $request_payload = [];
+
+        if ($climate_setting_schedule_id !== null) {
+            $request_payload[
+                "climate_setting_schedule_id"
+            ] = $climate_setting_schedule_id;
+        }
+        if ($schedule_type !== null) {
+            $request_payload["schedule_type"] = $schedule_type;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+        if ($schedule_starts_at !== null) {
+            $request_payload["schedule_starts_at"] = $schedule_starts_at;
+        }
+        if ($schedule_ends_at !== null) {
+            $request_payload["schedule_ends_at"] = $schedule_ends_at;
+        }
+        if ($automatic_heating_enabled !== null) {
+            $request_payload[
+                "automatic_heating_enabled"
+            ] = $automatic_heating_enabled;
+        }
+        if ($automatic_cooling_enabled !== null) {
+            $request_payload[
+                "automatic_cooling_enabled"
+            ] = $automatic_cooling_enabled;
+        }
+        if ($hvac_mode_setting !== null) {
+            $request_payload["hvac_mode_setting"] = $hvac_mode_setting;
+        }
+        if ($cooling_set_point_celsius !== null) {
+            $request_payload[
+                "cooling_set_point_celsius"
+            ] = $cooling_set_point_celsius;
+        }
+        if ($heating_set_point_celsius !== null) {
+            $request_payload[
+                "heating_set_point_celsius"
+            ] = $heating_set_point_celsius;
+        }
+        if ($cooling_set_point_fahrenheit !== null) {
+            $request_payload[
+                "cooling_set_point_fahrenheit"
+            ] = $cooling_set_point_fahrenheit;
+        }
+        if ($heating_set_point_fahrenheit !== null) {
+            $request_payload[
+                "heating_set_point_fahrenheit"
+            ] = $heating_set_point_fahrenheit;
+        }
+        if ($manual_override_allowed !== null) {
+            $request_payload[
+                "manual_override_allowed"
+            ] = $manual_override_allowed;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/thermostats/climate_setting_schedules/update",
+            json: $request_payload,
+            inner_object: "climate_setting_schedule"
+        );
+
+        return ClimateSettingSchedule::from_json($res);
+    }
 }
