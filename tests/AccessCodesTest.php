@@ -77,32 +77,32 @@ final class AccessCodesTest extends TestCase
     $this->assertTrue(count($access_codes) === 2);
   }
 
-  // public function testUnmanagedAccessCodes(): void
-  // {
-  //   $seam = Fixture::getTestServer();
+  public function testUnmanagedAccessCodes(): void
+  {
+    $seam = Fixture::getTestServer();
 
-  //   $device_id = $seam->devices->list()[0]->device_id;
-  //   $seam->access_codes->simulate->create_unmanaged_access_code(
-  //     device_id: $device_id,
-  //     name: "Test Unmanaged Code",
-  //     code: "1234"
-  //   );
+    $device_id = $seam->devices->list()[0]->device_id;
+    $seam->access_codes->simulate->create_unmanaged_access_code(
+      device_id: $device_id,
+      name: "Test Unmanaged Code",
+      code: "1234"
+    );
 
-  //   $unmanaged_access_codes = $seam->access_codes->unmanaged->list(device_id: $device_id);
-  //   $this->assertTrue(count($unmanaged_access_codes) === 1);
-  //   $this->assertTrue($unmanaged_access_codes[0]->is_managed === false);
+    $unmanaged_access_codes = $seam->access_codes->unmanaged->list(device_id: $device_id);
+    $this->assertTrue(count($unmanaged_access_codes) === 1);
+    $this->assertTrue($unmanaged_access_codes[0]->is_managed === false);
 
-  //   $unmanaged_access_code_id = $unmanaged_access_codes[0]->access_code_id;
-  //   $seam->access_codes->unmanaged->update(
-  //     access_code_id: $unmanaged_access_code_id,
-  //     is_managed: true
-  //   );
+    $unmanaged_access_code_id = $unmanaged_access_codes[0]->access_code_id;
+    $seam->access_codes->unmanaged->update(
+      access_code_id: $unmanaged_access_code_id,
+      is_managed: true
+    );
 
-  //   usleep(200000);
+    usleep(200000);
 
-  //   $managed_access_codes = $seam->access_codes->list(device_id: $device_id);
-  //   $this->assertTrue(count($managed_access_codes) === 1);
-  //   $this->assertTrue($managed_access_codes[0]->is_managed === true);
-  //   $this->assertTrue($managed_access_codes[0]->access_code_id === $unmanaged_access_code_id);
-  // }
+    $managed_access_codes = $seam->access_codes->list(device_id: $device_id);
+    $this->assertTrue(count($managed_access_codes) === 1);
+    $this->assertTrue($managed_access_codes[0]->is_managed === true);
+    $this->assertTrue($managed_access_codes[0]->access_code_id === $unmanaged_access_code_id);
+  }
 }

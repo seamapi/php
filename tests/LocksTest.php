@@ -33,9 +33,7 @@ final class LocksTest extends TestCase
 
     $seam->locks->unlock_door($lock->device_id);
 
-    // If you have the patience to wait for the server
-    // sleep(10); // wait for server to update
-    // $lock = $seam->locks->get(device_id: $device_id);
-    // $this->assertFalse($lock->properties->locked);
+    $lock = $seam->locks->get(device_id: $device_id);
+    $this->assertFalse($lock->properties->locked);
   }
 }

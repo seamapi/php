@@ -22,8 +22,8 @@ final class DevicesTest extends TestCase
     $devices = $seam->devices->list(connected_account_id: $connected_account->connected_account_id);
     $this->assertTrue(count($devices) > 0);
 
-    // $devices = $seam->devices->list(device_type: 'august_lock');
-    // $this->assertTrue(count($devices) > 0);
+    $devices = $seam->devices->list(device_type: 'august_lock');
+    $this->assertTrue(count($devices) > 0);
 
     $device_id = $devices[0]->device_id;
     $device = $seam->devices->get(device_id: $device_id);
@@ -52,7 +52,7 @@ final class DevicesTest extends TestCase
     $stable_device_providers = $seam->devices->list_device_providers(
       provider_category: "stable"
     );
-    // $this->assertTrue(count($stable_device_providers) > 0);
+    $this->assertTrue(count($stable_device_providers) > 0);
   }
 
   public function testUnmanagedDevices(): void
@@ -88,8 +88,8 @@ final class DevicesTest extends TestCase
     );
     $this->assertTrue(count($devices) > 0);
 
-    // $devices = $seam->devices->unmanaged->list(device_type: 'august_lock');
-    // $this->assertTrue(count($devices) > 0);
+    $devices = $seam->devices->unmanaged->list(device_type: 'august_lock');
+    $this->assertTrue(count($devices) > 0);
     $devices = $seam->devices->unmanaged->list(device_types: array('august_lock'));
     $this->assertTrue(count($devices) > 0);
 

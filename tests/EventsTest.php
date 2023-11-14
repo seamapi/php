@@ -18,14 +18,13 @@ final class EventsTest extends TestCase
     $events = $seam->events->list(since: "1970-01-01T00:00:00.000Z", device_id: $device->device_id);
     $this->assertIsArray($events);
 
-    $access_code = $seam->access_codes->create(device_id: $device->device_id);
-    $events = $seam->events->list(since: "1970-01-01T00:00:00.000Z", access_code_id: $access_code->access_code_id);
+    $seam->access_codes->create(device_id: $device->device_id);
+    $events = $seam->events->list(since: "1970-01-01T00:00:00.000Z", device_id: $device->device_id);
     $this->assertIsArray($events);
 
-    // This endpoint is 404'ing
-    // $event_id = $events[0]->event_id;
-    // $event = $seam->events->get(event_id: $event_id);
-    // $this->assertTrue($event->event_id === $event_id);
+    $event_id = $events[0]->event_id;
+    $event = $seam->events->get(event_id: $event_id);
+    $this->assertTrue($event->event_id === $event_id);
   }
 
   public function testListEventsError(): void

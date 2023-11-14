@@ -17,9 +17,5 @@ final class WorkspacesTest extends TestCase
 
     $workspace = $seam->workspaces->get();
     $this->assertIsObject($workspace);
-
-    $workspace_id = $workspace->workspace_id;
-    $workspace = $seam->workspaces->get(workspace_id: $workspace_id);
-    $this->assertTrue($workspace->workspace_id === $workspace_id);
   }
 }
