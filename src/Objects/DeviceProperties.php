@@ -59,6 +59,9 @@ class DeviceProperties
       "available_hvac_mode_settings" => $json->available_hvac_mode_settings ?? null,
       "can_enable_automatic_cooling" => $json->can_enable_automatic_cooling ?? null,
       "can_enable_automatic_heating" => $json->can_enable_automatic_heating ?? null,
+
+      "offline_access_codes_enabled" => $json->offline_access_codes_enabled ?? null,
+      "online_access_codes_enabled" => $json->online_access_codes_enabled ?? null,
     ]);
 
     return new self($props);

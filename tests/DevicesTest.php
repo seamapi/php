@@ -39,6 +39,8 @@ final class DevicesTest extends TestCase
     $manufacturer = $devices[0]->properties->manufacturer;
     $device = $seam->devices->get(name: $device_name);
     $this->assertTrue($device->properties->manufacturer === $manufacturer);
+    $this->assertNotNull($device->properties->offline_access_codes_enabled);
+    $this->assertNotNull($device->properties->online_access_codes_enabled);
 
     $seam->devices->delete(device_id: $device_id);
     try {
