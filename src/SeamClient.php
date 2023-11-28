@@ -35,6 +35,7 @@ class SeamClient
   public LocksClient $locks;
   public ClientSessionsClient $client_sessions;
   public NoiseSensorsClient $noise_sensors;
+  public ThermostatsClient $thermostats;
 
   public string $api_key;
   public HTTPClient $client;
@@ -1243,6 +1244,10 @@ class NoiseThresholdsClient
 class ThermostatsClient
 {
   private SeamClient $seam;
+
+  
+  public ClimateSettingSchedulesClient $climate_setting_schedules;
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
