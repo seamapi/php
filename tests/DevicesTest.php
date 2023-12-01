@@ -81,6 +81,7 @@ final class DevicesTest extends TestCase
     $this->assertTrue($unmanaged_device->device_id === $device_id);
     $unmanaged_device = $seam->devices->unmanaged->get(name: $device_name);
     $this->assertTrue($unmanaged_device->properties->name === $device_name);
+    $this->assertNotNull($unmanaged_device->properties->online_access_codes_enabled);
 
     $connected_account = $seam->connected_accounts->list()[0];
     $devices = $seam->devices->unmanaged->list(connected_account_id: $connected_account->connected_account_id);
