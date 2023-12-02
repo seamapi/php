@@ -2,9 +2,11 @@
 
 namespace Seam\Objects;
 
+use stdClass;
+
 use function Seam\filter_out_null_params;
 
-class DeviceProperties
+class DeviceProperties extends stdClass
 {
   public static function from_json(mixed $json): DeviceProperties|null
   {
@@ -73,5 +75,10 @@ class DeviceProperties
     foreach ($params as $key => $value) {
       $this->$key = $value;
     }
+  }
+
+  public function __get($name): mixed
+  {
+      return $this->$name ?? null;
   }
 }
