@@ -50,4 +50,31 @@ final class ConnectedAccountsTest extends TestCase
       $this->assertTrue(str_contains($exception->getMessage(), "connected_account_not_found"));
     }
   }
+
+  public function testUpdateConnectedAccount(): void
+  {
+    $seam = Fixture::getTestServer(true);
+    $connected_accounts = $seam->connected_accounts->list();
+
+    $connected_account_id = $connected_accounts[0]->connected_account_id;
+
+    $connected_account = $seam->connected_accounts->get(
+      connected_account_id: $connected_account_id
+    );
+    $this->assertTrue(
+      $connected_account->automatically_manage_new_devices === true
+    );
+
+    $seam->connected_accounts->update(
+      connected_account_id: $connected_account_id,
+      automatically_manage_new_devices: false
+    );
+
+    $connected_account = $seam->connected_accounts->get(
+      connected_account_id: $connected_account_id
+    );
+    $this->assertTrue(
+      $connected_account->automatically_manage_new_devices === false
+    );
+  }
 }

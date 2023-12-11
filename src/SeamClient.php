@@ -586,14 +586,14 @@ class AccessCodesClient
 
   /**
    * Create Access Codes across multiple Devices that share a common code
-   * 
+   *
    * @param string[] $device_ids
    * @param string|null $name
    * @param string|null $starts_at
    * @param string|null $ends_at
    * @param string|null $behavior_when_code_cannot_be_shared Accepts either "throw" or "create_random_code"
    * @param bool|null $attempt_for_offline_device
-   * 
+   *
    * @return AccessCode[]
    */
   public function create_multiple(
@@ -879,6 +879,21 @@ class ConnectedAccountsClient
         "GET",
         "connected_accounts/get",
         query: ["connected_account_id" => $connected_account_id],
+        inner_object: "connected_account"
+      )
+    );
+  }
+
+  public function update(string $connected_account_id, bool $automatically_manage_new_devices): ConnectedAccount
+  {
+    return ConnectedAccount::from_json(
+      $this->seam->request(
+        "POST",
+        "connected_accounts/update",
+        json: [
+          "connected_account_id" => $connected_account_id,
+          "automatically_manage_new_devices" => $automatically_manage_new_devices,
+        ],
         inner_object: "connected_account"
       )
     );
@@ -1245,7 +1260,7 @@ class ThermostatsClient
 {
   private SeamClient $seam;
 
-  
+
   public ClimateSettingSchedulesClient $climate_setting_schedules;
 
   public function __construct(SeamClient $seam)
