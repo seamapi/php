@@ -25,6 +25,7 @@ class ConnectedAccount
               fn ($e) => SeamWarning::from_json($e),
               $json->warnings ?? []
             ),
+            automatically_manage_new_devices: $json->automatically_manage_new_devices
         );
     }
 
@@ -35,7 +36,8 @@ class ConnectedAccount
         public array $errors,
         public array $warnings,
         public string $created_at,
-        public mixed $custom_metadata
+        public mixed $custom_metadata,
+        public bool $automatically_manage_new_devices
     ) {
     }
 }
