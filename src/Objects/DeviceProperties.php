@@ -92,6 +92,7 @@ class DeviceProperties
     }
   
 
+    
     public function __construct(
         public bool $online,
         public string $name,
@@ -169,4 +170,5 @@ class DeviceProperties
         public DeviceAssaAbloyCredentialServiceMetadata | null $assa_abloy_credential_service_metadata,
     ) {
     }
+  
 }

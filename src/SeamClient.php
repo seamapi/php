@@ -45,7 +45,6 @@ class SeamClient
   public WorkspacesClient $workspaces;
   public AcsClient $acs;
   public NoiseSensorsClient $noise_sensors;
-  public ThermostatsClient $thermostats;
 
   public string $api_key;
   public HTTPClient $client;
@@ -1290,7 +1289,8 @@ class DevicesClient
     string $device_id,
     mixed $properties = null,
     string $name = null,
-    bool $is_managed = null
+    bool $is_managed = null,
+    mixed $custom_metadata = null
   ): void {
     $request_payload = [];
 
@@ -1305,6 +1305,9 @@ class DevicesClient
     }
     if ($is_managed !== null) {
       $request_payload["is_managed"] = $is_managed;
+    }
+    if ($custom_metadata !== null) {
+      $request_payload["custom_metadata"] = $custom_metadata;
     }
 
     $this->seam->request(
@@ -4115,7 +4118,7 @@ class PhonesSimulateClient
 class ThermostatsClimateSettingSchedulesClient
 {
   private SeamClient $seam;
-
+  
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;

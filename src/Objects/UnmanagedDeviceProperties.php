@@ -23,6 +23,8 @@ class UnmanagedDeviceProperties
             model: UnmanagedDeviceModel::from_json($json->model),
         );
     }
+  
+
     
     public function __construct(
         public string $name,
@@ -37,5 +39,5 @@ class UnmanagedDeviceProperties
         public UnmanagedDeviceModel $model,
     ) {
     }
-
+  
 }

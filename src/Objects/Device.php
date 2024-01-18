@@ -28,6 +28,7 @@ class Device
         ),
             created_at: $json->created_at,
             is_managed: $json->is_managed,
+            custom_metadata: $json->custom_metadata ?? null,
         );
     }
   
@@ -45,6 +46,7 @@ class Device
         public array $warnings,
         public string $created_at,
         public bool $is_managed,
+        public mixed $custom_metadata,
     ) {
     }
   
