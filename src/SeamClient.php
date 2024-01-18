@@ -45,6 +45,7 @@ class SeamClient
   public WorkspacesClient $workspaces;
   public AcsClient $acs;
   public NoiseSensorsClient $noise_sensors;
+  public ThermostatsClient $thermostats;
 
   public string $api_key;
   public HTTPClient $client;
@@ -4114,7 +4115,7 @@ class PhonesSimulateClient
 class ThermostatsClimateSettingSchedulesClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
