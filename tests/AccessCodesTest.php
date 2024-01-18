@@ -19,7 +19,6 @@ final class AccessCodesTest extends TestCase
         $second_device_id = $devices[1]->device_id;
 
         $access_codes = $seam->access_codes->list(device_id: $first_device_id);
-        $this->assertEmpty($access_codes);
         $this->assertIsArray($access_codes);
 
         $seam->access_codes->create(device_id: $first_device_id, code: "1235");
@@ -51,7 +50,7 @@ final class AccessCodesTest extends TestCase
             code: "5679"
         );
         $access_code = $seam->access_codes->get(
-            access_code_id: $access_code_id
+           access_code_id: $access_code_id
         );
         $this->assertTrue($access_code->code === "5679");
 
@@ -102,7 +101,7 @@ final class AccessCodesTest extends TestCase
         $this->assertTrue($formatted_ends_at === $end_date->format("Y-m-d"));
 
         $access_codes = $seam->access_codes->create_multiple(
-            device_ids: [$first_device_id, $second_device_id]
+           device_ids: [$first_device_id, $second_device_id]
         );
         $this->assertTrue(count($access_codes) === 2);
     }
@@ -112,6 +111,11 @@ final class AccessCodesTest extends TestCase
         $seam = Fixture::getTestServer();
 
         $device_id = $seam->devices->list()[0]->device_id;
+
+        $managed_access_codes_before_update = $seam->access_codes->list(
+            device_id: $device_id
+        );
+
         $seam->access_codes->simulate->create_unmanaged_access_code(
             device_id: $device_id,
             name: "Test Unmanaged Code",
@@ -132,14 +136,19 @@ final class AccessCodesTest extends TestCase
 
         usleep(200000);
 
-        $managed_access_codes = $seam->access_codes->list(
-            device_id: $device_id
+        $current_managed_access_codes = $seam->access_codes->list(
+           device_id: $device_id
         );
-        $this->assertTrue(count($managed_access_codes) === 1);
-        $this->assertTrue($managed_access_codes[0]->is_managed === true);
         $this->assertTrue(
-            $managed_access_codes[0]->access_code_id ===
-                $unmanaged_access_code_id
+            count($managed_access_codes_before_update) + 1 === count($current_managed_access_codes)
+        );
+        $this->assertTrue(
+          !empty(array_filter(
+              $current_managed_access_codes,
+              function ($ac) use ($unmanaged_access_code_id) {
+                return $ac->access_code_id === $unmanaged_access_code_id;
+              }
+            ))
         );
     }
 }

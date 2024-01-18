@@ -4,36 +4,46 @@ namespace Seam\Objects;
 
 class UnmanagedDevice
 {
+    
     public static function from_json(mixed $json): UnmanagedDevice|null
     {
         if (!$json) {
             return null;
         }
         return new self(
-            device_id: $json->device_id ?? null,
-            device_type: $json->device_type ?? null,
-            connected_account_id: $json->connected_account_id ?? null,
-            capabilities_supported: $json->capabilities_supported ?? null,
-            workspace_id: $json->workspace_id ?? null,
-            errors: $json->errors ?? null,
-            warnings: $json->warnings ?? null,
-            created_at: $json->created_at ?? null,
-            is_managed: $json->is_managed ?? null,
-            properties: $json->properties ?? null
+            device_id: $json->device_id,
+            device_type: $json->device_type,
+            connected_account_id: $json->connected_account_id,
+            capabilities_supported: $json->capabilities_supported,
+            workspace_id: $json->workspace_id,
+            errors: array_map(
+          fn ($e) => UnmanagedDeviceErrors::from_json($e),
+          $json->errors ?? []
+        ),
+            warnings: array_map(
+          fn ($w) => UnmanagedDeviceWarnings::from_json($w),
+          $json->warnings ?? []
+        ),
+            created_at: $json->created_at,
+            is_managed: $json->is_managed,
+            properties: UnmanagedDeviceProperties::from_json($json->properties),
         );
     }
+  
 
+    
     public function __construct(
-        public string|null $device_id,
-        public mixed $device_type,
-        public string|null $connected_account_id,
-        public array|null $capabilities_supported,
-        public string|null $workspace_id,
-        public array|null $errors,
-        public array|null $warnings,
-        public string|null $created_at,
-        public bool|null $is_managed,
-        public mixed $properties
+        public string $device_id,
+        public string $device_type,
+        public string $connected_account_id,
+        public array $capabilities_supported,
+        public string $workspace_id,
+        public array $errors,
+        public array $warnings,
+        public string $created_at,
+        public bool $is_managed,
+        public UnmanagedDeviceProperties $properties,
     ) {
     }
+  
 }

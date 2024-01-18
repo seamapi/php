@@ -4,12 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "generate": "true",
+    "generate": "./scripts/generate.sh",
     "postgenerate": "prettier --write --ignore-path .gitignore ."
   },
   "devDependencies": {
     "@prettier/plugin-php": "^0.22.1",
-    "@seamapi/nextlove-sdk-generator": "^1.4.0",
+    "@seamapi/nextlove-sdk-generator": "^1.4.2",
     "@seamapi/types": "^1.75.0",
     "prettier": "^3.0.0"
   }
