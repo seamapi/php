@@ -10,7 +10,7 @@ final class ConnectedAccountsTest extends TestCase
 {
   public function testGetAndListConnectedAccounts(): void
   {
-    $seam = Fixture::getTestServer(true);
+    $seam = Fixture::getTestServer();
     $connected_accounts = $seam->connected_accounts->list();
     $this->assertIsArray($connected_accounts);
 
@@ -25,7 +25,7 @@ final class ConnectedAccountsTest extends TestCase
 
   public function testDeleteConnectedAccount(): void
   {
-    $seam = Fixture::getTestServer(true);
+    $seam = Fixture::getTestServer();
     $connected_accounts = $seam->connected_accounts->list();
 
     $connected_account_id = $connected_accounts[0]->connected_account_id;
@@ -45,15 +45,20 @@ final class ConnectedAccountsTest extends TestCase
       $connected_account = $seam->connected_accounts->get(
         connected_account_id: $connected_account_id
       );
-      $this->fail('Expected the account to be deleted');
+      $this->fail("Expected the account to be deleted");
     } catch (Exception $exception) {
-      $this->assertTrue(str_contains($exception->getMessage(), "connected_account_not_found"));
+      $this->assertTrue(
+        str_contains(
+          $exception->getMessage(),
+          "connected_account_not_found"
+        )
+      );
     }
   }
 
   public function testUpdateConnectedAccount(): void
   {
-    $seam = Fixture::getTestServer(true);
+    $seam = Fixture::getTestServer();
     $connected_accounts = $seam->connected_accounts->list();
 
     $connected_account_id = $connected_accounts[0]->connected_account_id;

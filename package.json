@@ -3,8 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "generate": "./scripts/generate.sh",
+    "postgenerate": "prettier --write --ignore-path .gitignore ."
+  },
   "devDependencies": {
-    "@prettier/plugin-php": "^0.19.0",
-    "prettier": "^2.7.1"
+    "@prettier/plugin-php": "^0.22.1",
+    "@seamapi/nextlove-sdk-generator": "^1.4.2",
+    "@seamapi/types": "^1.75.0",
+    "prettier": "^3.0.0"
   }
 }
