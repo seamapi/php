@@ -28,7 +28,6 @@ class Phone
             created_at: $json->created_at,
             is_managed: $json->is_managed,
             custom_metadata: $json->custom_metadata ?? null,
-            assa_abloy_credential_service_metadata: isset($json->assa_abloy_credential_service_metadata) ? PhoneAssaAbloyCredentialServiceMetadata::from_json($json->assa_abloy_credential_service_metadata) : null,
         );
     }
   
@@ -46,7 +45,6 @@ class Phone
         public string $created_at,
         public bool $is_managed,
         public mixed $custom_metadata,
-        public PhoneAssaAbloyCredentialServiceMetadata | null $assa_abloy_credential_service_metadata,
     ) {
     }
   
