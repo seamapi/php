@@ -98,7 +98,7 @@ class SeamClient
 
     // TODO handle request errors
     $response = $this->client->request($method, $path, $options);
-    $statusCode = $response->getStatusCode();
+    $status_code = $response->getStatusCode();
 
     $res_json = null;
     try {
@@ -119,9 +119,11 @@ class SeamClient
       );
     }
 
-    if ($statusCode >= 400) {
+    if ($status_code >= 400) {
+      $error_message = $response->getReasonPhrase();
+
       throw new Exception(
-        "HTTP Error: [" . $statusCode . "] " . $method . " " . $path
+        "HTTP Error: " . $error_message . " [" . $status_code . "] " . $method . " " . $path
       );
     }
 
@@ -630,7 +632,7 @@ class ActionAttemptsClient
         $action_attempt->action_attempt_id
       );
       if ($time_waiting > 20.0) {
-        throw new Exception("Timed out waiting for access code to be created");
+        throw new Exception("Timed out waiting for action attempt to be ready");
       }
       $time_waiting += 0.4;
       usleep(400000); // sleep for 0.4 seconds
@@ -1213,7 +1215,8 @@ class DevicesClient
     array $device_ids = null,
     float $limit = null,
     string $created_before = null,
-    string $user_identifier_key = null
+    string $user_identifier_key = null,
+    mixed $custom_metadata_has = null
   ): array {
     $request_payload = [];
 
@@ -1246,6 +1249,9 @@ class DevicesClient
     }
     if ($user_identifier_key !== null) {
       $request_payload["user_identifier_key"] = $user_identifier_key;
+    }
+    if ($custom_metadata_has !== null) {
+      $request_payload["custom_metadata_has"] = $custom_metadata_has;
     }
 
     $res = $this->seam->request(
@@ -1436,6 +1442,27 @@ class HealthClient
   }
 
 
+  public function get_health(
+    
+  ): void {
+    $request_payload = [];
+
+
+
+    $this->seam->request(
+      "POST",
+      "/health/get_health",
+      json: $request_payload,
+      
+    );
+
+
+
+
+
+
+  }
+
   public function get_service_health(
     string $service
   ): void {
@@ -1509,7 +1536,8 @@ class LocksClient
     array $device_ids = null,
     float $limit = null,
     string $created_before = null,
-    string $user_identifier_key = null
+    string $user_identifier_key = null,
+    mixed $custom_metadata_has = null
   ): array {
     $request_payload = [];
 
@@ -1542,6 +1570,9 @@ class LocksClient
     }
     if ($user_identifier_key !== null) {
       $request_payload["user_identifier_key"] = $user_identifier_key;
+    }
+    if ($custom_metadata_has !== null) {
+      $request_payload["custom_metadata_has"] = $custom_metadata_has;
     }
 
     $res = $this->seam->request(
@@ -1882,7 +1913,8 @@ class ThermostatsClient
     array $device_ids = null,
     float $limit = null,
     string $created_before = null,
-    string $user_identifier_key = null
+    string $user_identifier_key = null,
+    mixed $custom_metadata_has = null
   ): array {
     $request_payload = [];
 
@@ -1915,6 +1947,9 @@ class ThermostatsClient
     }
     if ($user_identifier_key !== null) {
       $request_payload["user_identifier_key"] = $user_identifier_key;
+    }
+    if ($custom_metadata_has !== null) {
+      $request_payload["custom_metadata_has"] = $custom_metadata_has;
     }
 
     $res = $this->seam->request(
@@ -2084,6 +2119,29 @@ class UserIdentitiesClient
     $this->seam->request(
       "POST",
       "/user_identities/create",
+      json: $request_payload,
+      
+    );
+
+
+
+
+
+
+  }
+
+  public function delete(
+    string $user_identity_id
+  ): void {
+    $request_payload = [];
+
+    if ($user_identity_id !== null) {
+      $request_payload["user_identity_id"] = $user_identity_id;
+    }
+
+    $this->seam->request(
+      "POST",
+      "/user_identities/delete",
       json: $request_payload,
       
     );
@@ -3315,6 +3373,37 @@ class AcsEntrancesClient
 
   }
 
+  public function list_credentials_with_access(
+    string $acs_entrance_id = null,
+    array $acs_entrance_ids = null,
+    array $include_if = null
+  ): void {
+    $request_payload = [];
+
+    if ($acs_entrance_id !== null) {
+      $request_payload["acs_entrance_id"] = $acs_entrance_id;
+    }
+    if ($acs_entrance_ids !== null) {
+      $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
+    }
+    if ($include_if !== null) {
+      $request_payload["include_if"] = $include_if;
+    }
+
+    $this->seam->request(
+      "POST",
+      "/acs/entrances/list_credentials_with_access",
+      json: $request_payload,
+      
+    );
+
+
+
+
+
+
+  }
+
 }
 
 class AcsSystemsClient
@@ -3685,7 +3774,8 @@ class DevicesUnmanagedClient
     array $device_ids = null,
     float $limit = null,
     string $created_before = null,
-    string $user_identifier_key = null
+    string $user_identifier_key = null,
+    mixed $custom_metadata_has = null
   ): array {
     $request_payload = [];
 
@@ -3718,6 +3808,9 @@ class DevicesUnmanagedClient
     }
     if ($user_identifier_key !== null) {
       $request_payload["user_identifier_key"] = $user_identifier_key;
+    }
+    if ($custom_metadata_has !== null) {
+      $request_payload["custom_metadata_has"] = $custom_metadata_has;
     }
 
     $res = $this->seam->request(
@@ -3817,9 +3910,8 @@ class NoiseSensorsNoiseThresholdsClient
     bool $sync = null,
     string $name = null,
     float $noise_threshold_decibels = null,
-    float $noise_threshold_nrs = null,
-    bool $wait_for_action_attempt = true
-  ): ActionAttempt {
+    float $noise_threshold_nrs = null
+  ): NoiseThreshold {
     $request_payload = [];
 
     if ($device_id !== null) {
@@ -3848,20 +3940,14 @@ class NoiseSensorsNoiseThresholdsClient
       "POST",
       "/noise_sensors/noise_thresholds/create",
       json: $request_payload,
-      inner_object: "action_attempt",
+      inner_object: "noise_threshold",
     );
 
-    if (!$wait_for_action_attempt) {
-      return ActionAttempt::from_json($res);
-    }
-
-    $action_attempt = $this->seam->action_attempts->poll_until_ready(
-      $res->action_attempt_id
-    );
-
-    return $action_attempt;
 
 
+
+
+    return NoiseThreshold::from_json($res);
   }
 
   public function delete(

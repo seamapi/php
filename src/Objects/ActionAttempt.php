@@ -25,7 +25,7 @@ class ActionAttempt
         public string | null $status,
         public string | null $action_type,
         public string | null $action_attempt_id,
-        public string | null $result,
+        public mixed $result,
         public ActionAttemptError | null $error,
     ) {
     }

@@ -25,6 +25,7 @@ class DeviceProperties
             offline_access_codes_enabled: $json->offline_access_codes_enabled ?? null,
             supports_accessory_keypad: $json->supports_accessory_keypad ?? null,
             supports_offline_access_codes: $json->supports_offline_access_codes ?? null,
+            assa_abloy_credential_service_metadata: isset($json->assa_abloy_credential_service_metadata) ? DeviceAssaAbloyCredentialServiceMetadata::from_json($json->assa_abloy_credential_service_metadata) : null,
             august_metadata: isset($json->august_metadata) ? DeviceAugustMetadata::from_json($json->august_metadata) : null,
             avigilon_alta_metadata: isset($json->avigilon_alta_metadata) ? DeviceAvigilonAltaMetadata::from_json($json->avigilon_alta_metadata) : null,
             schlage_metadata: isset($json->schlage_metadata) ? DeviceSchlageMetadata::from_json($json->schlage_metadata) : null,
@@ -49,6 +50,7 @@ class DeviceProperties
             hubitat_metadata: isset($json->hubitat_metadata) ? DeviceHubitatMetadata::from_json($json->hubitat_metadata) : null,
             dormakaba_oracode_metadata: isset($json->dormakaba_oracode_metadata) ? DeviceDormakabaOracodeMetadata::from_json($json->dormakaba_oracode_metadata) : null,
             wyze_metadata: isset($json->wyze_metadata) ? DeviceWyzeMetadata::from_json($json->wyze_metadata) : null,
+            _experimental_supported_code_from_access_codes_lengths: $json->_experimental_supported_code_from_access_codes_lengths ?? null,
             code_constraints: array_map(
           fn ($c) => DeviceCodeConstraints::from_json($c),
           $json->code_constraints ?? []
@@ -87,7 +89,6 @@ class DeviceProperties
             max_heating_set_point_fahrenheit: $json->max_heating_set_point_fahrenheit ?? null,
             min_heating_cooling_delta_celsius: $json->min_heating_cooling_delta_celsius ?? null,
             min_heating_cooling_delta_fahrenheit: $json->min_heating_cooling_delta_fahrenheit ?? null,
-            assa_abloy_credential_service_metadata: isset($json->assa_abloy_credential_service_metadata) ? DeviceAssaAbloyCredentialServiceMetadata::from_json($json->assa_abloy_credential_service_metadata) : null,
         );
     }
   
@@ -108,6 +109,7 @@ class DeviceProperties
         public bool | null $offline_access_codes_enabled,
         public bool | null $supports_accessory_keypad,
         public bool | null $supports_offline_access_codes,
+        public DeviceAssaAbloyCredentialServiceMetadata | null $assa_abloy_credential_service_metadata,
         public DeviceAugustMetadata | null $august_metadata,
         public DeviceAvigilonAltaMetadata | null $avigilon_alta_metadata,
         public DeviceSchlageMetadata | null $schlage_metadata,
@@ -132,6 +134,7 @@ class DeviceProperties
         public DeviceHubitatMetadata | null $hubitat_metadata,
         public DeviceDormakabaOracodeMetadata | null $dormakaba_oracode_metadata,
         public DeviceWyzeMetadata | null $wyze_metadata,
+        public array | null $_experimental_supported_code_from_access_codes_lengths,
         public array | null $code_constraints,
         public array | null $supported_code_lengths,
         public float | null $max_active_codes_supported,
@@ -167,7 +170,6 @@ class DeviceProperties
         public float | null $max_heating_set_point_fahrenheit,
         public float | null $min_heating_cooling_delta_celsius,
         public float | null $min_heating_cooling_delta_fahrenheit,
-        public DeviceAssaAbloyCredentialServiceMetadata | null $assa_abloy_credential_service_metadata,
     ) {
     }
   
