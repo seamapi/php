@@ -23,8 +23,8 @@ class DeviceNoiseawareMetadata
     
     public function __construct(
         public string $device_model,
-        public float $noise_level_nrs,
-        public float $noise_level_decibel,
+        public int $noise_level_nrs,
+        public int $noise_level_decibel,
         public string $device_name,
         public string $device_id,
     ) {

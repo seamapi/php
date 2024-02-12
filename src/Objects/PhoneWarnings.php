@@ -13,6 +13,7 @@ class PhoneWarnings
         return new self(
             warning_code: $json->warning_code,
             message: $json->message,
+            created_at: $json->created_at ?? null,
         );
     }
   
@@ -21,6 +22,7 @@ class PhoneWarnings
     public function __construct(
         public string $warning_code,
         public string $message,
+        public string | null $created_at,
     ) {
     }
   

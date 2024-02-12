@@ -243,6 +243,7 @@ $this->unmanaged = new AccessCodesUnmanagedClient($seam);
   public function create_multiple(
     array $device_ids,
     string $behavior_when_code_cannot_be_shared = null,
+    int $preferred_code_length = null,
     string $name = null,
     string $starts_at = null,
     string $ends_at = null,
@@ -264,6 +265,9 @@ $this->unmanaged = new AccessCodesUnmanagedClient($seam);
     }
     if ($behavior_when_code_cannot_be_shared !== null) {
       $request_payload["behavior_when_code_cannot_be_shared"] = $behavior_when_code_cannot_be_shared;
+    }
+    if ($preferred_code_length !== null) {
+      $request_payload["preferred_code_length"] = $preferred_code_length;
     }
     if ($name !== null) {
       $request_payload["name"] = $name;
@@ -1213,7 +1217,7 @@ class DevicesClient
     array $device_types = null,
     string $manufacturer = null,
     array $device_ids = null,
-    float $limit = null,
+    int $limit = null,
     string $created_before = null,
     string $user_identifier_key = null,
     mixed $custom_metadata_has = null
@@ -1534,7 +1538,7 @@ class LocksClient
     array $device_types = null,
     string $manufacturer = null,
     array $device_ids = null,
-    float $limit = null,
+    int $limit = null,
     string $created_before = null,
     string $user_identifier_key = null,
     mixed $custom_metadata_has = null
@@ -1727,6 +1731,29 @@ class PhonesClient
   }
 
 
+  public function deactivate(
+    string $device_id
+  ): void {
+    $request_payload = [];
+
+    if ($device_id !== null) {
+      $request_payload["device_id"] = $device_id;
+    }
+
+    $this->seam->request(
+      "POST",
+      "/phones/deactivate",
+      json: $request_payload,
+      
+    );
+
+
+
+
+
+
+  }
+
   public function list(
     string $owner_user_identity_id = null
   ): array {
@@ -1765,8 +1792,8 @@ class ThermostatsClient
 
   public function cool(
     string $device_id,
-    float $cooling_set_point_celsius = null,
-    float $cooling_set_point_fahrenheit = null,
+    int $cooling_set_point_celsius = null,
+    int $cooling_set_point_fahrenheit = null,
     bool $sync = null
   ): void {
     $request_payload = [];
@@ -1827,8 +1854,8 @@ class ThermostatsClient
 
   public function heat(
     string $device_id,
-    float $heating_set_point_celsius = null,
-    float $heating_set_point_fahrenheit = null,
+    int $heating_set_point_celsius = null,
+    int $heating_set_point_fahrenheit = null,
     bool $sync = null
   ): void {
     $request_payload = [];
@@ -1862,10 +1889,10 @@ class ThermostatsClient
 
   public function heat_cool(
     string $device_id,
-    float $heating_set_point_celsius = null,
-    float $heating_set_point_fahrenheit = null,
-    float $cooling_set_point_celsius = null,
-    float $cooling_set_point_fahrenheit = null,
+    int $heating_set_point_celsius = null,
+    int $heating_set_point_fahrenheit = null,
+    int $cooling_set_point_celsius = null,
+    int $cooling_set_point_fahrenheit = null,
     bool $sync = null
   ): void {
     $request_payload = [];
@@ -1911,7 +1938,7 @@ class ThermostatsClient
     array $device_types = null,
     string $manufacturer = null,
     array $device_ids = null,
-    float $limit = null,
+    int $limit = null,
     string $created_before = null,
     string $user_identifier_key = null,
     mixed $custom_metadata_has = null
@@ -2456,6 +2483,33 @@ class WebhooksClient
 
 
     return array_map(fn ($r) => Webhook::from_json($r), $res);
+  }
+
+  public function update(
+    string $webhook_id,
+    array $event_types
+  ): void {
+    $request_payload = [];
+
+    if ($webhook_id !== null) {
+      $request_payload["webhook_id"] = $webhook_id;
+    }
+    if ($event_types !== null) {
+      $request_payload["event_types"] = $event_types;
+    }
+
+    $this->seam->request(
+      "POST",
+      "/webhooks/update",
+      json: $request_payload,
+      
+    );
+
+
+
+
+
+
   }
 
 }
@@ -3098,10 +3152,8 @@ class AcsCredentialsClient
     string $access_method,
     string $code = null,
     bool $is_multi_phone_sync_credential = null,
-    string $assa_abloy_credential_service_mobile_endpoint_id = null,
     string $external_type = null,
-    string $card_format = null,
-    bool $is_override_key = null,
+    mixed $visionline_metadata = null,
     string $starts_at = null,
     string $ends_at = null
   ): void {
@@ -3119,17 +3171,11 @@ class AcsCredentialsClient
     if ($is_multi_phone_sync_credential !== null) {
       $request_payload["is_multi_phone_sync_credential"] = $is_multi_phone_sync_credential;
     }
-    if ($assa_abloy_credential_service_mobile_endpoint_id !== null) {
-      $request_payload["assa_abloy_credential_service_mobile_endpoint_id"] = $assa_abloy_credential_service_mobile_endpoint_id;
-    }
     if ($external_type !== null) {
       $request_payload["external_type"] = $external_type;
     }
-    if ($card_format !== null) {
-      $request_payload["card_format"] = $card_format;
-    }
-    if ($is_override_key !== null) {
-      $request_payload["is_override_key"] = $is_override_key;
+    if ($visionline_metadata !== null) {
+      $request_payload["visionline_metadata"] = $visionline_metadata;
     }
     if ($starts_at !== null) {
       $request_payload["starts_at"] = $starts_at;
@@ -3374,17 +3420,13 @@ class AcsEntrancesClient
   }
 
   public function list_credentials_with_access(
-    string $acs_entrance_id = null,
-    array $acs_entrance_ids = null,
+    string $acs_entrance_id,
     array $include_if = null
   ): void {
     $request_payload = [];
 
     if ($acs_entrance_id !== null) {
       $request_payload["acs_entrance_id"] = $acs_entrance_id;
-    }
-    if ($acs_entrance_ids !== null) {
-      $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
     }
     if ($include_if !== null) {
       $request_payload["include_if"] = $include_if;
@@ -3631,6 +3673,29 @@ class AcsUsersClient
 
   }
 
+  public function revoke_access_to_all_entrances(
+    string $acs_user_id
+  ): void {
+    $request_payload = [];
+
+    if ($acs_user_id !== null) {
+      $request_payload["acs_user_id"] = $acs_user_id;
+    }
+
+    $this->seam->request(
+      "POST",
+      "/acs/users/revoke_access_to_all_entrances",
+      json: $request_payload,
+      
+    );
+
+
+
+
+
+
+  }
+
   public function suspend(
     string $acs_user_id
   ): void {
@@ -3772,7 +3837,7 @@ class DevicesUnmanagedClient
     array $device_types = null,
     string $manufacturer = null,
     array $device_ids = null,
-    float $limit = null,
+    int $limit = null,
     string $created_before = null,
     string $user_identifier_key = null,
     mixed $custom_metadata_has = null
@@ -3909,8 +3974,8 @@ class NoiseSensorsNoiseThresholdsClient
     string $ends_daily_at,
     bool $sync = null,
     string $name = null,
-    float $noise_threshold_decibels = null,
-    float $noise_threshold_nrs = null
+    int $noise_threshold_decibels = null,
+    int $noise_threshold_nrs = null
   ): NoiseThreshold {
     $request_payload = [];
 
@@ -4045,8 +4110,8 @@ class NoiseSensorsNoiseThresholdsClient
     string $name = null,
     string $starts_daily_at = null,
     string $ends_daily_at = null,
-    float $noise_threshold_decibels = null,
-    float $noise_threshold_nrs = null,
+    int $noise_threshold_decibels = null,
+    int $noise_threshold_nrs = null,
     bool $wait_for_action_attempt = true
   ): ActionAttempt {
     $request_payload = [];
@@ -4221,10 +4286,10 @@ class ThermostatsClimateSettingSchedulesClient
     bool $automatic_heating_enabled = null,
     bool $automatic_cooling_enabled = null,
     string $hvac_mode_setting = null,
-    float $cooling_set_point_celsius = null,
-    float $heating_set_point_celsius = null,
-    float $cooling_set_point_fahrenheit = null,
-    float $heating_set_point_fahrenheit = null,
+    int $cooling_set_point_celsius = null,
+    int $heating_set_point_celsius = null,
+    int $cooling_set_point_fahrenheit = null,
+    int $heating_set_point_fahrenheit = null,
     bool $manual_override_allowed = null
   ): ClimateSettingSchedule {
     $request_payload = [];
@@ -4369,10 +4434,10 @@ class ThermostatsClimateSettingSchedulesClient
     bool $automatic_heating_enabled = null,
     bool $automatic_cooling_enabled = null,
     string $hvac_mode_setting = null,
-    float $cooling_set_point_celsius = null,
-    float $heating_set_point_celsius = null,
-    float $cooling_set_point_fahrenheit = null,
-    float $heating_set_point_fahrenheit = null,
+    int $cooling_set_point_celsius = null,
+    int $heating_set_point_celsius = null,
+    int $cooling_set_point_fahrenheit = null,
+    int $heating_set_point_fahrenheit = null,
     bool $manual_override_allowed = null
   ): ClimateSettingSchedule {
     $request_payload = [];

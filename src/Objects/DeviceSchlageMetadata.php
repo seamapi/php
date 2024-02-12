@@ -13,7 +13,7 @@ class DeviceSchlageMetadata
         return new self(
             device_id: $json->device_id,
             device_name: $json->device_name,
-            access_code_length: $json->access_code_length,
+            access_code_length: $json->access_code_length ?? null,
             model: $json->model ?? null,
         );
     }
@@ -23,7 +23,7 @@ class DeviceSchlageMetadata
     public function __construct(
         public string $device_id,
         public string $device_name,
-        public float $access_code_length,
+        public int | null $access_code_length,
         public string | null $model,
     ) {
     }

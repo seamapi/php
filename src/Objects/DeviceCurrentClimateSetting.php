@@ -28,10 +28,10 @@ class DeviceCurrentClimateSetting
         public bool $automatic_heating_enabled,
         public bool $automatic_cooling_enabled,
         public string $hvac_mode_setting,
-        public float | null $cooling_set_point_celsius,
-        public float | null $heating_set_point_celsius,
-        public float | null $cooling_set_point_fahrenheit,
-        public float | null $heating_set_point_fahrenheit,
+        public int | null $cooling_set_point_celsius,
+        public int | null $heating_set_point_celsius,
+        public int | null $cooling_set_point_fahrenheit,
+        public int | null $heating_set_point_fahrenheit,
         public bool $manual_override_allowed,
     ) {
     }

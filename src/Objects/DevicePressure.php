@@ -20,7 +20,7 @@ class DevicePressure
     
     public function __construct(
         public string $time,
-        public float $value,
+        public int $value,
     ) {
     }
   

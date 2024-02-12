@@ -20,9 +20,9 @@ class DeviceFourSuitesMetadata
 
     
     public function __construct(
-        public float $device_id,
+        public int $device_id,
         public string $device_name,
-        public float $reclose_delay_in_seconds,
+        public int $reclose_delay_in_seconds,
     ) {
     }
   

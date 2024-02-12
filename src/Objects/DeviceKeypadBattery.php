@@ -18,7 +18,7 @@ class DeviceKeypadBattery
 
     
     public function __construct(
-        public float $level,
+        public int $level,
     ) {
     }
   

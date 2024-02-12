@@ -19,7 +19,7 @@ class DeviceTwoNMetadata
 
     
     public function __construct(
-        public float $device_id,
+        public int $device_id,
         public string $device_name,
     ) {
     }

@@ -27,10 +27,10 @@ class DeviceDormakabaOracodeMetadata
 
     
     public function __construct(
-        public float $door_id,
+        public int $door_id,
         public string $door_name,
-        public float | null $device_id,
-        public float $site_id,
+        public int | null $device_id,
+        public int $site_id,
         public string $site_name,
         public string | null $iana_timezone,
         public array | null $predefined_time_slots,
