@@ -28,14 +28,14 @@ class DevicePredefinedTimeSlots
     
     public function __construct(
         public string $name,
-        public float $prefix,
+        public int $prefix,
         public string $check_in_time,
         public string $check_out_time,
         public bool $is_24_hour,
         public bool $is_biweekly_mode,
         public bool $is_one_shot,
         public bool $is_master,
-        public float $ext_dormakaba_oracode_user_level_prefix,
+        public int $ext_dormakaba_oracode_user_level_prefix,
         public string $dormakaba_oracode_user_level_id,
     ) {
     }

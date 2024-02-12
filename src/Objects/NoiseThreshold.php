@@ -27,10 +27,10 @@ class NoiseThreshold
         public string $noise_threshold_id,
         public string $device_id,
         public string $name,
-        public float | null $noise_threshold_nrs,
+        public int | null $noise_threshold_nrs,
         public string $starts_daily_at,
         public string $ends_daily_at,
-        public float $noise_threshold_decibels,
+        public int $noise_threshold_decibels,
     ) {
     }
   

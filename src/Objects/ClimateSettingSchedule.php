@@ -44,10 +44,10 @@ class ClimateSettingSchedule
         public bool | null $automatic_heating_enabled,
         public bool | null $automatic_cooling_enabled,
         public string | null $hvac_mode_setting,
-        public float | null $cooling_set_point_celsius,
-        public float | null $heating_set_point_celsius,
-        public float | null $cooling_set_point_fahrenheit,
-        public float | null $heating_set_point_fahrenheit,
+        public int | null $cooling_set_point_celsius,
+        public int | null $heating_set_point_celsius,
+        public int | null $cooling_set_point_fahrenheit,
+        public int | null $heating_set_point_fahrenheit,
         public bool | null $manual_override_allowed,
     ) {
     }

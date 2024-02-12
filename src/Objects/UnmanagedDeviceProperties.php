@@ -32,7 +32,7 @@ class UnmanagedDeviceProperties
         public string | null $manufacturer,
         public string | null $image_url,
         public string | null $image_alt_text,
-        public float | null $battery_level,
+        public int | null $battery_level,
         public UnmanagedDeviceBattery | null $battery,
         public bool | null $online_access_codes_enabled,
         public bool | null $offline_access_codes_enabled,

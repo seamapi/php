@@ -13,6 +13,7 @@ class UnmanagedDeviceErrors
         return new self(
             error_code: $json->error_code,
             message: $json->message,
+            created_at: $json->created_at ?? null,
         );
     }
   
@@ -21,6 +22,7 @@ class UnmanagedDeviceErrors
     public function __construct(
         public string $error_code,
         public string $message,
+        public string | null $created_at,
     ) {
     }
   
