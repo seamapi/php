@@ -68,7 +68,13 @@ $seam->access_codes->delete($access_code->access_code_id);
 
 ## Installation
 
-Run `composer require seamapi/seam`
+To install the latest version of the SDK, run:
+
+`composer require seamapi/seam`
+
+If you want to install our previous handwritten version, run:
+
+`composer require seamapi/seam:1.1`
 
 ## Development Setup
 
