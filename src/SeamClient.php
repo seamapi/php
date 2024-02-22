@@ -2378,6 +2378,45 @@ class UserIdentitiesClient
 
   }
 
+  public function update(
+    string $user_identity_id,
+    string $user_identity_key = null,
+    string $email_address = null,
+    string $phone_number = null,
+    string $full_name = null
+  ): void {
+    $request_payload = [];
+
+    if ($user_identity_id !== null) {
+      $request_payload["user_identity_id"] = $user_identity_id;
+    }
+    if ($user_identity_key !== null) {
+      $request_payload["user_identity_key"] = $user_identity_key;
+    }
+    if ($email_address !== null) {
+      $request_payload["email_address"] = $email_address;
+    }
+    if ($phone_number !== null) {
+      $request_payload["phone_number"] = $phone_number;
+    }
+    if ($full_name !== null) {
+      $request_payload["full_name"] = $full_name;
+    }
+
+    $this->seam->request(
+      "POST",
+      "/user_identities/update",
+      json: $request_payload,
+      
+    );
+
+
+
+
+
+
+  }
+
 }
 
 class WebhooksClient
@@ -3518,6 +3557,33 @@ class AcsUsersClient
   }
 
 
+  public function add_to_access_group(
+    string $acs_user_id,
+    string $acs_access_group_id
+  ): void {
+    $request_payload = [];
+
+    if ($acs_user_id !== null) {
+      $request_payload["acs_user_id"] = $acs_user_id;
+    }
+    if ($acs_access_group_id !== null) {
+      $request_payload["acs_access_group_id"] = $acs_access_group_id;
+    }
+
+    $this->seam->request(
+      "POST",
+      "/acs/users/add_to_access_group",
+      json: $request_payload,
+      
+    );
+
+
+
+
+
+
+  }
+
   public function create(
     string $acs_system_id,
     array $acs_access_group_ids = null,
@@ -3662,6 +3728,33 @@ class AcsUsersClient
     $this->seam->request(
       "POST",
       "/acs/users/list_accessible_entrances",
+      json: $request_payload,
+      
+    );
+
+
+
+
+
+
+  }
+
+  public function remove_from_access_group(
+    string $acs_user_id,
+    string $acs_access_group_id
+  ): void {
+    $request_payload = [];
+
+    if ($acs_user_id !== null) {
+      $request_payload["acs_user_id"] = $acs_user_id;
+    }
+    if ($acs_access_group_id !== null) {
+      $request_payload["acs_access_group_id"] = $acs_access_group_id;
+    }
+
+    $this->seam->request(
+      "POST",
+      "/acs/users/remove_from_access_group",
       json: $request_payload,
       
     );
@@ -4508,6 +4601,29 @@ class UserIdentitiesEnrollmentAutomationsClient
     
   }
 
+
+  public function delete(
+    string $enrollment_automation_id
+  ): void {
+    $request_payload = [];
+
+    if ($enrollment_automation_id !== null) {
+      $request_payload["enrollment_automation_id"] = $enrollment_automation_id;
+    }
+
+    $this->seam->request(
+      "POST",
+      "/user_identities/enrollment_automations/delete",
+      json: $request_payload,
+      
+    );
+
+
+
+
+
+
+  }
 
   public function get(
     string $enrollment_automation_id

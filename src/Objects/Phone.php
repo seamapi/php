@@ -28,6 +28,8 @@ class Phone
             created_at: $json->created_at,
             is_managed: $json->is_managed,
             custom_metadata: $json->custom_metadata ?? null,
+            can_remotely_unlock: $json->can_remotely_unlock ?? null,
+            can_program_online_access_codes: $json->can_program_online_access_codes ?? null,
         );
     }
   
@@ -45,6 +47,8 @@ class Phone
         public string $created_at,
         public bool $is_managed,
         public mixed $custom_metadata,
+        public bool | null $can_remotely_unlock,
+        public bool | null $can_program_online_access_codes,
     ) {
     }
   
