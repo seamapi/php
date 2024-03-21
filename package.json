@@ -1,7 +1,6 @@
 {
-  "name": "sdk1",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "@seamapi/php",
+  "version": "2.0.0",
   "license": "MIT",
   "scripts": {
     "generate": "./scripts/generate.sh",
