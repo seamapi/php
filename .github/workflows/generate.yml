@@ -29,10 +29,6 @@ jobs:
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Setup
         uses: ./.github/actions/setup
-        with:
-          install_dependencies: "false"
-      - name: Normalize package-lock.json
-        run: npm install
       - name: Generate SDK
         run: npm run generate
       - name: Commit
