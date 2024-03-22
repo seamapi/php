@@ -2,16 +2,16 @@
 
 namespace Seam\Objects;
 
-class DeviceHoneywellMetadata
+class DeviceHoneywellResideoMetadata
 {
     
-    public static function from_json(mixed $json): DeviceHoneywellMetadata|null
+    public static function from_json(mixed $json): DeviceHoneywellResideoMetadata|null
     {
         if (!$json) {
             return null;
         }
         return new self(
-            honeywell_device_id: $json->honeywell_device_id,
+            honeywell_resideo_device_id: $json->honeywell_resideo_device_id,
             device_name: $json->device_name,
         );
     }
@@ -19,7 +19,7 @@ class DeviceHoneywellMetadata
 
     
     public function __construct(
-        public string $honeywell_device_id,
+        public string $honeywell_resideo_device_id,
         public string $device_name,
     ) {
     }
