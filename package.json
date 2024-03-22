@@ -1,6 +1,7 @@
 {
   "name": "@seamapi/php",
   "version": "2.0.0",
+  "private": true,
   "license": "MIT",
   "scripts": {
     "generate": "./scripts/generate.sh",
