@@ -17,6 +17,7 @@ class DeviceTedeeMetadata
             device_model: $json->device_model,
             bridge_id: $json->bridge_id,
             bridge_name: $json->bridge_name,
+            keypad_id: $json->keypad_id ?? null,
         );
     }
   
@@ -29,6 +30,7 @@ class DeviceTedeeMetadata
         public string $device_model,
         public int $bridge_id,
         public string $bridge_name,
+        public int | null $keypad_id,
     ) {
     }
   

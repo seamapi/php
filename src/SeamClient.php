@@ -1230,7 +1230,9 @@ $this->unmanaged = new DevicesUnmanagedClient($seam);
     int $limit = null,
     string $created_before = null,
     string $user_identifier_key = null,
-    mixed $custom_metadata_has = null
+    mixed $custom_metadata_has = null,
+    array $include_if = null,
+    array $exclude_if = null
   ): array {
     $request_payload = [];
 
@@ -1266,6 +1268,12 @@ $this->unmanaged = new DevicesUnmanagedClient($seam);
     }
     if ($custom_metadata_has !== null) {
       $request_payload["custom_metadata_has"] = $custom_metadata_has;
+    }
+    if ($include_if !== null) {
+      $request_payload["include_if"] = $include_if;
+    }
+    if ($exclude_if !== null) {
+      $request_payload["exclude_if"] = $exclude_if;
     }
 
     $res = $this->seam->request(
@@ -1555,7 +1563,9 @@ class LocksClient
     int $limit = null,
     string $created_before = null,
     string $user_identifier_key = null,
-    mixed $custom_metadata_has = null
+    mixed $custom_metadata_has = null,
+    array $include_if = null,
+    array $exclude_if = null
   ): array {
     $request_payload = [];
 
@@ -1591,6 +1601,12 @@ class LocksClient
     }
     if ($custom_metadata_has !== null) {
       $request_payload["custom_metadata_has"] = $custom_metadata_has;
+    }
+    if ($include_if !== null) {
+      $request_payload["include_if"] = $include_if;
+    }
+    if ($exclude_if !== null) {
+      $request_payload["exclude_if"] = $exclude_if;
     }
 
     $res = $this->seam->request(
@@ -1976,7 +1992,9 @@ class ThermostatsClient
     int $limit = null,
     string $created_before = null,
     string $user_identifier_key = null,
-    mixed $custom_metadata_has = null
+    mixed $custom_metadata_has = null,
+    array $include_if = null,
+    array $exclude_if = null
   ): array {
     $request_payload = [];
 
@@ -2012,6 +2030,12 @@ class ThermostatsClient
     }
     if ($custom_metadata_has !== null) {
       $request_payload["custom_metadata_has"] = $custom_metadata_has;
+    }
+    if ($include_if !== null) {
+      $request_payload["include_if"] = $include_if;
+    }
+    if ($exclude_if !== null) {
+      $request_payload["exclude_if"] = $exclude_if;
     }
 
     $res = $this->seam->request(
@@ -3240,8 +3264,10 @@ class AcsCredentialsClient
   public function create(
     string $acs_user_id,
     string $access_method,
+    string $credential_manager_acs_system_id = null,
     string $code = null,
     bool $is_multi_phone_sync_credential = null,
+    array $allowed_acs_entrance_ids = null,
     mixed $visionline_metadata = null,
     string $starts_at = null,
     string $ends_at = null
@@ -3254,11 +3280,17 @@ class AcsCredentialsClient
     if ($access_method !== null) {
       $request_payload["access_method"] = $access_method;
     }
+    if ($credential_manager_acs_system_id !== null) {
+      $request_payload["credential_manager_acs_system_id"] = $credential_manager_acs_system_id;
+    }
     if ($code !== null) {
       $request_payload["code"] = $code;
     }
     if ($is_multi_phone_sync_credential !== null) {
       $request_payload["is_multi_phone_sync_credential"] = $is_multi_phone_sync_credential;
+    }
+    if ($allowed_acs_entrance_ids !== null) {
+      $request_payload["allowed_acs_entrance_ids"] = $allowed_acs_entrance_ids;
     }
     if ($visionline_metadata !== null) {
       $request_payload["visionline_metadata"] = $visionline_metadata;
@@ -4020,7 +4052,9 @@ class DevicesUnmanagedClient
     int $limit = null,
     string $created_before = null,
     string $user_identifier_key = null,
-    mixed $custom_metadata_has = null
+    mixed $custom_metadata_has = null,
+    array $include_if = null,
+    array $exclude_if = null
   ): array {
     $request_payload = [];
 
@@ -4056,6 +4090,12 @@ class DevicesUnmanagedClient
     }
     if ($custom_metadata_has !== null) {
       $request_payload["custom_metadata_has"] = $custom_metadata_has;
+    }
+    if ($include_if !== null) {
+      $request_payload["include_if"] = $include_if;
+    }
+    if ($exclude_if !== null) {
+      $request_payload["exclude_if"] = $exclude_if;
     }
 
     $res = $this->seam->request(
