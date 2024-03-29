@@ -20,6 +20,9 @@ class AcsSystem
             created_at: $json->created_at,
             workspace_id: $json->workspace_id,
             connected_account_ids: $json->connected_account_ids,
+            image_url: $json->image_url,
+            image_alt_text: $json->image_alt_text,
+            can_automate_enrollment: $json->can_automate_enrollment ?? null,
         );
     }
   
@@ -35,6 +38,9 @@ class AcsSystem
         public string $created_at,
         public string $workspace_id,
         public array $connected_account_ids,
+        public string $image_url,
+        public string $image_alt_text,
+        public bool | null $can_automate_enrollment,
     ) {
     }
   

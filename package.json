@@ -1,7 +1,7 @@
 {
-  "name": "sdk1",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "@seamapi/php",
+  "version": "2.0.0",
+  "private": true,
   "license": "MIT",
   "scripts": {
     "generate": "./scripts/generate.sh",
@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@prettier/plugin-php": "^0.22.1",
-    "@seamapi/nextlove-sdk-generator": "^1.5.3",
+    "@seamapi/nextlove-sdk-generator": "^1.6.1",
     "@seamapi/types": "^1.75.0",
     "prettier": "^3.0.0"
   }

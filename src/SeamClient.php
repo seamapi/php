@@ -99,6 +99,7 @@ class SeamClient
     // TODO handle request errors
     $response = $this->client->request($method, $path, $options);
     $status_code = $response->getStatusCode();
+    $request_id = $response->getHeaderLine('seam-request-id');
 
     $res_json = null;
     try {
@@ -115,7 +116,8 @@ class SeamClient
           "\" : " .
           ($res_json->error->type ?? "") .
           ": " .
-          $res_json->error->message
+          $res_json->error->message .
+          " [Request ID: " . $request_id . "]"
       );
     }
 
@@ -123,7 +125,8 @@ class SeamClient
       $error_message = $response->getReasonPhrase();
 
       throw new Exception(
-        "HTTP Error: " . $error_message . " [" . $status_code . "] " . $method . " " . $path
+        "HTTP Error: " . $error_message . " [" . $status_code . "] " . $method . " " . $path .
+        " [Request ID: " . $request_id . "]"
       );
     }
 
@@ -135,7 +138,8 @@ class SeamClient
             '" for ' .
             $method .
             " " .
-            $path
+            $path .
+            " [Request ID: " . $request_id . "]"
         );
       }
       return $res_json->$inner_object;
@@ -834,7 +838,8 @@ class ClientSessionsClient
     string $client_session_id = null,
     string $user_identifier_key = null,
     string $connect_webview_id = null,
-    bool $without_user_identifier_key = null
+    bool $without_user_identifier_key = null,
+    string $user_identity_id = null
   ): array {
     $request_payload = [];
 
@@ -849,6 +854,9 @@ class ClientSessionsClient
     }
     if ($without_user_identifier_key !== null) {
       $request_payload["without_user_identifier_key"] = $without_user_identifier_key;
+    }
+    if ($user_identity_id !== null) {
+      $request_payload["user_identity_id"] = $user_identity_id;
     }
 
     $res = $this->seam->request(
@@ -1151,11 +1159,13 @@ class ConnectedAccountsClient
 class DevicesClient
 {
   private SeamClient $seam;
-    public DevicesUnmanagedClient $unmanaged;
+    public DevicesSimulateClient $simulate;
+  public DevicesUnmanagedClient $unmanaged;
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    $this->unmanaged = new DevicesUnmanagedClient($seam);
+    $this->simulate = new DevicesSimulateClient($seam);
+$this->unmanaged = new DevicesUnmanagedClient($seam);
   }
 
 
@@ -1220,7 +1230,9 @@ class DevicesClient
     int $limit = null,
     string $created_before = null,
     string $user_identifier_key = null,
-    mixed $custom_metadata_has = null
+    mixed $custom_metadata_has = null,
+    array $include_if = null,
+    array $exclude_if = null
   ): array {
     $request_payload = [];
 
@@ -1256,6 +1268,12 @@ class DevicesClient
     }
     if ($custom_metadata_has !== null) {
       $request_payload["custom_metadata_has"] = $custom_metadata_has;
+    }
+    if ($include_if !== null) {
+      $request_payload["include_if"] = $include_if;
+    }
+    if ($exclude_if !== null) {
+      $request_payload["exclude_if"] = $exclude_if;
     }
 
     $res = $this->seam->request(
@@ -1387,7 +1405,8 @@ class EventsClient
     array $access_code_ids = null,
     string $event_type = null,
     array $event_types = null,
-    string $connected_account_id = null
+    string $connected_account_id = null,
+    int $limit = null
   ): array {
     $request_payload = [];
 
@@ -1417,6 +1436,9 @@ class EventsClient
     }
     if ($connected_account_id !== null) {
       $request_payload["connected_account_id"] = $connected_account_id;
+    }
+    if ($limit !== null) {
+      $request_payload["limit"] = $limit;
     }
 
     $res = $this->seam->request(
@@ -1541,7 +1563,9 @@ class LocksClient
     int $limit = null,
     string $created_before = null,
     string $user_identifier_key = null,
-    mixed $custom_metadata_has = null
+    mixed $custom_metadata_has = null,
+    array $include_if = null,
+    array $exclude_if = null
   ): array {
     $request_payload = [];
 
@@ -1577,6 +1601,12 @@ class LocksClient
     }
     if ($custom_metadata_has !== null) {
       $request_payload["custom_metadata_has"] = $custom_metadata_has;
+    }
+    if ($include_if !== null) {
+      $request_payload["include_if"] = $include_if;
+    }
+    if ($exclude_if !== null) {
+      $request_payload["exclude_if"] = $exclude_if;
     }
 
     $res = $this->seam->request(
@@ -1794,8 +1824,9 @@ class ThermostatsClient
     string $device_id,
     int $cooling_set_point_celsius = null,
     int $cooling_set_point_fahrenheit = null,
-    bool $sync = null
-  ): void {
+    bool $sync = null,
+    bool $wait_for_action_attempt = true
+  ): ActionAttempt {
     $request_payload = [];
 
     if ($device_id !== null) {
@@ -1811,16 +1842,22 @@ class ThermostatsClient
       $request_payload["sync"] = $sync;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/thermostats/cool",
       json: $request_payload,
-      
+      inner_object: "action_attempt",
     );
 
+    if (!$wait_for_action_attempt) {
+      return ActionAttempt::from_json($res);
+    }
 
+    $action_attempt = $this->seam->action_attempts->poll_until_ready(
+      $res->action_attempt_id
+    );
 
-
+    return $action_attempt;
 
 
   }
@@ -1856,8 +1893,9 @@ class ThermostatsClient
     string $device_id,
     int $heating_set_point_celsius = null,
     int $heating_set_point_fahrenheit = null,
-    bool $sync = null
-  ): void {
+    bool $sync = null,
+    bool $wait_for_action_attempt = true
+  ): ActionAttempt {
     $request_payload = [];
 
     if ($device_id !== null) {
@@ -1873,16 +1911,22 @@ class ThermostatsClient
       $request_payload["sync"] = $sync;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/thermostats/heat",
       json: $request_payload,
-      
+      inner_object: "action_attempt",
     );
 
+    if (!$wait_for_action_attempt) {
+      return ActionAttempt::from_json($res);
+    }
 
+    $action_attempt = $this->seam->action_attempts->poll_until_ready(
+      $res->action_attempt_id
+    );
 
-
+    return $action_attempt;
 
 
   }
@@ -1893,8 +1937,9 @@ class ThermostatsClient
     int $heating_set_point_fahrenheit = null,
     int $cooling_set_point_celsius = null,
     int $cooling_set_point_fahrenheit = null,
-    bool $sync = null
-  ): void {
+    bool $sync = null,
+    bool $wait_for_action_attempt = true
+  ): ActionAttempt {
     $request_payload = [];
 
     if ($device_id !== null) {
@@ -1916,16 +1961,22 @@ class ThermostatsClient
       $request_payload["sync"] = $sync;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/thermostats/heat_cool",
       json: $request_payload,
-      
+      inner_object: "action_attempt",
     );
 
+    if (!$wait_for_action_attempt) {
+      return ActionAttempt::from_json($res);
+    }
 
+    $action_attempt = $this->seam->action_attempts->poll_until_ready(
+      $res->action_attempt_id
+    );
 
-
+    return $action_attempt;
 
 
   }
@@ -1941,7 +1992,9 @@ class ThermostatsClient
     int $limit = null,
     string $created_before = null,
     string $user_identifier_key = null,
-    mixed $custom_metadata_has = null
+    mixed $custom_metadata_has = null,
+    array $include_if = null,
+    array $exclude_if = null
   ): array {
     $request_payload = [];
 
@@ -1978,6 +2031,12 @@ class ThermostatsClient
     if ($custom_metadata_has !== null) {
       $request_payload["custom_metadata_has"] = $custom_metadata_has;
     }
+    if ($include_if !== null) {
+      $request_payload["include_if"] = $include_if;
+    }
+    if ($exclude_if !== null) {
+      $request_payload["exclude_if"] = $exclude_if;
+    }
 
     $res = $this->seam->request(
       "POST",
@@ -1995,8 +2054,9 @@ class ThermostatsClient
 
   public function off(
     string $device_id,
-    bool $sync = null
-  ): void {
+    bool $sync = null,
+    bool $wait_for_action_attempt = true
+  ): ActionAttempt {
     $request_payload = [];
 
     if ($device_id !== null) {
@@ -2006,16 +2066,22 @@ class ThermostatsClient
       $request_payload["sync"] = $sync;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/thermostats/off",
       json: $request_payload,
-      
+      inner_object: "action_attempt",
     );
 
+    if (!$wait_for_action_attempt) {
+      return ActionAttempt::from_json($res);
+    }
 
+    $action_attempt = $this->seam->action_attempts->poll_until_ready(
+      $res->action_attempt_id
+    );
 
-
+    return $action_attempt;
 
 
   }
@@ -2024,8 +2090,9 @@ class ThermostatsClient
     string $device_id,
     string $fan_mode = null,
     string $fan_mode_setting = null,
-    bool $sync = null
-  ): void {
+    bool $sync = null,
+    bool $wait_for_action_attempt = true
+  ): ActionAttempt {
     $request_payload = [];
 
     if ($device_id !== null) {
@@ -2041,16 +2108,22 @@ class ThermostatsClient
       $request_payload["sync"] = $sync;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/thermostats/set_fan_mode",
       json: $request_payload,
-      
+      inner_object: "action_attempt",
     );
 
+    if (!$wait_for_action_attempt) {
+      return ActionAttempt::from_json($res);
+    }
 
+    $action_attempt = $this->seam->action_attempts->poll_until_ready(
+      $res->action_attempt_id
+    );
 
-
+    return $action_attempt;
 
 
   }
@@ -2235,11 +2308,13 @@ class UserIdentitiesClient
   }
 
   public function list(
-    
+    string $credential_manager_acs_system_id = null
   ): void {
     $request_payload = [];
 
-
+    if ($credential_manager_acs_system_id !== null) {
+      $request_payload["credential_manager_acs_system_id"] = $credential_manager_acs_system_id;
+    }
 
     $this->seam->request(
       "POST",
@@ -3189,9 +3264,10 @@ class AcsCredentialsClient
   public function create(
     string $acs_user_id,
     string $access_method,
+    string $credential_manager_acs_system_id = null,
     string $code = null,
     bool $is_multi_phone_sync_credential = null,
-    string $external_type = null,
+    array $allowed_acs_entrance_ids = null,
     mixed $visionline_metadata = null,
     string $starts_at = null,
     string $ends_at = null
@@ -3204,14 +3280,17 @@ class AcsCredentialsClient
     if ($access_method !== null) {
       $request_payload["access_method"] = $access_method;
     }
+    if ($credential_manager_acs_system_id !== null) {
+      $request_payload["credential_manager_acs_system_id"] = $credential_manager_acs_system_id;
+    }
     if ($code !== null) {
       $request_payload["code"] = $code;
     }
     if ($is_multi_phone_sync_credential !== null) {
       $request_payload["is_multi_phone_sync_credential"] = $is_multi_phone_sync_credential;
     }
-    if ($external_type !== null) {
-      $request_payload["external_type"] = $external_type;
+    if ($allowed_acs_entrance_ids !== null) {
+      $request_payload["allowed_acs_entrance_ids"] = $allowed_acs_entrance_ids;
     }
     if ($visionline_metadata !== null) {
       $request_payload["visionline_metadata"] = $visionline_metadata;
@@ -3286,7 +3365,8 @@ class AcsCredentialsClient
   public function list(
     string $acs_user_id = null,
     string $acs_system_id = null,
-    string $user_identity_id = null
+    string $user_identity_id = null,
+    bool $is_multi_phone_sync_credential = null
   ): void {
     $request_payload = [];
 
@@ -3298,6 +3378,9 @@ class AcsCredentialsClient
     }
     if ($user_identity_id !== null) {
       $request_payload["user_identity_id"] = $user_identity_id;
+    }
+    if ($is_multi_phone_sync_credential !== null) {
+      $request_payload["is_multi_phone_sync_credential"] = $is_multi_phone_sync_credential;
     }
 
     $this->seam->request(
@@ -3884,6 +3967,42 @@ class AcsUsersClient
 
 }
 
+class DevicesSimulateClient
+{
+  private SeamClient $seam;
+  
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+    
+  }
+
+
+  public function remove(
+    string $device_id
+  ): void {
+    $request_payload = [];
+
+    if ($device_id !== null) {
+      $request_payload["device_id"] = $device_id;
+    }
+
+    $this->seam->request(
+      "POST",
+      "/devices/simulate/remove",
+      json: $request_payload,
+      
+    );
+
+
+
+
+
+
+  }
+
+}
+
 class DevicesUnmanagedClient
 {
   private SeamClient $seam;
@@ -3933,7 +4052,9 @@ class DevicesUnmanagedClient
     int $limit = null,
     string $created_before = null,
     string $user_identifier_key = null,
-    mixed $custom_metadata_has = null
+    mixed $custom_metadata_has = null,
+    array $include_if = null,
+    array $exclude_if = null
   ): array {
     $request_payload = [];
 
@@ -3969,6 +4090,12 @@ class DevicesUnmanagedClient
     }
     if ($custom_metadata_has !== null) {
       $request_payload["custom_metadata_has"] = $custom_metadata_has;
+    }
+    if ($include_if !== null) {
+      $request_payload["include_if"] = $include_if;
+    }
+    if ($exclude_if !== null) {
+      $request_payload["exclude_if"] = $exclude_if;
     }
 
     $res = $this->seam->request(
@@ -4319,7 +4446,6 @@ class PhonesSimulateClient
 
 
   public function create_sandbox_phone(
-    string $assa_abloy_credential_service_acs_system_id,
     string $user_identity_id,
     string $custom_sdk_installation_id = null,
     mixed $phone_metadata = null,
@@ -4327,9 +4453,6 @@ class PhonesSimulateClient
   ): Phone {
     $request_payload = [];
 
-    if ($assa_abloy_credential_service_acs_system_id !== null) {
-      $request_payload["assa_abloy_credential_service_acs_system_id"] = $assa_abloy_credential_service_acs_system_id;
-    }
     if ($user_identity_id !== null) {
       $request_payload["user_identity_id"] = $user_identity_id;
     }

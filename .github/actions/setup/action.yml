@@ -1,7 +1,6 @@
 ---
 name: Setup
 description: Setup Node.js and install dependencies.
-
 inputs:
   node_version:
     description: The Node.js version.

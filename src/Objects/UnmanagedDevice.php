@@ -27,6 +27,10 @@ class UnmanagedDevice
             created_at: $json->created_at,
             is_managed: $json->is_managed,
             properties: UnmanagedDeviceProperties::from_json($json->properties),
+            can_remotely_unlock: $json->can_remotely_unlock ?? null,
+            can_remotely_lock: $json->can_remotely_lock ?? null,
+            can_program_online_access_codes: $json->can_program_online_access_codes ?? null,
+            can_simulate_removal: $json->can_simulate_removal ?? null,
         );
     }
   
@@ -43,6 +47,10 @@ class UnmanagedDevice
         public string $created_at,
         public bool $is_managed,
         public UnmanagedDeviceProperties $properties,
+        public bool | null $can_remotely_unlock,
+        public bool | null $can_remotely_lock,
+        public bool | null $can_program_online_access_codes,
+        public bool | null $can_simulate_removal,
     ) {
     }
   
