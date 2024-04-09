@@ -1,0 +1,36 @@
+name: Publish
+
+run-name: Publish ${{ github.ref_name }}
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  release:
+    name: GitHub Releases
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate release notes
+        id: changelog
+        run: |
+          mkdir tmp
+          outfile=tmp/changelog.txt
+          echo "outfile=${outfile}" >> $GITHUB_OUTPUT
+          npx standard-changelog@^2.0.0 --release-count 2 --infile $outfile.tmp --outfile $outfile.tmp
+          sed '1,3d' $outfile.tmp > $outfile
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          files: ''
+          body_path: ${{ github.workspace }}/${{ steps.changelog.outputs.outfile }}
