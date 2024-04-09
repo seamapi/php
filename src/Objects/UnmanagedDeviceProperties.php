@@ -11,6 +11,7 @@ class UnmanagedDeviceProperties
             return null;
         }
         return new self(
+            accessory_keypad: isset($json->accessory_keypad) ? UnmanagedDeviceAccessoryKeypad::from_json($json->accessory_keypad) : null,
             name: $json->name,
             online: $json->online,
             manufacturer: $json->manufacturer ?? null,
@@ -27,6 +28,7 @@ class UnmanagedDeviceProperties
 
     
     public function __construct(
+        public UnmanagedDeviceAccessoryKeypad | null $accessory_keypad,
         public string $name,
         public bool $online,
         public string | null $manufacturer,
