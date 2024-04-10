@@ -20,8 +20,14 @@ use Seam\Objects\Workspace;
 use Seam\Objects\AcsSystem;
 use Seam\Objects\AcsAccessGroup;
 use Seam\Objects\AcsUser;
+use Seam\Objects\AcsEntrance;
+use Seam\Objects\AcsCredentialProvisioningAutomation;
+use Seam\Objects\AcsCredentialPool;
+use Seam\Objects\AcsCredential;
 use Seam\Objects\EnrollmentAutomation;
 use Seam\Objects\Phone;
+use Seam\Objects\UserIdentity;
+use Seam\Objects\Network;
 
 use GuzzleHttp\Client as HTTPClient;
 use \Exception as Exception;
@@ -1706,46 +1712,46 @@ class NetworksClient
 
   public function get(
     string $network_id
-  ): void {
+  ): Network {
     $request_payload = [];
 
     if ($network_id !== null) {
       $request_payload["network_id"] = $network_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/networks/get",
       json: $request_payload,
-      
+      inner_object: "network",
     );
 
 
 
 
 
-
+    return Network::from_json($res);
   }
 
   public function list(
     
-  ): void {
+  ): array {
     $request_payload = [];
 
 
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/networks/list",
       json: $request_payload,
-      
+      inner_object: "networks",
     );
 
 
 
 
 
-
+    return array_map(fn ($r) => Network::from_json($r), $res);
   }
 
 }
@@ -2200,7 +2206,7 @@ class UserIdentitiesClient
     string $email_address = null,
     string $phone_number = null,
     string $full_name = null
-  ): void {
+  ): UserIdentity {
     $request_payload = [];
 
     if ($user_identity_key !== null) {
@@ -2216,18 +2222,18 @@ class UserIdentitiesClient
       $request_payload["full_name"] = $full_name;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/user_identities/create",
       json: $request_payload,
-      
+      inner_object: "user_identity",
     );
 
 
 
 
 
-
+    return UserIdentity::from_json($res);
   }
 
   public function delete(
@@ -2256,7 +2262,7 @@ class UserIdentitiesClient
   public function get(
     string $user_identity_id = null,
     string $user_identity_key = null
-  ): void {
+  ): UserIdentity {
     $request_payload = [];
 
     if ($user_identity_id !== null) {
@@ -2266,18 +2272,18 @@ class UserIdentitiesClient
       $request_payload["user_identity_key"] = $user_identity_key;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/user_identities/get",
       json: $request_payload,
-      
+      inner_object: "user_identity",
     );
 
 
 
 
 
-
+    return UserIdentity::from_json($res);
   }
 
   public function grant_access_to_device(
@@ -2309,14 +2315,14 @@ class UserIdentitiesClient
 
   public function list(
     string $credential_manager_acs_system_id = null
-  ): void {
+  ): array {
     $request_payload = [];
 
     if ($credential_manager_acs_system_id !== null) {
       $request_payload["credential_manager_acs_system_id"] = $credential_manager_acs_system_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/user_identities/list",
       json: $request_payload,
@@ -2327,76 +2333,76 @@ class UserIdentitiesClient
 
 
 
-
+    return array_map(fn ($r) => UserIdentity::from_json($r), $res);
   }
 
   public function list_accessible_devices(
     string $user_identity_id
-  ): void {
+  ): array {
     $request_payload = [];
 
     if ($user_identity_id !== null) {
       $request_payload["user_identity_id"] = $user_identity_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/user_identities/list_accessible_devices",
       json: $request_payload,
-      
+      inner_object: "devices",
     );
 
 
 
 
 
-
+    return array_map(fn ($r) => Device::from_json($r), $res);
   }
 
   public function list_acs_systems(
     string $user_identity_id
-  ): void {
+  ): array {
     $request_payload = [];
 
     if ($user_identity_id !== null) {
       $request_payload["user_identity_id"] = $user_identity_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/user_identities/list_acs_systems",
       json: $request_payload,
-      
+      inner_object: "acs_systems",
     );
 
 
 
 
 
-
+    return array_map(fn ($r) => AcsSystem::from_json($r), $res);
   }
 
   public function list_acs_users(
     string $user_identity_id
-  ): void {
+  ): array {
     $request_payload = [];
 
     if ($user_identity_id !== null) {
       $request_payload["user_identity_id"] = $user_identity_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/user_identities/list_acs_users",
       json: $request_payload,
-      
+      inner_object: "acs_users",
     );
 
 
 
 
 
-
+    return array_map(fn ($r) => AcsUser::from_json($r), $res);
   }
 
   public function remove_acs_user(
@@ -2645,7 +2651,7 @@ class WorkspacesClient
     bool $is_sandbox = null,
     string $webview_primary_button_color = null,
     string $webview_logo_shape = null
-  ): void {
+  ): Workspace {
     $request_payload = [];
 
     if ($name !== null) {
@@ -2664,18 +2670,18 @@ class WorkspacesClient
       $request_payload["webview_logo_shape"] = $webview_logo_shape;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/workspaces/create",
       json: $request_payload,
-      
+      inner_object: "workspace",
     );
 
 
 
 
 
-
+    return Workspace::from_json($res);
   }
 
   public function get(
@@ -3010,31 +3016,31 @@ class AcsAccessGroupsClient
 
   public function get(
     string $acs_access_group_id
-  ): void {
+  ): AcsAccessGroup {
     $request_payload = [];
 
     if ($acs_access_group_id !== null) {
       $request_payload["acs_access_group_id"] = $acs_access_group_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/access_groups/get",
       json: $request_payload,
-      
+      inner_object: "acs_access_group",
     );
 
 
 
 
 
-
+    return AcsAccessGroup::from_json($res);
   }
 
   public function list(
     string $acs_system_id = null,
     string $acs_user_id = null
-  ): void {
+  ): array {
     $request_payload = [];
 
     if ($acs_system_id !== null) {
@@ -3044,41 +3050,41 @@ class AcsAccessGroupsClient
       $request_payload["acs_user_id"] = $acs_user_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/access_groups/list",
       json: $request_payload,
-      
+      inner_object: "acs_access_groups",
     );
 
 
 
 
 
-
+    return array_map(fn ($r) => AcsAccessGroup::from_json($r), $res);
   }
 
   public function list_users(
     string $acs_access_group_id
-  ): void {
+  ): array {
     $request_payload = [];
 
     if ($acs_access_group_id !== null) {
       $request_payload["acs_access_group_id"] = $acs_access_group_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/access_groups/list_users",
       json: $request_payload,
-      
+      inner_object: "acs_users",
     );
 
 
 
 
 
-
+    return array_map(fn ($r) => AcsUser::from_json($r), $res);
   }
 
   public function remove_user(
@@ -3148,25 +3154,25 @@ class AcsCredentialPoolsClient
 
   public function list(
     string $acs_system_id
-  ): void {
+  ): array {
     $request_payload = [];
 
     if ($acs_system_id !== null) {
       $request_payload["acs_system_id"] = $acs_system_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/credential_pools/list",
       json: $request_payload,
-      
+      inner_object: "acs_credential_pools",
     );
 
 
 
 
 
-
+    return array_map(fn ($r) => AcsCredentialPool::from_json($r), $res);
   }
 
 }
@@ -3188,7 +3194,7 @@ class AcsCredentialProvisioningAutomationsClient
     string $acs_credential_pool_id = null,
     bool $create_credential_manager_user = null,
     string $credential_manager_acs_user_id = null
-  ): void {
+  ): AcsCredentialProvisioningAutomation {
     $request_payload = [];
 
     if ($user_identity_id !== null) {
@@ -3207,18 +3213,18 @@ class AcsCredentialProvisioningAutomationsClient
       $request_payload["credential_manager_acs_user_id"] = $credential_manager_acs_user_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/credential_provisioning_automations/launch",
       json: $request_payload,
-      
+      inner_object: "acs_credential_provisioning_automation",
     );
 
 
 
 
 
-
+    return AcsCredentialProvisioningAutomation::from_json($res);
   }
 
 }
@@ -3271,7 +3277,7 @@ class AcsCredentialsClient
     mixed $visionline_metadata = null,
     string $starts_at = null,
     string $ends_at = null
-  ): void {
+  ): AcsCredential {
     $request_payload = [];
 
     if ($acs_user_id !== null) {
@@ -3302,18 +3308,18 @@ class AcsCredentialsClient
       $request_payload["ends_at"] = $ends_at;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/credentials/create",
       json: $request_payload,
-      
+      inner_object: "acs_credential",
     );
 
 
 
 
 
-
+    return AcsCredential::from_json($res);
   }
 
   public function delete(
@@ -3341,25 +3347,25 @@ class AcsCredentialsClient
 
   public function get(
     string $acs_credential_id
-  ): void {
+  ): AcsCredential {
     $request_payload = [];
 
     if ($acs_credential_id !== null) {
       $request_payload["acs_credential_id"] = $acs_credential_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/credentials/get",
       json: $request_payload,
-      
+      inner_object: "acs_credential",
     );
 
 
 
 
 
-
+    return AcsCredential::from_json($res);
   }
 
   public function list(
@@ -3367,7 +3373,7 @@ class AcsCredentialsClient
     string $acs_system_id = null,
     string $user_identity_id = null,
     bool $is_multi_phone_sync_credential = null
-  ): void {
+  ): array {
     $request_payload = [];
 
     if ($acs_user_id !== null) {
@@ -3383,18 +3389,18 @@ class AcsCredentialsClient
       $request_payload["is_multi_phone_sync_credential"] = $is_multi_phone_sync_credential;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/credentials/list",
       json: $request_payload,
-      
+      inner_object: "acs_credentials",
     );
 
 
 
 
 
-
+    return array_map(fn ($r) => AcsCredential::from_json($r), $res);
   }
 
   public function unassign(
@@ -3466,25 +3472,25 @@ class AcsEntrancesClient
 
   public function get(
     string $acs_entrance_id
-  ): void {
+  ): AcsEntrance {
     $request_payload = [];
 
     if ($acs_entrance_id !== null) {
       $request_payload["acs_entrance_id"] = $acs_entrance_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/entrances/get",
       json: $request_payload,
-      
+      inner_object: "acs_entrance",
     );
 
 
 
 
 
-
+    return AcsEntrance::from_json($res);
   }
 
   public function grant_access(
@@ -3517,7 +3523,7 @@ class AcsEntrancesClient
   public function list(
     string $acs_system_id = null,
     string $acs_credential_id = null
-  ): void {
+  ): array {
     $request_payload = [];
 
     if ($acs_system_id !== null) {
@@ -3527,24 +3533,24 @@ class AcsEntrancesClient
       $request_payload["acs_credential_id"] = $acs_credential_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/entrances/list",
       json: $request_payload,
-      
+      inner_object: "acs_entrances",
     );
 
 
 
 
 
-
+    return array_map(fn ($r) => AcsEntrance::from_json($r), $res);
   }
 
   public function list_credentials_with_access(
     string $acs_entrance_id,
     array $include_if = null
-  ): void {
+  ): array {
     $request_payload = [];
 
     if ($acs_entrance_id !== null) {
@@ -3554,18 +3560,18 @@ class AcsEntrancesClient
       $request_payload["include_if"] = $include_if;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/entrances/list_credentials_with_access",
       json: $request_payload,
-      
+      inner_object: "acs_credentials",
     );
 
 
 
 
 
-
+    return array_map(fn ($r) => AcsCredential::from_json($r), $res);
   }
 
 }
@@ -3583,48 +3589,48 @@ class AcsSystemsClient
 
   public function get(
     string $acs_system_id
-  ): void {
+  ): AcsSystem {
     $request_payload = [];
 
     if ($acs_system_id !== null) {
       $request_payload["acs_system_id"] = $acs_system_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/systems/get",
       json: $request_payload,
-      
+      inner_object: "acs_system",
     );
 
 
 
 
 
-
+    return AcsSystem::from_json($res);
   }
 
   public function list(
     string $connected_account_id = null
-  ): void {
+  ): array {
     $request_payload = [];
 
     if ($connected_account_id !== null) {
       $request_payload["connected_account_id"] = $connected_account_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/systems/list",
       json: $request_payload,
-      
+      inner_object: "acs_systems",
     );
 
 
 
 
 
-
+    return array_map(fn ($r) => AcsSystem::from_json($r), $res);
   }
 
 }
@@ -3676,7 +3682,7 @@ class AcsUsersClient
     string $email = null,
     string $phone_number = null,
     string $email_address = null
-  ): void {
+  ): AcsUser {
     $request_payload = [];
 
     if ($acs_system_id !== null) {
@@ -3704,18 +3710,18 @@ class AcsUsersClient
       $request_payload["email_address"] = $email_address;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/users/create",
       json: $request_payload,
-      
+      inner_object: "acs_user",
     );
 
 
 
 
 
-
+    return AcsUser::from_json($res);
   }
 
   public function delete(
@@ -3743,25 +3749,25 @@ class AcsUsersClient
 
   public function get(
     string $acs_user_id
-  ): void {
+  ): AcsUser {
     $request_payload = [];
 
     if ($acs_user_id !== null) {
       $request_payload["acs_user_id"] = $acs_user_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/users/get",
       json: $request_payload,
-      
+      inner_object: "acs_user",
     );
 
 
 
 
 
-
+    return AcsUser::from_json($res);
   }
 
   public function list(
@@ -3769,7 +3775,7 @@ class AcsUsersClient
     string $user_identity_phone_number = null,
     string $user_identity_email_address = null,
     string $acs_system_id = null
-  ): void {
+  ): array {
     $request_payload = [];
 
     if ($user_identity_id !== null) {
@@ -3785,41 +3791,41 @@ class AcsUsersClient
       $request_payload["acs_system_id"] = $acs_system_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/users/list",
       json: $request_payload,
-      
+      inner_object: "acs_users",
     );
 
 
 
 
 
-
+    return array_map(fn ($r) => AcsUser::from_json($r), $res);
   }
 
   public function list_accessible_entrances(
     string $acs_user_id
-  ): void {
+  ): array {
     $request_payload = [];
 
     if ($acs_user_id !== null) {
       $request_payload["acs_user_id"] = $acs_user_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/acs/users/list_accessible_entrances",
       json: $request_payload,
-      
+      inner_object: "acs_entrances",
     );
 
 
 
 
 
-
+    return array_map(fn ($r) => AcsEntrance::from_json($r), $res);
   }
 
   public function remove_from_access_group(
@@ -4750,25 +4756,25 @@ class UserIdentitiesEnrollmentAutomationsClient
 
   public function get(
     string $enrollment_automation_id
-  ): void {
+  ): EnrollmentAutomation {
     $request_payload = [];
 
     if ($enrollment_automation_id !== null) {
       $request_payload["enrollment_automation_id"] = $enrollment_automation_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/user_identities/enrollment_automations/get",
       json: $request_payload,
-      
+      inner_object: "enrollment_automation",
     );
 
 
 
 
 
-
+    return EnrollmentAutomation::from_json($res);
   }
 
   public function launch(
@@ -4800,7 +4806,7 @@ class UserIdentitiesEnrollmentAutomationsClient
       "POST",
       "/user_identities/enrollment_automations/launch",
       json: $request_payload,
-      
+      inner_object: "enrollment_automation",
     );
 
 
@@ -4812,25 +4818,25 @@ class UserIdentitiesEnrollmentAutomationsClient
 
   public function list(
     string $user_identity_id
-  ): void {
+  ): array {
     $request_payload = [];
 
     if ($user_identity_id !== null) {
       $request_payload["user_identity_id"] = $user_identity_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/user_identities/enrollment_automations/list",
       json: $request_payload,
-      
+      inner_object: "enrollment_automations",
     );
 
 
 
 
 
-
+    return array_map(fn ($r) => EnrollmentAutomation::from_json($r), $res);
   }
 
 }

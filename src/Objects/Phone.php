@@ -29,7 +29,7 @@ class Phone
         ),
             created_at: $json->created_at,
             is_managed: $json->is_managed,
-            custom_metadata: $json->custom_metadata ?? null,
+            custom_metadata: $json->custom_metadata,
             can_remotely_unlock: $json->can_remotely_unlock ?? null,
             can_remotely_lock: $json->can_remotely_lock ?? null,
             can_program_online_access_codes: $json->can_program_online_access_codes ?? null,

@@ -14,6 +14,8 @@ class DeviceNukiMetadata
             device_id: $json->device_id,
             device_name: $json->device_name,
             keypad_battery_critical: $json->keypad_battery_critical ?? null,
+            keypad_paired: $json->keypad_paired ?? null,
+            keypad_2_paired: $json->keypad_2_paired ?? null,
         );
     }
   
@@ -23,6 +25,8 @@ class DeviceNukiMetadata
         public string $device_id,
         public string $device_name,
         public bool | null $keypad_battery_critical,
+        public bool | null $keypad_paired,
+        public bool | null $keypad_2_paired,
     ) {
     }
   

@@ -12,10 +12,10 @@ class AcsSystem
         }
         return new self(
             acs_system_id: $json->acs_system_id,
-            external_type: $json->external_type,
-            external_type_display_name: $json->external_type_display_name,
-            system_type: $json->system_type,
-            system_type_display_name: $json->system_type_display_name,
+            external_type: $json->external_type ?? null,
+            external_type_display_name: $json->external_type_display_name ?? null,
+            system_type: $json->system_type ?? null,
+            system_type_display_name: $json->system_type_display_name ?? null,
             name: $json->name,
             created_at: $json->created_at,
             workspace_id: $json->workspace_id,
@@ -30,10 +30,10 @@ class AcsSystem
     
     public function __construct(
         public string $acs_system_id,
-        public string $external_type,
-        public string $external_type_display_name,
-        public string $system_type,
-        public string $system_type_display_name,
+        public string | null $external_type,
+        public string | null $external_type_display_name,
+        public string | null $system_type,
+        public string | null $system_type_display_name,
         public string $name,
         public string $created_at,
         public string $workspace_id,

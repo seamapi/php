@@ -18,7 +18,7 @@ class ConnectedAccount
             account_type_display_name: $json->account_type_display_name,
             errors: $json->errors ?? null,
             warnings: $json->warnings ?? null,
-            custom_metadata: $json->custom_metadata ?? null,
+            custom_metadata: $json->custom_metadata,
             automatically_manage_new_devices: $json->automatically_manage_new_devices,
         );
     }
