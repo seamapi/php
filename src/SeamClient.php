@@ -41,7 +41,6 @@ class SeamClient
   public ConnectedAccountsClient $connected_accounts;
   public DevicesClient $devices;
   public EventsClient $events;
-  public HealthClient $health;
   public LocksClient $locks;
   public NetworksClient $networks;
   public PhonesClient $phones;
@@ -77,7 +76,6 @@ class SeamClient
     $this->connected_accounts = new ConnectedAccountsClient($this);
     $this->devices = new DevicesClient($this);
     $this->events = new EventsClient($this);
-    $this->health = new HealthClient($this);
     $this->locks = new LocksClient($this);
     $this->networks = new NetworksClient($this);
     $this->phones = new PhonesClient($this);
@@ -336,9 +334,8 @@ $this->unmanaged = new AccessCodesUnmanagedClient($seam);
   public function delete(
     string $access_code_id,
     string $device_id = null,
-    bool $sync = null,
-    bool $wait_for_action_attempt = true
-  ): ActionAttempt {
+    bool $sync = null
+  ): void {
     $request_payload = [];
 
     if ($access_code_id !== null) {
@@ -351,22 +348,16 @@ $this->unmanaged = new AccessCodesUnmanagedClient($seam);
       $request_payload["sync"] = $sync;
     }
 
-    $res = $this->seam->request(
+    $this->seam->request(
       "POST",
       "/access_codes/delete",
       json: $request_payload,
-      inner_object: "action_attempt",
+      
     );
 
-    if (!$wait_for_action_attempt) {
-      return ActionAttempt::from_json($res);
-    }
 
-    $action_attempt = $this->seam->action_attempts->poll_until_ready(
-      $res->action_attempt_id
-    );
 
-    return $action_attempt;
+
 
 
   }
@@ -497,9 +488,8 @@ $this->unmanaged = new AccessCodesUnmanagedClient($seam);
     string $max_time_rounding = null,
     string $device_id = null,
     string $type = null,
-    bool $is_managed = null,
-    bool $wait_for_action_attempt = true
-  ): ActionAttempt {
+    bool $is_managed = null
+  ): void {
     $request_payload = [];
 
     if ($access_code_id !== null) {
@@ -557,22 +547,16 @@ $this->unmanaged = new AccessCodesUnmanagedClient($seam);
       $request_payload["is_managed"] = $is_managed;
     }
 
-    $res = $this->seam->request(
+    $this->seam->request(
       "POST",
       "/access_codes/update",
       json: $request_payload,
-      inner_object: "action_attempt",
+      
     );
 
-    if (!$wait_for_action_attempt) {
-      return ActionAttempt::from_json($res);
-    }
 
-    $action_attempt = $this->seam->action_attempts->poll_until_ready(
-      $res->action_attempt_id
-    );
 
-    return $action_attempt;
+
 
 
   }
@@ -1459,63 +1443,6 @@ class EventsClient
 
 
     return array_map(fn ($r) => Event::from_json($r), $res);
-  }
-
-}
-
-class HealthClient
-{
-  private SeamClient $seam;
-    public HealthServiceClient $service;
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-    $this->service = new HealthServiceClient($seam);
-  }
-
-
-  public function get_health(
-    
-  ): void {
-    $request_payload = [];
-
-
-
-    $this->seam->request(
-      "POST",
-      "/health/get_health",
-      json: $request_payload,
-      
-    );
-
-
-
-
-
-
-  }
-
-  public function get_service_health(
-    string $service
-  ): void {
-    $request_payload = [];
-
-    if ($service !== null) {
-      $request_payload["service"] = $service;
-    }
-
-    $this->seam->request(
-      "POST",
-      "/health/get_service_health",
-      json: $request_payload,
-      
-    );
-
-
-
-
-
-
   }
 
 }
@@ -2727,22 +2654,28 @@ class WorkspacesClient
   }
 
   public function reset_sandbox(
-    
-  ): void {
+    bool $wait_for_action_attempt = true
+  ): ActionAttempt {
     $request_payload = [];
 
 
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/workspaces/reset_sandbox",
       json: $request_payload,
-      inner_object: "message",
+      inner_object: "action_attempt",
     );
 
+    if (!$wait_for_action_attempt) {
+      return ActionAttempt::from_json($res);
+    }
 
+    $action_attempt = $this->seam->action_attempts->poll_until_ready(
+      $res->action_attempt_id
+    );
 
-
+    return $action_attempt;
 
 
   }
@@ -2845,9 +2778,8 @@ class AccessCodesUnmanagedClient
 
   public function delete(
     string $access_code_id,
-    bool $sync = null,
-    bool $wait_for_action_attempt = true
-  ): ActionAttempt {
+    bool $sync = null
+  ): void {
     $request_payload = [];
 
     if ($access_code_id !== null) {
@@ -2857,22 +2789,16 @@ class AccessCodesUnmanagedClient
       $request_payload["sync"] = $sync;
     }
 
-    $res = $this->seam->request(
+    $this->seam->request(
       "POST",
       "/access_codes/unmanaged/delete",
       json: $request_payload,
-      inner_object: "action_attempt",
+      
     );
 
-    if (!$wait_for_action_attempt) {
-      return ActionAttempt::from_json($res);
-    }
 
-    $action_attempt = $this->seam->action_attempts->poll_until_ready(
-      $res->action_attempt_id
-    );
 
-    return $action_attempt;
+
 
 
   }
@@ -4147,42 +4073,6 @@ class DevicesUnmanagedClient
 
 }
 
-class HealthServiceClient
-{
-  private SeamClient $seam;
-  
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-    
-  }
-
-
-  public function by_service_name(
-    string $service_name
-  ): void {
-    $request_payload = [];
-
-    if ($service_name !== null) {
-      $request_payload["service_name"] = $service_name;
-    }
-
-    $this->seam->request(
-      "POST",
-      "/health/service/[service_name]",
-      json: $request_payload,
-      
-    );
-
-
-
-
-
-
-  }
-
-}
-
 class NoiseSensorsNoiseThresholdsClient
 {
   private SeamClient $seam;
@@ -4244,9 +4134,8 @@ class NoiseSensorsNoiseThresholdsClient
   public function delete(
     string $noise_threshold_id,
     string $device_id,
-    bool $sync = null,
-    bool $wait_for_action_attempt = true
-  ): ActionAttempt {
+    bool $sync = null
+  ): void {
     $request_payload = [];
 
     if ($noise_threshold_id !== null) {
@@ -4259,22 +4148,16 @@ class NoiseSensorsNoiseThresholdsClient
       $request_payload["sync"] = $sync;
     }
 
-    $res = $this->seam->request(
+    $this->seam->request(
       "POST",
       "/noise_sensors/noise_thresholds/delete",
       json: $request_payload,
-      inner_object: "action_attempt",
+      
     );
 
-    if (!$wait_for_action_attempt) {
-      return ActionAttempt::from_json($res);
-    }
 
-    $action_attempt = $this->seam->action_attempts->poll_until_ready(
-      $res->action_attempt_id
-    );
 
-    return $action_attempt;
+
 
 
   }
@@ -4337,9 +4220,8 @@ class NoiseSensorsNoiseThresholdsClient
     string $starts_daily_at = null,
     string $ends_daily_at = null,
     int $noise_threshold_decibels = null,
-    int $noise_threshold_nrs = null,
-    bool $wait_for_action_attempt = true
-  ): ActionAttempt {
+    int $noise_threshold_nrs = null
+  ): void {
     $request_payload = [];
 
     if ($noise_threshold_id !== null) {
@@ -4367,22 +4249,16 @@ class NoiseSensorsNoiseThresholdsClient
       $request_payload["noise_threshold_nrs"] = $noise_threshold_nrs;
     }
 
-    $res = $this->seam->request(
+    $this->seam->request(
       "POST",
       "/noise_sensors/noise_thresholds/update",
       json: $request_payload,
-      inner_object: "action_attempt",
+      
     );
 
-    if (!$wait_for_action_attempt) {
-      return ActionAttempt::from_json($res);
-    }
 
-    $action_attempt = $this->seam->action_attempts->poll_until_ready(
-      $res->action_attempt_id
-    );
 
-    return $action_attempt;
+
 
 
   }
@@ -4661,7 +4537,7 @@ class ThermostatsClimateSettingSchedulesClient
     int $cooling_set_point_fahrenheit = null,
     int $heating_set_point_fahrenheit = null,
     bool $manual_override_allowed = null
-  ): ClimateSettingSchedule {
+  ): void {
     $request_payload = [];
 
     if ($climate_setting_schedule_id !== null) {
@@ -4704,18 +4580,18 @@ class ThermostatsClimateSettingSchedulesClient
       $request_payload["manual_override_allowed"] = $manual_override_allowed;
     }
 
-    $res = $this->seam->request(
+    $this->seam->request(
       "POST",
       "/thermostats/climate_setting_schedules/update",
       json: $request_payload,
-      inner_object: "climate_setting_schedule",
+      
     );
 
 
 
 
 
-    return ClimateSettingSchedule::from_json($res);
+
   }
 
 }
