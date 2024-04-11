@@ -4,6 +4,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "postversion": "git push --follow-tags",
     "generate": "./scripts/generate.sh",
     "postgenerate": "prettier --write --ignore-path .gitignore ."
   },
