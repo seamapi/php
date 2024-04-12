@@ -11,16 +11,16 @@ class DeviceHoneywellResideoMetadata
             return null;
         }
         return new self(
-            honeywell_resideo_device_id: $json->honeywell_resideo_device_id,
             device_name: $json->device_name,
+            honeywell_resideo_device_id: $json->honeywell_resideo_device_id,
         );
     }
   
 
     
     public function __construct(
-        public string $honeywell_resideo_device_id,
         public string $device_name,
+        public string $honeywell_resideo_device_id,
     ) {
     }
   

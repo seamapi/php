@@ -11,16 +11,16 @@ class ActionAttemptError
             return null;
         }
         return new self(
-            type: $json->type,
             message: $json->message,
+            type: $json->type,
         );
     }
   
 
     
     public function __construct(
-        public string $type,
         public string $message,
+        public string $type,
     ) {
     }
   

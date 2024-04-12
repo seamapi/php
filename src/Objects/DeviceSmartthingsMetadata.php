@@ -13,8 +13,8 @@ class DeviceSmartthingsMetadata
         return new self(
             device_id: $json->device_id,
             device_name: $json->device_name,
-            model: $json->model ?? null,
             location_id: $json->location_id ?? null,
+            model: $json->model ?? null,
         );
     }
   
@@ -23,8 +23,8 @@ class DeviceSmartthingsMetadata
     public function __construct(
         public string $device_id,
         public string $device_name,
-        public string | null $model,
         public string | null $location_id,
+        public string | null $model,
     ) {
     }
   

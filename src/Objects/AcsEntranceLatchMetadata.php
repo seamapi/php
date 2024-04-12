@@ -12,8 +12,8 @@ class AcsEntranceLatchMetadata
         }
         return new self(
             accessibility_type: $json->accessibility_type,
-            name: $json->name,
-            type: $json->type,
+            door_name: $json->door_name,
+            door_type: $json->door_type,
             is_connected: $json->is_connected,
         );
     }
@@ -22,8 +22,8 @@ class AcsEntranceLatchMetadata
     
     public function __construct(
         public string $accessibility_type,
-        public string $name,
-        public string $type,
+        public string $door_name,
+        public string $door_type,
         public bool $is_connected,
     ) {
     }
