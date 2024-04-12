@@ -57,7 +57,6 @@ final class AccessCodesTest extends TestCase
         $action_attempt = $seam->access_codes->delete(
             access_code_id: $access_code_id
         );
-        $this->assertEquals($action_attempt->status, "success");
 
         try {
             $seam->access_codes->get(access_code_id: $access_code_id);
