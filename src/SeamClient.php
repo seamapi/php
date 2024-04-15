@@ -487,12 +487,8 @@ $this->unmanaged = new AccessCodesUnmanagedClient($seam);
     string $starts_at = null,
     bool $sync = null,
     string $type = null,
-<<<<<<< HEAD
-    bool $is_managed = null
-=======
     bool $use_backup_access_code_pool = null,
     bool $use_offline_access_code = null
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
   ): void {
     $request_payload = [];
 
@@ -1329,9 +1325,6 @@ class AcsEntrancesClient
 
 
 
-<<<<<<< HEAD
-class LocksClient
-=======
   }
 
   public function list(
@@ -1391,7 +1384,6 @@ class LocksClient
 }
 
 class AcsSystemsClient
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
 {
   private SeamClient $seam;
   
@@ -2528,11 +2520,6 @@ $this->unmanaged = new DevicesUnmanagedClient($seam);
     return array_map(fn ($r) => DeviceProvider::from_json($r), $res);
   }
 
-<<<<<<< HEAD
-  public function reset_sandbox(
-    bool $wait_for_action_attempt = true
-  ): ActionAttempt {
-=======
   public function update(
     string $device_id,
     mixed $custom_metadata = null,
@@ -2540,7 +2527,6 @@ $this->unmanaged = new DevicesUnmanagedClient($seam);
     string $name = null,
     mixed $properties = null
   ): void {
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
     $request_payload = [];
 
     if ($device_id !== null) {
@@ -2559,26 +2545,16 @@ $this->unmanaged = new DevicesUnmanagedClient($seam);
       $request_payload["properties"] = $properties;
     }
 
-    $res = $this->seam->request(
+    $this->seam->request(
       "POST",
       "/devices/update",
       json: $request_payload,
-<<<<<<< HEAD
-      inner_object: "action_attempt",
-=======
       
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
     );
 
-    if (!$wait_for_action_attempt) {
-      return ActionAttempt::from_json($res);
-    }
 
-    $action_attempt = $this->seam->action_attempts->poll_until_ready(
-      $res->action_attempt_id
-    );
 
-    return $action_attempt;
+
 
 
   }
@@ -2659,12 +2635,6 @@ class DevicesUnmanagedClient
     return UnmanagedDevice::from_json($res);
   }
 
-<<<<<<< HEAD
-  public function delete(
-    string $access_code_id,
-    bool $sync = null
-  ): void {
-=======
   public function list(
     string $connect_webview_id = null,
     string $connected_account_id = null,
@@ -2680,7 +2650,6 @@ class DevicesUnmanagedClient
     string $manufacturer = null,
     string $user_identifier_key = null
   ): array {
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
     $request_payload = [];
 
     if ($connect_webview_id !== null) {
@@ -2723,23 +2692,14 @@ class DevicesUnmanagedClient
       $request_payload["user_identifier_key"] = $user_identifier_key;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/devices/unmanaged/list",
       json: $request_payload,
-<<<<<<< HEAD
-      
-    );
-
-
-
-
-=======
       inner_object: "devices",
     );
 
 
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
 
 
 
@@ -4194,19 +4154,6 @@ class UserIdentitiesClient
 
   }
 
-<<<<<<< HEAD
-}
-
-class NoiseSensorsNoiseThresholdsClient
-{
-  private SeamClient $seam;
-  
-  public function __construct(SeamClient $seam)
-  {
-    $this->seam = $seam;
-    
-  }
-=======
   public function list(
     string $credential_manager_acs_system_id = null
   ): array {
@@ -4245,7 +4192,6 @@ class NoiseSensorsNoiseThresholdsClient
       json: $request_payload,
       inner_object: "devices",
     );
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
 
 
 
@@ -4277,40 +4223,24 @@ class NoiseSensorsNoiseThresholdsClient
     return array_map(fn ($r) => AcsSystem::from_json($r), $res);
   }
 
-<<<<<<< HEAD
-  public function delete(
-    string $noise_threshold_id,
-    string $device_id,
-    bool $sync = null
-  ): void {
-=======
   public function list_acs_users(
     string $user_identity_id
   ): array {
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
     $request_payload = [];
 
     if ($user_identity_id !== null) {
       $request_payload["user_identity_id"] = $user_identity_id;
     }
 
-    $this->seam->request(
+    $res = $this->seam->request(
       "POST",
       "/user_identities/list_acs_users",
       json: $request_payload,
-<<<<<<< HEAD
-      
-=======
       inner_object: "acs_users",
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
     );
 
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
 
 
     return array_map(fn ($r) => AcsUser::from_json($r), $res);
@@ -4371,22 +4301,11 @@ class NoiseSensorsNoiseThresholdsClient
   }
 
   public function update(
-<<<<<<< HEAD
-    string $noise_threshold_id,
-    string $device_id,
-    bool $sync = null,
-    string $name = null,
-    string $starts_daily_at = null,
-    string $ends_daily_at = null,
-    int $noise_threshold_decibels = null,
-    int $noise_threshold_nrs = null
-=======
     string $user_identity_id,
     string $email_address = null,
     string $full_name = null,
     string $phone_number = null,
     string $user_identity_key = null
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
   ): void {
     $request_payload = [];
 
@@ -4413,13 +4332,7 @@ class NoiseSensorsNoiseThresholdsClient
       
     );
 
-<<<<<<< HEAD
 
-
-
-=======
-
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
 
 
 
@@ -4655,24 +4568,8 @@ class WebhooksClient
   }
 
   public function update(
-<<<<<<< HEAD
-    string $climate_setting_schedule_id,
-    string $schedule_type = null,
-    string $name = null,
-    string $schedule_starts_at = null,
-    string $schedule_ends_at = null,
-    bool $automatic_heating_enabled = null,
-    bool $automatic_cooling_enabled = null,
-    string $hvac_mode_setting = null,
-    int $cooling_set_point_celsius = null,
-    int $heating_set_point_celsius = null,
-    int $cooling_set_point_fahrenheit = null,
-    int $heating_set_point_fahrenheit = null,
-    bool $manual_override_allowed = null
-=======
     array $event_types,
     string $webhook_id
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
   ): void {
     $request_payload = [];
 

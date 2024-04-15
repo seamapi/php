@@ -34,18 +34,7 @@ class Phone
           fn ($w) => PhoneWarnings::from_json($w),
           $json->warnings ?? []
         ),
-<<<<<<< HEAD
-            created_at: $json->created_at,
-            is_managed: $json->is_managed,
-            custom_metadata: $json->custom_metadata,
-            can_remotely_unlock: $json->can_remotely_unlock ?? null,
-            can_remotely_lock: $json->can_remotely_lock ?? null,
-            can_program_offline_access_codes: $json->can_program_offline_access_codes ?? null,
-            can_program_online_access_codes: $json->can_program_online_access_codes ?? null,
-            can_simulate_removal: $json->can_simulate_removal ?? null,
-=======
             workspace_id: $json->workspace_id,
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
         );
     }
   
@@ -65,20 +54,11 @@ class Phone
         public string $display_name,
         public array $errors,
         public bool $is_managed,
-<<<<<<< HEAD
-        public mixed $custom_metadata,
-        public bool | null $can_remotely_unlock,
-        public bool | null $can_remotely_lock,
-        public bool | null $can_program_offline_access_codes,
-        public bool | null $can_program_online_access_codes,
-        public bool | null $can_simulate_removal,
-=======
         public PhoneLocation | null $location,
         public string | null $nickname,
         public PhoneProperties $properties,
         public array $warnings,
         public string $workspace_id,
->>>>>>> a5349eae5aa544a3669bb442227dfd28523859f1
     ) {
     }
   
