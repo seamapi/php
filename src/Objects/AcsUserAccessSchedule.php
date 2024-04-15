@@ -11,16 +11,16 @@ class AcsUserAccessSchedule
             return null;
         }
         return new self(
-            starts_at: $json->starts_at,
             ends_at: $json->ends_at,
+            starts_at: $json->starts_at,
         );
     }
   
 
     
     public function __construct(
-        public string $starts_at,
         public string $ends_at,
+        public string $starts_at,
     ) {
     }
   

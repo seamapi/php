@@ -11,30 +11,30 @@ class AcsAccessGroup
             return null;
         }
         return new self(
-            acs_access_group_id: $json->acs_access_group_id,
-            acs_system_id: $json->acs_system_id,
-            workspace_id: $json->workspace_id,
-            name: $json->name,
             access_group_type: $json->access_group_type,
             access_group_type_display_name: $json->access_group_type_display_name,
+            acs_access_group_id: $json->acs_access_group_id,
+            acs_system_id: $json->acs_system_id,
+            created_at: $json->created_at,
             external_type: $json->external_type,
             external_type_display_name: $json->external_type_display_name,
-            created_at: $json->created_at,
+            name: $json->name,
+            workspace_id: $json->workspace_id,
         );
     }
   
 
     
     public function __construct(
-        public string $acs_access_group_id,
-        public string $acs_system_id,
-        public string $workspace_id,
-        public string $name,
         public string $access_group_type,
         public string $access_group_type_display_name,
+        public string $acs_access_group_id,
+        public string $acs_system_id,
+        public string $created_at,
         public string $external_type,
         public string $external_type_display_name,
-        public string $created_at,
+        public string $name,
+        public string $workspace_id,
     ) {
     }
   

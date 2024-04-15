@@ -11,8 +11,8 @@ class UnmanagedDeviceWarnings
             return null;
         }
         return new self(
-            warning_code: $json->warning_code,
             message: $json->message,
+            warning_code: $json->warning_code,
             created_at: $json->created_at ?? null,
         );
     }
@@ -20,8 +20,8 @@ class UnmanagedDeviceWarnings
 
     
     public function __construct(
-        public string $warning_code,
         public string $message,
+        public string $warning_code,
         public string | null $created_at,
     ) {
     }

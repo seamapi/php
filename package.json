@@ -1,16 +1,18 @@
 {
   "name": "@seamapi/php",
   "version": "2.0.0",
+  "type": "module",
   "private": true,
   "license": "MIT",
   "scripts": {
-    "generate": "./scripts/generate.sh",
+    "generate": "node ./scripts/generate.js",
     "postgenerate": "prettier --write --ignore-path .gitignore ."
   },
   "devDependencies": {
     "@prettier/plugin-php": "^0.22.1",
-    "@seamapi/nextlove-sdk-generator": "^1.6.1",
-    "@seamapi/types": "^1.75.0",
+    "@seamapi/nextlove-sdk-generator": "1.8.2",
+    "@seamapi/types": "1.157.1",
+    "del": "^7.1.0",
     "prettier": "^3.0.0"
   }
 }

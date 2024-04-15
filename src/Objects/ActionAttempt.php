@@ -11,22 +11,22 @@ class ActionAttempt
             return null;
         }
         return new self(
-            status: $json->status ?? null,
-            action_type: $json->action_type ?? null,
             action_attempt_id: $json->action_attempt_id ?? null,
-            result: $json->result ?? null,
+            action_type: $json->action_type ?? null,
             error: isset($json->error) ? ActionAttemptError::from_json($json->error) : null,
+            result: $json->result ?? null,
+            status: $json->status ?? null,
         );
     }
   
 
     
     public function __construct(
-        public string | null $status,
-        public string | null $action_type,
         public string | null $action_attempt_id,
-        public mixed $result,
+        public string | null $action_type,
         public ActionAttemptError | null $error,
+        public mixed $result,
+        public string | null $status,
     ) {
     }
   

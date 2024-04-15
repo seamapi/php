@@ -11,26 +11,26 @@ class DeviceTedeeMetadata
             return null;
         }
         return new self(
-            device_id: $json->device_id,
-            serial_number: $json->serial_number,
-            device_name: $json->device_name,
-            device_model: $json->device_model,
             bridge_id: $json->bridge_id,
             bridge_name: $json->bridge_name,
+            device_id: $json->device_id,
+            device_model: $json->device_model,
+            device_name: $json->device_name,
             keypad_id: $json->keypad_id ?? null,
+            serial_number: $json->serial_number,
         );
     }
   
 
     
     public function __construct(
-        public int $device_id,
-        public string $serial_number,
-        public string $device_name,
-        public string $device_model,
         public int $bridge_id,
         public string $bridge_name,
+        public int $device_id,
+        public string $device_model,
+        public string $device_name,
         public int | null $keypad_id,
+        public string $serial_number,
     ) {
     }
   
