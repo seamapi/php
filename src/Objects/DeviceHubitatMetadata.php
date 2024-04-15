@@ -12,8 +12,8 @@ class DeviceHubitatMetadata
         }
         return new self(
             device_id: $json->device_id,
-            device_name: $json->device_name,
             device_label: $json->device_label,
+            device_name: $json->device_name,
         );
     }
   
@@ -21,8 +21,8 @@ class DeviceHubitatMetadata
     
     public function __construct(
         public string $device_id,
-        public string $device_name,
         public string $device_label,
+        public string $device_name,
     ) {
     }
   

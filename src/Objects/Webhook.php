@@ -11,20 +11,20 @@ class Webhook
             return null;
         }
         return new self(
-            webhook_id: $json->webhook_id,
-            url: $json->url,
             event_types: $json->event_types ?? null,
             secret: $json->secret ?? null,
+            url: $json->url,
+            webhook_id: $json->webhook_id,
         );
     }
   
 
     
     public function __construct(
-        public string $webhook_id,
-        public string $url,
         public array | null $event_types,
         public string | null $secret,
+        public string $url,
+        public string $webhook_id,
     ) {
     }
   

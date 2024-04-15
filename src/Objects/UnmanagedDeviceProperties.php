@@ -12,16 +12,16 @@ class UnmanagedDeviceProperties
         }
         return new self(
             accessory_keypad: isset($json->accessory_keypad) ? UnmanagedDeviceAccessoryKeypad::from_json($json->accessory_keypad) : null,
-            name: $json->name,
-            online: $json->online,
-            manufacturer: $json->manufacturer ?? null,
-            image_url: $json->image_url ?? null,
-            image_alt_text: $json->image_alt_text ?? null,
-            battery_level: $json->battery_level ?? null,
             battery: isset($json->battery) ? UnmanagedDeviceBattery::from_json($json->battery) : null,
-            online_access_codes_enabled: $json->online_access_codes_enabled ?? null,
-            offline_access_codes_enabled: $json->offline_access_codes_enabled ?? null,
+            battery_level: $json->battery_level ?? null,
+            image_alt_text: $json->image_alt_text ?? null,
+            image_url: $json->image_url ?? null,
+            manufacturer: $json->manufacturer ?? null,
             model: UnmanagedDeviceModel::from_json($json->model),
+            name: $json->name,
+            offline_access_codes_enabled: $json->offline_access_codes_enabled ?? null,
+            online: $json->online,
+            online_access_codes_enabled: $json->online_access_codes_enabled ?? null,
         );
     }
   
@@ -29,16 +29,16 @@ class UnmanagedDeviceProperties
     
     public function __construct(
         public UnmanagedDeviceAccessoryKeypad | null $accessory_keypad,
-        public string $name,
-        public bool $online,
-        public string | null $manufacturer,
-        public string | null $image_url,
-        public string | null $image_alt_text,
-        public int | null $battery_level,
         public UnmanagedDeviceBattery | null $battery,
-        public bool | null $online_access_codes_enabled,
-        public bool | null $offline_access_codes_enabled,
+        public int | null $battery_level,
+        public string | null $image_alt_text,
+        public string | null $image_url,
+        public string | null $manufacturer,
         public UnmanagedDeviceModel $model,
+        public string $name,
+        public bool | null $offline_access_codes_enabled,
+        public bool $online,
+        public bool | null $online_access_codes_enabled,
     ) {
     }
   

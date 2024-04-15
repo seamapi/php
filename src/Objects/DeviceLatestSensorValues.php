@@ -11,22 +11,22 @@ class DeviceLatestSensorValues
             return null;
         }
         return new self(
-            temperature: DeviceTemperature::from_json($json->temperature),
-            sound: DeviceSound::from_json($json->sound),
+            accelerometer_z: DeviceAccelerometerZ::from_json($json->accelerometer_z),
             humidity: DeviceHumidity::from_json($json->humidity),
             pressure: DevicePressure::from_json($json->pressure),
-            accelerometer_z: DeviceAccelerometerZ::from_json($json->accelerometer_z),
+            sound: DeviceSound::from_json($json->sound),
+            temperature: DeviceTemperature::from_json($json->temperature),
         );
     }
   
 
     
     public function __construct(
-        public DeviceTemperature $temperature,
-        public DeviceSound $sound,
+        public DeviceAccelerometerZ $accelerometer_z,
         public DeviceHumidity $humidity,
         public DevicePressure $pressure,
-        public DeviceAccelerometerZ $accelerometer_z,
+        public DeviceSound $sound,
+        public DeviceTemperature $temperature,
     ) {
     }
   

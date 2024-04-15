@@ -11,19 +11,19 @@ class PhoneAssaAbloyCredentialServiceMetadata
             return null;
         }
         return new self(
-            has_active_endpoint: $json->has_active_endpoint,
             endpoints: array_map(
           fn ($e) => PhoneEndpoints::from_json($e),
           $json->endpoints ?? []
         ),
+            has_active_endpoint: $json->has_active_endpoint,
         );
     }
   
 
     
     public function __construct(
-        public bool $has_active_endpoint,
         public array $endpoints,
+        public bool $has_active_endpoint,
     ) {
     }
   

@@ -11,18 +11,18 @@ class ServiceHealth
             return null;
         }
         return new self(
+            description: $json->description,
             service: $json->service,
             status: $json->status,
-            description: $json->description,
         );
     }
   
 
     
     public function __construct(
+        public string $description,
         public string $service,
         public string $status,
-        public string $description,
     ) {
     }
   
