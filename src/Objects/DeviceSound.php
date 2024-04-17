@@ -20,7 +20,7 @@ class DeviceSound
     
     public function __construct(
         public string $time,
-        public int $value,
+        public float $value,
     ) {
     }
   

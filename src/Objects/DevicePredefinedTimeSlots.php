@@ -30,13 +30,13 @@ class DevicePredefinedTimeSlots
         public string $check_in_time,
         public string $check_out_time,
         public string $dormakaba_oracode_user_level_id,
-        public int $ext_dormakaba_oracode_user_level_prefix,
+        public float $ext_dormakaba_oracode_user_level_prefix,
         public bool $is_24_hour,
         public bool $is_biweekly_mode,
         public bool $is_master,
         public bool $is_one_shot,
         public string $name,
-        public int $prefix,
+        public float $prefix,
     ) {
     }
   

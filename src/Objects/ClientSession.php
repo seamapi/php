@@ -30,7 +30,7 @@ class ClientSession
         public array $connect_webview_ids,
         public array $connected_account_ids,
         public string $created_at,
-        public int $device_count,
+        public float $device_count,
         public string $token,
         public string | null $user_identifier_key,
         public array $user_identity_ids,

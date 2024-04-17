@@ -20,7 +20,7 @@ class DeviceAccelerometerZ
     
     public function __construct(
         public string $time,
-        public int $value,
+        public float $value,
     ) {
     }
   

@@ -29,7 +29,7 @@ class DeviceWyzeMetadata
         public string $device_info_model,
         public string $device_name,
         public string | null $keypad_uuid,
-        public int | null $locker_status_hardlock,
+        public float | null $locker_status_hardlock,
         public string $product_model,
         public string $product_name,
         public string $product_type,
