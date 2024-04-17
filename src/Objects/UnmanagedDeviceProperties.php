@@ -30,7 +30,7 @@ class UnmanagedDeviceProperties
     public function __construct(
         public UnmanagedDeviceAccessoryKeypad | null $accessory_keypad,
         public UnmanagedDeviceBattery | null $battery,
-        public int | null $battery_level,
+        public float | null $battery_level,
         public string | null $image_alt_text,
         public string | null $image_url,
         public string | null $manufacturer,

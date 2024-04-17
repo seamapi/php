@@ -20,7 +20,7 @@ class DeviceTtlockMetadata
     
     public function __construct(
         public string $lock_alias,
-        public int $lock_id,
+        public float $lock_id,
     ) {
     }
   

@@ -25,9 +25,9 @@ class DeviceAvigilonAltaMetadata
     public function __construct(
         public string $entry_name,
         public string $org_name,
-        public int $site_id,
+        public float $site_id,
         public string $site_name,
-        public int $zone_id,
+        public float $zone_id,
         public string $zone_name,
     ) {
     }

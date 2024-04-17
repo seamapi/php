@@ -21,7 +21,7 @@ class DeviceSchlageMetadata
 
     
     public function __construct(
-        public int | null $access_code_length,
+        public float | null $access_code_length,
         public string $device_id,
         public string $device_name,
         public string | null $model,

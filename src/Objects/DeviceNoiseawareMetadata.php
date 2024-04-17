@@ -25,8 +25,8 @@ class DeviceNoiseawareMetadata
         public string $device_id,
         public string $device_model,
         public string $device_name,
-        public int $noise_level_decibel,
-        public int $noise_level_nrs,
+        public float $noise_level_decibel,
+        public float $noise_level_nrs,
     ) {
     }
   

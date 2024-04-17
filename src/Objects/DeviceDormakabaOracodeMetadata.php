@@ -28,13 +28,13 @@ class DeviceDormakabaOracodeMetadata
 
     
     public function __construct(
-        public int | null $device_id,
-        public int $door_id,
+        public float | null $device_id,
+        public float $door_id,
         public bool $door_is_wireless,
         public string $door_name,
         public string | null $iana_timezone,
         public array | null $predefined_time_slots,
-        public int $site_id,
+        public float $site_id,
         public string $site_name,
     ) {
     }
