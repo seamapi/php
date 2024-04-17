@@ -20,7 +20,7 @@ class DeviceSeamBridgeMetadata
 
     
     public function __construct(
-        public int $device_num,
+        public float $device_num,
         public string $name,
         public string | null $unlock_method,
     ) {

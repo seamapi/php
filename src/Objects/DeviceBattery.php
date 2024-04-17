@@ -18,7 +18,7 @@ class DeviceBattery
 
     
     public function __construct(
-        public int $level,
+        public float $level,
     ) {
     }
   

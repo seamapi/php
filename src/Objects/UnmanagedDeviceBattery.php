@@ -18,7 +18,7 @@ class UnmanagedDeviceBattery
 
     
     public function __construct(
-        public int $level,
+        public float $level,
     ) {
     }
   

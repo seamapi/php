@@ -28,9 +28,12 @@ use Seam\Objects\UnmanagedDevice;
 use Seam\Objects\UserIdentity;
 use Seam\Objects\Webhook;
 use Seam\Objects\Workspace;
+use Seam\Utils\PackageVersion;
 
 use GuzzleHttp\Client as HTTPClient;
 use \Exception as Exception;
+
+define('LTS_VERSION', '1.0.0');
 
 class SeamClient
 {
@@ -53,6 +56,7 @@ class SeamClient
 
   public string $api_key;
   public HTTPClient $client;
+  public string $ltsVersion = LTS_VERSION;
 
   public function __construct(
     $api_key,
@@ -60,12 +64,16 @@ class SeamClient
     $throw_http_errors = false
   ) {
     $this->api_key = $api_key;
+    $seam_sdk_version = PackageVersion::get();
     $this->client = new HTTPClient([
       "base_uri" => $endpoint,
       "timeout" => 60.0,
       "headers" => [
         "Authorization" => "Bearer " . $this->api_key,
-        "User-Agent" => "Seam PHP Client 0.0.1",
+        "User-Agent" => "Seam PHP Client ". $seam_sdk_version,
+        "seam-sdk-name" => "seamapi/php",
+        "seam-sdk-version" => $seam_sdk_version,
+        "seam-lts-version" => $this->ltsVersion
       ],
       "http_errors" => $throw_http_errors,
     ]);
@@ -261,7 +269,7 @@ $this->unmanaged = new AccessCodesUnmanagedClient($seam);
     string $max_time_rounding = null,
     string $name = null,
     bool $prefer_native_scheduling = null,
-    int $preferred_code_length = null,
+    float $preferred_code_length = null,
     string $starts_at = null,
     bool $use_backup_access_code_pool = null,
     bool $use_offline_access_code = null
@@ -2437,7 +2445,7 @@ $this->unmanaged = new DevicesUnmanagedClient($seam);
     array $device_types = null,
     array $exclude_if = null,
     array $include_if = null,
-    int $limit = null,
+    float $limit = null,
     string $manufacturer = null,
     string $user_identifier_key = null
   ): array {
@@ -2646,7 +2654,7 @@ class DevicesUnmanagedClient
     array $device_types = null,
     array $exclude_if = null,
     array $include_if = null,
-    int $limit = null,
+    float $limit = null,
     string $manufacturer = null,
     string $user_identifier_key = null
   ): array {
@@ -2786,7 +2794,7 @@ class EventsClient
     array $device_ids = null,
     string $event_type = null,
     array $event_types = null,
-    int $limit = null,
+    float $limit = null,
     string $since = null
   ): array {
     $request_payload = [];
@@ -2887,7 +2895,7 @@ class LocksClient
     array $device_types = null,
     array $exclude_if = null,
     array $include_if = null,
-    int $limit = null,
+    float $limit = null,
     string $manufacturer = null,
     string $user_identifier_key = null
   ): array {
@@ -3090,8 +3098,8 @@ class NoiseSensorsNoiseThresholdsClient
     string $ends_daily_at,
     string $starts_daily_at,
     string $name = null,
-    int $noise_threshold_decibels = null,
-    int $noise_threshold_nrs = null,
+    float $noise_threshold_decibels = null,
+    float $noise_threshold_nrs = null,
     bool $sync = null
   ): NoiseThreshold {
     $request_payload = [];
@@ -3218,8 +3226,8 @@ class NoiseSensorsNoiseThresholdsClient
     string $noise_threshold_id,
     string $ends_daily_at = null,
     string $name = null,
-    int $noise_threshold_decibels = null,
-    int $noise_threshold_nrs = null,
+    float $noise_threshold_decibels = null,
+    float $noise_threshold_nrs = null,
     string $starts_daily_at = null,
     bool $sync = null
   ): void {
@@ -3441,10 +3449,10 @@ class ThermostatsClimateSettingSchedulesClient
     string $schedule_starts_at,
     bool $automatic_cooling_enabled = null,
     bool $automatic_heating_enabled = null,
-    int $cooling_set_point_celsius = null,
-    int $cooling_set_point_fahrenheit = null,
-    int $heating_set_point_celsius = null,
-    int $heating_set_point_fahrenheit = null,
+    float $cooling_set_point_celsius = null,
+    float $cooling_set_point_fahrenheit = null,
+    float $heating_set_point_celsius = null,
+    float $heating_set_point_fahrenheit = null,
     string $hvac_mode_setting = null,
     bool $manual_override_allowed = null,
     string $name = null,
@@ -3587,10 +3595,10 @@ class ThermostatsClimateSettingSchedulesClient
     string $climate_setting_schedule_id,
     bool $automatic_cooling_enabled = null,
     bool $automatic_heating_enabled = null,
-    int $cooling_set_point_celsius = null,
-    int $cooling_set_point_fahrenheit = null,
-    int $heating_set_point_celsius = null,
-    int $heating_set_point_fahrenheit = null,
+    float $cooling_set_point_celsius = null,
+    float $cooling_set_point_fahrenheit = null,
+    float $heating_set_point_celsius = null,
+    float $heating_set_point_fahrenheit = null,
     string $hvac_mode_setting = null,
     bool $manual_override_allowed = null,
     string $name = null,
@@ -3669,8 +3677,8 @@ class ThermostatsClient
 
   public function cool(
     string $device_id,
-    int $cooling_set_point_celsius = null,
-    int $cooling_set_point_fahrenheit = null,
+    float $cooling_set_point_celsius = null,
+    float $cooling_set_point_fahrenheit = null,
     bool $sync = null,
     bool $wait_for_action_attempt = true
   ): ActionAttempt {
@@ -3738,8 +3746,8 @@ class ThermostatsClient
 
   public function heat(
     string $device_id,
-    int $heating_set_point_celsius = null,
-    int $heating_set_point_fahrenheit = null,
+    float $heating_set_point_celsius = null,
+    float $heating_set_point_fahrenheit = null,
     bool $sync = null,
     bool $wait_for_action_attempt = true
   ): ActionAttempt {
@@ -3780,10 +3788,10 @@ class ThermostatsClient
 
   public function heat_cool(
     string $device_id,
-    int $cooling_set_point_celsius = null,
-    int $cooling_set_point_fahrenheit = null,
-    int $heating_set_point_celsius = null,
-    int $heating_set_point_fahrenheit = null,
+    float $cooling_set_point_celsius = null,
+    float $cooling_set_point_fahrenheit = null,
+    float $heating_set_point_celsius = null,
+    float $heating_set_point_fahrenheit = null,
     bool $sync = null,
     bool $wait_for_action_attempt = true
   ): ActionAttempt {
@@ -3839,7 +3847,7 @@ class ThermostatsClient
     array $device_types = null,
     array $exclude_if = null,
     array $include_if = null,
-    int $limit = null,
+    float $limit = null,
     string $manufacturer = null,
     string $user_identifier_key = null
   ): array {

@@ -24,12 +24,12 @@ class DeviceTedeeMetadata
 
     
     public function __construct(
-        public int $bridge_id,
+        public float $bridge_id,
         public string $bridge_name,
-        public int $device_id,
+        public float $device_id,
         public string $device_model,
         public string $device_name,
-        public int | null $keypad_id,
+        public float | null $keypad_id,
         public string $serial_number,
     ) {
     }
