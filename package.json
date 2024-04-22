@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "postversion": "git push --follow-tags",
-    "generate": "node ./scripts/generate.js",
+    "generate": "node generate-routes.js",
     "postgenerate": "npm run format",
     "format": "prettier --write --ignore-path .gitignore ."
   },
