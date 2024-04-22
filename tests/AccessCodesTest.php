@@ -50,7 +50,7 @@ final class AccessCodesTest extends TestCase
             code: "5679"
         );
         $access_code = $seam->access_codes->get(
-           access_code_id: $access_code_id
+            access_code_id: $access_code_id
         );
         $this->assertTrue($access_code->code === "5679");
 
@@ -100,7 +100,7 @@ final class AccessCodesTest extends TestCase
         $this->assertTrue($formatted_ends_at === $end_date->format("Y-m-d"));
 
         $access_codes = $seam->access_codes->create_multiple(
-           device_ids: [$first_device_id, $second_device_id]
+            device_ids: [$first_device_id, $second_device_id]
         );
         $this->assertTrue(count($access_codes) === 2);
     }
@@ -136,18 +136,20 @@ final class AccessCodesTest extends TestCase
         usleep(200000);
 
         $current_managed_access_codes = $seam->access_codes->list(
-           device_id: $device_id
+            device_id: $device_id
         );
         $this->assertTrue(
-            count($managed_access_codes_before_update) + 1 === count($current_managed_access_codes)
+            count($managed_access_codes_before_update) + 1 ===
+                count($current_managed_access_codes)
         );
         $this->assertTrue(
-          !empty(array_filter(
-              $current_managed_access_codes,
-              function ($ac) use ($unmanaged_access_code_id) {
-                return $ac->access_code_id === $unmanaged_access_code_id;
-              }
-            ))
+            !empty(
+                array_filter($current_managed_access_codes, function ($ac) use (
+                    $unmanaged_access_code_id
+                ) {
+                    return $ac->access_code_id === $unmanaged_access_code_id;
+                })
+            )
         );
     }
 }

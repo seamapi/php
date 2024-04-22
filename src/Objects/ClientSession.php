@@ -4,7 +4,6 @@ namespace Seam\Objects;
 
 class ClientSession
 {
-    
     public static function from_json(mixed $json): ClientSession|null
     {
         if (!$json) {
@@ -19,12 +18,10 @@ class ClientSession
             token: $json->token,
             user_identifier_key: $json->user_identifier_key ?? null,
             user_identity_ids: $json->user_identity_ids,
-            workspace_id: $json->workspace_id,
+            workspace_id: $json->workspace_id
         );
     }
-  
 
-    
     public function __construct(
         public string $client_session_id,
         public array $connect_webview_ids,
@@ -32,10 +29,9 @@ class ClientSession
         public string $created_at,
         public float $device_count,
         public string $token,
-        public string | null $user_identifier_key,
+        public string|null $user_identifier_key,
         public array $user_identity_ids,
-        public string $workspace_id,
+        public string $workspace_id
     ) {
     }
-  
 }
