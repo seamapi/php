@@ -1,6 +1,4 @@
 {
   "plugins": ["@prettier/plugin-php"],
-  "parser": "php",
-  "semi": false,
-  "endOfLine": "lf"
+  "parser": "php"
 }
