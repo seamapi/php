@@ -4,6 +4,7 @@ namespace Seam\Objects;
 
 class ConnectedAccount
 {
+    
     public static function from_json(mixed $json): ConnectedAccount|null
     {
         if (!$json) {
@@ -17,25 +18,24 @@ class ConnectedAccount
             created_at: $json->created_at ?? null,
             custom_metadata: $json->custom_metadata,
             errors: $json->errors ?? null,
-            user_identifier: isset($json->user_identifier)
-                ? ConnectedAccountUserIdentifier::from_json(
-                    $json->user_identifier
-                )
-                : null,
-            warnings: $json->warnings ?? null
+            user_identifier: isset($json->user_identifier) ? ConnectedAccountUserIdentifier::from_json($json->user_identifier) : null,
+            warnings: $json->warnings ?? null,
         );
     }
+  
 
+    
     public function __construct(
-        public string|null $account_type,
+        public string | null $account_type,
         public string $account_type_display_name,
         public bool $automatically_manage_new_devices,
-        public string|null $connected_account_id,
-        public string|null $created_at,
+        public string | null $connected_account_id,
+        public string | null $created_at,
         public mixed $custom_metadata,
         public mixed $errors,
-        public ConnectedAccountUserIdentifier|null $user_identifier,
-        public mixed $warnings
+        public ConnectedAccountUserIdentifier | null $user_identifier,
+        public mixed $warnings,
     ) {
     }
+  
 }

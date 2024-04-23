@@ -4,6 +4,7 @@ namespace Seam\Objects;
 
 class UserIdentity
 {
+    
     public static function from_json(mixed $json): UserIdentity|null
     {
         if (!$json) {
@@ -17,19 +18,22 @@ class UserIdentity
             phone_number: $json->phone_number ?? null,
             user_identity_id: $json->user_identity_id,
             user_identity_key: $json->user_identity_key ?? null,
-            workspace_id: $json->workspace_id
+            workspace_id: $json->workspace_id,
         );
     }
+  
 
+    
     public function __construct(
         public string $created_at,
         public string $display_name,
-        public string|null $email_address,
-        public string|null $full_name,
-        public string|null $phone_number,
+        public string | null $email_address,
+        public string | null $full_name,
+        public string | null $phone_number,
         public string $user_identity_id,
-        public string|null $user_identity_key,
-        public string $workspace_id
+        public string | null $user_identity_key,
+        public string $workspace_id,
     ) {
     }
+  
 }

@@ -4,6 +4,7 @@ namespace Seam\Objects;
 
 class UnmanagedAccessCode
 {
+    
     public static function from_json(mixed $json): UnmanagedAccessCode|null
     {
         if (!$json) {
@@ -21,23 +22,26 @@ class UnmanagedAccessCode
             starts_at: $json->starts_at ?? null,
             status: $json->status,
             type: $json->type,
-            warnings: $json->warnings ?? null
+            warnings: $json->warnings ?? null,
         );
     }
+  
 
+    
     public function __construct(
         public string $access_code_id,
-        public string|null $code,
+        public string | null $code,
         public string $created_at,
         public string $device_id,
-        public string|null $ends_at,
+        public string | null $ends_at,
         public mixed $errors,
         public bool $is_managed,
-        public string|null $name,
-        public string|null $starts_at,
+        public string | null $name,
+        public string | null $starts_at,
         public string $status,
         public string $type,
-        public mixed $warnings
+        public mixed $warnings,
     ) {
     }
+  
 }

@@ -4,6 +4,7 @@ namespace Seam\Objects;
 
 class DeviceNestMetadata
 {
+    
     public static function from_json(mixed $json): DeviceNestMetadata|null
     {
         if (!$json) {
@@ -12,14 +13,17 @@ class DeviceNestMetadata
         return new self(
             custom_name: $json->custom_name,
             device_name: $json->device_name,
-            nest_device_id: $json->nest_device_id
+            nest_device_id: $json->nest_device_id,
         );
     }
+  
 
+    
     public function __construct(
         public string $custom_name,
         public string $device_name,
-        public string $nest_device_id
+        public string $nest_device_id,
     ) {
     }
+  
 }

@@ -4,6 +4,7 @@ namespace Seam\Objects;
 
 class DeviceWyzeMetadata
 {
+    
     public static function from_json(mixed $json): DeviceWyzeMetadata|null
     {
         if (!$json) {
@@ -17,19 +18,22 @@ class DeviceWyzeMetadata
             locker_status_hardlock: $json->locker_status_hardlock ?? null,
             product_model: $json->product_model,
             product_name: $json->product_name,
-            product_type: $json->product_type
+            product_type: $json->product_type,
         );
     }
+  
 
+    
     public function __construct(
         public string $device_id,
         public string $device_info_model,
         public string $device_name,
-        public string|null $keypad_uuid,
-        public float|null $locker_status_hardlock,
+        public string | null $keypad_uuid,
+        public float | null $locker_status_hardlock,
         public string $product_model,
         public string $product_name,
-        public string $product_type
+        public string $product_type,
     ) {
     }
+  
 }

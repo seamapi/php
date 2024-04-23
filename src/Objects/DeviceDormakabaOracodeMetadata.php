@@ -4,9 +4,9 @@ namespace Seam\Objects;
 
 class DeviceDormakabaOracodeMetadata
 {
-    public static function from_json(
-        mixed $json
-    ): DeviceDormakabaOracodeMetadata|null {
+    
+    public static function from_json(mixed $json): DeviceDormakabaOracodeMetadata|null
+    {
         if (!$json) {
             return null;
         }
@@ -17,23 +17,26 @@ class DeviceDormakabaOracodeMetadata
             door_name: $json->door_name,
             iana_timezone: $json->iana_timezone ?? null,
             predefined_time_slots: array_map(
-                fn($p) => DevicePredefinedTimeSlots::from_json($p),
-                $json->predefined_time_slots ?? []
-            ),
+          fn ($p) => DevicePredefinedTimeSlots::from_json($p),
+          $json->predefined_time_slots ?? []
+        ),
             site_id: $json->site_id,
-            site_name: $json->site_name
+            site_name: $json->site_name,
         );
     }
+  
 
+    
     public function __construct(
-        public float|null $device_id,
+        public float | null $device_id,
         public float $door_id,
         public bool $door_is_wireless,
         public string $door_name,
-        public string|null $iana_timezone,
-        public array|null $predefined_time_slots,
+        public string | null $iana_timezone,
+        public array | null $predefined_time_slots,
         public float $site_id,
-        public string $site_name
+        public string $site_name,
     ) {
     }
+  
 }
