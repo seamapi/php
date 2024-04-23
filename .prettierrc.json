@@ -1,4 +1,16 @@
 {
   "plugins": ["@prettier/plugin-php"],
-  "parser": "php"
+  "parser": "php",
+
+  "overrides": [
+    {
+      "files": "**/*.{js,json,yml,md}",
+      "options": {
+        "semi": false,
+        "singleQuote": true,
+        "jsxSingleQuote": true,
+        "endOfLine": "lf"
+      }
+    }
+  ]
 }
