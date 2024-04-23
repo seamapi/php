@@ -4,7 +4,6 @@ namespace Seam\Objects;
 
 class AccessCode
 {
-    
     public static function from_json(mixed $json): AccessCode|null
     {
         if (!$json) {
@@ -25,41 +24,40 @@ class AccessCode
             is_offline_access_code: $json->is_offline_access_code,
             is_one_time_use: $json->is_one_time_use,
             is_scheduled_on_device: $json->is_scheduled_on_device ?? null,
-            is_waiting_for_code_assignment: $json->is_waiting_for_code_assignment ?? null,
+            is_waiting_for_code_assignment: $json->is_waiting_for_code_assignment ??
+                null,
             name: $json->name ?? null,
-            pulled_backup_access_code_id: $json->pulled_backup_access_code_id ?? null,
+            pulled_backup_access_code_id: $json->pulled_backup_access_code_id ??
+                null,
             starts_at: $json->starts_at ?? null,
             status: $json->status,
             type: $json->type,
-            warnings: $json->warnings ?? null,
+            warnings: $json->warnings ?? null
         );
     }
-  
 
-    
     public function __construct(
         public string $access_code_id,
-        public string | null $code,
-        public string | null $common_code_key,
+        public string|null $code,
+        public string|null $common_code_key,
         public string $created_at,
         public string $device_id,
-        public string | null $ends_at,
+        public string|null $ends_at,
         public mixed $errors,
-        public bool | null $is_backup,
+        public bool|null $is_backup,
         public bool $is_backup_access_code_available,
         public bool $is_external_modification_allowed,
         public bool $is_managed,
         public bool $is_offline_access_code,
         public bool $is_one_time_use,
-        public bool | null $is_scheduled_on_device,
-        public bool | null $is_waiting_for_code_assignment,
-        public string | null $name,
-        public string | null $pulled_backup_access_code_id,
-        public string | null $starts_at,
+        public bool|null $is_scheduled_on_device,
+        public bool|null $is_waiting_for_code_assignment,
+        public string|null $name,
+        public string|null $pulled_backup_access_code_id,
+        public string|null $starts_at,
         public string $status,
         public string $type,
-        public mixed $warnings,
+        public mixed $warnings
     ) {
     }
-  
 }

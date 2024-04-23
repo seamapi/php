@@ -4,9 +4,9 @@ namespace Seam\Objects;
 
 class DevicePredefinedTimeSlots
 {
-    
-    public static function from_json(mixed $json): DevicePredefinedTimeSlots|null
-    {
+    public static function from_json(
+        mixed $json
+    ): DevicePredefinedTimeSlots|null {
         if (!$json) {
             return null;
         }
@@ -20,12 +20,10 @@ class DevicePredefinedTimeSlots
             is_master: $json->is_master,
             is_one_shot: $json->is_one_shot,
             name: $json->name,
-            prefix: $json->prefix,
+            prefix: $json->prefix
         );
     }
-  
 
-    
     public function __construct(
         public string $check_in_time,
         public string $check_out_time,
@@ -36,8 +34,7 @@ class DevicePredefinedTimeSlots
         public bool $is_master,
         public bool $is_one_shot,
         public string $name,
-        public float $prefix,
+        public float $prefix
     ) {
     }
-  
 }
