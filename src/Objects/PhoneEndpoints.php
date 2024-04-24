@@ -4,7 +4,6 @@ namespace Seam\Objects;
 
 class PhoneEndpoints
 {
-    
     public static function from_json(mixed $json): PhoneEndpoints|null
     {
         if (!$json) {
@@ -12,16 +11,13 @@ class PhoneEndpoints
         }
         return new self(
             endpoint_id: $json->endpoint_id,
-            is_active: $json->is_active,
+            is_active: $json->is_active
         );
     }
-  
 
-    
     public function __construct(
         public string $endpoint_id,
-        public bool $is_active,
+        public bool $is_active
     ) {
     }
-  
 }

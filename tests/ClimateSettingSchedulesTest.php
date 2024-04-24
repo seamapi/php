@@ -51,8 +51,8 @@ final class ClimateSettingSchedulesTest extends TestCase
             manual_override_allowed: true
         );
         $updated_climate_setting_schedule = $seam->thermostats->climate_setting_schedules->get(
-          climate_setting_schedule_id: $climate_setting_schedule_id
-      );
+            climate_setting_schedule_id: $climate_setting_schedule_id
+        );
         $this->assertTrue(
             $updated_climate_setting_schedule->cooling_set_point_celsius == 21
         );
