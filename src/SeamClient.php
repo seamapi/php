@@ -1161,8 +1161,11 @@ class AcsCredentialsClient
         );
     }
 
-    public function update(string $acs_credential_id, string $code): void
-    {
+    public function update(
+        string $acs_credential_id,
+        string $code = null,
+        string $ends_at = null
+    ): void {
         $request_payload = [];
 
         if ($acs_credential_id !== null) {
@@ -1170,6 +1173,9 @@ class AcsCredentialsClient
         }
         if ($code !== null) {
             $request_payload["code"] = $code;
+        }
+        if ($ends_at !== null) {
+            $request_payload["ends_at"] = $ends_at;
         }
 
         $this->seam->request(

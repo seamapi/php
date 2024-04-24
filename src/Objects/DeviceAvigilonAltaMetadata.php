@@ -12,6 +12,7 @@ class DeviceAvigilonAltaMetadata
         }
         return new self(
             entry_name: $json->entry_name,
+            entry_relays_total_count: $json->entry_relays_total_count,
             org_name: $json->org_name,
             site_id: $json->site_id,
             site_name: $json->site_name,
@@ -22,6 +23,7 @@ class DeviceAvigilonAltaMetadata
 
     public function __construct(
         public string $entry_name,
+        public float $entry_relays_total_count,
         public string $org_name,
         public float $site_id,
         public string $site_name,
