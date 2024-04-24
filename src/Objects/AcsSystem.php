@@ -11,7 +11,13 @@ class AcsSystem
         }
         return new self(
             acs_system_id: $json->acs_system_id,
+            can_add_acs_users_to_acs_access_groups: $json->can_add_acs_users_to_acs_access_groups ??
+                null,
             can_automate_enrollment: $json->can_automate_enrollment ?? null,
+            can_create_acs_access_groups: $json->can_create_acs_access_groups ??
+                null,
+            can_remove_acs_users_from_acs_access_groups: $json->can_remove_acs_users_from_acs_access_groups ??
+                null,
             connected_account_ids: $json->connected_account_ids,
             created_at: $json->created_at,
             external_type: $json->external_type ?? null,
@@ -28,7 +34,10 @@ class AcsSystem
 
     public function __construct(
         public string $acs_system_id,
+        public bool|null $can_add_acs_users_to_acs_access_groups,
         public bool|null $can_automate_enrollment,
+        public bool|null $can_create_acs_access_groups,
+        public bool|null $can_remove_acs_users_from_acs_access_groups,
         public array $connected_account_ids,
         public string $created_at,
         public string|null $external_type,
