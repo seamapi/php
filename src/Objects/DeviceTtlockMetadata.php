@@ -9,10 +9,15 @@ class DeviceTtlockMetadata
         if (!$json) {
             return null;
         }
-        return new self(lock_alias: $json->lock_alias, lock_id: $json->lock_id);
+        return new self(
+            feature_value: $json->feature_value,
+            lock_alias: $json->lock_alias,
+            lock_id: $json->lock_id
+        );
     }
 
     public function __construct(
+        public string $feature_value,
         public string $lock_alias,
         public float $lock_id
     ) {
