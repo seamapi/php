@@ -12,8 +12,8 @@
   },
   "devDependencies": {
     "@prettier/plugin-php": "^0.22.1",
-    "@seamapi/nextlove-sdk-generator": "1.8.5",
-    "@seamapi/types": "1.168.0",
+    "@seamapi/nextlove-sdk-generator": "1.9.0",
+    "@seamapi/types": "1.171.0",
     "del": "^7.1.0",
     "prettier": "^3.0.0"
   }
