@@ -1324,6 +1324,25 @@ class AcsSystemsClient
 
         return array_map(fn($r) => AcsSystem::from_json($r), $res);
     }
+
+    public function list_compatible_credential_manager_acs_systems(
+        string $acs_system_id
+    ): array {
+        $request_payload = [];
+
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/acs/systems/list_compatible_credential_manager_acs_systems",
+            json: $request_payload,
+            inner_object: "acs_systems"
+        );
+
+        return array_map(fn($r) => AcsSystem::from_json($r), $res);
+    }
 }
 
 class AcsUsersClient
