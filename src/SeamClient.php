@@ -1141,6 +1141,24 @@ class AcsCredentialsClient
         return array_map(fn($r) => AcsCredential::from_json($r), $res);
     }
 
+    public function list_accessible_entrances(string $acs_credential_id): array
+    {
+        $request_payload = [];
+
+        if ($acs_credential_id !== null) {
+            $request_payload["acs_credential_id"] = $acs_credential_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/acs/credentials/list_accessible_entrances",
+            json: $request_payload,
+            inner_object: "acs_entrances"
+        );
+
+        return array_map(fn($r) => AcsEntrance::from_json($r), $res);
+    }
+
     public function unassign(
         string $acs_credential_id,
         string $acs_user_id
