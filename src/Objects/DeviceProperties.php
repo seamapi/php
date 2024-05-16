@@ -24,6 +24,7 @@ class DeviceProperties
             manufacturer: $json->manufacturer ?? null,
             model: DeviceModel::from_json($json->model),
             name: $json->name,
+            noise_level_decibels: $json->noise_level_decibels ?? null,
             offline_access_codes_enabled: $json->offline_access_codes_enabled ??
                 null,
             online: $json->online,
@@ -221,6 +222,7 @@ class DeviceProperties
         public string|null $manufacturer,
         public DeviceModel $model,
         public string $name,
+        public float|null $noise_level_decibels,
         public bool|null $offline_access_codes_enabled,
         public bool $online,
         public bool|null $online_access_codes_enabled,

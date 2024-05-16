@@ -2981,6 +2981,7 @@ class PhonesSimulateClient
     }
 
     public function create_sandbox_phone(
+        string $credential_manager_acs_system_id,
         string $user_identity_id,
         mixed $assa_abloy_metadata = null,
         string $custom_sdk_installation_id = null,
@@ -2988,6 +2989,11 @@ class PhonesSimulateClient
     ): Phone {
         $request_payload = [];
 
+        if ($credential_manager_acs_system_id !== null) {
+            $request_payload[
+                "credential_manager_acs_system_id"
+            ] = $credential_manager_acs_system_id;
+        }
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
         }
