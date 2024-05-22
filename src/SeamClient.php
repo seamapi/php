@@ -2003,12 +2003,16 @@ class ConnectWebviewsClient
 
     public function list(
         mixed $custom_metadata_has = null,
+        float $limit = null,
         string $user_identifier_key = null
     ): array {
         $request_payload = [];
 
         if ($custom_metadata_has !== null) {
             $request_payload["custom_metadata_has"] = $custom_metadata_has;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
         }
         if ($user_identifier_key !== null) {
             $request_payload["user_identifier_key"] = $user_identifier_key;
