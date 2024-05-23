@@ -20,6 +20,10 @@ class AcsSystem
                 null,
             connected_account_ids: $json->connected_account_ids,
             created_at: $json->created_at,
+            errors: array_map(
+                fn($e) => AcsSystemErrors::from_json($e),
+                $json->errors ?? []
+            ),
             external_type: $json->external_type ?? null,
             external_type_display_name: $json->external_type_display_name ??
                 null,
@@ -28,6 +32,10 @@ class AcsSystem
             name: $json->name,
             system_type: $json->system_type ?? null,
             system_type_display_name: $json->system_type_display_name ?? null,
+            warnings: array_map(
+                fn($w) => AcsSystemWarnings::from_json($w),
+                $json->warnings ?? []
+            ),
             workspace_id: $json->workspace_id
         );
     }
@@ -40,6 +48,7 @@ class AcsSystem
         public bool|null $can_remove_acs_users_from_acs_access_groups,
         public array $connected_account_ids,
         public string $created_at,
+        public array $errors,
         public string|null $external_type,
         public string|null $external_type_display_name,
         public string $image_alt_text,
@@ -47,6 +56,7 @@ class AcsSystem
         public string $name,
         public string|null $system_type,
         public string|null $system_type_display_name,
+        public array $warnings,
         public string $workspace_id
     ) {
     }
