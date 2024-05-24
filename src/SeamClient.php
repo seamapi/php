@@ -1640,7 +1640,7 @@ class ActionAttemptsClient
         $this->seam = $seam;
     }
 
-    public function get(string $action_attempt_id): ActionAttempt
+    public function get(string $action_attempt_id): void
     {
         $request_payload = [];
 
@@ -1648,17 +1648,15 @@ class ActionAttemptsClient
             $request_payload["action_attempt_id"] = $action_attempt_id;
         }
 
-        $res = $this->seam->request(
+        $this->seam->request(
             "POST",
             "/action_attempts/get",
             json: $request_payload,
             inner_object: "action_attempt"
         );
-
-        return ActionAttempt::from_json($res);
     }
 
-    public function list(array $action_attempt_ids): array
+    public function list(array $action_attempt_ids): void
     {
         $request_payload = [];
 
@@ -1666,14 +1664,12 @@ class ActionAttemptsClient
             $request_payload["action_attempt_ids"] = $action_attempt_ids;
         }
 
-        $res = $this->seam->request(
+        $this->seam->request(
             "POST",
             "/action_attempts/list",
             json: $request_payload,
             inner_object: "action_attempts"
         );
-
-        return array_map(fn($r) => ActionAttempt::from_json($r), $res);
     }
     public function poll_until_ready(string $action_attempt_id): ActionAttempt
     {
