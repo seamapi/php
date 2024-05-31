@@ -59,11 +59,11 @@ class SeamClient
     public string $ltsVersion = LTS_VERSION;
 
     public function __construct(
-        $api_key,
+        $api_key = null,
         $endpoint = "https://connect.getseam.com",
         $throw_http_errors = false
     ) {
-        $this->api_key = $api_key;
+        $this->api_key = $api_key ?: (getenv("SEAM_API_KEY") ?: null);
         $seam_sdk_version = PackageVersion::get();
         $this->client = new HTTPClient([
             "base_uri" => $endpoint,
