@@ -18,6 +18,8 @@ class DeviceProperties
                 ? DeviceBattery::from_json($json->battery)
                 : null,
             battery_level: $json->battery_level ?? null,
+            currently_triggering_noise_threshold_ids: $json->currently_triggering_noise_threshold_ids ??
+                null,
             has_direct_power: $json->has_direct_power ?? null,
             image_alt_text: $json->image_alt_text ?? null,
             image_url: $json->image_url ?? null,
@@ -216,6 +218,7 @@ class DeviceProperties
         public DeviceAppearance $appearance,
         public DeviceBattery|null $battery,
         public float|null $battery_level,
+        public array|null $currently_triggering_noise_threshold_ids,
         public bool|null $has_direct_power,
         public string|null $image_alt_text,
         public string|null $image_url,
