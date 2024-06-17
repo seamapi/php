@@ -4073,19 +4073,23 @@ class WorkspacesClient
     }
 
     public function create(
-        string $connect_partner_name,
         string $name,
+        string $company_name = null,
+        string $connect_partner_name = null,
         bool $is_sandbox = null,
         string $webview_logo_shape = null,
         string $webview_primary_button_color = null
     ): Workspace {
         $request_payload = [];
 
-        if ($connect_partner_name !== null) {
-            $request_payload["connect_partner_name"] = $connect_partner_name;
-        }
         if ($name !== null) {
             $request_payload["name"] = $name;
+        }
+        if ($company_name !== null) {
+            $request_payload["company_name"] = $company_name;
+        }
+        if ($connect_partner_name !== null) {
+            $request_payload["connect_partner_name"] = $connect_partner_name;
         }
         if ($is_sandbox !== null) {
             $request_payload["is_sandbox"] = $is_sandbox;
