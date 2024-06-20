@@ -26,7 +26,11 @@ class AcsCredential
             external_type: $json->external_type ?? null,
             external_type_display_name: $json->external_type_display_name ??
                 null,
+            is_latest_desired_state_synced_with_provider: $json->is_latest_desired_state_synced_with_provider ??
+                null,
             is_multi_phone_sync_credential: $json->is_multi_phone_sync_credential ??
+                null,
+            latest_desired_state_synced_with_provider_at: $json->latest_desired_state_synced_with_provider_at ??
                 null,
             parent_acs_credential_id: $json->parent_acs_credential_id ?? null,
             starts_at: $json->starts_at ?? null,
@@ -56,7 +60,9 @@ class AcsCredential
         public array $errors,
         public string|null $external_type,
         public string|null $external_type_display_name,
+        public bool|null $is_latest_desired_state_synced_with_provider,
         public bool|null $is_multi_phone_sync_credential,
+        public string|null $latest_desired_state_synced_with_provider_at,
         public string|null $parent_acs_credential_id,
         public string|null $starts_at,
         public AcsCredentialVisionlineMetadata|null $visionline_metadata,
