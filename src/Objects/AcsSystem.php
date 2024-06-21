@@ -20,10 +20,7 @@ class AcsSystem
                 null,
             connected_account_ids: $json->connected_account_ids,
             created_at: $json->created_at,
-            errors: array_map(
-                fn($e) => AcsSystemErrors::from_json($e),
-                $json->errors ?? []
-            ),
+            errors: $json->errors,
             external_type: $json->external_type ?? null,
             external_type_display_name: $json->external_type_display_name ??
                 null,
