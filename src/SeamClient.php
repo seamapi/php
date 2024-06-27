@@ -2297,6 +2297,36 @@ class DevicesSimulateClient
         $this->seam = $seam;
     }
 
+    public function connect(string $device_id): void
+    {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/devices/simulate/connect",
+            json: $request_payload
+        );
+    }
+
+    public function disconnect(string $device_id): void
+    {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/devices/simulate/disconnect",
+            json: $request_payload
+        );
+    }
+
     public function remove(string $device_id): void
     {
         $request_payload = [];

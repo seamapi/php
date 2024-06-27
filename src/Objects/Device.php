@@ -16,6 +16,9 @@ class Device
                 null,
             can_remotely_lock: $json->can_remotely_lock ?? null,
             can_remotely_unlock: $json->can_remotely_unlock ?? null,
+            can_simulate_connection: $json->can_simulate_connection ?? null,
+            can_simulate_disconnection: $json->can_simulate_disconnection ??
+                null,
             can_simulate_removal: $json->can_simulate_removal ?? null,
             capabilities_supported: $json->capabilities_supported,
             connected_account_id: $json->connected_account_id,
@@ -47,6 +50,8 @@ class Device
         public bool|null $can_program_online_access_codes,
         public bool|null $can_remotely_lock,
         public bool|null $can_remotely_unlock,
+        public bool|null $can_simulate_connection,
+        public bool|null $can_simulate_disconnection,
         public bool|null $can_simulate_removal,
         public array $capabilities_supported,
         public string $connected_account_id,
