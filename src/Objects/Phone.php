@@ -26,10 +26,7 @@ class Phone
             device_id: $json->device_id,
             device_type: $json->device_type,
             display_name: $json->display_name,
-            errors: array_map(
-                fn($e) => PhoneErrors::from_json($e),
-                $json->errors ?? []
-            ),
+            errors: $json->errors,
             is_managed: $json->is_managed,
             location: isset($json->location)
                 ? PhoneLocation::from_json($json->location)
