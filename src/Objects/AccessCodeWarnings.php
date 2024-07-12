@@ -2,23 +2,23 @@
 
 namespace Seam\Objects;
 
-class UnmanagedDeviceErrors
+class AccessCodeWarnings
 {
-    public static function from_json(mixed $json): UnmanagedDeviceErrors|null
+    public static function from_json(mixed $json): AccessCodeWarnings|null
     {
         if (!$json) {
             return null;
         }
         return new self(
-            error_code: $json->error_code,
             message: $json->message,
+            warning_code: $json->warning_code,
             created_at: $json->created_at ?? null
         );
     }
 
     public function __construct(
-        public string $error_code,
         public string $message,
+        public string $warning_code,
         public string|null $created_at
     ) {
     }

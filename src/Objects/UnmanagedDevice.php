@@ -25,10 +25,7 @@ class UnmanagedDevice
             created_at: $json->created_at,
             device_id: $json->device_id,
             device_type: $json->device_type,
-            errors: array_map(
-                fn($e) => UnmanagedDeviceErrors::from_json($e),
-                $json->errors ?? []
-            ),
+            errors: $json->errors,
             is_managed: $json->is_managed,
             properties: UnmanagedDeviceProperties::from_json($json->properties),
             warnings: array_map(
