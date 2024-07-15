@@ -1112,7 +1112,9 @@ class AcsCredentialsClient
         string $acs_user_id = null,
         string $acs_system_id = null,
         string $user_identity_id = null,
-        bool $is_multi_phone_sync_credential = null
+        string $created_before = null,
+        bool $is_multi_phone_sync_credential = null,
+        float $limit = null
     ): array {
         $request_payload = [];
 
@@ -1125,10 +1127,16 @@ class AcsCredentialsClient
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
         }
+        if ($created_before !== null) {
+            $request_payload["created_before"] = $created_before;
+        }
         if ($is_multi_phone_sync_credential !== null) {
             $request_payload[
                 "is_multi_phone_sync_credential"
             ] = $is_multi_phone_sync_credential;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
         }
 
         $res = $this->seam->request(
