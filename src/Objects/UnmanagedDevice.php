@@ -27,6 +27,9 @@ class UnmanagedDevice
             device_type: $json->device_type,
             errors: $json->errors,
             is_managed: $json->is_managed,
+            location: isset($json->location)
+                ? UnmanagedDeviceLocation::from_json($json->location)
+                : null,
             properties: UnmanagedDeviceProperties::from_json($json->properties),
             warnings: array_map(
                 fn($w) => UnmanagedDeviceWarnings::from_json($w),
@@ -51,6 +54,7 @@ class UnmanagedDevice
         public string $device_type,
         public array $errors,
         public bool $is_managed,
+        public UnmanagedDeviceLocation|null $location,
         public UnmanagedDeviceProperties $properties,
         public array $warnings,
         public string $workspace_id

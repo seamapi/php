@@ -2089,12 +2089,17 @@ class ConnectedAccountsClient
         return ConnectedAccount::from_json($res);
     }
 
-    public function list(mixed $custom_metadata_has = null): array
-    {
+    public function list(
+        mixed $custom_metadata_has = null,
+        string $user_identifier_key = null
+    ): array {
         $request_payload = [];
 
         if ($custom_metadata_has !== null) {
             $request_payload["custom_metadata_has"] = $custom_metadata_has;
+        }
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
         $res = $this->seam->request(
