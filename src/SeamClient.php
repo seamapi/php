@@ -1482,6 +1482,8 @@ class AcsUsersClient
 
     public function list(
         string $acs_system_id = null,
+        string $created_before = null,
+        float $limit = null,
         string $user_identity_email_address = null,
         string $user_identity_id = null,
         string $user_identity_phone_number = null
@@ -1490,6 +1492,12 @@ class AcsUsersClient
 
         if ($acs_system_id !== null) {
             $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($created_before !== null) {
+            $request_payload["created_before"] = $created_before;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
         }
         if ($user_identity_email_address !== null) {
             $request_payload[
