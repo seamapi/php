@@ -36,6 +36,10 @@ class AcsUser
             user_identity_id: $json->user_identity_id ?? null,
             user_identity_phone_number: $json->user_identity_phone_number ??
                 null,
+            warnings: array_map(
+                fn($w) => AcsUserWarnings::from_json($w),
+                $json->warnings ?? []
+            ),
             workspace_id: $json->workspace_id
         );
     }
@@ -60,6 +64,7 @@ class AcsUser
         public string|null $user_identity_full_name,
         public string|null $user_identity_id,
         public string|null $user_identity_phone_number,
+        public array $warnings,
         public string $workspace_id
     ) {
     }
