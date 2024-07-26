@@ -29,6 +29,11 @@ class AcsSystem
             name: $json->name,
             system_type: $json->system_type ?? null,
             system_type_display_name: $json->system_type_display_name ?? null,
+            visionline_metadata: isset($json->visionline_metadata)
+                ? AcsSystemVisionlineMetadata::from_json(
+                    $json->visionline_metadata
+                )
+                : null,
             warnings: array_map(
                 fn($w) => AcsSystemWarnings::from_json($w),
                 $json->warnings ?? []
@@ -53,6 +58,7 @@ class AcsSystem
         public string $name,
         public string|null $system_type,
         public string|null $system_type_display_name,
+        public AcsSystemVisionlineMetadata|null $visionline_metadata,
         public array $warnings,
         public string $workspace_id
     ) {
