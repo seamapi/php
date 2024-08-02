@@ -3072,10 +3072,15 @@ class PhonesClient
         );
     }
 
-    public function list(string $owner_user_identity_id = null): array
-    {
+    public function list(
+        string $acs_credential_id = null,
+        string $owner_user_identity_id = null
+    ): array {
         $request_payload = [];
 
+        if ($acs_credential_id !== null) {
+            $request_payload["acs_credential_id"] = $acs_credential_id;
+        }
         if ($owner_user_identity_id !== null) {
             $request_payload[
                 "owner_user_identity_id"
