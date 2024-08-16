@@ -846,6 +846,25 @@ class AcsAccessGroupsClient
         return array_map(fn($r) => AcsAccessGroup::from_json($r), $res);
     }
 
+    public function list_accessible_entrances(
+        string $acs_access_group_id
+    ): array {
+        $request_payload = [];
+
+        if ($acs_access_group_id !== null) {
+            $request_payload["acs_access_group_id"] = $acs_access_group_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/acs/access_groups/list_accessible_entrances",
+            json: $request_payload,
+            inner_object: "acs_entrances"
+        );
+
+        return array_map(fn($r) => AcsEntrance::from_json($r), $res);
+    }
+
     public function list_users(string $acs_access_group_id): array
     {
         $request_payload = [];
@@ -2522,6 +2541,7 @@ class EventsClient
         string $access_code_id = null,
         array $access_code_ids = null,
         array $between = null,
+        string $connect_webview_id = null,
         string $connected_account_id = null,
         string $device_id = null,
         array $device_ids = null,
@@ -2540,6 +2560,9 @@ class EventsClient
         }
         if ($between !== null) {
             $request_payload["between"] = $between;
+        }
+        if ($connect_webview_id !== null) {
+            $request_payload["connect_webview_id"] = $connect_webview_id;
         }
         if ($connected_account_id !== null) {
             $request_payload["connected_account_id"] = $connected_account_id;
