@@ -26,6 +26,7 @@ class AcsUser
             hid_acs_system_id: $json->hid_acs_system_id ?? null,
             is_latest_desired_state_synced_with_provider: $json->is_latest_desired_state_synced_with_provider ??
                 null,
+            is_managed: $json->is_managed,
             is_suspended: $json->is_suspended,
             latest_desired_state_synced_with_provider_at: $json->latest_desired_state_synced_with_provider_at ??
                 null,
@@ -57,6 +58,7 @@ class AcsUser
         public string|null $full_name,
         public string|null $hid_acs_system_id,
         public bool|null $is_latest_desired_state_synced_with_provider,
+        public bool $is_managed,
         public bool $is_suspended,
         public string|null $latest_desired_state_synced_with_provider_at,
         public string|null $phone_number,
