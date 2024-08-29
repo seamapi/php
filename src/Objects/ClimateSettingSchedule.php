@@ -10,8 +10,6 @@ class ClimateSettingSchedule
             return null;
         }
         return new self(
-            automatic_cooling_enabled: $json->automatic_cooling_enabled ?? null,
-            automatic_heating_enabled: $json->automatic_heating_enabled ?? null,
             climate_setting_schedule_id: $json->climate_setting_schedule_id,
             cooling_set_point_celsius: $json->cooling_set_point_celsius ?? null,
             cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
@@ -32,8 +30,6 @@ class ClimateSettingSchedule
     }
 
     public function __construct(
-        public bool|null $automatic_cooling_enabled,
-        public bool|null $automatic_heating_enabled,
         public string $climate_setting_schedule_id,
         public float|null $cooling_set_point_celsius,
         public float|null $cooling_set_point_fahrenheit,

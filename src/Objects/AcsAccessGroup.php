@@ -18,6 +18,7 @@ class AcsAccessGroup
             display_name: $json->display_name,
             external_type: $json->external_type,
             external_type_display_name: $json->external_type_display_name,
+            is_managed: $json->is_managed,
             name: $json->name,
             workspace_id: $json->workspace_id
         );
@@ -32,6 +33,7 @@ class AcsAccessGroup
         public string $display_name,
         public string $external_type,
         public string $external_type_display_name,
+        public bool $is_managed,
         public string $name,
         public string $workspace_id
     ) {
