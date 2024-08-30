@@ -201,6 +201,7 @@ class AccessCodesClient
         string $max_time_rounding = null,
         string $name = null,
         bool $prefer_native_scheduling = null,
+        float $preferred_code_length = null,
         string $starts_at = null,
         bool $sync = null,
         bool $use_backup_access_code_pool = null,
@@ -253,6 +254,9 @@ class AccessCodesClient
             $request_payload[
                 "prefer_native_scheduling"
             ] = $prefer_native_scheduling;
+        }
+        if ($preferred_code_length !== null) {
+            $request_payload["preferred_code_length"] = $preferred_code_length;
         }
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;
@@ -504,6 +508,7 @@ class AccessCodesClient
         string $max_time_rounding = null,
         string $name = null,
         bool $prefer_native_scheduling = null,
+        float $preferred_code_length = null,
         string $starts_at = null,
         bool $sync = null,
         string $type = null,
@@ -560,6 +565,9 @@ class AccessCodesClient
             $request_payload[
                 "prefer_native_scheduling"
             ] = $prefer_native_scheduling;
+        }
+        if ($preferred_code_length !== null) {
+            $request_payload["preferred_code_length"] = $preferred_code_length;
         }
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;
@@ -846,6 +854,25 @@ class AcsAccessGroupsClient
         return array_map(fn($r) => AcsAccessGroup::from_json($r), $res);
     }
 
+    public function list_accessible_entrances(
+        string $acs_access_group_id
+    ): array {
+        $request_payload = [];
+
+        if ($acs_access_group_id !== null) {
+            $request_payload["acs_access_group_id"] = $acs_access_group_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/acs/access_groups/list_accessible_entrances",
+            json: $request_payload,
+            inner_object: "acs_entrances"
+        );
+
+        return array_map(fn($r) => AcsEntrance::from_json($r), $res);
+    }
+
     public function list_users(string $acs_access_group_id): array
     {
         $request_payload = [];
@@ -907,6 +934,53 @@ class AcsClient
         $this->entrances = new AcsEntrancesClient($seam);
         $this->systems = new AcsSystemsClient($seam);
         $this->users = new AcsUsersClient($seam);
+    }
+}
+
+class AcsAccessGroupsUnmanagedClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(string $acs_access_group_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_access_group_id !== null) {
+            $request_payload["acs_access_group_id"] = $acs_access_group_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/access_groups/unmanaged/get",
+            json: $request_payload,
+            inner_object: "acs_access_group"
+        );
+    }
+
+    public function list(
+        string $acs_system_id = null,
+        string $acs_user_id = null
+    ): void {
+        $request_payload = [];
+
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/access_groups/unmanaged/list",
+            json: $request_payload,
+            inner_object: "acs_access_groups"
+        );
     }
 }
 
@@ -1208,6 +1282,57 @@ class AcsCredentialsClient
             "POST",
             "/acs/credentials/update",
             json: $request_payload
+        );
+    }
+}
+
+class AcsCredentialsUnmanagedClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(string $acs_credential_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_credential_id !== null) {
+            $request_payload["acs_credential_id"] = $acs_credential_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/credentials/unmanaged/get",
+            json: $request_payload,
+            inner_object: "acs_credential"
+        );
+    }
+
+    public function list(
+        string $acs_user_id = null,
+        string $acs_system_id = null,
+        string $user_identity_id = null
+    ): void {
+        $request_payload = [];
+
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/credentials/unmanaged/list",
+            json: $request_payload,
+            inner_object: "acs_credentials"
         );
     }
 }
@@ -1643,6 +1768,69 @@ class AcsUsersClient
             "POST",
             "/acs/users/update",
             json: $request_payload
+        );
+    }
+}
+
+class AcsUsersUnmanagedClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(string $acs_user_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/users/unmanaged/get",
+            json: $request_payload,
+            inner_object: "acs_user"
+        );
+    }
+
+    public function list(
+        string $acs_system_id = null,
+        float $limit = null,
+        string $user_identity_email_address = null,
+        string $user_identity_id = null,
+        string $user_identity_phone_number = null
+    ): void {
+        $request_payload = [];
+
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($user_identity_email_address !== null) {
+            $request_payload[
+                "user_identity_email_address"
+            ] = $user_identity_email_address;
+        }
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+        if ($user_identity_phone_number !== null) {
+            $request_payload[
+                "user_identity_phone_number"
+            ] = $user_identity_phone_number;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/users/unmanaged/list",
+            json: $request_payload,
+            inner_object: "acs_users"
         );
     }
 }
@@ -2522,6 +2710,7 @@ class EventsClient
         string $access_code_id = null,
         array $access_code_ids = null,
         array $between = null,
+        string $connect_webview_id = null,
         string $connected_account_id = null,
         string $device_id = null,
         array $device_ids = null,
@@ -2540,6 +2729,9 @@ class EventsClient
         }
         if ($between !== null) {
             $request_payload["between"] = $between;
+        }
+        if ($connect_webview_id !== null) {
+            $request_payload["connect_webview_id"] = $connect_webview_id;
         }
         if ($connected_account_id !== null) {
             $request_payload["connected_account_id"] = $connected_account_id;
@@ -3154,8 +3346,6 @@ class ThermostatsClimateSettingSchedulesClient
         string $device_id,
         string $schedule_ends_at,
         string $schedule_starts_at,
-        bool $automatic_cooling_enabled = null,
-        bool $automatic_heating_enabled = null,
         float $cooling_set_point_celsius = null,
         float $cooling_set_point_fahrenheit = null,
         float $heating_set_point_celsius = null,
@@ -3175,16 +3365,6 @@ class ThermostatsClimateSettingSchedulesClient
         }
         if ($schedule_starts_at !== null) {
             $request_payload["schedule_starts_at"] = $schedule_starts_at;
-        }
-        if ($automatic_cooling_enabled !== null) {
-            $request_payload[
-                "automatic_cooling_enabled"
-            ] = $automatic_cooling_enabled;
-        }
-        if ($automatic_heating_enabled !== null) {
-            $request_payload[
-                "automatic_heating_enabled"
-            ] = $automatic_heating_enabled;
         }
         if ($cooling_set_point_celsius !== null) {
             $request_payload[
@@ -3298,8 +3478,6 @@ class ThermostatsClimateSettingSchedulesClient
 
     public function update(
         string $climate_setting_schedule_id,
-        bool $automatic_cooling_enabled = null,
-        bool $automatic_heating_enabled = null,
         float $cooling_set_point_celsius = null,
         float $cooling_set_point_fahrenheit = null,
         float $heating_set_point_celsius = null,
@@ -3317,16 +3495,6 @@ class ThermostatsClimateSettingSchedulesClient
             $request_payload[
                 "climate_setting_schedule_id"
             ] = $climate_setting_schedule_id;
-        }
-        if ($automatic_cooling_enabled !== null) {
-            $request_payload[
-                "automatic_cooling_enabled"
-            ] = $automatic_cooling_enabled;
-        }
-        if ($automatic_heating_enabled !== null) {
-            $request_payload[
-                "automatic_heating_enabled"
-            ] = $automatic_heating_enabled;
         }
         if ($cooling_set_point_celsius !== null) {
             $request_payload[
