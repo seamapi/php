@@ -19,6 +19,7 @@ class AcsUser
             display_name: $json->display_name,
             email: $json->email ?? null,
             email_address: $json->email_address ?? null,
+            errors: $json->errors ?? null,
             external_type: $json->external_type ?? null,
             external_type_display_name: $json->external_type_display_name ??
                 null,
@@ -26,6 +27,7 @@ class AcsUser
             hid_acs_system_id: $json->hid_acs_system_id ?? null,
             is_latest_desired_state_synced_with_provider: $json->is_latest_desired_state_synced_with_provider ??
                 null,
+            is_managed: $json->is_managed,
             is_suspended: $json->is_suspended,
             latest_desired_state_synced_with_provider_at: $json->latest_desired_state_synced_with_provider_at ??
                 null,
@@ -36,10 +38,7 @@ class AcsUser
             user_identity_id: $json->user_identity_id ?? null,
             user_identity_phone_number: $json->user_identity_phone_number ??
                 null,
-            warnings: array_map(
-                fn($w) => AcsUserWarnings::from_json($w),
-                $json->warnings ?? []
-            ),
+            warnings: $json->warnings,
             workspace_id: $json->workspace_id
         );
     }
@@ -52,11 +51,13 @@ class AcsUser
         public string $display_name,
         public string|null $email,
         public string|null $email_address,
+        public mixed $errors,
         public string|null $external_type,
         public string|null $external_type_display_name,
         public string|null $full_name,
         public string|null $hid_acs_system_id,
         public bool|null $is_latest_desired_state_synced_with_provider,
+        public bool $is_managed,
         public bool $is_suspended,
         public string|null $latest_desired_state_synced_with_provider_at,
         public string|null $phone_number,
