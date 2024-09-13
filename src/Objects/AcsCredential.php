@@ -28,6 +28,7 @@ class AcsCredential
                 null,
             is_latest_desired_state_synced_with_provider: $json->is_latest_desired_state_synced_with_provider ??
                 null,
+            is_managed: $json->is_managed,
             is_multi_phone_sync_credential: $json->is_multi_phone_sync_credential ??
                 null,
             latest_desired_state_synced_with_provider_at: $json->latest_desired_state_synced_with_provider_at ??
@@ -61,6 +62,7 @@ class AcsCredential
         public string|null $external_type,
         public string|null $external_type_display_name,
         public bool|null $is_latest_desired_state_synced_with_provider,
+        public bool $is_managed,
         public bool|null $is_multi_phone_sync_credential,
         public string|null $latest_desired_state_synced_with_provider_at,
         public string|null $parent_acs_credential_id,
