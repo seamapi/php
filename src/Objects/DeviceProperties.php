@@ -154,18 +154,16 @@ class DeviceProperties
             supported_code_lengths: $json->supported_code_lengths ?? null,
             supports_backup_access_code_pool: $json->supports_backup_access_code_pool ??
                 null,
-            active_climate_setting_schedule: isset(
-                $json->active_climate_setting_schedule
-            )
-                ? DeviceActiveClimateSettingSchedule::from_json(
-                    $json->active_climate_setting_schedule
+            active_thermostat_schedule: isset($json->active_thermostat_schedule)
+                ? DeviceActiveThermostatSchedule::from_json(
+                    $json->active_thermostat_schedule
                 )
                 : null,
+            available_climate_presets: array_map(
+                fn($a) => DeviceAvailableClimatePresets::from_json($a),
+                $json->available_climate_presets ?? []
+            ),
             available_hvac_mode_settings: $json->available_hvac_mode_settings ??
-                null,
-            can_enable_automatic_cooling: $json->can_enable_automatic_cooling ??
-                null,
-            can_enable_automatic_heating: $json->can_enable_automatic_heating ??
                 null,
             current_climate_setting: isset($json->current_climate_setting)
                 ? DeviceCurrentClimateSetting::from_json(
@@ -177,14 +175,12 @@ class DeviceProperties
                     $json->default_climate_setting
                 )
                 : null,
-            fan_mode_setting: $json->fan_mode_setting ?? null,
-            is_climate_setting_schedule_active: $json->is_climate_setting_schedule_active ??
+            fallback_climate_preset_key: $json->fallback_climate_preset_key ??
                 null,
+            fan_mode_setting: $json->fan_mode_setting ?? null,
             is_cooling: $json->is_cooling ?? null,
-            is_cooling_available: $json->is_cooling_available ?? null,
             is_fan_running: $json->is_fan_running ?? null,
             is_heating: $json->is_heating ?? null,
-            is_heating_available: $json->is_heating_available ?? null,
             is_temporary_manual_override_active: $json->is_temporary_manual_override_active ??
                 null,
             max_cooling_set_point_celsius: $json->max_cooling_set_point_celsius ??
@@ -268,19 +264,16 @@ class DeviceProperties
         public float|null $max_active_codes_supported,
         public array|null $supported_code_lengths,
         public bool|null $supports_backup_access_code_pool,
-        public DeviceActiveClimateSettingSchedule|null $active_climate_setting_schedule,
+        public DeviceActiveThermostatSchedule|null $active_thermostat_schedule,
+        public array|null $available_climate_presets,
         public array|null $available_hvac_mode_settings,
-        public bool|null $can_enable_automatic_cooling,
-        public bool|null $can_enable_automatic_heating,
         public DeviceCurrentClimateSetting|null $current_climate_setting,
         public DeviceDefaultClimateSetting|null $default_climate_setting,
+        public string|null $fallback_climate_preset_key,
         public string|null $fan_mode_setting,
-        public bool|null $is_climate_setting_schedule_active,
         public bool|null $is_cooling,
-        public bool|null $is_cooling_available,
         public bool|null $is_fan_running,
         public bool|null $is_heating,
-        public bool|null $is_heating_available,
         public bool|null $is_temporary_manual_override_active,
         public float|null $max_cooling_set_point_celsius,
         public float|null $max_cooling_set_point_fahrenheit,
