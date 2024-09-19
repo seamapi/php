@@ -12,7 +12,6 @@ use Seam\Objects\AcsSystem;
 use Seam\Objects\AcsUser;
 use Seam\Objects\ActionAttempt;
 use Seam\Objects\ClientSession;
-use Seam\Objects\ClimateSettingSchedule;
 use Seam\Objects\ConnectWebview;
 use Seam\Objects\ConnectedAccount;
 use Seam\Objects\Device;
@@ -23,6 +22,7 @@ use Seam\Objects\Network;
 use Seam\Objects\NoiseThreshold;
 use Seam\Objects\Phone;
 use Seam\Objects\ServiceHealth;
+use Seam\Objects\ThermostatSchedule;
 use Seam\Objects\UnmanagedAccessCode;
 use Seam\Objects\UnmanagedDevice;
 use Seam\Objects\UserIdentity;
@@ -201,6 +201,7 @@ class AccessCodesClient
         string $max_time_rounding = null,
         string $name = null,
         bool $prefer_native_scheduling = null,
+        float $preferred_code_length = null,
         string $starts_at = null,
         bool $sync = null,
         bool $use_backup_access_code_pool = null,
@@ -253,6 +254,9 @@ class AccessCodesClient
             $request_payload[
                 "prefer_native_scheduling"
             ] = $prefer_native_scheduling;
+        }
+        if ($preferred_code_length !== null) {
+            $request_payload["preferred_code_length"] = $preferred_code_length;
         }
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;
@@ -504,6 +508,7 @@ class AccessCodesClient
         string $max_time_rounding = null,
         string $name = null,
         bool $prefer_native_scheduling = null,
+        float $preferred_code_length = null,
         string $starts_at = null,
         bool $sync = null,
         string $type = null,
@@ -560,6 +565,9 @@ class AccessCodesClient
             $request_payload[
                 "prefer_native_scheduling"
             ] = $prefer_native_scheduling;
+        }
+        if ($preferred_code_length !== null) {
+            $request_payload["preferred_code_length"] = $preferred_code_length;
         }
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;
@@ -846,6 +854,25 @@ class AcsAccessGroupsClient
         return array_map(fn($r) => AcsAccessGroup::from_json($r), $res);
     }
 
+    public function list_accessible_entrances(
+        string $acs_access_group_id
+    ): array {
+        $request_payload = [];
+
+        if ($acs_access_group_id !== null) {
+            $request_payload["acs_access_group_id"] = $acs_access_group_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/acs/access_groups/list_accessible_entrances",
+            json: $request_payload,
+            inner_object: "acs_entrances"
+        );
+
+        return array_map(fn($r) => AcsEntrance::from_json($r), $res);
+    }
+
     public function list_users(string $acs_access_group_id): array
     {
         $request_payload = [];
@@ -907,6 +934,53 @@ class AcsClient
         $this->entrances = new AcsEntrancesClient($seam);
         $this->systems = new AcsSystemsClient($seam);
         $this->users = new AcsUsersClient($seam);
+    }
+}
+
+class AcsAccessGroupsUnmanagedClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(string $acs_access_group_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_access_group_id !== null) {
+            $request_payload["acs_access_group_id"] = $acs_access_group_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/access_groups/unmanaged/get",
+            json: $request_payload,
+            inner_object: "acs_access_group"
+        );
+    }
+
+    public function list(
+        string $acs_system_id = null,
+        string $acs_user_id = null
+    ): void {
+        $request_payload = [];
+
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/access_groups/unmanaged/list",
+            json: $request_payload,
+            inner_object: "acs_access_groups"
+        );
     }
 }
 
@@ -1208,6 +1282,57 @@ class AcsCredentialsClient
             "POST",
             "/acs/credentials/update",
             json: $request_payload
+        );
+    }
+}
+
+class AcsCredentialsUnmanagedClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(string $acs_credential_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_credential_id !== null) {
+            $request_payload["acs_credential_id"] = $acs_credential_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/credentials/unmanaged/get",
+            json: $request_payload,
+            inner_object: "acs_credential"
+        );
+    }
+
+    public function list(
+        string $acs_user_id = null,
+        string $acs_system_id = null,
+        string $user_identity_id = null
+    ): void {
+        $request_payload = [];
+
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/credentials/unmanaged/list",
+            json: $request_payload,
+            inner_object: "acs_credentials"
         );
     }
 }
@@ -1643,6 +1768,69 @@ class AcsUsersClient
             "POST",
             "/acs/users/update",
             json: $request_payload
+        );
+    }
+}
+
+class AcsUsersUnmanagedClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(string $acs_user_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/users/unmanaged/get",
+            json: $request_payload,
+            inner_object: "acs_user"
+        );
+    }
+
+    public function list(
+        string $acs_system_id = null,
+        float $limit = null,
+        string $user_identity_email_address = null,
+        string $user_identity_id = null,
+        string $user_identity_phone_number = null
+    ): void {
+        $request_payload = [];
+
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($user_identity_email_address !== null) {
+            $request_payload[
+                "user_identity_email_address"
+            ] = $user_identity_email_address;
+        }
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+        if ($user_identity_phone_number !== null) {
+            $request_payload[
+                "user_identity_phone_number"
+            ] = $user_identity_phone_number;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/users/unmanaged/list",
+            json: $request_payload,
+            inner_object: "acs_users"
         );
     }
 }
@@ -2522,6 +2710,7 @@ class EventsClient
         string $access_code_id = null,
         array $access_code_ids = null,
         array $between = null,
+        string $connect_webview_id = null,
         string $connected_account_id = null,
         string $device_id = null,
         array $device_ids = null,
@@ -2540,6 +2729,9 @@ class EventsClient
         }
         if ($between !== null) {
             $request_payload["between"] = $between;
+        }
+        if ($connect_webview_id !== null) {
+            $request_payload["connect_webview_id"] = $connect_webview_id;
         }
         if ($connected_account_id !== null) {
             $request_payload["connected_account_id"] = $connected_account_id;
@@ -3141,252 +3333,46 @@ class PhonesSimulateClient
     }
 }
 
-class ThermostatsClimateSettingSchedulesClient
-{
-    private SeamClient $seam;
-
-    public function __construct(SeamClient $seam)
-    {
-        $this->seam = $seam;
-    }
-
-    public function create(
-        string $device_id,
-        string $schedule_ends_at,
-        string $schedule_starts_at,
-        bool $automatic_cooling_enabled = null,
-        bool $automatic_heating_enabled = null,
-        float $cooling_set_point_celsius = null,
-        float $cooling_set_point_fahrenheit = null,
-        float $heating_set_point_celsius = null,
-        float $heating_set_point_fahrenheit = null,
-        string $hvac_mode_setting = null,
-        bool $manual_override_allowed = null,
-        string $name = null,
-        string $schedule_type = null
-    ): ClimateSettingSchedule {
-        $request_payload = [];
-
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($schedule_ends_at !== null) {
-            $request_payload["schedule_ends_at"] = $schedule_ends_at;
-        }
-        if ($schedule_starts_at !== null) {
-            $request_payload["schedule_starts_at"] = $schedule_starts_at;
-        }
-        if ($automatic_cooling_enabled !== null) {
-            $request_payload[
-                "automatic_cooling_enabled"
-            ] = $automatic_cooling_enabled;
-        }
-        if ($automatic_heating_enabled !== null) {
-            $request_payload[
-                "automatic_heating_enabled"
-            ] = $automatic_heating_enabled;
-        }
-        if ($cooling_set_point_celsius !== null) {
-            $request_payload[
-                "cooling_set_point_celsius"
-            ] = $cooling_set_point_celsius;
-        }
-        if ($cooling_set_point_fahrenheit !== null) {
-            $request_payload[
-                "cooling_set_point_fahrenheit"
-            ] = $cooling_set_point_fahrenheit;
-        }
-        if ($heating_set_point_celsius !== null) {
-            $request_payload[
-                "heating_set_point_celsius"
-            ] = $heating_set_point_celsius;
-        }
-        if ($heating_set_point_fahrenheit !== null) {
-            $request_payload[
-                "heating_set_point_fahrenheit"
-            ] = $heating_set_point_fahrenheit;
-        }
-        if ($hvac_mode_setting !== null) {
-            $request_payload["hvac_mode_setting"] = $hvac_mode_setting;
-        }
-        if ($manual_override_allowed !== null) {
-            $request_payload[
-                "manual_override_allowed"
-            ] = $manual_override_allowed;
-        }
-        if ($name !== null) {
-            $request_payload["name"] = $name;
-        }
-        if ($schedule_type !== null) {
-            $request_payload["schedule_type"] = $schedule_type;
-        }
-
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/climate_setting_schedules/create",
-            json: $request_payload,
-            inner_object: "climate_setting_schedule"
-        );
-
-        return ClimateSettingSchedule::from_json($res);
-    }
-
-    public function delete(string $climate_setting_schedule_id): void
-    {
-        $request_payload = [];
-
-        if ($climate_setting_schedule_id !== null) {
-            $request_payload[
-                "climate_setting_schedule_id"
-            ] = $climate_setting_schedule_id;
-        }
-
-        $this->seam->request(
-            "POST",
-            "/thermostats/climate_setting_schedules/delete",
-            json: $request_payload
-        );
-    }
-
-    public function get(
-        string $climate_setting_schedule_id = null,
-        string $device_id = null
-    ): ClimateSettingSchedule {
-        $request_payload = [];
-
-        if ($climate_setting_schedule_id !== null) {
-            $request_payload[
-                "climate_setting_schedule_id"
-            ] = $climate_setting_schedule_id;
-        }
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/climate_setting_schedules/get",
-            json: $request_payload,
-            inner_object: "climate_setting_schedule"
-        );
-
-        return ClimateSettingSchedule::from_json($res);
-    }
-
-    public function list(
-        string $device_id,
-        string $user_identifier_key = null
-    ): array {
-        $request_payload = [];
-
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($user_identifier_key !== null) {
-            $request_payload["user_identifier_key"] = $user_identifier_key;
-        }
-
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/climate_setting_schedules/list",
-            json: $request_payload,
-            inner_object: "climate_setting_schedules"
-        );
-
-        return array_map(fn($r) => ClimateSettingSchedule::from_json($r), $res);
-    }
-
-    public function update(
-        string $climate_setting_schedule_id,
-        bool $automatic_cooling_enabled = null,
-        bool $automatic_heating_enabled = null,
-        float $cooling_set_point_celsius = null,
-        float $cooling_set_point_fahrenheit = null,
-        float $heating_set_point_celsius = null,
-        float $heating_set_point_fahrenheit = null,
-        string $hvac_mode_setting = null,
-        bool $manual_override_allowed = null,
-        string $name = null,
-        string $schedule_ends_at = null,
-        string $schedule_starts_at = null,
-        string $schedule_type = null
-    ): void {
-        $request_payload = [];
-
-        if ($climate_setting_schedule_id !== null) {
-            $request_payload[
-                "climate_setting_schedule_id"
-            ] = $climate_setting_schedule_id;
-        }
-        if ($automatic_cooling_enabled !== null) {
-            $request_payload[
-                "automatic_cooling_enabled"
-            ] = $automatic_cooling_enabled;
-        }
-        if ($automatic_heating_enabled !== null) {
-            $request_payload[
-                "automatic_heating_enabled"
-            ] = $automatic_heating_enabled;
-        }
-        if ($cooling_set_point_celsius !== null) {
-            $request_payload[
-                "cooling_set_point_celsius"
-            ] = $cooling_set_point_celsius;
-        }
-        if ($cooling_set_point_fahrenheit !== null) {
-            $request_payload[
-                "cooling_set_point_fahrenheit"
-            ] = $cooling_set_point_fahrenheit;
-        }
-        if ($heating_set_point_celsius !== null) {
-            $request_payload[
-                "heating_set_point_celsius"
-            ] = $heating_set_point_celsius;
-        }
-        if ($heating_set_point_fahrenheit !== null) {
-            $request_payload[
-                "heating_set_point_fahrenheit"
-            ] = $heating_set_point_fahrenheit;
-        }
-        if ($hvac_mode_setting !== null) {
-            $request_payload["hvac_mode_setting"] = $hvac_mode_setting;
-        }
-        if ($manual_override_allowed !== null) {
-            $request_payload[
-                "manual_override_allowed"
-            ] = $manual_override_allowed;
-        }
-        if ($name !== null) {
-            $request_payload["name"] = $name;
-        }
-        if ($schedule_ends_at !== null) {
-            $request_payload["schedule_ends_at"] = $schedule_ends_at;
-        }
-        if ($schedule_starts_at !== null) {
-            $request_payload["schedule_starts_at"] = $schedule_starts_at;
-        }
-        if ($schedule_type !== null) {
-            $request_payload["schedule_type"] = $schedule_type;
-        }
-
-        $this->seam->request(
-            "POST",
-            "/thermostats/climate_setting_schedules/update",
-            json: $request_payload
-        );
-    }
-}
-
 class ThermostatsClient
 {
     private SeamClient $seam;
-    public ThermostatsClimateSettingSchedulesClient $climate_setting_schedules;
+    public ThermostatsSchedulesClient $schedules;
     public function __construct(SeamClient $seam)
     {
         $this->seam = $seam;
-        $this->climate_setting_schedules = new ThermostatsClimateSettingSchedulesClient(
-            $seam
+        $this->schedules = new ThermostatsSchedulesClient($seam);
+    }
+
+    public function activate_climate_preset(
+        string $climate_preset_key,
+        string $device_id,
+        bool $wait_for_action_attempt = true
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($climate_preset_key !== null) {
+            $request_payload["climate_preset_key"] = $climate_preset_key;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/thermostats/activate_climate_preset",
+            json: $request_payload,
+            inner_object: "action_attempt"
         );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt_id
+        );
+
+        return $action_attempt;
     }
 
     public function cool(
@@ -3431,6 +3417,88 @@ class ThermostatsClient
         );
 
         return $action_attempt;
+    }
+
+    public function create_climate_preset(
+        string $climate_preset_key,
+        string $device_id,
+        bool $manual_override_allowed,
+        float $cooling_set_point_celsius = null,
+        float $cooling_set_point_fahrenheit = null,
+        string $fan_mode_setting = null,
+        float $heating_set_point_celsius = null,
+        float $heating_set_point_fahrenheit = null,
+        string $hvac_mode_setting = null,
+        string $name = null
+    ): void {
+        $request_payload = [];
+
+        if ($climate_preset_key !== null) {
+            $request_payload["climate_preset_key"] = $climate_preset_key;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($manual_override_allowed !== null) {
+            $request_payload[
+                "manual_override_allowed"
+            ] = $manual_override_allowed;
+        }
+        if ($cooling_set_point_celsius !== null) {
+            $request_payload[
+                "cooling_set_point_celsius"
+            ] = $cooling_set_point_celsius;
+        }
+        if ($cooling_set_point_fahrenheit !== null) {
+            $request_payload[
+                "cooling_set_point_fahrenheit"
+            ] = $cooling_set_point_fahrenheit;
+        }
+        if ($fan_mode_setting !== null) {
+            $request_payload["fan_mode_setting"] = $fan_mode_setting;
+        }
+        if ($heating_set_point_celsius !== null) {
+            $request_payload[
+                "heating_set_point_celsius"
+            ] = $heating_set_point_celsius;
+        }
+        if ($heating_set_point_fahrenheit !== null) {
+            $request_payload[
+                "heating_set_point_fahrenheit"
+            ] = $heating_set_point_fahrenheit;
+        }
+        if ($hvac_mode_setting !== null) {
+            $request_payload["hvac_mode_setting"] = $hvac_mode_setting;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/thermostats/create_climate_preset",
+            json: $request_payload
+        );
+    }
+
+    public function delete_climate_preset(
+        string $climate_preset_key,
+        string $device_id
+    ): void {
+        $request_payload = [];
+
+        if ($climate_preset_key !== null) {
+            $request_payload["climate_preset_key"] = $climate_preset_key;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/thermostats/delete_climate_preset",
+            json: $request_payload
+        );
     }
 
     public function get(string $device_id = null, string $name = null): Device
@@ -3653,6 +3721,26 @@ class ThermostatsClient
         return $action_attempt;
     }
 
+    public function set_fallback_climate_preset(
+        string $climate_preset_key,
+        string $device_id
+    ): void {
+        $request_payload = [];
+
+        if ($climate_preset_key !== null) {
+            $request_payload["climate_preset_key"] = $climate_preset_key;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/thermostats/set_fallback_climate_preset",
+            json: $request_payload
+        );
+    }
+
     public function set_fan_mode(
         string $device_id,
         string $fan_mode = null,
@@ -3693,24 +3781,216 @@ class ThermostatsClient
         return $action_attempt;
     }
 
-    public function update(
-        mixed $default_climate_setting,
-        string $device_id
+    public function update_climate_preset(
+        string $climate_preset_key,
+        string $device_id,
+        bool $manual_override_allowed,
+        float $cooling_set_point_celsius = null,
+        float $cooling_set_point_fahrenheit = null,
+        string $fan_mode_setting = null,
+        float $heating_set_point_celsius = null,
+        float $heating_set_point_fahrenheit = null,
+        string $hvac_mode_setting = null,
+        string $name = null
     ): void {
         $request_payload = [];
 
-        if ($default_climate_setting !== null) {
-            $request_payload[
-                "default_climate_setting"
-            ] = $default_climate_setting;
+        if ($climate_preset_key !== null) {
+            $request_payload["climate_preset_key"] = $climate_preset_key;
         }
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
         }
+        if ($manual_override_allowed !== null) {
+            $request_payload[
+                "manual_override_allowed"
+            ] = $manual_override_allowed;
+        }
+        if ($cooling_set_point_celsius !== null) {
+            $request_payload[
+                "cooling_set_point_celsius"
+            ] = $cooling_set_point_celsius;
+        }
+        if ($cooling_set_point_fahrenheit !== null) {
+            $request_payload[
+                "cooling_set_point_fahrenheit"
+            ] = $cooling_set_point_fahrenheit;
+        }
+        if ($fan_mode_setting !== null) {
+            $request_payload["fan_mode_setting"] = $fan_mode_setting;
+        }
+        if ($heating_set_point_celsius !== null) {
+            $request_payload[
+                "heating_set_point_celsius"
+            ] = $heating_set_point_celsius;
+        }
+        if ($heating_set_point_fahrenheit !== null) {
+            $request_payload[
+                "heating_set_point_fahrenheit"
+            ] = $heating_set_point_fahrenheit;
+        }
+        if ($hvac_mode_setting !== null) {
+            $request_payload["hvac_mode_setting"] = $hvac_mode_setting;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
 
         $this->seam->request(
             "POST",
-            "/thermostats/update",
+            "/thermostats/update_climate_preset",
+            json: $request_payload,
+            inner_object: "climate_preset"
+        );
+    }
+}
+
+class ThermostatsSchedulesClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function create(
+        string $climate_preset_key,
+        string $device_id,
+        string $ends_at,
+        string $starts_at,
+        mixed $max_override_period_minutes = null,
+        string $name = null
+    ): ThermostatSchedule {
+        $request_payload = [];
+
+        if ($climate_preset_key !== null) {
+            $request_payload["climate_preset_key"] = $climate_preset_key;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($ends_at !== null) {
+            $request_payload["ends_at"] = $ends_at;
+        }
+        if ($starts_at !== null) {
+            $request_payload["starts_at"] = $starts_at;
+        }
+        if ($max_override_period_minutes !== null) {
+            $request_payload[
+                "max_override_period_minutes"
+            ] = $max_override_period_minutes;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/thermostats/schedules/create",
+            json: $request_payload,
+            inner_object: "thermostat_schedule"
+        );
+
+        return ThermostatSchedule::from_json($res);
+    }
+
+    public function delete(string $thermostat_schedule_id): void
+    {
+        $request_payload = [];
+
+        if ($thermostat_schedule_id !== null) {
+            $request_payload[
+                "thermostat_schedule_id"
+            ] = $thermostat_schedule_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/thermostats/schedules/delete",
+            json: $request_payload
+        );
+    }
+
+    public function get(string $thermostat_schedule_id): ThermostatSchedule
+    {
+        $request_payload = [];
+
+        if ($thermostat_schedule_id !== null) {
+            $request_payload[
+                "thermostat_schedule_id"
+            ] = $thermostat_schedule_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/thermostats/schedules/get",
+            json: $request_payload,
+            inner_object: "thermostat_schedule"
+        );
+
+        return ThermostatSchedule::from_json($res);
+    }
+
+    public function list(
+        string $device_id,
+        string $user_identifier_key = null
+    ): array {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($user_identifier_key !== null) {
+            $request_payload["user_identifier_key"] = $user_identifier_key;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/thermostats/schedules/list",
+            json: $request_payload,
+            inner_object: "thermostat_schedules"
+        );
+
+        return array_map(fn($r) => ThermostatSchedule::from_json($r), $res);
+    }
+
+    public function update(
+        string $thermostat_schedule_id,
+        string $climate_preset_key = null,
+        string $ends_at = null,
+        mixed $max_override_period_minutes = null,
+        string $name = null,
+        string $starts_at = null
+    ): void {
+        $request_payload = [];
+
+        if ($thermostat_schedule_id !== null) {
+            $request_payload[
+                "thermostat_schedule_id"
+            ] = $thermostat_schedule_id;
+        }
+        if ($climate_preset_key !== null) {
+            $request_payload["climate_preset_key"] = $climate_preset_key;
+        }
+        if ($ends_at !== null) {
+            $request_payload["ends_at"] = $ends_at;
+        }
+        if ($max_override_period_minutes !== null) {
+            $request_payload[
+                "max_override_period_minutes"
+            ] = $max_override_period_minutes;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+        if ($starts_at !== null) {
+            $request_payload["starts_at"] = $starts_at;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/thermostats/schedules/update",
             json: $request_payload
         );
     }
