@@ -12,6 +12,7 @@ use Seam\Objects\AcsSystem;
 use Seam\Objects\AcsUser;
 use Seam\Objects\ActionAttempt;
 use Seam\Objects\ClientSession;
+use Seam\Objects\ClimatePreset;
 use Seam\Objects\ConnectWebview;
 use Seam\Objects\ConnectedAccount;
 use Seam\Objects\Device;
@@ -3792,7 +3793,7 @@ class ThermostatsClient
         float $heating_set_point_fahrenheit = null,
         string $hvac_mode_setting = null,
         string $name = null
-    ): void {
+    ): ClimatePreset {
         $request_payload = [];
 
         if ($climate_preset_key !== null) {
@@ -3836,12 +3837,14 @@ class ThermostatsClient
             $request_payload["name"] = $name;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/thermostats/update_climate_preset",
             json: $request_payload,
             inner_object: "climate_preset"
         );
+
+        return ClimatePreset::from_json($res);
     }
 }
 
