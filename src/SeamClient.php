@@ -3793,7 +3793,7 @@ class ThermostatsClient
         float $heating_set_point_fahrenheit = null,
         string $hvac_mode_setting = null,
         string $name = null
-    ): ClimatePreset {
+    ): void {
         $request_payload = [];
 
         if ($climate_preset_key !== null) {
@@ -3837,14 +3837,12 @@ class ThermostatsClient
             $request_payload["name"] = $name;
         }
 
-        $res = $this->seam->request(
+        $this->seam->request(
             "POST",
             "/thermostats/update_climate_preset",
             json: $request_payload,
             inner_object: "climate_preset"
         );
-
-        return ClimatePreset::from_json($res);
     }
 }
 
