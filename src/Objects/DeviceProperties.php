@@ -163,6 +163,8 @@ class DeviceProperties
                 fn($a) => DeviceAvailableClimatePresets::from_json($a),
                 $json->available_climate_presets ?? []
             ),
+            available_fan_mode_settings: $json->available_fan_mode_settings ??
+                null,
             available_hvac_mode_settings: $json->available_hvac_mode_settings ??
                 null,
             current_climate_setting: isset($json->current_climate_setting)
@@ -266,6 +268,7 @@ class DeviceProperties
         public bool|null $supports_backup_access_code_pool,
         public DeviceActiveThermostatSchedule|null $active_thermostat_schedule,
         public array|null $available_climate_presets,
+        public array|null $available_fan_mode_settings,
         public array|null $available_hvac_mode_settings,
         public DeviceCurrentClimateSetting|null $current_climate_setting,
         public DeviceDefaultClimateSetting|null $default_climate_setting,
