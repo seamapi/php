@@ -920,6 +920,7 @@ class AcsClient
     public AcsCredentialPoolsClient $credential_pools;
     public AcsCredentialProvisioningAutomationsClient $credential_provisioning_automations;
     public AcsCredentialsClient $credentials;
+    public AcsEncodersClient $encoders;
     public AcsEntrancesClient $entrances;
     public AcsSystemsClient $systems;
     public AcsUsersClient $users;
@@ -932,6 +933,7 @@ class AcsClient
             $seam
         );
         $this->credentials = new AcsCredentialsClient($seam);
+        $this->encoders = new AcsEncodersClient($seam);
         $this->entrances = new AcsEntrancesClient($seam);
         $this->systems = new AcsSystemsClient($seam);
         $this->users = new AcsUsersClient($seam);
@@ -1335,6 +1337,52 @@ class AcsCredentialsUnmanagedClient
             json: $request_payload,
             inner_object: "acs_credentials"
         );
+    }
+}
+
+class AcsEncodersClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function read_card(
+        string $acs_system_id = null,
+        string $device_name = null,
+        string $device_id = null,
+        bool $wait_for_action_attempt = true
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($device_name !== null) {
+            $request_payload["device_name"] = $device_name;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/acs/encoders/read_card",
+            json: $request_payload,
+            inner_object: "action_attempt"
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt_id
+        );
+
+        return $action_attempt;
     }
 }
 
@@ -3431,7 +3479,7 @@ class ThermostatsClient
         float $heating_set_point_fahrenheit = null,
         string $hvac_mode_setting = null,
         string $name = null
-    ): void {
+    ): ClimatePreset {
         $request_payload = [];
 
         if ($climate_preset_key !== null) {
@@ -3475,11 +3523,14 @@ class ThermostatsClient
             $request_payload["name"] = $name;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/thermostats/create_climate_preset",
-            json: $request_payload
+            json: $request_payload,
+            inner_object: "climate_preset"
         );
+
+        return ClimatePreset::from_json($res);
     }
 
     public function delete_climate_preset(
@@ -3840,8 +3891,7 @@ class ThermostatsClient
         $this->seam->request(
             "POST",
             "/thermostats/update_climate_preset",
-            json: $request_payload,
-            inner_object: "climate_preset"
+            json: $request_payload
         );
     }
 }
