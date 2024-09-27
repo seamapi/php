@@ -134,6 +134,11 @@ class DeviceProperties
             two_n_metadata: isset($json->two_n_metadata)
                 ? DeviceTwoNMetadata::from_json($json->two_n_metadata)
                 : null,
+            visionline_metadata: isset($json->visionline_metadata)
+                ? DeviceVisionlineMetadata::from_json(
+                    $json->visionline_metadata
+                )
+                : null,
             wyze_metadata: isset($json->wyze_metadata)
                 ? DeviceWyzeMetadata::from_json($json->wyze_metadata)
                 : null,
@@ -256,6 +261,7 @@ class DeviceProperties
         public DeviceTedeeMetadata|null $tedee_metadata,
         public DeviceTtlockMetadata|null $ttlock_metadata,
         public DeviceTwoNMetadata|null $two_n_metadata,
+        public DeviceVisionlineMetadata|null $visionline_metadata,
         public DeviceWyzeMetadata|null $wyze_metadata,
         public array|null $_experimental_supported_code_from_access_codes_lengths,
         public array|null $code_constraints,
