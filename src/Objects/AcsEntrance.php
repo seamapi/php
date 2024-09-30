@@ -21,6 +21,11 @@ class AcsEntrance
             latch_metadata: isset($json->latch_metadata)
                 ? AcsEntranceLatchMetadata::from_json($json->latch_metadata)
                 : null,
+            salto_ks_metadata: isset($json->salto_ks_metadata)
+                ? AcsEntranceSaltoKsMetadata::from_json(
+                    $json->salto_ks_metadata
+                )
+                : null,
             visionline_metadata: isset($json->visionline_metadata)
                 ? AcsEntranceVisionlineMetadata::from_json(
                     $json->visionline_metadata
@@ -36,6 +41,7 @@ class AcsEntrance
         public string $display_name,
         public array $errors,
         public AcsEntranceLatchMetadata|null $latch_metadata,
+        public AcsEntranceSaltoKsMetadata|null $salto_ks_metadata,
         public AcsEntranceVisionlineMetadata|null $visionline_metadata
     ) {
     }

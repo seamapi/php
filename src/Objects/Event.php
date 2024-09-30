@@ -15,13 +15,25 @@ class Event
             acs_user_id: $json->acs_user_id ?? null,
             action_attempt_id: $json->action_attempt_id ?? null,
             client_session_id: $json->client_session_id ?? null,
+            climate_preset_key: $json->climate_preset_key ?? null,
+            cooling_set_point_celsius: $json->cooling_set_point_celsius ?? null,
+            cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
+                null,
             created_at: $json->created_at,
             device_id: $json->device_id ?? null,
             enrollment_automation_id: $json->enrollment_automation_id ?? null,
             event_description: $json->event_description,
             event_id: $json->event_id,
             event_type: $json->event_type,
+            fan_mode_setting: $json->fan_mode_setting ?? null,
+            heating_set_point_celsius: $json->heating_set_point_celsius ?? null,
+            heating_set_point_fahrenheit: $json->heating_set_point_fahrenheit ??
+                null,
+            hvac_mode_setting: $json->hvac_mode_setting ?? null,
+            is_fallback_climate_preset: $json->is_fallback_climate_preset ??
+                null,
             occurred_at: $json->occurred_at,
+            thermostat_schedule_id: $json->thermostat_schedule_id ?? null,
             workspace_id: $json->workspace_id
         );
     }
@@ -32,13 +44,22 @@ class Event
         public string|null $acs_user_id,
         public string|null $action_attempt_id,
         public string|null $client_session_id,
+        public string|null $climate_preset_key,
+        public float|null $cooling_set_point_celsius,
+        public float|null $cooling_set_point_fahrenheit,
         public string $created_at,
         public string|null $device_id,
         public string|null $enrollment_automation_id,
         public string $event_description,
         public string $event_id,
         public string $event_type,
+        public string|null $fan_mode_setting,
+        public float|null $heating_set_point_celsius,
+        public float|null $heating_set_point_fahrenheit,
+        public string|null $hvac_mode_setting,
+        public bool|null $is_fallback_climate_preset,
         public string $occurred_at,
+        public string|null $thermostat_schedule_id,
         public string $workspace_id
     ) {
     }
