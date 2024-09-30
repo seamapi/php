@@ -12,7 +12,6 @@ use Seam\Objects\AcsSystem;
 use Seam\Objects\AcsUser;
 use Seam\Objects\ActionAttempt;
 use Seam\Objects\ClientSession;
-use Seam\Objects\ClimatePreset;
 use Seam\Objects\ConnectWebview;
 use Seam\Objects\ConnectedAccount;
 use Seam\Objects\Device;
@@ -1347,6 +1346,69 @@ class AcsEncodersClient
     public function __construct(SeamClient $seam)
     {
         $this->seam = $seam;
+    }
+
+    public function encode_card(
+        string $acs_system_id = null,
+        string $device_name = null,
+        string $device_id = null,
+        bool $wait_for_action_attempt = true
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($device_name !== null) {
+            $request_payload["device_name"] = $device_name;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/acs/encoders/encode_card",
+            json: $request_payload,
+            inner_object: "action_attempt"
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt_id
+        );
+
+        return $action_attempt;
+    }
+
+    public function list(
+        array $acs_system_ids = null,
+        array $device_ids = null,
+        float $limit = null
+    ): array {
+        $request_payload = [];
+
+        if ($acs_system_ids !== null) {
+            $request_payload["acs_system_ids"] = $acs_system_ids;
+        }
+        if ($device_ids !== null) {
+            $request_payload["device_ids"] = $device_ids;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/acs/encoders/list",
+            json: $request_payload,
+            inner_object: "devices"
+        );
+
+        return array_map(fn($r) => Device::from_json($r), $res);
     }
 
     public function read_card(
@@ -3479,7 +3541,7 @@ class ThermostatsClient
         float $heating_set_point_fahrenheit = null,
         string $hvac_mode_setting = null,
         string $name = null
-    ): ClimatePreset {
+    ): void {
         $request_payload = [];
 
         if ($climate_preset_key !== null) {
@@ -3523,14 +3585,11 @@ class ThermostatsClient
             $request_payload["name"] = $name;
         }
 
-        $res = $this->seam->request(
+        $this->seam->request(
             "POST",
             "/thermostats/create_climate_preset",
-            json: $request_payload,
-            inner_object: "climate_preset"
+            json: $request_payload
         );
-
-        return ClimatePreset::from_json($res);
     }
 
     public function delete_climate_preset(

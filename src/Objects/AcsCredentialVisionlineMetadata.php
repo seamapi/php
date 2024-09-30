@@ -11,6 +11,7 @@ class AcsCredentialVisionlineMetadata
             return null;
         }
         return new self(
+            auto_join: $json->auto_join ?? null,
             card_function_type: $json->card_function_type,
             card_id: $json->card_id ?? null,
             common_acs_entrance_ids: $json->common_acs_entrance_ids ?? null,
@@ -22,6 +23,7 @@ class AcsCredentialVisionlineMetadata
     }
 
     public function __construct(
+        public bool|null $auto_join,
         public string $card_function_type,
         public string|null $card_id,
         public array|null $common_acs_entrance_ids,
