@@ -16,8 +16,7 @@ class DeviceActiveThermostatSchedule
             device_id: $json->device_id,
             ends_at: $json->ends_at,
             errors: $json->errors ?? null,
-            max_override_period_minutes: $json->max_override_period_minutes ??
-                null,
+            max_override_period_minutes: $json->max_override_period_minutes,
             name: $json->name ?? null,
             starts_at: $json->starts_at,
             thermostat_schedule_id: $json->thermostat_schedule_id
