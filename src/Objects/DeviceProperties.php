@@ -43,6 +43,9 @@ class DeviceProperties
                     $json->assa_abloy_credential_service_metadata
                 )
                 : null,
+            akiles_metadata: isset($json->akiles_metadata)
+                ? DeviceAkilesMetadata::from_json($json->akiles_metadata)
+                : null,
             august_metadata: isset($json->august_metadata)
                 ? DeviceAugustMetadata::from_json($json->august_metadata)
                 : null,
@@ -236,6 +239,7 @@ class DeviceProperties
         public bool|null $supports_accessory_keypad,
         public bool|null $supports_offline_access_codes,
         public DeviceAssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata,
+        public DeviceAkilesMetadata|null $akiles_metadata,
         public DeviceAugustMetadata|null $august_metadata,
         public DeviceAvigilonAltaMetadata|null $avigilon_alta_metadata,
         public DeviceBrivoMetadata|null $brivo_metadata,
