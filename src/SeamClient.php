@@ -1412,7 +1412,7 @@ class AcsEncodersClient
     }
 
     public function read_card(
-        string $acs_system_id = null,
+        string $acs_system_id,
         string $device_name = null,
         string $device_id = null,
         bool $wait_for_action_attempt = true
@@ -2423,7 +2423,7 @@ class ConnectedAccountsClient
         string $connected_account_id,
         bool $automatically_manage_new_devices = null,
         mixed $custom_metadata = null
-    ): ConnectedAccount {
+    ): void {
         $request_payload = [];
 
         if ($connected_account_id !== null) {
@@ -2438,14 +2438,11 @@ class ConnectedAccountsClient
             $request_payload["custom_metadata"] = $custom_metadata;
         }
 
-        $res = $this->seam->request(
+        $this->seam->request(
             "POST",
             "/connected_accounts/update",
-            json: $request_payload,
-            inner_object: "connected_account"
+            json: $request_payload
         );
-
-        return ConnectedAccount::from_json($res);
     }
 }
 

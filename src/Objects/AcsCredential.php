@@ -19,7 +19,6 @@ class AcsCredential
             code: $json->code ?? null,
             created_at: $json->created_at,
             display_name: $json->display_name,
-            encoded_at: $json->encoded_at ?? null,
             ends_at: $json->ends_at ?? null,
             errors: array_map(
                 fn($e) => AcsCredentialErrors::from_json($e),
@@ -28,12 +27,13 @@ class AcsCredential
             external_type: $json->external_type ?? null,
             external_type_display_name: $json->external_type_display_name ??
                 null,
-            is_encoded: $json->is_encoded ?? null,
+            is_issued: $json->is_issued ?? null,
             is_latest_desired_state_synced_with_provider: $json->is_latest_desired_state_synced_with_provider ??
                 null,
             is_managed: $json->is_managed,
             is_multi_phone_sync_credential: $json->is_multi_phone_sync_credential ??
                 null,
+            issued_at: $json->issued_at ?? null,
             latest_desired_state_synced_with_provider_at: $json->latest_desired_state_synced_with_provider_at ??
                 null,
             parent_acs_credential_id: $json->parent_acs_credential_id ?? null,
@@ -61,15 +61,15 @@ class AcsCredential
         public string|null $code,
         public string $created_at,
         public string $display_name,
-        public string|null $encoded_at,
         public string|null $ends_at,
         public array $errors,
         public string|null $external_type,
         public string|null $external_type_display_name,
-        public bool|null $is_encoded,
+        public bool|null $is_issued,
         public bool|null $is_latest_desired_state_synced_with_provider,
         public bool $is_managed,
         public bool|null $is_multi_phone_sync_credential,
+        public string|null $issued_at,
         public string|null $latest_desired_state_synced_with_provider_at,
         public string|null $parent_acs_credential_id,
         public string|null $starts_at,
