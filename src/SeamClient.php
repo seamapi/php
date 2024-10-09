@@ -595,6 +595,56 @@ class AccessCodesClient
             json: $request_payload
         );
     }
+
+    public function update_multiple(
+        string $common_code_key,
+        bool $allow_external_modification = null,
+        string $code = null,
+        string $ends_at = null,
+        bool $is_external_modification_allowed = null,
+        string $name = null,
+        bool $prefer_native_scheduling = null,
+        string $starts_at = null
+    ): void {
+        $request_payload = [];
+
+        if ($common_code_key !== null) {
+            $request_payload["common_code_key"] = $common_code_key;
+        }
+        if ($allow_external_modification !== null) {
+            $request_payload[
+                "allow_external_modification"
+            ] = $allow_external_modification;
+        }
+        if ($code !== null) {
+            $request_payload["code"] = $code;
+        }
+        if ($ends_at !== null) {
+            $request_payload["ends_at"] = $ends_at;
+        }
+        if ($is_external_modification_allowed !== null) {
+            $request_payload[
+                "is_external_modification_allowed"
+            ] = $is_external_modification_allowed;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+        if ($prefer_native_scheduling !== null) {
+            $request_payload[
+                "prefer_native_scheduling"
+            ] = $prefer_native_scheduling;
+        }
+        if ($starts_at !== null) {
+            $request_payload["starts_at"] = $starts_at;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/access_codes/update_multiple",
+            json: $request_payload
+        );
+    }
 }
 
 class AccessCodesSimulateClient
