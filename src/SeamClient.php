@@ -3841,7 +3841,7 @@ class ThermostatsClient
             "POST",
             "/thermostats/list",
             json: $request_payload,
-            inner_object: "thermostats"
+            inner_object: "devices"
         );
 
         return array_map(fn($r) => Device::from_json($r), $res);
