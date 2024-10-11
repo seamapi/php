@@ -1461,7 +1461,7 @@ class AcsEncodersClient
         return array_map(fn($r) => Device::from_json($r), $res);
     }
 
-    public function read_card(
+    public function scan_card(
         string $acs_system_id,
         string $device_name = null,
         string $device_id = null,
@@ -1481,7 +1481,7 @@ class AcsEncodersClient
 
         $res = $this->seam->request(
             "POST",
-            "/acs/encoders/read_card",
+            "/acs/encoders/scan_card",
             json: $request_payload,
             inner_object: "action_attempt"
         );
