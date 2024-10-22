@@ -32,6 +32,7 @@ class Event
             hvac_mode_setting: $json->hvac_mode_setting ?? null,
             is_fallback_climate_preset: $json->is_fallback_climate_preset ??
                 null,
+            method: $json->method ?? null,
             occurred_at: $json->occurred_at,
             thermostat_schedule_id: $json->thermostat_schedule_id ?? null,
             workspace_id: $json->workspace_id
@@ -58,6 +59,7 @@ class Event
         public float|null $heating_set_point_fahrenheit,
         public string|null $hvac_mode_setting,
         public bool|null $is_fallback_climate_preset,
+        public string|null $method,
         public string $occurred_at,
         public string|null $thermostat_schedule_id,
         public string $workspace_id
