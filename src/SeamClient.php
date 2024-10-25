@@ -1399,18 +1399,14 @@ class AcsEncodersClient
     }
 
     public function encode_card(
-        string $acs_system_id = null,
-        string $device_name = null,
-        string $device_id = null,
+        string $acs_credential_id,
+        string $device_id,
         bool $wait_for_action_attempt = true
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($acs_system_id !== null) {
-            $request_payload["acs_system_id"] = $acs_system_id;
-        }
-        if ($device_name !== null) {
-            $request_payload["device_name"] = $device_name;
+        if ($acs_credential_id !== null) {
+            $request_payload["acs_credential_id"] = $acs_credential_id;
         }
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
@@ -1463,17 +1459,13 @@ class AcsEncodersClient
 
     public function scan_card(
         string $acs_system_id,
-        string $device_name = null,
-        string $device_id = null,
+        string $device_id,
         bool $wait_for_action_attempt = true
     ): ActionAttempt {
         $request_payload = [];
 
         if ($acs_system_id !== null) {
             $request_payload["acs_system_id"] = $acs_system_id;
-        }
-        if ($device_name !== null) {
-            $request_payload["device_name"] = $device_name;
         }
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
