@@ -3931,6 +3931,42 @@ class ThermostatsClient
         return $action_attempt;
     }
 
+    public function set_temperature_threshold(
+        string $device_id,
+        float $lower_limit_celsius = null,
+        float $lower_limit_fahrenheit = null,
+        float $upper_limit_celsius = null,
+        float $upper_limit_fahrenheit = null
+    ): void {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($lower_limit_celsius !== null) {
+            $request_payload["lower_limit_celsius"] = $lower_limit_celsius;
+        }
+        if ($lower_limit_fahrenheit !== null) {
+            $request_payload[
+                "lower_limit_fahrenheit"
+            ] = $lower_limit_fahrenheit;
+        }
+        if ($upper_limit_celsius !== null) {
+            $request_payload["upper_limit_celsius"] = $upper_limit_celsius;
+        }
+        if ($upper_limit_fahrenheit !== null) {
+            $request_payload[
+                "upper_limit_fahrenheit"
+            ] = $upper_limit_fahrenheit;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/thermostats/set_temperature_threshold",
+            json: $request_payload
+        );
+    }
+
     public function update_climate_preset(
         string $climate_preset_key,
         string $device_id,

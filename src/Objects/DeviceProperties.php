@@ -112,6 +112,9 @@ class DeviceProperties
             nuki_metadata: isset($json->nuki_metadata)
                 ? DeviceNukiMetadata::from_json($json->nuki_metadata)
                 : null,
+            salto_ks_metadata: isset($json->salto_ks_metadata)
+                ? DeviceSaltoKsMetadata::from_json($json->salto_ks_metadata)
+                : null,
             salto_metadata: isset($json->salto_metadata)
                 ? DeviceSaltoMetadata::from_json($json->salto_metadata)
                 : null,
@@ -215,7 +218,12 @@ class DeviceProperties
                 null,
             relative_humidity: $json->relative_humidity ?? null,
             temperature_celsius: $json->temperature_celsius ?? null,
-            temperature_fahrenheit: $json->temperature_fahrenheit ?? null
+            temperature_fahrenheit: $json->temperature_fahrenheit ?? null,
+            temperature_threshold: isset($json->temperature_threshold)
+                ? DeviceTemperatureThreshold::from_json(
+                    $json->temperature_threshold
+                )
+                : null
         );
     }
 
@@ -258,6 +266,7 @@ class DeviceProperties
         public DeviceNestMetadata|null $nest_metadata,
         public DeviceNoiseawareMetadata|null $noiseaware_metadata,
         public DeviceNukiMetadata|null $nuki_metadata,
+        public DeviceSaltoKsMetadata|null $salto_ks_metadata,
         public DeviceSaltoMetadata|null $salto_metadata,
         public DeviceSchlageMetadata|null $schlage_metadata,
         public DeviceSeamBridgeMetadata|null $seam_bridge_metadata,
@@ -300,7 +309,8 @@ class DeviceProperties
         public float|null $min_heating_set_point_fahrenheit,
         public float|null $relative_humidity,
         public float|null $temperature_celsius,
-        public float|null $temperature_fahrenheit
+        public float|null $temperature_fahrenheit,
+        public DeviceTemperatureThreshold|null $temperature_threshold
     ) {
     }
 }
