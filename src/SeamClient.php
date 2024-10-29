@@ -2867,7 +2867,8 @@ class EventsClient
         string $event_type = null,
         array $event_types = null,
         float $limit = null,
-        string $since = null
+        string $since = null,
+        float $unstable_offset = null
     ): array {
         $request_payload = [];
 
@@ -2903,6 +2904,9 @@ class EventsClient
         }
         if ($since !== null) {
             $request_payload["since"] = $since;
+        }
+        if ($unstable_offset !== null) {
+            $request_payload["unstable_offset"] = $unstable_offset;
         }
 
         $res = $this->seam->request(
@@ -4666,7 +4670,8 @@ class WorkspacesClient
         string $connect_partner_name = null,
         bool $is_sandbox = null,
         string $webview_logo_shape = null,
-        string $webview_primary_button_color = null
+        string $webview_primary_button_color = null,
+        string $webview_primary_button_text_color = null
     ): Workspace {
         $request_payload = [];
 
@@ -4689,6 +4694,11 @@ class WorkspacesClient
             $request_payload[
                 "webview_primary_button_color"
             ] = $webview_primary_button_color;
+        }
+        if ($webview_primary_button_text_color !== null) {
+            $request_payload[
+                "webview_primary_button_text_color"
+            ] = $webview_primary_button_text_color;
         }
 
         $res = $this->seam->request(
