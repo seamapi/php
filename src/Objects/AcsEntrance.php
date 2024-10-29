@@ -14,6 +14,13 @@ class AcsEntrance
             acs_system_id: $json->acs_system_id,
             created_at: $json->created_at,
             display_name: $json->display_name,
+            dormakaba_community_metadata: isset(
+                $json->dormakaba_community_metadata
+            )
+                ? AcsEntranceDormakabaCommunityMetadata::from_json(
+                    $json->dormakaba_community_metadata
+                )
+                : null,
             errors: array_map(
                 fn($e) => AcsEntranceErrors::from_json($e),
                 $json->errors ?? []
@@ -39,6 +46,7 @@ class AcsEntrance
         public string $acs_system_id,
         public string $created_at,
         public string $display_name,
+        public AcsEntranceDormakabaCommunityMetadata|null $dormakaba_community_metadata,
         public array $errors,
         public AcsEntranceLatchMetadata|null $latch_metadata,
         public AcsEntranceSaltoKsMetadata|null $salto_ks_metadata,
