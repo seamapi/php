@@ -2859,6 +2859,8 @@ class EventsClient
     public function list(
         string $access_code_id = null,
         array $access_code_ids = null,
+        string $acs_system_id = null,
+        array $acs_system_ids = null,
         array $between = null,
         string $connect_webview_id = null,
         string $connected_account_id = null,
@@ -2877,6 +2879,12 @@ class EventsClient
         }
         if ($access_code_ids !== null) {
             $request_payload["access_code_ids"] = $access_code_ids;
+        }
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($acs_system_ids !== null) {
+            $request_payload["acs_system_ids"] = $acs_system_ids;
         }
         if ($between !== null) {
             $request_payload["between"] = $between;
