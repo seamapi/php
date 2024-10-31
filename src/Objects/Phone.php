@@ -10,6 +10,23 @@ class Phone
             return null;
         }
         return new self(
+            capabilities_supported: $json->capabilities_supported,
+            created_at: $json->created_at,
+            custom_metadata: $json->custom_metadata,
+            device_id: $json->device_id,
+            device_type: $json->device_type,
+            display_name: $json->display_name,
+            errors: array_map(
+                fn($e) => PhoneErrors::from_json($e),
+                $json->errors ?? []
+            ),
+            is_managed: $json->is_managed,
+            properties: PhoneProperties::from_json($json->properties),
+            warnings: array_map(
+                fn($w) => PhoneWarnings::from_json($w),
+                $json->warnings ?? []
+            ),
+            workspace_id: $json->workspace_id,
             can_hvac_cool: $json->can_hvac_cool ?? null,
             can_hvac_heat: $json->can_hvac_heat ?? null,
             can_hvac_heat_cool: $json->can_hvac_heat_cool ?? null,
@@ -24,28 +41,25 @@ class Phone
                 null,
             can_simulate_removal: $json->can_simulate_removal ?? null,
             can_turn_off_hvac: $json->can_turn_off_hvac ?? null,
-            capabilities_supported: $json->capabilities_supported,
-            created_at: $json->created_at,
-            custom_metadata: $json->custom_metadata,
-            device_id: $json->device_id,
-            device_type: $json->device_type,
-            display_name: $json->display_name,
-            errors: $json->errors,
-            is_managed: $json->is_managed,
+            nickname: $json->nickname ?? null,
             location: isset($json->location)
                 ? PhoneLocation::from_json($json->location)
-                : null,
-            nickname: $json->nickname ?? null,
-            properties: PhoneProperties::from_json($json->properties),
-            warnings: array_map(
-                fn($w) => PhoneWarnings::from_json($w),
-                $json->warnings ?? []
-            ),
-            workspace_id: $json->workspace_id
+                : null
         );
     }
 
     public function __construct(
+        public array $capabilities_supported,
+        public string $created_at,
+        public mixed $custom_metadata,
+        public string $device_id,
+        public string $device_type,
+        public string $display_name,
+        public array $errors,
+        public bool $is_managed,
+        public PhoneProperties $properties,
+        public array $warnings,
+        public string $workspace_id,
         public bool|null $can_hvac_cool,
         public bool|null $can_hvac_heat,
         public bool|null $can_hvac_heat_cool,
@@ -57,19 +71,8 @@ class Phone
         public bool|null $can_simulate_disconnection,
         public bool|null $can_simulate_removal,
         public bool|null $can_turn_off_hvac,
-        public array $capabilities_supported,
-        public string $created_at,
-        public mixed $custom_metadata,
-        public string $device_id,
-        public string $device_type,
-        public string $display_name,
-        public array $errors,
-        public bool $is_managed,
-        public PhoneLocation|null $location,
         public string|null $nickname,
-        public PhoneProperties $properties,
-        public array $warnings,
-        public string $workspace_id
+        public PhoneLocation|null $location
     ) {
     }
 }

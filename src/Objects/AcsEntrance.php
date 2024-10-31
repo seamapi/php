@@ -14,6 +14,15 @@ class AcsEntrance
             acs_system_id: $json->acs_system_id,
             created_at: $json->created_at,
             display_name: $json->display_name,
+            errors: array_map(
+                fn($e) => AcsEntranceErrors::from_json($e),
+                $json->errors ?? []
+            ),
+            assa_abloy_vostio_metadata: isset($json->assa_abloy_vostio_metadata)
+                ? AcsEntranceAssaAbloyVostioMetadata::from_json(
+                    $json->assa_abloy_vostio_metadata
+                )
+                : null,
             dormakaba_community_metadata: isset(
                 $json->dormakaba_community_metadata
             )
@@ -21,10 +30,6 @@ class AcsEntrance
                     $json->dormakaba_community_metadata
                 )
                 : null,
-            errors: array_map(
-                fn($e) => AcsEntranceErrors::from_json($e),
-                $json->errors ?? []
-            ),
             latch_metadata: isset($json->latch_metadata)
                 ? AcsEntranceLatchMetadata::from_json($json->latch_metadata)
                 : null,
@@ -46,8 +51,9 @@ class AcsEntrance
         public string $acs_system_id,
         public string $created_at,
         public string $display_name,
-        public AcsEntranceDormakabaCommunityMetadata|null $dormakaba_community_metadata,
         public array $errors,
+        public AcsEntranceAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
+        public AcsEntranceDormakabaCommunityMetadata|null $dormakaba_community_metadata,
         public AcsEntranceLatchMetadata|null $latch_metadata,
         public AcsEntranceSaltoKsMetadata|null $salto_ks_metadata,
         public AcsEntranceVisionlineMetadata|null $visionline_metadata

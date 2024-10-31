@@ -16,9 +16,9 @@ class ClientSession
             created_at: $json->created_at,
             device_count: $json->device_count,
             token: $json->token,
-            user_identifier_key: $json->user_identifier_key ?? null,
             user_identity_ids: $json->user_identity_ids,
-            workspace_id: $json->workspace_id
+            workspace_id: $json->workspace_id,
+            user_identifier_key: $json->user_identifier_key ?? null
         );
     }
 
@@ -29,9 +29,9 @@ class ClientSession
         public string $created_at,
         public float $device_count,
         public string $token,
-        public string|null $user_identifier_key,
         public array $user_identity_ids,
-        public string $workspace_id
+        public string $workspace_id,
+        public string|null $user_identifier_key
     ) {
     }
 }
