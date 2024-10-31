@@ -15,11 +15,11 @@ class DeviceActiveThermostatSchedule
             created_at: $json->created_at,
             device_id: $json->device_id,
             ends_at: $json->ends_at,
-            errors: $json->errors ?? null,
             max_override_period_minutes: $json->max_override_period_minutes,
-            name: $json->name ?? null,
             starts_at: $json->starts_at,
-            thermostat_schedule_id: $json->thermostat_schedule_id
+            thermostat_schedule_id: $json->thermostat_schedule_id,
+            errors: $json->errors ?? null,
+            name: $json->name ?? null
         );
     }
 
@@ -28,11 +28,11 @@ class DeviceActiveThermostatSchedule
         public string $created_at,
         public string $device_id,
         public string $ends_at,
-        public mixed $errors,
         public mixed $max_override_period_minutes,
-        public string|null $name,
         public string $starts_at,
-        public string $thermostat_schedule_id
+        public string $thermostat_schedule_id,
+        public mixed $errors,
+        public string|null $name
     ) {
     }
 }

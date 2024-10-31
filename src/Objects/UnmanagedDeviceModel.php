@@ -10,13 +10,13 @@ class UnmanagedDeviceModel
             return null;
         }
         return new self(
+            display_name: $json->display_name,
+            manufacturer_display_name: $json->manufacturer_display_name,
             accessory_keypad_supported: $json->accessory_keypad_supported ??
                 null,
             can_connect_accessory_keypad: $json->can_connect_accessory_keypad ??
                 null,
-            display_name: $json->display_name,
             has_built_in_keypad: $json->has_built_in_keypad ?? null,
-            manufacturer_display_name: $json->manufacturer_display_name,
             offline_access_codes_supported: $json->offline_access_codes_supported ??
                 null,
             online_access_codes_supported: $json->online_access_codes_supported ??
@@ -25,11 +25,11 @@ class UnmanagedDeviceModel
     }
 
     public function __construct(
+        public string $display_name,
+        public string $manufacturer_display_name,
         public bool|null $accessory_keypad_supported,
         public bool|null $can_connect_accessory_keypad,
-        public string $display_name,
         public bool|null $has_built_in_keypad,
-        public string $manufacturer_display_name,
         public bool|null $offline_access_codes_supported,
         public bool|null $online_access_codes_supported
     ) {

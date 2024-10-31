@@ -11,6 +11,21 @@ class AcsSystem
         }
         return new self(
             acs_system_id: $json->acs_system_id,
+            connected_account_ids: $json->connected_account_ids,
+            created_at: $json->created_at,
+            errors: array_map(
+                fn($e) => AcsSystemErrors::from_json($e),
+                $json->errors ?? []
+            ),
+            image_alt_text: $json->image_alt_text,
+            image_url: $json->image_url,
+            is_credential_manager: $json->is_credential_manager,
+            name: $json->name,
+            warnings: array_map(
+                fn($w) => AcsSystemWarnings::from_json($w),
+                $json->warnings ?? []
+            ),
+            workspace_id: $json->workspace_id,
             can_add_acs_users_to_acs_access_groups: $json->can_add_acs_users_to_acs_access_groups ??
                 null,
             can_automate_enrollment: $json->can_automate_enrollment ?? null,
@@ -18,18 +33,9 @@ class AcsSystem
                 null,
             can_remove_acs_users_from_acs_access_groups: $json->can_remove_acs_users_from_acs_access_groups ??
                 null,
-            connected_account_ids: $json->connected_account_ids,
-            created_at: $json->created_at,
-            default_credential_manager_acs_system_id: $json->default_credential_manager_acs_system_id ??
-                null,
-            errors: $json->errors,
             external_type: $json->external_type ?? null,
             external_type_display_name: $json->external_type_display_name ??
                 null,
-            image_alt_text: $json->image_alt_text,
-            image_url: $json->image_url,
-            is_credential_manager: $json->is_credential_manager,
-            name: $json->name,
             system_type: $json->system_type ?? null,
             system_type_display_name: $json->system_type_display_name ?? null,
             visionline_metadata: isset($json->visionline_metadata)
@@ -37,35 +43,32 @@ class AcsSystem
                     $json->visionline_metadata
                 )
                 : null,
-            warnings: array_map(
-                fn($w) => AcsSystemWarnings::from_json($w),
-                $json->warnings ?? []
-            ),
-            workspace_id: $json->workspace_id
+            default_credential_manager_acs_system_id: $json->default_credential_manager_acs_system_id ??
+                null
         );
     }
 
     public function __construct(
         public string $acs_system_id,
-        public bool|null $can_add_acs_users_to_acs_access_groups,
-        public bool|null $can_automate_enrollment,
-        public bool|null $can_create_acs_access_groups,
-        public bool|null $can_remove_acs_users_from_acs_access_groups,
         public array $connected_account_ids,
         public string $created_at,
-        public string|null $default_credential_manager_acs_system_id,
         public array $errors,
-        public string|null $external_type,
-        public string|null $external_type_display_name,
         public string $image_alt_text,
         public string $image_url,
         public bool $is_credential_manager,
         public string $name,
+        public array $warnings,
+        public string $workspace_id,
+        public bool|null $can_add_acs_users_to_acs_access_groups,
+        public bool|null $can_automate_enrollment,
+        public bool|null $can_create_acs_access_groups,
+        public bool|null $can_remove_acs_users_from_acs_access_groups,
+        public string|null $external_type,
+        public string|null $external_type_display_name,
         public string|null $system_type,
         public string|null $system_type_display_name,
         public AcsSystemVisionlineMetadata|null $visionline_metadata,
-        public array $warnings,
-        public string $workspace_id
+        public string|null $default_credential_manager_acs_system_id
     ) {
     }
 }
