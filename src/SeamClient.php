@@ -1398,7 +1398,7 @@ class AcsEncodersClient
         $this->seam = $seam;
     }
 
-    public function encode_card(
+    public function encode_credential(
         string $acs_credential_id,
         string $device_id,
         bool $wait_for_action_attempt = true
@@ -1414,7 +1414,7 @@ class AcsEncodersClient
 
         $res = $this->seam->request(
             "POST",
-            "/acs/encoders/encode_card",
+            "/acs/encoders/encode_credential",
             json: $request_payload,
             inner_object: "action_attempt"
         );
@@ -1457,7 +1457,7 @@ class AcsEncodersClient
         return array_map(fn($r) => Device::from_json($r), $res);
     }
 
-    public function scan_card(
+    public function scan_credential(
         string $acs_system_id,
         string $device_id,
         bool $wait_for_action_attempt = true
@@ -1473,7 +1473,7 @@ class AcsEncodersClient
 
         $res = $this->seam->request(
             "POST",
-            "/acs/encoders/scan_card",
+            "/acs/encoders/scan_credential",
             json: $request_payload,
             inner_object: "action_attempt"
         );
