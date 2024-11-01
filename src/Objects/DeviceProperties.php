@@ -34,6 +34,11 @@ class DeviceProperties
                     $json->assa_abloy_credential_service_metadata
                 )
                 : null,
+            assa_abloy_vostio_metadata: isset($json->assa_abloy_vostio_metadata)
+                ? DeviceAssaAbloyVostioMetadata::from_json(
+                    $json->assa_abloy_vostio_metadata
+                )
+                : null,
             august_metadata: isset($json->august_metadata)
                 ? DeviceAugustMetadata::from_json($json->august_metadata)
                 : null,
@@ -237,6 +242,7 @@ class DeviceProperties
         public DeviceActiveThermostatSchedule|null $active_thermostat_schedule,
         public DeviceAkilesMetadata|null $akiles_metadata,
         public DeviceAssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata,
+        public DeviceAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
         public DeviceAugustMetadata|null $august_metadata,
         public array|null $available_climate_presets,
         public array|null $available_fan_mode_settings,
