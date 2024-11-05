@@ -1126,6 +1126,7 @@ class AcsCredentialsClient
         string $access_method,
         string $acs_user_id,
         array $allowed_acs_entrance_ids = null,
+        mixed $assa_abloy_vostio_metadata = null,
         string $code = null,
         string $credential_manager_acs_system_id = null,
         string $ends_at = null,
@@ -1145,6 +1146,11 @@ class AcsCredentialsClient
             $request_payload[
                 "allowed_acs_entrance_ids"
             ] = $allowed_acs_entrance_ids;
+        }
+        if ($assa_abloy_vostio_metadata !== null) {
+            $request_payload[
+                "assa_abloy_vostio_metadata"
+            ] = $assa_abloy_vostio_metadata;
         }
         if ($code !== null) {
             $request_payload["code"] = $code;
@@ -1376,7 +1382,7 @@ class AcsEncodersClient
         $this->seam = $seam;
     }
 
-    public function encode_credential(
+    public function encode_card(
         string $acs_credential_id,
         string $device_id,
         bool $wait_for_action_attempt = true
@@ -1392,7 +1398,7 @@ class AcsEncodersClient
 
         $res = $this->seam->request(
             "POST",
-            "/acs/encoders/encode_credential",
+            "/acs/encoders/encode_card",
             json: $request_payload,
             inner_object: "action_attempt"
         );
@@ -1435,7 +1441,7 @@ class AcsEncodersClient
         return array_map(fn($r) => Device::from_json($r), $res);
     }
 
-    public function scan_credential(
+    public function scan_card(
         string $acs_system_id,
         string $device_id,
         bool $wait_for_action_attempt = true
@@ -1451,7 +1457,7 @@ class AcsEncodersClient
 
         $res = $this->seam->request(
             "POST",
-            "/acs/encoders/scan_credential",
+            "/acs/encoders/scan_card",
             json: $request_payload,
             inner_object: "action_attempt"
         );
