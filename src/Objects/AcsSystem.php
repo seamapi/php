@@ -20,6 +20,7 @@ class AcsSystem
             image_alt_text: $json->image_alt_text,
             image_url: $json->image_url,
             is_credential_manager: $json->is_credential_manager,
+            location: AcsSystemLocation::from_json($json->location),
             name: $json->name,
             warnings: array_map(
                 fn($w) => AcsSystemWarnings::from_json($w),
@@ -56,6 +57,7 @@ class AcsSystem
         public string $image_alt_text,
         public string $image_url,
         public bool $is_credential_manager,
+        public AcsSystemLocation $location,
         public string $name,
         public array $warnings,
         public string $workspace_id,
