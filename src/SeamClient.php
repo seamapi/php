@@ -1384,7 +1384,7 @@ class AcsEncodersClient
 
     public function encode_credential(
         string $acs_credential_id,
-        string $device_id,
+        string $acs_encoder_id,
         bool $wait_for_action_attempt = true
     ): ActionAttempt {
         $request_payload = [];
@@ -1392,8 +1392,8 @@ class AcsEncodersClient
         if ($acs_credential_id !== null) {
             $request_payload["acs_credential_id"] = $acs_credential_id;
         }
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
+        if ($acs_encoder_id !== null) {
+            $request_payload["acs_encoder_id"] = $acs_encoder_id;
         }
 
         $res = $this->seam->request(
@@ -1415,44 +1415,42 @@ class AcsEncodersClient
     }
 
     public function list(
+        array $acs_encoder_ids = null,
         array $acs_system_ids = null,
-        array $device_ids = null,
         float $limit = null
-    ): array {
+    ): void {
         $request_payload = [];
 
+        if ($acs_encoder_ids !== null) {
+            $request_payload["acs_encoder_ids"] = $acs_encoder_ids;
+        }
         if ($acs_system_ids !== null) {
             $request_payload["acs_system_ids"] = $acs_system_ids;
-        }
-        if ($device_ids !== null) {
-            $request_payload["device_ids"] = $device_ids;
         }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;
         }
 
-        $res = $this->seam->request(
+        $this->seam->request(
             "POST",
             "/acs/encoders/list",
             json: $request_payload,
-            inner_object: "devices"
+            inner_object: "acs_encoders"
         );
-
-        return array_map(fn($r) => Device::from_json($r), $res);
     }
 
     public function scan_credential(
+        string $acs_encoder_id,
         string $acs_system_id,
-        string $device_id,
         bool $wait_for_action_attempt = true
     ): ActionAttempt {
         $request_payload = [];
 
+        if ($acs_encoder_id !== null) {
+            $request_payload["acs_encoder_id"] = $acs_encoder_id;
+        }
         if ($acs_system_id !== null) {
             $request_payload["acs_system_id"] = $acs_system_id;
-        }
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
         }
 
         $res = $this->seam->request(
