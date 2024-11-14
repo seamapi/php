@@ -3566,13 +3566,13 @@ class ThermostatsClient
     public function create_climate_preset(
         string $climate_preset_key,
         string $device_id,
-        bool $manual_override_allowed,
         float $cooling_set_point_celsius = null,
         float $cooling_set_point_fahrenheit = null,
         string $fan_mode_setting = null,
         float $heating_set_point_celsius = null,
         float $heating_set_point_fahrenheit = null,
         string $hvac_mode_setting = null,
+        bool $manual_override_allowed = null,
         string $name = null
     ): void {
         $request_payload = [];
@@ -3582,11 +3582,6 @@ class ThermostatsClient
         }
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
-        }
-        if ($manual_override_allowed !== null) {
-            $request_payload[
-                "manual_override_allowed"
-            ] = $manual_override_allowed;
         }
         if ($cooling_set_point_celsius !== null) {
             $request_payload[
@@ -3613,6 +3608,11 @@ class ThermostatsClient
         }
         if ($hvac_mode_setting !== null) {
             $request_payload["hvac_mode_setting"] = $hvac_mode_setting;
+        }
+        if ($manual_override_allowed !== null) {
+            $request_payload[
+                "manual_override_allowed"
+            ] = $manual_override_allowed;
         }
         if ($name !== null) {
             $request_payload["name"] = $name;
@@ -4038,6 +4038,7 @@ class ThermostatsSchedulesClient
         string $device_id,
         string $ends_at,
         string $starts_at,
+        bool $is_override_allowed = null,
         mixed $max_override_period_minutes = null,
         string $name = null
     ): ThermostatSchedule {
@@ -4054,6 +4055,9 @@ class ThermostatsSchedulesClient
         }
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;
+        }
+        if ($is_override_allowed !== null) {
+            $request_payload["is_override_allowed"] = $is_override_allowed;
         }
         if ($max_override_period_minutes !== null) {
             $request_payload[
@@ -4138,6 +4142,7 @@ class ThermostatsSchedulesClient
         string $thermostat_schedule_id,
         string $climate_preset_key = null,
         string $ends_at = null,
+        bool $is_override_allowed = null,
         mixed $max_override_period_minutes = null,
         string $name = null,
         string $starts_at = null
@@ -4154,6 +4159,9 @@ class ThermostatsSchedulesClient
         }
         if ($ends_at !== null) {
             $request_payload["ends_at"] = $ends_at;
+        }
+        if ($is_override_allowed !== null) {
+            $request_payload["is_override_allowed"] = $is_override_allowed;
         }
         if ($max_override_period_minutes !== null) {
             $request_payload[

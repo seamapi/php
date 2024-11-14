@@ -18,7 +18,9 @@ class ThermostatSchedule
             starts_at: $json->starts_at,
             thermostat_schedule_id: $json->thermostat_schedule_id,
             errors: $json->errors ?? null,
-            name: $json->name ?? null
+            name: $json->name ?? null,
+            unstable_is_override_allowed: $json->unstable_is_override_allowed ??
+                null
         );
     }
 
@@ -31,7 +33,8 @@ class ThermostatSchedule
         public string $starts_at,
         public string $thermostat_schedule_id,
         public mixed $errors,
-        public string|null $name
+        public string|null $name,
+        public bool|null $unstable_is_override_allowed
     ) {
     }
 }
