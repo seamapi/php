@@ -3925,6 +3925,62 @@ class ThermostatsClient
         return $action_attempt;
     }
 
+    public function set_hvac_mode(
+        string $device_id,
+        string $hvac_mode_setting,
+        float $cooling_set_point_celsius = null,
+        float $cooling_set_point_fahrenheit = null,
+        float $heating_set_point_celsius = null,
+        float $heating_set_point_fahrenheit = null,
+        bool $wait_for_action_attempt = true
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($hvac_mode_setting !== null) {
+            $request_payload["hvac_mode_setting"] = $hvac_mode_setting;
+        }
+        if ($cooling_set_point_celsius !== null) {
+            $request_payload[
+                "cooling_set_point_celsius"
+            ] = $cooling_set_point_celsius;
+        }
+        if ($cooling_set_point_fahrenheit !== null) {
+            $request_payload[
+                "cooling_set_point_fahrenheit"
+            ] = $cooling_set_point_fahrenheit;
+        }
+        if ($heating_set_point_celsius !== null) {
+            $request_payload[
+                "heating_set_point_celsius"
+            ] = $heating_set_point_celsius;
+        }
+        if ($heating_set_point_fahrenheit !== null) {
+            $request_payload[
+                "heating_set_point_fahrenheit"
+            ] = $heating_set_point_fahrenheit;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/thermostats/set_hvac_mode",
+            json: $request_payload,
+            inner_object: "action_attempt"
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt_id
+        );
+
+        return $action_attempt;
+    }
+
     public function set_temperature_threshold(
         string $device_id,
         float $lower_limit_celsius = null,
