@@ -1415,20 +1415,24 @@ class AcsEncodersClient
     }
 
     public function list(
-        array $acs_encoder_ids = null,
+        string $acs_system_id = null,
+        float $limit = null,
         array $acs_system_ids = null,
-        float $limit = null
+        array $acs_encoder_ids = null
     ): void {
         $request_payload = [];
 
-        if ($acs_encoder_ids !== null) {
-            $request_payload["acs_encoder_ids"] = $acs_encoder_ids;
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
         }
         if ($acs_system_ids !== null) {
             $request_payload["acs_system_ids"] = $acs_system_ids;
         }
-        if ($limit !== null) {
-            $request_payload["limit"] = $limit;
+        if ($acs_encoder_ids !== null) {
+            $request_payload["acs_encoder_ids"] = $acs_encoder_ids;
         }
 
         $this->seam->request(
