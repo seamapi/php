@@ -488,7 +488,7 @@ class AccessCodesClient
             "POST",
             "/access_codes/pull_backup_access_code",
             json: $request_payload,
-            inner_object: "backup_access_code"
+            inner_object: "access_code"
         );
 
         return AccessCode::from_json($res);
@@ -1178,6 +1178,43 @@ class AcsCredentialsClient
         $res = $this->seam->request(
             "POST",
             "/acs/credentials/create",
+            json: $request_payload,
+            inner_object: "acs_credential"
+        );
+
+        return AcsCredential::from_json($res);
+    }
+
+    public function create_offline_code(
+        string $acs_user_id,
+        string $allowed_acs_entrance_id = null,
+        string $ends_at = null,
+        bool $is_one_time_use = null,
+        string $starts_at = null
+    ): AcsCredential {
+        $request_payload = [];
+
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+        if ($allowed_acs_entrance_id !== null) {
+            $request_payload[
+                "allowed_acs_entrance_id"
+            ] = $allowed_acs_entrance_id;
+        }
+        if ($ends_at !== null) {
+            $request_payload["ends_at"] = $ends_at;
+        }
+        if ($is_one_time_use !== null) {
+            $request_payload["is_one_time_use"] = $is_one_time_use;
+        }
+        if ($starts_at !== null) {
+            $request_payload["starts_at"] = $starts_at;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/acs/credentials/create_offline_code",
             json: $request_payload,
             inner_object: "acs_credential"
         );
