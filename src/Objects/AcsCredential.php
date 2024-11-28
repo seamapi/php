@@ -36,6 +36,7 @@ class AcsCredential
                 null,
             is_multi_phone_sync_credential: $json->is_multi_phone_sync_credential ??
                 null,
+            is_one_time_use: $json->is_one_time_use ?? null,
             latest_desired_state_synced_with_provider_at: $json->latest_desired_state_synced_with_provider_at ??
                 null,
             parent_acs_credential_id: $json->parent_acs_credential_id ?? null,
@@ -69,6 +70,7 @@ class AcsCredential
         public bool|null $is_issued,
         public bool|null $is_latest_desired_state_synced_with_provider,
         public bool|null $is_multi_phone_sync_credential,
+        public bool|null $is_one_time_use,
         public string|null $latest_desired_state_synced_with_provider_at,
         public string|null $parent_acs_credential_id,
         public string|null $starts_at,

@@ -1187,7 +1187,7 @@ class AcsCredentialsClient
 
     public function create_offline_code(
         string $acs_user_id,
-        string $allowed_acs_entrance_id = null,
+        string $allowed_acs_entrance_id,
         string $ends_at = null,
         bool $is_one_time_use = null,
         string $starts_at = null
