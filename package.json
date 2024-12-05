@@ -15,6 +15,6 @@
     "@seamapi/nextlove-sdk-generator": "1.14.12",
     "@seamapi/types": "1.303.1",
     "del": "^7.1.0",
-    "prettier": "^3.0.0"
+    "prettier": "^3.4.2"
   }
 }
