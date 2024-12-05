@@ -203,6 +203,9 @@ class DeviceProperties
                 null,
             supports_offline_access_codes: $json->supports_offline_access_codes ??
                 null,
+            tado_metadata: isset($json->tado_metadata)
+                ? DeviceTadoMetadata::from_json($json->tado_metadata)
+                : null,
             tedee_metadata: isset($json->tedee_metadata)
                 ? DeviceTedeeMetadata::from_json($json->tedee_metadata)
                 : null,
@@ -308,6 +311,7 @@ class DeviceProperties
         public bool|null $supports_accessory_keypad,
         public bool|null $supports_backup_access_code_pool,
         public bool|null $supports_offline_access_codes,
+        public DeviceTadoMetadata|null $tado_metadata,
         public DeviceTedeeMetadata|null $tedee_metadata,
         public float|null $temperature_celsius,
         public float|null $temperature_fahrenheit,
