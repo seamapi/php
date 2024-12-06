@@ -10,16 +10,14 @@ class DeviceTadoMetadata
             return null;
         }
         return new self(
-            device_name: $json->device_name,
             device_type: $json->device_type,
-            serial_number: $json->serial_number
+            serial_no: $json->serial_no
         );
     }
 
     public function __construct(
-        public string $device_name,
         public string $device_type,
-        public string $serial_number
+        public string $serial_no
     ) {
     }
 }
