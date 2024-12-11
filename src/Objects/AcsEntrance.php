@@ -38,6 +38,11 @@ class AcsEntrance
                     $json->salto_ks_metadata
                 )
                 : null,
+            salto_space_metadata: isset($json->salto_space_metadata)
+                ? AcsEntranceSaltoSpaceMetadata::from_json(
+                    $json->salto_space_metadata
+                )
+                : null,
             visionline_metadata: isset($json->visionline_metadata)
                 ? AcsEntranceVisionlineMetadata::from_json(
                     $json->visionline_metadata
@@ -56,6 +61,7 @@ class AcsEntrance
         public AcsEntranceDormakabaCommunityMetadata|null $dormakaba_community_metadata,
         public AcsEntranceLatchMetadata|null $latch_metadata,
         public AcsEntranceSaltoKsMetadata|null $salto_ks_metadata,
+        public AcsEntranceSaltoSpaceMetadata|null $salto_space_metadata,
         public AcsEntranceVisionlineMetadata|null $visionline_metadata
     ) {
     }
