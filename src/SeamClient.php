@@ -1482,16 +1482,12 @@ class AcsEncodersClient
 
     public function scan_credential(
         string $acs_encoder_id,
-        string $acs_system_id,
         bool $wait_for_action_attempt = true
     ): ActionAttempt {
         $request_payload = [];
 
         if ($acs_encoder_id !== null) {
             $request_payload["acs_encoder_id"] = $acs_encoder_id;
-        }
-        if ($acs_system_id !== null) {
-            $request_payload["acs_system_id"] = $acs_system_id;
         }
 
         $res = $this->seam->request(
@@ -1703,11 +1699,11 @@ class AcsUsersClient
 
     public function create(
         string $acs_system_id,
+        string $full_name,
         mixed $access_schedule = null,
         array $acs_access_group_ids = null,
         string $email = null,
         string $email_address = null,
-        string $full_name = null,
         string $phone_number = null,
         string $user_identity_id = null
     ): AcsUser {
@@ -1715,6 +1711,9 @@ class AcsUsersClient
 
         if ($acs_system_id !== null) {
             $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($full_name !== null) {
+            $request_payload["full_name"] = $full_name;
         }
         if ($access_schedule !== null) {
             $request_payload["access_schedule"] = $access_schedule;
@@ -1727,9 +1726,6 @@ class AcsUsersClient
         }
         if ($email_address !== null) {
             $request_payload["email_address"] = $email_address;
-        }
-        if ($full_name !== null) {
-            $request_payload["full_name"] = $full_name;
         }
         if ($phone_number !== null) {
             $request_payload["phone_number"] = $phone_number;
