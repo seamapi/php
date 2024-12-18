@@ -11,6 +11,7 @@ class AcsSystem
         }
         return new self(
             acs_system_id: $json->acs_system_id,
+            connected_account_id: $json->connected_account_id,
             connected_account_ids: $json->connected_account_ids,
             created_at: $json->created_at,
             errors: array_map(
@@ -51,6 +52,7 @@ class AcsSystem
 
     public function __construct(
         public string $acs_system_id,
+        public string $connected_account_id,
         public array $connected_account_ids,
         public string $created_at,
         public array $errors,
