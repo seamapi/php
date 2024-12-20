@@ -124,21 +124,21 @@ class SeamClient
 
         if (($res_json->error ?? null) != null) {
             throw new ApiException(
-                method: $method, 
-                path: $path, 
-                type: $res_json->error->type ?? "",  
-                error: $res_json->error->message, 
-                request_id: $request_id
+                $method, 
+                $path, 
+                $res_json->error->type ?? "",  
+                $res_json->error->message, 
+                $request_id
             );
         }
 
         if ($status_code >= 400) {
             throw new HttpException(
-                method: $method, 
-                path: $path, 
-                error: $response->getReasonPhrase(),
-                request_id: $request_id,
-                status_code: $status_code,
+                $method, 
+                $path, 
+                $response->getReasonPhrase(),
+                $request_id,
+                $status_code,
             );
         }
 
@@ -148,10 +148,10 @@ class SeamClient
                 ($res_json->$inner_object ?? null) == null
             ) {
                 throw new MissingInnerObjectException(
-                    method: $method, 
-                    path: $path, 
-                    inner_object: $inner_object, 
-                    request_id: $request_id, 
+                    $method, 
+                    $path, 
+                    $inner_object, 
+                    $request_id, 
                 );
              }
             return $res_json->$inner_object;
