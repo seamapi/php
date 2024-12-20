@@ -32,6 +32,9 @@ use Seam\Utils\PackageVersion;
 
 use GuzzleHttp\Client as HTTPClient;
 use \Exception as Exception;
+use Seam\Exceptions\ApiException;
+use Seam\Exceptions\HttpException;
+use Seam\Exceptions\MissingInnerObjectException;
 
 define("LTS_VERSION", "1.0.0");
 
@@ -120,36 +123,22 @@ class SeamClient
         }
 
         if (($res_json->error ?? null) != null) {
-            throw new Exception(
-                "Error Calling \"" .
-                    $method .
-                    " " .
-                    $path .
-                    "\" : " .
-                    ($res_json->error->type ?? "") .
-                    ": " .
-                    $res_json->error->message .
-                    " [Request ID: " .
-                    $request_id .
-                    "]"
+            throw new ApiException(
+                method: $method, 
+                path: $path, 
+                type: $res_json->error->type ?? "",  
+                error: $res_json->error->message, 
+                request_id: $request_id
             );
         }
 
         if ($status_code >= 400) {
-            $error_message = $response->getReasonPhrase();
-
-            throw new Exception(
-                "HTTP Error: " .
-                    $error_message .
-                    " [" .
-                    $status_code .
-                    "] " .
-                    $method .
-                    " " .
-                    $path .
-                    " [Request ID: " .
-                    $request_id .
-                    "]"
+            throw new HttpException(
+                method: $method, 
+                path: $path, 
+                error: $response->getReasonPhrase(),
+                request_id: $request_id,
+                status_code: $status_code,
             );
         }
 
@@ -158,18 +147,13 @@ class SeamClient
                 !is_array($res_json->$inner_object) &&
                 ($res_json->$inner_object ?? null) == null
             ) {
-                throw new Exception(
-                    'Missing Inner Object "' .
-                        $inner_object .
-                        '" for ' .
-                        $method .
-                        " " .
-                        $path .
-                        " [Request ID: " .
-                        $request_id .
-                        "]"
+                throw new MissingInnerObjectException(
+                    method: $method, 
+                    path: $path, 
+                    inner_object: $inner_object, 
+                    request_id: $request_id, 
                 );
-            }
+             }
             return $res_json->$inner_object;
         }
         return $res_json;
