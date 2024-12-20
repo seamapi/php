@@ -13,14 +13,16 @@ class AcsEntranceDormakabaCommunityMetadata
         return new self(
             access_point_name: $json->access_point_name,
             common_area_number: $json->common_area_number ?? null,
-            inner_access_points_names: $json->inner_access_points_names ?? null
+            inner_access_points_names: $json->inner_access_points_names ?? null,
+            lease_ids: $json->lease_ids ?? null
         );
     }
 
     public function __construct(
         public string $access_point_name,
         public float|null $common_area_number,
-        public array|null $inner_access_points_names
+        public array|null $inner_access_points_names,
+        public array|null $lease_ids
     ) {
     }
 }

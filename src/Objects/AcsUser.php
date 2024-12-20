@@ -19,7 +19,6 @@ class AcsUser
                 $json->errors ?? []
             ),
             is_managed: $json->is_managed,
-            is_suspended: $json->is_suspended,
             warnings: array_map(
                 fn($w) => AcsUserWarnings::from_json($w),
                 $json->warnings ?? []
@@ -37,6 +36,7 @@ class AcsUser
             hid_acs_system_id: $json->hid_acs_system_id ?? null,
             is_latest_desired_state_synced_with_provider: $json->is_latest_desired_state_synced_with_provider ??
                 null,
+            is_suspended: $json->is_suspended ?? null,
             latest_desired_state_synced_with_provider_at: $json->latest_desired_state_synced_with_provider_at ??
                 null,
             phone_number: $json->phone_number ?? null,
@@ -56,7 +56,6 @@ class AcsUser
         public string $display_name,
         public array $errors,
         public bool $is_managed,
-        public bool $is_suspended,
         public array $warnings,
         public string $workspace_id,
         public AcsUserAccessSchedule|null $access_schedule,
@@ -67,6 +66,7 @@ class AcsUser
         public string|null $full_name,
         public string|null $hid_acs_system_id,
         public bool|null $is_latest_desired_state_synced_with_provider,
+        public bool|null $is_suspended,
         public string|null $latest_desired_state_synced_with_provider_at,
         public string|null $phone_number,
         public string|null $user_identity_id,
