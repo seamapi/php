@@ -20,6 +20,10 @@ class AcsAccessGroup
             external_type_display_name: $json->external_type_display_name,
             is_managed: $json->is_managed,
             name: $json->name,
+            warnings: array_map(
+                fn($w) => AcsAccessGroupWarnings::from_json($w),
+                $json->warnings ?? []
+            ),
             workspace_id: $json->workspace_id
         );
     }
@@ -35,6 +39,7 @@ class AcsAccessGroup
         public string $external_type_display_name,
         public bool $is_managed,
         public string $name,
+        public array $warnings,
         public string $workspace_id
     ) {
     }
