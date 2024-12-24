@@ -31,9 +31,9 @@ use Seam\Objects\Workspace;
 use Seam\Utils\PackageVersion;
 
 use GuzzleHttp\Client as HTTPClient;
-use Seam\Exceptions\SeamHttpApiError;
-use Seam\Exceptions\SeamHttpUnauthorizedError;
-use Seam\Exceptions\SeamHttpInvalidInputError;
+use Seam\Errors\Http\ApiError;
+use Seam\Errors\Http\UnauthorizedError;
+use Seam\Errors\Http\InvalidInputError;
 use \Exception as Exception;
 
 define("LTS_VERSION", "1.0.0");
@@ -124,15 +124,15 @@ class SeamClient
 
         if ($status_code >= 400) {
             if ($status_code === 401) {
-                throw new SeamHttpUnauthorizedError($request_id);
+                throw new UnauthorizedError($request_id);
             }
 
             if (($res_json->error ?? null) != null) {
                 if ($res_json->error->type === 'invalid_input') {
-                    throw new SeamHttpInvalidInputError($res_json->error, $status_code, $request_id);
+                    throw new InvalidInputError($res_json->error, $status_code, $request_id);
                 }
 
-                throw new SeamHttpApiError($res_json->error, $status_code, $request_id);
+                throw new ApiError($res_json->error, $status_code, $request_id);
             }
 
             throw \GuzzleHttp\Exception\RequestException::create(
