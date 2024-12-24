@@ -2128,22 +2128,22 @@ class ActionAttemptsClient
 
         return array_map(fn($r) => ActionAttempt::from_json($r), $res);
     }
-    public function poll_until_ready(string $action_attempt_id): ActionAttempt
+    public function poll_until_ready(string $action_attempt_id, float $timeout = 20.0): ActionAttempt
     {
         $seam = $this->seam;
         $time_waiting = 0.0;
-        $wait_time = 20.0;
+        $polling_interval = 0.4;
         $action_attempt = $seam->action_attempts->get($action_attempt_id);
 
         while ($action_attempt->status == "pending") {
             $action_attempt = $seam->action_attempts->get(
                 $action_attempt->action_attempt_id
             );
-            if ($time_waiting > $wait_time) {
-                throw new TimeoutError($action_attempt, $wait_time);
+            if ($time_waiting > $timeout) {
+                throw new TimeoutError($action_attempt, $timeout);
             }
-            $time_waiting += 0.4;
-            usleep(400000); // sleep for 0.4 seconds
+            $time_waiting += $polling_interval;
+            usleep($polling_interval * 1000000);
         }
 
         if ($action_attempt->status == "error") {
