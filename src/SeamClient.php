@@ -34,6 +34,8 @@ use GuzzleHttp\Client as HTTPClient;
 use Seam\Errors\Http\ApiError;
 use Seam\Errors\Http\UnauthorizedError;
 use Seam\Errors\Http\InvalidInputError;
+use Seam\Errors\ActionAttempt\FailedError;
+use Seam\Errors\ActionAttempt\TimeoutError;
 use \Exception as Exception;
 
 define("LTS_VERSION", "1.0.0");
@@ -2130,25 +2132,22 @@ class ActionAttemptsClient
     {
         $seam = $this->seam;
         $time_waiting = 0.0;
+        $wait_time = 20.0;
         $action_attempt = $seam->action_attempts->get($action_attempt_id);
 
         while ($action_attempt->status == "pending") {
             $action_attempt = $seam->action_attempts->get(
                 $action_attempt->action_attempt_id
             );
-            if ($time_waiting > 20.0) {
-                throw new Exception(
-                    "Timed out waiting for action attempt to be ready"
-                );
+            if ($time_waiting > $wait_time) {
+                throw new TimeoutError($action_attempt, $wait_time);
             }
             $time_waiting += 0.4;
             usleep(400000); // sleep for 0.4 seconds
         }
 
-        if ($action_attempt->status == "failed") {
-            throw new Exception(
-                "Action Attempt failed: " . $action_attempt->error->message
-            );
+        if ($action_attempt->status == "error") {
+            throw new FailedError($action_attempt);
         }
 
         return $action_attempt;
