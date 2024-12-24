@@ -21,7 +21,7 @@ class ApiError extends \Exception
 
   public function getErrorCode(): string
   {
-    return $this->getErrorCode;
+    return $this->errorCode;
   }
 
   public function getStatusCode(): int
@@ -29,7 +29,7 @@ class ApiError extends \Exception
     return $this->statusCode;
   }
 
-  public function getRequestId(): int
+  public function getRequestId(): string
   {
     return $this->requestId;
   }
