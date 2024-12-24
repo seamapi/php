@@ -31,6 +31,9 @@ use Seam\Objects\Workspace;
 use Seam\Utils\PackageVersion;
 
 use GuzzleHttp\Client as HTTPClient;
+use Seam\Exceptions\SeamHttpApiError;
+use Seam\Exceptions\SeamHttpUnauthorizedError;
+use Seam\Exceptions\SeamHttpInvalidInputError;
 use \Exception as Exception;
 
 define("LTS_VERSION", "1.0.0");
@@ -119,60 +122,26 @@ class SeamClient
         } catch (Exception $ignoreError) {
         }
 
-        if (($res_json->error ?? null) != null) {
-            throw new Exception(
-                "Error Calling \"" .
-                    $method .
-                    " " .
-                    $path .
-                    "\" : " .
-                    ($res_json->error->type ?? "") .
-                    ": " .
-                    $res_json->error->message .
-                    " [Request ID: " .
-                    $request_id .
-                    "]"
-            );
-        }
-
         if ($status_code >= 400) {
-            $error_message = $response->getReasonPhrase();
+            if ($status_code === 401) {
+                throw new SeamHttpUnauthorizedError($request_id);
+            }
 
-            throw new Exception(
-                "HTTP Error: " .
-                    $error_message .
-                    " [" .
-                    $status_code .
-                    "] " .
-                    $method .
-                    " " .
-                    $path .
-                    " [Request ID: " .
-                    $request_id .
-                    "]"
+            if (($res_json->error ?? null) != null) {
+                if ($res_json->error->type === 'invalid_input') {
+                    throw new SeamHttpInvalidInputError($res_json->error, $status_code, $request_id);
+                }
+
+                throw new SeamHttpApiError($res_json->error, $status_code, $request_id);
+            }
+
+            throw \GuzzleHttp\Exception\RequestException::create(
+              new \GuzzleHttp\Psr7\Request($method, $path),
+              $response
             );
         }
 
-        if ($inner_object) {
-            if (
-                !is_array($res_json->$inner_object) &&
-                ($res_json->$inner_object ?? null) == null
-            ) {
-                throw new Exception(
-                    'Missing Inner Object "' .
-                        $inner_object .
-                        '" for ' .
-                        $method .
-                        " " .
-                        $path .
-                        " [Request ID: " .
-                        $request_id .
-                        "]"
-                );
-            }
-            return $res_json->$inner_object;
-        }
-        return $res_json;
+        return $inner_object ? $res_json->$inner_object : $res_json;
     }
 }
 
