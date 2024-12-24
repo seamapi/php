@@ -5,6 +5,7 @@ on:
   push:
     branches-ignore:
       - main
+      - seam-exceptions
   workflow_dispatch: {}
 
 jobs:
