@@ -31,6 +31,11 @@ use Seam\Objects\Workspace;
 use Seam\Utils\PackageVersion;
 
 use GuzzleHttp\Client as HTTPClient;
+use Seam\Errors\Http\ApiError;
+use Seam\Errors\Http\UnauthorizedError;
+use Seam\Errors\Http\InvalidInputError;
+use Seam\Errors\ActionAttempt\FailedError;
+use Seam\Errors\ActionAttempt\TimeoutError;
 use \Exception as Exception;
 
 define("LTS_VERSION", "1.0.0");
@@ -119,60 +124,26 @@ class SeamClient
         } catch (Exception $ignoreError) {
         }
 
-        if (($res_json->error ?? null) != null) {
-            throw new Exception(
-                "Error Calling \"" .
-                    $method .
-                    " " .
-                    $path .
-                    "\" : " .
-                    ($res_json->error->type ?? "") .
-                    ": " .
-                    $res_json->error->message .
-                    " [Request ID: " .
-                    $request_id .
-                    "]"
-            );
-        }
-
         if ($status_code >= 400) {
-            $error_message = $response->getReasonPhrase();
+            if ($status_code === 401) {
+                throw new UnauthorizedError($request_id);
+            }
 
-            throw new Exception(
-                "HTTP Error: " .
-                    $error_message .
-                    " [" .
-                    $status_code .
-                    "] " .
-                    $method .
-                    " " .
-                    $path .
-                    " [Request ID: " .
-                    $request_id .
-                    "]"
+            if (($res_json->error ?? null) != null) {
+                if ($res_json->error->type === 'invalid_input') {
+                    throw new InvalidInputError($res_json->error, $status_code, $request_id);
+                }
+
+                throw new ApiError($res_json->error, $status_code, $request_id);
+            }
+
+            throw \GuzzleHttp\Exception\RequestException::create(
+              new \GuzzleHttp\Psr7\Request($method, $path),
+              $response
             );
         }
 
-        if ($inner_object) {
-            if (
-                !is_array($res_json->$inner_object) &&
-                ($res_json->$inner_object ?? null) == null
-            ) {
-                throw new Exception(
-                    'Missing Inner Object "' .
-                        $inner_object .
-                        '" for ' .
-                        $method .
-                        " " .
-                        $path .
-                        " [Request ID: " .
-                        $request_id .
-                        "]"
-                );
-            }
-            return $res_json->$inner_object;
-        }
-        return $res_json;
+        return $inner_object ? $res_json->$inner_object : $res_json;
     }
 }
 
@@ -2157,29 +2128,26 @@ class ActionAttemptsClient
 
         return array_map(fn($r) => ActionAttempt::from_json($r), $res);
     }
-    public function poll_until_ready(string $action_attempt_id): ActionAttempt
+    public function poll_until_ready(string $action_attempt_id, float $timeout = 20.0): ActionAttempt
     {
         $seam = $this->seam;
         $time_waiting = 0.0;
+        $polling_interval = 0.4;
         $action_attempt = $seam->action_attempts->get($action_attempt_id);
 
         while ($action_attempt->status == "pending") {
             $action_attempt = $seam->action_attempts->get(
                 $action_attempt->action_attempt_id
             );
-            if ($time_waiting > 20.0) {
-                throw new Exception(
-                    "Timed out waiting for action attempt to be ready"
-                );
+            if ($time_waiting > $timeout) {
+                throw new TimeoutError($action_attempt, $timeout);
             }
-            $time_waiting += 0.4;
-            usleep(400000); // sleep for 0.4 seconds
+            $time_waiting += $polling_interval;
+            usleep($polling_interval * 1000000);
         }
 
-        if ($action_attempt->status == "failed") {
-            throw new Exception(
-                "Action Attempt failed: " . $action_attempt->error->message
-            );
+        if ($action_attempt->status == "error") {
+            throw new FailedError($action_attempt);
         }
 
         return $action_attempt;
