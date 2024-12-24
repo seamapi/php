@@ -15,13 +15,22 @@ final class HttpErrorTest extends TestCase
     $seam = Fixture::getTestServer();
 
     try {
-      $device = $seam->devices->get();
-      $seam->access_codes->create(device_id: $device->device_id, code: "123");
+      $seam->request(
+        "POST",
+        "/devices/list",
+        json: [
+            "device_ids" => 1234,
+        ]
+    );
       $this->fail("Expected InvalidInputError");
     } catch (InvalidInputError $e) {
       $this->assertEquals(400, $e->statusCode);
       $this->assertNotEmpty($e->requestId);
       $this->assertEquals('invalid_input', $e->errorCode);
+      $this->assertEquals(
+        ['Expected array, received number'],
+        $e->getValidationErrorMessages('device_ids')
+      );
     }
   }
 
