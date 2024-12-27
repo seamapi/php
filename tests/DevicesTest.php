@@ -49,7 +49,7 @@ final class DevicesTest extends TestCase
             $this->fail("Expected the device to be deleted");
         } catch (Exception $exception) {
             $this->assertTrue(
-                str_contains($exception->getMessage(), "device_not_found")
+                str_contains($exception->errorCode, "device_not_found")
             );
         }
 
