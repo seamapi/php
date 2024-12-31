@@ -32,13 +32,9 @@ class AcsCredential
             external_type_display_name: $json->external_type_display_name ??
                 null,
             is_issued: $json->is_issued ?? null,
-            is_latest_desired_state_synced_with_provider: $json->is_latest_desired_state_synced_with_provider ??
-                null,
             is_multi_phone_sync_credential: $json->is_multi_phone_sync_credential ??
                 null,
             is_one_time_use: $json->is_one_time_use ?? null,
-            latest_desired_state_synced_with_provider_at: $json->latest_desired_state_synced_with_provider_at ??
-                null,
             parent_acs_credential_id: $json->parent_acs_credential_id ?? null,
             starts_at: $json->starts_at ?? null,
             visionline_metadata: isset($json->visionline_metadata)
@@ -48,7 +44,11 @@ class AcsCredential
                 : null,
             card_number: $json->card_number ?? null,
             code: $json->code ?? null,
-            issued_at: $json->issued_at ?? null
+            is_latest_desired_state_synced_with_provider: $json->is_latest_desired_state_synced_with_provider ??
+                null,
+            issued_at: $json->issued_at ?? null,
+            latest_desired_state_synced_with_provider_at: $json->latest_desired_state_synced_with_provider_at ??
+                null
         );
     }
 
@@ -68,16 +68,16 @@ class AcsCredential
         public string|null $external_type,
         public string|null $external_type_display_name,
         public bool|null $is_issued,
-        public bool|null $is_latest_desired_state_synced_with_provider,
         public bool|null $is_multi_phone_sync_credential,
         public bool|null $is_one_time_use,
-        public string|null $latest_desired_state_synced_with_provider_at,
         public string|null $parent_acs_credential_id,
         public string|null $starts_at,
         public AcsCredentialVisionlineMetadata|null $visionline_metadata,
         public string|null $card_number,
         public string|null $code,
-        public string|null $issued_at
+        public bool|null $is_latest_desired_state_synced_with_provider,
+        public string|null $issued_at,
+        public string|null $latest_desired_state_synced_with_provider_at
     ) {
     }
 }
