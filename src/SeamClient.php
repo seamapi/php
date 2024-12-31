@@ -1131,6 +1131,7 @@ class AcsCredentialsClient
         string $credential_manager_acs_system_id = null,
         string $ends_at = null,
         bool $is_multi_phone_sync_credential = null,
+        mixed $salto_space_metadata = null,
         string $starts_at = null,
         mixed $visionline_metadata = null
     ): AcsCredential {
@@ -1167,6 +1168,9 @@ class AcsCredentialsClient
             $request_payload[
                 "is_multi_phone_sync_credential"
             ] = $is_multi_phone_sync_credential;
+        }
+        if ($salto_space_metadata !== null) {
+            $request_payload["salto_space_metadata"] = $salto_space_metadata;
         }
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;

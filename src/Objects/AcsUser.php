@@ -34,13 +34,13 @@ class AcsUser
                 null,
             full_name: $json->full_name ?? null,
             hid_acs_system_id: $json->hid_acs_system_id ?? null,
-            is_latest_desired_state_synced_with_provider: $json->is_latest_desired_state_synced_with_provider ??
-                null,
             is_suspended: $json->is_suspended ?? null,
-            latest_desired_state_synced_with_provider_at: $json->latest_desired_state_synced_with_provider_at ??
-                null,
             phone_number: $json->phone_number ?? null,
             user_identity_id: $json->user_identity_id ?? null,
+            is_latest_desired_state_synced_with_provider: $json->is_latest_desired_state_synced_with_provider ??
+                null,
+            latest_desired_state_synced_with_provider_at: $json->latest_desired_state_synced_with_provider_at ??
+                null,
             user_identity_email_address: $json->user_identity_email_address ??
                 null,
             user_identity_full_name: $json->user_identity_full_name ?? null,
@@ -65,11 +65,11 @@ class AcsUser
         public string|null $external_type_display_name,
         public string|null $full_name,
         public string|null $hid_acs_system_id,
-        public bool|null $is_latest_desired_state_synced_with_provider,
         public bool|null $is_suspended,
-        public string|null $latest_desired_state_synced_with_provider_at,
         public string|null $phone_number,
         public string|null $user_identity_id,
+        public bool|null $is_latest_desired_state_synced_with_provider,
+        public string|null $latest_desired_state_synced_with_provider_at,
         public string|null $user_identity_email_address,
         public string|null $user_identity_full_name,
         public string|null $user_identity_phone_number
