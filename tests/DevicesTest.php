@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Tests\Fixture;
-use GuzzleHttp\Client;
 
 final class DevicesTest extends TestCase
 {
@@ -47,9 +46,9 @@ final class DevicesTest extends TestCase
             $seam->devices->get(device_id: $device_id);
 
             $this->fail("Expected the device to be deleted");
-        } catch (Exception $exception) {
+        } catch (\Seam\SeamHttpApiError $exception) {
             $this->assertTrue(
-                str_contains($exception->errorCode, "device_not_found")
+                str_contains($exception->getErrorCode(), "device_not_found")
             );
         }
 

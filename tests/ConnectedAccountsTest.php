@@ -48,7 +48,7 @@ final class ConnectedAccountsTest extends TestCase
         } catch (\Seam\SeamHttpApiError $exception) {
             $this->assertTrue(
                 str_contains(
-                    $exception->errorCode,
+                    $exception->getErrorCode(),
                     "connected_account_not_found"
                 )
             );

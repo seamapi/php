@@ -4,10 +4,10 @@ namespace Seam;
 
 class SeamHttpApiError extends \Exception
 {
-  public string $errorCode;
-  public int $statusCode;
-  public string $requestId;
-  public ?object $data;
+  private string $errorCode;
+  private int $statusCode;
+  private string $requestId;
+  private ?object $data = null;
 
   public function __construct(object $error, int $statusCode, string $requestId)
   {
