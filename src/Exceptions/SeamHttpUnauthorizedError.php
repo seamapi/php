@@ -1,10 +1,8 @@
 <?php
 
-namespace Seam\Errors\Http;
+namespace Seam;
 
-use Seam\Errors\Http\ApiError;
-
-class UnauthorizedError extends ApiError
+class SeamHttpUnauthorizedError extends SeamHttpApiError
 {
   public function __construct(string $requestId)
   {

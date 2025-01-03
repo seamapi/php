@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Tests\Fixture;
-use Seam\Errors\Http\ApiError;
-use Seam\Errors\Http\UnauthorizedError;
-use Seam\Errors\Http\InvalidInputError;
 
 final class HttpErrorTest extends TestCase
 {
@@ -23,7 +20,7 @@ final class HttpErrorTest extends TestCase
         ]
     );
       $this->fail("Expected InvalidInputError");
-    } catch (InvalidInputError $e) {
+    } catch (\Seam\SeamHttpInvalidInputError $e) {
       $this->assertEquals(400, $e->statusCode);
       $this->assertNotEmpty($e->requestId);
       $this->assertEquals('invalid_input', $e->errorCode);
@@ -45,7 +42,7 @@ final class HttpErrorTest extends TestCase
     try {
       $seam->devices->list();
       $this->fail("Expected UnauthorizedError");
-    } catch (UnauthorizedError $e) {
+    } catch (\Seam\SeamHttpUnauthorizedError $e) {
       $this->assertNotEmpty($e->requestId);
     }
   }
@@ -57,7 +54,7 @@ final class HttpErrorTest extends TestCase
     try {
       $seam->devices->get(device_id: "nonexistent_device_id");
       $this->fail("Expected ApiError");
-    } catch (ApiError $e) {
+    } catch (\Seam\SeamHttpApiError $e) {
       $this->assertEquals(404, $e->statusCode);
       $this->assertNotEmpty($e->requestId);
       $this->assertEquals('device_not_found', $e->errorCode);

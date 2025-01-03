@@ -1,10 +1,10 @@
 <?php
 
-namespace Seam\Errors\ActionAttempt;
+namespace Seam;
 
 use Seam\Objects\ActionAttempt;
 
-class TimeoutError extends SeamActionAttemptError
+class SeamActionAttemptTimeoutError extends SeamActionAttemptError
 {
     public function __construct(ActionAttempt $actionAttempt, float $timeout)
     {

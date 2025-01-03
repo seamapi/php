@@ -1,10 +1,8 @@
 <?php
 
-namespace Seam\Errors\Http;
+namespace Seam;
 
-use Seam\Errors\Http\ApiError;
-
-class InvalidInputError extends ApiError
+class SeamHttpInvalidInputError extends SeamHttpApiError
 {
   private object $validationErrors;
 

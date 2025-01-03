@@ -31,11 +31,11 @@ use Seam\Objects\Workspace;
 use Seam\Utils\PackageVersion;
 
 use GuzzleHttp\Client as HTTPClient;
-use Seam\Errors\Http\ApiError;
-use Seam\Errors\Http\UnauthorizedError;
-use Seam\Errors\Http\InvalidInputError;
-use Seam\Errors\ActionAttempt\FailedError;
-use Seam\Errors\ActionAttempt\TimeoutError;
+use Seam\SeamHttpApiError;
+use Seam\SeamHttpUnauthorizedError;
+use Seam\SeamHttpInvalidInputError;
+use Seam\SeamActionAttemptFailedError;
+use Seam\SeamActionAttemptTimeoutError;
 use \Exception as Exception;
 
 define("LTS_VERSION", "1.0.0");
@@ -126,15 +126,15 @@ class SeamClient
 
         if ($status_code >= 400) {
             if ($status_code === 401) {
-                throw new UnauthorizedError($request_id);
+                throw new SeamHttpUnauthorizedError($request_id);
             }
 
             if (($res_json->error ?? null) != null) {
                 if ($res_json->error->type === 'invalid_input') {
-                    throw new InvalidInputError($res_json->error, $status_code, $request_id);
+                    throw new SeamHttpInvalidInputError($res_json->error, $status_code, $request_id);
                 }
 
-                throw new ApiError($res_json->error, $status_code, $request_id);
+                throw new SeamHttpApiError($res_json->error, $status_code, $request_id);
             }
 
             throw \GuzzleHttp\Exception\RequestException::create(
@@ -2140,14 +2140,14 @@ class ActionAttemptsClient
                 $action_attempt->action_attempt_id
             );
             if ($time_waiting > $timeout) {
-                throw new TimeoutError($action_attempt, $timeout);
+                throw new SeamActionAttemptTimeoutError($action_attempt, $timeout);
             }
             $time_waiting += $polling_interval;
             usleep($polling_interval * 1000000);
         }
 
         if ($action_attempt->status == "error") {
-            throw new FailedError($action_attempt);
+            throw new SeamActionAttemptFailedError($action_attempt);
         }
 
         return $action_attempt;

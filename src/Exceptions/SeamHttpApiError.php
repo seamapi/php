@@ -1,8 +1,8 @@
 <?php
 
-namespace Seam\Errors\Http;
+namespace Seam;
 
-class ApiError extends \Exception
+class SeamHttpApiError extends \Exception
 {
   public string $errorCode;
   public int $statusCode;

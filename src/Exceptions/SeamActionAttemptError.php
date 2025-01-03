@@ -1,6 +1,6 @@
 <?php
 
-namespace Seam\Errors\ActionAttempt;
+namespace Seam;
 
 use Seam\Objects\ActionAttempt;
 
