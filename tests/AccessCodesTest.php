@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Tests\Fixture;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientErrorResponseException as ClientErrorResponseException;
-use GuzzleHttp\Promise\Is;
 
 final class AccessCodesTest extends TestCase
 {
@@ -62,7 +59,7 @@ final class AccessCodesTest extends TestCase
             $seam->access_codes->get(access_code_id: $access_code_id);
 
             $this->fail("Expected the code to be deleted");
-        } catch (Exception $exception) {
+        } catch (\Seam\SeamHttpApiError $exception) {
             $this->assertTrue(
                 str_contains($exception->getMessage(), "Access Code Not Found")
             );

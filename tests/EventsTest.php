@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Tests\Fixture;
-use GuzzleHttp\Client;
 
 final class EventsTest extends TestCase
 {
@@ -38,7 +37,7 @@ final class EventsTest extends TestCase
         $seam = Fixture::getTestServer();
         try {
             $seam->events->list(since: "invalid_date");
-        } catch (Exception $e) {
+        } catch (\Seam\SeamHttpInvalidInputError $e) {
             $this->assertTrue(
                 str_contains($e->getMessage(), "Must be parsable date string")
             );
