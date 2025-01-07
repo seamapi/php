@@ -4,7 +4,7 @@ namespace Seam;
 
 use Seam\Objects\ActionAttempt;
 
-class SeamActionAttemptFailedError extends SeamActionAttemptError
+class ActionAttemptFailedError extends ActionAttemptError
 {
   private string $errorCode;
 

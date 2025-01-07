@@ -2,7 +2,7 @@
 
 namespace Seam;
 
-class SeamHttpInvalidInputError extends SeamHttpApiError
+class HttpInvalidInputError extends HttpApiError
 {
   private object $validationErrors;
 

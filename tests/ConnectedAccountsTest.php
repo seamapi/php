@@ -45,7 +45,7 @@ final class ConnectedAccountsTest extends TestCase
                 connected_account_id: $connected_account_id
             );
             $this->fail("Expected the account to be deleted");
-        } catch (\Seam\SeamHttpApiError $exception) {
+        } catch (\Seam\HttpApiError $exception) {
             $this->assertTrue(
                 str_contains(
                     $exception->getErrorCode(),

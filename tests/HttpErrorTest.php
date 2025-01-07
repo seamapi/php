@@ -20,7 +20,7 @@ final class HttpErrorTest extends TestCase
         ]
     );
       $this->fail("Expected InvalidInputError");
-    } catch (\Seam\SeamHttpInvalidInputError $e) {
+    } catch (\Seam\HttpInvalidInputError $e) {
       $this->assertEquals(400, $e->getStatusCode());
       $this->assertNotEmpty($e->getRequestId());
       $this->assertEquals('invalid_input', $e->getErrorCode());
@@ -42,7 +42,7 @@ final class HttpErrorTest extends TestCase
     try {
       $seam->devices->list();
       $this->fail("Expected UnauthorizedError");
-    } catch (\Seam\SeamHttpUnauthorizedError $e) {
+    } catch (\Seam\HttpUnauthorizedError $e) {
       $this->assertNotEmpty($e->getRequestId());
     }
   }
@@ -54,7 +54,7 @@ final class HttpErrorTest extends TestCase
     try {
       $seam->devices->get(device_id: "nonexistent_device_id");
       $this->fail("Expected ApiError");
-    } catch (\Seam\SeamHttpApiError $e) {
+    } catch (\Seam\HttpApiError $e) {
       $this->assertEquals(404, $e->getStatusCode());
       $this->assertNotEmpty($e->getRequestId());
       $this->assertEquals('device_not_found', $e->getErrorCode());

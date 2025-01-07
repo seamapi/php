@@ -2,7 +2,7 @@
 
 namespace Seam;
 
-class SeamHttpApiError extends \Exception
+class HttpApiError extends \Exception
 {
   private string $errorCode;
   private int $statusCode;

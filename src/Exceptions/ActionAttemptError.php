@@ -4,7 +4,7 @@ namespace Seam;
 
 use Seam\Objects\ActionAttempt;
 
-class SeamActionAttemptError extends \Exception
+class ActionAttemptError extends \Exception
 {
   private ActionAttempt $actionAttempt;
 
@@ -15,7 +15,7 @@ class SeamActionAttemptError extends \Exception
     $this->actionAttempt = $actionAttempt;
   }
 
-  public function getActionAttempt(): ActionAttempt 
+  public function getActionAttempt(): ActionAttempt
   {
     return $this->actionAttempt;
   }

@@ -58,8 +58,8 @@ final class ActionAttemptsTest extends TestCase
 
         try {
             $seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id);
-            $this->fail("Expected SeamActionAttemptFailedError");
-        } catch (\Seam\SeamActionAttemptFailedError $e) {
+            $this->fail("Expected ActionAttemptFailedError");
+        } catch (\Seam\ActionAttemptFailedError $e) {
             $this->assertEquals($action_attempt->action_attempt_id, $e->getActionAttempt()->action_attempt_id);
             $this->assertEquals("error", $e->getActionAttempt()->status);
             $this->assertEquals("failed_attempt", $e->getErrorCode());
@@ -91,7 +91,7 @@ final class ActionAttemptsTest extends TestCase
         try {
             $seam->action_attempts->poll_until_ready($action_attempt->action_attempt_id, 0.1);
             $this->fail("Expected TimeoutError");
-        } catch (\Seam\SeamActionAttemptTimeoutError $e) {
+        } catch (\Seam\ActionAttemptTimeoutError $e) {
             $this->assertEquals($action_attempt->action_attempt_id, $e->getActionAttempt()->action_attempt_id);
             $this->assertEquals("pending", $e->getActionAttempt()->status);
             $this->assertEquals("Timed out waiting for action attempt after 0.1s", $e->getMessage());

@@ -59,7 +59,7 @@ final class AccessCodesTest extends TestCase
             $seam->access_codes->get(access_code_id: $access_code_id);
 
             $this->fail("Expected the code to be deleted");
-        } catch (\Seam\SeamHttpApiError $exception) {
+        } catch (\Seam\HttpApiError $exception) {
             $this->assertTrue(
                 str_contains($exception->getMessage(), "Access Code Not Found")
             );

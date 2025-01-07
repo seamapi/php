@@ -2,7 +2,7 @@
 
 namespace Seam;
 
-class SeamHttpUnauthorizedError extends SeamHttpApiError
+class HttpUnauthorizedError extends HttpApiError
 {
   public function __construct(string $requestId)
   {

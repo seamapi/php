@@ -46,7 +46,7 @@ final class DevicesTest extends TestCase
             $seam->devices->get(device_id: $device_id);
 
             $this->fail("Expected the device to be deleted");
-        } catch (\Seam\SeamHttpApiError $exception) {
+        } catch (\Seam\HttpApiError $exception) {
             $this->assertTrue(
                 str_contains($exception->getErrorCode(), "device_not_found")
             );
