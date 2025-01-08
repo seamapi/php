@@ -11,6 +11,7 @@ class Event
         }
         return new self(
             access_code_id: $json->access_code_id ?? null,
+            acs_access_group_id: $json->acs_access_group_id ?? null,
             acs_credential_id: $json->acs_credential_id ?? null,
             acs_encoder_id: $json->acs_encoder_id ?? null,
             acs_system_id: $json->acs_system_id ?? null,
@@ -28,6 +29,10 @@ class Event
             cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
                 null,
             created_at: $json->created_at ?? null,
+            desired_temperature_celsius: $json->desired_temperature_celsius ??
+                null,
+            desired_temperature_fahrenheit: $json->desired_temperature_fahrenheit ??
+                null,
             device_id: $json->device_id ?? null,
             enrollment_automation_id: $json->enrollment_automation_id ?? null,
             error_code: $json->error_code ?? null,
@@ -63,6 +68,7 @@ class Event
 
     public function __construct(
         public string|null $access_code_id,
+        public string|null $acs_access_group_id,
         public string|null $acs_credential_id,
         public string|null $acs_encoder_id,
         public string|null $acs_system_id,
@@ -79,6 +85,8 @@ class Event
         public float|null $cooling_set_point_celsius,
         public float|null $cooling_set_point_fahrenheit,
         public string|null $created_at,
+        public float|null $desired_temperature_celsius,
+        public float|null $desired_temperature_fahrenheit,
         public string|null $device_id,
         public string|null $enrollment_automation_id,
         public string|null $error_code,
