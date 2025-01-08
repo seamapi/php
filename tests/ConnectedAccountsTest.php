@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Tests\Fixture;
-use GuzzleHttp\Client;
 
 final class ConnectedAccountsTest extends TestCase
 {
@@ -46,10 +45,10 @@ final class ConnectedAccountsTest extends TestCase
                 connected_account_id: $connected_account_id
             );
             $this->fail("Expected the account to be deleted");
-        } catch (Exception $exception) {
+        } catch (\Seam\HttpApiError $exception) {
             $this->assertTrue(
                 str_contains(
-                    $exception->getMessage(),
+                    $exception->getErrorCode(),
                     "connected_account_not_found"
                 )
             );
