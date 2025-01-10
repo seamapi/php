@@ -10,15 +10,10 @@ class AcsEntranceDormakabaCommunityMetadata
         if (!$json) {
             return null;
         }
-        return new self(
-            access_point_name: $json->access_point_name,
-            common_area_number: $json->common_area_number ?? null
-        );
+        return new self(access_point_name: $json->access_point_name);
     }
 
-    public function __construct(
-        public string $access_point_name,
-        public float|null $common_area_number
-    ) {
+    public function __construct(public string $access_point_name)
+    {
     }
 }
