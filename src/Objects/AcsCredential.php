@@ -27,6 +27,11 @@ class AcsCredential
             workspace_id: $json->workspace_id,
             acs_credential_pool_id: $json->acs_credential_pool_id ?? null,
             acs_user_id: $json->acs_user_id ?? null,
+            assa_abloy_vostio_metadata: isset($json->assa_abloy_vostio_metadata)
+                ? AcsCredentialAssaAbloyVostioMetadata::from_json(
+                    $json->assa_abloy_vostio_metadata
+                )
+                : null,
             ends_at: $json->ends_at ?? null,
             external_type: $json->external_type ?? null,
             external_type_display_name: $json->external_type_display_name ??
@@ -64,6 +69,7 @@ class AcsCredential
         public string $workspace_id,
         public string|null $acs_credential_pool_id,
         public string|null $acs_user_id,
+        public AcsCredentialAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
         public string|null $ends_at,
         public string|null $external_type,
         public string|null $external_type_display_name,
