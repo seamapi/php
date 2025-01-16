@@ -1,6 +1,6 @@
 {
   "name": "@seamapi/php",
-  "version": "2.69.0",
+  "version": "2.70.0",
   "type": "module",
   "private": true,
   "license": "MIT",
