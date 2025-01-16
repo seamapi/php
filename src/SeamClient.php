@@ -7,6 +7,7 @@ use Seam\Objects\AcsAccessGroup;
 use Seam\Objects\AcsCredential;
 use Seam\Objects\AcsCredentialPool;
 use Seam\Objects\AcsCredentialProvisioningAutomation;
+use Seam\Objects\AcsEncoder;
 use Seam\Objects\AcsEntrance;
 use Seam\Objects\AcsSystem;
 use Seam\Objects\AcsUser;
@@ -24,6 +25,9 @@ use Seam\Objects\Phone;
 use Seam\Objects\ServiceHealth;
 use Seam\Objects\ThermostatSchedule;
 use Seam\Objects\UnmanagedAccessCode;
+use Seam\Objects\UnmanagedAcsAccessGroup;
+use Seam\Objects\UnmanagedAcsCredential;
+use Seam\Objects\UnmanagedAcsUser;
 use Seam\Objects\UnmanagedDevice;
 use Seam\Objects\UserIdentity;
 use Seam\Objects\Webhook;
@@ -955,7 +959,7 @@ class AcsAccessGroupsUnmanagedClient
         $this->seam = $seam;
     }
 
-    public function get(string $acs_access_group_id): void
+    public function get(string $acs_access_group_id): UnmanagedAcsAccessGroup
     {
         $request_payload = [];
 
@@ -963,18 +967,20 @@ class AcsAccessGroupsUnmanagedClient
             $request_payload["acs_access_group_id"] = $acs_access_group_id;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/acs/access_groups/unmanaged/get",
             json: $request_payload,
             inner_object: "acs_access_group"
         );
+
+        return UnmanagedAcsAccessGroup::from_json($res);
     }
 
     public function list(
         string $acs_system_id = null,
         string $acs_user_id = null
-    ): void {
+    ): array {
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -984,11 +990,16 @@ class AcsAccessGroupsUnmanagedClient
             $request_payload["acs_user_id"] = $acs_user_id;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/acs/access_groups/unmanaged/list",
             json: $request_payload,
             inner_object: "acs_access_groups"
+        );
+
+        return array_map(
+            fn($r) => UnmanagedAcsAccessGroup::from_json($r),
+            $res
         );
     }
 }
@@ -1351,7 +1362,7 @@ class AcsCredentialsUnmanagedClient
         $this->seam = $seam;
     }
 
-    public function get(string $acs_credential_id): void
+    public function get(string $acs_credential_id): UnmanagedAcsCredential
     {
         $request_payload = [];
 
@@ -1359,19 +1370,21 @@ class AcsCredentialsUnmanagedClient
             $request_payload["acs_credential_id"] = $acs_credential_id;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/acs/credentials/unmanaged/get",
             json: $request_payload,
             inner_object: "acs_credential"
         );
+
+        return UnmanagedAcsCredential::from_json($res);
     }
 
     public function list(
         string $acs_user_id = null,
         string $acs_system_id = null,
         string $user_identity_id = null
-    ): void {
+    ): array {
         $request_payload = [];
 
         if ($acs_user_id !== null) {
@@ -1384,12 +1397,14 @@ class AcsCredentialsUnmanagedClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/acs/credentials/unmanaged/list",
             json: $request_payload,
             inner_object: "acs_credentials"
         );
+
+        return array_map(fn($r) => UnmanagedAcsCredential::from_json($r), $res);
     }
 }
 
@@ -1439,7 +1454,7 @@ class AcsEncodersClient
         float $limit = null,
         array $acs_system_ids = null,
         array $acs_encoder_ids = null
-    ): void {
+    ): array {
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -1455,12 +1470,14 @@ class AcsEncodersClient
             $request_payload["acs_encoder_ids"] = $acs_encoder_ids;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/acs/encoders/list",
             json: $request_payload,
             inner_object: "acs_encoders"
         );
+
+        return array_map(fn($r) => AcsEncoder::from_json($r), $res);
     }
 
     public function scan_credential(
@@ -2042,7 +2059,7 @@ class AcsUsersUnmanagedClient
         $this->seam = $seam;
     }
 
-    public function get(string $acs_user_id): void
+    public function get(string $acs_user_id): UnmanagedAcsUser
     {
         $request_payload = [];
 
@@ -2050,12 +2067,14 @@ class AcsUsersUnmanagedClient
             $request_payload["acs_user_id"] = $acs_user_id;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/acs/users/unmanaged/get",
             json: $request_payload,
             inner_object: "acs_user"
         );
+
+        return UnmanagedAcsUser::from_json($res);
     }
 
     public function list(
@@ -2064,7 +2083,7 @@ class AcsUsersUnmanagedClient
         string $user_identity_email_address = null,
         string $user_identity_id = null,
         string $user_identity_phone_number = null
-    ): void {
+    ): array {
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -2087,12 +2106,14 @@ class AcsUsersUnmanagedClient
             ] = $user_identity_phone_number;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/acs/users/unmanaged/list",
             json: $request_payload,
             inner_object: "acs_users"
         );
+
+        return array_map(fn($r) => UnmanagedAcsUser::from_json($r), $res);
     }
 }
 
