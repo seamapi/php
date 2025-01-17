@@ -16,12 +16,20 @@ class PhoneProperties
                 ? PhoneAssaAbloyCredentialServiceMetadata::from_json(
                     $json->assa_abloy_credential_service_metadata
                 )
+                : null,
+            salto_space_credential_service_metadata: isset(
+                $json->salto_space_credential_service_metadata
+            )
+                ? PhoneSaltoSpaceCredentialServiceMetadata::from_json(
+                    $json->salto_space_credential_service_metadata
+                )
                 : null
         );
     }
 
     public function __construct(
-        public PhoneAssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata
+        public PhoneAssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata,
+        public PhoneSaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata
     ) {
     }
 }
