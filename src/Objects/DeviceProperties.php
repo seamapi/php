@@ -183,6 +183,13 @@ class DeviceProperties
             salto_metadata: isset($json->salto_metadata)
                 ? DeviceSaltoMetadata::from_json($json->salto_metadata)
                 : null,
+            salto_space_credential_service_metadata: isset(
+                $json->salto_space_credential_service_metadata
+            )
+                ? DeviceSaltoSpaceCredentialServiceMetadata::from_json(
+                    $json->salto_space_credential_service_metadata
+                )
+                : null,
             schlage_metadata: isset($json->schlage_metadata)
                 ? DeviceSchlageMetadata::from_json($json->schlage_metadata)
                 : null,
@@ -303,6 +310,7 @@ class DeviceProperties
         public float|null $relative_humidity,
         public DeviceSaltoKsMetadata|null $salto_ks_metadata,
         public DeviceSaltoMetadata|null $salto_metadata,
+        public DeviceSaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata,
         public DeviceSchlageMetadata|null $schlage_metadata,
         public DeviceSeamBridgeMetadata|null $seam_bridge_metadata,
         public string|null $serial_number,
