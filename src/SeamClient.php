@@ -3627,10 +3627,12 @@ class ThermostatsClient
 {
     private SeamClient $seam;
     public ThermostatsSchedulesClient $schedules;
+    public ThermostatsSimulateClient $simulate;
     public function __construct(SeamClient $seam)
     {
         $this->seam = $seam;
         $this->schedules = new ThermostatsSchedulesClient($seam);
+        $this->simulate = new ThermostatsSimulateClient($seam);
     }
 
     public function activate_climate_preset(
@@ -4380,6 +4382,42 @@ class ThermostatsSchedulesClient
         $this->seam->request(
             "POST",
             "/thermostats/schedules/update",
+            json: $request_payload
+        );
+    }
+}
+
+class ThermostatsSimulateClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function temperature_reached(
+        string $device_id,
+        float $temperature_celsius = null,
+        float $temperature_fahrenheit = null
+    ): void {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($temperature_celsius !== null) {
+            $request_payload["temperature_celsius"] = $temperature_celsius;
+        }
+        if ($temperature_fahrenheit !== null) {
+            $request_payload[
+                "temperature_fahrenheit"
+            ] = $temperature_fahrenheit;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/thermostats/simulate/temperature_reached",
             json: $request_payload
         );
     }
