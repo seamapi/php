@@ -11,7 +11,7 @@
     "format": "prettier --write --ignore-path .gitignore ."
   },
   "devDependencies": {
-    "@prettier/plugin-php": "^0.22.1",
+    "@prettier/plugin-php": "^0.22.3",
     "@seamapi/nextlove-sdk-generator": "1.15.3",
     "@seamapi/types": "1.340.1",
     "del": "^7.1.0",
