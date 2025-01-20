@@ -22,6 +22,5 @@ class AcsEntranceLatchMetadata
         public string $door_name,
         public string $door_type,
         public bool $is_connected
-    ) {
-    }
+    ) {}
 }

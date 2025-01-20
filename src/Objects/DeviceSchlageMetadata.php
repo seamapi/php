@@ -22,6 +22,5 @@ class DeviceSchlageMetadata
         public string $device_name,
         public string|null $model,
         public float|null $access_code_length
-    ) {
-    }
+    ) {}
 }

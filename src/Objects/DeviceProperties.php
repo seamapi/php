@@ -329,6 +329,5 @@ class DeviceProperties
         public DeviceVisionlineMetadata|null $visionline_metadata,
         public DeviceWyzeMetadata|null $wyze_metadata,
         public string|null $fallback_climate_preset_key
-    ) {
-    }
+    ) {}
 }

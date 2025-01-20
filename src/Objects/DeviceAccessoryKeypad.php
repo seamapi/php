@@ -20,6 +20,5 @@ class DeviceAccessoryKeypad
     public function __construct(
         public bool $is_connected,
         public DeviceBattery|null $battery
-    ) {
-    }
+    ) {}
 }

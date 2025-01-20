@@ -22,6 +22,5 @@ class ConnectedAccountErrors
         public bool $is_connected_account_error,
         public string $message,
         public string|null $created_at
-    ) {
-    }
+    ) {}
 }

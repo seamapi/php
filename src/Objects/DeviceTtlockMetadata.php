@@ -29,6 +29,5 @@ class DeviceTtlockMetadata
         public float $lock_id,
         public bool|null $has_gateway,
         public array|null $wireless_keypads
-    ) {
-    }
+    ) {}
 }

@@ -23,6 +23,5 @@ class DeviceSmartthingsMetadata
         public string $device_name,
         public string|null $location_id,
         public string|null $model
-    ) {
-    }
+    ) {}
 }

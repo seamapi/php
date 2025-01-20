@@ -20,6 +20,5 @@ class ServiceHealth
         public string $description,
         public string $service,
         public string $status
-    ) {
-    }
+    ) {}
 }

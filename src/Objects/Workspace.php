@@ -24,6 +24,5 @@ class Workspace
         public string $name,
         public string $workspace_id,
         public string|null $connect_partner_name
-    ) {
-    }
+    ) {}
 }

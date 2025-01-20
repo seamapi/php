@@ -21,6 +21,5 @@ class AcsSystemVisionlineMetadata
         public string $lan_address,
         public string $mobile_access_uuid,
         public string $system_id
-    ) {
-    }
+    ) {}
 }

@@ -75,6 +75,5 @@ class Device
         public bool|null $can_turn_off_hvac,
         public string|null $nickname,
         public DeviceLocation|null $location
-    ) {
-    }
+    ) {}
 }

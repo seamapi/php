@@ -13,7 +13,5 @@ class DeviceAssaAbloyVostioMetadata
         return new self(encoder_name: $json->encoder_name);
     }
 
-    public function __construct(public string $encoder_name)
-    {
-    }
+    public function __construct(public string $encoder_name) {}
 }

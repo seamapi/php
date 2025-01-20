@@ -18,6 +18,5 @@ class DeviceGenieMetadata
     public function __construct(
         public string $device_name,
         public string $door_name
-    ) {
-    }
+    ) {}
 }

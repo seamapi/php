@@ -24,6 +24,5 @@ class DeviceIgloohomeMetadata
         public string|null $bridge_id,
         public string|null $bridge_name,
         public string|null $keypad_id
-    ) {
-    }
+    ) {}
 }

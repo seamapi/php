@@ -34,6 +34,5 @@ class ClientSession
         public array $user_identity_ids,
         public string $workspace_id,
         public string|null $user_identifier_key
-    ) {
-    }
+    ) {}
 }

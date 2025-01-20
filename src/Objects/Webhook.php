@@ -22,6 +22,5 @@ class Webhook
         public string $webhook_id,
         public array|null $event_types,
         public string|null $secret
-    ) {
-    }
+    ) {}
 }

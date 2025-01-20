@@ -6,6 +6,4 @@ use PHPUnit\Framework\TestCase;
 use Tests\Fixture;
 use GuzzleHttp\Client;
 
-final class ReadmeTest extends TestCase
-{
-}
+final class ReadmeTest extends TestCase {}

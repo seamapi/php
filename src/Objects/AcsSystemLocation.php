@@ -12,7 +12,5 @@ class AcsSystemLocation
         return new self(time_zone: $json->time_zone ?? null);
     }
 
-    public function __construct(public string|null $time_zone)
-    {
-    }
+    public function __construct(public string|null $time_zone) {}
 }

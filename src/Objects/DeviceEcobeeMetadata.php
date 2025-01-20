@@ -18,6 +18,5 @@ class DeviceEcobeeMetadata
     public function __construct(
         public string $device_name,
         public string $ecobee_device_id
-    ) {
-    }
+    ) {}
 }

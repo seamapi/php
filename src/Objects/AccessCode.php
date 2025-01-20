@@ -64,6 +64,5 @@ class AccessCode
         public string|null $ends_at,
         public string|null $pulled_backup_access_code_id,
         public string|null $starts_at
-    ) {
-    }
+    ) {}
 }

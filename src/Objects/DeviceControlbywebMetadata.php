@@ -21,6 +21,5 @@ class DeviceControlbywebMetadata
         public string $device_id,
         public string $device_name,
         public string|null $relay_name
-    ) {
-    }
+    ) {}
 }
