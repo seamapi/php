@@ -24,6 +24,5 @@ class AcsEntranceVisionlineMetadata
         public string $door_category,
         public string $door_name,
         public array|null $profiles
-    ) {
-    }
+    ) {}
 }

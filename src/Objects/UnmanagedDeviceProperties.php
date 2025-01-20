@@ -45,6 +45,5 @@ class UnmanagedDeviceProperties
         public string|null $manufacturer,
         public bool|null $offline_access_codes_enabled,
         public bool|null $online_access_codes_enabled
-    ) {
-    }
+    ) {}
 }

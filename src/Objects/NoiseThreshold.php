@@ -28,6 +28,5 @@ class NoiseThreshold
         public string $noise_threshold_id,
         public string $starts_daily_at,
         public float|null $noise_threshold_nrs
-    ) {
-    }
+    ) {}
 }

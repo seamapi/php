@@ -35,6 +35,5 @@ class DevicePredefinedTimeSlots
         public bool $is_one_shot,
         public string $name,
         public float $prefix
-    ) {
-    }
+    ) {}
 }

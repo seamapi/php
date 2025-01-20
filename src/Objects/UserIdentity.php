@@ -30,6 +30,5 @@ class UserIdentity
         public string|null $full_name,
         public string|null $phone_number,
         public string|null $user_identity_key
-    ) {
-    }
+    ) {}
 }

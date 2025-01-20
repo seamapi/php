@@ -12,7 +12,5 @@ class DeviceAppearance
         return new self(name: $json->name);
     }
 
-    public function __construct(public string $name)
-    {
-    }
+    public function __construct(public string $name) {}
 }

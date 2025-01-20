@@ -26,6 +26,5 @@ class ActionAttempt
         public ActionAttemptError|null $error,
         public string|null $status,
         public mixed $result
-    ) {
-    }
+    ) {}
 }

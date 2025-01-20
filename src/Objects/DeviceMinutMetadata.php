@@ -22,6 +22,5 @@ class DeviceMinutMetadata
         public string $device_id,
         public string $device_name,
         public DeviceLatestSensorValues $latest_sensor_values
-    ) {
-    }
+    ) {}
 }

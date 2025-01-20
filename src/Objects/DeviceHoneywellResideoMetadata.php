@@ -19,6 +19,5 @@ class DeviceHoneywellResideoMetadata
     public function __construct(
         public string $device_name,
         public string $honeywell_resideo_device_id
-    ) {
-    }
+    ) {}
 }

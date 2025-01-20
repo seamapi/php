@@ -18,6 +18,5 @@ class DeviceLocation
     public function __construct(
         public string|null $location_name,
         public string|null $timezone
-    ) {
-    }
+    ) {}
 }

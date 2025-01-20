@@ -34,6 +34,5 @@ class DeviceDormakabaOracodeMetadata
         public string|null $iana_timezone,
         public array|null $predefined_time_slots,
         public float|null $site_id
-    ) {
-    }
+    ) {}
 }

@@ -25,6 +25,5 @@ class AcsEntranceAssaAbloyVostioMetadata
         public float|null $door_number,
         public string|null $pms_id,
         public bool|null $stand_open
-    ) {
-    }
+    ) {}
 }

@@ -21,6 +21,5 @@ class UnmanagedDeviceAccessoryKeypad
     public function __construct(
         public bool $is_connected,
         public UnmanagedDeviceBattery|null $battery
-    ) {
-    }
+    ) {}
 }

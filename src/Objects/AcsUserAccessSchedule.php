@@ -18,6 +18,5 @@ class AcsUserAccessSchedule
     public function __construct(
         public string $starts_at,
         public string|null $ends_at
-    ) {
-    }
+    ) {}
 }

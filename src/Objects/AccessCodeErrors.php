@@ -27,6 +27,5 @@ class AccessCodeErrors
         public bool|null $is_access_code_error,
         public bool|null $is_connected_account_error,
         public bool|null $is_device_error
-    ) {
-    }
+    ) {}
 }

@@ -32,6 +32,5 @@ class DeviceModel
         public bool|null $has_built_in_keypad,
         public bool|null $offline_access_codes_supported,
         public bool|null $online_access_codes_supported
-    ) {
-    }
+    ) {}
 }

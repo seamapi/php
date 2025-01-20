@@ -22,6 +22,5 @@ class DeviceAssaAbloyCredentialServiceMetadata
     public function __construct(
         public array $endpoints,
         public bool $has_active_endpoint
-    ) {
-    }
+    ) {}
 }

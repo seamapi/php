@@ -25,6 +25,5 @@ class DeviceErrors
         public string|null $created_at,
         public bool|null $is_connected_account_error,
         public bool|null $is_device_error
-    ) {
-    }
+    ) {}
 }

@@ -18,6 +18,5 @@ class AcsEntranceProfiles
     public function __construct(
         public string $visionline_door_profile_id,
         public string $visionline_door_profile_type
-    ) {
-    }
+    ) {}
 }

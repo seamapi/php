@@ -29,6 +29,5 @@ class AcsEncoder
         public string $display_name,
         public array $errors,
         public string $workspace_id
-    ) {
-    }
+    ) {}
 }

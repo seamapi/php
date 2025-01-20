@@ -26,6 +26,5 @@ class DeviceLatestSensorValues
         public DevicePressure $pressure,
         public DeviceSound $sound,
         public DeviceTemperature $temperature
-    ) {
-    }
+    ) {}
 }

@@ -20,6 +20,5 @@ class DeviceLocklyMetadata
         public string $device_id,
         public string $device_name,
         public string|null $model
-    ) {
-    }
+    ) {}
 }

@@ -23,6 +23,5 @@ class DeviceTemperatureThreshold
         public float|null $lower_limit_fahrenheit,
         public float|null $upper_limit_celsius,
         public float|null $upper_limit_fahrenheit
-    ) {
-    }
+    ) {}
 }

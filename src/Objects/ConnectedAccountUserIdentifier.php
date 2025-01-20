@@ -25,6 +25,5 @@ class ConnectedAccountUserIdentifier
         public bool|null $exclusive,
         public string|null $phone,
         public string|null $username
-    ) {
-    }
+    ) {}
 }

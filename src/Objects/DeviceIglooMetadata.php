@@ -20,6 +20,5 @@ class DeviceIglooMetadata
         public string $bridge_id,
         public string $device_id,
         public string|null $model
-    ) {
-    }
+    ) {}
 }

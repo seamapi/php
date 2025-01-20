@@ -44,6 +44,5 @@ class UnmanagedAccessCode
         public string|null $name,
         public string|null $ends_at,
         public string|null $starts_at
-    ) {
-    }
+    ) {}
 }

@@ -69,6 +69,5 @@ class UnmanagedDevice
         public bool|null $can_simulate_removal,
         public bool|null $can_turn_off_hvac,
         public UnmanagedDeviceLocation|null $location
-    ) {
-    }
+    ) {}
 }

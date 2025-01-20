@@ -22,6 +22,5 @@ class Network
         public string $display_name,
         public string $network_id,
         public string $workspace_id
-    ) {
-    }
+    ) {}
 }

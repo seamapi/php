@@ -31,6 +31,5 @@ class AcsEntranceSaltoKsMetadata
         public bool|null $left_open_alarm,
         public bool|null $online,
         public bool|null $privacy_mode
-    ) {
-    }
+    ) {}
 }

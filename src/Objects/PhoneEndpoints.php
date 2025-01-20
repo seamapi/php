@@ -18,6 +18,5 @@ class PhoneEndpoints
     public function __construct(
         public string $endpoint_id,
         public bool $is_active
-    ) {
-    }
+    ) {}
 }

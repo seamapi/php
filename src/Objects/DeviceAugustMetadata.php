@@ -28,6 +28,5 @@ class DeviceAugustMetadata
         public string|null $house_id,
         public string|null $keypad_battery_level,
         public string|null $model
-    ) {
-    }
+    ) {}
 }

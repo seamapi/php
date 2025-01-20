@@ -115,6 +115,5 @@ class Event
         public string|null $thermostat_schedule_id,
         public float|null $upper_limit_celsius,
         public float|null $upper_limit_fahrenheit
-    ) {
-    }
+    ) {}
 }

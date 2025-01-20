@@ -12,7 +12,5 @@ class ActionAttemptError
         return new self(message: $json->message, type: $json->type);
     }
 
-    public function __construct(public string $message, public string $type)
-    {
-    }
+    public function __construct(public string $message, public string $type) {}
 }

@@ -26,6 +26,5 @@ class UnmanagedAcsCredentialAssaAbloyVostioMetadata
         public string|null $key_id,
         public string|null $key_issuing_request_id,
         public array|null $override_guest_acs_entrance_ids
-    ) {
-    }
+    ) {}
 }

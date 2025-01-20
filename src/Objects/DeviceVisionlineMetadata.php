@@ -12,7 +12,5 @@ class DeviceVisionlineMetadata
         return new self(encoder_id: $json->encoder_id);
     }
 
-    public function __construct(public string $encoder_id)
-    {
-    }
+    public function __construct(public string $encoder_id) {}
 }

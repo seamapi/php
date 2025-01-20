@@ -22,6 +22,5 @@ class DeviceAkilesMetadata
         public string $gadget_name,
         public string $product_name,
         public string|null $_member_group_id
-    ) {
-    }
+    ) {}
 }

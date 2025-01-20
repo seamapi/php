@@ -20,6 +20,5 @@ class DeviceHubitatMetadata
         public string $device_id,
         public string $device_label,
         public string $device_name
-    ) {
-    }
+    ) {}
 }

@@ -20,6 +20,5 @@ class AcsSystemErrors
         public string $created_at,
         public string $error_code,
         public string $message
-    ) {
-    }
+    ) {}
 }

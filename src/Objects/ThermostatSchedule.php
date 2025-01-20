@@ -38,6 +38,5 @@ class ThermostatSchedule
         public string $thermostat_schedule_id,
         public string|null $name,
         public bool|null $unstable_is_override_allowed
-    ) {
-    }
+    ) {}
 }
