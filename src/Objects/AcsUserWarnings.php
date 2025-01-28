@@ -11,7 +11,7 @@ class AcsUserWarnings
         }
         return new self(
             created_at: $json->created_at,
-            message: $json->message,
+            message: $json->message ?? '',
             warning_code: $json->warning_code
         );
     }
