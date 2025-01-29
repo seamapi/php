@@ -261,7 +261,7 @@ class AccessCodesClient
         $res = $this->seam->request(
             "POST",
             "/access_codes/create",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "access_code"
         );
 
@@ -356,7 +356,7 @@ class AccessCodesClient
         $res = $this->seam->request(
             "POST",
             "/access_codes/create_multiple",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "access_codes"
         );
 
@@ -383,7 +383,7 @@ class AccessCodesClient
         $this->seam->request(
             "POST",
             "/access_codes/delete",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -398,7 +398,7 @@ class AccessCodesClient
         $res = $this->seam->request(
             "POST",
             "/access_codes/generate_code",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "generated_code"
         );
 
@@ -425,7 +425,7 @@ class AccessCodesClient
         $res = $this->seam->request(
             "POST",
             "/access_codes/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "access_code"
         );
 
@@ -452,7 +452,7 @@ class AccessCodesClient
         $res = $this->seam->request(
             "POST",
             "/access_codes/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "access_codes"
         );
 
@@ -470,7 +470,7 @@ class AccessCodesClient
         $res = $this->seam->request(
             "POST",
             "/access_codes/pull_backup_access_code",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "access_code"
         );
 
@@ -575,7 +575,7 @@ class AccessCodesClient
         $this->seam->request(
             "POST",
             "/access_codes/update",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -603,7 +603,7 @@ class AccessCodesClient
         $this->seam->request(
             "POST",
             "/access_codes/update_multiple",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -637,7 +637,7 @@ class AccessCodesSimulateClient
         $res = $this->seam->request(
             "POST",
             "/access_codes/simulate/create_unmanaged_access_code",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "access_code"
         );
 
@@ -686,7 +686,7 @@ class AccessCodesUnmanagedClient
         $this->seam->request(
             "POST",
             "/access_codes/unmanaged/convert_to_managed",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -704,7 +704,7 @@ class AccessCodesUnmanagedClient
         $this->seam->request(
             "POST",
             "/access_codes/unmanaged/delete",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -728,7 +728,7 @@ class AccessCodesUnmanagedClient
         $res = $this->seam->request(
             "POST",
             "/access_codes/unmanaged/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "access_code"
         );
 
@@ -751,7 +751,7 @@ class AccessCodesUnmanagedClient
         $res = $this->seam->request(
             "POST",
             "/access_codes/unmanaged/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "access_codes"
         );
 
@@ -790,7 +790,7 @@ class AccessCodesUnmanagedClient
         $this->seam->request(
             "POST",
             "/access_codes/unmanaged/update",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -820,7 +820,7 @@ class AcsAccessGroupsClient
         $this->seam->request(
             "POST",
             "/acs/access_groups/add_user",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -835,7 +835,7 @@ class AcsAccessGroupsClient
         $res = $this->seam->request(
             "POST",
             "/acs/access_groups/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_access_group"
         );
 
@@ -858,7 +858,7 @@ class AcsAccessGroupsClient
         $res = $this->seam->request(
             "POST",
             "/acs/access_groups/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_access_groups"
         );
 
@@ -877,7 +877,7 @@ class AcsAccessGroupsClient
         $res = $this->seam->request(
             "POST",
             "/acs/access_groups/list_accessible_entrances",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_entrances"
         );
 
@@ -895,7 +895,7 @@ class AcsAccessGroupsClient
         $res = $this->seam->request(
             "POST",
             "/acs/access_groups/list_users",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_users"
         );
 
@@ -918,7 +918,7 @@ class AcsAccessGroupsClient
         $this->seam->request(
             "POST",
             "/acs/access_groups/remove_user",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -970,7 +970,7 @@ class AcsAccessGroupsUnmanagedClient
         $res = $this->seam->request(
             "POST",
             "/acs/access_groups/unmanaged/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_access_group"
         );
 
@@ -993,7 +993,7 @@ class AcsAccessGroupsUnmanagedClient
         $res = $this->seam->request(
             "POST",
             "/acs/access_groups/unmanaged/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_access_groups"
         );
 
@@ -1024,7 +1024,7 @@ class AcsCredentialPoolsClient
         $res = $this->seam->request(
             "POST",
             "/acs/credential_pools/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_credential_pools"
         );
 
@@ -1077,7 +1077,7 @@ class AcsCredentialProvisioningAutomationsClient
         $res = $this->seam->request(
             "POST",
             "/acs/credential_provisioning_automations/launch",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_credential_provisioning_automation"
         );
 
@@ -1108,7 +1108,7 @@ class AcsCredentialsClient
         $this->seam->request(
             "POST",
             "/acs/credentials/assign",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -1172,7 +1172,7 @@ class AcsCredentialsClient
         $res = $this->seam->request(
             "POST",
             "/acs/credentials/create",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_credential"
         );
 
@@ -1209,7 +1209,7 @@ class AcsCredentialsClient
         $res = $this->seam->request(
             "POST",
             "/acs/credentials/create_offline_code",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_credential"
         );
 
@@ -1227,7 +1227,7 @@ class AcsCredentialsClient
         $this->seam->request(
             "POST",
             "/acs/credentials/delete",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -1242,7 +1242,7 @@ class AcsCredentialsClient
         $res = $this->seam->request(
             "POST",
             "/acs/credentials/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_credential"
         );
 
@@ -1283,7 +1283,7 @@ class AcsCredentialsClient
         $res = $this->seam->request(
             "POST",
             "/acs/credentials/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_credentials"
         );
 
@@ -1301,7 +1301,7 @@ class AcsCredentialsClient
         $res = $this->seam->request(
             "POST",
             "/acs/credentials/list_accessible_entrances",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_entrances"
         );
 
@@ -1324,7 +1324,7 @@ class AcsCredentialsClient
         $this->seam->request(
             "POST",
             "/acs/credentials/unassign",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -1348,7 +1348,7 @@ class AcsCredentialsClient
         $this->seam->request(
             "POST",
             "/acs/credentials/update",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -1373,7 +1373,7 @@ class AcsCredentialsUnmanagedClient
         $res = $this->seam->request(
             "POST",
             "/acs/credentials/unmanaged/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_credential"
         );
 
@@ -1400,7 +1400,7 @@ class AcsCredentialsUnmanagedClient
         $res = $this->seam->request(
             "POST",
             "/acs/credentials/unmanaged/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_credentials"
         );
 
@@ -1434,7 +1434,7 @@ class AcsEncodersClient
         $res = $this->seam->request(
             "POST",
             "/acs/encoders/encode_credential",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "action_attempt"
         );
 
@@ -1473,7 +1473,7 @@ class AcsEncodersClient
         $res = $this->seam->request(
             "POST",
             "/acs/encoders/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_encoders"
         );
 
@@ -1493,7 +1493,7 @@ class AcsEncodersClient
         $res = $this->seam->request(
             "POST",
             "/acs/encoders/scan_credential",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "action_attempt"
         );
 
@@ -1538,7 +1538,7 @@ class AcsEncodersSimulateClient
         $this->seam->request(
             "POST",
             "/acs/encoders/simulate/next_credential_encode_will_fail",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -1558,7 +1558,7 @@ class AcsEncodersSimulateClient
         $this->seam->request(
             "POST",
             "/acs/encoders/simulate/next_credential_encode_will_succeed",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -1584,7 +1584,7 @@ class AcsEncodersSimulateClient
         $this->seam->request(
             "POST",
             "/acs/encoders/simulate/next_credential_scan_will_fail",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -1610,7 +1610,7 @@ class AcsEncodersSimulateClient
         $this->seam->request(
             "POST",
             "/acs/encoders/simulate/next_credential_scan_will_succeed",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -1635,7 +1635,7 @@ class AcsEntrancesClient
         $res = $this->seam->request(
             "POST",
             "/acs/entrances/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_entrance"
         );
 
@@ -1658,7 +1658,7 @@ class AcsEntrancesClient
         $this->seam->request(
             "POST",
             "/acs/entrances/grant_access",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -1678,7 +1678,7 @@ class AcsEntrancesClient
         $res = $this->seam->request(
             "POST",
             "/acs/entrances/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_entrances"
         );
 
@@ -1701,7 +1701,7 @@ class AcsEntrancesClient
         $res = $this->seam->request(
             "POST",
             "/acs/entrances/list_credentials_with_access",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_credentials"
         );
 
@@ -1729,7 +1729,7 @@ class AcsSystemsClient
         $res = $this->seam->request(
             "POST",
             "/acs/systems/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_system"
         );
 
@@ -1747,7 +1747,7 @@ class AcsSystemsClient
         $res = $this->seam->request(
             "POST",
             "/acs/systems/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_systems"
         );
 
@@ -1766,7 +1766,7 @@ class AcsSystemsClient
         $res = $this->seam->request(
             "POST",
             "/acs/systems/list_compatible_credential_manager_acs_systems",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_systems"
         );
 
@@ -1799,7 +1799,7 @@ class AcsUsersClient
         $this->seam->request(
             "POST",
             "/acs/users/add_to_access_group",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -1843,7 +1843,7 @@ class AcsUsersClient
         $res = $this->seam->request(
             "POST",
             "/acs/users/create",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_user"
         );
 
@@ -1861,7 +1861,7 @@ class AcsUsersClient
         $this->seam->request(
             "POST",
             "/acs/users/delete",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -1876,7 +1876,7 @@ class AcsUsersClient
         $res = $this->seam->request(
             "POST",
             "/acs/users/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_user"
         );
 
@@ -1919,7 +1919,7 @@ class AcsUsersClient
         $res = $this->seam->request(
             "POST",
             "/acs/users/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_users"
         );
 
@@ -1937,7 +1937,7 @@ class AcsUsersClient
         $res = $this->seam->request(
             "POST",
             "/acs/users/list_accessible_entrances",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_entrances"
         );
 
@@ -1960,7 +1960,7 @@ class AcsUsersClient
         $this->seam->request(
             "POST",
             "/acs/users/remove_from_access_group",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -1975,7 +1975,7 @@ class AcsUsersClient
         $this->seam->request(
             "POST",
             "/acs/users/revoke_access_to_all_entrances",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -1990,7 +1990,7 @@ class AcsUsersClient
         $this->seam->request(
             "POST",
             "/acs/users/suspend",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -2005,7 +2005,7 @@ class AcsUsersClient
         $this->seam->request(
             "POST",
             "/acs/users/unsuspend",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -2045,7 +2045,7 @@ class AcsUsersClient
         $this->seam->request(
             "POST",
             "/acs/users/update",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -2070,7 +2070,7 @@ class AcsUsersUnmanagedClient
         $res = $this->seam->request(
             "POST",
             "/acs/users/unmanaged/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_user"
         );
 
@@ -2109,7 +2109,7 @@ class AcsUsersUnmanagedClient
         $res = $this->seam->request(
             "POST",
             "/acs/users/unmanaged/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_users"
         );
 
@@ -2137,7 +2137,7 @@ class ActionAttemptsClient
         $res = $this->seam->request(
             "POST",
             "/action_attempts/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "action_attempt"
         );
 
@@ -2155,7 +2155,7 @@ class ActionAttemptsClient
         $res = $this->seam->request(
             "POST",
             "/action_attempts/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "action_attempts"
         );
 
@@ -2226,7 +2226,7 @@ class ClientSessionsClient
         $res = $this->seam->request(
             "POST",
             "/client_sessions/create",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "client_session"
         );
 
@@ -2244,7 +2244,7 @@ class ClientSessionsClient
         $this->seam->request(
             "POST",
             "/client_sessions/delete",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -2264,7 +2264,7 @@ class ClientSessionsClient
         $res = $this->seam->request(
             "POST",
             "/client_sessions/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "client_session"
         );
 
@@ -2299,7 +2299,7 @@ class ClientSessionsClient
         $res = $this->seam->request(
             "POST",
             "/client_sessions/get_or_create",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "client_session"
         );
 
@@ -2334,7 +2334,7 @@ class ClientSessionsClient
         $this->seam->request(
             "POST",
             "/client_sessions/grant_access",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -2368,7 +2368,7 @@ class ClientSessionsClient
         $res = $this->seam->request(
             "POST",
             "/client_sessions/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "client_sessions"
         );
 
@@ -2386,7 +2386,7 @@ class ClientSessionsClient
         $this->seam->request(
             "POST",
             "/client_sessions/revoke",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -2446,7 +2446,7 @@ class ConnectWebviewsClient
         $res = $this->seam->request(
             "POST",
             "/connect_webviews/create",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "connect_webview"
         );
 
@@ -2464,7 +2464,7 @@ class ConnectWebviewsClient
         $this->seam->request(
             "POST",
             "/connect_webviews/delete",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -2479,7 +2479,7 @@ class ConnectWebviewsClient
         $res = $this->seam->request(
             "POST",
             "/connect_webviews/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "connect_webview"
         );
 
@@ -2506,7 +2506,7 @@ class ConnectWebviewsClient
         $res = $this->seam->request(
             "POST",
             "/connect_webviews/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "connect_webviews"
         );
 
@@ -2539,7 +2539,7 @@ class ConnectedAccountsClient
         $this->seam->request(
             "POST",
             "/connected_accounts/delete",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -2559,7 +2559,7 @@ class ConnectedAccountsClient
         $res = $this->seam->request(
             "POST",
             "/connected_accounts/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "connected_account"
         );
 
@@ -2582,7 +2582,7 @@ class ConnectedAccountsClient
         $res = $this->seam->request(
             "POST",
             "/connected_accounts/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "connected_accounts"
         );
 
@@ -2611,7 +2611,7 @@ class ConnectedAccountsClient
         $this->seam->request(
             "POST",
             "/connected_accounts/update",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -2636,7 +2636,11 @@ class DevicesClient
             $request_payload["device_id"] = $device_id;
         }
 
-        $this->seam->request("POST", "/devices/delete", json: $request_payload);
+        $this->seam->request(
+            "POST",
+            "/devices/delete",
+            json: (object) $request_payload
+        );
     }
 
     public function get(string $device_id = null, string $name = null): Device
@@ -2653,7 +2657,7 @@ class DevicesClient
         $res = $this->seam->request(
             "POST",
             "/devices/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "device"
         );
 
@@ -2720,7 +2724,7 @@ class DevicesClient
         $res = $this->seam->request(
             "POST",
             "/devices/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "devices"
         );
 
@@ -2739,7 +2743,7 @@ class DevicesClient
         $res = $this->seam->request(
             "POST",
             "/devices/list_device_providers",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "device_providers"
         );
 
@@ -2771,7 +2775,11 @@ class DevicesClient
             $request_payload["properties"] = $properties;
         }
 
-        $this->seam->request("POST", "/devices/update", json: $request_payload);
+        $this->seam->request(
+            "POST",
+            "/devices/update",
+            json: (object) $request_payload
+        );
     }
 }
 
@@ -2795,7 +2803,7 @@ class DevicesSimulateClient
         $this->seam->request(
             "POST",
             "/devices/simulate/connect",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -2810,7 +2818,7 @@ class DevicesSimulateClient
         $this->seam->request(
             "POST",
             "/devices/simulate/disconnect",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -2825,7 +2833,7 @@ class DevicesSimulateClient
         $this->seam->request(
             "POST",
             "/devices/simulate/remove",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -2855,7 +2863,7 @@ class DevicesUnmanagedClient
         $res = $this->seam->request(
             "POST",
             "/devices/unmanaged/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "device"
         );
 
@@ -2922,7 +2930,7 @@ class DevicesUnmanagedClient
         $res = $this->seam->request(
             "POST",
             "/devices/unmanaged/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "devices"
         );
 
@@ -2943,7 +2951,7 @@ class DevicesUnmanagedClient
         $this->seam->request(
             "POST",
             "/devices/unmanaged/update",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -2977,7 +2985,7 @@ class EventsClient
         $res = $this->seam->request(
             "POST",
             "/events/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "event"
         );
 
@@ -3048,7 +3056,7 @@ class EventsClient
         $res = $this->seam->request(
             "POST",
             "/events/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "events"
         );
 
@@ -3079,7 +3087,7 @@ class LocksClient
         $res = $this->seam->request(
             "POST",
             "/locks/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "device"
         );
 
@@ -3146,7 +3154,7 @@ class LocksClient
         $res = $this->seam->request(
             "POST",
             "/locks/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "devices"
         );
 
@@ -3170,7 +3178,7 @@ class LocksClient
         $res = $this->seam->request(
             "POST",
             "/locks/lock_door",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "action_attempt"
         );
 
@@ -3202,7 +3210,7 @@ class LocksClient
         $res = $this->seam->request(
             "POST",
             "/locks/unlock_door",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "action_attempt"
         );
 
@@ -3238,7 +3246,7 @@ class NetworksClient
         $res = $this->seam->request(
             "POST",
             "/networks/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "network"
         );
 
@@ -3252,7 +3260,7 @@ class NetworksClient
         $res = $this->seam->request(
             "POST",
             "/networks/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "networks"
         );
 
@@ -3332,7 +3340,7 @@ class NoiseSensorsClient
         $res = $this->seam->request(
             "POST",
             "/noise_sensors/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "devices"
         );
 
@@ -3387,7 +3395,7 @@ class NoiseSensorsNoiseThresholdsClient
         $res = $this->seam->request(
             "POST",
             "/noise_sensors/noise_thresholds/create",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "noise_threshold"
         );
 
@@ -3414,7 +3422,7 @@ class NoiseSensorsNoiseThresholdsClient
         $this->seam->request(
             "POST",
             "/noise_sensors/noise_thresholds/delete",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -3429,7 +3437,7 @@ class NoiseSensorsNoiseThresholdsClient
         $res = $this->seam->request(
             "POST",
             "/noise_sensors/noise_thresholds/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "noise_threshold"
         );
 
@@ -3450,7 +3458,7 @@ class NoiseSensorsNoiseThresholdsClient
         $res = $this->seam->request(
             "POST",
             "/noise_sensors/noise_thresholds/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "noise_thresholds"
         );
 
@@ -3499,7 +3507,7 @@ class NoiseSensorsNoiseThresholdsClient
         $this->seam->request(
             "POST",
             "/noise_sensors/noise_thresholds/update",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -3524,7 +3532,7 @@ class NoiseSensorsSimulateClient
         $this->seam->request(
             "POST",
             "/noise_sensors/simulate/trigger_noise_threshold",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -3550,7 +3558,7 @@ class PhonesClient
         $this->seam->request(
             "POST",
             "/phones/deactivate",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -3572,7 +3580,7 @@ class PhonesClient
         $res = $this->seam->request(
             "POST",
             "/phones/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "phones"
         );
 
@@ -3615,7 +3623,7 @@ class PhonesSimulateClient
         $res = $this->seam->request(
             "POST",
             "/phones/simulate/create_sandbox_phone",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "phone"
         );
 
@@ -3652,7 +3660,7 @@ class ThermostatsClient
         $res = $this->seam->request(
             "POST",
             "/thermostats/activate_climate_preset",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "action_attempt"
         );
 
@@ -3696,7 +3704,7 @@ class ThermostatsClient
         $res = $this->seam->request(
             "POST",
             "/thermostats/cool",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "action_attempt"
         );
 
@@ -3769,7 +3777,7 @@ class ThermostatsClient
         $this->seam->request(
             "POST",
             "/thermostats/create_climate_preset",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -3789,7 +3797,7 @@ class ThermostatsClient
         $this->seam->request(
             "POST",
             "/thermostats/delete_climate_preset",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -3807,7 +3815,7 @@ class ThermostatsClient
         $res = $this->seam->request(
             "POST",
             "/thermostats/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "thermostat"
         );
 
@@ -3843,7 +3851,7 @@ class ThermostatsClient
         $res = $this->seam->request(
             "POST",
             "/thermostats/heat",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "action_attempt"
         );
 
@@ -3899,7 +3907,7 @@ class ThermostatsClient
         $res = $this->seam->request(
             "POST",
             "/thermostats/heat_cool",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "action_attempt"
         );
 
@@ -3974,7 +3982,7 @@ class ThermostatsClient
         $res = $this->seam->request(
             "POST",
             "/thermostats/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "devices"
         );
 
@@ -3998,7 +4006,7 @@ class ThermostatsClient
         $res = $this->seam->request(
             "POST",
             "/thermostats/off",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "action_attempt"
         );
 
@@ -4029,7 +4037,7 @@ class ThermostatsClient
         $this->seam->request(
             "POST",
             "/thermostats/set_fallback_climate_preset",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -4058,7 +4066,7 @@ class ThermostatsClient
         $res = $this->seam->request(
             "POST",
             "/thermostats/set_fan_mode",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "action_attempt"
         );
 
@@ -4114,7 +4122,7 @@ class ThermostatsClient
         $res = $this->seam->request(
             "POST",
             "/thermostats/set_hvac_mode",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "action_attempt"
         );
 
@@ -4161,7 +4169,7 @@ class ThermostatsClient
         $this->seam->request(
             "POST",
             "/thermostats/set_temperature_threshold",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -4223,7 +4231,7 @@ class ThermostatsClient
         $this->seam->request(
             "POST",
             "/thermostats/update_climate_preset",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -4275,7 +4283,7 @@ class ThermostatsSchedulesClient
         $res = $this->seam->request(
             "POST",
             "/thermostats/schedules/create",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "thermostat_schedule"
         );
 
@@ -4295,7 +4303,7 @@ class ThermostatsSchedulesClient
         $this->seam->request(
             "POST",
             "/thermostats/schedules/delete",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -4312,7 +4320,7 @@ class ThermostatsSchedulesClient
         $res = $this->seam->request(
             "POST",
             "/thermostats/schedules/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "thermostat_schedule"
         );
 
@@ -4335,7 +4343,7 @@ class ThermostatsSchedulesClient
         $res = $this->seam->request(
             "POST",
             "/thermostats/schedules/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "thermostat_schedules"
         );
 
@@ -4382,7 +4390,7 @@ class ThermostatsSchedulesClient
         $this->seam->request(
             "POST",
             "/thermostats/schedules/update",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -4418,7 +4426,7 @@ class ThermostatsSimulateClient
         $this->seam->request(
             "POST",
             "/thermostats/simulate/temperature_reached",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -4451,7 +4459,7 @@ class UserIdentitiesClient
         $this->seam->request(
             "POST",
             "/user_identities/add_acs_user",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -4479,7 +4487,7 @@ class UserIdentitiesClient
         $res = $this->seam->request(
             "POST",
             "/user_identities/create",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "user_identity"
         );
 
@@ -4497,7 +4505,7 @@ class UserIdentitiesClient
         $this->seam->request(
             "POST",
             "/user_identities/delete",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -4517,7 +4525,7 @@ class UserIdentitiesClient
         $res = $this->seam->request(
             "POST",
             "/user_identities/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "user_identity"
         );
 
@@ -4540,7 +4548,7 @@ class UserIdentitiesClient
         $this->seam->request(
             "POST",
             "/user_identities/grant_access_to_device",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -4557,7 +4565,7 @@ class UserIdentitiesClient
         $res = $this->seam->request(
             "POST",
             "/user_identities/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "user_identities"
         );
 
@@ -4575,7 +4583,7 @@ class UserIdentitiesClient
         $res = $this->seam->request(
             "POST",
             "/user_identities/list_accessible_devices",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "devices"
         );
 
@@ -4593,7 +4601,7 @@ class UserIdentitiesClient
         $res = $this->seam->request(
             "POST",
             "/user_identities/list_acs_systems",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_systems"
         );
 
@@ -4611,7 +4619,7 @@ class UserIdentitiesClient
         $res = $this->seam->request(
             "POST",
             "/user_identities/list_acs_users",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "acs_users"
         );
 
@@ -4634,7 +4642,7 @@ class UserIdentitiesClient
         $this->seam->request(
             "POST",
             "/user_identities/remove_acs_user",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -4654,7 +4662,7 @@ class UserIdentitiesClient
         $this->seam->request(
             "POST",
             "/user_identities/revoke_access_to_device",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -4686,7 +4694,7 @@ class UserIdentitiesClient
         $this->seam->request(
             "POST",
             "/user_identities/update",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -4713,7 +4721,7 @@ class UserIdentitiesEnrollmentAutomationsClient
         $this->seam->request(
             "POST",
             "/user_identities/enrollment_automations/delete",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -4730,7 +4738,7 @@ class UserIdentitiesEnrollmentAutomationsClient
         $res = $this->seam->request(
             "POST",
             "/user_identities/enrollment_automations/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "enrollment_automation"
         );
 
@@ -4773,7 +4781,7 @@ class UserIdentitiesEnrollmentAutomationsClient
         $this->seam->request(
             "POST",
             "/user_identities/enrollment_automations/launch",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "enrollment_automation"
         );
     }
@@ -4789,7 +4797,7 @@ class UserIdentitiesEnrollmentAutomationsClient
         $res = $this->seam->request(
             "POST",
             "/user_identities/enrollment_automations/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "enrollment_automations"
         );
 
@@ -4820,7 +4828,7 @@ class WebhooksClient
         $res = $this->seam->request(
             "POST",
             "/webhooks/create",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "webhook"
         );
 
@@ -4838,7 +4846,7 @@ class WebhooksClient
         $this->seam->request(
             "POST",
             "/webhooks/delete",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 
@@ -4853,7 +4861,7 @@ class WebhooksClient
         $res = $this->seam->request(
             "POST",
             "/webhooks/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "webhook"
         );
 
@@ -4867,7 +4875,7 @@ class WebhooksClient
         $res = $this->seam->request(
             "POST",
             "/webhooks/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "webhooks"
         );
 
@@ -4888,7 +4896,7 @@ class WebhooksClient
         $this->seam->request(
             "POST",
             "/webhooks/update",
-            json: $request_payload
+            json: (object) $request_payload
         );
     }
 }
@@ -4942,7 +4950,7 @@ class WorkspacesClient
         $res = $this->seam->request(
             "POST",
             "/workspaces/create",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "workspace"
         );
 
@@ -4956,7 +4964,7 @@ class WorkspacesClient
         $res = $this->seam->request(
             "POST",
             "/workspaces/get",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "workspace"
         );
 
@@ -4970,7 +4978,7 @@ class WorkspacesClient
         $res = $this->seam->request(
             "POST",
             "/workspaces/list",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "workspaces"
         );
 
@@ -4985,7 +4993,7 @@ class WorkspacesClient
         $res = $this->seam->request(
             "POST",
             "/workspaces/reset_sandbox",
-            json: $request_payload,
+            json: (object) $request_payload,
             inner_object: "action_attempt"
         );
 
