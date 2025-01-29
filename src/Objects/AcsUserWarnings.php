@@ -11,15 +11,15 @@ class AcsUserWarnings
         }
         return new self(
             created_at: $json->created_at,
-            warning_code: $json->warning_code,
-            message: $json->message ?? null
+            message: $json->message,
+            warning_code: $json->warning_code
         );
     }
 
     public function __construct(
         public string $created_at,
-        public string $warning_code,
-        public string|null $message
+        public string $message,
+        public string $warning_code
     ) {
     }
 }
