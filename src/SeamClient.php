@@ -22,7 +22,6 @@ use Seam\Objects\Event;
 use Seam\Objects\Network;
 use Seam\Objects\NoiseThreshold;
 use Seam\Objects\Phone;
-use Seam\Objects\ServiceHealth;
 use Seam\Objects\ThermostatSchedule;
 use Seam\Objects\UnmanagedAccessCode;
 use Seam\Objects\UnmanagedAcsAccessGroup;
