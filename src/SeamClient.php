@@ -48,6 +48,7 @@ class SeamClient
     public AccessCodesClient $access_codes;
     public AcsClient $acs;
     public ActionAttemptsClient $action_attempts;
+    public BridgesClient $bridges;
     public ClientSessionsClient $client_sessions;
     public ConnectWebviewsClient $connect_webviews;
     public ConnectedAccountsClient $connected_accounts;
@@ -88,6 +89,7 @@ class SeamClient
         $this->access_codes = new AccessCodesClient($this);
         $this->acs = new AcsClient($this);
         $this->action_attempts = new ActionAttemptsClient($this);
+        $this->bridges = new BridgesClient($this);
         $this->client_sessions = new ClientSessionsClient($this);
         $this->connect_webviews = new ConnectWebviewsClient($this);
         $this->connected_accounts = new ConnectedAccountsClient($this);
@@ -2185,6 +2187,32 @@ class ActionAttemptsClient
         }
 
         return $action_attempt;
+    }
+}
+
+class BridgesClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(string $bridge_id): void
+    {
+        $request_payload = [];
+
+        if ($bridge_id !== null) {
+            $request_payload["bridge_id"] = $bridge_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/bridges/get",
+            json: (object) $request_payload,
+            inner_object: "bridge"
+        );
     }
 }
 
