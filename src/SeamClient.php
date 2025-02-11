@@ -58,6 +58,7 @@ class SeamClient
     public NetworksClient $networks;
     public NoiseSensorsClient $noise_sensors;
     public PhonesClient $phones;
+    public SeamClient $seam;
     public ThermostatsClient $thermostats;
     public UserIdentitiesClient $user_identities;
     public WebhooksClient $webhooks;
@@ -99,6 +100,7 @@ class SeamClient
         $this->networks = new NetworksClient($this);
         $this->noise_sensors = new NoiseSensorsClient($this);
         $this->phones = new PhonesClient($this);
+        $this->seam = new SeamClient($this);
         $this->thermostats = new ThermostatsClient($this);
         $this->user_identities = new UserIdentitiesClient($this);
         $this->webhooks = new WebhooksClient($this);
@@ -3655,6 +3657,68 @@ class PhonesSimulateClient
         );
 
         return Phone::from_json($res);
+    }
+}
+
+class SeamBridgeV1BridgeClientSessionsClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function create(
+        string $bridge_client_machine_identifier_key,
+        string $bridge_client_name,
+        string $bridge_client_time_zone
+    ): void {
+        $request_payload = [];
+
+        if ($bridge_client_machine_identifier_key !== null) {
+            $request_payload[
+                "bridge_client_machine_identifier_key"
+            ] = $bridge_client_machine_identifier_key;
+        }
+        if ($bridge_client_name !== null) {
+            $request_payload["bridge_client_name"] = $bridge_client_name;
+        }
+        if ($bridge_client_time_zone !== null) {
+            $request_payload[
+                "bridge_client_time_zone"
+            ] = $bridge_client_time_zone;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/seam/bridge/v1/bridge_client_sessions/create",
+            json: (object) $request_payload,
+            inner_object: "bridge_client_session"
+        );
+    }
+
+    public function get(): void
+    {
+        $request_payload = [];
+
+        $this->seam->request(
+            "POST",
+            "/seam/bridge/v1/bridge_client_sessions/get",
+            json: (object) $request_payload,
+            inner_object: "bridge_client_session"
+        );
+    }
+}
+
+class SeamClient
+{
+    private SeamClient $seam;
+    public SeamBridgeClient $bridge;
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+        $this->bridge = new SeamBridgeClient($seam);
     }
 }
 
