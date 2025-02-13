@@ -2214,6 +2214,18 @@ class BridgesClient
             inner_object: "bridge"
         );
     }
+
+    public function list(): void
+    {
+        $request_payload = [];
+
+        $this->seam->request(
+            "POST",
+            "/bridges/list",
+            json: (object) $request_payload,
+            inner_object: "bridges"
+        );
+    }
 }
 
 class ClientSessionsClient
@@ -3587,6 +3599,24 @@ class PhonesClient
             "/phones/deactivate",
             json: (object) $request_payload
         );
+    }
+
+    public function get(string $device_id): Phone
+    {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/phones/get",
+            json: (object) $request_payload,
+            inner_object: "phone"
+        );
+
+        return Phone::from_json($res);
     }
 
     public function list(
