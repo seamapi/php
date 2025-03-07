@@ -15,7 +15,12 @@ class UnmanagedDeviceErrors
             created_at: $json->created_at ?? null,
             is_connected_account_error: $json->is_connected_account_error ??
                 null,
-            is_device_error: $json->is_device_error ?? null
+            is_device_error: $json->is_device_error ?? null,
+            salto_ks_metadata: isset($json->salto_ks_metadata)
+                ? UnmanagedDeviceSaltoKsMetadata::from_json(
+                    $json->salto_ks_metadata
+                )
+                : null
         );
     }
 
@@ -24,7 +29,8 @@ class UnmanagedDeviceErrors
         public string $message,
         public string|null $created_at,
         public bool|null $is_connected_account_error,
-        public bool|null $is_device_error
+        public bool|null $is_device_error,
+        public UnmanagedDeviceSaltoKsMetadata|null $salto_ks_metadata
     ) {
     }
 }

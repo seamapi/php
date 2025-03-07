@@ -2,16 +2,17 @@
 
 namespace Seam\Objects;
 
-class DeviceSaltoKsMetadata
+class UnmanagedAccessCodeSaltoKsMetadata
 {
-    public static function from_json(mixed $json): DeviceSaltoKsMetadata|null
-    {
+    public static function from_json(
+        mixed $json
+    ): UnmanagedAccessCodeSaltoKsMetadata|null {
         if (!$json) {
             return null;
         }
         return new self(
             sites: array_map(
-                fn($s) => DeviceSites::from_json($s),
+                fn($s) => UnmanagedAccessCodeSites::from_json($s),
                 $json->sites ?? []
             )
         );
