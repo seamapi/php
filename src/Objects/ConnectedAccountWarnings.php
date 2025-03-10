@@ -10,16 +10,22 @@ class ConnectedAccountWarnings
             return null;
         }
         return new self(
+            created_at: $json->created_at,
             message: $json->message,
             warning_code: $json->warning_code,
-            created_at: $json->created_at ?? null
+            salto_ks_metadata: isset($json->salto_ks_metadata)
+                ? ConnectedAccountSaltoKsMetadata::from_json(
+                    $json->salto_ks_metadata
+                )
+                : null
         );
     }
 
     public function __construct(
+        public string $created_at,
         public string $message,
         public string $warning_code,
-        public string|null $created_at
+        public ConnectedAccountSaltoKsMetadata|null $salto_ks_metadata
     ) {
     }
 }

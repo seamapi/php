@@ -10,18 +10,24 @@ class ConnectedAccountErrors
             return null;
         }
         return new self(
+            created_at: $json->created_at,
             error_code: $json->error_code,
             is_connected_account_error: $json->is_connected_account_error,
             message: $json->message,
-            created_at: $json->created_at ?? null
+            salto_ks_metadata: isset($json->salto_ks_metadata)
+                ? ConnectedAccountSaltoKsMetadata::from_json(
+                    $json->salto_ks_metadata
+                )
+                : null
         );
     }
 
     public function __construct(
+        public string $created_at,
         public string $error_code,
         public bool $is_connected_account_error,
         public string $message,
-        public string|null $created_at
+        public ConnectedAccountSaltoKsMetadata|null $salto_ks_metadata
     ) {
     }
 }

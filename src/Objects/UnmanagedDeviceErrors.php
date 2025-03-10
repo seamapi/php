@@ -10,9 +10,9 @@ class UnmanagedDeviceErrors
             return null;
         }
         return new self(
+            created_at: $json->created_at,
             error_code: $json->error_code,
             message: $json->message,
-            created_at: $json->created_at ?? null,
             is_connected_account_error: $json->is_connected_account_error ??
                 null,
             is_device_error: $json->is_device_error ?? null
@@ -20,9 +20,9 @@ class UnmanagedDeviceErrors
     }
 
     public function __construct(
+        public string $created_at,
         public string $error_code,
         public string $message,
-        public string|null $created_at,
         public bool|null $is_connected_account_error,
         public bool|null $is_device_error
     ) {

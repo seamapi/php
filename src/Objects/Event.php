@@ -34,6 +34,7 @@ class Event
             desired_temperature_fahrenheit: $json->desired_temperature_fahrenheit ??
                 null,
             device_id: $json->device_id ?? null,
+            device_name: $json->device_name ?? null,
             enrollment_automation_id: $json->enrollment_automation_id ?? null,
             error_code: $json->error_code ?? null,
             event_id: $json->event_id ?? null,
@@ -88,6 +89,7 @@ class Event
         public float|null $desired_temperature_celsius,
         public float|null $desired_temperature_fahrenheit,
         public string|null $device_id,
+        public string|null $device_name,
         public string|null $enrollment_automation_id,
         public string|null $error_code,
         public string|null $event_id,
