@@ -7,7 +7,9 @@ Check out [the documentation](https://docs.seam.co) or the usage below.
 ## Usage
 
 ```php
-$seam = new Seam\SeamClient("YOUR_API_KEY");
+use Seam\Seam;
+
+$seam = new Seam("YOUR_API_KEY");
 
 # Create a Connect Webview to login to a provider
 $connect_webview = $seam->connect_webviews->create(
