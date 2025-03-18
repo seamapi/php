@@ -2,21 +2,21 @@
 
 namespace Seam;
 
-use Seam\Routes\Objects\ActionAttempt;
+use Seam\Objects\ActionAttempt;
 
 class ActionAttemptError extends \Exception
 {
-  private ActionAttempt $actionAttempt;
+    private ActionAttempt $actionAttempt;
 
-  public function __construct(string $message, ActionAttempt $actionAttempt)
-  {
-    parent::__construct($message);
-    $this->name = get_class($this);
-    $this->actionAttempt = $actionAttempt;
-  }
+    public function __construct(string $message, ActionAttempt $actionAttempt)
+    {
+        parent::__construct($message);
+        $this->name = get_class($this);
+        $this->actionAttempt = $actionAttempt;
+    }
 
-  public function getActionAttempt(): ActionAttempt
-  {
-    return $this->actionAttempt;
-  }
+    public function getActionAttempt(): ActionAttempt
+    {
+        return $this->actionAttempt;
+    }
 }
