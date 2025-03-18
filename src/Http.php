@@ -19,7 +19,6 @@ class Http
     $timeout = $config['timeout'] ?? 60.0;
 
     $handlerStack = HandlerStack::create();
-    $handlerStack->push(self::createJsonDecodingMiddleware());
     $handlerStack->push(self::createErrorHandlingMiddleware());
 
     $clientOptions = [
@@ -31,32 +30,6 @@ class Http
     ];
 
     return new GuzzleHttpClient($clientOptions);
-  }
-
-  public static function createJsonDecodingMiddleware(): callable
-  {
-    return function (callable $nextHandler) {
-      return function ($request, array $options) use ($nextHandler) {
-        return $nextHandler($request, $options)->then(
-          function (ResponseInterface $response) {
-            $contentType = $response->getHeaderLine('Content-Type');
-
-            if (stripos($contentType, 'application/json') !== 0) {
-              return $response;
-            }
-
-            $bodyContent = (string) $response->getBody();
-            $decodedJson = json_decode($bodyContent, true);
-
-            if (json_last_error() !== JSON_ERROR_NONE) {
-              throw new \RuntimeException('Error decoding JSON: ' . json_last_error_msg());
-            }
-
-            return $decodedJson;
-          }
-        );
-      };
-    };
   }
 
   public static function createErrorHandlingMiddleware(): callable
