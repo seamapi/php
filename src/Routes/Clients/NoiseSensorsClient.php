@@ -2,15 +2,15 @@
 
 namespace Seam\Routes\Clients;
 
-use Seam\SeamClient;
+use Seam\Seam;
 use Seam\Routes\Objects\Device;
 
 class NoiseSensorsClient
 {
-  private SeamClient $seam;
+  private Seam $seam;
   public NoiseSensorsNoiseThresholdsClient $noise_thresholds;
   public NoiseSensorsSimulateClient $simulate;
-  public function __construct(SeamClient $seam)
+  public function __construct(Seam $seam)
   {
     $this->seam = $seam;
     $this->noise_thresholds = new NoiseSensorsNoiseThresholdsClient($seam);

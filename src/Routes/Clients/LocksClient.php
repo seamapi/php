@@ -2,15 +2,15 @@
 
 namespace Seam\Routes\Clients;
 
-use Seam\SeamClient;
+use Seam\Seam;
 use Seam\Routes\Objects\Device;
 use Seam\Routes\Objects\ActionAttempt;
 
 class LocksClient
 {
-  private SeamClient $seam;
+  private Seam $seam;
 
-  public function __construct(SeamClient $seam)
+  public function __construct(Seam $seam)
   {
     $this->seam = $seam;
   }

@@ -2,14 +2,14 @@
 
 namespace Seam\Routes\Clients;
 
-use Seam\SeamClient;
+use Seam\Seam;
 use Seam\Routes\Objects\Phone;
 
 class PhonesClient
 {
-  private SeamClient $seam;
+  private Seam $seam;
   public PhonesSimulateClient $simulate;
-  public function __construct(SeamClient $seam)
+  public function __construct(Seam $seam)
   {
     $this->seam = $seam;
     $this->simulate = new PhonesSimulateClient($seam);

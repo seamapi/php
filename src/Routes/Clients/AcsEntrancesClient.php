@@ -2,15 +2,15 @@
 
 namespace Seam\Routes\Clients;
 
-use Seam\SeamClient;
+use Seam\Seam;
 use Seam\Routes\Objects\AcsEntrance;
 use Seam\Routes\Objects\AcsCredential;
 
 class AcsEntrancesClient
 {
-  private SeamClient $seam;
+  private Seam $seam;
 
-  public function __construct(SeamClient $seam)
+  public function __construct(Seam $seam)
   {
     $this->seam = $seam;
   }

@@ -2,14 +2,14 @@
 
 namespace Seam\Routes\Clients;
 
-use Seam\SeamClient;
+use Seam\Seam;
 use Seam\Routes\Objects\ClientSession;
 
 class ClientSessionsClient
 {
-  private SeamClient $seam;
+  private Seam $seam;
 
-  public function __construct(SeamClient $seam)
+  public function __construct(Seam $seam)
   {
     $this->seam = $seam;
   }

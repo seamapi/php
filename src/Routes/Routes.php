@@ -2,7 +2,7 @@
 
 namespace Seam\Routes;
 
-use Seam\SeamClient;
+use Seam\Seam;
 use Seam\Routes\Clients\AccessCodesClient;
 use Seam\Routes\Clients\AcsClient;
 use Seam\Routes\Clients\ActionAttemptsClient;
@@ -41,7 +41,7 @@ class Routes
   public WebhooksClient $webhooks;
   public WorkspacesClient $workspaces;
 
-  public function __construct(SeamClient $seam)
+  public function __construct(Seam $seam)
   {
     $this->access_codes = new AccessCodesClient($seam);
     $this->acs = new AcsClient($seam);

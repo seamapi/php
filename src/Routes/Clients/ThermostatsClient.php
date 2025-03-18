@@ -2,16 +2,16 @@
 
 namespace Seam\Routes\Clients;
 
-use Seam\SeamClient;
+use Seam\Seam;
 use Seam\Routes\Objects\ActionAttempt;
 use Seam\Routes\Objects\Device;
 
 class ThermostatsClient
 {
-  private SeamClient $seam;
+  private Seam $seam;
   public ThermostatsSchedulesClient $schedules;
   public ThermostatsSimulateClient $simulate;
-  public function __construct(SeamClient $seam)
+  public function __construct(Seam $seam)
   {
     $this->seam = $seam;
     $this->schedules = new ThermostatsSchedulesClient($seam);

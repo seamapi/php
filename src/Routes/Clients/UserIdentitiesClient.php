@@ -2,7 +2,7 @@
 
 namespace Seam\Routes\Clients;
 
-use Seam\SeamClient;
+use Seam\Seam;
 use Seam\Routes\Objects\UserIdentity;
 use Seam\Routes\Objects\Device;
 use Seam\Routes\Objects\AcsSystem;
@@ -10,9 +10,9 @@ use Seam\Routes\Objects\AcsUser;
 
 class UserIdentitiesClient
 {
-  private SeamClient $seam;
+  private Seam $seam;
   public UserIdentitiesEnrollmentAutomationsClient $enrollment_automations;
-  public function __construct(SeamClient $seam)
+  public function __construct(Seam $seam)
   {
     $this->seam = $seam;
     $this->enrollment_automations = new UserIdentitiesEnrollmentAutomationsClient(

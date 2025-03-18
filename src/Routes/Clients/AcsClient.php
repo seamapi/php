@@ -2,11 +2,11 @@
 
 namespace Seam\Routes\Clients;
 
-use Seam\SeamClient;
+use Seam\Seam;
 
 class AcsClient
 {
-  private SeamClient $seam;
+  private Seam $seam;
   public AcsAccessGroupsClient $access_groups;
   public AcsCredentialPoolsClient $credential_pools;
   public AcsCredentialProvisioningAutomationsClient $credential_provisioning_automations;
@@ -15,7 +15,7 @@ class AcsClient
   public AcsEntrancesClient $entrances;
   public AcsSystemsClient $systems;
   public AcsUsersClient $users;
-  public function __construct(SeamClient $seam)
+  public function __construct(Seam $seam)
   {
     $this->seam = $seam;
     $this->access_groups = new AcsAccessGroupsClient($seam);

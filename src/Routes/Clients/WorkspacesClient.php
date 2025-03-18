@@ -2,15 +2,15 @@
 
 namespace Seam\Routes\Clients;
 
-use Seam\SeamClient;
+use Seam\Seam;
 use Seam\Routes\Objects\Workspace;
 use Seam\Routes\Objects\ActionAttempt;
 
 class WorkspacesClient
 {
-  private SeamClient $seam;
+  private Seam $seam;
 
-  public function __construct(SeamClient $seam)
+  public function __construct(Seam $seam)
   {
     $this->seam = $seam;
   }

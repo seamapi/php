@@ -2,16 +2,16 @@
 
 namespace Seam\Routes\Clients;
 
-use Seam\SeamClient;
+use Seam\Seam;
 use Seam\Routes\Objects\AcsAccessGroup;
 use Seam\Routes\Objects\AcsEntrance;
 use Seam\Routes\Objects\AcsUser;
 
 class AcsAccessGroupsClient
 {
-  private SeamClient $seam;
+  private Seam $seam;
 
-  public function __construct(SeamClient $seam)
+  public function __construct(Seam $seam)
   {
     $this->seam = $seam;
   }

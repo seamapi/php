@@ -2,15 +2,15 @@
 
 namespace Seam\Routes\Clients;
 
-use Seam\SeamClient;
+use Seam\Seam;
 use Seam\Routes\Objects\AccessCode;
 
 class AccessCodesClient
 {
-  private SeamClient $seam;
+  private Seam $seam;
   public AccessCodesSimulateClient $simulate;
   public AccessCodesUnmanagedClient $unmanaged;
-  public function __construct(SeamClient $seam)
+  public function __construct(Seam $seam)
   {
     $this->seam = $seam;
     $this->simulate = new AccessCodesSimulateClient($seam);

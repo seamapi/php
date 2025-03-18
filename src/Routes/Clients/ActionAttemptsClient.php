@@ -2,16 +2,16 @@
 
 namespace Seam\Routes\Clients;
 
-use Seam\SeamClient;
+use Seam\Seam;
 use Seam\Routes\Objects\ActionAttempt;
 use Seam\ActionAttemptFailedError;
 use Seam\ActionAttemptTimeoutError;
 
 class ActionAttemptsClient
 {
-  private SeamClient $seam;
+  private Seam $seam;
 
-  public function __construct(SeamClient $seam)
+  public function __construct(Seam $seam)
   {
     $this->seam = $seam;
   }

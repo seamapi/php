@@ -2,16 +2,16 @@
 
 namespace Seam\Routes\Clients;
 
-use Seam\SeamClient;
+use Seam\Seam;
 use Seam\Routes\Objects\Device;
 use Seam\Routes\Objects\DeviceProvider;
 
 class DevicesClient
 {
-  private SeamClient $seam;
+  private Seam $seam;
   public DevicesSimulateClient $simulate;
   public DevicesUnmanagedClient $unmanaged;
-  public function __construct(SeamClient $seam)
+  public function __construct(Seam $seam)
   {
     $this->seam = $seam;
     $this->simulate = new DevicesSimulateClient($seam);
