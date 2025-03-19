@@ -13,13 +13,11 @@ final class HttpErrorTest extends TestCase
         $seam = Fixture::getTestServer();
 
         try {
-            $seam->request(
-                "POST",
-                "/devices/list",
-                json: [
+            $seam->client->post("/devices/list", [
+                "json" => [
                     "device_ids" => 1234,
-                ]
-            );
+                ],
+            ]);
             $this->fail("Expected InvalidInputError");
         } catch (\Seam\HttpInvalidInputError $e) {
             $this->assertEquals(400, $e->getStatusCode());

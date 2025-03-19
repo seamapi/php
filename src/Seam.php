@@ -41,32 +41,4 @@ class Seam
     {
         return $this->routes->$name;
     }
-
-    public function request(
-        $method,
-        $path,
-        $json = null,
-        $query = null,
-        $inner_object = null
-    ) {
-        $options = [];
-
-        if ($json !== null) {
-            $options["json"] = $json;
-        }
-
-        if ($query !== null) {
-            $options["query"] = $query;
-        }
-
-        $response = $this->client->request($method, $path, $options);
-        $body = json_decode($response->getBody());
-
-        // Handle inner_object extraction if needed
-        if ($inner_object && isset($body->$inner_object)) {
-            return $body->$inner_object;
-        }
-
-        return $body;
-    }
 }

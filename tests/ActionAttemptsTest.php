@@ -43,18 +43,16 @@ final class ActionAttemptsTest extends TestCase
 
         $this->assertEquals("pending", $action_attempt->status);
 
-        $seam->request(
-            "POST",
-            "/_fake/update_action_attempt",
-            json: [
+        $seam->client->post("/_fake/update_action_attempt", [
+            "json" => [
                 "action_attempt_id" => $action_attempt->action_attempt_id,
                 "status" => "error",
                 "error" => [
                     "message" => "Failed",
                     "type" => "failed_attempt",
                 ],
-            ]
-        );
+            ],
+        ]);
 
         try {
             $seam->action_attempts->poll_until_ready(
@@ -84,14 +82,12 @@ final class ActionAttemptsTest extends TestCase
 
         $this->assertEquals("pending", $action_attempt->status);
 
-        $seam->request(
-            "POST",
-            "/_fake/update_action_attempt",
-            json: [
+        $seam->client->post("/_fake/update_action_attempt", [
+            "json" => [
                 "action_attempt_id" => $action_attempt->action_attempt_id,
                 "status" => "pending",
-            ]
-        );
+            ],
+        ]);
 
         try {
             $seam->action_attempts->poll_until_ready(
