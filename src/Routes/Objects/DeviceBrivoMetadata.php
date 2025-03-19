@@ -4,13 +4,15 @@ namespace Seam\Routes\Objects;
 
 class DeviceBrivoMetadata
 {
-  public static function from_json(mixed $json): DeviceBrivoMetadata|null
-  {
-    if (!$json) {
-      return null;
+    public static function from_json(mixed $json): DeviceBrivoMetadata|null
+    {
+        if (!$json) {
+            return null;
+        }
+        return new self(device_name: $json->device_name);
     }
-    return new self(device_name: $json->device_name);
-  }
 
-  public function __construct(public string $device_name) {}
+    public function __construct(public string $device_name)
+    {
+    }
 }
