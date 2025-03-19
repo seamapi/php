@@ -28,7 +28,7 @@ final class ActionAttemptsTest extends TestCase
         $this->assertEquals($updated_action_attempt->status, "success");
 
         $action_attempts = $seam->action_attempts->list([$action_attempt_id]);
-        $this->assertTrue(count($action_attempts) > 0);
+        $this->assertTrue(count($action_attempts) > 10);
     }
 
     public function testFailedActionAttempt(): void
