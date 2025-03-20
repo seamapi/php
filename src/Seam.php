@@ -13,13 +13,13 @@ class Seam
     public static string $ltsVersion = Config::LTS_VERSION;
 
     public function __construct(
-        ?GuzzleHttpClient $client = null,
         ?string $api_key = null,
+        ?string $endpoint = null,
         ?string $personal_access_token = null,
         ?string $workspace_id = null,
-        ?string $endpoint = null,
         ?bool $wait_for_action_attempt = true,
-        ?array $guzzle_options = []
+        ?array $guzzle_options = [],
+        ?GuzzleHttpClient $client = null
     ) {
         $options = Options::parseOptions(
             $api_key,

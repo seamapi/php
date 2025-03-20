@@ -34,7 +34,7 @@ final class HttpErrorTest extends TestCase
     {
         $test_server = Fixture::getTestServer();
         $seam = new Seam(
-            "invalid_api_key",
+            "seam_invalid_api_key",
             $test_server->client->getConfig("base_uri")->__toString()
         );
 
@@ -66,7 +66,7 @@ final class HttpErrorTest extends TestCase
 
         $seam = new Seam(
             "seam_apikey1_token",
-            "https://nonexistent.example.com"
+            endpoint: "https://nonexistent.example.com"
         );
 
         try {
