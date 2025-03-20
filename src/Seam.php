@@ -28,7 +28,6 @@ class Seam
             $endpoint
         );
 
-        $this->ltsVersion = Config::LTS_VERSION;
         $this->defaults = [
             "wait_for_action_attempt" => $wait_for_action_attempt,
         ];

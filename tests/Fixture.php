@@ -17,7 +17,7 @@ final class Fixture
         $api_url = "https://{$random_string}.fakeseamconnect.seam.vc";
         $api_key = "seam_apikey1_token";
 
-        $seam = new Seam($api_key, $api_url);
+        $seam = new Seam(api_key: $api_key, endpoint: $api_url);
 
         return $seam;
     }
