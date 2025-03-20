@@ -29,6 +29,9 @@ class Http
             "http_errors" => false,
         ];
 
+        $guzzleOptions = $config["guzzle_options"] ?? [];
+        $clientOptions = array_merge($clientOptions, $guzzleOptions);
+
         return new GuzzleHttpClient($clientOptions);
     }
 
