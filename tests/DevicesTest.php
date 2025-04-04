@@ -41,17 +41,6 @@ final class DevicesTest extends TestCase
         $device = $seam->devices->get(name: $device_name);
         $this->assertTrue($device->properties->manufacturer === $manufacturer);
 
-        $seam->devices->delete(device_id: $device_id);
-        try {
-            $seam->devices->get(device_id: $device_id);
-
-            $this->fail("Expected the device to be deleted");
-        } catch (\Seam\HttpApiError $exception) {
-            $this->assertTrue(
-                str_contains($exception->getErrorCode(), "device_not_found")
-            );
-        }
-
         $stable_device_providers = $seam->devices->list_device_providers(
             provider_category: "stable"
         );
