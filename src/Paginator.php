@@ -30,25 +30,25 @@ class Paginator
         return [$data, $this->pagination_cache[self::FIRST_PAGE]];
     }
 
-    public function nextPage(string $nextPageCursor): array
+    public function nextPage(string $next_page_cursor): array
     {
         $callable = $this->callable;
         $params = $this->params;
 
-        $params["page_cursor"] = $nextPageCursor;
+        $params["page_cursor"] = $next_page_cursor;
         $params["on_response"] = fn($response) => $this->cachePagination(
             $response,
-            $nextPageCursor
+            $next_page_cursor
         );
 
         $data = $callable($params);
 
-        return [$data, $this->pagination_cache[$nextPageCursor]];
+        return [$data, $this->pagination_cache[$next_page_cursor]];
     }
 
-    private function cachePagination($response, $nextPageCursor)
+    private function cachePagination($response, $next_page_cursor)
     {
-        $this->pagination_cache[$nextPageCursor] = $response->pagination;
+        $this->pagination_cache[$next_page_cursor] = $response->pagination;
     }
 
     public function flattenToArray(): array

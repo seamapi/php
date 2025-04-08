@@ -35,6 +35,10 @@ class AcsUser
             full_name: $json->full_name ?? null,
             hid_acs_system_id: $json->hid_acs_system_id ?? null,
             is_suspended: $json->is_suspended ?? null,
+            pending_mutations: array_map(
+                fn($p) => AcsUserPendingMutations::from_json($p),
+                $json->pending_mutations ?? []
+            ),
             phone_number: $json->phone_number ?? null,
             user_identity_id: $json->user_identity_id ?? null,
             is_latest_desired_state_synced_with_provider: $json->is_latest_desired_state_synced_with_provider ??
@@ -66,6 +70,7 @@ class AcsUser
         public string|null $full_name,
         public string|null $hid_acs_system_id,
         public bool|null $is_suspended,
+        public array|null $pending_mutations,
         public string|null $phone_number,
         public string|null $user_identity_id,
         public bool|null $is_latest_desired_state_synced_with_provider,
