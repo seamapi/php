@@ -28,6 +28,8 @@ class AcsSystem
                 $json->warnings ?? []
             ),
             workspace_id: $json->workspace_id,
+            acs_access_group_count: $json->acs_access_group_count ?? null,
+            acs_user_count: $json->acs_user_count ?? null,
             can_add_acs_users_to_acs_access_groups: $json->can_add_acs_users_to_acs_access_groups ??
                 null,
             can_automate_enrollment: $json->can_automate_enrollment ?? null,
@@ -63,6 +65,8 @@ class AcsSystem
         public string $name,
         public array $warnings,
         public string $workspace_id,
+        public float|null $acs_access_group_count,
+        public float|null $acs_user_count,
         public bool|null $can_add_acs_users_to_acs_access_groups,
         public bool|null $can_automate_enrollment,
         public bool|null $can_create_acs_access_groups,

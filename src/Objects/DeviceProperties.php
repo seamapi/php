@@ -198,6 +198,9 @@ class DeviceProperties
                     $json->seam_bridge_metadata
                 )
                 : null,
+            sensi_metadata: isset($json->sensi_metadata)
+                ? DeviceSensiMetadata::from_json($json->sensi_metadata)
+                : null,
             serial_number: $json->serial_number ?? null,
             smartthings_metadata: isset($json->smartthings_metadata)
                 ? DeviceSmartthingsMetadata::from_json(
@@ -313,6 +316,7 @@ class DeviceProperties
         public DeviceSaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata,
         public DeviceSchlageMetadata|null $schlage_metadata,
         public DeviceSeamBridgeMetadata|null $seam_bridge_metadata,
+        public DeviceSensiMetadata|null $sensi_metadata,
         public string|null $serial_number,
         public DeviceSmartthingsMetadata|null $smartthings_metadata,
         public array|null $supported_code_lengths,

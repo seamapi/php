@@ -14,7 +14,8 @@ class DeviceFeatures
             lock_command: $json->lock_command,
             passcode: $json->passcode,
             passcode_management: $json->passcode_management,
-            unlock_via_gateway: $json->unlock_via_gateway
+            unlock_via_gateway: $json->unlock_via_gateway,
+            wifi: $json->wifi
         );
     }
 
@@ -23,7 +24,8 @@ class DeviceFeatures
         public bool $lock_command,
         public bool $passcode,
         public bool $passcode_management,
-        public bool $unlock_via_gateway
+        public bool $unlock_via_gateway,
+        public bool $wifi
     ) {
     }
 }
