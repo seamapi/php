@@ -1241,6 +1241,23 @@ class AcsEncodersClient
         return $action_attempt;
     }
 
+    public function get(string $acs_encoder_id): AcsEncoder
+    {
+        $request_payload = [];
+
+        if ($acs_encoder_id !== null) {
+            $request_payload["acs_encoder_id"] = $acs_encoder_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/acs/encoders/get",
+            json: (object) $request_payload
+        );
+
+        return AcsEncoder::from_json($res->acs_encoder);
+    }
+
     public function list(
         ?string $acs_system_id = null,
         ?float $limit = null,
