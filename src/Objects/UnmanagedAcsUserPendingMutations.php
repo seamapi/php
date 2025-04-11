@@ -12,6 +12,7 @@ class UnmanagedAcsUserPendingMutations
         }
         return new self(
             created_at: $json->created_at,
+            message: $json->message,
             mutation_code: $json->mutation_code,
             from: isset($json->from)
                 ? UnmanagedAcsUserFrom::from_json($json->from)
@@ -24,6 +25,7 @@ class UnmanagedAcsUserPendingMutations
 
     public function __construct(
         public string $created_at,
+        public string $message,
         public string $mutation_code,
         public UnmanagedAcsUserFrom|null $from,
         public UnmanagedAcsUserTo|null $to

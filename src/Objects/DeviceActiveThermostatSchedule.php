@@ -19,11 +19,12 @@ class DeviceActiveThermostatSchedule
                 fn($e) => DeviceErrors::from_json($e),
                 $json->errors ?? []
             ),
-            max_override_period_minutes: $json->max_override_period_minutes,
             starts_at: $json->starts_at,
             thermostat_schedule_id: $json->thermostat_schedule_id,
             name: $json->name ?? null,
             unstable_is_override_allowed: $json->unstable_is_override_allowed ??
+                null,
+            max_override_period_minutes: $json->max_override_period_minutes ??
                 null
         );
     }
@@ -34,11 +35,11 @@ class DeviceActiveThermostatSchedule
         public string $device_id,
         public string $ends_at,
         public array $errors,
-        public mixed $max_override_period_minutes,
         public string $starts_at,
         public string $thermostat_schedule_id,
         public string|null $name,
-        public bool|null $unstable_is_override_allowed
+        public bool|null $unstable_is_override_allowed,
+        public mixed $max_override_period_minutes
     ) {
     }
 }
