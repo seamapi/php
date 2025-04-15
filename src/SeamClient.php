@@ -19,6 +19,7 @@ use Seam\Objects\Device;
 use Seam\Objects\DeviceProvider;
 use Seam\Objects\EnrollmentAutomation;
 use Seam\Objects\Event;
+use Seam\Objects\InstantKey;
 use Seam\Objects\Network;
 use Seam\Objects\NoiseThreshold;
 use Seam\Objects\Pagination;
@@ -4413,6 +4414,23 @@ class UserIdentitiesClient
             "/user_identities/delete",
             json: (object) $request_payload
         );
+    }
+
+    public function generate_instant_key(string $user_identity_id): InstantKey
+    {
+        $request_payload = [];
+
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/user_identities/generate_instant_key",
+            json: (object) $request_payload
+        );
+
+        return InstantKey::from_json($res->instant_key);
     }
 
     public function get(
