@@ -4,20 +4,20 @@ namespace Seam;
 
 class Paginator
 {
-    private $callable;
+    private $request;
     private $params;
     private $pagination_cache = [];
     private const FIRST_PAGE = "FIRST_PAGE";
 
-    public function __construct(callable $callable, array $params = [])
+    public function __construct(callable $request, array $params = [])
     {
-        $this->callable = $callable;
+        $this->request = $request;
         $this->params = $params;
     }
 
     public function firstPage(): array
     {
-        $callable = $this->callable;
+        $request = $this->request;
         $params = $this->params;
 
         $params["on_response"] = fn($response) => $this->cachePagination(
@@ -25,14 +25,20 @@ class Paginator
             self::FIRST_PAGE
         );
 
-        $data = $callable($params);
+        $data = $request($params);
 
         return [$data, $this->pagination_cache[self::FIRST_PAGE]];
     }
 
     public function nextPage(string $next_page_cursor): array
     {
-        $callable = $this->callable;
+        if ($next_page_cursor === null) {
+            throw new \InvalidArgumentException(
+                "Cannot get the next page with a null next_page_cursor"
+            );
+        }
+
+        $request = $this->request;
         $params = $this->params;
 
         $params["page_cursor"] = $next_page_cursor;
@@ -41,7 +47,7 @@ class Paginator
             $next_page_cursor
         );
 
-        $data = $callable($params);
+        $data = $request($params);
 
         return [$data, $this->pagination_cache[$next_page_cursor]];
     }

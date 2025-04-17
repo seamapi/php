@@ -437,8 +437,7 @@ class AccessCodesClient
     public function list(
         ?array $access_code_ids = null,
         ?string $device_id = null,
-        ?string $user_identifier_key = null,
-        ?callable $on_response = null
+        ?string $user_identifier_key = null
     ): array {
         $request_payload = [];
 
@@ -457,10 +456,6 @@ class AccessCodesClient
             "/access_codes/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(
             fn($r) => AccessCode::from_json($r),
@@ -743,8 +738,7 @@ class AccessCodesUnmanagedClient
 
     public function list(
         string $device_id,
-        ?string $user_identifier_key = null,
-        ?callable $on_response = null
+        ?string $user_identifier_key = null
     ): array {
         $request_payload = [];
 
@@ -760,10 +754,6 @@ class AccessCodesUnmanagedClient
             "/access_codes/unmanaged/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(
             fn($r) => UnmanagedAccessCode::from_json($r),
@@ -856,8 +846,7 @@ class AcsAccessGroupsClient
 
     public function list(
         ?string $acs_system_id = null,
-        ?string $acs_user_id = null,
-        ?callable $on_response = null
+        ?string $acs_user_id = null
     ): array {
         $request_payload = [];
 
@@ -873,10 +862,6 @@ class AcsAccessGroupsClient
             "/acs/access_groups/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(
             fn($r) => AcsAccessGroup::from_json($r),
@@ -1095,8 +1080,7 @@ class AcsCredentialsClient
         ?string $user_identity_id = null,
         ?string $created_before = null,
         ?bool $is_multi_phone_sync_credential = null,
-        ?float $limit = null,
-        ?callable $on_response = null
+        ?float $limit = null
     ): array {
         $request_payload = [];
 
@@ -1126,10 +1110,6 @@ class AcsCredentialsClient
             "/acs/credentials/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(
             fn($r) => AcsCredential::from_json($r),
@@ -1263,8 +1243,7 @@ class AcsEncodersClient
         ?string $acs_system_id = null,
         ?float $limit = null,
         ?array $acs_system_ids = null,
-        ?array $acs_encoder_ids = null,
-        ?callable $on_response = null
+        ?array $acs_encoder_ids = null
     ): array {
         $request_payload = [];
 
@@ -1286,10 +1265,6 @@ class AcsEncodersClient
             "/acs/encoders/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(
             fn($r) => AcsEncoder::from_json($r),
@@ -1479,8 +1454,7 @@ class AcsEntrancesClient
 
     public function list(
         ?string $acs_credential_id = null,
-        ?string $acs_system_id = null,
-        ?callable $on_response = null
+        ?string $acs_system_id = null
     ): array {
         $request_payload = [];
 
@@ -1496,10 +1470,6 @@ class AcsEntrancesClient
             "/acs/entrances/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(
             fn($r) => AcsEntrance::from_json($r),
@@ -1559,10 +1529,8 @@ class AcsSystemsClient
         return AcsSystem::from_json($res->acs_system);
     }
 
-    public function list(
-        ?string $connected_account_id = null,
-        ?callable $on_response = null
-    ): array {
+    public function list(?string $connected_account_id = null): array
+    {
         $request_payload = [];
 
         if ($connected_account_id !== null) {
@@ -1574,10 +1542,6 @@ class AcsSystemsClient
             "/acs/systems/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(fn($r) => AcsSystem::from_json($r), $res->acs_systems);
     }
@@ -1915,10 +1879,8 @@ class ActionAttemptsClient
         return ActionAttempt::from_json($res->action_attempt);
     }
 
-    public function list(
-        array $action_attempt_ids,
-        ?callable $on_response = null
-    ): array {
+    public function list(array $action_attempt_ids): array
+    {
         $request_payload = [];
 
         if ($action_attempt_ids !== null) {
@@ -1930,10 +1892,6 @@ class ActionAttemptsClient
             "/action_attempts/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(
             fn($r) => ActionAttempt::from_json($r),
@@ -2149,8 +2107,7 @@ class ClientSessionsClient
         ?string $connect_webview_id = null,
         ?string $user_identifier_key = null,
         ?string $user_identity_id = null,
-        ?bool $without_user_identifier_key = null,
-        ?callable $on_response = null
+        ?bool $without_user_identifier_key = null
     ): array {
         $request_payload = [];
 
@@ -2177,10 +2134,6 @@ class ClientSessionsClient
             "/client_sessions/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(
             fn($r) => ClientSession::from_json($r),
@@ -2300,8 +2253,7 @@ class ConnectWebviewsClient
     public function list(
         mixed $custom_metadata_has = null,
         ?float $limit = null,
-        ?string $user_identifier_key = null,
-        ?callable $on_response = null
+        ?string $user_identifier_key = null
     ): array {
         $request_payload = [];
 
@@ -2320,10 +2272,6 @@ class ConnectWebviewsClient
             "/connect_webviews/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(
             fn($r) => ConnectWebview::from_json($r),
@@ -2494,8 +2442,7 @@ class DevicesClient
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $unstable_location_id = null,
-        ?string $user_identifier_key = null,
-        ?callable $on_response = null
+        ?string $user_identifier_key = null
     ): array {
         $request_payload = [];
 
@@ -2547,10 +2494,6 @@ class DevicesClient
             "/devices/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(fn($r) => Device::from_json($r), $res->devices);
     }
@@ -2709,8 +2652,7 @@ class DevicesUnmanagedClient
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $unstable_location_id = null,
-        ?string $user_identifier_key = null,
-        ?callable $on_response = null
+        ?string $user_identifier_key = null
     ): array {
         $request_payload = [];
 
@@ -2762,10 +2704,6 @@ class DevicesUnmanagedClient
             "/devices/unmanaged/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(
             fn($r) => UnmanagedDevice::from_json($r),
@@ -2842,8 +2780,7 @@ class EventsClient
         ?array $event_types = null,
         ?float $limit = null,
         ?string $since = null,
-        ?float $unstable_offset = null,
-        ?callable $on_response = null
+        ?float $unstable_offset = null
     ): array {
         $request_payload = [];
 
@@ -2899,10 +2836,6 @@ class EventsClient
             json: (object) $request_payload
         );
 
-        if ($on_response !== null) {
-            $on_response($res);
-        }
-
         return array_map(fn($r) => Event::from_json($r), $res->events);
     }
 }
@@ -2950,8 +2883,7 @@ class LocksClient
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $unstable_location_id = null,
-        ?string $user_identifier_key = null,
-        ?callable $on_response = null
+        ?string $user_identifier_key = null
     ): array {
         $request_payload = [];
 
@@ -3003,10 +2935,6 @@ class LocksClient
             "/locks/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(fn($r) => Device::from_json($r), $res->devices);
     }
@@ -3100,13 +3028,9 @@ class NetworksClient
         return Network::from_json($res->network);
     }
 
-    public function list(?callable $on_response = null): array
+    public function list(): array
     {
         $res = $this->seam->request("POST", "/networks/list");
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(fn($r) => Network::from_json($r), $res->networks);
     }
@@ -3138,8 +3062,7 @@ class NoiseSensorsClient
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $unstable_location_id = null,
-        ?string $user_identifier_key = null,
-        ?callable $on_response = null
+        ?string $user_identifier_key = null
     ): array {
         $request_payload = [];
 
@@ -3191,10 +3114,6 @@ class NoiseSensorsClient
             "/noise_sensors/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(fn($r) => Device::from_json($r), $res->devices);
     }
@@ -3294,11 +3213,8 @@ class NoiseSensorsNoiseThresholdsClient
         return NoiseThreshold::from_json($res->noise_threshold);
     }
 
-    public function list(
-        string $device_id,
-        ?bool $is_programmed = null,
-        ?callable $on_response = null
-    ): array {
+    public function list(string $device_id, ?bool $is_programmed = null): array
+    {
         $request_payload = [];
 
         if ($device_id !== null) {
@@ -3313,10 +3229,6 @@ class NoiseSensorsNoiseThresholdsClient
             "/noise_sensors/noise_thresholds/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(
             fn($r) => NoiseThreshold::from_json($r),
@@ -3440,8 +3352,7 @@ class PhonesClient
 
     public function list(
         ?string $acs_credential_id = null,
-        ?string $owner_user_identity_id = null,
-        ?callable $on_response = null
+        ?string $owner_user_identity_id = null
     ): array {
         $request_payload = [];
 
@@ -3459,10 +3370,6 @@ class PhonesClient
             "/phones/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(fn($r) => Phone::from_json($r), $res->phones);
     }
@@ -3790,8 +3697,7 @@ class ThermostatsClient
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $unstable_location_id = null,
-        ?string $user_identifier_key = null,
-        ?callable $on_response = null
+        ?string $user_identifier_key = null
     ): array {
         $request_payload = [];
 
@@ -3843,10 +3749,6 @@ class ThermostatsClient
             "/thermostats/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(fn($r) => Device::from_json($r), $res->devices);
     }
@@ -4186,8 +4088,7 @@ class ThermostatsSchedulesClient
 
     public function list(
         string $device_id,
-        ?string $user_identifier_key = null,
-        ?callable $on_response = null
+        ?string $user_identifier_key = null
     ): array {
         $request_payload = [];
 
@@ -4203,10 +4104,6 @@ class ThermostatsSchedulesClient
             "/thermostats/schedules/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(
             fn($r) => ThermostatSchedule::from_json($r),
@@ -4476,8 +4373,7 @@ class UserIdentitiesClient
     }
 
     public function list(
-        ?string $credential_manager_acs_system_id = null,
-        ?callable $on_response = null
+        ?string $credential_manager_acs_system_id = null
     ): array {
         $request_payload = [];
 
@@ -4492,10 +4388,6 @@ class UserIdentitiesClient
             "/user_identities/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(
             fn($r) => UserIdentity::from_json($r),
@@ -4712,10 +4604,8 @@ class UserIdentitiesEnrollmentAutomationsClient
         );
     }
 
-    public function list(
-        string $user_identity_id,
-        ?callable $on_response = null
-    ): array {
+    public function list(string $user_identity_id): array
+    {
         $request_payload = [];
 
         if ($user_identity_id !== null) {
@@ -4727,10 +4617,6 @@ class UserIdentitiesEnrollmentAutomationsClient
             "/user_identities/enrollment_automations/list",
             json: (object) $request_payload
         );
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(
             fn($r) => EnrollmentAutomation::from_json($r),
@@ -4800,13 +4686,9 @@ class WebhooksClient
         return Webhook::from_json($res->webhook);
     }
 
-    public function list(?callable $on_response = null): array
+    public function list(): array
     {
         $res = $this->seam->request("POST", "/webhooks/list");
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(fn($r) => Webhook::from_json($r), $res->webhooks);
     }
@@ -4898,13 +4780,9 @@ class WorkspacesClient
         return Workspace::from_json($res->workspace);
     }
 
-    public function list(?callable $on_response = null): array
+    public function list(): array
     {
         $res = $this->seam->request("POST", "/workspaces/list");
-
-        if ($on_response !== null) {
-            $on_response($res);
-        }
 
         return array_map(fn($r) => Workspace::from_json($r), $res->workspaces);
     }
