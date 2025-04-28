@@ -60,6 +60,7 @@ class SeamClient
     public NetworksClient $networks;
     public NoiseSensorsClient $noise_sensors;
     public PhonesClient $phones;
+    public SeamClient $seam;
     public ThermostatsClient $thermostats;
     public UserIdentitiesClient $user_identities;
     public WebhooksClient $webhooks;
@@ -101,6 +102,7 @@ class SeamClient
         $this->networks = new NetworksClient($this);
         $this->noise_sensors = new NoiseSensorsClient($this);
         $this->phones = new PhonesClient($this);
+        $this->seam = new SeamClient($this);
         $this->thermostats = new ThermostatsClient($this);
         $this->user_identities = new UserIdentitiesClient($this);
         $this->webhooks = new WebhooksClient($this);
@@ -3414,6 +3416,44 @@ class PhonesSimulateClient
         );
 
         return Phone::from_json($res->phone);
+    }
+}
+
+class SeamInstantKeyV1ClientSessionsClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function exchange_short_code(string $short_code): ClientSession
+    {
+        $request_payload = [];
+
+        if ($short_code !== null) {
+            $request_payload["short_code"] = $short_code;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/seam/instant_key/v1/client_sessions/exchange_short_code",
+            json: (object) $request_payload
+        );
+
+        return ClientSession::from_json($res->client_session);
+    }
+}
+
+class SeamClient
+{
+    private SeamClient $seam;
+    public SeamInstantKeyClient $instant_key;
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+        $this->instant_key = new SeamInstantKeyClient($seam);
     }
 }
 
