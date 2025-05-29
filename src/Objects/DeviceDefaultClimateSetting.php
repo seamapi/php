@@ -13,6 +13,7 @@ class DeviceDefaultClimateSetting
         return new self(
             can_delete: $json->can_delete ?? null,
             can_edit: $json->can_edit ?? null,
+            can_program: $json->can_program ?? null,
             climate_preset_key: $json->climate_preset_key ?? null,
             cooling_set_point_celsius: $json->cooling_set_point_celsius ?? null,
             cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
@@ -31,6 +32,7 @@ class DeviceDefaultClimateSetting
     public function __construct(
         public bool|null $can_delete,
         public bool|null $can_edit,
+        public bool|null $can_program,
         public string|null $climate_preset_key,
         public float|null $cooling_set_point_celsius,
         public float|null $cooling_set_point_fahrenheit,

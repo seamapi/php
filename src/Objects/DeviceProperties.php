@@ -226,6 +226,15 @@ class DeviceProperties
                     $json->temperature_threshold
                 )
                 : null,
+            thermostat_daily_programs: array_map(
+                fn($t) => DeviceThermostatDailyPrograms::from_json($t),
+                $json->thermostat_daily_programs ?? []
+            ),
+            thermostat_weekly_program: isset($json->thermostat_weekly_program)
+                ? DeviceThermostatWeeklyProgram::from_json(
+                    $json->thermostat_weekly_program
+                )
+                : null,
             ttlock_metadata: isset($json->ttlock_metadata)
                 ? DeviceTtlockMetadata::from_json($json->ttlock_metadata)
                 : null,
@@ -328,6 +337,8 @@ class DeviceProperties
         public float|null $temperature_celsius,
         public float|null $temperature_fahrenheit,
         public DeviceTemperatureThreshold|null $temperature_threshold,
+        public array|null $thermostat_daily_programs,
+        public DeviceThermostatWeeklyProgram|null $thermostat_weekly_program,
         public DeviceTtlockMetadata|null $ttlock_metadata,
         public DeviceTwoNMetadata|null $two_n_metadata,
         public DeviceVisionlineMetadata|null $visionline_metadata,

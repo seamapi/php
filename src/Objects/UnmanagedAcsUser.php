@@ -12,6 +12,7 @@ class UnmanagedAcsUser
         return new self(
             acs_system_id: $json->acs_system_id,
             acs_user_id: $json->acs_user_id,
+            connected_account_id: $json->connected_account_id,
             created_at: $json->created_at,
             display_name: $json->display_name,
             errors: array_map(
@@ -43,10 +44,7 @@ class UnmanagedAcsUser
             ),
             phone_number: $json->phone_number ?? null,
             user_identity_id: $json->user_identity_id ?? null,
-            is_latest_desired_state_synced_with_provider: $json->is_latest_desired_state_synced_with_provider ??
-                null,
-            latest_desired_state_synced_with_provider_at: $json->latest_desired_state_synced_with_provider_at ??
-                null,
+            last_successful_sync_at: $json->last_successful_sync_at ?? null,
             user_identity_email_address: $json->user_identity_email_address ??
                 null,
             user_identity_full_name: $json->user_identity_full_name ?? null,
@@ -58,6 +56,7 @@ class UnmanagedAcsUser
     public function __construct(
         public string $acs_system_id,
         public string $acs_user_id,
+        public string $connected_account_id,
         public string $created_at,
         public string $display_name,
         public array $errors,
@@ -75,8 +74,7 @@ class UnmanagedAcsUser
         public array|null $pending_mutations,
         public string|null $phone_number,
         public string|null $user_identity_id,
-        public bool|null $is_latest_desired_state_synced_with_provider,
-        public string|null $latest_desired_state_synced_with_provider_at,
+        public string|null $last_successful_sync_at,
         public string|null $user_identity_email_address,
         public string|null $user_identity_full_name,
         public string|null $user_identity_phone_number
