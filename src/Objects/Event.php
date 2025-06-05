@@ -11,6 +11,8 @@ class Event
         }
         return new self(
             access_code_id: $json->access_code_id ?? null,
+            access_grant_id: $json->access_grant_id ?? null,
+            access_method_id: $json->access_method_id ?? null,
             acs_access_group_id: $json->acs_access_group_id ?? null,
             acs_credential_id: $json->acs_credential_id ?? null,
             acs_encoder_id: $json->acs_encoder_id ?? null,
@@ -70,6 +72,8 @@ class Event
 
     public function __construct(
         public string|null $access_code_id,
+        public string|null $access_grant_id,
+        public string|null $access_method_id,
         public string|null $acs_access_group_id,
         public string|null $acs_credential_id,
         public string|null $acs_encoder_id,

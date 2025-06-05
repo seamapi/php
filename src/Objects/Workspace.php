@@ -11,6 +11,9 @@ class Workspace
         }
         return new self(
             company_name: $json->company_name,
+            connect_webview_customization: WorkspaceConnectWebviewCustomization::from_json(
+                $json->connect_webview_customization
+            ),
             is_sandbox: $json->is_sandbox,
             is_suspended: $json->is_suspended,
             name: $json->name,
@@ -21,6 +24,7 @@ class Workspace
 
     public function __construct(
         public string $company_name,
+        public WorkspaceConnectWebviewCustomization $connect_webview_customization,
         public bool $is_sandbox,
         public bool $is_suspended,
         public string $name,
