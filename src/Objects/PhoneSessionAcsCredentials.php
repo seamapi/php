@@ -12,7 +12,6 @@ class PhoneSessionAcsCredentials
         }
         return new self(
             access_method: $json->access_method,
-            acs_credential_id: $json->acs_credential_id,
             acs_entrances: array_map(
                 fn($a) => PhoneSessionAcsEntrances::from_json($a),
                 $json->acs_entrances ?? []
@@ -52,6 +51,7 @@ class PhoneSessionAcsCredentials
                     $json->visionline_metadata
                 )
                 : null,
+            acs_credential_id: $json->acs_credential_id ?? null,
             card_number: $json->card_number ?? null,
             code: $json->code ?? null,
             is_latest_desired_state_synced_with_provider: $json->is_latest_desired_state_synced_with_provider ??
@@ -64,7 +64,6 @@ class PhoneSessionAcsCredentials
 
     public function __construct(
         public string $access_method,
-        public string $acs_credential_id,
         public array $acs_entrances,
         public string $acs_system_id,
         public string $created_at,
@@ -85,6 +84,7 @@ class PhoneSessionAcsCredentials
         public string|null $parent_acs_credential_id,
         public string|null $starts_at,
         public PhoneSessionVisionlineMetadata|null $visionline_metadata,
+        public string|null $acs_credential_id,
         public string|null $card_number,
         public string|null $code,
         public bool|null $is_latest_desired_state_synced_with_provider,
