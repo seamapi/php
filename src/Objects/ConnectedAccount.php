@@ -24,6 +24,7 @@ class ConnectedAccount
             account_type: $json->account_type ?? null,
             connected_account_id: $json->connected_account_id ?? null,
             created_at: $json->created_at ?? null,
+            customer_key: $json->customer_key ?? null,
             user_identifier: isset($json->user_identifier)
                 ? ConnectedAccountUserIdentifier::from_json(
                     $json->user_identifier
@@ -41,6 +42,7 @@ class ConnectedAccount
         public string|null $account_type,
         public string|null $connected_account_id,
         public string|null $created_at,
+        public string|null $customer_key,
         public ConnectedAccountUserIdentifier|null $user_identifier
     ) {
     }
