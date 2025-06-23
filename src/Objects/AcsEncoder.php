@@ -12,6 +12,7 @@ class AcsEncoder
         return new self(
             acs_encoder_id: $json->acs_encoder_id,
             acs_system_id: $json->acs_system_id,
+            connected_account_id: $json->connected_account_id,
             created_at: $json->created_at,
             display_name: $json->display_name,
             errors: array_map(
@@ -25,6 +26,7 @@ class AcsEncoder
     public function __construct(
         public string $acs_encoder_id,
         public string $acs_system_id,
+        public string $connected_account_id,
         public string $created_at,
         public string $display_name,
         public array $errors,
