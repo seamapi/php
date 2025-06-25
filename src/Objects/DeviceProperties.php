@@ -249,6 +249,8 @@ class DeviceProperties
             wyze_metadata: isset($json->wyze_metadata)
                 ? DeviceWyzeMetadata::from_json($json->wyze_metadata)
                 : null,
+            active_thermostat_schedule_id: $json->active_thermostat_schedule_id ??
+                null,
             fallback_climate_preset_key: $json->fallback_climate_preset_key ??
                 null
         );
@@ -343,6 +345,7 @@ class DeviceProperties
         public DeviceTwoNMetadata|null $two_n_metadata,
         public DeviceVisionlineMetadata|null $visionline_metadata,
         public DeviceWyzeMetadata|null $wyze_metadata,
+        public string|null $active_thermostat_schedule_id,
         public string|null $fallback_climate_preset_key
     ) {
     }

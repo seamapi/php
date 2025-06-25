@@ -21,7 +21,9 @@ class AccessGrant
             ),
             space_ids: $json->space_ids,
             user_identity_id: $json->user_identity_id,
-            workspace_id: $json->workspace_id
+            workspace_id: $json->workspace_id,
+            ends_at: $json->ends_at ?? null,
+            starts_at: $json->starts_at ?? null
         );
     }
 
@@ -34,7 +36,9 @@ class AccessGrant
         public array $requested_access_methods,
         public array $space_ids,
         public string $user_identity_id,
-        public string $workspace_id
+        public string $workspace_id,
+        public string|null $ends_at,
+        public string|null $starts_at
     ) {
     }
 }

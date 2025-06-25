@@ -28,7 +28,6 @@ use Seam\Objects\Location;
 use Seam\Objects\MagicLink;
 use Seam\Objects\NoiseThreshold;
 use Seam\Objects\Pagination;
-use Seam\Objects\PartnerResource;
 use Seam\Objects\Phone;
 use Seam\Objects\PhoneRegistration;
 use Seam\Objects\PhoneSession;
@@ -65,6 +64,7 @@ class SeamClient
     public ClientSessionsClient $client_sessions;
     public ConnectWebviewsClient $connect_webviews;
     public ConnectedAccountsClient $connected_accounts;
+    public CustomersClient $customers;
     public DevicesClient $devices;
     public EventsClient $events;
     public LocksClient $locks;
@@ -107,6 +107,7 @@ class SeamClient
         $this->client_sessions = new ClientSessionsClient($this);
         $this->connect_webviews = new ConnectWebviewsClient($this);
         $this->connected_accounts = new ConnectedAccountsClient($this);
+        $this->customers = new CustomersClient($this);
         $this->devices = new DevicesClient($this);
         $this->events = new EventsClient($this);
         $this->locks = new LocksClient($this);
@@ -988,6 +989,30 @@ class AccessGrantsClient
         return array_map(
             fn($r) => AccessGrant::from_json($r),
             $res->access_grants
+        );
+    }
+
+    public function update(
+        string $access_grant_id,
+        ?string $ends_at = null,
+        ?string $starts_at = null
+    ): void {
+        $request_payload = [];
+
+        if ($access_grant_id !== null) {
+            $request_payload["access_grant_id"] = $access_grant_id;
+        }
+        if ($ends_at !== null) {
+            $request_payload["ends_at"] = $ends_at;
+        }
+        if ($starts_at !== null) {
+            $request_payload["starts_at"] = $starts_at;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/access_grants/update",
+            json: (object) $request_payload
         );
     }
 }
@@ -2824,6 +2849,126 @@ class ConnectedAccountsClient
         $this->seam->request(
             "POST",
             "/connected_accounts/update",
+            json: (object) $request_payload
+        );
+    }
+}
+
+class CustomersClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function create_portal(
+        mixed $features = null,
+        ?bool $is_embedded = null,
+        mixed $customer_data = null
+    ): MagicLink {
+        $request_payload = [];
+
+        if ($features !== null) {
+            $request_payload["features"] = $features;
+        }
+        if ($is_embedded !== null) {
+            $request_payload["is_embedded"] = $is_embedded;
+        }
+        if ($customer_data !== null) {
+            $request_payload["customer_data"] = $customer_data;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/customers/create_portal",
+            json: (object) $request_payload
+        );
+
+        return MagicLink::from_json($res->magic_link);
+    }
+
+    public function push_data(
+        string $customer_key,
+        ?array $access_grants = null,
+        ?array $bookings = null,
+        ?array $buildings = null,
+        ?array $common_areas = null,
+        ?array $facilities = null,
+        ?array $guests = null,
+        ?array $listings = null,
+        ?array $properties = null,
+        ?array $property_listings = null,
+        ?array $reservations = null,
+        ?array $residents = null,
+        ?array $rooms = null,
+        ?array $spaces = null,
+        ?array $tenants = null,
+        ?array $units = null,
+        ?array $user_identities = null,
+        ?array $users = null
+    ): void {
+        $request_payload = [];
+
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
+        }
+        if ($access_grants !== null) {
+            $request_payload["access_grants"] = $access_grants;
+        }
+        if ($bookings !== null) {
+            $request_payload["bookings"] = $bookings;
+        }
+        if ($buildings !== null) {
+            $request_payload["buildings"] = $buildings;
+        }
+        if ($common_areas !== null) {
+            $request_payload["common_areas"] = $common_areas;
+        }
+        if ($facilities !== null) {
+            $request_payload["facilities"] = $facilities;
+        }
+        if ($guests !== null) {
+            $request_payload["guests"] = $guests;
+        }
+        if ($listings !== null) {
+            $request_payload["listings"] = $listings;
+        }
+        if ($properties !== null) {
+            $request_payload["properties"] = $properties;
+        }
+        if ($property_listings !== null) {
+            $request_payload["property_listings"] = $property_listings;
+        }
+        if ($reservations !== null) {
+            $request_payload["reservations"] = $reservations;
+        }
+        if ($residents !== null) {
+            $request_payload["residents"] = $residents;
+        }
+        if ($rooms !== null) {
+            $request_payload["rooms"] = $rooms;
+        }
+        if ($spaces !== null) {
+            $request_payload["spaces"] = $spaces;
+        }
+        if ($tenants !== null) {
+            $request_payload["tenants"] = $tenants;
+        }
+        if ($units !== null) {
+            $request_payload["units"] = $units;
+        }
+        if ($user_identities !== null) {
+            $request_payload["user_identities"] = $user_identities;
+        }
+        if ($users !== null) {
+            $request_payload["users"] = $users;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/customers/push_data",
             json: (object) $request_payload
         );
     }
