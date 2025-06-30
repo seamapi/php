@@ -10,6 +10,7 @@ class ConnectedAccount
             return null;
         }
         return new self(
+            accepted_capabilities: $json->accepted_capabilities,
             account_type_display_name: $json->account_type_display_name,
             automatically_manage_new_devices: $json->automatically_manage_new_devices,
             custom_metadata: $json->custom_metadata,
@@ -34,6 +35,7 @@ class ConnectedAccount
     }
 
     public function __construct(
+        public array $accepted_capabilities,
         public string $account_type_display_name,
         public bool $automatically_manage_new_devices,
         public mixed $custom_metadata,
