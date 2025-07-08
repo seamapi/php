@@ -20,6 +20,5 @@ class Pagination
         public bool $has_next_page,
         public string|null $next_page_cursor,
         public string|null $next_page_url
-    ) {
-    }
+    ) {}
 }

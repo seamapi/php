@@ -26,6 +26,5 @@ class MagicLink
         public string $expires_at,
         public string $url,
         public string $workspace_id
-    ) {
-    }
+    ) {}
 }

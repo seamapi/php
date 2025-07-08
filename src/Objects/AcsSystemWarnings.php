@@ -23,6 +23,5 @@ class AcsSystemWarnings
         public string $message,
         public string $warning_code,
         public array|null $misconfigured_acs_entrance_ids
-    ) {
-    }
+    ) {}
 }

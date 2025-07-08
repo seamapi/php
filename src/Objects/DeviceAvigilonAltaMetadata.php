@@ -29,6 +29,5 @@ class DeviceAvigilonAltaMetadata
         public string $site_name,
         public float $zone_id,
         public string $zone_name
-    ) {
-    }
+    ) {}
 }

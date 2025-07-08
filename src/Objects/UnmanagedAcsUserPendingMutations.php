@@ -29,6 +29,5 @@ class UnmanagedAcsUserPendingMutations
         public string $mutation_code,
         public UnmanagedAcsUserFrom|null $from,
         public UnmanagedAcsUserTo|null $to
-    ) {
-    }
+    ) {}
 }

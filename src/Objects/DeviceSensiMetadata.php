@@ -20,6 +20,5 @@ class DeviceSensiMetadata
         public string $device_id,
         public string $device_name,
         public string $product_type
-    ) {
-    }
+    ) {}
 }

@@ -20,6 +20,5 @@ class PhoneErrors
         public string $error_code,
         public string $message,
         public string|null $created_at
-    ) {
-    }
+    ) {}
 }

@@ -25,6 +25,5 @@ class WorkspaceConnectWebviewCustomization
         public string|null $primary_button_color,
         public string|null $primary_button_text_color,
         public string|null $success_message
-    ) {
-    }
+    ) {}
 }

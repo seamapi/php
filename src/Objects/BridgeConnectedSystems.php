@@ -30,6 +30,5 @@ class BridgeConnectedSystems
         public string $connected_account_id,
         public string $workspace_display_name,
         public string $workspace_id
-    ) {
-    }
+    ) {}
 }

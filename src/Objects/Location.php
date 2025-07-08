@@ -30,6 +30,5 @@ class Location
         public string $workspace_id,
         public LocationGeolocation|null $geolocation,
         public string|null $time_zone
-    ) {
-    }
+    ) {}
 }

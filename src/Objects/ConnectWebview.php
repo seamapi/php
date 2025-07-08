@@ -55,6 +55,5 @@ class ConnectWebview
         public string|null $custom_redirect_failure_url,
         public string|null $custom_redirect_url,
         public string|null $selected_provider
-    ) {
-    }
+    ) {}
 }

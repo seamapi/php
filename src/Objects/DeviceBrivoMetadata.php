@@ -12,7 +12,5 @@ class DeviceBrivoMetadata
         return new self(device_name: $json->device_name);
     }
 
-    public function __construct(public string $device_name)
-    {
-    }
+    public function __construct(public string $device_name) {}
 }

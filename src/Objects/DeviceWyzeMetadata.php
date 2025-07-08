@@ -30,6 +30,5 @@ class DeviceWyzeMetadata
         public string $product_type,
         public string|null $keypad_uuid,
         public float|null $locker_status_hardlock
-    ) {
-    }
+    ) {}
 }

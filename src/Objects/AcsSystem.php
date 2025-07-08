@@ -66,6 +66,5 @@ class AcsSystem
         public string|null $system_type_display_name,
         public AcsSystemVisionlineMetadata|null $visionline_metadata,
         public string|null $default_credential_manager_acs_system_id
-    ) {
-    }
+    ) {}
 }

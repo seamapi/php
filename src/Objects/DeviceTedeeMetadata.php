@@ -28,6 +28,5 @@ class DeviceTedeeMetadata
         public string $device_name,
         public string $serial_number,
         public float|null $keypad_id
-    ) {
-    }
+    ) {}
 }

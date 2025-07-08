@@ -47,6 +47,5 @@ class DeviceProvider
         public bool|null $can_simulate_disconnection,
         public bool|null $can_simulate_removal,
         public bool|null $can_turn_off_hvac
-    ) {
-    }
+    ) {}
 }

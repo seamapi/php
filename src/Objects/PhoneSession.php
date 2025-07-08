@@ -17,7 +17,5 @@ class PhoneSession
         );
     }
 
-    public function __construct(public array $provider_sessions)
-    {
-    }
+    public function __construct(public array $provider_sessions) {}
 }

@@ -28,6 +28,5 @@ class InstantKey
         public string $instant_key_url,
         public string $user_identity_id,
         public string $workspace_id
-    ) {
-    }
+    ) {}
 }

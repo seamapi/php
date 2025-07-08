@@ -2,9 +2,7 @@
 
 namespace Seam\Utils;
 
-class PackageVersionException extends \Exception
-{
-}
+class PackageVersionException extends \Exception {}
 
 class PackageVersion
 {

@@ -31,6 +31,5 @@ class AcsCredentialVisionlineMetadata
         public array|null $guest_acs_entrance_ids,
         public bool|null $is_valid,
         public array|null $joiner_acs_credential_ids
-    ) {
-    }
+    ) {}
 }

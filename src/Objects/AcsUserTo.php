@@ -14,7 +14,5 @@ class AcsUserTo
         );
     }
 
-    public function __construct(public string|null $acs_access_group_id)
-    {
-    }
+    public function __construct(public string|null $acs_access_group_id) {}
 }

@@ -30,6 +30,5 @@ class UnmanagedAccessCodeErrors
         public bool|null $is_bridge_error,
         public bool|null $is_connected_account_error,
         public bool|null $is_device_error
-    ) {
-    }
+    ) {}
 }

@@ -18,6 +18,5 @@ class DeviceWirelessKeypads
     public function __construct(
         public float $wireless_keypad_id,
         public string $wireless_keypad_name
-    ) {
-    }
+    ) {}
 }

@@ -20,6 +20,5 @@ class DeviceKwiksetMetadata
         public string $device_id,
         public string $device_name,
         public string $model_number
-    ) {
-    }
+    ) {}
 }

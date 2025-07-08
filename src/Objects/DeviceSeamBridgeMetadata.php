@@ -20,6 +20,5 @@ class DeviceSeamBridgeMetadata
         public float $device_num,
         public string $name,
         public string|null $unlock_method
-    ) {
-    }
+    ) {}
 }

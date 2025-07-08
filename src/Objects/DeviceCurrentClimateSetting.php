@@ -43,6 +43,5 @@ class DeviceCurrentClimateSetting
         public string|null $hvac_mode_setting,
         public bool|null $manual_override_allowed,
         public string|null $name
-    ) {
-    }
+    ) {}
 }

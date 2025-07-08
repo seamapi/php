@@ -44,6 +44,5 @@ class ConnectedAccount
         public string|null $created_at,
         public string|null $customer_key,
         public ConnectedAccountUserIdentifier|null $user_identifier
-    ) {
-    }
+    ) {}
 }

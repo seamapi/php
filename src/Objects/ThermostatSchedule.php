@@ -40,6 +40,5 @@ class ThermostatSchedule
         public bool|null $is_override_allowed,
         public string|null $name,
         public mixed $max_override_period_minutes
-    ) {
-    }
+    ) {}
 }

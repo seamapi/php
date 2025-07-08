@@ -18,6 +18,5 @@ class DeviceTadoMetadata
     public function __construct(
         public string $device_type,
         public string $serial_no
-    ) {
-    }
+    ) {}
 }

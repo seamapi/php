@@ -65,6 +65,5 @@ class AcsEntrance
         public AcsEntranceSaltoKsMetadata|null $salto_ks_metadata,
         public AcsEntranceSaltoSpaceMetadata|null $salto_space_metadata,
         public AcsEntranceVisionlineMetadata|null $visionline_metadata
-    ) {
-    }
+    ) {}
 }

@@ -24,6 +24,5 @@ class Space
         public string $name,
         public string $space_id,
         public string $workspace_id
-    ) {
-    }
+    ) {}
 }

@@ -30,6 +30,5 @@ class PhoneProperties
     public function __construct(
         public PhoneAssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata,
         public PhoneSaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata
-    ) {
-    }
+    ) {}
 }
