@@ -24,6 +24,5 @@ class EnrollmentAutomation
         public string $enrollment_automation_id,
         public string $user_identity_id,
         public string $workspace_id
-    ) {
-    }
+    ) {}
 }

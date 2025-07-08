@@ -22,6 +22,5 @@ class DeviceNestMetadata
         public string $device_name,
         public string $nest_device_id,
         public string|null $display_name
-    ) {
-    }
+    ) {}
 }

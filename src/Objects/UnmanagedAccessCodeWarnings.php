@@ -21,6 +21,5 @@ class UnmanagedAccessCodeWarnings
         public string $message,
         public string $warning_code,
         public string|null $created_at
-    ) {
-    }
+    ) {}
 }

@@ -25,6 +25,5 @@ class AcsCredentialProvisioningAutomation
         public string $credential_manager_acs_system_id,
         public string $user_identity_id,
         public string $workspace_id
-    ) {
-    }
+    ) {}
 }

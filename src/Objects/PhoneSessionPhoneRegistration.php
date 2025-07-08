@@ -23,6 +23,5 @@ class PhoneSessionPhoneRegistration
         public string $phone_registration_id,
         public mixed $provider_state,
         public string|null $provider_name
-    ) {
-    }
+    ) {}
 }

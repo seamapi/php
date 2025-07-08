@@ -46,6 +46,5 @@ class BridgeClientSession
         public string|null $telemetry_token,
         public string|null $telemetry_token_expires_at,
         public string|null $telemetry_url
-    ) {
-    }
+    ) {}
 }

@@ -24,6 +24,5 @@ class PhoneSessionProviderSessions
     public function __construct(
         public array $acs_credentials,
         public PhoneSessionPhoneRegistration $phone_registration
-    ) {
-    }
+    ) {}
 }

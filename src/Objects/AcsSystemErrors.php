@@ -22,6 +22,5 @@ class AcsSystemErrors
         public string $error_code,
         public string $message,
         public bool|null $is_bridge_error
-    ) {
-    }
+    ) {}
 }

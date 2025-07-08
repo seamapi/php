@@ -28,6 +28,5 @@ class AcsCredentialPool
         public string $external_type,
         public string $external_type_display_name,
         public string $workspace_id
-    ) {
-    }
+    ) {}
 }

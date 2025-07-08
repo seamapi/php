@@ -20,6 +20,5 @@ class DeviceCodeConstraints
         public string $constraint_type,
         public float|null $max_length,
         public float|null $min_length
-    ) {
-    }
+    ) {}
 }

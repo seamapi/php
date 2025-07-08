@@ -43,6 +43,5 @@ class DeviceAvailableClimatePresets
         public float|null $heating_set_point_fahrenheit,
         public string|null $hvac_mode_setting,
         public string|null $name
-    ) {
-    }
+    ) {}
 }

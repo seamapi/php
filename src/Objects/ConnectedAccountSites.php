@@ -22,6 +22,5 @@ class ConnectedAccountSites
         public string $site_name,
         public mixed $site_user_subscription_limit,
         public mixed $subscribed_site_user_count
-    ) {
-    }
+    ) {}
 }

@@ -30,6 +30,5 @@ class AccessMethod
         public string|null $instant_key_url,
         public bool|null $is_card_encoding_required,
         public string|null $issued_at
-    ) {
-    }
+    ) {}
 }

@@ -90,6 +90,5 @@ class PhoneSessionAcsCredentials
         public bool|null $is_latest_desired_state_synced_with_provider,
         public string|null $issued_at,
         public string|null $latest_desired_state_synced_with_provider_at
-    ) {
-    }
+    ) {}
 }

@@ -31,6 +31,5 @@ class ConnectedAccountErrors
         public bool|null $is_bridge_error,
         public bool|null $is_connected_account_error,
         public ConnectedAccountSaltoKsMetadata|null $salto_ks_metadata
-    ) {
-    }
+    ) {}
 }

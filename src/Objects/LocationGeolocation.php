@@ -12,7 +12,8 @@ class LocationGeolocation
         return new self(latitude: $json->latitude, longitude: $json->longitude);
     }
 
-    public function __construct(public float $latitude, public float $longitude)
-    {
-    }
+    public function __construct(
+        public float $latitude,
+        public float $longitude
+    ) {}
 }

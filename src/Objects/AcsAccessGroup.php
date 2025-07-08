@@ -43,6 +43,5 @@ class AcsAccessGroup
         public string $name,
         public array $warnings,
         public string $workspace_id
-    ) {
-    }
+    ) {}
 }

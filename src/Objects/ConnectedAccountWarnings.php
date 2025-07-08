@@ -26,6 +26,5 @@ class ConnectedAccountWarnings
         public string $message,
         public string $warning_code,
         public ConnectedAccountSaltoKsMetadata|null $salto_ks_metadata
-    ) {
-    }
+    ) {}
 }

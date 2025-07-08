@@ -65,6 +65,5 @@ class PhoneSessionAcsEntrances
         public PhoneSessionSaltoKsMetadata|null $salto_ks_metadata,
         public PhoneSessionSaltoSpaceMetadata|null $salto_space_metadata,
         public PhoneSessionVisionlineMetadata|null $visionline_metadata
-    ) {
-    }
+    ) {}
 }

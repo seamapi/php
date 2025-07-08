@@ -24,6 +24,5 @@ class DeviceNukiMetadata
         public bool|null $keypad_2_paired,
         public bool|null $keypad_battery_critical,
         public bool|null $keypad_paired
-    ) {
-    }
+    ) {}
 }

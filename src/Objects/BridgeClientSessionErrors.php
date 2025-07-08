@@ -36,6 +36,5 @@ class BridgeClientSessionErrors
         public bool|null $is_bridge_socks_server_healthy,
         public bool|null $is_tailscale_proxy_reachable,
         public bool|null $is_tailscale_proxy_socks_server_healthy
-    ) {
-    }
+    ) {}
 }

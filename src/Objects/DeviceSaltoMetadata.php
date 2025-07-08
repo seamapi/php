@@ -26,6 +26,5 @@ class DeviceSaltoMetadata
         public string $lock_type,
         public string $locked_state,
         public string|null $model
-    ) {
-    }
+    ) {}
 }

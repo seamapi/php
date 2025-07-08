@@ -39,6 +39,5 @@ class AccessGrant
         public string $workspace_id,
         public string|null $ends_at,
         public string|null $starts_at
-    ) {
-    }
+    ) {}
 }

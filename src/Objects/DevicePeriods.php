@@ -18,6 +18,5 @@ class DevicePeriods
     public function __construct(
         public string $climate_preset_key,
         public string $starts_at_time
-    ) {
-    }
+    ) {}
 }

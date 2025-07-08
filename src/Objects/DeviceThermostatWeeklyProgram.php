@@ -31,6 +31,5 @@ class DeviceThermostatWeeklyProgram
         public string|null $thursday_program_id,
         public string|null $tuesday_program_id,
         public string|null $wednesday_program_id
-    ) {
-    }
+    ) {}
 }

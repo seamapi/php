@@ -23,6 +23,5 @@ class AccessGrantRequestedAccessMethods
         public string $created_at,
         public string $display_name,
         public string $mode
-    ) {
-    }
+    ) {}
 }

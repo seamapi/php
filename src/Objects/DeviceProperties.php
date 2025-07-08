@@ -347,6 +347,5 @@ class DeviceProperties
         public DeviceWyzeMetadata|null $wyze_metadata,
         public string|null $active_thermostat_schedule_id,
         public string|null $fallback_climate_preset_key
-    ) {
-    }
+    ) {}
 }

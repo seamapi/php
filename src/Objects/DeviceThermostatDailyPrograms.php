@@ -30,6 +30,5 @@ class DeviceThermostatDailyPrograms
         public string $thermostat_daily_program_id,
         public string $workspace_id,
         public string|null $name
-    ) {
-    }
+    ) {}
 }

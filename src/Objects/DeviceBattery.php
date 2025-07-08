@@ -12,7 +12,5 @@ class DeviceBattery
         return new self(level: $json->level);
     }
 
-    public function __construct(public float $level)
-    {
-    }
+    public function __construct(public float $level) {}
 }

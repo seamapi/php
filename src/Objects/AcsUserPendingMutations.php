@@ -26,6 +26,5 @@ class AcsUserPendingMutations
         public string $mutation_code,
         public AcsUserFrom|null $from,
         public AcsUserTo|null $to
-    ) {
-    }
+    ) {}
 }

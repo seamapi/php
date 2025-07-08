@@ -20,6 +20,5 @@ class DeviceFourSuitesMetadata
         public float $device_id,
         public string $device_name,
         public float $reclose_delay_in_seconds
-    ) {
-    }
+    ) {}
 }

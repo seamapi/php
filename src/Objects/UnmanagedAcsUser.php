@@ -78,6 +78,5 @@ class UnmanagedAcsUser
         public string|null $user_identity_email_address,
         public string|null $user_identity_full_name,
         public string|null $user_identity_phone_number
-    ) {
-    }
+    ) {}
 }

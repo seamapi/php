@@ -21,6 +21,5 @@ class PhoneSessionSaltoSpaceMetadata
         public string $door_name,
         public string $ext_door_id,
         public string|null $door_description
-    ) {
-    }
+    ) {}
 }

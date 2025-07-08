@@ -38,6 +38,5 @@ class ClientSession
         public string|null $customer_id,
         public string|null $user_identity_id,
         public string|null $user_identifier_key
-    ) {
-    }
+    ) {}
 }

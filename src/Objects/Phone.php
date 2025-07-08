@@ -40,6 +40,5 @@ class Phone
         public array $warnings,
         public string $workspace_id,
         public string|null $nickname
-    ) {
-    }
+    ) {}
 }

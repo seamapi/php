@@ -20,6 +20,5 @@ class DeviceWarnings
         public string $created_at,
         public string $message,
         public string $warning_code
-    ) {
-    }
+    ) {}
 }

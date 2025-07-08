@@ -26,6 +26,5 @@ class DeviceFeatures
         public bool $passcode_management,
         public bool $unlock_via_gateway,
         public bool $wifi
-    ) {
-    }
+    ) {}
 }
