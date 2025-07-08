@@ -40,6 +40,7 @@ class UnmanagedDevice
                 null,
             can_simulate_removal: $json->can_simulate_removal ?? null,
             can_turn_off_hvac: $json->can_turn_off_hvac ?? null,
+            can_unlock_with_code: $json->can_unlock_with_code ?? null,
             location: isset($json->location)
                 ? UnmanagedDeviceLocation::from_json($json->location)
                 : null
@@ -68,6 +69,7 @@ class UnmanagedDevice
         public bool|null $can_simulate_disconnection,
         public bool|null $can_simulate_removal,
         public bool|null $can_turn_off_hvac,
+        public bool|null $can_unlock_with_code,
         public UnmanagedDeviceLocation|null $location
     ) {
     }

@@ -13,6 +13,7 @@ class UnmanagedAcsCredential
             access_method: $json->access_method,
             acs_credential_id: $json->acs_credential_id,
             acs_system_id: $json->acs_system_id,
+            connected_account_id: $json->connected_account_id,
             created_at: $json->created_at,
             display_name: $json->display_name,
             errors: array_map(
@@ -42,6 +43,7 @@ class UnmanagedAcsCredential
             is_one_time_use: $json->is_one_time_use ?? null,
             parent_acs_credential_id: $json->parent_acs_credential_id ?? null,
             starts_at: $json->starts_at ?? null,
+            user_identity_id: $json->user_identity_id ?? null,
             visionline_metadata: isset($json->visionline_metadata)
                 ? UnmanagedAcsCredentialVisionlineMetadata::from_json(
                     $json->visionline_metadata
@@ -61,6 +63,7 @@ class UnmanagedAcsCredential
         public string $access_method,
         public string $acs_credential_id,
         public string $acs_system_id,
+        public string $connected_account_id,
         public string $created_at,
         public string $display_name,
         public array $errors,
@@ -78,6 +81,7 @@ class UnmanagedAcsCredential
         public bool|null $is_one_time_use,
         public string|null $parent_acs_credential_id,
         public string|null $starts_at,
+        public string|null $user_identity_id,
         public UnmanagedAcsCredentialVisionlineMetadata|null $visionline_metadata,
         public string|null $card_number,
         public string|null $code,

@@ -24,6 +24,10 @@ class AcsEntrance
                     $json->assa_abloy_vostio_metadata
                 )
                 : null,
+            can_unlock_with_card: $json->can_unlock_with_card ?? null,
+            can_unlock_with_code: $json->can_unlock_with_code ?? null,
+            can_unlock_with_mobile_key: $json->can_unlock_with_mobile_key ??
+                null,
             dormakaba_community_metadata: isset(
                 $json->dormakaba_community_metadata
             )
@@ -60,6 +64,9 @@ class AcsEntrance
         public string $display_name,
         public array $errors,
         public AcsEntranceAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
+        public bool|null $can_unlock_with_card,
+        public bool|null $can_unlock_with_code,
+        public bool|null $can_unlock_with_mobile_key,
         public AcsEntranceDormakabaCommunityMetadata|null $dormakaba_community_metadata,
         public AcsEntranceLatchMetadata|null $latch_metadata,
         public AcsEntranceSaltoKsMetadata|null $salto_ks_metadata,

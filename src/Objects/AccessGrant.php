@@ -23,6 +23,7 @@ class AccessGrant
             user_identity_id: $json->user_identity_id,
             workspace_id: $json->workspace_id,
             ends_at: $json->ends_at ?? null,
+            instant_key_url: $json->instant_key_url ?? null,
             starts_at: $json->starts_at ?? null
         );
     }
@@ -38,6 +39,7 @@ class AccessGrant
         public string $user_identity_id,
         public string $workspace_id,
         public string|null $ends_at,
+        public string|null $instant_key_url,
         public string|null $starts_at
     ) {
     }
