@@ -10,6 +10,7 @@ class UserIdentity
             return null;
         }
         return new self(
+            acs_user_ids: $json->acs_user_ids,
             created_at: $json->created_at,
             display_name: $json->display_name,
             errors: array_map(
@@ -30,6 +31,7 @@ class UserIdentity
     }
 
     public function __construct(
+        public array $acs_user_ids,
         public string $created_at,
         public string $display_name,
         public array $errors,

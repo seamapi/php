@@ -16,7 +16,7 @@ class AccessMethod
             mode: $json->mode,
             workspace_id: $json->workspace_id,
             instant_key_url: $json->instant_key_url ?? null,
-            is_card_encoding_required: $json->is_card_encoding_required ?? null,
+            is_encoding_required: $json->is_encoding_required ?? null,
             issued_at: $json->issued_at ?? null
         );
     }
@@ -28,7 +28,7 @@ class AccessMethod
         public string $mode,
         public string $workspace_id,
         public string|null $instant_key_url,
-        public bool|null $is_card_encoding_required,
+        public bool|null $is_encoding_required,
         public string|null $issued_at
     ) {
     }

@@ -15,10 +15,14 @@ class DeviceDefaultClimateSetting
             can_edit: $json->can_edit ?? null,
             can_program: $json->can_program ?? null,
             climate_preset_key: $json->climate_preset_key ?? null,
+            climate_preset_mode: $json->climate_preset_mode ?? null,
             cooling_set_point_celsius: $json->cooling_set_point_celsius ?? null,
             cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
                 null,
             display_name: $json->display_name ?? null,
+            ecobee_metadata: isset($json->ecobee_metadata)
+                ? DeviceEcobeeMetadata::from_json($json->ecobee_metadata)
+                : null,
             fan_mode_setting: $json->fan_mode_setting ?? null,
             heating_set_point_celsius: $json->heating_set_point_celsius ?? null,
             heating_set_point_fahrenheit: $json->heating_set_point_fahrenheit ??
@@ -34,9 +38,11 @@ class DeviceDefaultClimateSetting
         public bool|null $can_edit,
         public bool|null $can_program,
         public string|null $climate_preset_key,
+        public string|null $climate_preset_mode,
         public float|null $cooling_set_point_celsius,
         public float|null $cooling_set_point_fahrenheit,
         public string|null $display_name,
+        public DeviceEcobeeMetadata|null $ecobee_metadata,
         public string|null $fan_mode_setting,
         public float|null $heating_set_point_celsius,
         public float|null $heating_set_point_fahrenheit,
