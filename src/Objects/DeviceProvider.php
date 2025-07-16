@@ -27,7 +27,8 @@ class DeviceProvider
             can_simulate_disconnection: $json->can_simulate_disconnection ??
                 null,
             can_simulate_removal: $json->can_simulate_removal ?? null,
-            can_turn_off_hvac: $json->can_turn_off_hvac ?? null
+            can_turn_off_hvac: $json->can_turn_off_hvac ?? null,
+            can_unlock_with_code: $json->can_unlock_with_code ?? null
         );
     }
 
@@ -46,6 +47,7 @@ class DeviceProvider
         public bool|null $can_simulate_connection,
         public bool|null $can_simulate_disconnection,
         public bool|null $can_simulate_removal,
-        public bool|null $can_turn_off_hvac
+        public bool|null $can_turn_off_hvac,
+        public bool|null $can_unlock_with_code
     ) {}
 }

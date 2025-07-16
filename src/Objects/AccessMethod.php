@@ -15,8 +15,10 @@ class AccessMethod
             display_name: $json->display_name,
             mode: $json->mode,
             workspace_id: $json->workspace_id,
+            client_session_token: $json->client_session_token ?? null,
+            code: $json->code ?? null,
             instant_key_url: $json->instant_key_url ?? null,
-            is_card_encoding_required: $json->is_card_encoding_required ?? null,
+            is_encoding_required: $json->is_encoding_required ?? null,
             issued_at: $json->issued_at ?? null
         );
     }
@@ -27,8 +29,10 @@ class AccessMethod
         public string $display_name,
         public string $mode,
         public string $workspace_id,
+        public string|null $client_session_token,
+        public string|null $code,
         public string|null $instant_key_url,
-        public bool|null $is_card_encoding_required,
+        public bool|null $is_encoding_required,
         public string|null $issued_at
     ) {}
 }

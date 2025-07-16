@@ -17,6 +17,7 @@ class PhoneSessionAcsCredentials
                 $json->acs_entrances ?? []
             ),
             acs_system_id: $json->acs_system_id,
+            connected_account_id: $json->connected_account_id,
             created_at: $json->created_at,
             display_name: $json->display_name,
             errors: array_map(
@@ -46,6 +47,7 @@ class PhoneSessionAcsCredentials
             is_one_time_use: $json->is_one_time_use ?? null,
             parent_acs_credential_id: $json->parent_acs_credential_id ?? null,
             starts_at: $json->starts_at ?? null,
+            user_identity_id: $json->user_identity_id ?? null,
             visionline_metadata: isset($json->visionline_metadata)
                 ? PhoneSessionVisionlineMetadata::from_json(
                     $json->visionline_metadata
@@ -66,6 +68,7 @@ class PhoneSessionAcsCredentials
         public string $access_method,
         public array $acs_entrances,
         public string $acs_system_id,
+        public string $connected_account_id,
         public string $created_at,
         public string $display_name,
         public array $errors,
@@ -83,6 +86,7 @@ class PhoneSessionAcsCredentials
         public bool|null $is_one_time_use,
         public string|null $parent_acs_credential_id,
         public string|null $starts_at,
+        public string|null $user_identity_id,
         public PhoneSessionVisionlineMetadata|null $visionline_metadata,
         public string|null $acs_credential_id,
         public string|null $card_number,

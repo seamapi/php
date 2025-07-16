@@ -27,6 +27,8 @@ class Event
             client_session_id: $json->client_session_id ?? null,
             climate_preset_key: $json->climate_preset_key ?? null,
             connect_webview_id: $json->connect_webview_id ?? null,
+            connected_account_custom_metadata: $json->connected_account_custom_metadata ??
+                null,
             connected_account_id: $json->connected_account_id ?? null,
             cooling_set_point_celsius: $json->cooling_set_point_celsius ?? null,
             cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
@@ -36,6 +38,7 @@ class Event
                 null,
             desired_temperature_fahrenheit: $json->desired_temperature_fahrenheit ??
                 null,
+            device_custom_metadata: $json->device_custom_metadata ?? null,
             device_id: $json->device_id ?? null,
             device_name: $json->device_name ?? null,
             enrollment_automation_id: $json->enrollment_automation_id ?? null,
@@ -88,12 +91,14 @@ class Event
         public string|null $client_session_id,
         public string|null $climate_preset_key,
         public string|null $connect_webview_id,
+        public mixed $connected_account_custom_metadata,
         public string|null $connected_account_id,
         public float|null $cooling_set_point_celsius,
         public float|null $cooling_set_point_fahrenheit,
         public string|null $created_at,
         public float|null $desired_temperature_celsius,
         public float|null $desired_temperature_fahrenheit,
+        public mixed $device_custom_metadata,
         public string|null $device_id,
         public string|null $device_name,
         public string|null $enrollment_automation_id,

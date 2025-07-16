@@ -42,6 +42,8 @@ class DeviceProperties
             august_metadata: isset($json->august_metadata)
                 ? DeviceAugustMetadata::from_json($json->august_metadata)
                 : null,
+            available_climate_preset_modes: $json->available_climate_preset_modes ??
+                null,
             available_climate_presets: array_map(
                 fn($a) => DeviceAvailableClimatePresets::from_json($a),
                 $json->available_climate_presets ?? []
@@ -268,6 +270,7 @@ class DeviceProperties
         public DeviceAssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata,
         public DeviceAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
         public DeviceAugustMetadata|null $august_metadata,
+        public array|null $available_climate_preset_modes,
         public array|null $available_climate_presets,
         public array|null $available_fan_mode_settings,
         public array|null $available_hvac_mode_settings,
