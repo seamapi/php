@@ -25,6 +25,7 @@ class ConnectWebview
             url: $json->url,
             wait_for_device_creation: $json->wait_for_device_creation,
             workspace_id: $json->workspace_id,
+            customer_key: $json->customer_key ?? null,
             authorized_at: $json->authorized_at ?? null,
             connected_account_id: $json->connected_account_id ?? null,
             custom_redirect_failure_url: $json->custom_redirect_failure_url ??
@@ -50,6 +51,7 @@ class ConnectWebview
         public string $url,
         public bool $wait_for_device_creation,
         public string $workspace_id,
+        public string|null $customer_key,
         public string|null $authorized_at,
         public string|null $connected_account_id,
         public string|null $custom_redirect_failure_url,

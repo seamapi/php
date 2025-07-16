@@ -22,8 +22,12 @@ class AccessGrant
             space_ids: $json->space_ids,
             user_identity_id: $json->user_identity_id,
             workspace_id: $json->workspace_id,
+            access_grant_key: $json->access_grant_key ?? null,
+            client_session_token: $json->client_session_token ?? null,
             ends_at: $json->ends_at ?? null,
-            starts_at: $json->starts_at ?? null
+            instant_key_url: $json->instant_key_url ?? null,
+            starts_at: $json->starts_at ?? null,
+            name: $json->name ?? null
         );
     }
 
@@ -37,7 +41,11 @@ class AccessGrant
         public array $space_ids,
         public string $user_identity_id,
         public string $workspace_id,
+        public string|null $access_grant_key,
+        public string|null $client_session_token,
         public string|null $ends_at,
-        public string|null $starts_at
+        public string|null $instant_key_url,
+        public string|null $starts_at,
+        public string|null $name
     ) {}
 }

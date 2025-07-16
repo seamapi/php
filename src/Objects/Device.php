@@ -42,6 +42,7 @@ class Device
                 null,
             can_simulate_removal: $json->can_simulate_removal ?? null,
             can_turn_off_hvac: $json->can_turn_off_hvac ?? null,
+            can_unlock_with_code: $json->can_unlock_with_code ?? null,
             nickname: $json->nickname ?? null,
             location: isset($json->location)
                 ? DeviceLocation::from_json($json->location)
@@ -73,6 +74,7 @@ class Device
         public bool|null $can_simulate_disconnection,
         public bool|null $can_simulate_removal,
         public bool|null $can_turn_off_hvac,
+        public bool|null $can_unlock_with_code,
         public string|null $nickname,
         public DeviceLocation|null $location
     ) {}

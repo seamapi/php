@@ -17,9 +17,13 @@ class DeviceAvailableClimatePresets
             climate_preset_key: $json->climate_preset_key,
             display_name: $json->display_name,
             manual_override_allowed: $json->manual_override_allowed,
+            climate_preset_mode: $json->climate_preset_mode ?? null,
             cooling_set_point_celsius: $json->cooling_set_point_celsius ?? null,
             cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
                 null,
+            ecobee_metadata: isset($json->ecobee_metadata)
+                ? DeviceEcobeeMetadata::from_json($json->ecobee_metadata)
+                : null,
             fan_mode_setting: $json->fan_mode_setting ?? null,
             heating_set_point_celsius: $json->heating_set_point_celsius ?? null,
             heating_set_point_fahrenheit: $json->heating_set_point_fahrenheit ??
@@ -36,8 +40,10 @@ class DeviceAvailableClimatePresets
         public string $climate_preset_key,
         public string $display_name,
         public bool $manual_override_allowed,
+        public string|null $climate_preset_mode,
         public float|null $cooling_set_point_celsius,
         public float|null $cooling_set_point_fahrenheit,
+        public DeviceEcobeeMetadata|null $ecobee_metadata,
         public string|null $fan_mode_setting,
         public float|null $heating_set_point_celsius,
         public float|null $heating_set_point_fahrenheit,
