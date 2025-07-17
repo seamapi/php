@@ -22,7 +22,7 @@ class Paginator
 
         $params["on_response"] = fn($response) => $this->cachePagination(
             $response,
-            self::FIRST_PAGE
+            self::FIRST_PAGE,
         );
 
         $data = $request($params);
@@ -34,7 +34,7 @@ class Paginator
     {
         if ($next_page_cursor === null) {
             throw new \InvalidArgumentException(
-                "Cannot get the next page with a null next_page_cursor"
+                "Cannot get the next page with a null next_page_cursor",
             );
         }
 
@@ -44,7 +44,7 @@ class Paginator
         $params["page_cursor"] = $next_page_cursor;
         $params["on_response"] = fn($response) => $this->cachePagination(
             $response,
-            $next_page_cursor
+            $next_page_cursor,
         );
 
         $data = $request($params);
@@ -66,7 +66,7 @@ class Paginator
 
         while ($pagination->has_next_page) {
             [$response, $pagination] = $this->nextPage(
-                $pagination->next_page_cursor
+                $pagination->next_page_cursor,
             );
             $items = array_merge($items, $response);
         }
@@ -84,7 +84,7 @@ class Paginator
 
         while ($pagination->has_next_page) {
             [$current, $pagination] = $this->nextPage(
-                $pagination->next_page_cursor
+                $pagination->next_page_cursor,
             );
 
             foreach ($current as $item) {

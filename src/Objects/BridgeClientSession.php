@@ -18,7 +18,7 @@ class BridgeClientSession
             created_at: $json->created_at,
             errors: array_map(
                 fn($e) => BridgeClientSessionErrors::from_json($e),
-                $json->errors ?? []
+                $json->errors ?? [],
             ),
             pairing_code: $json->pairing_code,
             pairing_code_expires_at: $json->pairing_code_expires_at,
@@ -27,7 +27,7 @@ class BridgeClientSession
             telemetry_token: $json->telemetry_token ?? null,
             telemetry_token_expires_at: $json->telemetry_token_expires_at ??
                 null,
-            telemetry_url: $json->telemetry_url ?? null
+            telemetry_url: $json->telemetry_url ?? null,
         );
     }
 
@@ -45,6 +45,6 @@ class BridgeClientSession
         public string|null $tailscale_auth_key,
         public string|null $telemetry_token,
         public string|null $telemetry_token_expires_at,
-        public string|null $telemetry_url
+        public string|null $telemetry_url,
     ) {}
 }

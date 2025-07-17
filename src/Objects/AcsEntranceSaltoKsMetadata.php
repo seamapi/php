@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class AcsEntranceSaltoKsMetadata
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): AcsEntranceSaltoKsMetadata|null {
         if (!$json) {
             return null;
@@ -18,7 +18,7 @@ class AcsEntranceSaltoKsMetadata
             intrusion_alarm: $json->intrusion_alarm ?? null,
             left_open_alarm: $json->left_open_alarm ?? null,
             online: $json->online ?? null,
-            privacy_mode: $json->privacy_mode ?? null
+            privacy_mode: $json->privacy_mode ?? null,
         );
     }
 
@@ -30,6 +30,6 @@ class AcsEntranceSaltoKsMetadata
         public bool|null $intrusion_alarm,
         public bool|null $left_open_alarm,
         public bool|null $online,
-        public bool|null $privacy_mode
+        public bool|null $privacy_mode,
     ) {}
 }

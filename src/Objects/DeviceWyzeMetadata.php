@@ -17,7 +17,7 @@ class DeviceWyzeMetadata
             product_name: $json->product_name,
             product_type: $json->product_type,
             keypad_uuid: $json->keypad_uuid ?? null,
-            locker_status_hardlock: $json->locker_status_hardlock ?? null
+            locker_status_hardlock: $json->locker_status_hardlock ?? null,
         );
     }
 
@@ -29,6 +29,6 @@ class DeviceWyzeMetadata
         public string $product_name,
         public string $product_type,
         public string|null $keypad_uuid,
-        public float|null $locker_status_hardlock
+        public float|null $locker_status_hardlock,
     ) {}
 }

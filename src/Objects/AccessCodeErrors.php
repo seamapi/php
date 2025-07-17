@@ -17,7 +17,7 @@ class AccessCodeErrors
             is_bridge_error: $json->is_bridge_error ?? null,
             is_connected_account_error: $json->is_connected_account_error ??
                 null,
-            is_device_error: $json->is_device_error ?? null
+            is_device_error: $json->is_device_error ?? null,
         );
     }
 
@@ -28,6 +28,6 @@ class AccessCodeErrors
         public bool|null $is_access_code_error,
         public bool|null $is_bridge_error,
         public bool|null $is_connected_account_error,
-        public bool|null $is_device_error
+        public bool|null $is_device_error,
     ) {}
 }

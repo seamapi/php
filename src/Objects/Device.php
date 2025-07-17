@@ -19,13 +19,13 @@ class Device
             display_name: $json->display_name,
             errors: array_map(
                 fn($e) => DeviceErrors::from_json($e),
-                $json->errors ?? []
+                $json->errors ?? [],
             ),
             is_managed: $json->is_managed,
             properties: DeviceProperties::from_json($json->properties),
             warnings: array_map(
                 fn($w) => DeviceWarnings::from_json($w),
-                $json->warnings ?? []
+                $json->warnings ?? [],
             ),
             workspace_id: $json->workspace_id,
             can_hvac_cool: $json->can_hvac_cool ?? null,
@@ -45,7 +45,7 @@ class Device
             nickname: $json->nickname ?? null,
             location: isset($json->location)
                 ? DeviceLocation::from_json($json->location)
-                : null
+                : null,
         );
     }
 
@@ -74,6 +74,6 @@ class Device
         public bool|null $can_simulate_removal,
         public bool|null $can_turn_off_hvac,
         public string|null $nickname,
-        public DeviceLocation|null $location
+        public DeviceLocation|null $location,
     ) {}
 }

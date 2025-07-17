@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class AcsEntranceDormakabaCommunityMetadata
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): AcsEntranceDormakabaCommunityMetadata|null {
         if (!$json) {
             return null;

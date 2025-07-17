@@ -11,12 +11,12 @@ class DeviceTwoNMetadata
         }
         return new self(
             device_id: $json->device_id,
-            device_name: $json->device_name
+            device_name: $json->device_name,
         );
     }
 
     public function __construct(
         public float $device_id,
-        public string $device_name
+        public string $device_name,
     ) {}
 }

@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class AcsEntranceVisionlineMetadata
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): AcsEntranceVisionlineMetadata|null {
         if (!$json) {
             return null;
@@ -15,14 +15,14 @@ class AcsEntranceVisionlineMetadata
             door_name: $json->door_name,
             profiles: array_map(
                 fn($p) => AcsEntranceProfiles::from_json($p),
-                $json->profiles ?? []
-            )
+                $json->profiles ?? [],
+            ),
         );
     }
 
     public function __construct(
         public string $door_category,
         public string $door_name,
-        public array|null $profiles
+        public array|null $profiles,
     ) {}
 }

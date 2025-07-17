@@ -16,7 +16,7 @@ class NoiseThreshold
             noise_threshold_decibels: $json->noise_threshold_decibels,
             noise_threshold_id: $json->noise_threshold_id,
             starts_daily_at: $json->starts_daily_at,
-            noise_threshold_nrs: $json->noise_threshold_nrs ?? null
+            noise_threshold_nrs: $json->noise_threshold_nrs ?? null,
         );
     }
 
@@ -27,6 +27,6 @@ class NoiseThreshold
         public float $noise_threshold_decibels,
         public string $noise_threshold_id,
         public string $starts_daily_at,
-        public float|null $noise_threshold_nrs
+        public float|null $noise_threshold_nrs,
     ) {}
 }

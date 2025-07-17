@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class DeviceSmartthingsMetadata
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): DeviceSmartthingsMetadata|null {
         if (!$json) {
             return null;
@@ -14,7 +14,7 @@ class DeviceSmartthingsMetadata
             device_id: $json->device_id,
             device_name: $json->device_name,
             location_id: $json->location_id ?? null,
-            model: $json->model ?? null
+            model: $json->model ?? null,
         );
     }
 
@@ -22,6 +22,6 @@ class DeviceSmartthingsMetadata
         public string $device_id,
         public string $device_name,
         public string|null $location_id,
-        public string|null $model
+        public string|null $model,
     ) {}
 }

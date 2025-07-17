@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class DeviceActiveThermostatSchedule
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): DeviceActiveThermostatSchedule|null {
         if (!$json) {
             return null;
@@ -17,7 +17,7 @@ class DeviceActiveThermostatSchedule
             ends_at: $json->ends_at,
             errors: array_map(
                 fn($e) => DeviceErrors::from_json($e),
-                $json->errors ?? []
+                $json->errors ?? [],
             ),
             starts_at: $json->starts_at,
             thermostat_schedule_id: $json->thermostat_schedule_id,
@@ -25,7 +25,7 @@ class DeviceActiveThermostatSchedule
             is_override_allowed: $json->is_override_allowed ?? null,
             name: $json->name ?? null,
             max_override_period_minutes: $json->max_override_period_minutes ??
-                null
+                null,
         );
     }
 
@@ -40,6 +40,6 @@ class DeviceActiveThermostatSchedule
         public string $workspace_id,
         public bool|null $is_override_allowed,
         public string|null $name,
-        public mixed $max_override_period_minutes
+        public mixed $max_override_period_minutes,
     ) {}
 }

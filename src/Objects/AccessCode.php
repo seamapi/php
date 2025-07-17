@@ -15,7 +15,7 @@ class AccessCode
             device_id: $json->device_id,
             errors: array_map(
                 fn($e) => AccessCodeErrors::from_json($e),
-                $json->errors ?? []
+                $json->errors ?? [],
             ),
             is_backup_access_code_available: $json->is_backup_access_code_available,
             is_external_modification_allowed: $json->is_external_modification_allowed,
@@ -26,7 +26,7 @@ class AccessCode
             type: $json->type,
             warnings: array_map(
                 fn($w) => AccessCodeWarnings::from_json($w),
-                $json->warnings ?? []
+                $json->warnings ?? [],
             ),
             is_backup: $json->is_backup ?? null,
             is_scheduled_on_device: $json->is_scheduled_on_device ?? null,
@@ -38,7 +38,7 @@ class AccessCode
             ends_at: $json->ends_at ?? null,
             pulled_backup_access_code_id: $json->pulled_backup_access_code_id ??
                 null,
-            starts_at: $json->starts_at ?? null
+            starts_at: $json->starts_at ?? null,
         );
     }
 
@@ -63,6 +63,6 @@ class AccessCode
         public string|null $name,
         public string|null $ends_at,
         public string|null $pulled_backup_access_code_id,
-        public string|null $starts_at
+        public string|null $starts_at,
     ) {}
 }

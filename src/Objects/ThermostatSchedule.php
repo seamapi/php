@@ -16,7 +16,7 @@ class ThermostatSchedule
             ends_at: $json->ends_at,
             errors: array_map(
                 fn($e) => ThermostatScheduleErrors::from_json($e),
-                $json->errors ?? []
+                $json->errors ?? [],
             ),
             starts_at: $json->starts_at,
             thermostat_schedule_id: $json->thermostat_schedule_id,
@@ -24,7 +24,7 @@ class ThermostatSchedule
             is_override_allowed: $json->is_override_allowed ?? null,
             name: $json->name ?? null,
             max_override_period_minutes: $json->max_override_period_minutes ??
-                null
+                null,
         );
     }
 
@@ -39,6 +39,6 @@ class ThermostatSchedule
         public string $workspace_id,
         public bool|null $is_override_allowed,
         public string|null $name,
-        public mixed $max_override_period_minutes
+        public mixed $max_override_period_minutes,
     ) {}
 }

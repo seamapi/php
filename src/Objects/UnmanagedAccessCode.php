@@ -15,19 +15,19 @@ class UnmanagedAccessCode
             device_id: $json->device_id,
             errors: array_map(
                 fn($e) => UnmanagedAccessCodeErrors::from_json($e),
-                $json->errors ?? []
+                $json->errors ?? [],
             ),
             is_managed: $json->is_managed,
             status: $json->status,
             type: $json->type,
             warnings: array_map(
                 fn($w) => UnmanagedAccessCodeWarnings::from_json($w),
-                $json->warnings ?? []
+                $json->warnings ?? [],
             ),
             code: $json->code ?? null,
             name: $json->name ?? null,
             ends_at: $json->ends_at ?? null,
-            starts_at: $json->starts_at ?? null
+            starts_at: $json->starts_at ?? null,
         );
     }
 
@@ -43,6 +43,6 @@ class UnmanagedAccessCode
         public string|null $code,
         public string|null $name,
         public string|null $ends_at,
-        public string|null $starts_at
+        public string|null $starts_at,
     ) {}
 }

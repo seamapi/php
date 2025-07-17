@@ -12,13 +12,13 @@ class DeviceSeamBridgeMetadata
         return new self(
             device_num: $json->device_num,
             name: $json->name,
-            unlock_method: $json->unlock_method ?? null
+            unlock_method: $json->unlock_method ?? null,
         );
     }
 
     public function __construct(
         public float $device_num,
         public string $name,
-        public string|null $unlock_method
+        public string|null $unlock_method,
     ) {}
 }

@@ -9,7 +9,7 @@ class HttpInvalidInputError extends HttpApiError
     public function __construct(
         object $error,
         int $statusCode,
-        string $requestId
+        string $requestId,
     ) {
         parent::__construct($error, $statusCode, $requestId);
         $this->errorCode = "invalid_input";

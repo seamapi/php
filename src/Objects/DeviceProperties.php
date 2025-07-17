@@ -21,22 +21,22 @@ class DeviceProperties
                 : null,
             active_thermostat_schedule: isset($json->active_thermostat_schedule)
                 ? DeviceActiveThermostatSchedule::from_json(
-                    $json->active_thermostat_schedule
+                    $json->active_thermostat_schedule,
                 )
                 : null,
             akiles_metadata: isset($json->akiles_metadata)
                 ? DeviceAkilesMetadata::from_json($json->akiles_metadata)
                 : null,
             assa_abloy_credential_service_metadata: isset(
-                $json->assa_abloy_credential_service_metadata
+                $json->assa_abloy_credential_service_metadata,
             )
                 ? DeviceAssaAbloyCredentialServiceMetadata::from_json(
-                    $json->assa_abloy_credential_service_metadata
+                    $json->assa_abloy_credential_service_metadata,
                 )
                 : null,
             assa_abloy_vostio_metadata: isset($json->assa_abloy_vostio_metadata)
                 ? DeviceAssaAbloyVostioMetadata::from_json(
-                    $json->assa_abloy_vostio_metadata
+                    $json->assa_abloy_vostio_metadata,
                 )
                 : null,
             august_metadata: isset($json->august_metadata)
@@ -44,7 +44,7 @@ class DeviceProperties
                 : null,
             available_climate_presets: array_map(
                 fn($a) => DeviceAvailableClimatePresets::from_json($a),
-                $json->available_climate_presets ?? []
+                $json->available_climate_presets ?? [],
             ),
             available_fan_mode_settings: $json->available_fan_mode_settings ??
                 null,
@@ -52,7 +52,7 @@ class DeviceProperties
                 null,
             avigilon_alta_metadata: isset($json->avigilon_alta_metadata)
                 ? DeviceAvigilonAltaMetadata::from_json(
-                    $json->avigilon_alta_metadata
+                    $json->avigilon_alta_metadata,
                 )
                 : null,
             battery: isset($json->battery)
@@ -64,29 +64,29 @@ class DeviceProperties
                 : null,
             code_constraints: array_map(
                 fn($c) => DeviceCodeConstraints::from_json($c),
-                $json->code_constraints ?? []
+                $json->code_constraints ?? [],
             ),
             controlbyweb_metadata: isset($json->controlbyweb_metadata)
                 ? DeviceControlbywebMetadata::from_json(
-                    $json->controlbyweb_metadata
+                    $json->controlbyweb_metadata,
                 )
                 : null,
             current_climate_setting: isset($json->current_climate_setting)
                 ? DeviceCurrentClimateSetting::from_json(
-                    $json->current_climate_setting
+                    $json->current_climate_setting,
                 )
                 : null,
             currently_triggering_noise_threshold_ids: $json->currently_triggering_noise_threshold_ids ??
                 null,
             default_climate_setting: isset($json->default_climate_setting)
                 ? DeviceDefaultClimateSetting::from_json(
-                    $json->default_climate_setting
+                    $json->default_climate_setting,
                 )
                 : null,
             door_open: $json->door_open ?? null,
             dormakaba_oracode_metadata: isset($json->dormakaba_oracode_metadata)
                 ? DeviceDormakabaOracodeMetadata::from_json(
-                    $json->dormakaba_oracode_metadata
+                    $json->dormakaba_oracode_metadata,
                 )
                 : null,
             ecobee_metadata: isset($json->ecobee_metadata)
@@ -95,7 +95,7 @@ class DeviceProperties
             fan_mode_setting: $json->fan_mode_setting ?? null,
             four_suites_metadata: isset($json->four_suites_metadata)
                 ? DeviceFourSuitesMetadata::from_json(
-                    $json->four_suites_metadata
+                    $json->four_suites_metadata,
                 )
                 : null,
             genie_metadata: isset($json->genie_metadata)
@@ -105,7 +105,7 @@ class DeviceProperties
             has_native_entry_events: $json->has_native_entry_events ?? null,
             honeywell_resideo_metadata: isset($json->honeywell_resideo_metadata)
                 ? DeviceHoneywellResideoMetadata::from_json(
-                    $json->honeywell_resideo_metadata
+                    $json->honeywell_resideo_metadata,
                 )
                 : null,
             hubitat_metadata: isset($json->hubitat_metadata)
@@ -166,7 +166,7 @@ class DeviceProperties
             noise_level_decibels: $json->noise_level_decibels ?? null,
             noiseaware_metadata: isset($json->noiseaware_metadata)
                 ? DeviceNoiseawareMetadata::from_json(
-                    $json->noiseaware_metadata
+                    $json->noiseaware_metadata,
                 )
                 : null,
             nuki_metadata: isset($json->nuki_metadata)
@@ -184,10 +184,10 @@ class DeviceProperties
                 ? DeviceSaltoMetadata::from_json($json->salto_metadata)
                 : null,
             salto_space_credential_service_metadata: isset(
-                $json->salto_space_credential_service_metadata
+                $json->salto_space_credential_service_metadata,
             )
                 ? DeviceSaltoSpaceCredentialServiceMetadata::from_json(
-                    $json->salto_space_credential_service_metadata
+                    $json->salto_space_credential_service_metadata,
                 )
                 : null,
             schlage_metadata: isset($json->schlage_metadata)
@@ -195,7 +195,7 @@ class DeviceProperties
                 : null,
             seam_bridge_metadata: isset($json->seam_bridge_metadata)
                 ? DeviceSeamBridgeMetadata::from_json(
-                    $json->seam_bridge_metadata
+                    $json->seam_bridge_metadata,
                 )
                 : null,
             sensi_metadata: isset($json->sensi_metadata)
@@ -204,7 +204,7 @@ class DeviceProperties
             serial_number: $json->serial_number ?? null,
             smartthings_metadata: isset($json->smartthings_metadata)
                 ? DeviceSmartthingsMetadata::from_json(
-                    $json->smartthings_metadata
+                    $json->smartthings_metadata,
                 )
                 : null,
             supported_code_lengths: $json->supported_code_lengths ?? null,
@@ -223,16 +223,16 @@ class DeviceProperties
             temperature_fahrenheit: $json->temperature_fahrenheit ?? null,
             temperature_threshold: isset($json->temperature_threshold)
                 ? DeviceTemperatureThreshold::from_json(
-                    $json->temperature_threshold
+                    $json->temperature_threshold,
                 )
                 : null,
             thermostat_daily_programs: array_map(
                 fn($t) => DeviceThermostatDailyPrograms::from_json($t),
-                $json->thermostat_daily_programs ?? []
+                $json->thermostat_daily_programs ?? [],
             ),
             thermostat_weekly_program: isset($json->thermostat_weekly_program)
                 ? DeviceThermostatWeeklyProgram::from_json(
-                    $json->thermostat_weekly_program
+                    $json->thermostat_weekly_program,
                 )
                 : null,
             ttlock_metadata: isset($json->ttlock_metadata)
@@ -243,7 +243,7 @@ class DeviceProperties
                 : null,
             visionline_metadata: isset($json->visionline_metadata)
                 ? DeviceVisionlineMetadata::from_json(
-                    $json->visionline_metadata
+                    $json->visionline_metadata,
                 )
                 : null,
             wyze_metadata: isset($json->wyze_metadata)
@@ -252,7 +252,7 @@ class DeviceProperties
             active_thermostat_schedule_id: $json->active_thermostat_schedule_id ??
                 null,
             fallback_climate_preset_key: $json->fallback_climate_preset_key ??
-                null
+                null,
         );
     }
 
@@ -346,6 +346,6 @@ class DeviceProperties
         public DeviceVisionlineMetadata|null $visionline_metadata,
         public DeviceWyzeMetadata|null $wyze_metadata,
         public string|null $active_thermostat_schedule_id,
-        public string|null $fallback_climate_preset_key
+        public string|null $fallback_climate_preset_key,
     ) {}
 }

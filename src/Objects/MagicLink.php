@@ -15,7 +15,7 @@ class MagicLink
             customer_key: $json->customer_key,
             expires_at: $json->expires_at,
             url: $json->url,
-            workspace_id: $json->workspace_id
+            workspace_id: $json->workspace_id,
         );
     }
 
@@ -25,6 +25,6 @@ class MagicLink
         public string $customer_key,
         public string $expires_at,
         public string $url,
-        public string $workspace_id
+        public string $workspace_id,
     ) {}
 }

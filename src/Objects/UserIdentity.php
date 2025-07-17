@@ -14,18 +14,18 @@ class UserIdentity
             display_name: $json->display_name,
             errors: array_map(
                 fn($e) => UserIdentityErrors::from_json($e),
-                $json->errors ?? []
+                $json->errors ?? [],
             ),
             user_identity_id: $json->user_identity_id,
             warnings: array_map(
                 fn($w) => UserIdentityWarnings::from_json($w),
-                $json->warnings ?? []
+                $json->warnings ?? [],
             ),
             workspace_id: $json->workspace_id,
             email_address: $json->email_address ?? null,
             full_name: $json->full_name ?? null,
             phone_number: $json->phone_number ?? null,
-            user_identity_key: $json->user_identity_key ?? null
+            user_identity_key: $json->user_identity_key ?? null,
         );
     }
 
@@ -39,6 +39,6 @@ class UserIdentity
         public string|null $email_address,
         public string|null $full_name,
         public string|null $phone_number,
-        public string|null $user_identity_key
+        public string|null $user_identity_key,
     ) {}
 }

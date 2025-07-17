@@ -17,7 +17,7 @@ final class HttpErrorTest extends TestCase
                 "/devices/list",
                 json: [
                     "device_ids" => 1234,
-                ]
+                ],
             );
             $this->fail("Expected InvalidInputError");
         } catch (\Seam\HttpInvalidInputError $e) {
@@ -26,7 +26,7 @@ final class HttpErrorTest extends TestCase
             $this->assertEquals("invalid_input", $e->getErrorCode());
             $this->assertEquals(
                 ["Expected array, received number"],
-                $e->getValidationErrorMessages("device_ids")
+                $e->getValidationErrorMessages("device_ids"),
             );
         }
     }
@@ -36,7 +36,7 @@ final class HttpErrorTest extends TestCase
         $test_server = Fixture::getTestServer();
         $seam = new \Seam\SeamClient(
             "invalid_api_key",
-            $test_server->client->getConfig("base_uri")->__toString()
+            $test_server->client->getConfig("base_uri")->__toString(),
         );
 
         try {
@@ -67,7 +67,7 @@ final class HttpErrorTest extends TestCase
 
         $seam = new \Seam\SeamClient(
             "seam_apikey1_token",
-            "https://nonexistent.example.com"
+            "https://nonexistent.example.com",
         );
 
         try {
@@ -76,11 +76,11 @@ final class HttpErrorTest extends TestCase
         } catch (\GuzzleHttp\Exception\ConnectException $e) {
             $this->assertInstanceOf(
                 \GuzzleHttp\Exception\ConnectException::class,
-                $e
+                $e,
             );
             $this->assertStringContainsString(
                 "Could not resolve host",
-                $e->getMessage()
+                $e->getMessage(),
             );
         }
     }

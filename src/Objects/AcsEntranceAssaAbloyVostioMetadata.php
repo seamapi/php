@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class AcsEntranceAssaAbloyVostioMetadata
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): AcsEntranceAssaAbloyVostioMetadata|null {
         if (!$json) {
             return null;
@@ -15,7 +15,7 @@ class AcsEntranceAssaAbloyVostioMetadata
             door_type: $json->door_type,
             door_number: $json->door_number ?? null,
             pms_id: $json->pms_id ?? null,
-            stand_open: $json->stand_open ?? null
+            stand_open: $json->stand_open ?? null,
         );
     }
 
@@ -24,6 +24,6 @@ class AcsEntranceAssaAbloyVostioMetadata
         public string $door_type,
         public float|null $door_number,
         public string|null $pms_id,
-        public bool|null $stand_open
+        public bool|null $stand_open,
     ) {}
 }

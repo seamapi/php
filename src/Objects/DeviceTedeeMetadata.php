@@ -16,7 +16,7 @@ class DeviceTedeeMetadata
             device_model: $json->device_model,
             device_name: $json->device_name,
             serial_number: $json->serial_number,
-            keypad_id: $json->keypad_id ?? null
+            keypad_id: $json->keypad_id ?? null,
         );
     }
 
@@ -27,6 +27,6 @@ class DeviceTedeeMetadata
         public string $device_model,
         public string $device_name,
         public string $serial_number,
-        public float|null $keypad_id
+        public float|null $keypad_id,
     ) {}
 }

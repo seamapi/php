@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class BridgeClientSessionErrors
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): BridgeClientSessionErrors|null {
         if (!$json) {
             return null;
@@ -23,7 +23,7 @@ class BridgeClientSessionErrors
             is_tailscale_proxy_reachable: $json->is_tailscale_proxy_reachable ??
                 null,
             is_tailscale_proxy_socks_server_healthy: $json->is_tailscale_proxy_socks_server_healthy ??
-                null
+                null,
         );
     }
 
@@ -35,6 +35,6 @@ class BridgeClientSessionErrors
         public bool|null $can_tailscale_proxy_reach_tailscale_network,
         public bool|null $is_bridge_socks_server_healthy,
         public bool|null $is_tailscale_proxy_reachable,
-        public bool|null $is_tailscale_proxy_socks_server_healthy
+        public bool|null $is_tailscale_proxy_socks_server_healthy,
     ) {}
 }

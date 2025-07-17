@@ -14,6 +14,6 @@ class UserIdentityErrors
 
     public function __construct(
         public string $created_at,
-        public string $message
+        public string $message,
     ) {}
 }

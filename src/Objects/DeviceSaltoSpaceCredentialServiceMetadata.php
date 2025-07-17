@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class DeviceSaltoSpaceCredentialServiceMetadata
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): DeviceSaltoSpaceCredentialServiceMetadata|null {
         if (!$json) {
             return null;

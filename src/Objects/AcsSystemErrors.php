@@ -13,7 +13,7 @@ class AcsSystemErrors
             created_at: $json->created_at,
             error_code: $json->error_code,
             message: $json->message,
-            is_bridge_error: $json->is_bridge_error ?? null
+            is_bridge_error: $json->is_bridge_error ?? null,
         );
     }
 
@@ -21,6 +21,6 @@ class AcsSystemErrors
         public string $created_at,
         public string $error_code,
         public string $message,
-        public bool|null $is_bridge_error
+        public bool|null $is_bridge_error,
     ) {}
 }

@@ -14,6 +14,6 @@ class LocationGeolocation
 
     public function __construct(
         public float $latitude,
-        public float $longitude
+        public float $longitude,
     ) {}
 }

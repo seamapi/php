@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class DeviceDefaultClimateSetting
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): DeviceDefaultClimateSetting|null {
         if (!$json) {
             return null;
@@ -25,7 +25,7 @@ class DeviceDefaultClimateSetting
                 null,
             hvac_mode_setting: $json->hvac_mode_setting ?? null,
             manual_override_allowed: $json->manual_override_allowed ?? null,
-            name: $json->name ?? null
+            name: $json->name ?? null,
         );
     }
 
@@ -42,6 +42,6 @@ class DeviceDefaultClimateSetting
         public float|null $heating_set_point_fahrenheit,
         public string|null $hvac_mode_setting,
         public bool|null $manual_override_allowed,
-        public string|null $name
+        public string|null $name,
     ) {}
 }

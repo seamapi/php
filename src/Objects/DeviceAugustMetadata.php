@@ -16,7 +16,7 @@ class DeviceAugustMetadata
             lock_name: $json->lock_name,
             house_id: $json->house_id ?? null,
             keypad_battery_level: $json->keypad_battery_level ?? null,
-            model: $json->model ?? null
+            model: $json->model ?? null,
         );
     }
 
@@ -27,6 +27,6 @@ class DeviceAugustMetadata
         public string $lock_name,
         public string|null $house_id,
         public string|null $keypad_battery_level,
-        public string|null $model
+        public string|null $model,
     ) {}
 }

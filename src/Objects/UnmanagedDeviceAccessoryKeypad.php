@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class UnmanagedDeviceAccessoryKeypad
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): UnmanagedDeviceAccessoryKeypad|null {
         if (!$json) {
             return null;
@@ -14,12 +14,12 @@ class UnmanagedDeviceAccessoryKeypad
             is_connected: $json->is_connected,
             battery: isset($json->battery)
                 ? UnmanagedDeviceBattery::from_json($json->battery)
-                : null
+                : null,
         );
     }
 
     public function __construct(
         public bool $is_connected,
-        public UnmanagedDeviceBattery|null $battery
+        public UnmanagedDeviceBattery|null $battery,
     ) {}
 }

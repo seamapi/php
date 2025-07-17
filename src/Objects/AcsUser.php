@@ -17,12 +17,12 @@ class AcsUser
             display_name: $json->display_name,
             errors: array_map(
                 fn($e) => AcsUserErrors::from_json($e),
-                $json->errors ?? []
+                $json->errors ?? [],
             ),
             is_managed: $json->is_managed,
             warnings: array_map(
                 fn($w) => AcsUserWarnings::from_json($w),
-                $json->warnings ?? []
+                $json->warnings ?? [],
             ),
             workspace_id: $json->workspace_id,
             access_schedule: isset($json->access_schedule)
@@ -38,7 +38,7 @@ class AcsUser
             is_suspended: $json->is_suspended ?? null,
             pending_mutations: array_map(
                 fn($p) => AcsUserPendingMutations::from_json($p),
-                $json->pending_mutations ?? []
+                $json->pending_mutations ?? [],
             ),
             phone_number: $json->phone_number ?? null,
             user_identity_id: $json->user_identity_id ?? null,
@@ -47,7 +47,7 @@ class AcsUser
                 null,
             user_identity_full_name: $json->user_identity_full_name ?? null,
             user_identity_phone_number: $json->user_identity_phone_number ??
-                null
+                null,
         );
     }
 
@@ -75,6 +75,6 @@ class AcsUser
         public string|null $last_successful_sync_at,
         public string|null $user_identity_email_address,
         public string|null $user_identity_full_name,
-        public string|null $user_identity_phone_number
+        public string|null $user_identity_phone_number,
     ) {}
 }

@@ -13,7 +13,7 @@ class ConnectedAccountSites
             site_id: $json->site_id,
             site_name: $json->site_name,
             site_user_subscription_limit: $json->site_user_subscription_limit,
-            subscribed_site_user_count: $json->subscribed_site_user_count
+            subscribed_site_user_count: $json->subscribed_site_user_count,
         );
     }
 
@@ -21,6 +21,6 @@ class ConnectedAccountSites
         public string $site_id,
         public string $site_name,
         public mixed $site_user_subscription_limit,
-        public mixed $subscribed_site_user_count
+        public mixed $subscribed_site_user_count,
     ) {}
 }

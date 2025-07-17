@@ -13,14 +13,14 @@ class DeviceMinutMetadata
             device_id: $json->device_id,
             device_name: $json->device_name,
             latest_sensor_values: DeviceLatestSensorValues::from_json(
-                $json->latest_sensor_values
-            )
+                $json->latest_sensor_values,
+            ),
         );
     }
 
     public function __construct(
         public string $device_id,
         public string $device_name,
-        public DeviceLatestSensorValues $latest_sensor_values
+        public DeviceLatestSensorValues $latest_sensor_values,
     ) {}
 }

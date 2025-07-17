@@ -16,7 +16,7 @@ class InstantKey
             instant_key_id: $json->instant_key_id,
             instant_key_url: $json->instant_key_url,
             user_identity_id: $json->user_identity_id,
-            workspace_id: $json->workspace_id
+            workspace_id: $json->workspace_id,
         );
     }
 
@@ -27,6 +27,6 @@ class InstantKey
         public string $instant_key_id,
         public string $instant_key_url,
         public string $user_identity_id,
-        public string $workspace_id
+        public string $workspace_id,
     ) {}
 }

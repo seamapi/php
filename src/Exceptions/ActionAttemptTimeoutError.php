@@ -10,7 +10,7 @@ class ActionAttemptTimeoutError extends ActionAttemptError
     {
         parent::__construct(
             "Timed out waiting for action attempt after {$timeout}s",
-            $actionAttempt
+            $actionAttempt,
         );
         $this->name = get_class($this);
     }

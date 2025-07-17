@@ -17,7 +17,7 @@ class BridgeConnectedSystems
             connected_account_created_at: $json->connected_account_created_at,
             connected_account_id: $json->connected_account_id,
             workspace_display_name: $json->workspace_display_name,
-            workspace_id: $json->workspace_id
+            workspace_id: $json->workspace_id,
         );
     }
 
@@ -29,6 +29,6 @@ class BridgeConnectedSystems
         public string $connected_account_created_at,
         public string $connected_account_id,
         public string $workspace_display_name,
-        public string $workspace_id
+        public string $workspace_id,
     ) {}
 }

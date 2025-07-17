@@ -13,12 +13,12 @@ class DeviceAccessoryKeypad
             is_connected: $json->is_connected,
             battery: isset($json->battery)
                 ? DeviceBattery::from_json($json->battery)
-                : null
+                : null,
         );
     }
 
     public function __construct(
         public bool $is_connected,
-        public DeviceBattery|null $battery
+        public DeviceBattery|null $battery,
     ) {}
 }

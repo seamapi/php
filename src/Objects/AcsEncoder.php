@@ -17,9 +17,9 @@ class AcsEncoder
             display_name: $json->display_name,
             errors: array_map(
                 fn($e) => AcsEncoderErrors::from_json($e),
-                $json->errors ?? []
+                $json->errors ?? [],
             ),
-            workspace_id: $json->workspace_id
+            workspace_id: $json->workspace_id,
         );
     }
 
@@ -30,6 +30,6 @@ class AcsEncoder
         public string $created_at,
         public string $display_name,
         public array $errors,
-        public string $workspace_id
+        public string $workspace_id,
     ) {}
 }

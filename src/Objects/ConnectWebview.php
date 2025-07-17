@@ -30,7 +30,7 @@ class ConnectWebview
             custom_redirect_failure_url: $json->custom_redirect_failure_url ??
                 null,
             custom_redirect_url: $json->custom_redirect_url ?? null,
-            selected_provider: $json->selected_provider ?? null
+            selected_provider: $json->selected_provider ?? null,
         );
     }
 
@@ -54,6 +54,6 @@ class ConnectWebview
         public string|null $connected_account_id,
         public string|null $custom_redirect_failure_url,
         public string|null $custom_redirect_url,
-        public string|null $selected_provider
+        public string|null $selected_provider,
     ) {}
 }

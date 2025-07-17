@@ -11,7 +11,7 @@ final class Fixture
         $random_string = substr(
             str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"),
             0,
-            10
+            10,
         );
         echo $random_string;
         $api_url = "https://{$random_string}.fakeseamconnect.seam.vc";

@@ -16,7 +16,7 @@ class AcsUserPendingMutations
             from: isset($json->from)
                 ? AcsUserFrom::from_json($json->from)
                 : null,
-            to: isset($json->to) ? AcsUserTo::from_json($json->to) : null
+            to: isset($json->to) ? AcsUserTo::from_json($json->to) : null,
         );
     }
 
@@ -25,6 +25,6 @@ class AcsUserPendingMutations
         public string $message,
         public string $mutation_code,
         public AcsUserFrom|null $from,
-        public AcsUserTo|null $to
+        public AcsUserTo|null $to,
     ) {}
 }
