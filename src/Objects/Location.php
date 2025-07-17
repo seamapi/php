@@ -18,7 +18,7 @@ class Location
             geolocation: isset($json->geolocation)
                 ? LocationGeolocation::from_json($json->geolocation)
                 : null,
-            time_zone: $json->time_zone ?? null
+            time_zone: $json->time_zone ?? null,
         );
     }
 
@@ -29,6 +29,6 @@ class Location
         public string $name,
         public string $workspace_id,
         public LocationGeolocation|null $geolocation,
-        public string|null $time_zone
+        public string|null $time_zone,
     ) {}
 }

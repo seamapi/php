@@ -21,7 +21,7 @@ class ClientSession
             workspace_id: $json->workspace_id,
             customer_id: $json->customer_id ?? null,
             user_identity_id: $json->user_identity_id ?? null,
-            user_identifier_key: $json->user_identifier_key ?? null
+            user_identifier_key: $json->user_identifier_key ?? null,
         );
     }
 
@@ -37,6 +37,6 @@ class ClientSession
         public string $workspace_id,
         public string|null $customer_id,
         public string|null $user_identity_id,
-        public string|null $user_identifier_key
+        public string|null $user_identifier_key,
     ) {}
 }

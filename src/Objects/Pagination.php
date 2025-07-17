@@ -12,13 +12,13 @@ class Pagination
         return new self(
             has_next_page: $json->has_next_page,
             next_page_cursor: $json->next_page_cursor ?? null,
-            next_page_url: $json->next_page_url ?? null
+            next_page_url: $json->next_page_url ?? null,
         );
     }
 
     public function __construct(
         public bool $has_next_page,
         public string|null $next_page_cursor,
-        public string|null $next_page_url
+        public string|null $next_page_url,
     ) {}
 }

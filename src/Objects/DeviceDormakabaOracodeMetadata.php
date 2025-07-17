@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class DeviceDormakabaOracodeMetadata
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): DeviceDormakabaOracodeMetadata|null {
         if (!$json) {
             return null;
@@ -19,9 +19,9 @@ class DeviceDormakabaOracodeMetadata
             iana_timezone: $json->iana_timezone ?? null,
             predefined_time_slots: array_map(
                 fn($p) => DevicePredefinedTimeSlots::from_json($p),
-                $json->predefined_time_slots ?? []
+                $json->predefined_time_slots ?? [],
             ),
-            site_id: $json->site_id ?? null
+            site_id: $json->site_id ?? null,
         );
     }
 
@@ -33,6 +33,6 @@ class DeviceDormakabaOracodeMetadata
         public float|null $door_id,
         public string|null $iana_timezone,
         public array|null $predefined_time_slots,
-        public float|null $site_id
+        public float|null $site_id,
     ) {}
 }

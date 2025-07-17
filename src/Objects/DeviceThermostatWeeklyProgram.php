@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class DeviceThermostatWeeklyProgram
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): DeviceThermostatWeeklyProgram|null {
         if (!$json) {
             return null;
@@ -18,7 +18,7 @@ class DeviceThermostatWeeklyProgram
             sunday_program_id: $json->sunday_program_id ?? null,
             thursday_program_id: $json->thursday_program_id ?? null,
             tuesday_program_id: $json->tuesday_program_id ?? null,
-            wednesday_program_id: $json->wednesday_program_id ?? null
+            wednesday_program_id: $json->wednesday_program_id ?? null,
         );
     }
 
@@ -30,6 +30,6 @@ class DeviceThermostatWeeklyProgram
         public string|null $sunday_program_id,
         public string|null $thursday_program_id,
         public string|null $tuesday_program_id,
-        public string|null $wednesday_program_id
+        public string|null $wednesday_program_id,
     ) {}
 }

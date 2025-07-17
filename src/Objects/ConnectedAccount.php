@@ -15,11 +15,11 @@ class ConnectedAccount
             custom_metadata: $json->custom_metadata,
             errors: array_map(
                 fn($e) => ConnectedAccountErrors::from_json($e),
-                $json->errors ?? []
+                $json->errors ?? [],
             ),
             warnings: array_map(
                 fn($w) => ConnectedAccountWarnings::from_json($w),
-                $json->warnings ?? []
+                $json->warnings ?? [],
             ),
             account_type: $json->account_type ?? null,
             connected_account_id: $json->connected_account_id ?? null,
@@ -27,9 +27,9 @@ class ConnectedAccount
             customer_key: $json->customer_key ?? null,
             user_identifier: isset($json->user_identifier)
                 ? ConnectedAccountUserIdentifier::from_json(
-                    $json->user_identifier
+                    $json->user_identifier,
                 )
-                : null
+                : null,
         );
     }
 
@@ -43,6 +43,6 @@ class ConnectedAccount
         public string|null $connected_account_id,
         public string|null $created_at,
         public string|null $customer_key,
-        public ConnectedAccountUserIdentifier|null $user_identifier
+        public ConnectedAccountUserIdentifier|null $user_identifier,
     ) {}
 }

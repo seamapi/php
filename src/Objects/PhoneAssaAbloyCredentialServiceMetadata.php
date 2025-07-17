@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class PhoneAssaAbloyCredentialServiceMetadata
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): PhoneAssaAbloyCredentialServiceMetadata|null {
         if (!$json) {
             return null;
@@ -13,14 +13,14 @@ class PhoneAssaAbloyCredentialServiceMetadata
         return new self(
             endpoints: array_map(
                 fn($e) => PhoneEndpoints::from_json($e),
-                $json->endpoints ?? []
+                $json->endpoints ?? [],
             ),
-            has_active_endpoint: $json->has_active_endpoint
+            has_active_endpoint: $json->has_active_endpoint,
         );
     }
 
     public function __construct(
         public array $endpoints,
-        public bool $has_active_endpoint
+        public bool $has_active_endpoint,
     ) {}
 }

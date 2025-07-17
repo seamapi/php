@@ -18,9 +18,9 @@ class ConnectedAccountErrors
                 null,
             salto_ks_metadata: isset($json->salto_ks_metadata)
                 ? ConnectedAccountSaltoKsMetadata::from_json(
-                    $json->salto_ks_metadata
+                    $json->salto_ks_metadata,
                 )
-                : null
+                : null,
         );
     }
 
@@ -30,6 +30,6 @@ class ConnectedAccountErrors
         public string $message,
         public bool|null $is_bridge_error,
         public bool|null $is_connected_account_error,
-        public ConnectedAccountSaltoKsMetadata|null $salto_ks_metadata
+        public ConnectedAccountSaltoKsMetadata|null $salto_ks_metadata,
     ) {}
 }

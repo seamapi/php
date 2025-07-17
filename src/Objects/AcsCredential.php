@@ -17,19 +17,19 @@ class AcsCredential
             display_name: $json->display_name,
             errors: array_map(
                 fn($e) => AcsCredentialErrors::from_json($e),
-                $json->errors ?? []
+                $json->errors ?? [],
             ),
             is_managed: $json->is_managed,
             warnings: array_map(
                 fn($w) => AcsCredentialWarnings::from_json($w),
-                $json->warnings ?? []
+                $json->warnings ?? [],
             ),
             workspace_id: $json->workspace_id,
             acs_credential_pool_id: $json->acs_credential_pool_id ?? null,
             acs_user_id: $json->acs_user_id ?? null,
             assa_abloy_vostio_metadata: isset($json->assa_abloy_vostio_metadata)
                 ? AcsCredentialAssaAbloyVostioMetadata::from_json(
-                    $json->assa_abloy_vostio_metadata
+                    $json->assa_abloy_vostio_metadata,
                 )
                 : null,
             ends_at: $json->ends_at ?? null,
@@ -44,7 +44,7 @@ class AcsCredential
             starts_at: $json->starts_at ?? null,
             visionline_metadata: isset($json->visionline_metadata)
                 ? AcsCredentialVisionlineMetadata::from_json(
-                    $json->visionline_metadata
+                    $json->visionline_metadata,
                 )
                 : null,
             card_number: $json->card_number ?? null,
@@ -53,7 +53,7 @@ class AcsCredential
                 null,
             issued_at: $json->issued_at ?? null,
             latest_desired_state_synced_with_provider_at: $json->latest_desired_state_synced_with_provider_at ??
-                null
+                null,
         );
     }
 
@@ -83,6 +83,6 @@ class AcsCredential
         public string|null $code,
         public bool|null $is_latest_desired_state_synced_with_provider,
         public string|null $issued_at,
-        public string|null $latest_desired_state_synced_with_provider_at
+        public string|null $latest_desired_state_synced_with_provider_at,
     ) {}
 }

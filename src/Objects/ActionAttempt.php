@@ -16,7 +16,7 @@ class ActionAttempt
                 ? ActionAttemptError::from_json($json->error)
                 : null,
             status: $json->status ?? null,
-            result: $json->result ?? null
+            result: $json->result ?? null,
         );
     }
 
@@ -25,6 +25,6 @@ class ActionAttempt
         public string|null $action_type,
         public ActionAttemptError|null $error,
         public string|null $status,
-        public mixed $result
+        public mixed $result,
     ) {}
 }

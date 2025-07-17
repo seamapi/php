@@ -14,7 +14,7 @@ final class PaginatorTest extends TestCase
 
         $pages = $seam->createPaginator(
             fn($params) => $seam->connected_accounts->list(...$params),
-            ["limit" => 2]
+            ["limit" => 2],
         );
         [$connectedAccounts, $pagination] = $pages->firstPage();
 
@@ -30,7 +30,7 @@ final class PaginatorTest extends TestCase
 
         $pages = $seam->createPaginator(
             fn($params) => $seam->connected_accounts->list(...$params),
-            ["limit" => 2]
+            ["limit" => 2],
         );
         [$connectedAccounts, $pagination] = $pages->firstPage();
 
@@ -38,7 +38,7 @@ final class PaginatorTest extends TestCase
         $this->assertTrue($pagination->has_next_page);
 
         [$moreConnectedAccounts] = $pages->nextPage(
-            $pagination->next_page_cursor
+            $pagination->next_page_cursor,
         );
 
         $this->assertTrue(count($moreConnectedAccounts) == 1);
@@ -52,7 +52,7 @@ final class PaginatorTest extends TestCase
 
         $pages = $seam->createPaginator(
             fn($params) => $seam->connected_accounts->list(...$params),
-            ["limit" => 1]
+            ["limit" => 1],
         );
         $devices = $pages->flattenToArray();
 
@@ -67,7 +67,7 @@ final class PaginatorTest extends TestCase
         $allConnectedAccounts = $seam->connected_accounts->list();
         $pages = $seam->createPaginator(
             fn($params) => $seam->connected_accounts->list(...$params),
-            ["limit" => 1]
+            ["limit" => 1],
         );
 
         $connectedAccounts = [];
@@ -76,7 +76,7 @@ final class PaginatorTest extends TestCase
         }
         $this->assertTrue(count($connectedAccounts) > 1);
         $this->assertTrue(
-            count($connectedAccounts) == count($allConnectedAccounts)
+            count($connectedAccounts) == count($allConnectedAccounts),
         );
     }
 }

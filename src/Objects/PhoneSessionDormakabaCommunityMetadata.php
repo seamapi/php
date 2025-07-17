@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class PhoneSessionDormakabaCommunityMetadata
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): PhoneSessionDormakabaCommunityMetadata|null {
         if (!$json) {
             return null;

@@ -15,7 +15,7 @@ class DeviceFeatures
             passcode: $json->passcode,
             passcode_management: $json->passcode_management,
             unlock_via_gateway: $json->unlock_via_gateway,
-            wifi: $json->wifi
+            wifi: $json->wifi,
         );
     }
 
@@ -25,6 +25,6 @@ class DeviceFeatures
         public bool $passcode,
         public bool $passcode_management,
         public bool $unlock_via_gateway,
-        public bool $wifi
+        public bool $wifi,
     ) {}
 }

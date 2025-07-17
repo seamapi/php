@@ -17,15 +17,15 @@ class Phone
             display_name: $json->display_name,
             errors: array_map(
                 fn($e) => PhoneErrors::from_json($e),
-                $json->errors ?? []
+                $json->errors ?? [],
             ),
             properties: PhoneProperties::from_json($json->properties),
             warnings: array_map(
                 fn($w) => PhoneWarnings::from_json($w),
-                $json->warnings ?? []
+                $json->warnings ?? [],
             ),
             workspace_id: $json->workspace_id,
-            nickname: $json->nickname ?? null
+            nickname: $json->nickname ?? null,
         );
     }
 
@@ -39,6 +39,6 @@ class Phone
         public PhoneProperties $properties,
         public array $warnings,
         public string $workspace_id,
-        public string|null $nickname
+        public string|null $nickname,
     ) {}
 }

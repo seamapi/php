@@ -14,7 +14,7 @@ class Space
             display_name: $json->display_name,
             name: $json->name,
             space_id: $json->space_id,
-            workspace_id: $json->workspace_id
+            workspace_id: $json->workspace_id,
         );
     }
 
@@ -23,6 +23,6 @@ class Space
         public string $display_name,
         public string $name,
         public string $space_id,
-        public string $workspace_id
+        public string $workspace_id,
     ) {}
 }

@@ -17,13 +17,13 @@ class AccessGrant
             location_ids: $json->location_ids,
             requested_access_methods: array_map(
                 fn($r) => AccessGrantRequestedAccessMethods::from_json($r),
-                $json->requested_access_methods ?? []
+                $json->requested_access_methods ?? [],
             ),
             space_ids: $json->space_ids,
             user_identity_id: $json->user_identity_id,
             workspace_id: $json->workspace_id,
             ends_at: $json->ends_at ?? null,
-            starts_at: $json->starts_at ?? null
+            starts_at: $json->starts_at ?? null,
         );
     }
 
@@ -38,6 +38,6 @@ class AccessGrant
         public string $user_identity_id,
         public string $workspace_id,
         public string|null $ends_at,
-        public string|null $starts_at
+        public string|null $starts_at,
     ) {}
 }

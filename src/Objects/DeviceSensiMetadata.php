@@ -12,13 +12,13 @@ class DeviceSensiMetadata
         return new self(
             device_id: $json->device_id,
             device_name: $json->device_name,
-            product_type: $json->product_type
+            product_type: $json->product_type,
         );
     }
 
     public function __construct(
         public string $device_id,
         public string $device_name,
-        public string $product_type
+        public string $product_type,
     ) {}
 }

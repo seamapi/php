@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class UnmanagedDeviceProperties
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): UnmanagedDeviceProperties|null {
         if (!$json) {
             return null;
@@ -16,7 +16,7 @@ class UnmanagedDeviceProperties
             online: $json->online,
             accessory_keypad: isset($json->accessory_keypad)
                 ? UnmanagedDeviceAccessoryKeypad::from_json(
-                    $json->accessory_keypad
+                    $json->accessory_keypad,
                 )
                 : null,
             battery: isset($json->battery)
@@ -29,7 +29,7 @@ class UnmanagedDeviceProperties
             offline_access_codes_enabled: $json->offline_access_codes_enabled ??
                 null,
             online_access_codes_enabled: $json->online_access_codes_enabled ??
-                null
+                null,
         );
     }
 
@@ -44,6 +44,6 @@ class UnmanagedDeviceProperties
         public string|null $image_url,
         public string|null $manufacturer,
         public bool|null $offline_access_codes_enabled,
-        public bool|null $online_access_codes_enabled
+        public bool|null $online_access_codes_enabled,
     ) {}
 }

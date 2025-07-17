@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class UnmanagedAcsCredentialVisionlineMetadata
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): UnmanagedAcsCredentialVisionlineMetadata|null {
         if (!$json) {
             return null;
@@ -18,7 +18,7 @@ class UnmanagedAcsCredentialVisionlineMetadata
             credential_id: $json->credential_id ?? null,
             guest_acs_entrance_ids: $json->guest_acs_entrance_ids ?? null,
             is_valid: $json->is_valid ?? null,
-            joiner_acs_credential_ids: $json->joiner_acs_credential_ids ?? null
+            joiner_acs_credential_ids: $json->joiner_acs_credential_ids ?? null,
         );
     }
 
@@ -30,6 +30,6 @@ class UnmanagedAcsCredentialVisionlineMetadata
         public string|null $credential_id,
         public array|null $guest_acs_entrance_ids,
         public bool|null $is_valid,
-        public array|null $joiner_acs_credential_ids
+        public array|null $joiner_acs_credential_ids,
     ) {}
 }

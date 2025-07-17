@@ -16,7 +16,7 @@ class AcsSystem
             created_at: $json->created_at,
             errors: array_map(
                 fn($e) => AcsSystemErrors::from_json($e),
-                $json->errors ?? []
+                $json->errors ?? [],
             ),
             image_alt_text: $json->image_alt_text,
             image_url: $json->image_url,
@@ -25,7 +25,7 @@ class AcsSystem
             name: $json->name,
             warnings: array_map(
                 fn($w) => AcsSystemWarnings::from_json($w),
-                $json->warnings ?? []
+                $json->warnings ?? [],
             ),
             workspace_id: $json->workspace_id,
             acs_access_group_count: $json->acs_access_group_count ?? null,
@@ -37,11 +37,11 @@ class AcsSystem
             system_type_display_name: $json->system_type_display_name ?? null,
             visionline_metadata: isset($json->visionline_metadata)
                 ? AcsSystemVisionlineMetadata::from_json(
-                    $json->visionline_metadata
+                    $json->visionline_metadata,
                 )
                 : null,
             default_credential_manager_acs_system_id: $json->default_credential_manager_acs_system_id ??
-                null
+                null,
         );
     }
 
@@ -65,6 +65,6 @@ class AcsSystem
         public string|null $system_type,
         public string|null $system_type_display_name,
         public AcsSystemVisionlineMetadata|null $visionline_metadata,
-        public string|null $default_credential_manager_acs_system_id
+        public string|null $default_credential_manager_acs_system_id,
     ) {}
 }

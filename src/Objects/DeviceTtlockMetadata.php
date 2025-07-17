@@ -17,8 +17,8 @@ class DeviceTtlockMetadata
             has_gateway: $json->has_gateway ?? null,
             wireless_keypads: array_map(
                 fn($w) => DeviceWirelessKeypads::from_json($w),
-                $json->wireless_keypads ?? []
-            )
+                $json->wireless_keypads ?? [],
+            ),
         );
     }
 
@@ -28,6 +28,6 @@ class DeviceTtlockMetadata
         public string $lock_alias,
         public float $lock_id,
         public bool|null $has_gateway,
-        public array|null $wireless_keypads
+        public array|null $wireless_keypads,
     ) {}
 }

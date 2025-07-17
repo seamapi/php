@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class WorkspaceConnectWebviewCustomization
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): WorkspaceConnectWebviewCustomization|null {
         if (!$json) {
             return null;
@@ -15,7 +15,7 @@ class WorkspaceConnectWebviewCustomization
             logo_shape: $json->logo_shape ?? null,
             primary_button_color: $json->primary_button_color ?? null,
             primary_button_text_color: $json->primary_button_text_color ?? null,
-            success_message: $json->success_message ?? null
+            success_message: $json->success_message ?? null,
         );
     }
 
@@ -24,6 +24,6 @@ class WorkspaceConnectWebviewCustomization
         public string|null $logo_shape,
         public string|null $primary_button_color,
         public string|null $primary_button_text_color,
-        public string|null $success_message
+        public string|null $success_message,
     ) {}
 }

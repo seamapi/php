@@ -12,13 +12,13 @@ class DeviceKwiksetMetadata
         return new self(
             device_id: $json->device_id,
             device_name: $json->device_name,
-            model_number: $json->model_number
+            model_number: $json->model_number,
         );
     }
 
     public function __construct(
         public string $device_id,
         public string $device_name,
-        public string $model_number
+        public string $model_number,
     ) {}
 }

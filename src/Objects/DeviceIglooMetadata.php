@@ -12,13 +12,13 @@ class DeviceIglooMetadata
         return new self(
             bridge_id: $json->bridge_id,
             device_id: $json->device_id,
-            model: $json->model ?? null
+            model: $json->model ?? null,
         );
     }
 
     public function __construct(
         public string $bridge_id,
         public string $device_id,
-        public string|null $model
+        public string|null $model,
     ) {}
 }

@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class DeviceThermostatDailyPrograms
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): DeviceThermostatDailyPrograms|null {
         if (!$json) {
             return null;
@@ -15,11 +15,11 @@ class DeviceThermostatDailyPrograms
             device_id: $json->device_id,
             periods: array_map(
                 fn($p) => DevicePeriods::from_json($p),
-                $json->periods ?? []
+                $json->periods ?? [],
             ),
             thermostat_daily_program_id: $json->thermostat_daily_program_id,
             workspace_id: $json->workspace_id,
-            name: $json->name ?? null
+            name: $json->name ?? null,
         );
     }
 
@@ -29,6 +29,6 @@ class DeviceThermostatDailyPrograms
         public array $periods,
         public string $thermostat_daily_program_id,
         public string $workspace_id,
-        public string|null $name
+        public string|null $name,
     ) {}
 }

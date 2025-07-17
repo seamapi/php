@@ -12,13 +12,13 @@ class Workspace
         return new self(
             company_name: $json->company_name,
             connect_webview_customization: WorkspaceConnectWebviewCustomization::from_json(
-                $json->connect_webview_customization
+                $json->connect_webview_customization,
             ),
             is_sandbox: $json->is_sandbox,
             is_suspended: $json->is_suspended,
             name: $json->name,
             workspace_id: $json->workspace_id,
-            connect_partner_name: $json->connect_partner_name ?? null
+            connect_partner_name: $json->connect_partner_name ?? null,
         );
     }
 
@@ -29,6 +29,6 @@ class Workspace
         public bool $is_suspended,
         public string $name,
         public string $workspace_id,
-        public string|null $connect_partner_name
+        public string|null $connect_partner_name,
     ) {}
 }

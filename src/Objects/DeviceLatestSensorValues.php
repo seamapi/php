@@ -11,12 +11,12 @@ class DeviceLatestSensorValues
         }
         return new self(
             accelerometer_z: DeviceAccelerometerZ::from_json(
-                $json->accelerometer_z
+                $json->accelerometer_z,
             ),
             humidity: DeviceHumidity::from_json($json->humidity),
             pressure: DevicePressure::from_json($json->pressure),
             sound: DeviceSound::from_json($json->sound),
-            temperature: DeviceTemperature::from_json($json->temperature)
+            temperature: DeviceTemperature::from_json($json->temperature),
         );
     }
 
@@ -25,6 +25,6 @@ class DeviceLatestSensorValues
         public DeviceHumidity $humidity,
         public DevicePressure $pressure,
         public DeviceSound $sound,
-        public DeviceTemperature $temperature
+        public DeviceTemperature $temperature,
     ) {}
 }

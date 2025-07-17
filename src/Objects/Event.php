@@ -66,7 +66,7 @@ class Event
             lower_limit_fahrenheit: $json->lower_limit_fahrenheit ?? null,
             thermostat_schedule_id: $json->thermostat_schedule_id ?? null,
             upper_limit_celsius: $json->upper_limit_celsius ?? null,
-            upper_limit_fahrenheit: $json->upper_limit_fahrenheit ?? null
+            upper_limit_fahrenheit: $json->upper_limit_fahrenheit ?? null,
         );
     }
 
@@ -122,6 +122,6 @@ class Event
         public float|null $lower_limit_fahrenheit,
         public string|null $thermostat_schedule_id,
         public float|null $upper_limit_celsius,
-        public float|null $upper_limit_fahrenheit
+        public float|null $upper_limit_fahrenheit,
     ) {}
 }

@@ -10,7 +10,7 @@ class AcsUserTo
             return null;
         }
         return new self(
-            acs_access_group_id: $json->acs_access_group_id ?? null
+            acs_access_group_id: $json->acs_access_group_id ?? null,
         );
     }
 

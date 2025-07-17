@@ -20,7 +20,7 @@ class DeviceModel
             offline_access_codes_supported: $json->offline_access_codes_supported ??
                 null,
             online_access_codes_supported: $json->online_access_codes_supported ??
-                null
+                null,
         );
     }
 
@@ -31,6 +31,6 @@ class DeviceModel
         public bool|null $can_connect_accessory_keypad,
         public bool|null $has_built_in_keypad,
         public bool|null $offline_access_codes_supported,
-        public bool|null $online_access_codes_supported
+        public bool|null $online_access_codes_supported,
     ) {}
 }

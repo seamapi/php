@@ -13,7 +13,7 @@ class Webhook
             url: $json->url,
             webhook_id: $json->webhook_id,
             event_types: $json->event_types ?? null,
-            secret: $json->secret ?? null
+            secret: $json->secret ?? null,
         );
     }
 
@@ -21,6 +21,6 @@ class Webhook
         public string $url,
         public string $webhook_id,
         public array|null $event_types,
-        public string|null $secret
+        public string|null $secret,
     ) {}
 }

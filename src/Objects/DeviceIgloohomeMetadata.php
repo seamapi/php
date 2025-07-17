@@ -14,7 +14,7 @@ class DeviceIgloohomeMetadata
             device_name: $json->device_name,
             bridge_id: $json->bridge_id ?? null,
             bridge_name: $json->bridge_name ?? null,
-            keypad_id: $json->keypad_id ?? null
+            keypad_id: $json->keypad_id ?? null,
         );
     }
 
@@ -23,6 +23,6 @@ class DeviceIgloohomeMetadata
         public string $device_name,
         public string|null $bridge_id,
         public string|null $bridge_name,
-        public string|null $keypad_id
+        public string|null $keypad_id,
     ) {}
 }

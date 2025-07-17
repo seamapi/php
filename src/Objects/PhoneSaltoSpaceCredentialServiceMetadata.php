@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class PhoneSaltoSpaceCredentialServiceMetadata
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): PhoneSaltoSpaceCredentialServiceMetadata|null {
         if (!$json) {
             return null;

@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class ConnectedAccountUserIdentifier
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): ConnectedAccountUserIdentifier|null {
         if (!$json) {
             return null;
@@ -15,7 +15,7 @@ class ConnectedAccountUserIdentifier
             email: $json->email ?? null,
             exclusive: $json->exclusive ?? null,
             phone: $json->phone ?? null,
-            username: $json->username ?? null
+            username: $json->username ?? null,
         );
     }
 
@@ -24,6 +24,6 @@ class ConnectedAccountUserIdentifier
         public string|null $email,
         public bool|null $exclusive,
         public string|null $phone,
-        public string|null $username
+        public string|null $username,
     ) {}
 }

@@ -14,7 +14,7 @@ class AcsSystemWarnings
             message: $json->message,
             warning_code: $json->warning_code,
             misconfigured_acs_entrance_ids: $json->misconfigured_acs_entrance_ids ??
-                null
+                null,
         );
     }
 
@@ -22,6 +22,6 @@ class AcsSystemWarnings
         public string $created_at,
         public string $message,
         public string $warning_code,
-        public array|null $misconfigured_acs_entrance_ids
+        public array|null $misconfigured_acs_entrance_ids,
     ) {}
 }

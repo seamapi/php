@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class UnmanagedAcsUserPendingMutations
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): UnmanagedAcsUserPendingMutations|null {
         if (!$json) {
             return null;
@@ -19,7 +19,7 @@ class UnmanagedAcsUserPendingMutations
                 : null,
             to: isset($json->to)
                 ? UnmanagedAcsUserTo::from_json($json->to)
-                : null
+                : null,
         );
     }
 
@@ -28,6 +28,6 @@ class UnmanagedAcsUserPendingMutations
         public string $message,
         public string $mutation_code,
         public UnmanagedAcsUserFrom|null $from,
-        public UnmanagedAcsUserTo|null $to
+        public UnmanagedAcsUserTo|null $to,
     ) {}
 }

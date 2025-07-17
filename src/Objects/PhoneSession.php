@@ -12,8 +12,8 @@ class PhoneSession
         return new self(
             provider_sessions: array_map(
                 fn($p) => PhoneSessionProviderSessions::from_json($p),
-                $json->provider_sessions ?? []
-            )
+                $json->provider_sessions ?? [],
+            ),
         );
     }
 

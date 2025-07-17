@@ -23,9 +23,9 @@ class AcsAccessGroup
             name: $json->name,
             warnings: array_map(
                 fn($w) => AcsAccessGroupWarnings::from_json($w),
-                $json->warnings ?? []
+                $json->warnings ?? [],
             ),
-            workspace_id: $json->workspace_id
+            workspace_id: $json->workspace_id,
         );
     }
 
@@ -42,6 +42,6 @@ class AcsAccessGroup
         public bool $is_managed,
         public string $name,
         public array $warnings,
-        public string $workspace_id
+        public string $workspace_id,
     ) {}
 }

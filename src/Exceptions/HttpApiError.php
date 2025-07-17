@@ -12,7 +12,7 @@ class HttpApiError extends \Exception
     public function __construct(
         object $error,
         int $statusCode,
-        string $requestId
+        string $requestId,
     ) {
         $message = $error->message ?? "Unknown error";
         parent::__construct($message);

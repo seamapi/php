@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class PhoneSessionSaltoSpaceMetadata
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): PhoneSessionSaltoSpaceMetadata|null {
         if (!$json) {
             return null;
@@ -13,13 +13,13 @@ class PhoneSessionSaltoSpaceMetadata
         return new self(
             door_name: $json->door_name,
             ext_door_id: $json->ext_door_id,
-            door_description: $json->door_description ?? null
+            door_description: $json->door_description ?? null,
         );
     }
 
     public function __construct(
         public string $door_name,
         public string $ext_door_id,
-        public string|null $door_description
+        public string|null $door_description,
     ) {}
 }

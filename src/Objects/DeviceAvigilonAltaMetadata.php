@@ -5,7 +5,7 @@ namespace Seam\Objects;
 class DeviceAvigilonAltaMetadata
 {
     public static function from_json(
-        mixed $json
+        mixed $json,
     ): DeviceAvigilonAltaMetadata|null {
         if (!$json) {
             return null;
@@ -17,7 +17,7 @@ class DeviceAvigilonAltaMetadata
             site_id: $json->site_id,
             site_name: $json->site_name,
             zone_id: $json->zone_id,
-            zone_name: $json->zone_name
+            zone_name: $json->zone_name,
         );
     }
 
@@ -28,6 +28,6 @@ class DeviceAvigilonAltaMetadata
         public float $site_id,
         public string $site_name,
         public float $zone_id,
-        public string $zone_name
+        public string $zone_name,
     ) {}
 }

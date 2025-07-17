@@ -17,13 +17,13 @@ class UnmanagedDevice
             device_type: $json->device_type,
             errors: array_map(
                 fn($e) => UnmanagedDeviceErrors::from_json($e),
-                $json->errors ?? []
+                $json->errors ?? [],
             ),
             is_managed: $json->is_managed,
             properties: UnmanagedDeviceProperties::from_json($json->properties),
             warnings: array_map(
                 fn($w) => UnmanagedDeviceWarnings::from_json($w),
-                $json->warnings ?? []
+                $json->warnings ?? [],
             ),
             workspace_id: $json->workspace_id,
             can_hvac_cool: $json->can_hvac_cool ?? null,
@@ -42,7 +42,7 @@ class UnmanagedDevice
             can_turn_off_hvac: $json->can_turn_off_hvac ?? null,
             location: isset($json->location)
                 ? UnmanagedDeviceLocation::from_json($json->location)
-                : null
+                : null,
         );
     }
 
@@ -68,6 +68,6 @@ class UnmanagedDevice
         public bool|null $can_simulate_disconnection,
         public bool|null $can_simulate_removal,
         public bool|null $can_turn_off_hvac,
-        public UnmanagedDeviceLocation|null $location
+        public UnmanagedDeviceLocation|null $location,
     ) {}
 }
