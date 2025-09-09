@@ -28,6 +28,7 @@ class AccessCode
                 fn($w) => AccessCodeWarnings::from_json($w),
                 $json->warnings ?? [],
             ),
+            workspace_id: $json->workspace_id,
             is_backup: $json->is_backup ?? null,
             is_scheduled_on_device: $json->is_scheduled_on_device ?? null,
             is_waiting_for_code_assignment: $json->is_waiting_for_code_assignment ??
@@ -55,6 +56,7 @@ class AccessCode
         public string $status,
         public string $type,
         public array $warnings,
+        public string $workspace_id,
         public bool|null $is_backup,
         public bool|null $is_scheduled_on_device,
         public bool|null $is_waiting_for_code_assignment,

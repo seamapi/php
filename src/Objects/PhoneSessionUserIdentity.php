@@ -2,9 +2,9 @@
 
 namespace Seam\Objects;
 
-class UserIdentity
+class PhoneSessionUserIdentity
 {
-    public static function from_json(mixed $json): UserIdentity|null
+    public static function from_json(mixed $json): PhoneSessionUserIdentity|null
     {
         if (!$json) {
             return null;
@@ -14,12 +14,12 @@ class UserIdentity
             created_at: $json->created_at,
             display_name: $json->display_name,
             errors: array_map(
-                fn($e) => UserIdentityErrors::from_json($e),
+                fn($e) => PhoneSessionErrors::from_json($e),
                 $json->errors ?? [],
             ),
             user_identity_id: $json->user_identity_id,
             warnings: array_map(
-                fn($w) => UserIdentityWarnings::from_json($w),
+                fn($w) => PhoneSessionWarnings::from_json($w),
                 $json->warnings ?? [],
             ),
             workspace_id: $json->workspace_id,

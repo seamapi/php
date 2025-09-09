@@ -19,7 +19,7 @@ class ClientSession
             token: $json->token,
             user_identity_ids: $json->user_identity_ids,
             workspace_id: $json->workspace_id,
-            customer_id: $json->customer_id ?? null,
+            customer_key: $json->customer_key ?? null,
             user_identity_id: $json->user_identity_id ?? null,
             user_identifier_key: $json->user_identifier_key ?? null,
         );
@@ -35,7 +35,7 @@ class ClientSession
         public string $token,
         public array $user_identity_ids,
         public string $workspace_id,
-        public string|null $customer_id,
+        public string|null $customer_key,
         public string|null $user_identity_id,
         public string|null $user_identifier_key,
     ) {}

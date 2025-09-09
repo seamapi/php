@@ -19,12 +19,12 @@ use Seam\Objects\BridgeConnectedSystems;
 use Seam\Objects\ClientSession;
 use Seam\Objects\ConnectWebview;
 use Seam\Objects\ConnectedAccount;
+use Seam\Objects\CustomizationProfile;
 use Seam\Objects\Device;
 use Seam\Objects\DeviceProvider;
 use Seam\Objects\EnrollmentAutomation;
 use Seam\Objects\Event;
 use Seam\Objects\InstantKey;
-use Seam\Objects\Location;
 use Seam\Objects\MagicLink;
 use Seam\Objects\NoiseThreshold;
 use Seam\Objects\Pagination;
@@ -67,6 +67,7 @@ class SeamClient
     public CustomersClient $customers;
     public DevicesClient $devices;
     public EventsClient $events;
+    public InstantKeysClient $instant_keys;
     public LocksClient $locks;
     public NoiseSensorsClient $noise_sensors;
     public PhonesClient $phones;
@@ -110,6 +111,7 @@ class SeamClient
         $this->customers = new CustomersClient($this);
         $this->devices = new DevicesClient($this);
         $this->events = new EventsClient($this);
+        $this->instant_keys = new InstantKeysClient($this);
         $this->locks = new LocksClient($this);
         $this->noise_sensors = new NoiseSensorsClient($this);
         $this->phones = new PhonesClient($this);
@@ -449,7 +451,7 @@ class AccessCodesClient
 
     public function list(
         ?array $access_code_ids = null,
-        ?array $customer_ids = null,
+        ?string $customer_key = null,
         ?string $device_id = null,
         ?float $limit = null,
         ?string $page_cursor = null,
@@ -461,8 +463,8 @@ class AccessCodesClient
         if ($access_code_ids !== null) {
             $request_payload["access_code_ids"] = $access_code_ids;
         }
-        if ($customer_ids !== null) {
-            $request_payload["customer_ids"] = $customer_ids;
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
@@ -798,12 +800,21 @@ class AccessCodesUnmanagedClient
 
     public function list(
         string $device_id,
+        ?float $limit = null,
+        ?string $page_cursor = null,
         ?string $user_identifier_key = null,
+        ?callable $on_response = null,
     ): array {
         $request_payload = [];
 
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($page_cursor !== null) {
+            $request_payload["page_cursor"] = $page_cursor;
         }
         if ($user_identifier_key !== null) {
             $request_payload["user_identifier_key"] = $user_identifier_key;
@@ -814,6 +825,10 @@ class AccessCodesUnmanagedClient
             "/access_codes/unmanaged/list",
             json: (object) $request_payload,
         );
+
+        if ($on_response !== null) {
+            $on_response($res);
+        }
 
         return array_map(
             fn($r) => UnmanagedAccessCode::from_json($r),
@@ -871,12 +886,16 @@ class AccessGrantsClient
         array $requested_access_methods,
         ?string $user_identity_id = null,
         mixed $user_identity = null,
+        ?string $access_grant_key = null,
         ?array $acs_entrance_ids = null,
+        ?string $customization_profile_id = null,
         ?array $device_ids = null,
         ?string $ends_at = null,
         mixed $location = null,
         ?array $location_ids = null,
+        ?string $name = null,
         ?array $space_ids = null,
+        ?array $space_keys = null,
         ?string $starts_at = null,
     ): AccessGrant {
         $request_payload = [];
@@ -892,8 +911,16 @@ class AccessGrantsClient
         if ($user_identity !== null) {
             $request_payload["user_identity"] = $user_identity;
         }
+        if ($access_grant_key !== null) {
+            $request_payload["access_grant_key"] = $access_grant_key;
+        }
         if ($acs_entrance_ids !== null) {
             $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
+        }
+        if ($customization_profile_id !== null) {
+            $request_payload[
+                "customization_profile_id"
+            ] = $customization_profile_id;
         }
         if ($device_ids !== null) {
             $request_payload["device_ids"] = $device_ids;
@@ -907,8 +934,14 @@ class AccessGrantsClient
         if ($location_ids !== null) {
             $request_payload["location_ids"] = $location_ids;
         }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
         if ($space_ids !== null) {
             $request_payload["space_ids"] = $space_ids;
+        }
+        if ($space_keys !== null) {
+            $request_payload["space_keys"] = $space_keys;
         }
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;
@@ -938,12 +971,17 @@ class AccessGrantsClient
         );
     }
 
-    public function get(string $access_grant_id): AccessGrant
-    {
+    public function get(
+        ?string $access_grant_id = null,
+        ?string $access_grant_key = null,
+    ): AccessGrant {
         $request_payload = [];
 
         if ($access_grant_id !== null) {
             $request_payload["access_grant_id"] = $access_grant_id;
+        }
+        if ($access_grant_key !== null) {
+            $request_payload["access_grant_key"] = $access_grant_key;
         }
 
         $res = $this->seam->request(
@@ -955,20 +993,52 @@ class AccessGrantsClient
         return AccessGrant::from_json($res->access_grant);
     }
 
+    public function get_related(
+        array $access_grant_ids,
+        ?array $exclude = null,
+        ?array $include = null,
+    ): void {
+        $request_payload = [];
+
+        if ($access_grant_ids !== null) {
+            $request_payload["access_grant_ids"] = $access_grant_ids;
+        }
+        if ($exclude !== null) {
+            $request_payload["exclude"] = $exclude;
+        }
+        if ($include !== null) {
+            $request_payload["include"] = $include;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/access_grants/get_related",
+            json: (object) $request_payload,
+        );
+    }
+
     public function list(
+        ?string $access_grant_key = null,
         ?string $acs_entrance_id = null,
         ?string $acs_system_id = null,
+        ?string $customer_key = null,
         ?string $location_id = null,
         ?string $space_id = null,
         ?string $user_identity_id = null,
     ): array {
         $request_payload = [];
 
+        if ($access_grant_key !== null) {
+            $request_payload["access_grant_key"] = $access_grant_key;
+        }
         if ($acs_entrance_id !== null) {
             $request_payload["acs_entrance_id"] = $acs_entrance_id;
         }
         if ($acs_system_id !== null) {
             $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($location_id !== null) {
             $request_payload["location_id"] = $location_id;
@@ -995,6 +1065,7 @@ class AccessGrantsClient
     public function update(
         string $access_grant_id,
         ?string $ends_at = null,
+        ?string $name = null,
         ?string $starts_at = null,
     ): void {
         $request_payload = [];
@@ -1004,6 +1075,9 @@ class AccessGrantsClient
         }
         if ($ends_at !== null) {
             $request_payload["ends_at"] = $ends_at;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
         }
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;
@@ -1041,6 +1115,37 @@ class AccessMethodsClient
         );
     }
 
+    public function encode(
+        string $access_method_id,
+        string $acs_encoder_id,
+        bool $wait_for_action_attempt = true,
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($access_method_id !== null) {
+            $request_payload["access_method_id"] = $access_method_id;
+        }
+        if ($acs_encoder_id !== null) {
+            $request_payload["acs_encoder_id"] = $acs_encoder_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/access_methods/encode",
+            json: (object) $request_payload,
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res->action_attempt);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt->action_attempt_id,
+        );
+
+        return $action_attempt;
+    }
+
     public function get(string $access_method_id): AccessMethod
     {
         $request_payload = [];
@@ -1058,12 +1163,49 @@ class AccessMethodsClient
         return AccessMethod::from_json($res->access_method);
     }
 
-    public function list(string $access_grant_id): array
-    {
+    public function get_related(
+        array $access_method_ids,
+        ?array $exclude = null,
+        ?array $include = null,
+    ): void {
+        $request_payload = [];
+
+        if ($access_method_ids !== null) {
+            $request_payload["access_method_ids"] = $access_method_ids;
+        }
+        if ($exclude !== null) {
+            $request_payload["exclude"] = $exclude;
+        }
+        if ($include !== null) {
+            $request_payload["include"] = $include;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/access_methods/get_related",
+            json: (object) $request_payload,
+        );
+    }
+
+    public function list(
+        string $access_grant_id,
+        ?string $acs_entrance_id = null,
+        ?string $device_id = null,
+        ?string $space_id = null,
+    ): array {
         $request_payload = [];
 
         if ($access_grant_id !== null) {
             $request_payload["access_grant_id"] = $access_grant_id;
+        }
+        if ($acs_entrance_id !== null) {
+            $request_payload["acs_entrance_id"] = $acs_entrance_id;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($space_id !== null) {
+            $request_payload["space_id"] = $space_id;
         }
 
         $res = $this->seam->request(
@@ -1284,6 +1426,7 @@ class AcsCredentialsClient
         ?string $code = null,
         ?string $credential_manager_acs_system_id = null,
         ?string $ends_at = null,
+        mixed $hotek_metadata = null,
         ?bool $is_multi_phone_sync_credential = null,
         mixed $salto_space_metadata = null,
         ?string $starts_at = null,
@@ -1321,6 +1464,9 @@ class AcsCredentialsClient
         }
         if ($ends_at !== null) {
             $request_payload["ends_at"] = $ends_at;
+        }
+        if ($hotek_metadata !== null) {
+            $request_payload["hotek_metadata"] = $hotek_metadata;
         }
         if ($is_multi_phone_sync_credential !== null) {
             $request_payload[
@@ -1388,6 +1534,9 @@ class AcsCredentialsClient
         ?string $created_before = null,
         ?bool $is_multi_phone_sync_credential = null,
         ?float $limit = null,
+        ?string $page_cursor = null,
+        ?string $search = null,
+        ?callable $on_response = null,
     ): array {
         $request_payload = [];
 
@@ -1411,12 +1560,22 @@ class AcsCredentialsClient
         if ($limit !== null) {
             $request_payload["limit"] = $limit;
         }
+        if ($page_cursor !== null) {
+            $request_payload["page_cursor"] = $page_cursor;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
+        }
 
         $res = $this->seam->request(
             "POST",
             "/acs/credentials/list",
             json: (object) $request_payload,
         );
+
+        if ($on_response !== null) {
+            $on_response($res);
+        }
 
         return array_map(
             fn($r) => AcsCredential::from_json($r),
@@ -1502,49 +1661,22 @@ class AcsEncodersClient
         $this->seam = $seam;
     }
 
-    public function encode_access_method(
-        string $access_method_id,
+    public function encode_credential(
         string $acs_encoder_id,
+        ?string $access_method_id = null,
+        ?string $acs_credential_id = null,
         bool $wait_for_action_attempt = true,
     ): ActionAttempt {
         $request_payload = [];
 
+        if ($acs_encoder_id !== null) {
+            $request_payload["acs_encoder_id"] = $acs_encoder_id;
+        }
         if ($access_method_id !== null) {
             $request_payload["access_method_id"] = $access_method_id;
         }
-        if ($acs_encoder_id !== null) {
-            $request_payload["acs_encoder_id"] = $acs_encoder_id;
-        }
-
-        $res = $this->seam->request(
-            "POST",
-            "/acs/encoders/encode_access_method",
-            json: (object) $request_payload,
-        );
-
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
-        );
-
-        return $action_attempt;
-    }
-
-    public function encode_credential(
-        string $acs_credential_id,
-        string $acs_encoder_id,
-        bool $wait_for_action_attempt = true,
-    ): ActionAttempt {
-        $request_payload = [];
-
         if ($acs_credential_id !== null) {
             $request_payload["acs_credential_id"] = $acs_credential_id;
-        }
-        if ($acs_encoder_id !== null) {
-            $request_payload["acs_encoder_id"] = $acs_encoder_id;
         }
 
         $res = $this->seam->request(
@@ -1583,17 +1715,16 @@ class AcsEncodersClient
 
     public function list(
         ?string $acs_system_id = null,
-        ?float $limit = null,
         ?array $acs_system_ids = null,
         ?array $acs_encoder_ids = null,
+        ?float $limit = null,
+        ?string $page_cursor = null,
+        ?callable $on_response = null,
     ): array {
         $request_payload = [];
 
         if ($acs_system_id !== null) {
             $request_payload["acs_system_id"] = $acs_system_id;
-        }
-        if ($limit !== null) {
-            $request_payload["limit"] = $limit;
         }
         if ($acs_system_ids !== null) {
             $request_payload["acs_system_ids"] = $acs_system_ids;
@@ -1601,12 +1732,22 @@ class AcsEncodersClient
         if ($acs_encoder_ids !== null) {
             $request_payload["acs_encoder_ids"] = $acs_encoder_ids;
         }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($page_cursor !== null) {
+            $request_payload["page_cursor"] = $page_cursor;
+        }
 
         $res = $this->seam->request(
             "POST",
             "/acs/encoders/list",
             json: (object) $request_payload,
         );
+
+        if ($on_response !== null) {
+            $on_response($res);
+        }
 
         return array_map(
             fn($r) => AcsEncoder::from_json($r),
@@ -1799,29 +1940,46 @@ class AcsEntrancesClient
     }
 
     public function list(
-        ?string $access_grant_id = null,
-        ?string $access_method_id = null,
         ?string $acs_credential_id = null,
+        ?array $acs_entrance_ids = null,
         ?string $acs_system_id = null,
+        ?string $connected_account_id = null,
+        ?string $customer_key = null,
+        mixed $limit = null,
         ?string $location_id = null,
+        ?string $page_cursor = null,
+        ?string $search = null,
         ?string $space_id = null,
+        ?callable $on_response = null,
     ): array {
         $request_payload = [];
 
-        if ($access_grant_id !== null) {
-            $request_payload["access_grant_id"] = $access_grant_id;
-        }
-        if ($access_method_id !== null) {
-            $request_payload["access_method_id"] = $access_method_id;
-        }
         if ($acs_credential_id !== null) {
             $request_payload["acs_credential_id"] = $acs_credential_id;
+        }
+        if ($acs_entrance_ids !== null) {
+            $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
         }
         if ($acs_system_id !== null) {
             $request_payload["acs_system_id"] = $acs_system_id;
         }
+        if ($connected_account_id !== null) {
+            $request_payload["connected_account_id"] = $connected_account_id;
+        }
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
         if ($location_id !== null) {
             $request_payload["location_id"] = $location_id;
+        }
+        if ($page_cursor !== null) {
+            $request_payload["page_cursor"] = $page_cursor;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
         }
         if ($space_id !== null) {
             $request_payload["space_id"] = $space_id;
@@ -1832,6 +1990,10 @@ class AcsEntrancesClient
             "/acs/entrances/list",
             json: (object) $request_payload,
         );
+
+        if ($on_response !== null) {
+            $on_response($res);
+        }
 
         return array_map(
             fn($r) => AcsEntrance::from_json($r),
@@ -1891,12 +2053,17 @@ class AcsSystemsClient
         return AcsSystem::from_json($res->acs_system);
     }
 
-    public function list(?string $connected_account_id = null): array
-    {
+    public function list(
+        ?string $connected_account_id = null,
+        ?string $customer_key = null,
+    ): array {
         $request_payload = [];
 
         if ($connected_account_id !== null) {
             $request_payload["connected_account_id"] = $connected_account_id;
+        }
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
 
         $res = $this->seam->request(
@@ -2591,7 +2758,7 @@ class ConnectWebviewsClient
         mixed $custom_metadata = null,
         ?string $custom_redirect_failure_url = null,
         ?string $custom_redirect_url = null,
-        ?string $customer_id = null,
+        ?string $customer_key = null,
         ?string $device_selection_mode = null,
         ?string $provider_category = null,
         ?bool $wait_for_device_creation = null,
@@ -2620,8 +2787,8 @@ class ConnectWebviewsClient
         if ($custom_redirect_url !== null) {
             $request_payload["custom_redirect_url"] = $custom_redirect_url;
         }
-        if ($customer_id !== null) {
-            $request_payload["customer_id"] = $customer_id;
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($device_selection_mode !== null) {
             $request_payload["device_selection_mode"] = $device_selection_mode;
@@ -2678,7 +2845,7 @@ class ConnectWebviewsClient
 
     public function list(
         mixed $custom_metadata_has = null,
-        ?array $customer_ids = null,
+        ?string $customer_key = null,
         ?float $limit = null,
         ?string $page_cursor = null,
         ?string $user_identifier_key = null,
@@ -2689,8 +2856,8 @@ class ConnectWebviewsClient
         if ($custom_metadata_has !== null) {
             $request_payload["custom_metadata_has"] = $custom_metadata_has;
         }
-        if ($customer_ids !== null) {
-            $request_payload["customer_ids"] = $customer_ids;
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;
@@ -2772,9 +2939,10 @@ class ConnectedAccountsClient
 
     public function list(
         mixed $custom_metadata_has = null,
-        ?array $customer_ids = null,
+        ?string $customer_key = null,
         mixed $limit = null,
         ?string $page_cursor = null,
+        ?string $search = null,
         ?string $user_identifier_key = null,
         ?callable $on_response = null,
     ): array {
@@ -2783,14 +2951,17 @@ class ConnectedAccountsClient
         if ($custom_metadata_has !== null) {
             $request_payload["custom_metadata_has"] = $custom_metadata_has;
         }
-        if ($customer_ids !== null) {
-            $request_payload["customer_ids"] = $customer_ids;
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;
         }
         if ($page_cursor !== null) {
             $request_payload["page_cursor"] = $page_cursor;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
         }
         if ($user_identifier_key !== null) {
             $request_payload["user_identifier_key"] = $user_identifier_key;
@@ -2829,6 +3000,7 @@ class ConnectedAccountsClient
 
     public function update(
         string $connected_account_id,
+        ?array $accepted_capabilities = null,
         ?bool $automatically_manage_new_devices = null,
         mixed $custom_metadata = null,
     ): void {
@@ -2836,6 +3008,9 @@ class ConnectedAccountsClient
 
         if ($connected_account_id !== null) {
             $request_payload["connected_account_id"] = $connected_account_id;
+        }
+        if ($accepted_capabilities !== null) {
+            $request_payload["accepted_capabilities"] = $accepted_capabilities;
         }
         if ($automatically_manage_new_devices !== null) {
             $request_payload[
@@ -2866,6 +3041,7 @@ class CustomersClient
     public function create_portal(
         mixed $features = null,
         ?bool $is_embedded = null,
+        mixed $landing_page = null,
         mixed $customer_data = null,
     ): MagicLink {
         $request_payload = [];
@@ -2875,6 +3051,9 @@ class CustomersClient
         }
         if ($is_embedded !== null) {
             $request_payload["is_embedded"] = $is_embedded;
+        }
+        if ($landing_page !== null) {
+            $request_payload["landing_page"] = $landing_page;
         }
         if ($customer_data !== null) {
             $request_payload["customer_data"] = $customer_data;
@@ -2887,6 +3066,90 @@ class CustomersClient
         );
 
         return MagicLink::from_json($res->magic_link);
+    }
+
+    public function delete_data(
+        ?array $access_grant_keys = null,
+        ?array $booking_keys = null,
+        ?array $building_keys = null,
+        ?array $common_area_keys = null,
+        ?array $customer_keys = null,
+        ?array $facility_keys = null,
+        ?array $guest_keys = null,
+        ?array $listing_keys = null,
+        ?array $property_keys = null,
+        ?array $property_listing_keys = null,
+        ?array $reservation_keys = null,
+        ?array $resident_keys = null,
+        ?array $room_keys = null,
+        ?array $space_keys = null,
+        ?array $tenant_keys = null,
+        ?array $unit_keys = null,
+        ?array $user_identity_keys = null,
+        ?array $user_keys = null,
+    ): void {
+        $request_payload = [];
+
+        if ($access_grant_keys !== null) {
+            $request_payload["access_grant_keys"] = $access_grant_keys;
+        }
+        if ($booking_keys !== null) {
+            $request_payload["booking_keys"] = $booking_keys;
+        }
+        if ($building_keys !== null) {
+            $request_payload["building_keys"] = $building_keys;
+        }
+        if ($common_area_keys !== null) {
+            $request_payload["common_area_keys"] = $common_area_keys;
+        }
+        if ($customer_keys !== null) {
+            $request_payload["customer_keys"] = $customer_keys;
+        }
+        if ($facility_keys !== null) {
+            $request_payload["facility_keys"] = $facility_keys;
+        }
+        if ($guest_keys !== null) {
+            $request_payload["guest_keys"] = $guest_keys;
+        }
+        if ($listing_keys !== null) {
+            $request_payload["listing_keys"] = $listing_keys;
+        }
+        if ($property_keys !== null) {
+            $request_payload["property_keys"] = $property_keys;
+        }
+        if ($property_listing_keys !== null) {
+            $request_payload["property_listing_keys"] = $property_listing_keys;
+        }
+        if ($reservation_keys !== null) {
+            $request_payload["reservation_keys"] = $reservation_keys;
+        }
+        if ($resident_keys !== null) {
+            $request_payload["resident_keys"] = $resident_keys;
+        }
+        if ($room_keys !== null) {
+            $request_payload["room_keys"] = $room_keys;
+        }
+        if ($space_keys !== null) {
+            $request_payload["space_keys"] = $space_keys;
+        }
+        if ($tenant_keys !== null) {
+            $request_payload["tenant_keys"] = $tenant_keys;
+        }
+        if ($unit_keys !== null) {
+            $request_payload["unit_keys"] = $unit_keys;
+        }
+        if ($user_identity_keys !== null) {
+            $request_payload["user_identity_keys"] = $user_identity_keys;
+        }
+        if ($user_keys !== null) {
+            $request_payload["user_keys"] = $user_keys;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/customers/delete_data",
+            json: (object) $request_payload,
+        );
     }
 
     public function push_data(
@@ -3012,7 +3275,7 @@ class DevicesClient
         ?array $connected_account_ids = null,
         ?string $created_before = null,
         mixed $custom_metadata_has = null,
-        ?array $customer_ids = null,
+        ?string $customer_key = null,
         ?array $device_ids = null,
         ?string $device_type = null,
         ?array $device_types = null,
@@ -3021,6 +3284,7 @@ class DevicesClient
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $page_cursor = null,
+        ?string $search = null,
         ?string $space_id = null,
         ?string $unstable_location_id = null,
         ?string $user_identifier_key = null,
@@ -3043,8 +3307,8 @@ class DevicesClient
         if ($custom_metadata_has !== null) {
             $request_payload["custom_metadata_has"] = $custom_metadata_has;
         }
-        if ($customer_ids !== null) {
-            $request_payload["customer_ids"] = $customer_ids;
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($device_ids !== null) {
             $request_payload["device_ids"] = $device_ids;
@@ -3069,6 +3333,9 @@ class DevicesClient
         }
         if ($page_cursor !== null) {
             $request_payload["page_cursor"] = $page_cursor;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
         }
         if ($space_id !== null) {
             $request_payload["space_id"] = $space_id;
@@ -3171,6 +3438,21 @@ class DevicesSimulateClient
         );
     }
 
+    public function connect_to_hub(string $device_id): void
+    {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/devices/simulate/connect_to_hub",
+            json: (object) $request_payload,
+        );
+    }
+
     public function disconnect(string $device_id): void
     {
         $request_payload = [];
@@ -3182,6 +3464,39 @@ class DevicesSimulateClient
         $this->seam->request(
             "POST",
             "/devices/simulate/disconnect",
+            json: (object) $request_payload,
+        );
+    }
+
+    public function disconnect_from_hub(string $device_id): void
+    {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/devices/simulate/disconnect_from_hub",
+            json: (object) $request_payload,
+        );
+    }
+
+    public function paid_subscription(string $device_id, bool $is_expired): void
+    {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($is_expired !== null) {
+            $request_payload["is_expired"] = $is_expired;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/devices/simulate/paid_subscription",
             json: (object) $request_payload,
         );
     }
@@ -3239,7 +3554,7 @@ class DevicesUnmanagedClient
         ?array $connected_account_ids = null,
         ?string $created_before = null,
         mixed $custom_metadata_has = null,
-        ?array $customer_ids = null,
+        ?string $customer_key = null,
         ?array $device_ids = null,
         ?string $device_type = null,
         ?array $device_types = null,
@@ -3248,6 +3563,7 @@ class DevicesUnmanagedClient
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $page_cursor = null,
+        ?string $search = null,
         ?string $space_id = null,
         ?string $unstable_location_id = null,
         ?string $user_identifier_key = null,
@@ -3270,8 +3586,8 @@ class DevicesUnmanagedClient
         if ($custom_metadata_has !== null) {
             $request_payload["custom_metadata_has"] = $custom_metadata_has;
         }
-        if ($customer_ids !== null) {
-            $request_payload["customer_ids"] = $customer_ids;
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($device_ids !== null) {
             $request_payload["device_ids"] = $device_ids;
@@ -3296,6 +3612,9 @@ class DevicesUnmanagedClient
         }
         if ($page_cursor !== null) {
             $request_payload["page_cursor"] = $page_cursor;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
         }
         if ($space_id !== null) {
             $request_payload["space_id"] = $space_id;
@@ -3323,12 +3642,18 @@ class DevicesUnmanagedClient
         );
     }
 
-    public function update(string $device_id, bool $is_managed): void
-    {
+    public function update(
+        string $device_id,
+        mixed $custom_metadata = null,
+        ?bool $is_managed = null,
+    ): void {
         $request_payload = [];
 
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
+        }
+        if ($custom_metadata !== null) {
+            $request_payload["custom_metadata"] = $custom_metadata;
         }
         if ($is_managed !== null) {
             $request_payload["is_managed"] = $is_managed;
@@ -3385,7 +3710,7 @@ class EventsClient
         ?array $between = null,
         ?string $connect_webview_id = null,
         ?string $connected_account_id = null,
-        ?array $customer_ids = null,
+        ?string $customer_key = null,
         ?string $device_id = null,
         ?array $device_ids = null,
         ?array $event_ids = null,
@@ -3418,8 +3743,8 @@ class EventsClient
         if ($connected_account_id !== null) {
             $request_payload["connected_account_id"] = $connected_account_id;
         }
-        if ($customer_ids !== null) {
-            $request_payload["customer_ids"] = $customer_ids;
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
@@ -3456,13 +3781,81 @@ class EventsClient
     }
 }
 
-class LocksClient
+class InstantKeysClient
 {
     private SeamClient $seam;
 
     public function __construct(SeamClient $seam)
     {
         $this->seam = $seam;
+    }
+
+    public function delete(string $instant_key_id): void
+    {
+        $request_payload = [];
+
+        if ($instant_key_id !== null) {
+            $request_payload["instant_key_id"] = $instant_key_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/instant_keys/delete",
+            json: (object) $request_payload,
+        );
+    }
+
+    public function get(
+        ?string $instant_key_id = null,
+        ?string $instant_key_url = null,
+    ): InstantKey {
+        $request_payload = [];
+
+        if ($instant_key_id !== null) {
+            $request_payload["instant_key_id"] = $instant_key_id;
+        }
+        if ($instant_key_url !== null) {
+            $request_payload["instant_key_url"] = $instant_key_url;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/instant_keys/get",
+            json: (object) $request_payload,
+        );
+
+        return InstantKey::from_json($res->instant_key);
+    }
+
+    public function list(?string $user_identity_id = null): array
+    {
+        $request_payload = [];
+
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/instant_keys/list",
+            json: (object) $request_payload,
+        );
+
+        return array_map(
+            fn($r) => InstantKey::from_json($r),
+            $res->instant_keys,
+        );
+    }
+}
+
+class LocksClient
+{
+    private SeamClient $seam;
+    public LocksSimulateClient $simulate;
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+        $this->simulate = new LocksSimulateClient($seam);
     }
 
     public function get(?string $device_id = null, ?string $name = null): Device
@@ -3491,7 +3884,7 @@ class LocksClient
         ?array $connected_account_ids = null,
         ?string $created_before = null,
         mixed $custom_metadata_has = null,
-        ?array $customer_ids = null,
+        ?string $customer_key = null,
         ?array $device_ids = null,
         ?string $device_type = null,
         ?array $device_types = null,
@@ -3500,6 +3893,7 @@ class LocksClient
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $page_cursor = null,
+        ?string $search = null,
         ?string $space_id = null,
         ?string $unstable_location_id = null,
         ?string $user_identifier_key = null,
@@ -3522,8 +3916,8 @@ class LocksClient
         if ($custom_metadata_has !== null) {
             $request_payload["custom_metadata_has"] = $custom_metadata_has;
         }
-        if ($customer_ids !== null) {
-            $request_payload["customer_ids"] = $customer_ids;
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($device_ids !== null) {
             $request_payload["device_ids"] = $device_ids;
@@ -3548,6 +3942,9 @@ class LocksClient
         }
         if ($page_cursor !== null) {
             $request_payload["page_cursor"] = $page_cursor;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
         }
         if ($space_id !== null) {
             $request_payload["space_id"] = $space_id;
@@ -3635,6 +4032,74 @@ class LocksClient
     }
 }
 
+class LocksSimulateClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function keypad_code_entry(
+        string $code,
+        string $device_id,
+        bool $wait_for_action_attempt = true,
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($code !== null) {
+            $request_payload["code"] = $code;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/locks/simulate/keypad_code_entry",
+            json: (object) $request_payload,
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res->action_attempt);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt->action_attempt_id,
+        );
+
+        return $action_attempt;
+    }
+
+    public function manual_lock_via_keypad(
+        string $device_id,
+        bool $wait_for_action_attempt = true,
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/locks/simulate/manual_lock_via_keypad",
+            json: (object) $request_payload,
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res->action_attempt);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt->action_attempt_id,
+        );
+
+        return $action_attempt;
+    }
+}
+
 class NoiseSensorsClient
 {
     private SeamClient $seam;
@@ -3653,7 +4118,7 @@ class NoiseSensorsClient
         ?array $connected_account_ids = null,
         ?string $created_before = null,
         mixed $custom_metadata_has = null,
-        ?array $customer_ids = null,
+        ?string $customer_key = null,
         ?array $device_ids = null,
         ?string $device_type = null,
         ?array $device_types = null,
@@ -3662,6 +4127,7 @@ class NoiseSensorsClient
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $page_cursor = null,
+        ?string $search = null,
         ?string $space_id = null,
         ?string $unstable_location_id = null,
         ?string $user_identifier_key = null,
@@ -3684,8 +4150,8 @@ class NoiseSensorsClient
         if ($custom_metadata_has !== null) {
             $request_payload["custom_metadata_has"] = $custom_metadata_has;
         }
-        if ($customer_ids !== null) {
-            $request_payload["customer_ids"] = $customer_ids;
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($device_ids !== null) {
             $request_payload["device_ids"] = $device_ids;
@@ -3710,6 +4176,9 @@ class NoiseSensorsClient
         }
         if ($page_cursor !== null) {
             $request_payload["page_cursor"] = $page_cursor;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
         }
         if ($space_id !== null) {
             $request_payload["space_id"] = $space_id;
@@ -4084,6 +4553,7 @@ class SpacesClient
         string $name,
         ?array $acs_entrance_ids = null,
         ?array $device_ids = null,
+        ?string $space_key = null,
     ): Space {
         $request_payload = [];
 
@@ -4095,6 +4565,9 @@ class SpacesClient
         }
         if ($device_ids !== null) {
             $request_payload["device_ids"] = $device_ids;
+        }
+        if ($space_key !== null) {
+            $request_payload["space_key"] = $space_key;
         }
 
         $res = $this->seam->request(
@@ -4121,12 +4594,17 @@ class SpacesClient
         );
     }
 
-    public function get(string $space_id): Space
-    {
+    public function get(
+        ?string $space_id = null,
+        ?string $space_key = null,
+    ): Space {
         $request_payload = [];
 
         if ($space_id !== null) {
             $request_payload["space_id"] = $space_id;
+        }
+        if ($space_key !== null) {
+            $request_payload["space_key"] = $space_key;
         }
 
         $res = $this->seam->request(
@@ -4138,9 +4616,60 @@ class SpacesClient
         return Space::from_json($res->space);
     }
 
-    public function list(): array
-    {
-        $res = $this->seam->request("POST", "/spaces/list");
+    public function get_related(
+        ?array $exclude = null,
+        ?array $include = null,
+        ?array $space_ids = null,
+        ?array $space_keys = null,
+    ): void {
+        $request_payload = [];
+
+        if ($exclude !== null) {
+            $request_payload["exclude"] = $exclude;
+        }
+        if ($include !== null) {
+            $request_payload["include"] = $include;
+        }
+        if ($space_ids !== null) {
+            $request_payload["space_ids"] = $space_ids;
+        }
+        if ($space_keys !== null) {
+            $request_payload["space_keys"] = $space_keys;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/spaces/get_related",
+            json: (object) $request_payload,
+        );
+    }
+
+    public function list(
+        ?string $connected_account_id = null,
+        ?string $customer_key = null,
+        ?string $search = null,
+        ?string $space_key = null,
+    ): array {
+        $request_payload = [];
+
+        if ($connected_account_id !== null) {
+            $request_payload["connected_account_id"] = $connected_account_id;
+        }
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
+        }
+        if ($space_key !== null) {
+            $request_payload["space_key"] = $space_key;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/spaces/list",
+            json: (object) $request_payload,
+        );
 
         return array_map(fn($r) => Space::from_json($r), $res->spaces);
     }
@@ -4183,15 +4712,29 @@ class SpacesClient
         );
     }
 
-    public function update(string $space_id, ?string $name = null): Space
-    {
+    public function update(
+        ?array $acs_entrance_ids = null,
+        ?array $device_ids = null,
+        ?string $name = null,
+        ?string $space_id = null,
+        ?string $space_key = null,
+    ): Space {
         $request_payload = [];
 
-        if ($space_id !== null) {
-            $request_payload["space_id"] = $space_id;
+        if ($acs_entrance_ids !== null) {
+            $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
+        }
+        if ($device_ids !== null) {
+            $request_payload["device_ids"] = $device_ids;
         }
         if ($name !== null) {
             $request_payload["name"] = $name;
+        }
+        if ($space_id !== null) {
+            $request_payload["space_id"] = $space_id;
+        }
+        if ($space_key !== null) {
+            $request_payload["space_key"] = $space_key;
         }
 
         $res = $this->seam->request(
@@ -4295,8 +4838,10 @@ class ThermostatsClient
     public function create_climate_preset(
         string $climate_preset_key,
         string $device_id,
+        ?string $climate_preset_mode = null,
         ?float $cooling_set_point_celsius = null,
         ?float $cooling_set_point_fahrenheit = null,
+        mixed $ecobee_metadata = null,
         ?string $fan_mode_setting = null,
         ?float $heating_set_point_celsius = null,
         ?float $heating_set_point_fahrenheit = null,
@@ -4312,6 +4857,9 @@ class ThermostatsClient
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
         }
+        if ($climate_preset_mode !== null) {
+            $request_payload["climate_preset_mode"] = $climate_preset_mode;
+        }
         if ($cooling_set_point_celsius !== null) {
             $request_payload[
                 "cooling_set_point_celsius"
@@ -4321,6 +4869,9 @@ class ThermostatsClient
             $request_payload[
                 "cooling_set_point_fahrenheit"
             ] = $cooling_set_point_fahrenheit;
+        }
+        if ($ecobee_metadata !== null) {
+            $request_payload["ecobee_metadata"] = $ecobee_metadata;
         }
         if ($fan_mode_setting !== null) {
             $request_payload["fan_mode_setting"] = $fan_mode_setting;
@@ -4478,7 +5029,7 @@ class ThermostatsClient
         ?array $connected_account_ids = null,
         ?string $created_before = null,
         mixed $custom_metadata_has = null,
-        ?array $customer_ids = null,
+        ?string $customer_key = null,
         ?array $device_ids = null,
         ?string $device_type = null,
         ?array $device_types = null,
@@ -4487,6 +5038,7 @@ class ThermostatsClient
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $page_cursor = null,
+        ?string $search = null,
         ?string $space_id = null,
         ?string $unstable_location_id = null,
         ?string $user_identifier_key = null,
@@ -4509,8 +5061,8 @@ class ThermostatsClient
         if ($custom_metadata_has !== null) {
             $request_payload["custom_metadata_has"] = $custom_metadata_has;
         }
-        if ($customer_ids !== null) {
-            $request_payload["customer_ids"] = $customer_ids;
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($device_ids !== null) {
             $request_payload["device_ids"] = $device_ids;
@@ -4535,6 +5087,9 @@ class ThermostatsClient
         }
         if ($page_cursor !== null) {
             $request_payload["page_cursor"] = $page_cursor;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
         }
         if ($space_id !== null) {
             $request_payload["space_id"] = $space_id;
@@ -4743,8 +5298,10 @@ class ThermostatsClient
     public function update_climate_preset(
         string $climate_preset_key,
         string $device_id,
+        ?string $climate_preset_mode = null,
         ?float $cooling_set_point_celsius = null,
         ?float $cooling_set_point_fahrenheit = null,
+        mixed $ecobee_metadata = null,
         ?string $fan_mode_setting = null,
         ?float $heating_set_point_celsius = null,
         ?float $heating_set_point_fahrenheit = null,
@@ -4760,6 +5317,9 @@ class ThermostatsClient
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
         }
+        if ($climate_preset_mode !== null) {
+            $request_payload["climate_preset_mode"] = $climate_preset_mode;
+        }
         if ($cooling_set_point_celsius !== null) {
             $request_payload[
                 "cooling_set_point_celsius"
@@ -4769,6 +5329,9 @@ class ThermostatsClient
             $request_payload[
                 "cooling_set_point_fahrenheit"
             ] = $cooling_set_point_fahrenheit;
+        }
+        if ($ecobee_metadata !== null) {
+            $request_payload["ecobee_metadata"] = $ecobee_metadata;
         }
         if ($fan_mode_setting !== null) {
             $request_payload["fan_mode_setting"] = $fan_mode_setting;
@@ -5192,13 +5755,10 @@ class ThermostatsSimulateClient
 class UserIdentitiesClient
 {
     private SeamClient $seam;
-    public UserIdentitiesEnrollmentAutomationsClient $enrollment_automations;
+
     public function __construct(SeamClient $seam)
     {
         $this->seam = $seam;
-        $this->enrollment_automations = new UserIdentitiesEnrollmentAutomationsClient(
-            $seam,
-        );
     }
 
     public function add_acs_user(
@@ -5272,12 +5832,18 @@ class UserIdentitiesClient
 
     public function generate_instant_key(
         string $user_identity_id,
+        ?string $customization_profile_id = null,
         ?float $max_use_count = null,
     ): InstantKey {
         $request_payload = [];
 
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
+        }
+        if ($customization_profile_id !== null) {
+            $request_payload[
+                "customization_profile_id"
+            ] = $customization_profile_id;
         }
         if ($max_use_count !== null) {
             $request_payload["max_use_count"] = $max_use_count;
@@ -5336,6 +5902,7 @@ class UserIdentitiesClient
 
     public function list(
         ?string $credential_manager_acs_system_id = null,
+        ?string $search = null,
     ): array {
         $request_payload = [];
 
@@ -5343,6 +5910,9 @@ class UserIdentitiesClient
             $request_payload[
                 "credential_manager_acs_system_id"
             ] = $credential_manager_acs_system_id;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
         }
 
         $res = $this->seam->request(
@@ -5477,114 +6047,6 @@ class UserIdentitiesClient
             "POST",
             "/user_identities/update",
             json: (object) $request_payload,
-        );
-    }
-}
-
-class UserIdentitiesEnrollmentAutomationsClient
-{
-    private SeamClient $seam;
-
-    public function __construct(SeamClient $seam)
-    {
-        $this->seam = $seam;
-    }
-
-    public function delete(string $enrollment_automation_id): void
-    {
-        $request_payload = [];
-
-        if ($enrollment_automation_id !== null) {
-            $request_payload[
-                "enrollment_automation_id"
-            ] = $enrollment_automation_id;
-        }
-
-        $this->seam->request(
-            "POST",
-            "/user_identities/enrollment_automations/delete",
-            json: (object) $request_payload,
-        );
-    }
-
-    public function get(string $enrollment_automation_id): EnrollmentAutomation
-    {
-        $request_payload = [];
-
-        if ($enrollment_automation_id !== null) {
-            $request_payload[
-                "enrollment_automation_id"
-            ] = $enrollment_automation_id;
-        }
-
-        $res = $this->seam->request(
-            "POST",
-            "/user_identities/enrollment_automations/get",
-            json: (object) $request_payload,
-        );
-
-        return EnrollmentAutomation::from_json($res->enrollment_automation);
-    }
-
-    public function launch(
-        string $credential_manager_acs_system_id,
-        string $user_identity_id,
-        ?string $acs_credential_pool_id = null,
-        ?bool $create_credential_manager_user = null,
-        ?string $credential_manager_acs_user_id = null,
-    ): EnrollmentAutomation {
-        $request_payload = [];
-
-        if ($credential_manager_acs_system_id !== null) {
-            $request_payload[
-                "credential_manager_acs_system_id"
-            ] = $credential_manager_acs_system_id;
-        }
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
-        if ($acs_credential_pool_id !== null) {
-            $request_payload[
-                "acs_credential_pool_id"
-            ] = $acs_credential_pool_id;
-        }
-        if ($create_credential_manager_user !== null) {
-            $request_payload[
-                "create_credential_manager_user"
-            ] = $create_credential_manager_user;
-        }
-        if ($credential_manager_acs_user_id !== null) {
-            $request_payload[
-                "credential_manager_acs_user_id"
-            ] = $credential_manager_acs_user_id;
-        }
-
-        $res = $this->seam->request(
-            "POST",
-            "/user_identities/enrollment_automations/launch",
-            json: (object) $request_payload,
-        );
-
-        return EnrollmentAutomation::from_json($res->enrollment_automation);
-    }
-
-    public function list(string $user_identity_id): array
-    {
-        $request_payload = [];
-
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
-
-        $res = $this->seam->request(
-            "POST",
-            "/user_identities/enrollment_automations/list",
-            json: (object) $request_payload,
-        );
-
-        return array_map(
-            fn($r) => EnrollmentAutomation::from_json($r),
-            $res->enrollment_automations,
         );
     }
 }

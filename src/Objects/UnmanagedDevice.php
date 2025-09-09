@@ -13,6 +13,7 @@ class UnmanagedDevice
             capabilities_supported: $json->capabilities_supported,
             connected_account_id: $json->connected_account_id,
             created_at: $json->created_at,
+            custom_metadata: $json->custom_metadata,
             device_id: $json->device_id,
             device_type: $json->device_type,
             errors: array_map(
@@ -35,11 +36,20 @@ class UnmanagedDevice
                 null,
             can_remotely_lock: $json->can_remotely_lock ?? null,
             can_remotely_unlock: $json->can_remotely_unlock ?? null,
+            can_run_thermostat_programs: $json->can_run_thermostat_programs ??
+                null,
             can_simulate_connection: $json->can_simulate_connection ?? null,
             can_simulate_disconnection: $json->can_simulate_disconnection ??
                 null,
+            can_simulate_hub_connection: $json->can_simulate_hub_connection ??
+                null,
+            can_simulate_hub_disconnection: $json->can_simulate_hub_disconnection ??
+                null,
+            can_simulate_paid_subscription: $json->can_simulate_paid_subscription ??
+                null,
             can_simulate_removal: $json->can_simulate_removal ?? null,
             can_turn_off_hvac: $json->can_turn_off_hvac ?? null,
+            can_unlock_with_code: $json->can_unlock_with_code ?? null,
             location: isset($json->location)
                 ? UnmanagedDeviceLocation::from_json($json->location)
                 : null,
@@ -50,6 +60,7 @@ class UnmanagedDevice
         public array $capabilities_supported,
         public string $connected_account_id,
         public string $created_at,
+        public mixed $custom_metadata,
         public string $device_id,
         public string $device_type,
         public array $errors,
@@ -64,10 +75,15 @@ class UnmanagedDevice
         public bool|null $can_program_online_access_codes,
         public bool|null $can_remotely_lock,
         public bool|null $can_remotely_unlock,
+        public bool|null $can_run_thermostat_programs,
         public bool|null $can_simulate_connection,
         public bool|null $can_simulate_disconnection,
+        public bool|null $can_simulate_hub_connection,
+        public bool|null $can_simulate_hub_disconnection,
+        public bool|null $can_simulate_paid_subscription,
         public bool|null $can_simulate_removal,
         public bool|null $can_turn_off_hvac,
+        public bool|null $can_unlock_with_code,
         public UnmanagedDeviceLocation|null $location,
     ) {}
 }

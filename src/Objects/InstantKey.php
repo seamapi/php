@@ -17,6 +17,10 @@ class InstantKey
             instant_key_url: $json->instant_key_url,
             user_identity_id: $json->user_identity_id,
             workspace_id: $json->workspace_id,
+            customization: isset($json->customization)
+                ? InstantKeyCustomization::from_json($json->customization)
+                : null,
+            customization_profile_id: $json->customization_profile_id ?? null,
         );
     }
 
@@ -28,5 +32,7 @@ class InstantKey
         public string $instant_key_url,
         public string $user_identity_id,
         public string $workspace_id,
+        public InstantKeyCustomization|null $customization,
+        public string|null $customization_profile_id,
     ) {}
 }
