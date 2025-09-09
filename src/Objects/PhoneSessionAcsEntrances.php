@@ -24,12 +24,26 @@ class PhoneSessionAcsEntrances
                     $json->assa_abloy_vostio_metadata,
                 )
                 : null,
+            can_unlock_with_card: $json->can_unlock_with_card ?? null,
+            can_unlock_with_code: $json->can_unlock_with_code ?? null,
+            can_unlock_with_mobile_key: $json->can_unlock_with_mobile_key ??
+                null,
+            dormakaba_ambiance_metadata: isset(
+                $json->dormakaba_ambiance_metadata,
+            )
+                ? PhoneSessionDormakabaAmbianceMetadata::from_json(
+                    $json->dormakaba_ambiance_metadata,
+                )
+                : null,
             dormakaba_community_metadata: isset(
                 $json->dormakaba_community_metadata,
             )
                 ? PhoneSessionDormakabaCommunityMetadata::from_json(
                     $json->dormakaba_community_metadata,
                 )
+                : null,
+            hotek_metadata: isset($json->hotek_metadata)
+                ? PhoneSessionHotekMetadata::from_json($json->hotek_metadata)
                 : null,
             latch_metadata: isset($json->latch_metadata)
                 ? PhoneSessionLatchMetadata::from_json($json->latch_metadata)
@@ -60,7 +74,12 @@ class PhoneSessionAcsEntrances
         public string $display_name,
         public array $errors,
         public PhoneSessionAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
+        public bool|null $can_unlock_with_card,
+        public bool|null $can_unlock_with_code,
+        public bool|null $can_unlock_with_mobile_key,
+        public PhoneSessionDormakabaAmbianceMetadata|null $dormakaba_ambiance_metadata,
         public PhoneSessionDormakabaCommunityMetadata|null $dormakaba_community_metadata,
+        public PhoneSessionHotekMetadata|null $hotek_metadata,
         public PhoneSessionLatchMetadata|null $latch_metadata,
         public PhoneSessionSaltoKsMetadata|null $salto_ks_metadata,
         public PhoneSessionSaltoSpaceMetadata|null $salto_space_metadata,

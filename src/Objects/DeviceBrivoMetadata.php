@@ -9,8 +9,14 @@ class DeviceBrivoMetadata
         if (!$json) {
             return null;
         }
-        return new self(device_name: $json->device_name);
+        return new self(
+            activation_enabled: $json->activation_enabled ?? null,
+            device_name: $json->device_name ?? null,
+        );
     }
 
-    public function __construct(public string $device_name) {}
+    public function __construct(
+        public bool|null $activation_enabled,
+        public string|null $device_name,
+    ) {}
 }

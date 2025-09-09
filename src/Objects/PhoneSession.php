@@ -14,8 +14,16 @@ class PhoneSession
                 fn($p) => PhoneSessionProviderSessions::from_json($p),
                 $json->provider_sessions ?? [],
             ),
+            user_identity: PhoneSessionUserIdentity::from_json(
+                $json->user_identity,
+            ),
+            workspace_id: $json->workspace_id,
         );
     }
 
-    public function __construct(public array $provider_sessions) {}
+    public function __construct(
+        public array $provider_sessions,
+        public PhoneSessionUserIdentity $user_identity,
+        public string $workspace_id,
+    ) {}
 }

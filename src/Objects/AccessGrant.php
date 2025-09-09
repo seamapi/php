@@ -20,10 +20,19 @@ class AccessGrant
                 $json->requested_access_methods ?? [],
             ),
             space_ids: $json->space_ids,
+            starts_at: $json->starts_at,
             user_identity_id: $json->user_identity_id,
+            warnings: array_map(
+                fn($w) => AccessGrantWarnings::from_json($w),
+                $json->warnings ?? [],
+            ),
             workspace_id: $json->workspace_id,
+            access_grant_key: $json->access_grant_key ?? null,
+            client_session_token: $json->client_session_token ?? null,
+            customization_profile_id: $json->customization_profile_id ?? null,
+            instant_key_url: $json->instant_key_url ?? null,
             ends_at: $json->ends_at ?? null,
-            starts_at: $json->starts_at ?? null,
+            name: $json->name ?? null,
         );
     }
 
@@ -35,9 +44,15 @@ class AccessGrant
         public array $location_ids,
         public array $requested_access_methods,
         public array $space_ids,
+        public string $starts_at,
         public string $user_identity_id,
+        public array $warnings,
         public string $workspace_id,
+        public string|null $access_grant_key,
+        public string|null $client_session_token,
+        public string|null $customization_profile_id,
+        public string|null $instant_key_url,
         public string|null $ends_at,
-        public string|null $starts_at,
+        public string|null $name,
     ) {}
 }

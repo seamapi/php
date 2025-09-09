@@ -42,6 +42,8 @@ class DeviceProperties
             august_metadata: isset($json->august_metadata)
                 ? DeviceAugustMetadata::from_json($json->august_metadata)
                 : null,
+            available_climate_preset_modes: $json->available_climate_preset_modes ??
+                null,
             available_climate_presets: array_map(
                 fn($a) => DeviceAvailableClimatePresets::from_json($a),
                 $json->available_climate_presets ?? [],
@@ -124,6 +126,9 @@ class DeviceProperties
             is_heating: $json->is_heating ?? null,
             is_temporary_manual_override_active: $json->is_temporary_manual_override_active ??
                 null,
+            keynest_metadata: isset($json->keynest_metadata)
+                ? DeviceKeynestMetadata::from_json($json->keynest_metadata)
+                : null,
             keypad_battery: isset($json->keypad_battery)
                 ? DeviceKeypadBattery::from_json($json->keypad_battery)
                 : null,
@@ -144,6 +149,8 @@ class DeviceProperties
             max_heating_set_point_celsius: $json->max_heating_set_point_celsius ??
                 null,
             max_heating_set_point_fahrenheit: $json->max_heating_set_point_fahrenheit ??
+                null,
+            max_thermostat_daily_program_periods_per_day: $json->max_thermostat_daily_program_periods_per_day ??
                 null,
             min_cooling_set_point_celsius: $json->min_cooling_set_point_celsius ??
                 null,
@@ -226,6 +233,8 @@ class DeviceProperties
                     $json->temperature_threshold,
                 )
                 : null,
+            thermostat_daily_program_period_precision_minutes: $json->thermostat_daily_program_period_precision_minutes ??
+                null,
             thermostat_daily_programs: array_map(
                 fn($t) => DeviceThermostatDailyPrograms::from_json($t),
                 $json->thermostat_daily_programs ?? [],
@@ -268,6 +277,7 @@ class DeviceProperties
         public DeviceAssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata,
         public DeviceAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
         public DeviceAugustMetadata|null $august_metadata,
+        public array|null $available_climate_preset_modes,
         public array|null $available_climate_presets,
         public array|null $available_fan_mode_settings,
         public array|null $available_hvac_mode_settings,
@@ -298,6 +308,7 @@ class DeviceProperties
         public bool|null $is_fan_running,
         public bool|null $is_heating,
         public bool|null $is_temporary_manual_override_active,
+        public DeviceKeynestMetadata|null $keynest_metadata,
         public DeviceKeypadBattery|null $keypad_battery,
         public DeviceKwiksetMetadata|null $kwikset_metadata,
         public bool|null $locked,
@@ -308,6 +319,7 @@ class DeviceProperties
         public float|null $max_cooling_set_point_fahrenheit,
         public float|null $max_heating_set_point_celsius,
         public float|null $max_heating_set_point_fahrenheit,
+        public float|null $max_thermostat_daily_program_periods_per_day,
         public float|null $min_cooling_set_point_celsius,
         public float|null $min_cooling_set_point_fahrenheit,
         public float|null $min_heating_cooling_delta_celsius,
@@ -339,6 +351,7 @@ class DeviceProperties
         public float|null $temperature_celsius,
         public float|null $temperature_fahrenheit,
         public DeviceTemperatureThreshold|null $temperature_threshold,
+        public float|null $thermostat_daily_program_period_precision_minutes,
         public array|null $thermostat_daily_programs,
         public DeviceThermostatWeeklyProgram|null $thermostat_weekly_program,
         public DeviceTtlockMetadata|null $ttlock_metadata,

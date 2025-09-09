@@ -15,6 +15,7 @@ class AccessGrantRequestedAccessMethods
             created_at: $json->created_at,
             display_name: $json->display_name,
             mode: $json->mode,
+            code: $json->code ?? null,
         );
     }
 
@@ -23,5 +24,6 @@ class AccessGrantRequestedAccessMethods
         public string $created_at,
         public string $display_name,
         public string $mode,
+        public string|null $code,
     ) {}
 }

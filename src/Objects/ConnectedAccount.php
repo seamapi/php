@@ -10,8 +10,10 @@ class ConnectedAccount
             return null;
         }
         return new self(
+            accepted_capabilities: $json->accepted_capabilities,
             account_type_display_name: $json->account_type_display_name,
             automatically_manage_new_devices: $json->automatically_manage_new_devices,
+            connected_account_id: $json->connected_account_id,
             custom_metadata: $json->custom_metadata,
             errors: array_map(
                 fn($e) => ConnectedAccountErrors::from_json($e),
@@ -22,7 +24,6 @@ class ConnectedAccount
                 $json->warnings ?? [],
             ),
             account_type: $json->account_type ?? null,
-            connected_account_id: $json->connected_account_id ?? null,
             created_at: $json->created_at ?? null,
             customer_key: $json->customer_key ?? null,
             user_identifier: isset($json->user_identifier)
@@ -34,13 +35,14 @@ class ConnectedAccount
     }
 
     public function __construct(
+        public array $accepted_capabilities,
         public string $account_type_display_name,
         public bool $automatically_manage_new_devices,
+        public string $connected_account_id,
         public mixed $custom_metadata,
         public array $errors,
         public array $warnings,
         public string|null $account_type,
-        public string|null $connected_account_id,
         public string|null $created_at,
         public string|null $customer_key,
         public ConnectedAccountUserIdentifier|null $user_identifier,

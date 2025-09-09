@@ -14,7 +14,7 @@ final class Fixture
             10,
         );
         echo $random_string;
-        $api_url = "https://{$random_string}.fakeseamconnect.seam.vc";
+        $api_url = "https://{$random_string}-seamconnect.fake.seam.vc";
         $api_key = "seam_apikey1_token";
 
         $seam = new SeamClient($api_key, $api_url);

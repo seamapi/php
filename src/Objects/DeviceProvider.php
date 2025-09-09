@@ -23,11 +23,20 @@ class DeviceProvider
                 null,
             can_remotely_lock: $json->can_remotely_lock ?? null,
             can_remotely_unlock: $json->can_remotely_unlock ?? null,
+            can_run_thermostat_programs: $json->can_run_thermostat_programs ??
+                null,
             can_simulate_connection: $json->can_simulate_connection ?? null,
             can_simulate_disconnection: $json->can_simulate_disconnection ??
                 null,
+            can_simulate_hub_connection: $json->can_simulate_hub_connection ??
+                null,
+            can_simulate_hub_disconnection: $json->can_simulate_hub_disconnection ??
+                null,
+            can_simulate_paid_subscription: $json->can_simulate_paid_subscription ??
+                null,
             can_simulate_removal: $json->can_simulate_removal ?? null,
             can_turn_off_hvac: $json->can_turn_off_hvac ?? null,
+            can_unlock_with_code: $json->can_unlock_with_code ?? null,
         );
     }
 
@@ -43,9 +52,14 @@ class DeviceProvider
         public bool|null $can_program_online_access_codes,
         public bool|null $can_remotely_lock,
         public bool|null $can_remotely_unlock,
+        public bool|null $can_run_thermostat_programs,
         public bool|null $can_simulate_connection,
         public bool|null $can_simulate_disconnection,
+        public bool|null $can_simulate_hub_connection,
+        public bool|null $can_simulate_hub_disconnection,
+        public bool|null $can_simulate_paid_subscription,
         public bool|null $can_simulate_removal,
         public bool|null $can_turn_off_hvac,
+        public bool|null $can_unlock_with_code,
     ) {}
 }
