@@ -19,6 +19,7 @@ class PhoneSessionAcsEntrances
                 fn($e) => PhoneSessionErrors::from_json($e),
                 $json->errors ?? [],
             ),
+            space_ids: $json->space_ids,
             assa_abloy_vostio_metadata: isset($json->assa_abloy_vostio_metadata)
                 ? PhoneSessionAssaAbloyVostioMetadata::from_json(
                     $json->assa_abloy_vostio_metadata,
@@ -73,6 +74,7 @@ class PhoneSessionAcsEntrances
         public string $created_at,
         public string $display_name,
         public array $errors,
+        public array $space_ids,
         public PhoneSessionAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
         public bool|null $can_unlock_with_card,
         public bool|null $can_unlock_with_code,
