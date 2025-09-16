@@ -23,6 +23,7 @@ class Device
             ),
             is_managed: $json->is_managed,
             properties: DeviceProperties::from_json($json->properties),
+            space_ids: $json->space_ids,
             warnings: array_map(
                 fn($w) => DeviceWarnings::from_json($w),
                 $json->warnings ?? [],
@@ -69,6 +70,7 @@ class Device
         public array $errors,
         public bool $is_managed,
         public DeviceProperties $properties,
+        public array $space_ids,
         public array $warnings,
         public string $workspace_id,
         public bool|null $can_hvac_cool,
