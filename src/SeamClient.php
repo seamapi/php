@@ -5763,7 +5763,8 @@ class UserIdentitiesClient
 
     public function add_acs_user(
         string $acs_user_id,
-        string $user_identity_id,
+        ?string $user_identity_id = null,
+        ?string $user_identity_key = null,
     ): void {
         $request_payload = [];
 
@@ -5772,6 +5773,9 @@ class UserIdentitiesClient
         }
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
+        }
+        if ($user_identity_key !== null) {
+            $request_payload["user_identity_key"] = $user_identity_key;
         }
 
         $this->seam->request(
