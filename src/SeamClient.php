@@ -2760,6 +2760,7 @@ class ConnectWebviewsClient
         ?string $custom_redirect_url = null,
         ?string $customer_key = null,
         ?string $device_selection_mode = null,
+        ?array $excluded_providers = null,
         ?string $provider_category = null,
         ?bool $wait_for_device_creation = null,
     ): ConnectWebview {
@@ -2792,6 +2793,9 @@ class ConnectWebviewsClient
         }
         if ($device_selection_mode !== null) {
             $request_payload["device_selection_mode"] = $device_selection_mode;
+        }
+        if ($excluded_providers !== null) {
+            $request_payload["excluded_providers"] = $excluded_providers;
         }
         if ($provider_category !== null) {
             $request_payload["provider_category"] = $provider_category;
