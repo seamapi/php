@@ -13,7 +13,8 @@ class DeviceCurrentClimateSetting
         return new self(
             can_delete: $json->can_delete ?? null,
             can_edit: $json->can_edit ?? null,
-            can_program: $json->can_program ?? null,
+            can_use_with_thermostat_daily_programs: $json->can_use_with_thermostat_daily_programs ??
+                null,
             climate_preset_key: $json->climate_preset_key ?? null,
             climate_preset_mode: $json->climate_preset_mode ?? null,
             cooling_set_point_celsius: $json->cooling_set_point_celsius ?? null,
@@ -36,7 +37,7 @@ class DeviceCurrentClimateSetting
     public function __construct(
         public bool|null $can_delete,
         public bool|null $can_edit,
-        public bool|null $can_program,
+        public bool|null $can_use_with_thermostat_daily_programs,
         public string|null $climate_preset_key,
         public string|null $climate_preset_mode,
         public float|null $cooling_set_point_celsius,

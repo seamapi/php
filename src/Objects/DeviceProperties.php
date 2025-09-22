@@ -152,6 +152,8 @@ class DeviceProperties
                 null,
             max_thermostat_daily_program_periods_per_day: $json->max_thermostat_daily_program_periods_per_day ??
                 null,
+            max_unique_climate_presets_per_thermostat_weekly_program: $json->max_unique_climate_presets_per_thermostat_weekly_program ??
+                null,
             min_cooling_set_point_celsius: $json->min_cooling_set_point_celsius ??
                 null,
             min_cooling_set_point_fahrenheit: $json->min_cooling_set_point_fahrenheit ??
@@ -320,6 +322,7 @@ class DeviceProperties
         public float|null $max_heating_set_point_celsius,
         public float|null $max_heating_set_point_fahrenheit,
         public float|null $max_thermostat_daily_program_periods_per_day,
+        public float|null $max_unique_climate_presets_per_thermostat_weekly_program,
         public float|null $min_cooling_set_point_celsius,
         public float|null $min_cooling_set_point_fahrenheit,
         public float|null $min_heating_cooling_delta_celsius,
