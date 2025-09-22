@@ -36,6 +36,12 @@ class Device
                 null,
             can_program_online_access_codes: $json->can_program_online_access_codes ??
                 null,
+            can_program_thermostat_programs_as_different_each_day: $json->can_program_thermostat_programs_as_different_each_day ??
+                null,
+            can_program_thermostat_programs_as_same_each_day: $json->can_program_thermostat_programs_as_same_each_day ??
+                null,
+            can_program_thermostat_programs_as_weekday_weekend: $json->can_program_thermostat_programs_as_weekday_weekend ??
+                null,
             can_remotely_lock: $json->can_remotely_lock ?? null,
             can_remotely_unlock: $json->can_remotely_unlock ?? null,
             can_run_thermostat_programs: $json->can_run_thermostat_programs ??
@@ -78,6 +84,9 @@ class Device
         public bool|null $can_hvac_heat_cool,
         public bool|null $can_program_offline_access_codes,
         public bool|null $can_program_online_access_codes,
+        public bool|null $can_program_thermostat_programs_as_different_each_day,
+        public bool|null $can_program_thermostat_programs_as_same_each_day,
+        public bool|null $can_program_thermostat_programs_as_weekday_weekend,
         public bool|null $can_remotely_lock,
         public bool|null $can_remotely_unlock,
         public bool|null $can_run_thermostat_programs,

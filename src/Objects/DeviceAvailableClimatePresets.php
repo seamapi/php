@@ -13,7 +13,7 @@ class DeviceAvailableClimatePresets
         return new self(
             can_delete: $json->can_delete,
             can_edit: $json->can_edit,
-            can_program: $json->can_program,
+            can_use_with_thermostat_daily_programs: $json->can_use_with_thermostat_daily_programs,
             climate_preset_key: $json->climate_preset_key,
             display_name: $json->display_name,
             manual_override_allowed: $json->manual_override_allowed,
@@ -36,7 +36,7 @@ class DeviceAvailableClimatePresets
     public function __construct(
         public bool $can_delete,
         public bool $can_edit,
-        public bool $can_program,
+        public bool $can_use_with_thermostat_daily_programs,
         public string $climate_preset_key,
         public string $display_name,
         public bool $manual_override_allowed,
