@@ -876,10 +876,11 @@ class AccessCodesUnmanagedClient
 class AccessGrantsClient
 {
     private SeamClient $seam;
-
+    public AccessGrantsUnmanagedClient $unmanaged;
     public function __construct(SeamClient $seam)
     {
         $this->seam = $seam;
+        $this->unmanaged = new AccessGrantsUnmanagedClient($seam);
     }
 
     public function create(
@@ -1091,13 +1092,63 @@ class AccessGrantsClient
     }
 }
 
-class AccessMethodsClient
+class AccessGrantsUnmanagedClient
 {
     private SeamClient $seam;
 
     public function __construct(SeamClient $seam)
     {
         $this->seam = $seam;
+    }
+
+    public function get(string $access_grant_id): void
+    {
+        $request_payload = [];
+
+        if ($access_grant_id !== null) {
+            $request_payload["access_grant_id"] = $access_grant_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/access_grants/unmanaged/get",
+            json: (object) $request_payload,
+        );
+    }
+
+    public function list(
+        ?string $acs_entrance_id = null,
+        ?string $acs_system_id = null,
+        ?string $user_identity_id = null,
+    ): void {
+        $request_payload = [];
+
+        if ($acs_entrance_id !== null) {
+            $request_payload["acs_entrance_id"] = $acs_entrance_id;
+        }
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/access_grants/unmanaged/list",
+            json: (object) $request_payload,
+        );
+    }
+}
+
+class AccessMethodsClient
+{
+    private SeamClient $seam;
+    public AccessMethodsUnmanagedClient $unmanaged;
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+        $this->unmanaged = new AccessMethodsUnmanagedClient($seam);
     }
 
     public function delete(string $access_method_id): void
@@ -1217,6 +1268,59 @@ class AccessMethodsClient
         return array_map(
             fn($r) => AccessMethod::from_json($r),
             $res->access_methods,
+        );
+    }
+}
+
+class AccessMethodsUnmanagedClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(string $access_method_id): void
+    {
+        $request_payload = [];
+
+        if ($access_method_id !== null) {
+            $request_payload["access_method_id"] = $access_method_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/access_methods/unmanaged/get",
+            json: (object) $request_payload,
+        );
+    }
+
+    public function list(
+        string $access_grant_id,
+        ?string $acs_entrance_id = null,
+        ?string $device_id = null,
+        ?string $space_id = null,
+    ): void {
+        $request_payload = [];
+
+        if ($access_grant_id !== null) {
+            $request_payload["access_grant_id"] = $access_grant_id;
+        }
+        if ($acs_entrance_id !== null) {
+            $request_payload["acs_entrance_id"] = $acs_entrance_id;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($space_id !== null) {
+            $request_payload["space_id"] = $space_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/access_methods/unmanaged/list",
+            json: (object) $request_payload,
         );
     }
 }
@@ -5759,10 +5863,11 @@ class ThermostatsSimulateClient
 class UserIdentitiesClient
 {
     private SeamClient $seam;
-
+    public UserIdentitiesUnmanagedClient $unmanaged;
     public function __construct(SeamClient $seam)
     {
         $this->seam = $seam;
+        $this->unmanaged = new UserIdentitiesUnmanagedClient($seam);
     }
 
     public function add_acs_user(
@@ -6054,6 +6159,46 @@ class UserIdentitiesClient
         $this->seam->request(
             "POST",
             "/user_identities/update",
+            json: (object) $request_payload,
+        );
+    }
+}
+
+class UserIdentitiesUnmanagedClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function get(string $user_identity_id): void
+    {
+        $request_payload = [];
+
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/user_identities/unmanaged/get",
+            json: (object) $request_payload,
+        );
+    }
+
+    public function list(?string $search = null): void
+    {
+        $request_payload = [];
+
+        if ($search !== null) {
+            $request_payload["search"] = $search;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/user_identities/unmanaged/list",
             json: (object) $request_payload,
         );
     }
