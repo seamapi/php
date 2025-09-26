@@ -17,6 +17,8 @@ class Space
             name: $json->name,
             space_id: $json->space_id,
             workspace_id: $json->workspace_id,
+            parent_space_id: $json->parent_space_id ?? null,
+            parent_space_key: $json->parent_space_key ?? null,
             space_key: $json->space_key ?? null,
         );
     }
@@ -29,6 +31,8 @@ class Space
         public string $name,
         public string $space_id,
         public string $workspace_id,
+        public string|null $parent_space_id,
+        public string|null $parent_space_key,
         public string|null $space_key,
     ) {}
 }
