@@ -71,7 +71,6 @@ class SeamClient
     public LocksClient $locks;
     public NoiseSensorsClient $noise_sensors;
     public PhonesClient $phones;
-    public SeamClient $seam;
     public SpacesClient $spaces;
     public ThermostatsClient $thermostats;
     public UserIdentitiesClient $user_identities;
@@ -116,7 +115,6 @@ class SeamClient
         $this->locks = new LocksClient($this);
         $this->noise_sensors = new NoiseSensorsClient($this);
         $this->phones = new PhonesClient($this);
-        $this->seam = new SeamClient($this);
         $this->spaces = new SpacesClient($this);
         $this->thermostats = new ThermostatsClient($this);
         $this->user_identities = new UserIdentitiesClient($this);
@@ -4617,65 +4615,6 @@ class PhonesSimulateClient
         );
 
         return Phone::from_json($res->phone);
-    }
-}
-
-class SeamCustomerV1SpacesClient
-{
-    private SeamClient $seam;
-
-    public function __construct(SeamClient $seam)
-    {
-        $this->seam = $seam;
-    }
-
-    public function create(
-        string $name,
-        ?array $acs_entrance_ids = null,
-        ?array $device_ids = null,
-        ?string $parent_space_key = null,
-        ?string $parent_space_name = null,
-        ?string $space_key = null,
-    ): Space {
-        $request_payload = [];
-
-        if ($name !== null) {
-            $request_payload["name"] = $name;
-        }
-        if ($acs_entrance_ids !== null) {
-            $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
-        }
-        if ($device_ids !== null) {
-            $request_payload["device_ids"] = $device_ids;
-        }
-        if ($parent_space_key !== null) {
-            $request_payload["parent_space_key"] = $parent_space_key;
-        }
-        if ($parent_space_name !== null) {
-            $request_payload["parent_space_name"] = $parent_space_name;
-        }
-        if ($space_key !== null) {
-            $request_payload["space_key"] = $space_key;
-        }
-
-        $res = $this->seam->request(
-            "POST",
-            "/seam/customer/v1/spaces/create",
-            json: (object) $request_payload,
-        );
-
-        return Space::from_json($res->space);
-    }
-}
-
-class SeamClient
-{
-    private SeamClient $seam;
-    public SeamCustomerClient $customer;
-    public function __construct(SeamClient $seam)
-    {
-        $this->seam = $seam;
-        $this->customer = new SeamCustomerClient($seam);
     }
 }
 
