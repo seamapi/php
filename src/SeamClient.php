@@ -3111,6 +3111,7 @@ class ConnectedAccountsClient
         ?array $accepted_capabilities = null,
         ?bool $automatically_manage_new_devices = null,
         mixed $custom_metadata = null,
+        ?string $customer_key = null,
     ): void {
         $request_payload = [];
 
@@ -3127,6 +3128,9 @@ class ConnectedAccountsClient
         }
         if ($custom_metadata !== null) {
             $request_payload["custom_metadata"] = $custom_metadata;
+        }
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
 
         $this->seam->request(
@@ -3274,6 +3278,7 @@ class CustomersClient
         ?array $reservations = null,
         ?array $residents = null,
         ?array $rooms = null,
+        ?array $sites = null,
         ?array $spaces = null,
         ?array $tenants = null,
         ?array $units = null,
@@ -3320,6 +3325,9 @@ class CustomersClient
         }
         if ($rooms !== null) {
             $request_payload["rooms"] = $rooms;
+        }
+        if ($sites !== null) {
+            $request_payload["sites"] = $sites;
         }
         if ($spaces !== null) {
             $request_payload["spaces"] = $spaces;
