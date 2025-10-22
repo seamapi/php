@@ -10,15 +10,15 @@ class AcsEntranceHotekMetadata
             return null;
         }
         return new self(
-            display_name: $json->display_name,
-            door_type: $json->door_type,
-            room_number: $json->room_number,
+            common_area_name: $json->common_area_name ?? null,
+            common_area_number: $json->common_area_number ?? null,
+            room_number: $json->room_number ?? null,
         );
     }
 
     public function __construct(
-        public string $display_name,
-        public string $door_type,
-        public string $room_number,
+        public string|null $common_area_name,
+        public string|null $common_area_number,
+        public string|null $room_number,
     ) {}
 }

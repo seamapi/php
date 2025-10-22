@@ -31,6 +31,7 @@ class AccessGrant
             client_session_token: $json->client_session_token ?? null,
             customization_profile_id: $json->customization_profile_id ?? null,
             instant_key_url: $json->instant_key_url ?? null,
+            reservation_key: $json->reservation_key ?? null,
             ends_at: $json->ends_at ?? null,
             name: $json->name ?? null,
         );
@@ -52,6 +53,7 @@ class AccessGrant
         public string|null $client_session_token,
         public string|null $customization_profile_id,
         public string|null $instant_key_url,
+        public string|null $reservation_key,
         public string|null $ends_at,
         public string|null $name,
     ) {}

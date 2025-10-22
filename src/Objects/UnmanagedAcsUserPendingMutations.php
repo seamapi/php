@@ -20,6 +20,7 @@ class UnmanagedAcsUserPendingMutations
             to: isset($json->to)
                 ? UnmanagedAcsUserTo::from_json($json->to)
                 : null,
+            scheduled_at: $json->scheduled_at ?? null,
         );
     }
 
@@ -29,5 +30,6 @@ class UnmanagedAcsUserPendingMutations
         public string $mutation_code,
         public UnmanagedAcsUserFrom|null $from,
         public UnmanagedAcsUserTo|null $to,
+        public string|null $scheduled_at,
     ) {}
 }
