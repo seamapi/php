@@ -252,6 +252,9 @@ class DeviceProperties
             two_n_metadata: isset($json->two_n_metadata)
                 ? DeviceTwoNMetadata::from_json($json->two_n_metadata)
                 : null,
+            ultraloq_metadata: isset($json->ultraloq_metadata)
+                ? DeviceUltraloqMetadata::from_json($json->ultraloq_metadata)
+                : null,
             visionline_metadata: isset($json->visionline_metadata)
                 ? DeviceVisionlineMetadata::from_json(
                     $json->visionline_metadata,
@@ -359,6 +362,7 @@ class DeviceProperties
         public DeviceThermostatWeeklyProgram|null $thermostat_weekly_program,
         public DeviceTtlockMetadata|null $ttlock_metadata,
         public DeviceTwoNMetadata|null $two_n_metadata,
+        public DeviceUltraloqMetadata|null $ultraloq_metadata,
         public DeviceVisionlineMetadata|null $visionline_metadata,
         public DeviceWyzeMetadata|null $wyze_metadata,
         public string|null $active_thermostat_schedule_id,

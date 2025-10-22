@@ -32,6 +32,7 @@ use Seam\Objects\Phone;
 use Seam\Objects\PhoneRegistration;
 use Seam\Objects\PhoneSession;
 use Seam\Objects\Space;
+use Seam\Objects\StaffMember;
 use Seam\Objects\ThermostatDailyProgram;
 use Seam\Objects\ThermostatSchedule;
 use Seam\Objects\UnmanagedAccessCode;
@@ -895,6 +896,7 @@ class AccessGrantsClient
         mixed $location = null,
         ?array $location_ids = null,
         ?string $name = null,
+        ?string $reservation_key = null,
         ?array $space_ids = null,
         ?array $space_keys = null,
         ?string $starts_at = null,
@@ -937,6 +939,9 @@ class AccessGrantsClient
         }
         if ($name !== null) {
             $request_payload["name"] = $name;
+        }
+        if ($reservation_key !== null) {
+            $request_payload["reservation_key"] = $reservation_key;
         }
         if ($space_ids !== null) {
             $request_payload["space_ids"] = $space_ids;
@@ -1024,6 +1029,7 @@ class AccessGrantsClient
         ?string $acs_system_id = null,
         ?string $customer_key = null,
         ?string $location_id = null,
+        ?string $reservation_key = null,
         ?string $space_id = null,
         ?string $user_identity_id = null,
     ): array {
@@ -1044,6 +1050,9 @@ class AccessGrantsClient
         if ($location_id !== null) {
             $request_payload["location_id"] = $location_id;
         }
+        if ($reservation_key !== null) {
+            $request_payload["reservation_key"] = $reservation_key;
+        }
         if ($space_id !== null) {
             $request_payload["space_id"] = $space_id;
         }
@@ -1061,6 +1070,30 @@ class AccessGrantsClient
             fn($r) => AccessGrant::from_json($r),
             $res->access_grants,
         );
+    }
+
+    public function request_access_methods(
+        string $access_grant_id,
+        array $requested_access_methods,
+    ): AccessGrant {
+        $request_payload = [];
+
+        if ($access_grant_id !== null) {
+            $request_payload["access_grant_id"] = $access_grant_id;
+        }
+        if ($requested_access_methods !== null) {
+            $request_payload[
+                "requested_access_methods"
+            ] = $requested_access_methods;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/access_grants/request_access_methods",
+            json: (object) $request_payload,
+        );
+
+        return AccessGrant::from_json($res->access_grant);
     }
 
     public function update(
@@ -1119,6 +1152,7 @@ class AccessGrantsUnmanagedClient
     public function list(
         ?string $acs_entrance_id = null,
         ?string $acs_system_id = null,
+        ?string $reservation_key = null,
         ?string $user_identity_id = null,
     ): void {
         $request_payload = [];
@@ -1129,6 +1163,9 @@ class AccessGrantsUnmanagedClient
         if ($acs_system_id !== null) {
             $request_payload["acs_system_id"] = $acs_system_id;
         }
+        if ($reservation_key !== null) {
+            $request_payload["reservation_key"] = $reservation_key;
+        }
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
         }
@@ -1136,6 +1173,30 @@ class AccessGrantsUnmanagedClient
         $this->seam->request(
             "POST",
             "/access_grants/unmanaged/list",
+            json: (object) $request_payload,
+        );
+    }
+
+    public function update(
+        string $access_grant_id,
+        bool $is_managed,
+        ?string $access_grant_key = null,
+    ): void {
+        $request_payload = [];
+
+        if ($access_grant_id !== null) {
+            $request_payload["access_grant_id"] = $access_grant_id;
+        }
+        if ($is_managed !== null) {
+            $request_payload["is_managed"] = $is_managed;
+        }
+        if ($access_grant_key !== null) {
+            $request_payload["access_grant_key"] = $access_grant_key;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/access_grants/unmanaged/update",
             json: (object) $request_payload,
         );
     }
@@ -2196,6 +2257,30 @@ class AcsSystemsClient
 
         return array_map(fn($r) => AcsSystem::from_json($r), $res->acs_systems);
     }
+
+    public function report_devices(
+        string $acs_system_id,
+        ?array $acs_encoders = null,
+        ?array $acs_entrances = null,
+    ): void {
+        $request_payload = [];
+
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($acs_encoders !== null) {
+            $request_payload["acs_encoders"] = $acs_encoders;
+        }
+        if ($acs_entrances !== null) {
+            $request_payload["acs_entrances"] = $acs_entrances;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/systems/report_devices",
+            json: (object) $request_payload,
+        );
+    }
 }
 
 class AcsUsersClient
@@ -3195,6 +3280,7 @@ class CustomersClient
         ?array $resident_keys = null,
         ?array $room_keys = null,
         ?array $space_keys = null,
+        ?array $staff_member_keys = null,
         ?array $tenant_keys = null,
         ?array $unit_keys = null,
         ?array $user_identity_keys = null,
@@ -3244,6 +3330,9 @@ class CustomersClient
         if ($space_keys !== null) {
             $request_payload["space_keys"] = $space_keys;
         }
+        if ($staff_member_keys !== null) {
+            $request_payload["staff_member_keys"] = $staff_member_keys;
+        }
         if ($tenant_keys !== null) {
             $request_payload["tenant_keys"] = $tenant_keys;
         }
@@ -3280,6 +3369,7 @@ class CustomersClient
         ?array $rooms = null,
         ?array $sites = null,
         ?array $spaces = null,
+        ?array $staff_members = null,
         ?array $tenants = null,
         ?array $units = null,
         ?array $user_identities = null,
@@ -3331,6 +3421,9 @@ class CustomersClient
         }
         if ($spaces !== null) {
             $request_payload["spaces"] = $spaces;
+        }
+        if ($staff_members !== null) {
+            $request_payload["staff_members"] = $staff_members;
         }
         if ($tenants !== null) {
             $request_payload["tenants"] = $tenants;
@@ -6030,15 +6123,28 @@ class UserIdentitiesClient
     }
 
     public function list(
+        ?string $created_before = null,
         ?string $credential_manager_acs_system_id = null,
+        mixed $limit = null,
+        ?string $page_cursor = null,
         ?string $search = null,
+        ?callable $on_response = null,
     ): array {
         $request_payload = [];
 
+        if ($created_before !== null) {
+            $request_payload["created_before"] = $created_before;
+        }
         if ($credential_manager_acs_system_id !== null) {
             $request_payload[
                 "credential_manager_acs_system_id"
             ] = $credential_manager_acs_system_id;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($page_cursor !== null) {
+            $request_payload["page_cursor"] = $page_cursor;
         }
         if ($search !== null) {
             $request_payload["search"] = $search;
@@ -6049,6 +6155,10 @@ class UserIdentitiesClient
             "/user_identities/list",
             json: (object) $request_payload,
         );
+
+        if ($on_response !== null) {
+            $on_response($res);
+        }
 
         return array_map(
             fn($r) => UserIdentity::from_json($r),
@@ -6204,10 +6314,24 @@ class UserIdentitiesUnmanagedClient
         );
     }
 
-    public function list(?string $search = null): void
-    {
+    public function list(
+        ?string $created_before = null,
+        mixed $limit = null,
+        ?string $page_cursor = null,
+        ?string $search = null,
+        ?callable $on_response = null,
+    ): void {
         $request_payload = [];
 
+        if ($created_before !== null) {
+            $request_payload["created_before"] = $created_before;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($page_cursor !== null) {
+            $request_payload["page_cursor"] = $page_cursor;
+        }
         if ($search !== null) {
             $request_payload["search"] = $search;
         }
@@ -6215,6 +6339,34 @@ class UserIdentitiesUnmanagedClient
         $this->seam->request(
             "POST",
             "/user_identities/unmanaged/list",
+            json: (object) $request_payload,
+        );
+
+        if ($on_response !== null) {
+            $on_response($res);
+        }
+    }
+
+    public function update(
+        bool $is_managed,
+        string $user_identity_id,
+        ?string $user_identity_key = null,
+    ): void {
+        $request_payload = [];
+
+        if ($is_managed !== null) {
+            $request_payload["is_managed"] = $is_managed;
+        }
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+        if ($user_identity_key !== null) {
+            $request_payload["user_identity_key"] = $user_identity_key;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/user_identities/unmanaged/update",
             json: (object) $request_payload,
         );
     }
