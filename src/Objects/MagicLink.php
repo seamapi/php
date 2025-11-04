@@ -10,7 +10,6 @@ class MagicLink
             return null;
         }
         return new self(
-            building_block_type: $json->building_block_type,
             created_at: $json->created_at,
             customer_key: $json->customer_key,
             expires_at: $json->expires_at,
@@ -20,7 +19,6 @@ class MagicLink
     }
 
     public function __construct(
-        public string $building_block_type,
         public string $created_at,
         public string $customer_key,
         public string $expires_at,
