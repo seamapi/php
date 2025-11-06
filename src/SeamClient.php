@@ -3082,10 +3082,11 @@ class ConnectWebviewsClient
 class ConnectedAccountsClient
 {
     private SeamClient $seam;
-
+    public ConnectedAccountsSimulateClient $simulate;
     public function __construct(SeamClient $seam)
     {
         $this->seam = $seam;
+        $this->simulate = new ConnectedAccountsSimulateClient($seam);
     }
 
     public function delete(
@@ -3221,6 +3222,31 @@ class ConnectedAccountsClient
         $this->seam->request(
             "POST",
             "/connected_accounts/update",
+            json: (object) $request_payload,
+        );
+    }
+}
+
+class ConnectedAccountsSimulateClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function disconnect(string $connected_account_id): void
+    {
+        $request_payload = [];
+
+        if ($connected_account_id !== null) {
+            $request_payload["connected_account_id"] = $connected_account_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/connected_accounts/simulate/disconnect",
             json: (object) $request_payload,
         );
     }
