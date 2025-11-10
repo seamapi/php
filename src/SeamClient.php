@@ -3262,13 +3262,20 @@ class CustomersClient
     }
 
     public function create_portal(
+        ?string $customization_profile_id = null,
         mixed $features = null,
         ?bool $is_embedded = null,
         mixed $landing_page = null,
+        ?string $locale = null,
         mixed $customer_data = null,
     ): MagicLink {
         $request_payload = [];
 
+        if ($customization_profile_id !== null) {
+            $request_payload[
+                "customization_profile_id"
+            ] = $customization_profile_id;
+        }
         if ($features !== null) {
             $request_payload["features"] = $features;
         }
@@ -3277,6 +3284,9 @@ class CustomersClient
         }
         if ($landing_page !== null) {
             $request_payload["landing_page"] = $landing_page;
+        }
+        if ($locale !== null) {
+            $request_payload["locale"] = $locale;
         }
         if ($customer_data !== null) {
             $request_payload["customer_data"] = $customer_data;
