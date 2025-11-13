@@ -12,11 +12,13 @@ class DeviceUltraloqMetadata
         return new self(
             device_id: $json->device_id,
             device_name: $json->device_name,
+            device_type: $json->device_type,
         );
     }
 
     public function __construct(
         public string $device_id,
         public string $device_name,
+        public string $device_type,
     ) {}
 }

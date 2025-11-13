@@ -14,6 +14,7 @@ use Seam\Objects\AcsEntrance;
 use Seam\Objects\AcsSystem;
 use Seam\Objects\AcsUser;
 use Seam\Objects\ActionAttempt;
+use Seam\Objects\Batch;
 use Seam\Objects\BridgeClientSession;
 use Seam\Objects\BridgeConnectedSystems;
 use Seam\Objects\ClientSession;

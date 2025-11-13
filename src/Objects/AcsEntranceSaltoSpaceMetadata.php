@@ -11,6 +11,7 @@ class AcsEntranceSaltoSpaceMetadata
             return null;
         }
         return new self(
+            audit_on_keys: $json->audit_on_keys ?? null,
             door_description: $json->door_description ?? null,
             door_id: $json->door_id ?? null,
             door_name: $json->door_name ?? null,
@@ -21,6 +22,7 @@ class AcsEntranceSaltoSpaceMetadata
     }
 
     public function __construct(
+        public bool|null $audit_on_keys,
         public string|null $door_description,
         public string|null $door_id,
         public string|null $door_name,
