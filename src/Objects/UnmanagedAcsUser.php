@@ -43,11 +43,6 @@ class UnmanagedAcsUser
                 $json->pending_mutations ?? [],
             ),
             phone_number: $json->phone_number ?? null,
-            salto_space_metadata: isset($json->salto_space_metadata)
-                ? UnmanagedAcsUserSaltoSpaceMetadata::from_json(
-                    $json->salto_space_metadata,
-                )
-                : null,
             user_identity_id: $json->user_identity_id ?? null,
             last_successful_sync_at: $json->last_successful_sync_at ?? null,
             user_identity_email_address: $json->user_identity_email_address ??
@@ -78,7 +73,6 @@ class UnmanagedAcsUser
         public bool|null $is_suspended,
         public array|null $pending_mutations,
         public string|null $phone_number,
-        public UnmanagedAcsUserSaltoSpaceMetadata|null $salto_space_metadata,
         public string|null $user_identity_id,
         public string|null $last_successful_sync_at,
         public string|null $user_identity_email_address,
