@@ -1004,7 +1004,7 @@ class AccessGrantsClient
         array $access_grant_ids,
         ?array $exclude = null,
         ?array $include = null,
-    ): array {
+    ): Batch {
         $request_payload = [];
 
         if ($access_grant_ids !== null) {
@@ -1023,7 +1023,7 @@ class AccessGrantsClient
             json: (object) $request_payload,
         );
 
-        return array_map(fn($r) => Batch::from_json($r), $res->batch);
+        return Batch::from_json($res->batch);
     }
 
     public function list(
@@ -1282,7 +1282,7 @@ class AccessMethodsClient
         array $access_method_ids,
         ?array $exclude = null,
         ?array $include = null,
-    ): array {
+    ): Batch {
         $request_payload = [];
 
         if ($access_method_ids !== null) {
@@ -1301,7 +1301,7 @@ class AccessMethodsClient
             json: (object) $request_payload,
         );
 
-        return array_map(fn($r) => Batch::from_json($r), $res->batch);
+        return Batch::from_json($res->batch);
     }
 
     public function list(
@@ -4875,7 +4875,7 @@ class SpacesClient
         ?array $include = null,
         ?array $space_ids = null,
         ?array $space_keys = null,
-    ): array {
+    ): Batch {
         $request_payload = [];
 
         if ($exclude !== null) {
@@ -4897,7 +4897,7 @@ class SpacesClient
             json: (object) $request_payload,
         );
 
-        return array_map(fn($r) => Batch::from_json($r), $res->batch);
+        return Batch::from_json($res->batch);
     }
 
     public function list(
