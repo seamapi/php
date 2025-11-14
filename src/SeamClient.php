@@ -1004,7 +1004,7 @@ class AccessGrantsClient
         array $access_grant_ids,
         ?array $exclude = null,
         ?array $include = null,
-    ): void {
+    ): Batch {
         $request_payload = [];
 
         if ($access_grant_ids !== null) {
@@ -1017,11 +1017,13 @@ class AccessGrantsClient
             $request_payload["include"] = $include;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/access_grants/get_related",
             json: (object) $request_payload,
         );
+
+        return Batch::from_json($res->batch);
     }
 
     public function list(
@@ -1280,7 +1282,7 @@ class AccessMethodsClient
         array $access_method_ids,
         ?array $exclude = null,
         ?array $include = null,
-    ): void {
+    ): Batch {
         $request_payload = [];
 
         if ($access_method_ids !== null) {
@@ -1293,11 +1295,13 @@ class AccessMethodsClient
             $request_payload["include"] = $include;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/access_methods/get_related",
             json: (object) $request_payload,
         );
+
+        return Batch::from_json($res->batch);
     }
 
     public function list(
@@ -4871,7 +4875,7 @@ class SpacesClient
         ?array $include = null,
         ?array $space_ids = null,
         ?array $space_keys = null,
-    ): void {
+    ): Batch {
         $request_payload = [];
 
         if ($exclude !== null) {
@@ -4887,11 +4891,13 @@ class SpacesClient
             $request_payload["space_keys"] = $space_keys;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/spaces/get_related",
             json: (object) $request_payload,
         );
+
+        return Batch::from_json($res->batch);
     }
 
     public function list(
