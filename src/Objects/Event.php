@@ -35,6 +35,7 @@ class Event
             connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                 null,
             connected_account_id: $json->connected_account_id ?? null,
+            connected_account_type: $json->connected_account_type ?? null,
             cooling_set_point_celsius: $json->cooling_set_point_celsius ?? null,
             cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
                 null,
@@ -110,6 +111,7 @@ class Event
         public string|null $connect_webview_id,
         public mixed $connected_account_custom_metadata,
         public string|null $connected_account_id,
+        public string|null $connected_account_type,
         public float|null $cooling_set_point_celsius,
         public float|null $cooling_set_point_fahrenheit,
         public string|null $created_at,
