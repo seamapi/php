@@ -10,6 +10,7 @@ class PhoneSession
             return null;
         }
         return new self(
+            is_sandbox_workspace: $json->is_sandbox_workspace,
             provider_sessions: array_map(
                 fn($p) => PhoneSessionProviderSessions::from_json($p),
                 $json->provider_sessions ?? [],
@@ -22,6 +23,7 @@ class PhoneSession
     }
 
     public function __construct(
+        public bool $is_sandbox_workspace,
         public array $provider_sessions,
         public PhoneSessionUserIdentity $user_identity,
         public string $workspace_id,
