@@ -2668,12 +2668,26 @@ class ActionAttemptsClient
         return ActionAttempt::from_json($res->action_attempt);
     }
 
-    public function list(array $action_attempt_ids): array
-    {
+    public function list(
+        ?array $action_attempt_ids = null,
+        ?string $device_id = null,
+        mixed $limit = null,
+        ?string $page_cursor = null,
+        ?callable $on_response = null,
+    ): array {
         $request_payload = [];
 
         if ($action_attempt_ids !== null) {
             $request_payload["action_attempt_ids"] = $action_attempt_ids;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($page_cursor !== null) {
+            $request_payload["page_cursor"] = $page_cursor;
         }
 
         $res = $this->seam->request(
@@ -2681,6 +2695,10 @@ class ActionAttemptsClient
             "/action_attempts/list",
             json: (object) $request_payload,
         );
+
+        if ($on_response !== null) {
+            $on_response($res);
+        }
 
         return array_map(
             fn($r) => ActionAttempt::from_json($r),
@@ -3955,8 +3973,10 @@ class EventsClient
     public function list(
         ?string $access_code_id = null,
         ?array $access_code_ids = null,
+        ?string $acs_entrance_id = null,
         ?string $acs_system_id = null,
         ?array $acs_system_ids = null,
+        ?string $acs_user_id = null,
         ?array $between = null,
         ?string $connect_webview_id = null,
         ?string $connected_account_id = null,
@@ -3969,6 +3989,7 @@ class EventsClient
         ?float $limit = null,
         ?string $since = null,
         ?float $unstable_offset = null,
+        ?string $user_identity_id = null,
     ): array {
         $request_payload = [];
 
@@ -3978,11 +3999,17 @@ class EventsClient
         if ($access_code_ids !== null) {
             $request_payload["access_code_ids"] = $access_code_ids;
         }
+        if ($acs_entrance_id !== null) {
+            $request_payload["acs_entrance_id"] = $acs_entrance_id;
+        }
         if ($acs_system_id !== null) {
             $request_payload["acs_system_id"] = $acs_system_id;
         }
         if ($acs_system_ids !== null) {
             $request_payload["acs_system_ids"] = $acs_system_ids;
+        }
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
         }
         if ($between !== null) {
             $request_payload["between"] = $between;
@@ -4019,6 +4046,9 @@ class EventsClient
         }
         if ($unstable_offset !== null) {
             $request_payload["unstable_offset"] = $unstable_offset;
+        }
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
         }
 
         $res = $this->seam->request(
