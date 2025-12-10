@@ -3290,6 +3290,7 @@ class CustomersClient
         ?bool $is_embedded = null,
         mixed $landing_page = null,
         ?string $locale = null,
+        mixed $property_listing_filter = null,
         mixed $customer_data = null,
     ): MagicLink {
         $request_payload = [];
@@ -3310,6 +3311,11 @@ class CustomersClient
         }
         if ($locale !== null) {
             $request_payload["locale"] = $locale;
+        }
+        if ($property_listing_filter !== null) {
+            $request_payload[
+                "property_listing_filter"
+            ] = $property_listing_filter;
         }
         if ($customer_data !== null) {
             $request_payload["customer_data"] = $customer_data;
