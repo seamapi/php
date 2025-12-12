@@ -15,6 +15,8 @@ class DeviceSaltoKsMetadata
             lock_id: $json->lock_id,
             lock_type: $json->lock_type,
             locked_state: $json->locked_state,
+            has_custom_pin_subscription: $json->has_custom_pin_subscription ??
+                null,
             model: $json->model ?? null,
         );
     }
@@ -25,6 +27,7 @@ class DeviceSaltoKsMetadata
         public string $lock_id,
         public string $lock_type,
         public string $locked_state,
+        public bool|null $has_custom_pin_subscription,
         public string|null $model,
     ) {}
 }
