@@ -3655,6 +3655,21 @@ class DevicesClient
         );
     }
 
+    public function report_provider_metadata(array $devices): void
+    {
+        $request_payload = [];
+
+        if ($devices !== null) {
+            $request_payload["devices"] = $devices;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/devices/report_provider_metadata",
+            json: (object) $request_payload,
+        );
+    }
+
     public function update(
         string $device_id,
         mixed $custom_metadata = null,
