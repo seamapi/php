@@ -20,6 +20,7 @@ use Seam\Objects\BridgeConnectedSystems;
 use Seam\Objects\ClientSession;
 use Seam\Objects\ConnectWebview;
 use Seam\Objects\ConnectedAccount;
+use Seam\Objects\Customer;
 use Seam\Objects\CustomizationProfile;
 use Seam\Objects\Device;
 use Seam\Objects\DeviceProvider;
