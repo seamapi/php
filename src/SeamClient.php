@@ -1425,6 +1425,21 @@ class AcsAccessGroupsClient
         );
     }
 
+    public function delete(string $acs_access_group_id): void
+    {
+        $request_payload = [];
+
+        if ($acs_access_group_id !== null) {
+            $request_payload["acs_access_group_id"] = $acs_access_group_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/acs/access_groups/delete",
+            json: (object) $request_payload,
+        );
+    }
+
     public function get(string $acs_access_group_id): AcsAccessGroup
     {
         $request_payload = [];
