@@ -15,6 +15,7 @@ class ConnectedAccount
             automatically_manage_new_devices: $json->automatically_manage_new_devices,
             connected_account_id: $json->connected_account_id,
             custom_metadata: $json->custom_metadata,
+            display_name: $json->display_name,
             errors: array_map(
                 fn($e) => ConnectedAccountErrors::from_json($e),
                 $json->errors ?? [],
@@ -40,6 +41,7 @@ class ConnectedAccount
         public bool $automatically_manage_new_devices,
         public string $connected_account_id,
         public mixed $custom_metadata,
+        public string $display_name,
         public array $errors,
         public array $warnings,
         public string|null $account_type,
