@@ -11,6 +11,7 @@ class Event
         }
         return new self(
             access_code_id: $json->access_code_id ?? null,
+            access_code_is_managed: $json->access_code_is_managed ?? null,
             access_grant_id: $json->access_grant_id ?? null,
             access_grant_ids: $json->access_grant_ids ?? null,
             access_grant_key: $json->access_grant_key ?? null,
@@ -88,6 +89,7 @@ class Event
 
     public function __construct(
         public string|null $access_code_id,
+        public bool|null $access_code_is_managed,
         public string|null $access_grant_id,
         public array|null $access_grant_ids,
         public string|null $access_grant_key,
