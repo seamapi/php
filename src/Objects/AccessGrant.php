@@ -14,6 +14,10 @@ class AccessGrant
             access_method_ids: $json->access_method_ids,
             created_at: $json->created_at,
             display_name: $json->display_name,
+            errors: array_map(
+                fn($e) => AccessGrantErrors::from_json($e),
+                $json->errors ?? [],
+            ),
             location_ids: $json->location_ids,
             requested_access_methods: array_map(
                 fn($r) => AccessGrantRequestedAccessMethods::from_json($r),
@@ -42,6 +46,7 @@ class AccessGrant
         public array $access_method_ids,
         public string $created_at,
         public string $display_name,
+        public array $errors,
         public array $location_ids,
         public array $requested_access_methods,
         public array $space_ids,
