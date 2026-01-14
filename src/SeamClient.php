@@ -1032,10 +1032,13 @@ class AccessGrantsClient
         ?string $acs_entrance_id = null,
         ?string $acs_system_id = null,
         ?string $customer_key = null,
+        ?float $limit = null,
         ?string $location_id = null,
+        ?string $page_cursor = null,
         ?string $reservation_key = null,
         ?string $space_id = null,
         ?string $user_identity_id = null,
+        ?callable $on_response = null,
     ): array {
         $request_payload = [];
 
@@ -1051,8 +1054,14 @@ class AccessGrantsClient
         if ($customer_key !== null) {
             $request_payload["customer_key"] = $customer_key;
         }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
         if ($location_id !== null) {
             $request_payload["location_id"] = $location_id;
+        }
+        if ($page_cursor !== null) {
+            $request_payload["page_cursor"] = $page_cursor;
         }
         if ($reservation_key !== null) {
             $request_payload["reservation_key"] = $reservation_key;
@@ -1069,6 +1078,10 @@ class AccessGrantsClient
             "/access_grants/list",
             json: (object) $request_payload,
         );
+
+        if ($on_response !== null) {
+            $on_response($res);
+        }
 
         return array_map(
             fn($r) => AccessGrant::from_json($r),
