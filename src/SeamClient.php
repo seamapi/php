@@ -4023,6 +4023,13 @@ class EventsClient
     public function list(
         ?string $access_code_id = null,
         ?array $access_code_ids = null,
+        ?string $access_grant_id = null,
+        ?array $access_grant_ids = null,
+        ?string $access_method_id = null,
+        ?array $access_method_ids = null,
+        ?string $acs_access_group_id = null,
+        ?string $acs_credential_id = null,
+        ?string $acs_encoder_id = null,
         ?string $acs_entrance_id = null,
         ?string $acs_system_id = null,
         ?array $acs_system_ids = null,
@@ -4038,6 +4045,8 @@ class EventsClient
         ?array $event_types = null,
         ?float $limit = null,
         ?string $since = null,
+        ?string $space_id = null,
+        ?array $space_ids = null,
         ?float $unstable_offset = null,
         ?string $user_identity_id = null,
     ): array {
@@ -4048,6 +4057,27 @@ class EventsClient
         }
         if ($access_code_ids !== null) {
             $request_payload["access_code_ids"] = $access_code_ids;
+        }
+        if ($access_grant_id !== null) {
+            $request_payload["access_grant_id"] = $access_grant_id;
+        }
+        if ($access_grant_ids !== null) {
+            $request_payload["access_grant_ids"] = $access_grant_ids;
+        }
+        if ($access_method_id !== null) {
+            $request_payload["access_method_id"] = $access_method_id;
+        }
+        if ($access_method_ids !== null) {
+            $request_payload["access_method_ids"] = $access_method_ids;
+        }
+        if ($acs_access_group_id !== null) {
+            $request_payload["acs_access_group_id"] = $acs_access_group_id;
+        }
+        if ($acs_credential_id !== null) {
+            $request_payload["acs_credential_id"] = $acs_credential_id;
+        }
+        if ($acs_encoder_id !== null) {
+            $request_payload["acs_encoder_id"] = $acs_encoder_id;
         }
         if ($acs_entrance_id !== null) {
             $request_payload["acs_entrance_id"] = $acs_entrance_id;
@@ -4093,6 +4123,12 @@ class EventsClient
         }
         if ($since !== null) {
             $request_payload["since"] = $since;
+        }
+        if ($space_id !== null) {
+            $request_payload["space_id"] = $space_id;
+        }
+        if ($space_ids !== null) {
+            $request_payload["space_ids"] = $space_ids;
         }
         if ($unstable_offset !== null) {
             $request_payload["unstable_offset"] = $unstable_offset;
