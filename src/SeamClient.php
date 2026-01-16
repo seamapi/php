@@ -1028,6 +1028,7 @@ class AccessGrantsClient
     }
 
     public function list(
+        ?string $access_grant_id = null,
         ?string $access_grant_key = null,
         ?string $acs_entrance_id = null,
         ?string $acs_system_id = null,
@@ -1042,6 +1043,9 @@ class AccessGrantsClient
     ): array {
         $request_payload = [];
 
+        if ($access_grant_id !== null) {
+            $request_payload["access_grant_id"] = $access_grant_id;
+        }
         if ($access_grant_key !== null) {
             $request_payload["access_grant_key"] = $access_grant_key;
         }
