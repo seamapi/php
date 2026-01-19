@@ -132,6 +132,9 @@ class DeviceProperties
             keypad_battery: isset($json->keypad_battery)
                 ? DeviceKeypadBattery::from_json($json->keypad_battery)
                 : null,
+            korelock_metadata: isset($json->korelock_metadata)
+                ? DeviceKorelockMetadata::from_json($json->korelock_metadata)
+                : null,
             kwikset_metadata: isset($json->kwikset_metadata)
                 ? DeviceKwiksetMetadata::from_json($json->kwikset_metadata)
                 : null,
@@ -315,6 +318,7 @@ class DeviceProperties
         public bool|null $is_temporary_manual_override_active,
         public DeviceKeynestMetadata|null $keynest_metadata,
         public DeviceKeypadBattery|null $keypad_battery,
+        public DeviceKorelockMetadata|null $korelock_metadata,
         public DeviceKwiksetMetadata|null $kwikset_metadata,
         public bool|null $locked,
         public DeviceLocklyMetadata|null $lockly_metadata,
