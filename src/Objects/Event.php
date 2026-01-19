@@ -35,6 +35,10 @@ class Event
             connect_webview_id: $json->connect_webview_id ?? null,
             connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                 null,
+            connected_account_errors: array_map(
+                fn($c) => EventConnectedAccountErrors::from_json($c),
+                $json->connected_account_errors ?? [],
+            ),
             connected_account_id: $json->connected_account_id ?? null,
             connected_account_type: $json->connected_account_type ?? null,
             cooling_set_point_celsius: $json->cooling_set_point_celsius ?? null,
@@ -113,6 +117,7 @@ class Event
         public string|null $code,
         public string|null $connect_webview_id,
         public mixed $connected_account_custom_metadata,
+        public array|null $connected_account_errors,
         public string|null $connected_account_id,
         public string|null $connected_account_type,
         public float|null $cooling_set_point_celsius,

@@ -296,15 +296,10 @@ class AccessCodesClient
         ?string $code = null,
         ?string $ends_at = null,
         ?bool $is_external_modification_allowed = null,
-        ?bool $is_offline_access_code = null,
-        ?bool $is_one_time_use = null,
-        ?string $max_time_rounding = null,
         ?string $name = null,
         ?bool $prefer_native_scheduling = null,
         ?float $preferred_code_length = null,
         ?string $starts_at = null,
-        ?bool $use_backup_access_code_pool = null,
-        ?bool $use_offline_access_code = null,
     ): array {
         $request_payload = [];
 
@@ -337,17 +332,6 @@ class AccessCodesClient
                 "is_external_modification_allowed"
             ] = $is_external_modification_allowed;
         }
-        if ($is_offline_access_code !== null) {
-            $request_payload[
-                "is_offline_access_code"
-            ] = $is_offline_access_code;
-        }
-        if ($is_one_time_use !== null) {
-            $request_payload["is_one_time_use"] = $is_one_time_use;
-        }
-        if ($max_time_rounding !== null) {
-            $request_payload["max_time_rounding"] = $max_time_rounding;
-        }
         if ($name !== null) {
             $request_payload["name"] = $name;
         }
@@ -361,16 +345,6 @@ class AccessCodesClient
         }
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;
-        }
-        if ($use_backup_access_code_pool !== null) {
-            $request_payload[
-                "use_backup_access_code_pool"
-            ] = $use_backup_access_code_pool;
-        }
-        if ($use_offline_access_code !== null) {
-            $request_payload[
-                "use_offline_access_code"
-            ] = $use_offline_access_code;
         }
 
         $res = $this->seam->request(
@@ -1028,7 +1002,7 @@ class AccessGrantsClient
     }
 
     public function list(
-        ?string $access_grant_id = null,
+        ?array $access_grant_ids = null,
         ?string $access_grant_key = null,
         ?string $acs_entrance_id = null,
         ?string $acs_system_id = null,
@@ -1043,8 +1017,8 @@ class AccessGrantsClient
     ): array {
         $request_payload = [];
 
-        if ($access_grant_id !== null) {
-            $request_payload["access_grant_id"] = $access_grant_id;
+        if ($access_grant_ids !== null) {
+            $request_payload["access_grant_ids"] = $access_grant_ids;
         }
         if ($access_grant_key !== null) {
             $request_payload["access_grant_key"] = $access_grant_key;
