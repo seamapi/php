@@ -6265,6 +6265,7 @@ class UserIdentitiesClient
         mixed $limit = null,
         ?string $page_cursor = null,
         ?string $search = null,
+        ?array $user_identity_ids = null,
         ?callable $on_response = null,
     ): array {
         $request_payload = [];
@@ -6285,6 +6286,9 @@ class UserIdentitiesClient
         }
         if ($search !== null) {
             $request_payload["search"] = $search;
+        }
+        if ($user_identity_ids !== null) {
+            $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
         $res = $this->seam->request(
