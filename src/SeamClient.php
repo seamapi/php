@@ -165,8 +165,8 @@ class SeamClient
                 );
             }
 
-            throw GuzzleHttpExceptionRequestException::create(
-                new GuzzleHttpPsr7Request($method, $path),
+            throw \GuzzleHttp\Exception\RequestException::create(
+                new \GuzzleHttp\Psr7\Request($method, $path),
                 $response,
             );
         }
