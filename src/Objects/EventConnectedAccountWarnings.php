@@ -2,10 +2,11 @@
 
 namespace Seam\Objects;
 
-class DeviceWarnings
+class EventConnectedAccountWarnings
 {
-    public static function from_json(mixed $json): DeviceWarnings|null
-    {
+    public static function from_json(
+        mixed $json,
+    ): EventConnectedAccountWarnings|null {
         if (!$json) {
             return null;
         }
@@ -13,9 +14,6 @@ class DeviceWarnings
             created_at: $json->created_at,
             message: $json->message,
             warning_code: $json->warning_code,
-            active_access_code_count: $json->active_access_code_count ?? null,
-            max_active_access_code_count: $json->max_active_access_code_count ??
-                null,
         );
     }
 
@@ -23,7 +21,5 @@ class DeviceWarnings
         public string $created_at,
         public string $message,
         public string $warning_code,
-        public mixed $active_access_code_count,
-        public mixed $max_active_access_code_count,
     ) {}
 }

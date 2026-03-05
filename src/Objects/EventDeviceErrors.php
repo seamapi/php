@@ -2,11 +2,10 @@
 
 namespace Seam\Objects;
 
-class EventConnectedAccountErrors
+class EventDeviceErrors
 {
-    public static function from_json(
-        mixed $json,
-    ): EventConnectedAccountErrors|null {
+    public static function from_json(mixed $json): EventDeviceErrors|null
+    {
         if (!$json) {
             return null;
         }

@@ -15,6 +15,10 @@ class AccessMethod
             display_name: $json->display_name,
             is_issued: $json->is_issued,
             mode: $json->mode,
+            pending_mutations: array_map(
+                fn($p) => AccessMethodPendingMutations::from_json($p),
+                $json->pending_mutations ?? [],
+            ),
             warnings: array_map(
                 fn($w) => AccessMethodWarnings::from_json($w),
                 $json->warnings ?? [],
@@ -35,6 +39,7 @@ class AccessMethod
         public string $display_name,
         public bool $is_issued,
         public string $mode,
+        public array $pending_mutations,
         public array $warnings,
         public string $workspace_id,
         public string|null $client_session_token,

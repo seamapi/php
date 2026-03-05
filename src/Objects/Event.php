@@ -10,8 +10,16 @@ class Event
             return null;
         }
         return new self(
+            access_code_errors: array_map(
+                fn($a) => EventAccessCodeErrors::from_json($a),
+                $json->access_code_errors ?? [],
+            ),
             access_code_id: $json->access_code_id ?? null,
             access_code_is_managed: $json->access_code_is_managed ?? null,
+            access_code_warnings: array_map(
+                fn($a) => EventAccessCodeWarnings::from_json($a),
+                $json->access_code_warnings ?? [],
+            ),
             access_grant_id: $json->access_grant_id ?? null,
             access_grant_ids: $json->access_grant_ids ?? null,
             access_grant_key: $json->access_grant_key ?? null,
@@ -22,7 +30,15 @@ class Event
             acs_encoder_id: $json->acs_encoder_id ?? null,
             acs_entrance_id: $json->acs_entrance_id ?? null,
             acs_entrance_ids: $json->acs_entrance_ids ?? null,
+            acs_system_errors: array_map(
+                fn($a) => EventAcsSystemErrors::from_json($a),
+                $json->acs_system_errors ?? [],
+            ),
             acs_system_id: $json->acs_system_id ?? null,
+            acs_system_warnings: array_map(
+                fn($a) => EventAcsSystemWarnings::from_json($a),
+                $json->acs_system_warnings ?? [],
+            ),
             acs_user_id: $json->acs_user_id ?? null,
             action_attempt_id: $json->action_attempt_id ?? null,
             action_type: $json->action_type ?? null,
@@ -41,6 +57,10 @@ class Event
             ),
             connected_account_id: $json->connected_account_id ?? null,
             connected_account_type: $json->connected_account_type ?? null,
+            connected_account_warnings: array_map(
+                fn($c) => EventConnectedAccountWarnings::from_json($c),
+                $json->connected_account_warnings ?? [],
+            ),
             cooling_set_point_celsius: $json->cooling_set_point_celsius ?? null,
             cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
                 null,
@@ -51,9 +71,17 @@ class Event
             desired_temperature_fahrenheit: $json->desired_temperature_fahrenheit ??
                 null,
             device_custom_metadata: $json->device_custom_metadata ?? null,
+            device_errors: array_map(
+                fn($d) => EventDeviceErrors::from_json($d),
+                $json->device_errors ?? [],
+            ),
             device_id: $json->device_id ?? null,
             device_ids: $json->device_ids ?? null,
             device_name: $json->device_name ?? null,
+            device_warnings: array_map(
+                fn($d) => EventDeviceWarnings::from_json($d),
+                $json->device_warnings ?? [],
+            ),
             ends_at: $json->ends_at ?? null,
             enrollment_automation_id: $json->enrollment_automation_id ?? null,
             error_code: $json->error_code ?? null,
@@ -93,8 +121,10 @@ class Event
     }
 
     public function __construct(
+        public array|null $access_code_errors,
         public string|null $access_code_id,
         public bool|null $access_code_is_managed,
+        public array|null $access_code_warnings,
         public string|null $access_grant_id,
         public array|null $access_grant_ids,
         public string|null $access_grant_key,
@@ -105,7 +135,9 @@ class Event
         public string|null $acs_encoder_id,
         public string|null $acs_entrance_id,
         public array|null $acs_entrance_ids,
+        public array|null $acs_system_errors,
         public string|null $acs_system_id,
+        public array|null $acs_system_warnings,
         public string|null $acs_user_id,
         public string|null $action_attempt_id,
         public string|null $action_type,
@@ -120,6 +152,7 @@ class Event
         public array|null $connected_account_errors,
         public string|null $connected_account_id,
         public string|null $connected_account_type,
+        public array|null $connected_account_warnings,
         public float|null $cooling_set_point_celsius,
         public float|null $cooling_set_point_fahrenheit,
         public string|null $created_at,
@@ -127,9 +160,11 @@ class Event
         public float|null $desired_temperature_celsius,
         public float|null $desired_temperature_fahrenheit,
         public mixed $device_custom_metadata,
+        public array|null $device_errors,
         public string|null $device_id,
         public array|null $device_ids,
         public string|null $device_name,
+        public array|null $device_warnings,
         public string|null $ends_at,
         public string|null $enrollment_automation_id,
         public string|null $error_code,

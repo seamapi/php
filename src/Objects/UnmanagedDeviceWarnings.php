@@ -13,6 +13,9 @@ class UnmanagedDeviceWarnings
             created_at: $json->created_at,
             message: $json->message,
             warning_code: $json->warning_code,
+            active_access_code_count: $json->active_access_code_count ?? null,
+            max_active_access_code_count: $json->max_active_access_code_count ??
+                null,
         );
     }
 
@@ -20,5 +23,7 @@ class UnmanagedDeviceWarnings
         public string $created_at,
         public string $message,
         public string $warning_code,
+        public mixed $active_access_code_count,
+        public mixed $max_active_access_code_count,
     ) {}
 }

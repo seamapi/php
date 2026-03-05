@@ -13,6 +13,10 @@ class AccessGrantWarnings
             created_at: $json->created_at,
             message: $json->message,
             warning_code: $json->warning_code,
+            access_method_ids: $json->access_method_ids ?? null,
+            device_id: $json->device_id ?? null,
+            new_code: $json->new_code ?? null,
+            original_code: $json->original_code ?? null,
         );
     }
 
@@ -20,5 +24,9 @@ class AccessGrantWarnings
         public string $created_at,
         public string $message,
         public string $warning_code,
+        public array|null $access_method_ids,
+        public string|null $device_id,
+        public string|null $new_code,
+        public string|null $original_code,
     ) {}
 }

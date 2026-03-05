@@ -19,6 +19,10 @@ class AccessGrant
                 $json->errors ?? [],
             ),
             location_ids: $json->location_ids,
+            pending_mutations: array_map(
+                fn($p) => AccessGrantPendingMutations::from_json($p),
+                $json->pending_mutations ?? [],
+            ),
             requested_access_methods: array_map(
                 fn($r) => AccessGrantRequestedAccessMethods::from_json($r),
                 $json->requested_access_methods ?? [],
@@ -48,6 +52,7 @@ class AccessGrant
         public string $display_name,
         public array $errors,
         public array $location_ids,
+        public array $pending_mutations,
         public array $requested_access_methods,
         public array $space_ids,
         public string $starts_at,

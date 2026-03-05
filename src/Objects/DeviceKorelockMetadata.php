@@ -16,6 +16,7 @@ class DeviceKorelockMetadata
             model_code: $json->model_code ?? null,
             serial_number: $json->serial_number ?? null,
             wifi_signal_strength: $json->wifi_signal_strength ?? null,
+            location_id: $json->location_id ?? null,
         );
     }
 
@@ -26,5 +27,6 @@ class DeviceKorelockMetadata
         public string|null $model_code,
         public string|null $serial_number,
         public float|null $wifi_signal_strength,
+        public string|null $location_id,
     ) {}
 }

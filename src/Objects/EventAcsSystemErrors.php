@@ -2,11 +2,10 @@
 
 namespace Seam\Objects;
 
-class EventConnectedAccountErrors
+class EventAcsSystemErrors
 {
-    public static function from_json(
-        mixed $json,
-    ): EventConnectedAccountErrors|null {
+    public static function from_json(mixed $json): EventAcsSystemErrors|null
+    {
         if (!$json) {
             return null;
         }

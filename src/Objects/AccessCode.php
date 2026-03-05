@@ -36,6 +36,11 @@ class AccessCode
             code: $json->code ?? null,
             common_code_key: $json->common_code_key ?? null,
             name: $json->name ?? null,
+            dormakaba_oracode_metadata: isset($json->dormakaba_oracode_metadata)
+                ? AccessCodeDormakabaOracodeMetadata::from_json(
+                    $json->dormakaba_oracode_metadata,
+                )
+                : null,
             ends_at: $json->ends_at ?? null,
             pulled_backup_access_code_id: $json->pulled_backup_access_code_id ??
                 null,
@@ -63,6 +68,7 @@ class AccessCode
         public string|null $code,
         public string|null $common_code_key,
         public string|null $name,
+        public AccessCodeDormakabaOracodeMetadata|null $dormakaba_oracode_metadata,
         public string|null $ends_at,
         public string|null $pulled_backup_access_code_id,
         public string|null $starts_at,

@@ -26,6 +26,11 @@ class UnmanagedAccessCode
             ),
             workspace_id: $json->workspace_id,
             code: $json->code ?? null,
+            dormakaba_oracode_metadata: isset($json->dormakaba_oracode_metadata)
+                ? UnmanagedAccessCodeDormakabaOracodeMetadata::from_json(
+                    $json->dormakaba_oracode_metadata,
+                )
+                : null,
             name: $json->name ?? null,
             ends_at: $json->ends_at ?? null,
             starts_at: $json->starts_at ?? null,
@@ -43,6 +48,7 @@ class UnmanagedAccessCode
         public array $warnings,
         public string $workspace_id,
         public string|null $code,
+        public UnmanagedAccessCodeDormakabaOracodeMetadata|null $dormakaba_oracode_metadata,
         public string|null $name,
         public string|null $ends_at,
         public string|null $starts_at,

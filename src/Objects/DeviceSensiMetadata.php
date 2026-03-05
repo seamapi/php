@@ -13,6 +13,8 @@ class DeviceSensiMetadata
             device_id: $json->device_id,
             device_name: $json->device_name,
             product_type: $json->product_type,
+            dual_setpoints_not_supported: $json->dual_setpoints_not_supported ??
+                null,
         );
     }
 
@@ -20,5 +22,6 @@ class DeviceSensiMetadata
         public string $device_id,
         public string $device_name,
         public string $product_type,
+        public bool|null $dual_setpoints_not_supported,
     ) {}
 }

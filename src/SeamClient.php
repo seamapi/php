@@ -426,12 +426,45 @@ class AccessCodesClient
         return AccessCode::from_json($res->access_code);
     }
 
+    public function get_timeline(
+        string $access_code_id,
+        ?string $after = null,
+        ?string $before = null,
+        ?array $event_types = null,
+        ?float $limit = null,
+    ): void {
+        $request_payload = [];
+
+        if ($access_code_id !== null) {
+            $request_payload["access_code_id"] = $access_code_id;
+        }
+        if ($after !== null) {
+            $request_payload["after"] = $after;
+        }
+        if ($before !== null) {
+            $request_payload["before"] = $before;
+        }
+        if ($event_types !== null) {
+            $request_payload["event_types"] = $event_types;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/access_codes/get_timeline",
+            json: (object) $request_payload,
+        );
+    }
+
     public function list(
         ?array $access_code_ids = null,
         ?string $customer_key = null,
         ?string $device_id = null,
         ?float $limit = null,
         ?string $page_cursor = null,
+        ?string $search = null,
         ?string $user_identifier_key = null,
         ?callable $on_response = null,
     ): array {
@@ -451,6 +484,9 @@ class AccessCodesClient
         }
         if ($page_cursor !== null) {
             $request_payload["page_cursor"] = $page_cursor;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
         }
         if ($user_identifier_key !== null) {
             $request_payload["user_identifier_key"] = $user_identifier_key;
@@ -779,6 +815,7 @@ class AccessCodesUnmanagedClient
         string $device_id,
         ?float $limit = null,
         ?string $page_cursor = null,
+        ?string $search = null,
         ?string $user_identifier_key = null,
         ?callable $on_response = null,
     ): array {
@@ -792,6 +829,9 @@ class AccessCodesUnmanagedClient
         }
         if ($page_cursor !== null) {
             $request_payload["page_cursor"] = $page_cursor;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
         }
         if ($user_identifier_key !== null) {
             $request_payload["user_identifier_key"] = $user_identifier_key;
@@ -976,7 +1016,8 @@ class AccessGrantsClient
     }
 
     public function get_related(
-        array $access_grant_ids,
+        ?array $access_grant_ids = null,
+        ?array $access_grant_keys = null,
         ?array $exclude = null,
         ?array $include = null,
     ): Batch {
@@ -984,6 +1025,9 @@ class AccessGrantsClient
 
         if ($access_grant_ids !== null) {
             $request_payload["access_grant_ids"] = $access_grant_ids;
+        }
+        if ($access_grant_keys !== null) {
+            $request_payload["access_grant_keys"] = $access_grant_keys;
         }
         if ($exclude !== null) {
             $request_payload["exclude"] = $exclude;
@@ -1451,6 +1495,7 @@ class AcsAccessGroupsClient
     public function list(
         ?string $acs_system_id = null,
         ?string $acs_user_id = null,
+        ?string $search = null,
         ?string $user_identity_id = null,
     ): array {
         $request_payload = [];
@@ -1460,6 +1505,9 @@ class AcsAccessGroupsClient
         }
         if ($acs_user_id !== null) {
             $request_payload["acs_user_id"] = $acs_user_id;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
         }
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
@@ -2233,6 +2281,7 @@ class AcsSystemsClient
     public function list(
         ?string $connected_account_id = null,
         ?string $customer_key = null,
+        ?string $search = null,
     ): array {
         $request_payload = [];
 
@@ -2241,6 +2290,9 @@ class AcsSystemsClient
         }
         if ($customer_key !== null) {
             $request_payload["customer_key"] = $customer_key;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
         }
 
         $res = $this->seam->request(
@@ -3071,6 +3123,7 @@ class ConnectWebviewsClient
         ?string $customer_key = null,
         ?float $limit = null,
         ?string $page_cursor = null,
+        ?string $search = null,
         ?string $user_identifier_key = null,
         ?callable $on_response = null,
     ): array {
@@ -3087,6 +3140,9 @@ class ConnectWebviewsClient
         }
         if ($page_cursor !== null) {
             $request_payload["page_cursor"] = $page_cursor;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
         }
         if ($user_identifier_key !== null) {
             $request_payload["user_identifier_key"] = $user_identifier_key;
@@ -3285,27 +3341,42 @@ class ConnectedAccountsSimulateClient
 class CustomersClient
 {
     private SeamClient $seam;
-
+    public CustomersReservationsClient $reservations;
     public function __construct(SeamClient $seam)
     {
         $this->seam = $seam;
+        $this->reservations = new CustomersReservationsClient($seam);
     }
 
     public function create_portal(
+        ?array $customer_resources_filters = null,
         ?string $customization_profile_id = null,
+        mixed $deep_link = null,
+        ?bool $exclude_locale_picker = null,
         mixed $features = null,
         ?bool $is_embedded = null,
         mixed $landing_page = null,
         ?string $locale = null,
-        mixed $property_listing_filter = null,
+        ?string $navigation_mode = null,
         mixed $customer_data = null,
     ): MagicLink {
         $request_payload = [];
 
+        if ($customer_resources_filters !== null) {
+            $request_payload[
+                "customer_resources_filters"
+            ] = $customer_resources_filters;
+        }
         if ($customization_profile_id !== null) {
             $request_payload[
                 "customization_profile_id"
             ] = $customization_profile_id;
+        }
+        if ($deep_link !== null) {
+            $request_payload["deep_link"] = $deep_link;
+        }
+        if ($exclude_locale_picker !== null) {
+            $request_payload["exclude_locale_picker"] = $exclude_locale_picker;
         }
         if ($features !== null) {
             $request_payload["features"] = $features;
@@ -3319,10 +3390,8 @@ class CustomersClient
         if ($locale !== null) {
             $request_payload["locale"] = $locale;
         }
-        if ($property_listing_filter !== null) {
-            $request_payload[
-                "property_listing_filter"
-            ] = $property_listing_filter;
+        if ($navigation_mode !== null) {
+            $request_payload["navigation_mode"] = $navigation_mode;
         }
         if ($customer_data !== null) {
             $request_payload["customer_data"] = $customer_data;
@@ -3513,6 +3582,36 @@ class CustomersClient
         $this->seam->request(
             "POST",
             "/customers/push_data",
+            json: (object) $request_payload,
+        );
+    }
+}
+
+class CustomersReservationsClient
+{
+    private SeamClient $seam;
+
+    public function __construct(SeamClient $seam)
+    {
+        $this->seam = $seam;
+    }
+
+    public function create_deep_link(
+        string $customer_key,
+        string $reservation_key,
+    ): void {
+        $request_payload = [];
+
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
+        }
+        if ($reservation_key !== null) {
+            $request_payload["reservation_key"] = $reservation_key;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/customers/reservations/create_deep_link",
             json: (object) $request_payload,
         );
     }
@@ -6615,6 +6714,7 @@ class WorkspacesClient
         ?string $connect_partner_name = null,
         mixed $connect_webview_customization = null,
         ?bool $is_sandbox = null,
+        ?string $organization_id = null,
         ?string $webview_logo_shape = null,
         ?string $webview_primary_button_color = null,
         ?string $webview_primary_button_text_color = null,
@@ -6638,6 +6738,9 @@ class WorkspacesClient
         }
         if ($is_sandbox !== null) {
             $request_payload["is_sandbox"] = $is_sandbox;
+        }
+        if ($organization_id !== null) {
+            $request_payload["organization_id"] = $organization_id;
         }
         if ($webview_logo_shape !== null) {
             $request_payload["webview_logo_shape"] = $webview_logo_shape;
