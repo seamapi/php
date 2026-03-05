@@ -110,9 +110,6 @@ class DeviceProperties
                     $json->honeywell_resideo_metadata,
                 )
                 : null,
-            hubitat_metadata: isset($json->hubitat_metadata)
-                ? DeviceHubitatMetadata::from_json($json->hubitat_metadata)
-                : null,
             igloo_metadata: isset($json->igloo_metadata)
                 ? DeviceIglooMetadata::from_json($json->igloo_metadata)
                 : null,
@@ -307,7 +304,6 @@ class DeviceProperties
         public bool|null $has_direct_power,
         public bool|null $has_native_entry_events,
         public DeviceHoneywellResideoMetadata|null $honeywell_resideo_metadata,
-        public DeviceHubitatMetadata|null $hubitat_metadata,
         public DeviceIglooMetadata|null $igloo_metadata,
         public DeviceIgloohomeMetadata|null $igloohome_metadata,
         public string|null $image_alt_text,

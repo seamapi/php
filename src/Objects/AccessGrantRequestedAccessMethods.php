@@ -16,6 +16,7 @@ class AccessGrantRequestedAccessMethods
             display_name: $json->display_name,
             mode: $json->mode,
             code: $json->code ?? null,
+            instant_key_max_use_count: $json->instant_key_max_use_count ?? null,
         );
     }
 
@@ -25,5 +26,6 @@ class AccessGrantRequestedAccessMethods
         public string $display_name,
         public string $mode,
         public string|null $code,
+        public mixed $instant_key_max_use_count,
     ) {}
 }

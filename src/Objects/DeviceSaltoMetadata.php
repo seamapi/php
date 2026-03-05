@@ -16,6 +16,8 @@ class DeviceSaltoMetadata
             lock_type: $json->lock_type,
             locked_state: $json->locked_state,
             model: $json->model ?? null,
+            site_id: $json->site_id ?? null,
+            site_name: $json->site_name ?? null,
         );
     }
 
@@ -26,5 +28,7 @@ class DeviceSaltoMetadata
         public string $lock_type,
         public string $locked_state,
         public string|null $model,
+        public string|null $site_id,
+        public string|null $site_name,
     ) {}
 }

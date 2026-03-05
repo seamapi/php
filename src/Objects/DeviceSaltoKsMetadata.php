@@ -18,6 +18,8 @@ class DeviceSaltoKsMetadata
             has_custom_pin_subscription: $json->has_custom_pin_subscription ??
                 null,
             model: $json->model ?? null,
+            site_id: $json->site_id ?? null,
+            site_name: $json->site_name ?? null,
         );
     }
 
@@ -29,5 +31,7 @@ class DeviceSaltoKsMetadata
         public string $locked_state,
         public bool|null $has_custom_pin_subscription,
         public string|null $model,
+        public string|null $site_id,
+        public string|null $site_name,
     ) {}
 }
