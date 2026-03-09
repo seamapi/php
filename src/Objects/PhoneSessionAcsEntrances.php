@@ -25,6 +25,9 @@ class PhoneSessionAcsEntrances
                     $json->assa_abloy_vostio_metadata,
                 )
                 : null,
+            brivo_metadata: isset($json->brivo_metadata)
+                ? PhoneSessionBrivoMetadata::from_json($json->brivo_metadata)
+                : null,
             can_belong_to_reservation: $json->can_belong_to_reservation ?? null,
             can_unlock_with_card: $json->can_unlock_with_card ?? null,
             can_unlock_with_code: $json->can_unlock_with_code ?? null,
@@ -77,6 +80,7 @@ class PhoneSessionAcsEntrances
         public array $errors,
         public array $space_ids,
         public PhoneSessionAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
+        public PhoneSessionBrivoMetadata|null $brivo_metadata,
         public bool|null $can_belong_to_reservation,
         public bool|null $can_unlock_with_card,
         public bool|null $can_unlock_with_code,

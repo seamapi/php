@@ -26,6 +26,11 @@ class AcsAccessGroup
                 $json->warnings ?? [],
             ),
             workspace_id: $json->workspace_id,
+            access_schedule: isset($json->access_schedule)
+                ? AcsAccessGroupAccessSchedule::from_json(
+                    $json->access_schedule,
+                )
+                : null,
         );
     }
 
@@ -43,5 +48,6 @@ class AcsAccessGroup
         public string $name,
         public array $warnings,
         public string $workspace_id,
+        public AcsAccessGroupAccessSchedule|null $access_schedule,
     ) {}
 }

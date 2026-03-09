@@ -26,6 +26,11 @@ class UnmanagedAcsAccessGroup
                 $json->warnings ?? [],
             ),
             workspace_id: $json->workspace_id,
+            access_schedule: isset($json->access_schedule)
+                ? UnmanagedAcsAccessGroupAccessSchedule::from_json(
+                    $json->access_schedule,
+                )
+                : null,
         );
     }
 
@@ -43,5 +48,6 @@ class UnmanagedAcsAccessGroup
         public string $name,
         public array $warnings,
         public string $workspace_id,
+        public UnmanagedAcsAccessGroupAccessSchedule|null $access_schedule,
     ) {}
 }
