@@ -186,6 +186,9 @@ class DeviceProperties
             online_access_codes_enabled: $json->online_access_codes_enabled ??
                 null,
             relative_humidity: $json->relative_humidity ?? null,
+            ring_metadata: isset($json->ring_metadata)
+                ? DeviceRingMetadata::from_json($json->ring_metadata)
+                : null,
             salto_ks_metadata: isset($json->salto_ks_metadata)
                 ? DeviceSaltoKsMetadata::from_json($json->salto_ks_metadata)
                 : null,
@@ -340,6 +343,7 @@ class DeviceProperties
         public bool|null $offline_access_codes_enabled,
         public bool|null $online_access_codes_enabled,
         public float|null $relative_humidity,
+        public DeviceRingMetadata|null $ring_metadata,
         public DeviceSaltoKsMetadata|null $salto_ks_metadata,
         public DeviceSaltoMetadata|null $salto_metadata,
         public DeviceSaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata,
