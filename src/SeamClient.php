@@ -3349,6 +3349,7 @@ class CustomersClient
     }
 
     public function create_portal(
+        ?bool $_dev = null,
         ?array $customer_resources_filters = null,
         ?string $customization_profile_id = null,
         mixed $deep_link = null,
@@ -3362,6 +3363,9 @@ class CustomersClient
     ): MagicLink {
         $request_payload = [];
 
+        if ($_dev !== null) {
+            $request_payload["_dev"] = $_dev;
+        }
         if ($customer_resources_filters !== null) {
             $request_payload[
                 "customer_resources_filters"
