@@ -1251,12 +1251,21 @@ class AccessMethodsClient
         $this->unmanaged = new AccessMethodsUnmanagedClient($seam);
     }
 
-    public function delete(string $access_method_id): void
-    {
+    public function delete(
+        ?string $access_method_id = null,
+        ?string $access_grant_id = null,
+        ?string $reservation_key = null,
+    ): void {
         $request_payload = [];
 
         if ($access_method_id !== null) {
             $request_payload["access_method_id"] = $access_method_id;
+        }
+        if ($access_grant_id !== null) {
+            $request_payload["access_grant_id"] = $access_grant_id;
+        }
+        if ($reservation_key !== null) {
+            $request_payload["reservation_key"] = $reservation_key;
         }
 
         $this->seam->request(
