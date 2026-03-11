@@ -21,6 +21,12 @@ class UnmanagedAcsAccessGroup
             external_type_display_name: $json->external_type_display_name,
             is_managed: $json->is_managed,
             name: $json->name,
+            pending_mutations: array_map(
+                fn($p) => UnmanagedAcsAccessGroupPendingMutations::from_json(
+                    $p,
+                ),
+                $json->pending_mutations ?? [],
+            ),
             warnings: array_map(
                 fn($w) => UnmanagedAcsAccessGroupWarnings::from_json($w),
                 $json->warnings ?? [],
@@ -46,6 +52,7 @@ class UnmanagedAcsAccessGroup
         public string $external_type_display_name,
         public bool $is_managed,
         public string $name,
+        public array $pending_mutations,
         public array $warnings,
         public string $workspace_id,
         public UnmanagedAcsAccessGroupAccessSchedule|null $access_schedule,
