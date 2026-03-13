@@ -14,12 +14,14 @@ class AcsAccessGroupPendingMutations
             created_at: $json->created_at,
             message: $json->message,
             mutation_code: $json->mutation_code,
+            acs_user_id: $json->acs_user_id ?? null,
             from: isset($json->from)
                 ? AcsAccessGroupFrom::from_json($json->from)
                 : null,
             to: isset($json->to)
                 ? AcsAccessGroupTo::from_json($json->to)
                 : null,
+            variant: $json->variant ?? null,
         );
     }
 
@@ -27,7 +29,9 @@ class AcsAccessGroupPendingMutations
         public string $created_at,
         public string $message,
         public string $mutation_code,
+        public string|null $acs_user_id,
         public AcsAccessGroupFrom|null $from,
         public AcsAccessGroupTo|null $to,
+        public string|null $variant,
     ) {}
 }
