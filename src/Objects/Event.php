@@ -94,6 +94,7 @@ class Event
             heating_set_point_fahrenheit: $json->heating_set_point_fahrenheit ??
                 null,
             hvac_mode_setting: $json->hvac_mode_setting ?? null,
+            image_url: $json->image_url ?? null,
             is_backup_code: $json->is_backup_code ?? null,
             is_fallback_climate_preset: $json->is_fallback_climate_preset ??
                 null,
@@ -113,6 +114,7 @@ class Event
             temperature_celsius: $json->temperature_celsius ?? null,
             temperature_fahrenheit: $json->temperature_fahrenheit ?? null,
             user_identity_id: $json->user_identity_id ?? null,
+            video_url: $json->video_url ?? null,
             workspace_id: $json->workspace_id ?? null,
             lower_limit_celsius: $json->lower_limit_celsius ?? null,
             lower_limit_fahrenheit: $json->lower_limit_fahrenheit ?? null,
@@ -178,6 +180,7 @@ class Event
         public float|null $heating_set_point_celsius,
         public float|null $heating_set_point_fahrenheit,
         public string|null $hvac_mode_setting,
+        public string|null $image_url,
         public bool|null $is_backup_code,
         public bool|null $is_fallback_climate_preset,
         public string|null $method,
@@ -196,6 +199,7 @@ class Event
         public float|null $temperature_celsius,
         public float|null $temperature_fahrenheit,
         public string|null $user_identity_id,
+        public string|null $video_url,
         public string|null $workspace_id,
         public float|null $lower_limit_celsius,
         public float|null $lower_limit_fahrenheit,
