@@ -2259,6 +2259,37 @@ class AcsEntrancesClient
             $res->acs_credentials,
         );
     }
+
+    public function unlock(
+        string $acs_credential_id,
+        string $acs_entrance_id,
+        bool $wait_for_action_attempt = true,
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($acs_credential_id !== null) {
+            $request_payload["acs_credential_id"] = $acs_credential_id;
+        }
+        if ($acs_entrance_id !== null) {
+            $request_payload["acs_entrance_id"] = $acs_entrance_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/acs/entrances/unlock",
+            json: (object) $request_payload,
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res->action_attempt);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt->action_attempt_id,
+        );
+
+        return $action_attempt;
+    }
 }
 
 class AcsSystemsClient
