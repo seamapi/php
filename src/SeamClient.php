@@ -460,6 +460,7 @@ class AccessCodesClient
 
     public function list(
         ?array $access_code_ids = null,
+        ?string $access_method_id = null,
         ?string $customer_key = null,
         ?string $device_id = null,
         ?float $limit = null,
@@ -472,6 +473,9 @@ class AccessCodesClient
 
         if ($access_code_ids !== null) {
             $request_payload["access_code_ids"] = $access_code_ids;
+        }
+        if ($access_method_id !== null) {
+            $request_payload["access_method_id"] = $access_method_id;
         }
         if ($customer_key !== null) {
             $request_payload["customer_key"] = $customer_key;
@@ -1350,7 +1354,8 @@ class AccessMethodsClient
     }
 
     public function list(
-        string $access_grant_id,
+        ?string $access_grant_id = null,
+        ?string $access_grant_key = null,
         ?string $acs_entrance_id = null,
         ?string $device_id = null,
         ?string $space_id = null,
@@ -1359,6 +1364,9 @@ class AccessMethodsClient
 
         if ($access_grant_id !== null) {
             $request_payload["access_grant_id"] = $access_grant_id;
+        }
+        if ($access_grant_key !== null) {
+            $request_payload["access_grant_key"] = $access_grant_key;
         }
         if ($acs_entrance_id !== null) {
             $request_payload["acs_entrance_id"] = $acs_entrance_id;

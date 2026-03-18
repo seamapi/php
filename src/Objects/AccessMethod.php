@@ -28,6 +28,7 @@ class AccessMethod
             customization_profile_id: $json->customization_profile_id ?? null,
             instant_key_url: $json->instant_key_url ?? null,
             is_encoding_required: $json->is_encoding_required ?? null,
+            is_ready_for_encoding: $json->is_ready_for_encoding ?? null,
             issued_at: $json->issued_at ?? null,
             code: $json->code ?? null,
         );
@@ -46,6 +47,7 @@ class AccessMethod
         public string|null $customization_profile_id,
         public string|null $instant_key_url,
         public bool|null $is_encoding_required,
+        public bool|null $is_ready_for_encoding,
         public string|null $issued_at,
         public string|null $code,
     ) {}
