@@ -1195,8 +1195,11 @@ class AccessGrantsUnmanagedClient
     public function list(
         ?string $acs_entrance_id = null,
         ?string $acs_system_id = null,
+        ?float $limit = null,
+        ?string $page_cursor = null,
         ?string $reservation_key = null,
         ?string $user_identity_id = null,
+        ?callable $on_response = null,
     ): void {
         $request_payload = [];
 
@@ -1205,6 +1208,12 @@ class AccessGrantsUnmanagedClient
         }
         if ($acs_system_id !== null) {
             $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($page_cursor !== null) {
+            $request_payload["page_cursor"] = $page_cursor;
         }
         if ($reservation_key !== null) {
             $request_payload["reservation_key"] = $reservation_key;
@@ -1218,6 +1227,10 @@ class AccessGrantsUnmanagedClient
             "/access_grants/unmanaged/list",
             json: (object) $request_payload,
         );
+
+        if ($on_response !== null) {
+            $on_response($res);
+        }
     }
 
     public function update(
