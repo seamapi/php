@@ -426,38 +426,6 @@ class AccessCodesClient
         return AccessCode::from_json($res->access_code);
     }
 
-    public function get_timeline(
-        string $access_code_id,
-        ?string $after = null,
-        ?string $before = null,
-        ?array $event_types = null,
-        ?float $limit = null,
-    ): void {
-        $request_payload = [];
-
-        if ($access_code_id !== null) {
-            $request_payload["access_code_id"] = $access_code_id;
-        }
-        if ($after !== null) {
-            $request_payload["after"] = $after;
-        }
-        if ($before !== null) {
-            $request_payload["before"] = $before;
-        }
-        if ($event_types !== null) {
-            $request_payload["event_types"] = $event_types;
-        }
-        if ($limit !== null) {
-            $request_payload["limit"] = $limit;
-        }
-
-        $this->seam->request(
-            "POST",
-            "/access_codes/get_timeline",
-            json: (object) $request_payload,
-        );
-    }
-
     public function list(
         ?array $access_code_ids = null,
         ?string $access_method_id = null,
@@ -3402,11 +3370,10 @@ class ConnectedAccountsSimulateClient
 class CustomersClient
 {
     private SeamClient $seam;
-    public CustomersReservationsClient $reservations;
+
     public function __construct(SeamClient $seam)
     {
         $this->seam = $seam;
-        $this->reservations = new CustomersReservationsClient($seam);
     }
 
     public function create_portal(
@@ -3647,36 +3614,6 @@ class CustomersClient
         $this->seam->request(
             "POST",
             "/customers/push_data",
-            json: (object) $request_payload,
-        );
-    }
-}
-
-class CustomersReservationsClient
-{
-    private SeamClient $seam;
-
-    public function __construct(SeamClient $seam)
-    {
-        $this->seam = $seam;
-    }
-
-    public function create_deep_link(
-        string $customer_key,
-        string $reservation_key,
-    ): void {
-        $request_payload = [];
-
-        if ($customer_key !== null) {
-            $request_payload["customer_key"] = $customer_key;
-        }
-        if ($reservation_key !== null) {
-            $request_payload["reservation_key"] = $reservation_key;
-        }
-
-        $this->seam->request(
-            "POST",
-            "/customers/reservations/create_deep_link",
             json: (object) $request_payload,
         );
     }
@@ -4364,6 +4301,43 @@ class LocksClient
     {
         $this->seam = $seam;
         $this->simulate = new LocksSimulateClient($seam);
+    }
+
+    public function configure_auto_lock(
+        bool $auto_lock_enabled,
+        string $device_id,
+        ?float $auto_lock_delay_seconds = null,
+        bool $wait_for_action_attempt = true,
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($auto_lock_enabled !== null) {
+            $request_payload["auto_lock_enabled"] = $auto_lock_enabled;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
+        }
+        if ($auto_lock_delay_seconds !== null) {
+            $request_payload[
+                "auto_lock_delay_seconds"
+            ] = $auto_lock_delay_seconds;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/locks/configure_auto_lock",
+            json: (object) $request_payload,
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res->action_attempt);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt->action_attempt_id,
+        );
+
+        return $action_attempt;
     }
 
     public function get(?string $device_id = null, ?string $name = null): Device
