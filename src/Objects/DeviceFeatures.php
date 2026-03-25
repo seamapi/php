@@ -10,6 +10,7 @@ class DeviceFeatures
             return null;
         }
         return new self(
+            auto_lock_time_config: $json->auto_lock_time_config,
             incomplete_keyboard_passcode: $json->incomplete_keyboard_passcode,
             lock_command: $json->lock_command,
             passcode: $json->passcode,
@@ -20,6 +21,7 @@ class DeviceFeatures
     }
 
     public function __construct(
+        public bool $auto_lock_time_config,
         public bool $incomplete_keyboard_passcode,
         public bool $lock_command,
         public bool $passcode,
