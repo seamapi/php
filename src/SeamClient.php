@@ -207,7 +207,6 @@ class AccessCodesClient
         ?bool $prefer_native_scheduling = null,
         ?float $preferred_code_length = null,
         ?string $starts_at = null,
-        ?bool $sync = null,
         ?bool $use_backup_access_code_pool = null,
         ?bool $use_offline_access_code = null,
     ): AccessCode {
@@ -264,9 +263,6 @@ class AccessCodesClient
         }
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;
-        }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
         }
         if ($use_backup_access_code_pool !== null) {
             $request_payload[
@@ -362,7 +358,6 @@ class AccessCodesClient
     public function delete(
         string $access_code_id,
         ?string $device_id = null,
-        ?bool $sync = null,
     ): void {
         $request_payload = [];
 
@@ -371,9 +366,6 @@ class AccessCodesClient
         }
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
-        }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
         }
 
         $this->seam->request(
@@ -543,7 +535,6 @@ class AccessCodesClient
         ?bool $prefer_native_scheduling = null,
         ?float $preferred_code_length = null,
         ?string $starts_at = null,
-        ?bool $sync = null,
         ?string $type = null,
         ?bool $use_backup_access_code_pool = null,
         ?bool $use_offline_access_code = null,
@@ -604,9 +595,6 @@ class AccessCodesClient
         }
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;
-        }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
         }
         if ($type !== null) {
             $request_payload["type"] = $type;
@@ -708,7 +696,6 @@ class AccessCodesUnmanagedClient
         ?bool $allow_external_modification = null,
         ?bool $force = null,
         ?bool $is_external_modification_allowed = null,
-        ?bool $sync = null,
     ): void {
         $request_payload = [];
 
@@ -728,9 +715,6 @@ class AccessCodesUnmanagedClient
                 "is_external_modification_allowed"
             ] = $is_external_modification_allowed;
         }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
-        }
 
         $this->seam->request(
             "POST",
@@ -739,15 +723,12 @@ class AccessCodesUnmanagedClient
         );
     }
 
-    public function delete(string $access_code_id, ?bool $sync = null): void
+    public function delete(string $access_code_id): void
     {
         $request_payload = [];
 
         if ($access_code_id !== null) {
             $request_payload["access_code_id"] = $access_code_id;
-        }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
         }
 
         $this->seam->request(
@@ -1649,7 +1630,6 @@ class AcsCredentialsClient
         ?string $code = null,
         ?string $credential_manager_acs_system_id = null,
         ?string $ends_at = null,
-        mixed $hotek_metadata = null,
         ?bool $is_multi_phone_sync_credential = null,
         mixed $salto_space_metadata = null,
         ?string $starts_at = null,
@@ -1687,9 +1667,6 @@ class AcsCredentialsClient
         }
         if ($ends_at !== null) {
             $request_payload["ends_at"] = $ends_at;
-        }
-        if ($hotek_metadata !== null) {
-            $request_payload["hotek_metadata"] = $hotek_metadata;
         }
         if ($is_multi_phone_sync_credential !== null) {
             $request_payload[
@@ -3059,7 +3036,6 @@ class ConnectWebviewsClient
         ?string $custom_redirect_failure_url = null,
         ?string $custom_redirect_url = null,
         ?string $customer_key = null,
-        ?string $device_selection_mode = null,
         ?array $excluded_providers = null,
         ?string $provider_category = null,
         ?bool $wait_for_device_creation = null,
@@ -3090,9 +3066,6 @@ class ConnectWebviewsClient
         }
         if ($customer_key !== null) {
             $request_payload["customer_key"] = $customer_key;
-        }
-        if ($device_selection_mode !== null) {
-            $request_payload["device_selection_mode"] = $device_selection_mode;
         }
         if ($excluded_providers !== null) {
             $request_payload["excluded_providers"] = $excluded_providers;
@@ -3204,17 +3177,12 @@ class ConnectedAccountsClient
         $this->simulate = new ConnectedAccountsSimulateClient($seam);
     }
 
-    public function delete(
-        string $connected_account_id,
-        ?bool $sync = null,
-    ): void {
+    public function delete(string $connected_account_id): void
+    {
         $request_payload = [];
 
         if ($connected_account_id !== null) {
             $request_payload["connected_account_id"] = $connected_account_id;
-        }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
         }
 
         $this->seam->request(
@@ -3377,10 +3345,8 @@ class CustomersClient
     }
 
     public function create_portal(
-        ?bool $_dev = null,
         ?array $customer_resources_filters = null,
         ?string $customization_profile_id = null,
-        mixed $deep_link = null,
         ?bool $exclude_locale_picker = null,
         mixed $features = null,
         ?bool $is_embedded = null,
@@ -3391,9 +3357,6 @@ class CustomersClient
     ): MagicLink {
         $request_payload = [];
 
-        if ($_dev !== null) {
-            $request_payload["_dev"] = $_dev;
-        }
         if ($customer_resources_filters !== null) {
             $request_payload[
                 "customer_resources_filters"
@@ -3403,9 +3366,6 @@ class CustomersClient
             $request_payload[
                 "customization_profile_id"
             ] = $customization_profile_id;
-        }
-        if ($deep_link !== null) {
-            $request_payload["deep_link"] = $deep_link;
         }
         if ($exclude_locale_picker !== null) {
             $request_payload["exclude_locale_picker"] = $exclude_locale_picker;
@@ -3661,8 +3621,6 @@ class DevicesClient
         ?array $device_ids = null,
         ?string $device_type = null,
         ?array $device_types = null,
-        ?array $exclude_if = null,
-        ?array $include_if = null,
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $page_cursor = null,
@@ -3700,12 +3658,6 @@ class DevicesClient
         }
         if ($device_types !== null) {
             $request_payload["device_types"] = $device_types;
-        }
-        if ($exclude_if !== null) {
-            $request_payload["exclude_if"] = $exclude_if;
-        }
-        if ($include_if !== null) {
-            $request_payload["include_if"] = $include_if;
         }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;
@@ -3955,8 +3907,6 @@ class DevicesUnmanagedClient
         ?array $device_ids = null,
         ?string $device_type = null,
         ?array $device_types = null,
-        ?array $exclude_if = null,
-        ?array $include_if = null,
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $page_cursor = null,
@@ -3994,12 +3944,6 @@ class DevicesUnmanagedClient
         }
         if ($device_types !== null) {
             $request_payload["device_types"] = $device_types;
-        }
-        if ($exclude_if !== null) {
-            $request_payload["exclude_if"] = $exclude_if;
-        }
-        if ($include_if !== null) {
-            $request_payload["include_if"] = $include_if;
         }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;
@@ -4370,8 +4314,6 @@ class LocksClient
         ?array $device_ids = null,
         ?string $device_type = null,
         ?array $device_types = null,
-        ?array $exclude_if = null,
-        ?array $include_if = null,
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $page_cursor = null,
@@ -4410,12 +4352,6 @@ class LocksClient
         if ($device_types !== null) {
             $request_payload["device_types"] = $device_types;
         }
-        if ($exclude_if !== null) {
-            $request_payload["exclude_if"] = $exclude_if;
-        }
-        if ($include_if !== null) {
-            $request_payload["include_if"] = $include_if;
-        }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;
         }
@@ -4453,16 +4389,12 @@ class LocksClient
 
     public function lock_door(
         string $device_id,
-        ?bool $sync = null,
         bool $wait_for_action_attempt = true,
     ): ActionAttempt {
         $request_payload = [];
 
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
-        }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
         }
 
         $res = $this->seam->request(
@@ -4484,16 +4416,12 @@ class LocksClient
 
     public function unlock_door(
         string $device_id,
-        ?bool $sync = null,
         bool $wait_for_action_attempt = true,
     ): ActionAttempt {
         $request_payload = [];
 
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
-        }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
         }
 
         $res = $this->seam->request(
@@ -4604,8 +4532,6 @@ class NoiseSensorsClient
         ?array $device_ids = null,
         ?string $device_type = null,
         ?array $device_types = null,
-        ?array $exclude_if = null,
-        ?array $include_if = null,
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $page_cursor = null,
@@ -4643,12 +4569,6 @@ class NoiseSensorsClient
         }
         if ($device_types !== null) {
             $request_payload["device_types"] = $device_types;
-        }
-        if ($exclude_if !== null) {
-            $request_payload["exclude_if"] = $exclude_if;
-        }
-        if ($include_if !== null) {
-            $request_payload["include_if"] = $include_if;
         }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;
@@ -4702,7 +4622,6 @@ class NoiseSensorsNoiseThresholdsClient
         ?string $name = null,
         ?float $noise_threshold_decibels = null,
         ?float $noise_threshold_nrs = null,
-        ?bool $sync = null,
     ): NoiseThreshold {
         $request_payload = [];
 
@@ -4726,9 +4645,6 @@ class NoiseSensorsNoiseThresholdsClient
         if ($noise_threshold_nrs !== null) {
             $request_payload["noise_threshold_nrs"] = $noise_threshold_nrs;
         }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
-        }
 
         $res = $this->seam->request(
             "POST",
@@ -4739,11 +4655,8 @@ class NoiseSensorsNoiseThresholdsClient
         return NoiseThreshold::from_json($res->noise_threshold);
     }
 
-    public function delete(
-        string $device_id,
-        string $noise_threshold_id,
-        ?bool $sync = null,
-    ): void {
+    public function delete(string $device_id, string $noise_threshold_id): void
+    {
         $request_payload = [];
 
         if ($device_id !== null) {
@@ -4751,9 +4664,6 @@ class NoiseSensorsNoiseThresholdsClient
         }
         if ($noise_threshold_id !== null) {
             $request_payload["noise_threshold_id"] = $noise_threshold_id;
-        }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
         }
 
         $this->seam->request(
@@ -4780,15 +4690,12 @@ class NoiseSensorsNoiseThresholdsClient
         return NoiseThreshold::from_json($res->noise_threshold);
     }
 
-    public function list(string $device_id, ?bool $is_programmed = null): array
+    public function list(string $device_id): array
     {
         $request_payload = [];
 
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
-        }
-        if ($is_programmed !== null) {
-            $request_payload["is_programmed"] = $is_programmed;
         }
 
         $res = $this->seam->request(
@@ -4811,7 +4718,6 @@ class NoiseSensorsNoiseThresholdsClient
         ?float $noise_threshold_decibels = null,
         ?float $noise_threshold_nrs = null,
         ?string $starts_daily_at = null,
-        ?bool $sync = null,
     ): void {
         $request_payload = [];
 
@@ -4837,9 +4743,6 @@ class NoiseSensorsNoiseThresholdsClient
         }
         if ($starts_daily_at !== null) {
             $request_payload["starts_daily_at"] = $starts_daily_at;
-        }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
         }
 
         $this->seam->request(
@@ -5133,16 +5036,12 @@ class SpacesClient
     }
 
     public function list(
-        ?string $connected_account_id = null,
         ?string $customer_key = null,
         ?string $search = null,
         ?string $space_key = null,
     ): array {
         $request_payload = [];
 
-        if ($connected_account_id !== null) {
-            $request_payload["connected_account_id"] = $connected_account_id;
-        }
         if ($customer_key !== null) {
             $request_payload["customer_key"] = $customer_key;
         }
@@ -5288,7 +5187,6 @@ class ThermostatsClient
         string $device_id,
         ?float $cooling_set_point_celsius = null,
         ?float $cooling_set_point_fahrenheit = null,
-        ?bool $sync = null,
         bool $wait_for_action_attempt = true,
     ): ActionAttempt {
         $request_payload = [];
@@ -5305,9 +5203,6 @@ class ThermostatsClient
             $request_payload[
                 "cooling_set_point_fahrenheit"
             ] = $cooling_set_point_fahrenheit;
-        }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
         }
 
         $res = $this->seam->request(
@@ -5421,7 +5316,6 @@ class ThermostatsClient
         string $device_id,
         ?float $heating_set_point_celsius = null,
         ?float $heating_set_point_fahrenheit = null,
-        ?bool $sync = null,
         bool $wait_for_action_attempt = true,
     ): ActionAttempt {
         $request_payload = [];
@@ -5438,9 +5332,6 @@ class ThermostatsClient
             $request_payload[
                 "heating_set_point_fahrenheit"
             ] = $heating_set_point_fahrenheit;
-        }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
         }
 
         $res = $this->seam->request(
@@ -5466,7 +5357,6 @@ class ThermostatsClient
         ?float $cooling_set_point_fahrenheit = null,
         ?float $heating_set_point_celsius = null,
         ?float $heating_set_point_fahrenheit = null,
-        ?bool $sync = null,
         bool $wait_for_action_attempt = true,
     ): ActionAttempt {
         $request_payload = [];
@@ -5493,9 +5383,6 @@ class ThermostatsClient
             $request_payload[
                 "heating_set_point_fahrenheit"
             ] = $heating_set_point_fahrenheit;
-        }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
         }
 
         $res = $this->seam->request(
@@ -5525,8 +5412,6 @@ class ThermostatsClient
         ?array $device_ids = null,
         ?string $device_type = null,
         ?array $device_types = null,
-        ?array $exclude_if = null,
-        ?array $include_if = null,
         ?float $limit = null,
         ?string $manufacturer = null,
         ?string $page_cursor = null,
@@ -5565,12 +5450,6 @@ class ThermostatsClient
         if ($device_types !== null) {
             $request_payload["device_types"] = $device_types;
         }
-        if ($exclude_if !== null) {
-            $request_payload["exclude_if"] = $exclude_if;
-        }
-        if ($include_if !== null) {
-            $request_payload["include_if"] = $include_if;
-        }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;
         }
@@ -5608,16 +5487,12 @@ class ThermostatsClient
 
     public function off(
         string $device_id,
-        ?bool $sync = null,
         bool $wait_for_action_attempt = true,
     ): ActionAttempt {
         $request_payload = [];
 
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
-        }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
         }
 
         $res = $this->seam->request(
@@ -5661,7 +5536,6 @@ class ThermostatsClient
         string $device_id,
         ?string $fan_mode = null,
         ?string $fan_mode_setting = null,
-        ?bool $sync = null,
         bool $wait_for_action_attempt = true,
     ): ActionAttempt {
         $request_payload = [];
@@ -5674,9 +5548,6 @@ class ThermostatsClient
         }
         if ($fan_mode_setting !== null) {
             $request_payload["fan_mode_setting"] = $fan_mode_setting;
-        }
-        if ($sync !== null) {
-            $request_payload["sync"] = $sync;
         }
 
         $res = $this->seam->request(
