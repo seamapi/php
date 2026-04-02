@@ -67,10 +67,10 @@ class Device
             device_provider: isset($json->device_provider)
                 ? DeviceDeviceProvider::from_json($json->device_provider)
                 : null,
-            nickname: $json->nickname ?? null,
             location: isset($json->location)
                 ? DeviceLocation::from_json($json->location)
                 : null,
+            nickname: $json->nickname ?? null,
         );
     }
 
@@ -110,7 +110,7 @@ class Device
         public bool|null $can_unlock_with_code,
         public DeviceDeviceManufacturer|null $device_manufacturer,
         public DeviceDeviceProvider|null $device_provider,
-        public string|null $nickname,
         public DeviceLocation|null $location,
+        public string|null $nickname,
     ) {}
 }

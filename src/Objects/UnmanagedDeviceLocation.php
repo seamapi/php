@@ -11,12 +11,14 @@ class UnmanagedDeviceLocation
         }
         return new self(
             location_name: $json->location_name ?? null,
+            time_zone: $json->time_zone ?? null,
             timezone: $json->timezone ?? null,
         );
     }
 
     public function __construct(
         public string|null $location_name,
+        public string|null $time_zone,
         public string|null $timezone,
     ) {}
 }
