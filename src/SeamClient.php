@@ -6333,6 +6333,26 @@ class UserIdentitiesClient
         return array_map(fn($r) => Device::from_json($r), $res->devices);
     }
 
+    public function list_accessible_entrances(string $user_identity_id): array
+    {
+        $request_payload = [];
+
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/user_identities/list_accessible_entrances",
+            json: (object) $request_payload,
+        );
+
+        return array_map(
+            fn($r) => AcsEntrance::from_json($r),
+            $res->acs_entrances,
+        );
+    }
+
     public function list_acs_systems(string $user_identity_id): array
     {
         $request_payload = [];
