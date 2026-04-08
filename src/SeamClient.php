@@ -5037,13 +5037,22 @@ class SpacesClient
 
     public function list(
         ?string $customer_key = null,
+        ?float $limit = null,
+        ?string $page_cursor = null,
         ?string $search = null,
         ?string $space_key = null,
+        ?callable $on_response = null,
     ): array {
         $request_payload = [];
 
         if ($customer_key !== null) {
             $request_payload["customer_key"] = $customer_key;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($page_cursor !== null) {
+            $request_payload["page_cursor"] = $page_cursor;
         }
         if ($search !== null) {
             $request_payload["search"] = $search;
@@ -5057,6 +5066,10 @@ class SpacesClient
             "/spaces/list",
             json: (object) $request_payload,
         );
+
+        if ($on_response !== null) {
+            $on_response($res);
+        }
 
         return array_map(fn($r) => Space::from_json($r), $res->spaces);
     }
