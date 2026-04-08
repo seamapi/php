@@ -17,6 +17,10 @@ class AcsAccessGroup
             connected_account_id: $json->connected_account_id,
             created_at: $json->created_at,
             display_name: $json->display_name,
+            errors: array_map(
+                fn($e) => AcsAccessGroupErrors::from_json($e),
+                $json->errors ?? [],
+            ),
             external_type: $json->external_type,
             external_type_display_name: $json->external_type_display_name,
             is_managed: $json->is_managed,
@@ -46,6 +50,7 @@ class AcsAccessGroup
         public string $connected_account_id,
         public string $created_at,
         public string $display_name,
+        public array $errors,
         public string $external_type,
         public string $external_type_display_name,
         public bool $is_managed,
