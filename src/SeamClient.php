@@ -420,6 +420,7 @@ class AccessCodesClient
 
     public function list(
         ?array $access_code_ids = null,
+        ?string $access_grant_id = null,
         ?string $access_method_id = null,
         ?string $customer_key = null,
         ?string $device_id = null,
@@ -433,6 +434,9 @@ class AccessCodesClient
 
         if ($access_code_ids !== null) {
             $request_payload["access_code_ids"] = $access_code_ids;
+        }
+        if ($access_grant_id !== null) {
+            $request_payload["access_grant_id"] = $access_grant_id;
         }
         if ($access_method_id !== null) {
             $request_payload["access_method_id"] = $access_method_id;
@@ -999,6 +1003,7 @@ class AccessGrantsClient
     }
 
     public function list(
+        ?string $access_code_id = null,
         ?array $access_grant_ids = null,
         ?string $access_grant_key = null,
         ?string $acs_entrance_id = null,
@@ -1014,6 +1019,9 @@ class AccessGrantsClient
     ): array {
         $request_payload = [];
 
+        if ($access_code_id !== null) {
+            $request_payload["access_code_id"] = $access_code_id;
+        }
         if ($access_grant_ids !== null) {
             $request_payload["access_grant_ids"] = $access_grant_ids;
         }
@@ -1316,6 +1324,7 @@ class AccessMethodsClient
     }
 
     public function list(
+        ?string $access_code_id = null,
         ?string $access_grant_id = null,
         ?string $access_grant_key = null,
         ?string $acs_entrance_id = null,
@@ -1324,6 +1333,9 @@ class AccessMethodsClient
     ): array {
         $request_payload = [];
 
+        if ($access_code_id !== null) {
+            $request_payload["access_code_id"] = $access_code_id;
+        }
         if ($access_grant_id !== null) {
             $request_payload["access_grant_id"] = $access_grant_id;
         }
