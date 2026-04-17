@@ -22,6 +22,10 @@ class AccessCode
             is_managed: $json->is_managed,
             is_offline_access_code: $json->is_offline_access_code,
             is_one_time_use: $json->is_one_time_use,
+            pending_mutations: array_map(
+                fn($p) => AccessCodePendingMutations::from_json($p),
+                $json->pending_mutations ?? [],
+            ),
             status: $json->status,
             type: $json->type,
             warnings: array_map(
@@ -58,6 +62,7 @@ class AccessCode
         public bool $is_managed,
         public bool $is_offline_access_code,
         public bool $is_one_time_use,
+        public array $pending_mutations,
         public string $status,
         public string $type,
         public array $warnings,
