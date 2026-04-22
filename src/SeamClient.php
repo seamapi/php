@@ -21,6 +21,7 @@ use Seam\Objects\ClientSession;
 use Seam\Objects\ConnectWebview;
 use Seam\Objects\ConnectedAccount;
 use Seam\Objects\Customer;
+use Seam\Objects\CustomerPortal;
 use Seam\Objects\CustomizationProfile;
 use Seam\Objects\Device;
 use Seam\Objects\DeviceProvider;
@@ -3366,7 +3367,7 @@ class CustomersClient
         ?string $locale = null,
         ?string $navigation_mode = null,
         mixed $customer_data = null,
-    ): MagicLink {
+    ): CustomerPortal {
         $request_payload = [];
 
         if ($customer_resources_filters !== null) {
@@ -3407,7 +3408,7 @@ class CustomersClient
             json: (object) $request_payload,
         );
 
-        return MagicLink::from_json($res->magic_link);
+        return CustomerPortal::from_json($res->customer_portal);
     }
 
     public function delete_data(
