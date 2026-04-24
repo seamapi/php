@@ -297,6 +297,7 @@ class AccessCodesClient
         ?bool $prefer_native_scheduling = null,
         ?float $preferred_code_length = null,
         ?string $starts_at = null,
+        ?bool $use_backup_access_code_pool = null,
     ): array {
         $request_payload = [];
 
@@ -342,6 +343,11 @@ class AccessCodesClient
         }
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;
+        }
+        if ($use_backup_access_code_pool !== null) {
+            $request_payload[
+                "use_backup_access_code_pool"
+            ] = $use_backup_access_code_pool;
         }
 
         $res = $this->seam->request(
