@@ -17,6 +17,9 @@ class Space
             name: $json->name,
             space_id: $json->space_id,
             workspace_id: $json->workspace_id,
+            customer_data: isset($json->customer_data)
+                ? SpaceCustomerData::from_json($json->customer_data)
+                : null,
             customer_key: $json->customer_key ?? null,
             parent_space_id: $json->parent_space_id ?? null,
             parent_space_key: $json->parent_space_key ?? null,
@@ -32,6 +35,7 @@ class Space
         public string $name,
         public string $space_id,
         public string $workspace_id,
+        public SpaceCustomerData|null $customer_data,
         public string|null $customer_key,
         public string|null $parent_space_id,
         public string|null $parent_space_key,

@@ -4956,6 +4956,7 @@ class SpacesClient
     public function create(
         string $name,
         ?array $acs_entrance_ids = null,
+        mixed $customer_data = null,
         ?string $customer_key = null,
         ?array $device_ids = null,
         ?string $space_key = null,
@@ -4967,6 +4968,9 @@ class SpacesClient
         }
         if ($acs_entrance_ids !== null) {
             $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
+        }
+        if ($customer_data !== null) {
+            $request_payload["customer_data"] = $customer_data;
         }
         if ($customer_key !== null) {
             $request_payload["customer_key"] = $customer_key;
@@ -5133,6 +5137,7 @@ class SpacesClient
 
     public function update(
         ?array $acs_entrance_ids = null,
+        mixed $customer_data = null,
         ?string $customer_key = null,
         ?array $device_ids = null,
         ?string $name = null,
@@ -5143,6 +5148,9 @@ class SpacesClient
 
         if ($acs_entrance_ids !== null) {
             $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
+        }
+        if ($customer_data !== null) {
+            $request_payload["customer_data"] = $customer_data;
         }
         if ($customer_key !== null) {
             $request_payload["customer_key"] = $customer_key;
