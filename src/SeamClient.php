@@ -3239,6 +3239,7 @@ class ConnectedAccountsClient
         mixed $limit = null,
         ?string $page_cursor = null,
         ?string $search = null,
+        ?string $space_id = null,
         ?string $user_identifier_key = null,
         ?callable $on_response = null,
     ): array {
@@ -3258,6 +3259,9 @@ class ConnectedAccountsClient
         }
         if ($search !== null) {
             $request_payload["search"] = $search;
+        }
+        if ($space_id !== null) {
+            $request_payload["space_id"] = $space_id;
         }
         if ($user_identifier_key !== null) {
             $request_payload["user_identifier_key"] = $user_identifier_key;
@@ -4935,6 +4939,26 @@ class SpacesClient
         );
     }
 
+    public function add_connected_account(
+        string $connected_account_id,
+        string $space_id,
+    ): void {
+        $request_payload = [];
+
+        if ($connected_account_id !== null) {
+            $request_payload["connected_account_id"] = $connected_account_id;
+        }
+        if ($space_id !== null) {
+            $request_payload["space_id"] = $space_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/spaces/add_connected_account",
+            json: (object) $request_payload,
+        );
+    }
+
     public function add_devices(array $device_ids, string $space_id): void
     {
         $request_payload = [];
@@ -5113,6 +5137,26 @@ class SpacesClient
         $this->seam->request(
             "POST",
             "/spaces/remove_acs_entrances",
+            json: (object) $request_payload,
+        );
+    }
+
+    public function remove_connected_account(
+        string $connected_account_id,
+        string $space_id,
+    ): void {
+        $request_payload = [];
+
+        if ($connected_account_id !== null) {
+            $request_payload["connected_account_id"] = $connected_account_id;
+        }
+        if ($space_id !== null) {
+            $request_payload["space_id"] = $space_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/spaces/remove_connected_account",
             json: (object) $request_payload,
         );
     }

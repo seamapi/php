@@ -21,6 +21,7 @@ class AccessGrantWarnings
             ),
             new_code: $json->new_code ?? null,
             original_code: $json->original_code ?? null,
+            reason: $json->reason ?? null,
         );
     }
 
@@ -33,5 +34,6 @@ class AccessGrantWarnings
         public array|null $failed_devices,
         public string|null $new_code,
         public string|null $original_code,
+        public string|null $reason,
     ) {}
 }
