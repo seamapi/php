@@ -96,6 +96,7 @@ class Event
             hvac_mode_setting: $json->hvac_mode_setting ?? null,
             image_url: $json->image_url ?? null,
             is_backup_code: $json->is_backup_code ?? null,
+            is_bluetooth_action: $json->is_bluetooth_action ?? null,
             is_fallback_climate_preset: $json->is_fallback_climate_preset ??
                 null,
             method: $json->method ?? null,
@@ -182,6 +183,7 @@ class Event
         public string|null $hvac_mode_setting,
         public string|null $image_url,
         public bool|null $is_backup_code,
+        public bool|null $is_bluetooth_action,
         public bool|null $is_fallback_climate_preset,
         public string|null $method,
         public mixed $minut_metadata,
