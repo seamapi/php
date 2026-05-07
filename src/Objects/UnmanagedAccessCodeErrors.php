@@ -19,6 +19,7 @@ class UnmanagedAccessCodeErrors
             is_connected_account_error: $json->is_connected_account_error ??
                 null,
             is_device_error: $json->is_device_error ?? null,
+            unmanaged_access_code_id: $json->unmanaged_access_code_id ?? null,
         );
     }
 
@@ -30,5 +31,6 @@ class UnmanagedAccessCodeErrors
         public bool|null $is_bridge_error,
         public bool|null $is_connected_account_error,
         public bool|null $is_device_error,
+        public string|null $unmanaged_access_code_id,
     ) {}
 }
