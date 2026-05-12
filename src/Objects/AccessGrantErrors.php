@@ -13,6 +13,7 @@ class AccessGrantErrors
             created_at: $json->created_at,
             error_code: $json->error_code,
             message: $json->message,
+            missing_device_ids: $json->missing_device_ids ?? null,
         );
     }
 
@@ -20,5 +21,6 @@ class AccessGrantErrors
         public string $created_at,
         public string $error_code,
         public string $message,
+        public array|null $missing_device_ids,
     ) {}
 }
