@@ -11,6 +11,8 @@ class CustomizationProfileCustomerPortalTheme
             return null;
         }
         return new self(
+            font_family: $json->font_family ?? null,
+            mono_font_family: $json->mono_font_family ?? null,
             primary_color: $json->primary_color ?? null,
             primary_foreground_color: $json->primary_foreground_color ?? null,
             secondary_color: $json->secondary_color ?? null,
@@ -20,6 +22,8 @@ class CustomizationProfileCustomerPortalTheme
     }
 
     public function __construct(
+        public string|null $font_family,
+        public string|null $mono_font_family,
         public string|null $primary_color,
         public string|null $primary_foreground_color,
         public string|null $secondary_color,

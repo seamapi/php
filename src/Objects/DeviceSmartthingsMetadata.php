@@ -11,16 +11,16 @@ class DeviceSmartthingsMetadata
             return null;
         }
         return new self(
-            device_id: $json->device_id,
-            device_name: $json->device_name,
+            device_id: $json->device_id ?? null,
+            device_name: $json->device_name ?? null,
             location_id: $json->location_id ?? null,
             model: $json->model ?? null,
         );
     }
 
     public function __construct(
-        public string $device_id,
-        public string $device_name,
+        public string|null $device_id,
+        public string|null $device_name,
         public string|null $location_id,
         public string|null $model,
     ) {}

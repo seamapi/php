@@ -25,6 +25,9 @@ class UnmanagedAccessCode
                 $json->warnings ?? [],
             ),
             workspace_id: $json->workspace_id,
+            cannot_be_managed: $json->cannot_be_managed ?? null,
+            cannot_delete_unmanaged_access_code: $json->cannot_delete_unmanaged_access_code ??
+                null,
             code: $json->code ?? null,
             name: $json->name ?? null,
             dormakaba_oracode_metadata: isset($json->dormakaba_oracode_metadata)
@@ -47,6 +50,8 @@ class UnmanagedAccessCode
         public string $type,
         public array $warnings,
         public string $workspace_id,
+        public bool|null $cannot_be_managed,
+        public bool|null $cannot_delete_unmanaged_access_code,
         public string|null $code,
         public string|null $name,
         public UnmanagedAccessCodeDormakabaOracodeMetadata|null $dormakaba_oracode_metadata,

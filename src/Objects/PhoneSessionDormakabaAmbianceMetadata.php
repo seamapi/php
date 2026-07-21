@@ -10,8 +10,8 @@ class PhoneSessionDormakabaAmbianceMetadata
         if (!$json) {
             return null;
         }
-        return new self(access_point_name: $json->access_point_name);
+        return new self(access_point_name: $json->access_point_name ?? null);
     }
 
-    public function __construct(public string $access_point_name) {}
+    public function __construct(public string|null $access_point_name) {}
 }

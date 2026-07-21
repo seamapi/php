@@ -9,8 +9,11 @@ class DevicePressure
         if (!$json) {
             return null;
         }
-        return new self(time: $json->time, value: $json->value);
+        return new self(time: $json->time ?? null, value: $json->value ?? null);
     }
 
-    public function __construct(public string $time, public float $value) {}
+    public function __construct(
+        public string|null $time,
+        public float|null $value,
+    ) {}
 }

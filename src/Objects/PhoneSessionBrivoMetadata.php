@@ -11,15 +11,15 @@ class PhoneSessionBrivoMetadata
             return null;
         }
         return new self(
-            access_point_id: $json->access_point_id,
-            site_id: $json->site_id,
-            site_name: $json->site_name,
+            access_point_id: $json->access_point_id ?? null,
+            site_id: $json->site_id ?? null,
+            site_name: $json->site_name ?? null,
         );
     }
 
     public function __construct(
-        public string $access_point_id,
-        public float $site_id,
-        public string $site_name,
+        public string|null $access_point_id,
+        public float|null $site_id,
+        public string|null $site_name,
     ) {}
 }

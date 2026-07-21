@@ -10,17 +10,17 @@ class DeviceAkilesMetadata
             return null;
         }
         return new self(
-            gadget_id: $json->gadget_id,
-            gadget_name: $json->gadget_name,
-            product_name: $json->product_name,
             _member_group_id: $json->_member_group_id ?? null,
+            gadget_id: $json->gadget_id ?? null,
+            gadget_name: $json->gadget_name ?? null,
+            product_name: $json->product_name ?? null,
         );
     }
 
     public function __construct(
-        public string $gadget_id,
-        public string $gadget_name,
-        public string $product_name,
         public string|null $_member_group_id,
+        public string|null $gadget_id,
+        public string|null $gadget_name,
+        public string|null $product_name,
     ) {}
 }

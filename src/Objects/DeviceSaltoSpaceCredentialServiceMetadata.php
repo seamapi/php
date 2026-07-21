@@ -10,8 +10,8 @@ class DeviceSaltoSpaceCredentialServiceMetadata
         if (!$json) {
             return null;
         }
-        return new self(has_active_phone: $json->has_active_phone);
+        return new self(has_active_phone: $json->has_active_phone ?? null);
     }
 
-    public function __construct(public bool $has_active_phone) {}
+    public function __construct(public bool|null $has_active_phone) {}
 }

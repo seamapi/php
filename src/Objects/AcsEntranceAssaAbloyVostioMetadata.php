@@ -11,18 +11,18 @@ class AcsEntranceAssaAbloyVostioMetadata
             return null;
         }
         return new self(
-            door_name: $json->door_name,
-            door_type: $json->door_type,
+            door_name: $json->door_name ?? null,
             door_number: $json->door_number ?? null,
+            door_type: $json->door_type ?? null,
             pms_id: $json->pms_id ?? null,
             stand_open: $json->stand_open ?? null,
         );
     }
 
     public function __construct(
-        public string $door_name,
-        public string $door_type,
+        public string|null $door_name,
         public float|null $door_number,
+        public string|null $door_type,
         public string|null $pms_id,
         public bool|null $stand_open,
     ) {}

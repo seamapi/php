@@ -10,15 +10,15 @@ class DeviceKwiksetMetadata
             return null;
         }
         return new self(
-            device_id: $json->device_id,
-            device_name: $json->device_name,
-            model_number: $json->model_number,
+            device_id: $json->device_id ?? null,
+            device_name: $json->device_name ?? null,
+            model_number: $json->model_number ?? null,
         );
     }
 
     public function __construct(
-        public string $device_id,
-        public string $device_name,
-        public string $model_number,
+        public string|null $device_id,
+        public string|null $device_name,
+        public string|null $model_number,
     ) {}
 }

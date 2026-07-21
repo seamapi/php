@@ -428,6 +428,7 @@ class AccessCodesClient
     public function list(
         ?array $access_code_ids = null,
         ?string $access_grant_id = null,
+        ?string $access_grant_key = null,
         ?string $access_method_id = null,
         ?string $customer_key = null,
         ?string $device_id = null,
@@ -444,6 +445,9 @@ class AccessCodesClient
         }
         if ($access_grant_id !== null) {
             $request_payload["access_grant_id"] = $access_grant_id;
+        }
+        if ($access_grant_key !== null) {
+            $request_payload["access_grant_key"] = $access_grant_key;
         }
         if ($access_method_id !== null) {
             $request_payload["access_method_id"] = $access_method_id;
@@ -1016,6 +1020,7 @@ class AccessGrantsClient
         ?string $acs_entrance_id = null,
         ?string $acs_system_id = null,
         ?string $customer_key = null,
+        ?string $device_id = null,
         ?float $limit = null,
         ?string $location_id = null,
         ?string $page_cursor = null,
@@ -1043,6 +1048,9 @@ class AccessGrantsClient
         }
         if ($customer_key !== null) {
             $request_payload["customer_key"] = $customer_key;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
         }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;
@@ -1104,7 +1112,8 @@ class AccessGrantsClient
     }
 
     public function update(
-        string $access_grant_id,
+        ?string $access_grant_id = null,
+        ?string $access_grant_key = null,
         ?string $ends_at = null,
         ?string $name = null,
         ?string $starts_at = null,
@@ -1113,6 +1122,9 @@ class AccessGrantsClient
 
         if ($access_grant_id !== null) {
             $request_payload["access_grant_id"] = $access_grant_id;
+        }
+        if ($access_grant_key !== null) {
+            $request_payload["access_grant_key"] = $access_grant_key;
         }
         if ($ends_at !== null) {
             $request_payload["ends_at"] = $ends_at;
@@ -1230,6 +1242,37 @@ class AccessMethodsClient
     {
         $this->seam = $seam;
         $this->unmanaged = new AccessMethodsUnmanagedClient($seam);
+    }
+
+    public function assign_card(
+        string $access_method_id,
+        string $card_number,
+        bool $wait_for_action_attempt = true,
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($access_method_id !== null) {
+            $request_payload["access_method_id"] = $access_method_id;
+        }
+        if ($card_number !== null) {
+            $request_payload["card_number"] = $card_number;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/access_methods/assign_card",
+            json: (object) $request_payload,
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res->action_attempt);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt->action_attempt_id,
+        );
+
+        return $action_attempt;
     }
 
     public function delete(
@@ -1369,6 +1412,37 @@ class AccessMethodsClient
             fn($r) => AccessMethod::from_json($r),
             $res->access_methods,
         );
+    }
+
+    public function unlock_door(
+        string $access_method_id,
+        string $acs_entrance_id,
+        bool $wait_for_action_attempt = true,
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($access_method_id !== null) {
+            $request_payload["access_method_id"] = $access_method_id;
+        }
+        if ($acs_entrance_id !== null) {
+            $request_payload["acs_entrance_id"] = $acs_entrance_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/access_methods/unlock_door",
+            json: (object) $request_payload,
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res->action_attempt);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt->action_attempt_id,
+        );
+
+        return $action_attempt;
     }
 }
 
@@ -1976,6 +2050,7 @@ class AcsEncodersClient
 
     public function scan_credential(
         string $acs_encoder_id,
+        mixed $salto_ks_metadata = null,
         bool $wait_for_action_attempt = true,
     ): ActionAttempt {
         $request_payload = [];
@@ -1983,10 +2058,52 @@ class AcsEncodersClient
         if ($acs_encoder_id !== null) {
             $request_payload["acs_encoder_id"] = $acs_encoder_id;
         }
+        if ($salto_ks_metadata !== null) {
+            $request_payload["salto_ks_metadata"] = $salto_ks_metadata;
+        }
 
         $res = $this->seam->request(
             "POST",
             "/acs/encoders/scan_credential",
+            json: (object) $request_payload,
+        );
+
+        if (!$wait_for_action_attempt) {
+            return ActionAttempt::from_json($res->action_attempt);
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready(
+            $res->action_attempt->action_attempt_id,
+        );
+
+        return $action_attempt;
+    }
+
+    public function scan_to_assign_credential(
+        string $acs_encoder_id,
+        ?string $acs_user_id = null,
+        mixed $salto_ks_metadata = null,
+        ?string $user_identity_id = null,
+        bool $wait_for_action_attempt = true,
+    ): ActionAttempt {
+        $request_payload = [];
+
+        if ($acs_encoder_id !== null) {
+            $request_payload["acs_encoder_id"] = $acs_encoder_id;
+        }
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
+        }
+        if ($salto_ks_metadata !== null) {
+            $request_payload["salto_ks_metadata"] = $salto_ks_metadata;
+        }
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+
+        $res = $this->seam->request(
+            "POST",
+            "/acs/encoders/scan_to_assign_credential",
             json: (object) $request_payload,
         );
 
@@ -3304,6 +3421,7 @@ class ConnectedAccountsClient
         ?bool $automatically_manage_new_devices = null,
         mixed $custom_metadata = null,
         ?string $customer_key = null,
+        ?string $display_name = null,
     ): void {
         $request_payload = [];
 
@@ -3323,6 +3441,9 @@ class ConnectedAccountsClient
         }
         if ($customer_key !== null) {
             $request_payload["customer_key"] = $customer_key;
+        }
+        if ($display_name !== null) {
+            $request_payload["display_name"] = $display_name;
         }
 
         $this->seam->request(
@@ -3755,6 +3876,7 @@ class DevicesClient
 
     public function update(
         string $device_id,
+        ?bool $backup_access_code_pool_enabled = null,
         mixed $custom_metadata = null,
         ?bool $is_managed = null,
         ?string $name = null,
@@ -3764,6 +3886,11 @@ class DevicesClient
 
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
+        }
+        if ($backup_access_code_pool_enabled !== null) {
+            $request_payload[
+                "backup_access_code_pool_enabled"
+            ] = $backup_access_code_pool_enabled;
         }
         if ($custom_metadata !== null) {
             $request_payload["custom_metadata"] = $custom_metadata;
@@ -4980,6 +5107,7 @@ class SpacesClient
     public function create(
         string $name,
         ?array $acs_entrance_ids = null,
+        ?array $connected_account_ids = null,
         mixed $customer_data = null,
         ?string $customer_key = null,
         ?array $device_ids = null,
@@ -4992,6 +5120,9 @@ class SpacesClient
         }
         if ($acs_entrance_ids !== null) {
             $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
+        }
+        if ($connected_account_ids !== null) {
+            $request_payload["connected_account_ids"] = $connected_account_ids;
         }
         if ($customer_data !== null) {
             $request_payload["customer_data"] = $customer_data;
@@ -5182,7 +5313,6 @@ class SpacesClient
     public function update(
         ?array $acs_entrance_ids = null,
         mixed $customer_data = null,
-        ?string $customer_key = null,
         ?array $device_ids = null,
         ?string $name = null,
         ?string $space_id = null,
@@ -5195,9 +5325,6 @@ class SpacesClient
         }
         if ($customer_data !== null) {
             $request_payload["customer_data"] = $customer_data;
-        }
-        if ($customer_key !== null) {
-            $request_payload["customer_key"] = $customer_key;
         }
         if ($device_ids !== null) {
             $request_payload["device_ids"] = $device_ids;

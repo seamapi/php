@@ -9,10 +9,8 @@ class UnmanagedAcsUserFrom
         if (!$json) {
             return null;
         }
-        return new self(
-            acs_access_group_id: $json->acs_access_group_id ?? null,
-        );
+        return new self(acs_credential_id: $json->acs_credential_id ?? null);
     }
 
-    public function __construct(public string|null $acs_access_group_id) {}
+    public function __construct(public string|null $acs_credential_id) {}
 }

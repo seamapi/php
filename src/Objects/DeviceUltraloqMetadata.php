@@ -10,17 +10,17 @@ class DeviceUltraloqMetadata
             return null;
         }
         return new self(
-            device_id: $json->device_id,
-            device_name: $json->device_name,
-            device_type: $json->device_type,
+            device_id: $json->device_id ?? null,
+            device_name: $json->device_name ?? null,
+            device_type: $json->device_type ?? null,
             time_zone: $json->time_zone ?? null,
         );
     }
 
     public function __construct(
-        public string $device_id,
-        public string $device_name,
-        public string $device_type,
+        public string|null $device_id,
+        public string|null $device_name,
+        public string|null $device_type,
         public string|null $time_zone,
     ) {}
 }

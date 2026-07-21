@@ -59,6 +59,8 @@ class DeviceProperties
                     $json->avigilon_alta_metadata,
                 )
                 : null,
+            backup_access_code_pool_enabled: $json->backup_access_code_pool_enabled ??
+                null,
             battery: isset($json->battery)
                 ? DeviceBattery::from_json($json->battery)
                 : null,
@@ -131,6 +133,9 @@ class DeviceProperties
             keypad_battery: isset($json->keypad_battery)
                 ? DeviceKeypadBattery::from_json($json->keypad_battery)
                 : null,
+            kisi_metadata: isset($json->kisi_metadata)
+                ? DeviceKisiMetadata::from_json($json->kisi_metadata)
+                : null,
             korelock_metadata: isset($json->korelock_metadata)
                 ? DeviceKorelockMetadata::from_json($json->korelock_metadata)
                 : null,
@@ -185,8 +190,19 @@ class DeviceProperties
                 : null,
             offline_access_codes_enabled: $json->offline_access_codes_enabled ??
                 null,
+            offline_time_frame_options: array_map(
+                fn($o) => DeviceOfflineTimeFrameOptions::from_json($o),
+                $json->offline_time_frame_options ?? [],
+            ),
+            omnitec_metadata: isset($json->omnitec_metadata)
+                ? DeviceOmnitecMetadata::from_json($json->omnitec_metadata)
+                : null,
             online_access_codes_enabled: $json->online_access_codes_enabled ??
                 null,
+            online_time_frame_options: array_map(
+                fn($o) => DeviceOnlineTimeFrameOptions::from_json($o),
+                $json->online_time_frame_options ?? [],
+            ),
             relative_humidity: $json->relative_humidity ?? null,
             ring_metadata: isset($json->ring_metadata)
                 ? DeviceRingMetadata::from_json($json->ring_metadata)
@@ -294,6 +310,7 @@ class DeviceProperties
         public array|null $available_fan_mode_settings,
         public array|null $available_hvac_mode_settings,
         public DeviceAvigilonAltaMetadata|null $avigilon_alta_metadata,
+        public bool|null $backup_access_code_pool_enabled,
         public DeviceBattery|null $battery,
         public float|null $battery_level,
         public DeviceBrivoMetadata|null $brivo_metadata,
@@ -321,6 +338,7 @@ class DeviceProperties
         public bool|null $is_temporary_manual_override_active,
         public DeviceKeynestMetadata|null $keynest_metadata,
         public DeviceKeypadBattery|null $keypad_battery,
+        public DeviceKisiMetadata|null $kisi_metadata,
         public DeviceKorelockMetadata|null $korelock_metadata,
         public DeviceKwiksetMetadata|null $kwikset_metadata,
         public bool|null $locked,
@@ -345,7 +363,10 @@ class DeviceProperties
         public DeviceNoiseawareMetadata|null $noiseaware_metadata,
         public DeviceNukiMetadata|null $nuki_metadata,
         public bool|null $offline_access_codes_enabled,
+        public array|null $offline_time_frame_options,
+        public DeviceOmnitecMetadata|null $omnitec_metadata,
         public bool|null $online_access_codes_enabled,
+        public array|null $online_time_frame_options,
         public float|null $relative_humidity,
         public DeviceRingMetadata|null $ring_metadata,
         public DeviceSaltoKsMetadata|null $salto_ks_metadata,

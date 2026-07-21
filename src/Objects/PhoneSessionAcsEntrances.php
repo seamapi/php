@@ -20,9 +20,18 @@ class PhoneSessionAcsEntrances
                 $json->errors ?? [],
             ),
             space_ids: $json->space_ids,
+            warnings: array_map(
+                fn($w) => PhoneSessionWarnings::from_json($w),
+                $json->warnings ?? [],
+            ),
             assa_abloy_vostio_metadata: isset($json->assa_abloy_vostio_metadata)
                 ? PhoneSessionAssaAbloyVostioMetadata::from_json(
                     $json->assa_abloy_vostio_metadata,
+                )
+                : null,
+            avigilon_alta_metadata: isset($json->avigilon_alta_metadata)
+                ? PhoneSessionAvigilonAltaMetadata::from_json(
+                    $json->avigilon_alta_metadata,
                 )
                 : null,
             brivo_metadata: isset($json->brivo_metadata)
@@ -51,6 +60,7 @@ class PhoneSessionAcsEntrances
             hotek_metadata: isset($json->hotek_metadata)
                 ? PhoneSessionHotekMetadata::from_json($json->hotek_metadata)
                 : null,
+            is_locked: $json->is_locked ?? null,
             latch_metadata: isset($json->latch_metadata)
                 ? PhoneSessionLatchMetadata::from_json($json->latch_metadata)
                 : null,
@@ -80,7 +90,9 @@ class PhoneSessionAcsEntrances
         public string $display_name,
         public array $errors,
         public array $space_ids,
+        public array $warnings,
         public PhoneSessionAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
+        public PhoneSessionAvigilonAltaMetadata|null $avigilon_alta_metadata,
         public PhoneSessionBrivoMetadata|null $brivo_metadata,
         public bool|null $can_belong_to_reservation,
         public bool|null $can_unlock_with_card,
@@ -90,6 +102,7 @@ class PhoneSessionAcsEntrances
         public PhoneSessionDormakabaAmbianceMetadata|null $dormakaba_ambiance_metadata,
         public PhoneSessionDormakabaCommunityMetadata|null $dormakaba_community_metadata,
         public PhoneSessionHotekMetadata|null $hotek_metadata,
+        public bool|null $is_locked,
         public PhoneSessionLatchMetadata|null $latch_metadata,
         public PhoneSessionSaltoKsMetadata|null $salto_ks_metadata,
         public PhoneSessionSaltoSpaceMetadata|null $salto_space_metadata,

@@ -10,15 +10,15 @@ class DeviceIglooMetadata
             return null;
         }
         return new self(
-            bridge_id: $json->bridge_id,
-            device_id: $json->device_id,
+            bridge_id: $json->bridge_id ?? null,
+            device_id: $json->device_id ?? null,
             model: $json->model ?? null,
         );
     }
 
     public function __construct(
-        public string $bridge_id,
-        public string $device_id,
+        public string|null $bridge_id,
+        public string|null $device_id,
         public string|null $model,
     ) {}
 }

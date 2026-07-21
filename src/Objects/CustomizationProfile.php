@@ -19,6 +19,7 @@ class CustomizationProfile
                 )
                 : null,
             logo_url: $json->logo_url ?? null,
+            message_overrides: $json->message_overrides ?? null,
             primary_color: $json->primary_color ?? null,
             secondary_color: $json->secondary_color ?? null,
             name: $json->name ?? null,
@@ -31,6 +32,7 @@ class CustomizationProfile
         public string $workspace_id,
         public CustomizationProfileCustomerPortalTheme|null $customer_portal_theme,
         public string|null $logo_url,
+        public mixed $message_overrides,
         public string|null $primary_color,
         public string|null $secondary_color,
         public string|null $name,

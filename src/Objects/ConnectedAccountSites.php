@@ -10,16 +10,18 @@ class ConnectedAccountSites
             return null;
         }
         return new self(
-            site_id: $json->site_id,
-            site_name: $json->site_name,
-            site_user_subscription_limit: $json->site_user_subscription_limit,
-            subscribed_site_user_count: $json->subscribed_site_user_count,
+            site_id: $json->site_id ?? null,
+            site_name: $json->site_name ?? null,
+            site_user_subscription_limit: $json->site_user_subscription_limit ??
+                null,
+            subscribed_site_user_count: $json->subscribed_site_user_count ??
+                null,
         );
     }
 
     public function __construct(
-        public string $site_id,
-        public string $site_name,
+        public string|null $site_id,
+        public string|null $site_name,
         public mixed $site_user_subscription_limit,
         public mixed $subscribed_site_user_count,
     ) {}

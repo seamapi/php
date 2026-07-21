@@ -10,8 +10,8 @@ class DeviceAssaAbloyVostioMetadata
         if (!$json) {
             return null;
         }
-        return new self(encoder_name: $json->encoder_name);
+        return new self(encoder_name: $json->encoder_name ?? null);
     }
 
-    public function __construct(public string $encoder_name) {}
+    public function __construct(public string|null $encoder_name) {}
 }

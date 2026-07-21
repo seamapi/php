@@ -10,17 +10,19 @@ class DeviceMinutMetadata
             return null;
         }
         return new self(
-            device_id: $json->device_id,
-            device_name: $json->device_name,
-            latest_sensor_values: DeviceLatestSensorValues::from_json(
-                $json->latest_sensor_values,
-            ),
+            device_id: $json->device_id ?? null,
+            device_name: $json->device_name ?? null,
+            latest_sensor_values: isset($json->latest_sensor_values)
+                ? DeviceLatestSensorValues::from_json(
+                    $json->latest_sensor_values,
+                )
+                : null,
         );
     }
 
     public function __construct(
-        public string $device_id,
-        public string $device_name,
-        public DeviceLatestSensorValues $latest_sensor_values,
+        public string|null $device_id,
+        public string|null $device_name,
+        public DeviceLatestSensorValues|null $latest_sensor_values,
     ) {}
 }
