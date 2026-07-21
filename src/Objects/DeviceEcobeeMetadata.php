@@ -10,13 +10,13 @@ class DeviceEcobeeMetadata
             return null;
         }
         return new self(
-            device_name: $json->device_name,
-            ecobee_device_id: $json->ecobee_device_id,
+            device_name: $json->device_name ?? null,
+            ecobee_device_id: $json->ecobee_device_id ?? null,
         );
     }
 
     public function __construct(
-        public string $device_name,
-        public string $ecobee_device_id,
+        public string|null $device_name,
+        public string|null $ecobee_device_id,
     ) {}
 }

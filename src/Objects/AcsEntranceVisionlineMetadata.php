@@ -11,8 +11,8 @@ class AcsEntranceVisionlineMetadata
             return null;
         }
         return new self(
-            door_category: $json->door_category,
-            door_name: $json->door_name,
+            door_category: $json->door_category ?? null,
+            door_name: $json->door_name ?? null,
             profiles: array_map(
                 fn($p) => AcsEntranceProfiles::from_json($p),
                 $json->profiles ?? [],
@@ -21,8 +21,8 @@ class AcsEntranceVisionlineMetadata
     }
 
     public function __construct(
-        public string $door_category,
-        public string $door_name,
+        public string|null $door_category,
+        public string|null $door_name,
         public array|null $profiles,
     ) {}
 }

@@ -10,13 +10,13 @@ class DeviceWirelessKeypads
             return null;
         }
         return new self(
-            wireless_keypad_id: $json->wireless_keypad_id,
-            wireless_keypad_name: $json->wireless_keypad_name,
+            wireless_keypad_id: $json->wireless_keypad_id ?? null,
+            wireless_keypad_name: $json->wireless_keypad_name ?? null,
         );
     }
 
     public function __construct(
-        public float $wireless_keypad_id,
-        public string $wireless_keypad_name,
+        public float|null $wireless_keypad_id,
+        public string|null $wireless_keypad_name,
     ) {}
 }

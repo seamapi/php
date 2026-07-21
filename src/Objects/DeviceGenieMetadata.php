@@ -10,13 +10,13 @@ class DeviceGenieMetadata
             return null;
         }
         return new self(
-            device_name: $json->device_name,
-            door_name: $json->door_name,
+            device_name: $json->device_name ?? null,
+            door_name: $json->door_name ?? null,
         );
     }
 
     public function __construct(
-        public string $device_name,
-        public string $door_name,
+        public string|null $device_name,
+        public string|null $door_name,
     ) {}
 }

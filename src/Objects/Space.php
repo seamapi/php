@@ -24,6 +24,9 @@ class Space
             parent_space_id: $json->parent_space_id ?? null,
             parent_space_key: $json->parent_space_key ?? null,
             space_key: $json->space_key ?? null,
+            geolocation: isset($json->geolocation)
+                ? SpaceGeolocation::from_json($json->geolocation)
+                : null,
         );
     }
 
@@ -40,5 +43,6 @@ class Space
         public string|null $parent_space_id,
         public string|null $parent_space_key,
         public string|null $space_key,
+        public SpaceGeolocation|null $geolocation,
     ) {}
 }

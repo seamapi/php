@@ -15,12 +15,12 @@ class PhoneAssaAbloyCredentialServiceMetadata
                 fn($e) => PhoneEndpoints::from_json($e),
                 $json->endpoints ?? [],
             ),
-            has_active_endpoint: $json->has_active_endpoint,
+            has_active_endpoint: $json->has_active_endpoint ?? null,
         );
     }
 
     public function __construct(
-        public array $endpoints,
-        public bool $has_active_endpoint,
+        public array|null $endpoints,
+        public bool|null $has_active_endpoint,
     ) {}
 }

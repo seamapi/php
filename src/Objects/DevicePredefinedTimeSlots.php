@@ -11,29 +11,31 @@ class DevicePredefinedTimeSlots
             return null;
         }
         return new self(
-            check_in_time: $json->check_in_time,
-            check_out_time: $json->check_out_time,
-            dormakaba_oracode_user_level_id: $json->dormakaba_oracode_user_level_id,
-            dormakaba_oracode_user_level_prefix: $json->dormakaba_oracode_user_level_prefix,
-            is_24_hour: $json->is_24_hour,
-            is_biweekly_mode: $json->is_biweekly_mode,
-            is_master: $json->is_master,
-            is_one_shot: $json->is_one_shot,
-            name: $json->name,
-            prefix: $json->prefix,
+            check_in_time: $json->check_in_time ?? null,
+            check_out_time: $json->check_out_time ?? null,
+            dormakaba_oracode_user_level_id: $json->dormakaba_oracode_user_level_id ??
+                null,
+            dormakaba_oracode_user_level_prefix: $json->dormakaba_oracode_user_level_prefix ??
+                null,
+            is_24_hour: $json->is_24_hour ?? null,
+            is_biweekly_mode: $json->is_biweekly_mode ?? null,
+            is_master: $json->is_master ?? null,
+            is_one_shot: $json->is_one_shot ?? null,
+            name: $json->name ?? null,
+            prefix: $json->prefix ?? null,
         );
     }
 
     public function __construct(
-        public string $check_in_time,
-        public string $check_out_time,
-        public string $dormakaba_oracode_user_level_id,
-        public float $dormakaba_oracode_user_level_prefix,
-        public bool $is_24_hour,
-        public bool $is_biweekly_mode,
-        public bool $is_master,
-        public bool $is_one_shot,
-        public string $name,
-        public float $prefix,
+        public string|null $check_in_time,
+        public string|null $check_out_time,
+        public string|null $dormakaba_oracode_user_level_id,
+        public float|null $dormakaba_oracode_user_level_prefix,
+        public bool|null $is_24_hour,
+        public bool|null $is_biweekly_mode,
+        public bool|null $is_master,
+        public bool|null $is_one_shot,
+        public string|null $name,
+        public float|null $prefix,
     ) {}
 }

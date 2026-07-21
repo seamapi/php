@@ -10,13 +10,13 @@ class DeviceEndpoints
             return null;
         }
         return new self(
-            endpoint_id: $json->endpoint_id,
-            is_active: $json->is_active,
+            endpoint_id: $json->endpoint_id ?? null,
+            is_active: $json->is_active ?? null,
         );
     }
 
     public function __construct(
-        public string $endpoint_id,
-        public bool $is_active,
+        public string|null $endpoint_id,
+        public bool|null $is_active,
     ) {}
 }

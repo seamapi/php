@@ -20,9 +20,18 @@ class AcsEntrance
                 $json->errors ?? [],
             ),
             space_ids: $json->space_ids,
+            warnings: array_map(
+                fn($w) => AcsEntranceWarnings::from_json($w),
+                $json->warnings ?? [],
+            ),
             assa_abloy_vostio_metadata: isset($json->assa_abloy_vostio_metadata)
                 ? AcsEntranceAssaAbloyVostioMetadata::from_json(
                     $json->assa_abloy_vostio_metadata,
+                )
+                : null,
+            avigilon_alta_metadata: isset($json->avigilon_alta_metadata)
+                ? AcsEntranceAvigilonAltaMetadata::from_json(
+                    $json->avigilon_alta_metadata,
                 )
                 : null,
             brivo_metadata: isset($json->brivo_metadata)
@@ -51,6 +60,7 @@ class AcsEntrance
             hotek_metadata: isset($json->hotek_metadata)
                 ? AcsEntranceHotekMetadata::from_json($json->hotek_metadata)
                 : null,
+            is_locked: $json->is_locked ?? null,
             latch_metadata: isset($json->latch_metadata)
                 ? AcsEntranceLatchMetadata::from_json($json->latch_metadata)
                 : null,
@@ -80,7 +90,9 @@ class AcsEntrance
         public string $display_name,
         public array $errors,
         public array $space_ids,
+        public array $warnings,
         public AcsEntranceAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
+        public AcsEntranceAvigilonAltaMetadata|null $avigilon_alta_metadata,
         public AcsEntranceBrivoMetadata|null $brivo_metadata,
         public bool|null $can_belong_to_reservation,
         public bool|null $can_unlock_with_card,
@@ -90,6 +102,7 @@ class AcsEntrance
         public AcsEntranceDormakabaAmbianceMetadata|null $dormakaba_ambiance_metadata,
         public AcsEntranceDormakabaCommunityMetadata|null $dormakaba_community_metadata,
         public AcsEntranceHotekMetadata|null $hotek_metadata,
+        public bool|null $is_locked,
         public AcsEntranceLatchMetadata|null $latch_metadata,
         public AcsEntranceSaltoKsMetadata|null $salto_ks_metadata,
         public AcsEntranceSaltoSpaceMetadata|null $salto_space_metadata,

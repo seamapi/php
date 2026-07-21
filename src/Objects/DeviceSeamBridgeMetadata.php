@@ -10,15 +10,15 @@ class DeviceSeamBridgeMetadata
             return null;
         }
         return new self(
-            device_num: $json->device_num,
-            name: $json->name,
+            device_num: $json->device_num ?? null,
+            name: $json->name ?? null,
             unlock_method: $json->unlock_method ?? null,
         );
     }
 
     public function __construct(
-        public float $device_num,
-        public string $name,
+        public float|null $device_num,
+        public string|null $name,
         public string|null $unlock_method,
     ) {}
 }

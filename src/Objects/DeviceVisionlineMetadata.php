@@ -9,8 +9,8 @@ class DeviceVisionlineMetadata
         if (!$json) {
             return null;
         }
-        return new self(encoder_id: $json->encoder_id);
+        return new self(encoder_id: $json->encoder_id ?? null);
     }
 
-    public function __construct(public string $encoder_id) {}
+    public function __construct(public string|null $encoder_id) {}
 }

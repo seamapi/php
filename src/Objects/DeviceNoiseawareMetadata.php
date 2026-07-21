@@ -10,19 +10,19 @@ class DeviceNoiseawareMetadata
             return null;
         }
         return new self(
-            device_id: $json->device_id,
-            device_model: $json->device_model,
-            device_name: $json->device_name,
-            noise_level_decibel: $json->noise_level_decibel,
-            noise_level_nrs: $json->noise_level_nrs,
+            device_id: $json->device_id ?? null,
+            device_model: $json->device_model ?? null,
+            device_name: $json->device_name ?? null,
+            noise_level_decibel: $json->noise_level_decibel ?? null,
+            noise_level_nrs: $json->noise_level_nrs ?? null,
         );
     }
 
     public function __construct(
-        public string $device_id,
-        public string $device_model,
-        public string $device_name,
-        public float $noise_level_decibel,
-        public float $noise_level_nrs,
+        public string|null $device_id,
+        public string|null $device_model,
+        public string|null $device_name,
+        public float|null $noise_level_decibel,
+        public float|null $noise_level_nrs,
     ) {}
 }

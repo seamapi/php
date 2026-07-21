@@ -10,17 +10,17 @@ class DeviceNestMetadata
             return null;
         }
         return new self(
-            device_custom_name: $json->device_custom_name,
-            device_name: $json->device_name,
-            nest_device_id: $json->nest_device_id,
+            device_custom_name: $json->device_custom_name ?? null,
+            device_name: $json->device_name ?? null,
             display_name: $json->display_name ?? null,
+            nest_device_id: $json->nest_device_id ?? null,
         );
     }
 
     public function __construct(
-        public string $device_custom_name,
-        public string $device_name,
-        public string $nest_device_id,
+        public string|null $device_custom_name,
+        public string|null $device_name,
         public string|null $display_name,
+        public string|null $nest_device_id,
     ) {}
 }
