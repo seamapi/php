@@ -6,15 +6,20 @@
   "license": "MIT",
   "scripts": {
     "postversion": "git push --follow-tags",
-    "generate": "node generate-routes.js",
+    "generate": "tsx codegen/smith.ts",
     "postgenerate": "npm run format",
-    "format": "prettier --write --ignore-path .gitignore ."
+    "typecheck": "tsc",
+    "lint": "eslint .",
+    "postlint": "prettier --check --ignore-path .gitignore --ignore-path .prettierignore .",
+    "format": "prettier --write --ignore-path .gitignore --ignore-path .prettierignore .",
+    "preformat": "eslint --fix ."
   },
   "devDependencies": {
     "@prettier/plugin-php": "^0.24.0",
-    "@seamapi/nextlove-sdk-generator": "^1.19.10",
+    "@seamapi/blueprint": "0.55.0",
+    "@seamapi/smith": "^0.5.2",
     "@seamapi/types": "1.827.0",
-    "del": "^7.1.0",
+    "change-case": "^5.4.4",
     "prettier": "^3.0.0"
   }
 }

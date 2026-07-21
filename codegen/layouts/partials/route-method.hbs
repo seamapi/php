@@ -1,0 +1,44 @@
+    public function {{methodName}}({{{signatureParams}}}): {{returnType}} {
+{{#if hasParams}}
+        $request_payload = [];
+
+{{#each paramNames}}
+        if (${{this}} !== null) {
+            $request_payload["{{this}}"] = ${{this}};
+        }
+{{/each}}
+
+{{/if}}
+        {{#unless returnsVoid}}$res = {{/unless}}$this->seam->request(
+            "POST",
+            "{{path}}",
+{{#if hasParams}}
+            json: (object) $request_payload,
+{{/if}}
+        );
+{{#if usesActionAttempt}}
+
+        if (!$wait_for_action_attempt) {
+            return {{returnResource}}::from_json($res->{{returnPath}});
+        }
+
+        $action_attempt = $this->seam->action_attempts->poll_until_ready($res->action_attempt->action_attempt_id);
+
+        return $action_attempt;
+{{else}}
+{{#if usesOnResponse}}
+
+        if ($on_response !== null) {
+            $on_response($res);
+        }
+{{/if}}
+{{#unless returnsVoid}}
+
+{{#if isArrayResponse}}
+        return array_map(fn ($r) => {{returnResource}}::from_json($r), $res->{{returnPath}});
+{{else}}
+        return {{returnResource}}::from_json($res->{{returnPath}});
+{{/if}}
+{{/unless}}
+{{/if}}
+    }

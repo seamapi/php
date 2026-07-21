@@ -1,4 +1,10 @@
+# Codegen
+CODEGEN.md
+
 vendor
 node_modules
 .env
 .vscode
+
+# TypeScript cache
+*.tsbuildinfo

@@ -1,0 +1,25 @@
+class {{clientName}}Client
+{
+  private SeamClient $seam;
+{{#if hasChildClients}}
+{{#each childClients}}
+  public {{clientName}}Client ${{namespace}};
+{{/each}}
+{{else}}
+
+{{/if}}
+  public function __construct(SeamClient $seam)
+  {
+    $this->seam = $seam;
+{{#each childClients}}
+    $this->{{namespace}} = new {{clientName}}Client($seam);
+{{/each}}
+  }
+{{#each methods}}
+
+{{> route-method}}
+{{/each}}
+{{#if isActionAttempts}}
+{{> poll-until-ready}}
+{{/if}}
+}

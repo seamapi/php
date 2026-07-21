@@ -1,0 +1,25 @@
+<?php
+
+namespace Seam\Objects;
+
+class {{className}}
+{
+    public static function from_json(mixed $json): {{className}}|null
+    {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+{{#each fromJsonProps}}
+            {{{this}}}
+{{/each}}
+        );
+    }
+
+    public function __construct(
+{{#each constructorParams}}
+        {{{this}}}
+{{/each}}
+    ) {
+    }
+}
