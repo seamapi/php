@@ -490,8 +490,8 @@ class AccessCodesClient
 
     public function report_device_constraints(
         string $device_id,
-        ?float $max_code_length = null,
-        ?float $min_code_length = null,
+        ?int $max_code_length = null,
+        ?int $min_code_length = null,
         ?array $supported_code_lengths = null,
     ): void {
         $request_payload = [];
@@ -2266,7 +2266,7 @@ class AcsEntrancesClient
         ?string $acs_system_id = null,
         ?string $connected_account_id = null,
         ?string $customer_key = null,
-        ?float $limit = null,
+        ?int $limit = null,
         ?string $location_id = null,
         ?string $page_cursor = null,
         ?string $search = null,
@@ -2602,7 +2602,7 @@ class AcsUsersClient
     public function list(
         ?string $acs_system_id = null,
         ?string $created_before = null,
-        ?float $limit = null,
+        ?int $limit = null,
         ?string $page_cursor = null,
         ?string $search = null,
         ?string $user_identity_email_address = null,
@@ -2857,7 +2857,7 @@ class ActionAttemptsClient
     public function list(
         ?array $action_attempt_ids = null,
         ?string $device_id = null,
-        ?float $limit = null,
+        ?int $limit = null,
         ?string $page_cursor = null,
         ?callable $on_response = null,
     ): array {
@@ -3338,7 +3338,7 @@ class ConnectedAccountsClient
     public function list(
         mixed $custom_metadata_has = null,
         ?string $customer_key = null,
-        ?float $limit = null,
+        ?int $limit = null,
         ?string $page_cursor = null,
         ?string $search = null,
         ?string $space_id = null,
@@ -6087,7 +6087,7 @@ class ThermostatsSchedulesClient
         string $ends_at,
         string $starts_at,
         ?bool $is_override_allowed = null,
-        ?float $max_override_period_minutes = null,
+        ?int $max_override_period_minutes = null,
         ?string $name = null,
     ): ThermostatSchedule {
         $request_payload = [];
@@ -6191,7 +6191,7 @@ class ThermostatsSchedulesClient
         ?string $climate_preset_key = null,
         ?string $ends_at = null,
         ?bool $is_override_allowed = null,
-        ?float $max_override_period_minutes = null,
+        ?int $max_override_period_minutes = null,
         ?string $name = null,
         ?string $starts_at = null,
     ): void {
@@ -6467,7 +6467,7 @@ class UserIdentitiesClient
     public function list(
         ?string $created_before = null,
         ?string $credential_manager_acs_system_id = null,
-        ?float $limit = null,
+        ?int $limit = null,
         ?string $page_cursor = null,
         ?string $search = null,
         ?array $user_identity_ids = null,
@@ -6682,7 +6682,7 @@ class UserIdentitiesUnmanagedClient
 
     public function list(
         ?string $created_before = null,
-        ?float $limit = null,
+        ?int $limit = null,
         ?string $page_cursor = null,
         ?string $search = null,
         ?callable $on_response = null,

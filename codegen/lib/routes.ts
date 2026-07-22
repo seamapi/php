@@ -11,7 +11,7 @@ import type Metalsmith from 'metalsmith'
 import type { PhpClient, PhpClientMethod } from './class-model.js'
 import { setObjectLayoutContext } from './layouts/object.js'
 import { setSeamClientLayoutContext } from './layouts/seam-client.js'
-import { getPhpType } from './map-php-type.js'
+import { getParameterPhpType } from './map-php-type.js'
 import { createResourceObjectModel } from './resource-model.js'
 
 interface Metadata {
@@ -118,7 +118,7 @@ const createClientMethod = (endpoint: Endpoint): PhpClientMethod => {
       .filter((parameter) => !parameter.isUndocumented)
       .map((parameter) => ({
         name: parameter.name,
-        type: getPhpType(parameter.jsonType),
+        type: getParameterPhpType(parameter),
         required: parameter.isRequired,
         // The primary identifier of a get endpoint always sorts first in the
         // method signature.

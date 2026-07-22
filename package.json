@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@prettier/plugin-php": "^0.24.0",
-    "@seamapi/blueprint": "^0.56.0",
+    "@seamapi/blueprint": "^0.57.0",
     "@seamapi/smith": "^0.5.2",
     "@seamapi/types": "1.964.0",
     "change-case": "^5.4.4",
