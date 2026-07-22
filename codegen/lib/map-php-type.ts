@@ -1,14 +1,12 @@
-// Maps a blueprint JSON type to the PHP type used in generated declarations.
+// Maps a blueprint parameter or property to the PHP type used in generated
+// declarations.
 
-import type { Parameter } from '@seamapi/blueprint'
+import type { Parameter, Property } from '@seamapi/blueprint'
 
-export const getParameterPhpType = (parameter: Parameter): string =>
-  parameter.format === 'number' && parameter.isInt
-    ? 'int'
-    : getPhpType(parameter.jsonType)
+export const getPhpType = (schema: Parameter | Property): string => {
+  if (schema.format === 'number' && schema.isInt) return 'int'
 
-export const getPhpType = (jsonType: string): string => {
-  switch (jsonType) {
+  switch (schema.jsonType) {
     case 'string':
       return 'string'
 

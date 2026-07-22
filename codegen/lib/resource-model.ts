@@ -136,7 +136,7 @@ const createResourceObjectProperty = (
   return {
     name: property.name,
     kind: 'value',
-    phpType: getPhpType(property.jsonType),
+    phpType: getPhpType(property),
   }
 }
 

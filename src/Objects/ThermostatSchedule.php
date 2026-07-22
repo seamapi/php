@@ -35,7 +35,7 @@ class ThermostatSchedule
         public string|null $ends_at,
         public array $errors,
         public bool|null $is_override_allowed,
-        public float|null $max_override_period_minutes,
+        public int|null $max_override_period_minutes,
         public string|null $name,
         public string|null $starts_at,
         public string|null $thermostat_schedule_id,

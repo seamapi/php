@@ -20,9 +20,9 @@ class UnmanagedDeviceWarnings
     }
 
     public function __construct(
-        public float|null $active_access_code_count,
+        public int|null $active_access_code_count,
         public string|null $created_at,
-        public float|null $max_active_access_code_count,
+        public int|null $max_active_access_code_count,
         public string|null $message,
         public string|null $warning_code,
     ) {}

@@ -25,7 +25,7 @@ class AccessGrantRequestedAccessMethods
         public array|null $created_access_method_ids,
         public string|null $created_at,
         public string|null $display_name,
-        public float|null $instant_key_max_use_count,
+        public int|null $instant_key_max_use_count,
         public string|null $mode,
     ) {}
 }
