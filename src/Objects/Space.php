@@ -22,8 +22,6 @@ class Space
                 ? SpaceGeolocation::from_json($json->geolocation)
                 : null,
             name: $json->name ?? null,
-            parent_space_id: $json->parent_space_id ?? null,
-            parent_space_key: $json->parent_space_key ?? null,
             space_id: $json->space_id ?? null,
             space_key: $json->space_key ?? null,
             workspace_id: $json->workspace_id ?? null,
@@ -39,8 +37,6 @@ class Space
         public string|null $display_name,
         public SpaceGeolocation|null $geolocation,
         public string|null $name,
-        public string|null $parent_space_id,
-        public string|null $parent_space_key,
         public string|null $space_id,
         public string|null $space_key,
         public string|null $workspace_id,

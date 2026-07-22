@@ -11,9 +11,7 @@ class ConnectWebview
         }
         return new self(
             accepted_capabilities: $json->accepted_capabilities ?? null,
-            accepted_devices: $json->accepted_devices ?? null,
             accepted_providers: $json->accepted_providers ?? null,
-            any_device_allowed: $json->any_device_allowed ?? null,
             any_provider_allowed: $json->any_provider_allowed ?? null,
             authorized_at: $json->authorized_at ?? null,
             automatically_manage_new_devices: $json->automatically_manage_new_devices ??
@@ -38,9 +36,7 @@ class ConnectWebview
 
     public function __construct(
         public array|null $accepted_capabilities,
-        public array|null $accepted_devices,
         public array|null $accepted_providers,
-        public bool|null $any_device_allowed,
         public bool|null $any_provider_allowed,
         public string|null $authorized_at,
         public bool|null $automatically_manage_new_devices,

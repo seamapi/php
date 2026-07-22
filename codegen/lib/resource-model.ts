@@ -33,24 +33,36 @@ export const createResourceObjectModel = (
   const baseResources = new Map<string, Property[]>()
 
   for (const resource of blueprint.resources) {
-    baseResources.set(resource.resourceType, resource.properties)
+    if (resource.isUndocumented) continue
+    baseResources.set(
+      resource.resourceType,
+      documentedProperties(resource.properties),
+    )
   }
 
   // The blueprint models events and action attempts as one resource per
   // variant. The PHP SDK has a single class for each, so the variants are
   // merged into one schema.
-  if (blueprint.events.length > 0) {
+  const events = blueprint.events.filter((event) => !event.isUndocumented)
+  if (events.length > 0) {
     baseResources.set(
       'event',
-      mergeProperties(blueprint.events.map((event) => event.properties)),
+      mergeProperties(
+        events.map((event) => documentedProperties(event.properties)),
+      ),
     )
   }
 
-  if (blueprint.actionAttempts.length > 0) {
+  const actionAttempts = blueprint.actionAttempts.filter(
+    (actionAttempt) => !actionAttempt.isUndocumented,
+  )
+  if (actionAttempts.length > 0) {
     baseResources.set(
       'action_attempt',
       mergeProperties(
-        blueprint.actionAttempts.map((actionAttempt) => actionAttempt.properties),
+        actionAttempts.map((actionAttempt) =>
+          documentedProperties(actionAttempt.properties),
+        ),
       ),
     )
   }
@@ -94,17 +106,25 @@ const createResourceObjectProperty = (
 ): ResourceObjectProperty => {
   const referenceName = pascalCase(`${baseName}_${property.name}`)
 
-  if (property.format === 'object' && property.properties.length > 0) {
-    addSchema(referenceName, property.properties, baseName)
-    return { name: property.name, kind: 'objectReference', referenceName }
+  if (property.format === 'object') {
+    const properties = documentedProperties(property.properties)
+
+    if (properties.length > 0) {
+      addSchema(referenceName, properties, baseName)
+      return { name: property.name, kind: 'objectReference', referenceName }
+    }
   }
 
   if (property.format === 'list') {
     const itemProperties =
       property.itemFormat === 'object'
-        ? property.itemProperties
+        ? documentedProperties(property.itemProperties)
         : property.itemFormat === 'discriminated_object'
-          ? mergeProperties(property.variants.map((variant) => variant.properties))
+          ? mergeProperties(
+              property.variants.map((variant) =>
+                documentedProperties(variant.properties),
+              ),
+            )
           : []
 
     if (itemProperties.length > 0) {
@@ -119,6 +139,9 @@ const createResourceObjectProperty = (
     phpType: getPhpType(property.jsonType),
   }
 }
+
+const documentedProperties = (properties: Property[]): Property[] =>
+  properties.filter((property) => !property.isUndocumented)
 
 const mergeProperties = (propertyLists: Property[][]): Property[] => {
   const merged = new Map<string, Property>()

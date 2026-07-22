@@ -31,7 +31,6 @@ class AcsUser
             hid_acs_system_id: $json->hid_acs_system_id ?? null,
             is_managed: $json->is_managed ?? null,
             is_suspended: $json->is_suspended ?? null,
-            last_successful_sync_at: $json->last_successful_sync_at ?? null,
             pending_mutations: array_map(
                 fn($p) => AcsUserPendingMutations::from_json($p),
                 $json->pending_mutations ?? [],
@@ -72,7 +71,6 @@ class AcsUser
         public string|null $hid_acs_system_id,
         public bool|null $is_managed,
         public bool|null $is_suspended,
-        public string|null $last_successful_sync_at,
         public array $pending_mutations,
         public string|null $phone_number,
         public AcsUserSaltoSpaceMetadata|null $salto_space_metadata,

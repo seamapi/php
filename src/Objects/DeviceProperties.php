@@ -10,8 +10,6 @@ class DeviceProperties
             return null;
         }
         return new self(
-            _experimental_supported_code_from_access_codes_lengths: $json->_experimental_supported_code_from_access_codes_lengths ??
-                null,
             accessory_keypad: isset($json->accessory_keypad)
                 ? DeviceAccessoryKeypad::from_json($json->accessory_keypad)
                 : null,
@@ -296,7 +294,6 @@ class DeviceProperties
     }
 
     public function __construct(
-        public array|null $_experimental_supported_code_from_access_codes_lengths,
         public DeviceAccessoryKeypad|null $accessory_keypad,
         public DeviceActiveThermostatSchedule|null $active_thermostat_schedule,
         public string|null $active_thermostat_schedule_id,
