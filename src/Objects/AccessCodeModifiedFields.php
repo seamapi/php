@@ -10,14 +10,14 @@ class AccessCodeModifiedFields
             return null;
         }
         return new self(
-            field: $json->field,
+            field: $json->field ?? null,
             from: $json->from ?? null,
             to: $json->to ?? null,
         );
     }
 
     public function __construct(
-        public string $field,
+        public string|null $field,
         public string|null $from,
         public string|null $to,
     ) {}

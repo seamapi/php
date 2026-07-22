@@ -11,7 +11,7 @@ class DeviceThermostatWeeklyProgram
             return null;
         }
         return new self(
-            created_at: $json->created_at,
+            created_at: $json->created_at ?? null,
             friday_program_id: $json->friday_program_id ?? null,
             monday_program_id: $json->monday_program_id ?? null,
             saturday_program_id: $json->saturday_program_id ?? null,
@@ -23,7 +23,7 @@ class DeviceThermostatWeeklyProgram
     }
 
     public function __construct(
-        public string $created_at,
+        public string|null $created_at,
         public string|null $friday_program_id,
         public string|null $monday_program_id,
         public string|null $saturday_program_id,

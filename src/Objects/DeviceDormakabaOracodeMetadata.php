@@ -20,19 +20,19 @@ class DeviceDormakabaOracodeMetadata
                 fn($p) => DevicePredefinedTimeSlots::from_json($p),
                 $json->predefined_time_slots ?? [],
             ),
-            site_name: $json->site_name ?? null,
             site_id: $json->site_id ?? null,
+            site_name: $json->site_name ?? null,
         );
     }
 
     public function __construct(
-        public float|null $device_id,
+        public mixed $device_id,
         public float|null $door_id,
         public bool|null $door_is_wireless,
         public string|null $door_name,
         public string|null $iana_timezone,
-        public array|null $predefined_time_slots,
-        public string|null $site_name,
+        public array $predefined_time_slots,
         public float|null $site_id,
+        public string|null $site_name,
     ) {}
 }

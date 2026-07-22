@@ -10,15 +10,15 @@ class EventChangedProperties
             return null;
         }
         return new self(
-            property: $json->property,
             from: $json->from ?? null,
+            property: $json->property ?? null,
             to: $json->to ?? null,
         );
     }
 
     public function __construct(
-        public string $property,
         public string|null $from,
+        public string|null $property,
         public string|null $to,
     ) {}
 }

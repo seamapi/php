@@ -1,7 +1,6 @@
-// Builds the template context for src/SeamClient.php.
-// Mirrors the nextlove generate-seam-client.ts plus PhpClient#serialize: the
-// SeamClient class with its parent client properties, and every resource
-// client class with its methods.
+// Builds the template context for src/SeamClient.php: the SeamClient class
+// with its parent client properties, and every resource client class with its
+// methods.
 
 import {
   type PhpClient,

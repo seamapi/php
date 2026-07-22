@@ -10,23 +10,6 @@ class UnmanagedDevice
             return null;
         }
         return new self(
-            capabilities_supported: $json->capabilities_supported,
-            connected_account_id: $json->connected_account_id,
-            created_at: $json->created_at,
-            custom_metadata: $json->custom_metadata,
-            device_id: $json->device_id,
-            device_type: $json->device_type,
-            errors: array_map(
-                fn($e) => UnmanagedDeviceErrors::from_json($e),
-                $json->errors ?? [],
-            ),
-            is_managed: $json->is_managed,
-            properties: UnmanagedDeviceProperties::from_json($json->properties),
-            warnings: array_map(
-                fn($w) => UnmanagedDeviceWarnings::from_json($w),
-                $json->warnings ?? [],
-            ),
-            workspace_id: $json->workspace_id,
             can_configure_auto_lock: $json->can_configure_auto_lock ?? null,
             can_hvac_cool: $json->can_hvac_cool ?? null,
             can_hvac_heat: $json->can_hvac_heat ?? null,
@@ -57,24 +40,32 @@ class UnmanagedDevice
             can_simulate_removal: $json->can_simulate_removal ?? null,
             can_turn_off_hvac: $json->can_turn_off_hvac ?? null,
             can_unlock_with_code: $json->can_unlock_with_code ?? null,
+            capabilities_supported: $json->capabilities_supported ?? null,
+            connected_account_id: $json->connected_account_id ?? null,
+            created_at: $json->created_at ?? null,
+            custom_metadata: $json->custom_metadata ?? null,
+            device_id: $json->device_id ?? null,
+            device_type: $json->device_type ?? null,
+            errors: array_map(
+                fn($e) => UnmanagedDeviceErrors::from_json($e),
+                $json->errors ?? [],
+            ),
+            is_managed: $json->is_managed ?? null,
             location: isset($json->location)
                 ? UnmanagedDeviceLocation::from_json($json->location)
                 : null,
+            properties: isset($json->properties)
+                ? UnmanagedDeviceProperties::from_json($json->properties)
+                : null,
+            warnings: array_map(
+                fn($w) => UnmanagedDeviceWarnings::from_json($w),
+                $json->warnings ?? [],
+            ),
+            workspace_id: $json->workspace_id ?? null,
         );
     }
 
     public function __construct(
-        public array $capabilities_supported,
-        public string $connected_account_id,
-        public string $created_at,
-        public mixed $custom_metadata,
-        public string $device_id,
-        public string $device_type,
-        public array $errors,
-        public bool $is_managed,
-        public UnmanagedDeviceProperties $properties,
-        public array $warnings,
-        public string $workspace_id,
         public bool|null $can_configure_auto_lock,
         public bool|null $can_hvac_cool,
         public bool|null $can_hvac_heat,
@@ -95,6 +86,17 @@ class UnmanagedDevice
         public bool|null $can_simulate_removal,
         public bool|null $can_turn_off_hvac,
         public bool|null $can_unlock_with_code,
+        public array|null $capabilities_supported,
+        public string|null $connected_account_id,
+        public string|null $created_at,
+        public mixed $custom_metadata,
+        public string|null $device_id,
+        public string|null $device_type,
+        public array $errors,
+        public bool|null $is_managed,
         public UnmanagedDeviceLocation|null $location,
+        public UnmanagedDeviceProperties|null $properties,
+        public array $warnings,
+        public string|null $workspace_id,
     ) {}
 }

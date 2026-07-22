@@ -1,30 +1,18 @@
-// The Metalsmith plugin that generates the PHP SDK route files.
-// Ported from @seamapi/nextlove-sdk-generator
-// lib/generate-php-sdk/generate-php-sdk.ts, restructured to mirror the
-// javascript-http codegen plugin (lib/connect.ts).
+// The Metalsmith plugin that generates the PHP SDK source files.
 //
-// The blueprint from @seamapi/blueprint drives the iteration order and the
-// route, endpoint, and namespace structure. The raw OpenAPI spec is still
-// consulted wherever the previous nextlove generator derived output from data
-// the blueprint normalizes differently; each of those spots is marked with a
-// TODO so they can migrate to the blueprint once output is allowed to change,
-// and the supporting code lives in files marked TEMPORARY that will be deleted
-// with them.
+// The blueprint from @seamapi/blueprint is the only input: it drives the
+// resource object classes written to src/Objects, and the resource client
+// classes serialized into src/SeamClient.php.
 
-import type { Blueprint } from '@seamapi/blueprint'
-import * as types from '@seamapi/types/connect'
+import type { Blueprint, Endpoint } from '@seamapi/blueprint'
 import { pascalCase } from 'change-case'
 import type Metalsmith from 'metalsmith'
 
-import type { PhpClient, PhpClientMethodParameter } from './class-model.js'
+import type { PhpClient, PhpClientMethod } from './class-model.js'
 import { setObjectLayoutContext } from './layouts/object.js'
 import { setSeamClientLayoutContext } from './layouts/seam-client.js'
 import { getPhpType } from './map-php-type.js'
-import { deepExtractResourceObjectSchemas } from './openapi/deep-extract-resource-object-schemas.js'
-import { getFilteredRoutes } from './openapi/get-filtered-routes.js'
-import { getParameterAndResponseSchema } from './openapi/get-parameter-and-response-schema.js'
-import { mapParentToChildResources } from './openapi/map-parent-to-children-resource.js'
-import type { OpenapiSchema } from './openapi/types.js'
+import { createResourceObjectModel } from './resource-model.js'
 
 interface Metadata {
   blueprint: Blueprint
@@ -33,8 +21,6 @@ interface Metadata {
 const objectsPath = 'src/Objects'
 const seamClientPath = 'src/SeamClient.php'
 
-const openapi = types.openapi as unknown as OpenapiSchema
-
 export const routes = (
   files: Metalsmith.Files,
   metalsmith: Metalsmith,
@@ -42,159 +28,108 @@ export const routes = (
   const metadata = metalsmith.metadata() as Metadata
   const { blueprint } = metadata
 
-  // TODO: Derive the parent to child resource map from blueprint.namespaces
-  // once generated output is allowed to change.
-  const rawRoutes = getFilteredRoutes(openapi)
-  const parentToChildResourcesMap = mapParentToChildResources(rawRoutes)
+  // Resource object classes, one file per (deeply extracted) schema. The base
+  // resource names drive the SeamClient use statements.
+  const { baseResourceNames, schemas } = createResourceObjectModel(blueprint)
 
-  // Resource object classes, one file per (deeply extracted) schema. The order
-  // of base resource names drives the SeamClient use statements.
-  const baseResourceObjectNames: string[] = []
-  for (const [schemaName, schema] of Object.entries(
-    openapi.components.schemas,
-  )) {
-    baseResourceObjectNames.push(pascalCase(schemaName))
-
-    const extracted = deepExtractResourceObjectSchemas({
-      schemaName,
-      schemaBody: schema,
-    })
-
-    for (const extractedSchema of Object.values(extracted)) {
-      // TODO: Remove this ActionAttempt result widening once the nextlove
-      // OpenAPI generator is fixed and generated output is allowed to change.
-      const schemaForContext =
-        extractedSchema.name === 'ActionAttempt'
-          ? {
-              ...extractedSchema,
-              properties: {
-                ...extractedSchema.properties,
-                result: { type: 'object' as const, nullable: true },
-              },
-            }
-          : extractedSchema
-
-      files[`${objectsPath}/${extractedSchema.name}.php`] = {
-        contents: Buffer.from('\n'),
-        layout: 'object.hbs',
-        ...setObjectLayoutContext(schemaForContext),
-      }
+  for (const schema of schemas) {
+    files[`${objectsPath}/${schema.name}.php`] = {
+      contents: Buffer.from('\n'),
+      layout: 'object.hbs',
+      ...setObjectLayoutContext(schema),
     }
   }
 
-  // Resource client classes, all serialized into SeamClient.php.
+  // Resource client classes, all serialized into SeamClient.php. Each route
+  // path maps to a client class, e.g. /acs/users to AcsUsersClient, wired to
+  // a property on its parent client (AcsClient) or, for top-level routes, on
+  // the SeamClient itself.
   const classMap = new Map<string, PhpClient>()
 
-  const processClient = (resourceName: string): void => {
-    const childClientIdentifiers = (
-      parentToChildResourcesMap[resourceName] ?? []
-    ).map((childResource) => ({
-      clientName: pascalCase(`${resourceName} ${childResource}`),
-      namespace: childResource,
-    }))
-    const isParentClient = Object.keys(parentToChildResourcesMap).includes(
-      resourceName,
-    )
-    const pascalResourceName = pascalCase(resourceName)
+  const ensureClient = (namespaceSegments: string[]): PhpClient => {
+    const clientName = pascalCase(namespaceSegments.join('_'))
+    const existingClient = classMap.get(clientName)
+    if (existingClient != null) return existingClient
 
-    classMap.set(pascalResourceName, {
-      clientName: pascalResourceName,
-      namespace: resourceName,
-      isParentClient,
-      childClientIdentifiers,
+    const namespace = namespaceSegments.at(-1) ?? ''
+    const client: PhpClient = {
+      clientName,
+      namespace,
+      isParentClient: namespaceSegments.length === 1,
+      childClientIdentifiers: [],
       methods: [],
-    })
+    }
+    classMap.set(clientName, client)
+
+    if (namespaceSegments.length > 1) {
+      const parentClient = ensureClient(namespaceSegments.slice(0, -1))
+      parentClient.childClientIdentifiers.push({ clientName, namespace })
+    }
+
+    return client
   }
 
   for (const route of blueprint.routes) {
-    for (const endpoint of route.endpoints) {
-      const post = openapi.paths[endpoint.path]?.post
-      if (post == null) continue
+    if (route.isUndocumented) continue
 
-      // TODO: Filter on endpoint.isUndocumented and route.isUndocumented from
-      // the blueprint once generated output is allowed to change. The raw
-      // OpenAPI extensions are used here to include exactly the same route set
-      // as the previous nextlove getFilteredRoutes plus its group-name guard.
-      if (post['x-undocumented'] != null) continue
-      if ((post.summary ?? '').startsWith('/seam/')) continue
-      if (post['x-fern-sdk-group-name'] == null) continue
+    const endpoints = route.endpoints.filter(
+      (endpoint) => !endpoint.isUndocumented,
+    )
+    if (endpoints.length === 0) continue
 
-      const groupNames = [...post['x-fern-sdk-group-name']]
-      const [baseResource] = groupNames
-      const namespace = groupNames.join('_')
-      const clientName = pascalCase(namespace)
+    const namespaceSegments = route.path.split('/').filter((s) => s.length > 0)
+    const client = ensureClient(namespaceSegments)
 
-      if (!classMap.has(clientName)) {
-        processClient(namespace)
-      }
-
-      /*
-        Special case when we don't have routes for a base resource
-        and thus a respective x-fern-sdk-group-name for ex. /noise_sensors
-      */
-      if (baseResource != null && !classMap.has(pascalCase(baseResource))) {
-        processClient(baseResource)
-      }
-
-      const client = classMap.get(clientName)
-
-      if (client == null) {
-        // eslint-disable-next-line no-console
-        console.warn(`No client for "${clientName}", skipping`)
-        continue
-      }
-
-      const { parameterSchema, responseObjType, responseArrType } =
-        getParameterAndResponseSchema({ path: endpoint.path, post })
-
-      if (parameterSchema == null) {
-        // eslint-disable-next-line no-console
-        console.warn(`No parameter schema for "${endpoint.path}", skipping`)
-        continue
-      }
-
-      const returnResource = responseObjType ?? responseArrType ?? ''
-
-      client.methods.push({
-        methodName: post['x-fern-sdk-method-name'] ?? '',
-        path: endpoint.path,
-        // TODO: Use endpoint.request.parameters from the blueprint once
-        // generated output is allowed to change. The blueprint collapses
-        // integer to number and flattens unions differently, so parameters are
-        // derived from the raw OpenAPI schema for identical output.
-        parameters: Object.entries(parameterSchema.properties)
-          .filter(
-            ([, paramVal]) =>
-              'type' in paramVal ||
-              ('oneOf' in paramVal &&
-                'type' in ((paramVal as any).oneOf[0] ?? {})),
-          )
-          .map(([paramName, paramVal]): PhpClientMethodParameter => {
-            const raw = paramVal as any
-            return {
-              name: paramName,
-              type: getPhpType(raw?.type ?? raw.oneOf[0].type),
-              required: parameterSchema.required?.includes(paramName),
-              position:
-                post['x-fern-sdk-method-name'] === 'get' &&
-                paramName === `${post['x-fern-sdk-return-value']}_id`
-                  ? 0
-                  : undefined,
-            }
-          }),
-        returnPath: post['x-fern-sdk-return-value'] ?? '',
-        returnResource: pascalCase(returnResource),
-        isArrayResponse: Boolean(responseArrType),
-      })
+    for (const endpoint of endpoints) {
+      client.methods.push(createClientMethod(endpoint))
     }
   }
 
   files[seamClientPath] = {
     contents: Buffer.from('\n'),
     layout: 'seam-client.hbs',
-    ...setSeamClientLayoutContext(
-      [...classMap.values()],
-      baseResourceObjectNames,
-    ),
+    ...setSeamClientLayoutContext([...classMap.values()], baseResourceNames),
+  }
+}
+
+const createClientMethod = (endpoint: Endpoint): PhpClientMethod => {
+  const { response } = endpoint
+
+  const responseKey = response.responseType === 'void' ? '' : response.responseKey
+
+  // Batch responses have no single resource type; they deserialize into the
+  // Batch resource object. A response whose resource type the blueprint
+  // cannot resolve ('unknown') has no resource object class to deserialize
+  // into, so the method is generated as returning void.
+  const resourceType =
+    response.responseType === 'void'
+      ? ''
+      : response.responseType === 'resource' &&
+          response.batchResourceTypes != null
+        ? 'batch'
+        : response.resourceType === 'unknown'
+          ? ''
+          : response.resourceType
+
+  return {
+    methodName: endpoint.name,
+    path: endpoint.path,
+    parameters: endpoint.request.parameters
+      .filter((parameter) => !parameter.isUndocumented)
+      .map((parameter) => ({
+        name: parameter.name,
+        type: getPhpType(parameter.jsonType),
+        required: parameter.isRequired,
+        // The primary identifier of a get endpoint always sorts first in the
+        // method signature.
+        position:
+          endpoint.name === 'get' && parameter.name === `${responseKey}_id`
+            ? 0
+            : undefined,
+      })),
+    returnPath: responseKey,
+    returnResource: resourceType === '' ? '' : pascalCase(resourceType),
+    isArrayResponse:
+      response.responseType === 'resource_list' && resourceType !== '',
   }
 }

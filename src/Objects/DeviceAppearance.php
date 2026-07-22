@@ -9,8 +9,8 @@ class DeviceAppearance
         if (!$json) {
             return null;
         }
-        return new self(name: $json->name);
+        return new self(name: $json->name ?? null);
     }
 
-    public function __construct(public string $name) {}
+    public function __construct(public string|null $name) {}
 }

@@ -9,8 +9,8 @@ class DeviceBattery
         if (!$json) {
             return null;
         }
-        return new self(level: $json->level);
+        return new self(level: $json->level ?? null);
     }
 
-    public function __construct(public float $level) {}
+    public function __construct(public float|null $level) {}
 }

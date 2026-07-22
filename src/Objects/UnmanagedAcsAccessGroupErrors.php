@@ -11,15 +11,15 @@ class UnmanagedAcsAccessGroupErrors
             return null;
         }
         return new self(
-            created_at: $json->created_at,
-            error_code: $json->error_code,
-            message: $json->message,
+            created_at: $json->created_at ?? null,
+            error_code: $json->error_code ?? null,
+            message: $json->message ?? null,
         );
     }
 
     public function __construct(
-        public string $created_at,
-        public string $error_code,
-        public string $message,
+        public string|null $created_at,
+        public string|null $error_code,
+        public string|null $message,
     ) {}
 }

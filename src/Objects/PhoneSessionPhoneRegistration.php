@@ -11,17 +11,15 @@ class PhoneSessionPhoneRegistration
             return null;
         }
         return new self(
-            is_being_activated: $json->is_being_activated,
-            phone_registration_id: $json->phone_registration_id,
-            provider_state: $json->provider_state ?? null,
+            is_being_activated: $json->is_being_activated ?? null,
+            phone_registration_id: $json->phone_registration_id ?? null,
             provider_name: $json->provider_name ?? null,
         );
     }
 
     public function __construct(
-        public bool $is_being_activated,
-        public string $phone_registration_id,
-        public mixed $provider_state,
+        public bool|null $is_being_activated,
+        public string|null $phone_registration_id,
         public string|null $provider_name,
     ) {}
 }

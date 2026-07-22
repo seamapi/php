@@ -11,13 +11,13 @@ class UnmanagedAcsAccessGroupPendingMutations
             return null;
         }
         return new self(
-            created_at: $json->created_at,
-            message: $json->message,
-            mutation_code: $json->mutation_code,
             acs_user_id: $json->acs_user_id ?? null,
+            created_at: $json->created_at ?? null,
             from: isset($json->from)
                 ? UnmanagedAcsAccessGroupFrom::from_json($json->from)
                 : null,
+            message: $json->message ?? null,
+            mutation_code: $json->mutation_code ?? null,
             to: isset($json->to)
                 ? UnmanagedAcsAccessGroupTo::from_json($json->to)
                 : null,
@@ -26,11 +26,11 @@ class UnmanagedAcsAccessGroupPendingMutations
     }
 
     public function __construct(
-        public string $created_at,
-        public string $message,
-        public string $mutation_code,
         public string|null $acs_user_id,
+        public string|null $created_at,
         public UnmanagedAcsAccessGroupFrom|null $from,
+        public string|null $message,
+        public string|null $mutation_code,
         public UnmanagedAcsAccessGroupTo|null $to,
         public string|null $variant,
     ) {}

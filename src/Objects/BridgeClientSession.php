@@ -10,20 +10,22 @@ class BridgeClientSession
             return null;
         }
         return new self(
-            bridge_client_machine_identifier_key: $json->bridge_client_machine_identifier_key,
-            bridge_client_name: $json->bridge_client_name,
-            bridge_client_session_id: $json->bridge_client_session_id,
-            bridge_client_session_token: $json->bridge_client_session_token,
-            bridge_client_time_zone: $json->bridge_client_time_zone,
-            created_at: $json->created_at,
+            bridge_client_machine_identifier_key: $json->bridge_client_machine_identifier_key ??
+                null,
+            bridge_client_name: $json->bridge_client_name ?? null,
+            bridge_client_session_id: $json->bridge_client_session_id ?? null,
+            bridge_client_session_token: $json->bridge_client_session_token ??
+                null,
+            bridge_client_time_zone: $json->bridge_client_time_zone ?? null,
+            created_at: $json->created_at ?? null,
             errors: array_map(
                 fn($e) => BridgeClientSessionErrors::from_json($e),
                 $json->errors ?? [],
             ),
-            pairing_code: $json->pairing_code,
-            pairing_code_expires_at: $json->pairing_code_expires_at,
-            tailscale_hostname: $json->tailscale_hostname,
+            pairing_code: $json->pairing_code ?? null,
+            pairing_code_expires_at: $json->pairing_code_expires_at ?? null,
             tailscale_auth_key: $json->tailscale_auth_key ?? null,
+            tailscale_hostname: $json->tailscale_hostname ?? null,
             telemetry_token: $json->telemetry_token ?? null,
             telemetry_token_expires_at: $json->telemetry_token_expires_at ??
                 null,
@@ -32,17 +34,17 @@ class BridgeClientSession
     }
 
     public function __construct(
-        public string $bridge_client_machine_identifier_key,
-        public string $bridge_client_name,
-        public string $bridge_client_session_id,
-        public string $bridge_client_session_token,
-        public string $bridge_client_time_zone,
-        public string $created_at,
+        public string|null $bridge_client_machine_identifier_key,
+        public string|null $bridge_client_name,
+        public string|null $bridge_client_session_id,
+        public string|null $bridge_client_session_token,
+        public string|null $bridge_client_time_zone,
+        public string|null $created_at,
         public array $errors,
-        public string $pairing_code,
-        public string $pairing_code_expires_at,
-        public string $tailscale_hostname,
+        public string|null $pairing_code,
+        public string|null $pairing_code_expires_at,
         public string|null $tailscale_auth_key,
+        public string|null $tailscale_hostname,
         public string|null $telemetry_token,
         public string|null $telemetry_token_expires_at,
         public string|null $telemetry_url,

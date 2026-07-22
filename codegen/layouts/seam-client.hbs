@@ -63,7 +63,6 @@ class SeamClient
     ];
     $options = array_filter($options, fn($option) => $option !== null);
 
-    // TODO handle request errors
     $response = $this->client->request($method, $path, $options);
     $status_code = $response->getStatusCode();
     $request_id = $response->getHeaderLine("seam-request-id");

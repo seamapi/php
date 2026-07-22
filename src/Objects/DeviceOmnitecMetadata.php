@@ -15,8 +15,8 @@ class DeviceOmnitecMetadata
             lock_id: $json->lock_id ?? null,
             lock_mac: $json->lock_mac ?? null,
             lock_name: $json->lock_name ?? null,
-            timezone_raw_offset_ms: $json->timezone_raw_offset_ms ?? null,
             time_zone: $json->time_zone ?? null,
+            timezone_raw_offset_ms: $json->timezone_raw_offset_ms ?? null,
         );
     }
 
@@ -26,7 +26,7 @@ class DeviceOmnitecMetadata
         public float|null $lock_id,
         public string|null $lock_mac,
         public string|null $lock_name,
-        public float|null $timezone_raw_offset_ms,
         public string|null $time_zone,
+        public float|null $timezone_raw_offset_ms,
     ) {}
 }

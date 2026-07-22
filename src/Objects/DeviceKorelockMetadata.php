@@ -13,10 +13,10 @@ class DeviceKorelockMetadata
             device_id: $json->device_id ?? null,
             device_name: $json->device_name ?? null,
             firmware_version: $json->firmware_version ?? null,
+            location_id: $json->location_id ?? null,
             model_code: $json->model_code ?? null,
             serial_number: $json->serial_number ?? null,
             wifi_signal_strength: $json->wifi_signal_strength ?? null,
-            location_id: $json->location_id ?? null,
         );
     }
 
@@ -24,9 +24,9 @@ class DeviceKorelockMetadata
         public string|null $device_id,
         public string|null $device_name,
         public string|null $firmware_version,
+        public string|null $location_id,
         public string|null $model_code,
         public string|null $serial_number,
         public float|null $wifi_signal_strength,
-        public string|null $location_id,
     ) {}
 }

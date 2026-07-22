@@ -10,10 +10,6 @@ class DeviceProvider
             return null;
         }
         return new self(
-            device_provider_name: $json->device_provider_name,
-            display_name: $json->display_name,
-            image_url: $json->image_url,
-            provider_categories: $json->provider_categories,
             can_configure_auto_lock: $json->can_configure_auto_lock ?? null,
             can_hvac_cool: $json->can_hvac_cool ?? null,
             can_hvac_heat: $json->can_hvac_heat ?? null,
@@ -44,14 +40,14 @@ class DeviceProvider
             can_simulate_removal: $json->can_simulate_removal ?? null,
             can_turn_off_hvac: $json->can_turn_off_hvac ?? null,
             can_unlock_with_code: $json->can_unlock_with_code ?? null,
+            device_provider_name: $json->device_provider_name ?? null,
+            display_name: $json->display_name ?? null,
+            image_url: $json->image_url ?? null,
+            provider_categories: $json->provider_categories ?? null,
         );
     }
 
     public function __construct(
-        public string $device_provider_name,
-        public string $display_name,
-        public string $image_url,
-        public array $provider_categories,
         public bool|null $can_configure_auto_lock,
         public bool|null $can_hvac_cool,
         public bool|null $can_hvac_heat,
@@ -72,5 +68,9 @@ class DeviceProvider
         public bool|null $can_simulate_removal,
         public bool|null $can_turn_off_hvac,
         public bool|null $can_unlock_with_code,
+        public string|null $device_provider_name,
+        public string|null $display_name,
+        public string|null $image_url,
+        public array|null $provider_categories,
     ) {}
 }

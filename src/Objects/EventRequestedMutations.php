@@ -10,15 +10,15 @@ class EventRequestedMutations
             return null;
         }
         return new self(
-            mutation_code: $json->mutation_code,
             from: $json->from ?? null,
+            mutation_code: $json->mutation_code ?? null,
             to: $json->to ?? null,
         );
     }
 
     public function __construct(
-        public string $mutation_code,
         public mixed $from,
+        public string|null $mutation_code,
         public mixed $to,
     ) {}
 }

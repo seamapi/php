@@ -10,19 +10,19 @@ class UserIdentityErrors
             return null;
         }
         return new self(
-            acs_system_id: $json->acs_system_id,
-            acs_user_id: $json->acs_user_id,
-            created_at: $json->created_at,
-            error_code: $json->error_code,
-            message: $json->message,
+            acs_system_id: $json->acs_system_id ?? null,
+            acs_user_id: $json->acs_user_id ?? null,
+            created_at: $json->created_at ?? null,
+            error_code: $json->error_code ?? null,
+            message: $json->message ?? null,
         );
     }
 
     public function __construct(
-        public string $acs_system_id,
-        public string $acs_user_id,
-        public string $created_at,
-        public string $error_code,
-        public string $message,
+        public string|null $acs_system_id,
+        public string|null $acs_user_id,
+        public string|null $created_at,
+        public string|null $error_code,
+        public string|null $message,
     ) {}
 }

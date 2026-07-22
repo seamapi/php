@@ -15,14 +15,16 @@ class PhoneSessionProviderSessions
                 fn($a) => PhoneSessionAcsCredentials::from_json($a),
                 $json->acs_credentials ?? [],
             ),
-            phone_registration: PhoneSessionPhoneRegistration::from_json(
-                $json->phone_registration,
-            ),
+            phone_registration: isset($json->phone_registration)
+                ? PhoneSessionPhoneRegistration::from_json(
+                    $json->phone_registration,
+                )
+                : null,
         );
     }
 
     public function __construct(
         public array $acs_credentials,
-        public PhoneSessionPhoneRegistration $phone_registration,
+        public PhoneSessionPhoneRegistration|null $phone_registration,
     ) {}
 }
