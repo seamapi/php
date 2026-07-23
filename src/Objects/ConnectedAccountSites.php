@@ -22,7 +22,7 @@ class ConnectedAccountSites
     public function __construct(
         public string|null $site_id,
         public string|null $site_name,
-        public mixed $site_user_subscription_limit,
-        public mixed $subscribed_site_user_count,
+        public int|null $site_user_subscription_limit,
+        public int|null $subscribed_site_user_count,
     ) {}
 }

@@ -9,8 +9,14 @@ class ActionAttemptError
         if (!$json) {
             return null;
         }
-        return new self(message: $json->message, type: $json->type);
+        return new self(
+            message: $json->message ?? null,
+            type: $json->type ?? null,
+        );
     }
 
-    public function __construct(public string $message, public string $type) {}
+    public function __construct(
+        public string|null $message,
+        public string|null $type,
+    ) {}
 }

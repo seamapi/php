@@ -10,24 +10,25 @@ class ThermostatDailyProgram
             return null;
         }
         return new self(
-            created_at: $json->created_at,
-            device_id: $json->device_id,
+            created_at: $json->created_at ?? null,
+            device_id: $json->device_id ?? null,
+            name: $json->name ?? null,
             periods: array_map(
                 fn($p) => ThermostatDailyProgramPeriods::from_json($p),
                 $json->periods ?? [],
             ),
-            thermostat_daily_program_id: $json->thermostat_daily_program_id,
-            workspace_id: $json->workspace_id,
-            name: $json->name ?? null,
+            thermostat_daily_program_id: $json->thermostat_daily_program_id ??
+                null,
+            workspace_id: $json->workspace_id ?? null,
         );
     }
 
     public function __construct(
-        public string $created_at,
-        public string $device_id,
-        public array $periods,
-        public string $thermostat_daily_program_id,
-        public string $workspace_id,
+        public string|null $created_at,
+        public string|null $device_id,
         public string|null $name,
+        public array $periods,
+        public string|null $thermostat_daily_program_id,
+        public string|null $workspace_id,
     ) {}
 }

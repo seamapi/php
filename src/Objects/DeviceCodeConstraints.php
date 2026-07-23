@@ -10,14 +10,14 @@ class DeviceCodeConstraints
             return null;
         }
         return new self(
-            constraint_type: $json->constraint_type,
+            constraint_type: $json->constraint_type ?? null,
             max_length: $json->max_length ?? null,
             min_length: $json->min_length ?? null,
         );
     }
 
     public function __construct(
-        public string $constraint_type,
+        public string|null $constraint_type,
         public float|null $max_length,
         public float|null $min_length,
     ) {}

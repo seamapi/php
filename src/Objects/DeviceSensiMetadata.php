@@ -14,8 +14,6 @@ class DeviceSensiMetadata
             device_name: $json->device_name ?? null,
             dual_setpoints_not_supported: $json->dual_setpoints_not_supported ??
                 null,
-            enforced_setpoint_range_celsius: $json->enforced_setpoint_range_celsius ??
-                null,
             product_type: $json->product_type ?? null,
         );
     }
@@ -24,7 +22,6 @@ class DeviceSensiMetadata
         public string|null $device_id,
         public string|null $device_name,
         public bool|null $dual_setpoints_not_supported,
-        public mixed $enforced_setpoint_range_celsius,
         public string|null $product_type,
     ) {}
 }

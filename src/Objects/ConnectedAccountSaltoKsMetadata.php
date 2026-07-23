@@ -18,5 +18,5 @@ class ConnectedAccountSaltoKsMetadata
         );
     }
 
-    public function __construct(public array|null $sites) {}
+    public function __construct(public array $sites) {}
 }

@@ -10,18 +10,18 @@ class AcsSystemWarnings
             return null;
         }
         return new self(
-            created_at: $json->created_at,
-            message: $json->message,
-            warning_code: $json->warning_code,
+            created_at: $json->created_at ?? null,
+            message: $json->message ?? null,
             misconfigured_acs_entrance_ids: $json->misconfigured_acs_entrance_ids ??
                 null,
+            warning_code: $json->warning_code ?? null,
         );
     }
 
     public function __construct(
-        public string $created_at,
-        public string $message,
-        public string $warning_code,
+        public string|null $created_at,
+        public string|null $message,
         public array|null $misconfigured_acs_entrance_ids,
+        public string|null $warning_code,
     ) {}
 }

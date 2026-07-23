@@ -11,19 +11,21 @@ class AccessMethodPendingMutations
             return null;
         }
         return new self(
-            created_at: $json->created_at,
-            from: AccessMethodFrom::from_json($json->from),
-            message: $json->message,
-            mutation_code: $json->mutation_code,
-            to: AccessMethodTo::from_json($json->to),
+            created_at: $json->created_at ?? null,
+            from: isset($json->from)
+                ? AccessMethodFrom::from_json($json->from)
+                : null,
+            message: $json->message ?? null,
+            mutation_code: $json->mutation_code ?? null,
+            to: isset($json->to) ? AccessMethodTo::from_json($json->to) : null,
         );
     }
 
     public function __construct(
-        public string $created_at,
-        public AccessMethodFrom $from,
-        public string $message,
-        public string $mutation_code,
-        public AccessMethodTo $to,
+        public string|null $created_at,
+        public AccessMethodFrom|null $from,
+        public string|null $message,
+        public string|null $mutation_code,
+        public AccessMethodTo|null $to,
     ) {}
 }

@@ -11,13 +11,13 @@ class ThermostatDailyProgramPeriods
             return null;
         }
         return new self(
-            climate_preset_key: $json->climate_preset_key,
-            starts_at_time: $json->starts_at_time,
+            climate_preset_key: $json->climate_preset_key ?? null,
+            starts_at_time: $json->starts_at_time ?? null,
         );
     }
 
     public function __construct(
-        public string $climate_preset_key,
-        public string $starts_at_time,
+        public string|null $climate_preset_key,
+        public string|null $starts_at_time,
     ) {}
 }

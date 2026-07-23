@@ -2,11 +2,11 @@
 
 namespace Seam\Objects;
 
-class UnmanagedAcsCredentialAssaAbloyVostioMetadata
+class ActionAttemptAssaAbloyVostioMetadata
 {
     public static function from_json(
         mixed $json,
-    ): UnmanagedAcsCredentialAssaAbloyVostioMetadata|null {
+    ): ActionAttemptAssaAbloyVostioMetadata|null {
         if (!$json) {
             return null;
         }

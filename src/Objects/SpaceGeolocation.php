@@ -9,11 +9,14 @@ class SpaceGeolocation
         if (!$json) {
             return null;
         }
-        return new self(latitude: $json->latitude, longitude: $json->longitude);
+        return new self(
+            latitude: $json->latitude ?? null,
+            longitude: $json->longitude ?? null,
+        );
     }
 
     public function __construct(
-        public float $latitude,
-        public float $longitude,
+        public float|null $latitude,
+        public float|null $longitude,
     ) {}
 }

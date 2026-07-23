@@ -10,12 +10,6 @@ class DeviceProperties
             return null;
         }
         return new self(
-            appearance: DeviceAppearance::from_json($json->appearance),
-            model: DeviceModel::from_json($json->model),
-            name: $json->name,
-            online: $json->online,
-            _experimental_supported_code_from_access_codes_lengths: $json->_experimental_supported_code_from_access_codes_lengths ??
-                null,
             accessory_keypad: isset($json->accessory_keypad)
                 ? DeviceAccessoryKeypad::from_json($json->accessory_keypad)
                 : null,
@@ -24,8 +18,13 @@ class DeviceProperties
                     $json->active_thermostat_schedule,
                 )
                 : null,
+            active_thermostat_schedule_id: $json->active_thermostat_schedule_id ??
+                null,
             akiles_metadata: isset($json->akiles_metadata)
                 ? DeviceAkilesMetadata::from_json($json->akiles_metadata)
+                : null,
+            appearance: isset($json->appearance)
+                ? DeviceAppearance::from_json($json->appearance)
                 : null,
             assa_abloy_credential_service_metadata: isset(
                 $json->assa_abloy_credential_service_metadata,
@@ -98,6 +97,8 @@ class DeviceProperties
             ecobee_metadata: isset($json->ecobee_metadata)
                 ? DeviceEcobeeMetadata::from_json($json->ecobee_metadata)
                 : null,
+            fallback_climate_preset_key: $json->fallback_climate_preset_key ??
+                null,
             fan_mode_setting: $json->fan_mode_setting ?? null,
             four_suites_metadata: isset($json->four_suites_metadata)
                 ? DeviceFourSuitesMetadata::from_json(
@@ -176,6 +177,10 @@ class DeviceProperties
             minut_metadata: isset($json->minut_metadata)
                 ? DeviceMinutMetadata::from_json($json->minut_metadata)
                 : null,
+            model: isset($json->model)
+                ? DeviceModel::from_json($json->model)
+                : null,
+            name: $json->name ?? null,
             nest_metadata: isset($json->nest_metadata)
                 ? DeviceNestMetadata::from_json($json->nest_metadata)
                 : null,
@@ -197,6 +202,7 @@ class DeviceProperties
             omnitec_metadata: isset($json->omnitec_metadata)
                 ? DeviceOmnitecMetadata::from_json($json->omnitec_metadata)
                 : null,
+            online: $json->online ?? null,
             online_access_codes_enabled: $json->online_access_codes_enabled ??
                 null,
             online_time_frame_options: array_map(
@@ -284,29 +290,22 @@ class DeviceProperties
             wyze_metadata: isset($json->wyze_metadata)
                 ? DeviceWyzeMetadata::from_json($json->wyze_metadata)
                 : null,
-            active_thermostat_schedule_id: $json->active_thermostat_schedule_id ??
-                null,
-            fallback_climate_preset_key: $json->fallback_climate_preset_key ??
-                null,
         );
     }
 
     public function __construct(
-        public DeviceAppearance $appearance,
-        public DeviceModel $model,
-        public string $name,
-        public bool $online,
-        public array|null $_experimental_supported_code_from_access_codes_lengths,
         public DeviceAccessoryKeypad|null $accessory_keypad,
         public DeviceActiveThermostatSchedule|null $active_thermostat_schedule,
+        public string|null $active_thermostat_schedule_id,
         public DeviceAkilesMetadata|null $akiles_metadata,
+        public DeviceAppearance|null $appearance,
         public DeviceAssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata,
         public DeviceAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
         public DeviceAugustMetadata|null $august_metadata,
         public float|null $auto_lock_delay_seconds,
         public bool|null $auto_lock_enabled,
         public array|null $available_climate_preset_modes,
-        public array|null $available_climate_presets,
+        public array $available_climate_presets,
         public array|null $available_fan_mode_settings,
         public array|null $available_hvac_mode_settings,
         public DeviceAvigilonAltaMetadata|null $avigilon_alta_metadata,
@@ -314,7 +313,7 @@ class DeviceProperties
         public DeviceBattery|null $battery,
         public float|null $battery_level,
         public DeviceBrivoMetadata|null $brivo_metadata,
-        public array|null $code_constraints,
+        public array $code_constraints,
         public DeviceControlbywebMetadata|null $controlbyweb_metadata,
         public DeviceCurrentClimateSetting|null $current_climate_setting,
         public array|null $currently_triggering_noise_threshold_ids,
@@ -322,6 +321,7 @@ class DeviceProperties
         public bool|null $door_open,
         public DeviceDormakabaOracodeMetadata|null $dormakaba_oracode_metadata,
         public DeviceEcobeeMetadata|null $ecobee_metadata,
+        public string|null $fallback_climate_preset_key,
         public string|null $fan_mode_setting,
         public DeviceFourSuitesMetadata|null $four_suites_metadata,
         public DeviceGenieMetadata|null $genie_metadata,
@@ -358,15 +358,18 @@ class DeviceProperties
         public float|null $min_heating_set_point_celsius,
         public float|null $min_heating_set_point_fahrenheit,
         public DeviceMinutMetadata|null $minut_metadata,
+        public DeviceModel|null $model,
+        public string|null $name,
         public DeviceNestMetadata|null $nest_metadata,
         public float|null $noise_level_decibels,
         public DeviceNoiseawareMetadata|null $noiseaware_metadata,
         public DeviceNukiMetadata|null $nuki_metadata,
         public bool|null $offline_access_codes_enabled,
-        public array|null $offline_time_frame_options,
+        public array $offline_time_frame_options,
         public DeviceOmnitecMetadata|null $omnitec_metadata,
+        public bool|null $online,
         public bool|null $online_access_codes_enabled,
-        public array|null $online_time_frame_options,
+        public array $online_time_frame_options,
         public float|null $relative_humidity,
         public DeviceRingMetadata|null $ring_metadata,
         public DeviceSaltoKsMetadata|null $salto_ks_metadata,
@@ -387,14 +390,12 @@ class DeviceProperties
         public float|null $temperature_fahrenheit,
         public DeviceTemperatureThreshold|null $temperature_threshold,
         public float|null $thermostat_daily_program_period_precision_minutes,
-        public array|null $thermostat_daily_programs,
+        public array $thermostat_daily_programs,
         public DeviceThermostatWeeklyProgram|null $thermostat_weekly_program,
         public DeviceTtlockMetadata|null $ttlock_metadata,
         public DeviceTwoNMetadata|null $two_n_metadata,
         public DeviceUltraloqMetadata|null $ultraloq_metadata,
         public DeviceVisionlineMetadata|null $visionline_metadata,
         public DeviceWyzeMetadata|null $wyze_metadata,
-        public string|null $active_thermostat_schedule_id,
-        public string|null $fallback_climate_preset_key,
     ) {}
 }

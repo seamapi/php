@@ -17,11 +17,11 @@ class DeviceTtlockMetadata
             has_gateway: $json->has_gateway ?? null,
             lock_alias: $json->lock_alias ?? null,
             lock_id: $json->lock_id ?? null,
+            timezone_raw_offset_ms: $json->timezone_raw_offset_ms ?? null,
             wireless_keypads: array_map(
                 fn($w) => DeviceWirelessKeypads::from_json($w),
                 $json->wireless_keypads ?? [],
             ),
-            timezone_raw_offset_ms: $json->timezone_raw_offset_ms ?? null,
         );
     }
 
@@ -31,7 +31,7 @@ class DeviceTtlockMetadata
         public bool|null $has_gateway,
         public string|null $lock_alias,
         public float|null $lock_id,
-        public array|null $wireless_keypads,
         public float|null $timezone_raw_offset_ms,
+        public array $wireless_keypads,
     ) {}
 }

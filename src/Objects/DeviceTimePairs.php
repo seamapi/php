@@ -10,15 +10,15 @@ class DeviceTimePairs
             return null;
         }
         return new self(
-            display_name: $json->display_name,
-            end_time: $json->end_time,
-            start_time: $json->start_time,
+            display_name: $json->display_name ?? null,
+            end_time: $json->end_time ?? null,
+            start_time: $json->start_time ?? null,
         );
     }
 
     public function __construct(
-        public string $display_name,
-        public string $end_time,
-        public string $start_time,
+        public string|null $display_name,
+        public string|null $end_time,
+        public string|null $start_time,
     ) {}
 }

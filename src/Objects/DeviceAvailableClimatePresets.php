@@ -11,16 +11,16 @@ class DeviceAvailableClimatePresets
             return null;
         }
         return new self(
-            can_delete: $json->can_delete,
-            can_edit: $json->can_edit,
-            can_use_with_thermostat_daily_programs: $json->can_use_with_thermostat_daily_programs,
-            climate_preset_key: $json->climate_preset_key,
-            display_name: $json->display_name,
-            manual_override_allowed: $json->manual_override_allowed,
+            can_delete: $json->can_delete ?? null,
+            can_edit: $json->can_edit ?? null,
+            can_use_with_thermostat_daily_programs: $json->can_use_with_thermostat_daily_programs ??
+                null,
+            climate_preset_key: $json->climate_preset_key ?? null,
             climate_preset_mode: $json->climate_preset_mode ?? null,
             cooling_set_point_celsius: $json->cooling_set_point_celsius ?? null,
             cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
                 null,
+            display_name: $json->display_name ?? null,
             ecobee_metadata: isset($json->ecobee_metadata)
                 ? DeviceEcobeeMetadata::from_json($json->ecobee_metadata)
                 : null,
@@ -29,25 +29,26 @@ class DeviceAvailableClimatePresets
             heating_set_point_fahrenheit: $json->heating_set_point_fahrenheit ??
                 null,
             hvac_mode_setting: $json->hvac_mode_setting ?? null,
+            manual_override_allowed: $json->manual_override_allowed ?? null,
             name: $json->name ?? null,
         );
     }
 
     public function __construct(
-        public bool $can_delete,
-        public bool $can_edit,
-        public bool $can_use_with_thermostat_daily_programs,
-        public string $climate_preset_key,
-        public string $display_name,
-        public bool $manual_override_allowed,
+        public bool|null $can_delete,
+        public bool|null $can_edit,
+        public bool|null $can_use_with_thermostat_daily_programs,
+        public string|null $climate_preset_key,
         public string|null $climate_preset_mode,
         public float|null $cooling_set_point_celsius,
         public float|null $cooling_set_point_fahrenheit,
+        public string|null $display_name,
         public DeviceEcobeeMetadata|null $ecobee_metadata,
         public string|null $fan_mode_setting,
         public float|null $heating_set_point_celsius,
         public float|null $heating_set_point_fahrenheit,
         public string|null $hvac_mode_setting,
+        public bool|null $manual_override_allowed,
         public string|null $name,
     ) {}
 }

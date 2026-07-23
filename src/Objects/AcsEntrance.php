@@ -10,20 +10,8 @@ class AcsEntrance
             return null;
         }
         return new self(
-            acs_entrance_id: $json->acs_entrance_id,
-            acs_system_id: $json->acs_system_id,
-            connected_account_id: $json->connected_account_id,
-            created_at: $json->created_at,
-            display_name: $json->display_name,
-            errors: array_map(
-                fn($e) => AcsEntranceErrors::from_json($e),
-                $json->errors ?? [],
-            ),
-            space_ids: $json->space_ids,
-            warnings: array_map(
-                fn($w) => AcsEntranceWarnings::from_json($w),
-                $json->warnings ?? [],
-            ),
+            acs_entrance_id: $json->acs_entrance_id ?? null,
+            acs_system_id: $json->acs_system_id ?? null,
             assa_abloy_vostio_metadata: isset($json->assa_abloy_vostio_metadata)
                 ? AcsEntranceAssaAbloyVostioMetadata::from_json(
                     $json->assa_abloy_vostio_metadata,
@@ -43,6 +31,9 @@ class AcsEntrance
             can_unlock_with_code: $json->can_unlock_with_code ?? null,
             can_unlock_with_mobile_key: $json->can_unlock_with_mobile_key ??
                 null,
+            connected_account_id: $json->connected_account_id ?? null,
+            created_at: $json->created_at ?? null,
+            display_name: $json->display_name ?? null,
             dormakaba_ambiance_metadata: isset(
                 $json->dormakaba_ambiance_metadata,
             )
@@ -57,6 +48,10 @@ class AcsEntrance
                     $json->dormakaba_community_metadata,
                 )
                 : null,
+            errors: array_map(
+                fn($e) => AcsEntranceErrors::from_json($e),
+                $json->errors ?? [],
+            ),
             hotek_metadata: isset($json->hotek_metadata)
                 ? AcsEntranceHotekMetadata::from_json($json->hotek_metadata)
                 : null,
@@ -74,23 +69,22 @@ class AcsEntrance
                     $json->salto_space_metadata,
                 )
                 : null,
+            space_ids: $json->space_ids ?? null,
             visionline_metadata: isset($json->visionline_metadata)
                 ? AcsEntranceVisionlineMetadata::from_json(
                     $json->visionline_metadata,
                 )
                 : null,
+            warnings: array_map(
+                fn($w) => AcsEntranceWarnings::from_json($w),
+                $json->warnings ?? [],
+            ),
         );
     }
 
     public function __construct(
-        public string $acs_entrance_id,
-        public string $acs_system_id,
-        public string $connected_account_id,
-        public string $created_at,
-        public string $display_name,
-        public array $errors,
-        public array $space_ids,
-        public array $warnings,
+        public string|null $acs_entrance_id,
+        public string|null $acs_system_id,
         public AcsEntranceAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
         public AcsEntranceAvigilonAltaMetadata|null $avigilon_alta_metadata,
         public AcsEntranceBrivoMetadata|null $brivo_metadata,
@@ -99,13 +93,19 @@ class AcsEntrance
         public bool|null $can_unlock_with_cloud_key,
         public bool|null $can_unlock_with_code,
         public bool|null $can_unlock_with_mobile_key,
+        public string|null $connected_account_id,
+        public string|null $created_at,
+        public string|null $display_name,
         public AcsEntranceDormakabaAmbianceMetadata|null $dormakaba_ambiance_metadata,
         public AcsEntranceDormakabaCommunityMetadata|null $dormakaba_community_metadata,
+        public array $errors,
         public AcsEntranceHotekMetadata|null $hotek_metadata,
         public bool|null $is_locked,
         public AcsEntranceLatchMetadata|null $latch_metadata,
         public AcsEntranceSaltoKsMetadata|null $salto_ks_metadata,
         public AcsEntranceSaltoSpaceMetadata|null $salto_space_metadata,
+        public array|null $space_ids,
         public AcsEntranceVisionlineMetadata|null $visionline_metadata,
+        public array $warnings,
     ) {}
 }

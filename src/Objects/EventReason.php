@@ -10,13 +10,13 @@ class EventReason
             return null;
         }
         return new self(
-            message: $json->message,
-            reason_code: $json->reason_code,
+            message: $json->message ?? null,
+            reason_code: $json->reason_code ?? null,
         );
     }
 
     public function __construct(
-        public string $message,
-        public string $reason_code,
+        public string|null $message,
+        public string|null $reason_code,
     ) {}
 }

@@ -10,25 +10,6 @@ class Device
             return null;
         }
         return new self(
-            capabilities_supported: $json->capabilities_supported,
-            connected_account_id: $json->connected_account_id,
-            created_at: $json->created_at,
-            custom_metadata: $json->custom_metadata,
-            device_id: $json->device_id,
-            device_type: $json->device_type,
-            display_name: $json->display_name,
-            errors: array_map(
-                fn($e) => DeviceErrors::from_json($e),
-                $json->errors ?? [],
-            ),
-            is_managed: $json->is_managed,
-            properties: DeviceProperties::from_json($json->properties),
-            space_ids: $json->space_ids,
-            warnings: array_map(
-                fn($w) => DeviceWarnings::from_json($w),
-                $json->warnings ?? [],
-            ),
-            workspace_id: $json->workspace_id,
             can_configure_auto_lock: $json->can_configure_auto_lock ?? null,
             can_hvac_cool: $json->can_hvac_cool ?? null,
             can_hvac_heat: $json->can_hvac_heat ?? null,
@@ -59,6 +40,11 @@ class Device
             can_simulate_removal: $json->can_simulate_removal ?? null,
             can_turn_off_hvac: $json->can_turn_off_hvac ?? null,
             can_unlock_with_code: $json->can_unlock_with_code ?? null,
+            capabilities_supported: $json->capabilities_supported ?? null,
+            connected_account_id: $json->connected_account_id ?? null,
+            created_at: $json->created_at ?? null,
+            custom_metadata: $json->custom_metadata ?? null,
+            device_id: $json->device_id ?? null,
             device_manufacturer: isset($json->device_manufacturer)
                 ? DeviceDeviceManufacturer::from_json(
                     $json->device_manufacturer,
@@ -67,27 +53,30 @@ class Device
             device_provider: isset($json->device_provider)
                 ? DeviceDeviceProvider::from_json($json->device_provider)
                 : null,
+            device_type: $json->device_type ?? null,
+            display_name: $json->display_name ?? null,
+            errors: array_map(
+                fn($e) => DeviceErrors::from_json($e),
+                $json->errors ?? [],
+            ),
+            is_managed: $json->is_managed ?? null,
             location: isset($json->location)
                 ? DeviceLocation::from_json($json->location)
                 : null,
             nickname: $json->nickname ?? null,
+            properties: isset($json->properties)
+                ? DeviceProperties::from_json($json->properties)
+                : null,
+            space_ids: $json->space_ids ?? null,
+            warnings: array_map(
+                fn($w) => DeviceWarnings::from_json($w),
+                $json->warnings ?? [],
+            ),
+            workspace_id: $json->workspace_id ?? null,
         );
     }
 
     public function __construct(
-        public array $capabilities_supported,
-        public string $connected_account_id,
-        public string $created_at,
-        public mixed $custom_metadata,
-        public string $device_id,
-        public string $device_type,
-        public string $display_name,
-        public array $errors,
-        public bool $is_managed,
-        public DeviceProperties $properties,
-        public array $space_ids,
-        public array $warnings,
-        public string $workspace_id,
         public bool|null $can_configure_auto_lock,
         public bool|null $can_hvac_cool,
         public bool|null $can_hvac_heat,
@@ -108,9 +97,22 @@ class Device
         public bool|null $can_simulate_removal,
         public bool|null $can_turn_off_hvac,
         public bool|null $can_unlock_with_code,
+        public array|null $capabilities_supported,
+        public string|null $connected_account_id,
+        public string|null $created_at,
+        public mixed $custom_metadata,
+        public string|null $device_id,
         public DeviceDeviceManufacturer|null $device_manufacturer,
         public DeviceDeviceProvider|null $device_provider,
+        public string|null $device_type,
+        public string|null $display_name,
+        public array $errors,
+        public bool|null $is_managed,
         public DeviceLocation|null $location,
         public string|null $nickname,
+        public DeviceProperties|null $properties,
+        public array|null $space_ids,
+        public array $warnings,
+        public string|null $workspace_id,
     ) {}
 }

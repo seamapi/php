@@ -7,41 +7,26 @@ use Seam\Objects\AccessGrant;
 use Seam\Objects\AccessMethod;
 use Seam\Objects\AcsAccessGroup;
 use Seam\Objects\AcsCredential;
-use Seam\Objects\AcsCredentialPool;
-use Seam\Objects\AcsCredentialProvisioningAutomation;
 use Seam\Objects\AcsEncoder;
 use Seam\Objects\AcsEntrance;
 use Seam\Objects\AcsSystem;
 use Seam\Objects\AcsUser;
 use Seam\Objects\ActionAttempt;
 use Seam\Objects\Batch;
-use Seam\Objects\BridgeClientSession;
-use Seam\Objects\BridgeConnectedSystems;
 use Seam\Objects\ClientSession;
 use Seam\Objects\ConnectWebview;
 use Seam\Objects\ConnectedAccount;
-use Seam\Objects\Customer;
 use Seam\Objects\CustomerPortal;
-use Seam\Objects\CustomizationProfile;
 use Seam\Objects\Device;
 use Seam\Objects\DeviceProvider;
-use Seam\Objects\EnrollmentAutomation;
 use Seam\Objects\Event;
 use Seam\Objects\InstantKey;
-use Seam\Objects\MagicLink;
 use Seam\Objects\NoiseThreshold;
-use Seam\Objects\Pagination;
 use Seam\Objects\Phone;
-use Seam\Objects\PhoneRegistration;
-use Seam\Objects\PhoneSession;
 use Seam\Objects\Space;
-use Seam\Objects\StaffMember;
 use Seam\Objects\ThermostatDailyProgram;
 use Seam\Objects\ThermostatSchedule;
 use Seam\Objects\UnmanagedAccessCode;
-use Seam\Objects\UnmanagedAcsAccessGroup;
-use Seam\Objects\UnmanagedAcsCredential;
-use Seam\Objects\UnmanagedAcsUser;
 use Seam\Objects\UnmanagedDevice;
 use Seam\Objects\UserIdentity;
 use Seam\Objects\Webhook;
@@ -134,7 +119,6 @@ class SeamClient
         ];
         $options = array_filter($options, fn($option) => $option !== null);
 
-        // TODO handle request errors
         $response = $this->client->request($method, $path, $options);
         $status_code = $response->getStatusCode();
         $request_id = $response->getHeaderLine("seam-request-id");
@@ -506,8 +490,8 @@ class AccessCodesClient
 
     public function report_device_constraints(
         string $device_id,
-        mixed $max_code_length = null,
-        mixed $min_code_length = null,
+        ?int $max_code_length = null,
+        ?int $min_code_length = null,
         ?array $supported_code_lengths = null,
     ): void {
         $request_payload = [];
@@ -1948,10 +1932,11 @@ class AcsCredentialsClient
 class AcsEncodersClient
 {
     private SeamClient $seam;
-
+    public AcsEncodersSimulateClient $simulate;
     public function __construct(SeamClient $seam)
     {
         $this->seam = $seam;
+        $this->simulate = new AcsEncodersSimulateClient($seam);
     }
 
     public function encode_credential(
@@ -2281,7 +2266,7 @@ class AcsEntrancesClient
         ?string $acs_system_id = null,
         ?string $connected_account_id = null,
         ?string $customer_key = null,
-        mixed $limit = null,
+        ?int $limit = null,
         ?string $location_id = null,
         ?string $page_cursor = null,
         ?string $search = null,
@@ -2589,17 +2574,17 @@ class AcsUsersClient
     }
 
     public function get(
-        ?string $acs_system_id = null,
         ?string $acs_user_id = null,
+        ?string $acs_system_id = null,
         ?string $user_identity_id = null,
     ): AcsUser {
         $request_payload = [];
 
-        if ($acs_system_id !== null) {
-            $request_payload["acs_system_id"] = $acs_system_id;
-        }
         if ($acs_user_id !== null) {
             $request_payload["acs_user_id"] = $acs_user_id;
+        }
+        if ($acs_system_id !== null) {
+            $request_payload["acs_system_id"] = $acs_system_id;
         }
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
@@ -2617,7 +2602,7 @@ class AcsUsersClient
     public function list(
         ?string $acs_system_id = null,
         ?string $created_before = null,
-        mixed $limit = null,
+        ?int $limit = null,
         ?string $page_cursor = null,
         ?string $search = null,
         ?string $user_identity_email_address = null,
@@ -2872,7 +2857,7 @@ class ActionAttemptsClient
     public function list(
         ?array $action_attempt_ids = null,
         ?string $device_id = null,
-        mixed $limit = null,
+        ?int $limit = null,
         ?string $page_cursor = null,
         ?callable $on_response = null,
     ): array {
@@ -3353,7 +3338,7 @@ class ConnectedAccountsClient
     public function list(
         mixed $custom_metadata_has = null,
         ?string $customer_key = null,
-        mixed $limit = null,
+        ?int $limit = null,
         ?string $page_cursor = null,
         ?string $search = null,
         ?string $space_id = null,
@@ -4168,17 +4153,17 @@ class EventsClient
     }
 
     public function get(
-        ?string $device_id = null,
         ?string $event_id = null,
+        ?string $device_id = null,
         ?string $event_type = null,
     ): Event {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
         if ($event_id !== null) {
             $request_payload["event_id"] = $event_id;
+        }
+        if ($device_id !== null) {
+            $request_payload["device_id"] = $device_id;
         }
         if ($event_type !== null) {
             $request_payload["event_type"] = $event_type;
@@ -6102,7 +6087,7 @@ class ThermostatsSchedulesClient
         string $ends_at,
         string $starts_at,
         ?bool $is_override_allowed = null,
-        mixed $max_override_period_minutes = null,
+        ?int $max_override_period_minutes = null,
         ?string $name = null,
     ): ThermostatSchedule {
         $request_payload = [];
@@ -6206,7 +6191,7 @@ class ThermostatsSchedulesClient
         ?string $climate_preset_key = null,
         ?string $ends_at = null,
         ?bool $is_override_allowed = null,
-        mixed $max_override_period_minutes = null,
+        ?int $max_override_period_minutes = null,
         ?string $name = null,
         ?string $starts_at = null,
     ): void {
@@ -6482,7 +6467,7 @@ class UserIdentitiesClient
     public function list(
         ?string $created_before = null,
         ?string $credential_manager_acs_system_id = null,
-        mixed $limit = null,
+        ?int $limit = null,
         ?string $page_cursor = null,
         ?string $search = null,
         ?array $user_identity_ids = null,
@@ -6697,7 +6682,7 @@ class UserIdentitiesUnmanagedClient
 
     public function list(
         ?string $created_before = null,
-        mixed $limit = null,
+        ?int $limit = null,
         ?string $page_cursor = null,
         ?string $search = null,
         ?callable $on_response = null,
@@ -6939,5 +6924,45 @@ class WorkspacesClient
         );
 
         return $action_attempt;
+    }
+
+    public function update(
+        ?string $connect_partner_name = null,
+        mixed $connect_webview_customization = null,
+        ?bool $is_publishable_key_auth_enabled = null,
+        ?bool $is_suspended = null,
+        ?string $name = null,
+        ?string $organization_id = null,
+    ): void {
+        $request_payload = [];
+
+        if ($connect_partner_name !== null) {
+            $request_payload["connect_partner_name"] = $connect_partner_name;
+        }
+        if ($connect_webview_customization !== null) {
+            $request_payload[
+                "connect_webview_customization"
+            ] = $connect_webview_customization;
+        }
+        if ($is_publishable_key_auth_enabled !== null) {
+            $request_payload[
+                "is_publishable_key_auth_enabled"
+            ] = $is_publishable_key_auth_enabled;
+        }
+        if ($is_suspended !== null) {
+            $request_payload["is_suspended"] = $is_suspended;
+        }
+        if ($name !== null) {
+            $request_payload["name"] = $name;
+        }
+        if ($organization_id !== null) {
+            $request_payload["organization_id"] = $organization_id;
+        }
+
+        $this->seam->request(
+            "POST",
+            "/workspaces/update",
+            json: (object) $request_payload,
+        );
     }
 }

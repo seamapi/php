@@ -11,9 +11,6 @@ class UnmanagedDeviceProperties
             return null;
         }
         return new self(
-            model: UnmanagedDeviceModel::from_json($json->model),
-            name: $json->name,
-            online: $json->online,
             accessory_keypad: isset($json->accessory_keypad)
                 ? UnmanagedDeviceAccessoryKeypad::from_json(
                     $json->accessory_keypad,
@@ -26,24 +23,29 @@ class UnmanagedDeviceProperties
             image_alt_text: $json->image_alt_text ?? null,
             image_url: $json->image_url ?? null,
             manufacturer: $json->manufacturer ?? null,
+            model: isset($json->model)
+                ? UnmanagedDeviceModel::from_json($json->model)
+                : null,
+            name: $json->name ?? null,
             offline_access_codes_enabled: $json->offline_access_codes_enabled ??
                 null,
+            online: $json->online ?? null,
             online_access_codes_enabled: $json->online_access_codes_enabled ??
                 null,
         );
     }
 
     public function __construct(
-        public UnmanagedDeviceModel $model,
-        public string $name,
-        public bool $online,
         public UnmanagedDeviceAccessoryKeypad|null $accessory_keypad,
         public UnmanagedDeviceBattery|null $battery,
         public float|null $battery_level,
         public string|null $image_alt_text,
         public string|null $image_url,
         public string|null $manufacturer,
+        public UnmanagedDeviceModel|null $model,
+        public string|null $name,
         public bool|null $offline_access_codes_enabled,
+        public bool|null $online,
         public bool|null $online_access_codes_enabled,
     ) {}
 }

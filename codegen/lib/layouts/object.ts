@@ -1,10 +1,14 @@
-// Builds the template context for resource object files (src/Objects/{Name}.php).
-// Mirrors the nextlove generate-resource-object-class.ts serialization: the
-// from_json body lines and the constructor parameter lines, each already
-// sorted with the nextlove property comparator.
+// Builds the template context for resource object files (src/Objects/{Name}.php):
+// the from_json body lines and the constructor parameter lines.
+//
+// The blueprint does not track which resource properties are required, so
+// every property is optional: from_json falls back to null for missing values
+// and the constructor parameters are nullable.
 
-import { getPhpType } from '../map-php-type.js'
-import type { ExtractedResourceObjectSchema ,PropertySchemaWithReferenceObject } from '../openapi/deep-extract-resource-object-schemas.js'
+import type {
+  ResourceObjectProperty,
+  ResourceObjectSchema,
+} from '../resource-model.js'
 
 export interface ObjectLayoutContext {
   className: string
@@ -12,103 +16,49 @@ export interface ObjectLayoutContext {
   constructorParams: string[]
 }
 
-const compareProperties = (
-  [propA, schemaA]: [string, PropertySchemaWithReferenceObject],
-  [propB, schemaB]: [string, PropertySchemaWithReferenceObject],
-  requiredPropertyNames: string[],
-): number => {
-  const aRequired = requiredPropertyNames.includes(propA)
-  const bRequired = requiredPropertyNames.includes(propB)
-  const aNullable = 'nullable' in schemaA && schemaA.nullable === true
-  const bNullable = 'nullable' in schemaB && schemaB.nullable === true
+const generateFromJsonProp = (property: ResourceObjectProperty): string => {
+  const { name } = property
 
-  if (!aNullable !== !bNullable) return !aNullable ? -1 : 1
-  if (aRequired !== bRequired) return aRequired ? -1 : 1
-  return propA.localeCompare(propB)
-}
+  switch (property.kind) {
+    case 'objectReference':
+      return `${name}: isset($json->${name}) ? ${property.referenceName}::from_json($json->${name}) : null,`
 
-const isObjectReferencingResource = (
-  schema: PropertySchemaWithReferenceObject,
-): boolean =>
-  'type' in schema &&
-  schema.type === 'object' &&
-  'referenceObjectTypeName' in schema
+    case 'listReference':
+      return `${name}: array_map(fn ($${name[0]}) => ${property.referenceName}::from_json($${name[0]}), $json->${name} ?? []),`
 
-const isArrayReferencingResource = (
-  schema: PropertySchemaWithReferenceObject,
-): boolean =>
-  'type' in schema &&
-  schema.type === 'array' &&
-  'referenceObjectTypeName' in schema
-
-const isPropertyRequired = (
-  propName: string,
-  schema: PropertySchemaWithReferenceObject,
-  requiredPropertyNames: string[],
-): boolean =>
-  'nullable' in schema
-    ? !(schema.nullable ?? false)
-    : requiredPropertyNames.includes(propName)
-
-const generateFromJsonProp = (
-  propName: string,
-  schema: PropertySchemaWithReferenceObject,
-  requiredPropertyNames: string[],
-): string => {
-  const required = isPropertyRequired(propName, schema, requiredPropertyNames)
-  const refName =
-    'referenceObjectTypeName' in schema ? schema.referenceObjectTypeName : ''
-
-  if (isObjectReferencingResource(schema)) {
-    return `${propName}: ${required ? '' : `isset($json->${propName}) ? `}${refName}::from_json($json->${propName})${required ? ',' : ' : null,'}`
+    case 'value':
+      return `${name}: $json->${name} ?? null,`
   }
-
-  if (isArrayReferencingResource(schema)) {
-    return `${propName}: array_map(fn ($${propName[0]}) => ${refName}::from_json($${propName[0]}), $json->${propName} ?? []),`
-  }
-
-  return `${propName}: $json->${propName}${required ? ',' : ' ?? null,'}`
 }
 
 const generateConstructorParam = (
-  propName: string,
-  schema: PropertySchemaWithReferenceObject,
-  requiredPropertyNames: string[],
+  property: ResourceObjectProperty,
 ): string => {
-  const phpType = isObjectReferencingResource(schema)
-    ? ((schema as { referenceObjectTypeName?: string })
-        .referenceObjectTypeName ?? 'mixed')
-    : getPhpType('type' in schema ? schema.type : 'mixed')
-  const required = isPropertyRequired(propName, schema, requiredPropertyNames)
-  const nullSuffix = phpType === 'mixed' ? '' : required ? '' : ' | null'
+  switch (property.kind) {
+    case 'objectReference':
+      return `public ${property.referenceName}|null $${property.name},`
 
-  return `public ${phpType}${nullSuffix} $${propName},`
+    case 'listReference':
+      return `public array $${property.name},`
+
+    case 'value': {
+      const { phpType } = property
+      const nullSuffix = phpType === 'mixed' ? '' : '|null'
+      return `public ${phpType}${nullSuffix} $${property.name},`
+    }
+  }
 }
 
 export const setObjectLayoutContext = (
-  schema: ExtractedResourceObjectSchema,
+  schema: ResourceObjectSchema,
 ): ObjectLayoutContext => {
-  const { name, requiredPropertyNames } = schema
-  const properties = { ...schema.properties }
-
-  // TODO: Remove this created_at injection once seam-connect is patched and
-  // generated output is allowed to change. The nextlove generator added a
-  // created_at string property to every Errors and Warnings resource class.
-  if (name.endsWith('Errors') || name.endsWith('Warnings')) {
-    properties['created_at'] = { type: 'string' }
-  }
-
-  const sorted = Object.entries(properties).sort((a, b) =>
-    compareProperties(a, b, requiredPropertyNames),
+  const sorted = [...schema.properties].sort((a, b) =>
+    a.name.localeCompare(b.name),
   )
 
   return {
-    className: name,
-    fromJsonProps: sorted.map(([propName, propSchema]) =>
-      generateFromJsonProp(propName, propSchema, requiredPropertyNames),
-    ),
-    constructorParams: sorted.map(([propName, propSchema]) =>
-      generateConstructorParam(propName, propSchema, requiredPropertyNames),
-    ),
+    className: schema.name,
+    fromJsonProps: sorted.map(generateFromJsonProp),
+    constructorParams: sorted.map(generateConstructorParam),
   }
 }

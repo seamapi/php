@@ -20,7 +20,7 @@ class PhoneAssaAbloyCredentialServiceMetadata
     }
 
     public function __construct(
-        public array|null $endpoints,
+        public array $endpoints,
         public bool|null $has_active_endpoint,
     ) {}
 }

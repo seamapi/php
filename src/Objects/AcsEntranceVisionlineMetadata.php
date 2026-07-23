@@ -23,6 +23,6 @@ class AcsEntranceVisionlineMetadata
     public function __construct(
         public string|null $door_category,
         public string|null $door_name,
-        public array|null $profiles,
+        public array $profiles,
     ) {}
 }
