@@ -19,8 +19,6 @@ Metalsmith(rootDir)
   .source('./content')
   .destination('../')
   .clean(false)
-  // Omit undocumented endpoints, resources, parameters, and properties so the
-  // codegen only sees the public API.
   .use(blueprint({ types, omitUndocumented: true }))
   .use(routes)
   .use(
