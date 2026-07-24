@@ -33,36 +33,26 @@ export const createResourceObjectModel = (
   const baseResources = new Map<string, Property[]>()
 
   for (const resource of blueprint.resources) {
-    if (resource.isUndocumented) continue
-    baseResources.set(
-      resource.resourceType,
-      documentedProperties(resource.properties),
-    )
+    baseResources.set(resource.resourceType, resource.properties)
   }
 
   // The blueprint models events and action attempts as one resource per
   // variant. The PHP SDK has a single class for each, so the variants are
   // merged into one schema.
-  const events = blueprint.events.filter((event) => !event.isUndocumented)
+  const { events } = blueprint
   if (events.length > 0) {
     baseResources.set(
       'event',
-      mergeProperties(
-        events.map((event) => documentedProperties(event.properties)),
-      ),
+      mergeProperties(events.map((event) => event.properties)),
     )
   }
 
-  const actionAttempts = blueprint.actionAttempts.filter(
-    (actionAttempt) => !actionAttempt.isUndocumented,
-  )
+  const { actionAttempts } = blueprint
   if (actionAttempts.length > 0) {
     baseResources.set(
       'action_attempt',
       mergeProperties(
-        actionAttempts.map((actionAttempt) =>
-          documentedProperties(actionAttempt.properties),
-        ),
+        actionAttempts.map((actionAttempt) => actionAttempt.properties),
       ),
     )
   }
@@ -107,7 +97,7 @@ const createResourceObjectProperty = (
   const referenceName = pascalCase(`${baseName}_${property.name}`)
 
   if (property.format === 'object') {
-    const properties = documentedProperties(property.properties)
+    const { properties } = property
 
     if (properties.length > 0) {
       addSchema(referenceName, properties, baseName)
@@ -118,12 +108,10 @@ const createResourceObjectProperty = (
   if (property.format === 'list') {
     const itemProperties =
       property.itemFormat === 'object'
-        ? documentedProperties(property.itemProperties)
+        ? property.itemProperties
         : property.itemFormat === 'discriminated_object'
           ? mergeProperties(
-              property.variants.map((variant) =>
-                documentedProperties(variant.properties),
-              ),
+              property.variants.map((variant) => variant.properties),
             )
           : []
 
@@ -139,9 +127,6 @@ const createResourceObjectProperty = (
     phpType: getPhpType(property),
   }
 }
-
-const documentedProperties = (properties: Property[]): Property[] =>
-  properties.filter((property) => !property.isUndocumented)
 
 const mergeProperties = (propertyLists: Property[][]): Property[] => {
   const merged = new Map<string, Property>()

@@ -70,17 +70,12 @@ export const routes = (
   }
 
   for (const route of blueprint.routes) {
-    if (route.isUndocumented) continue
-
-    const endpoints = route.endpoints.filter(
-      (endpoint) => !endpoint.isUndocumented,
-    )
-    if (endpoints.length === 0) continue
+    if (route.endpoints.length === 0) continue
 
     const namespaceSegments = route.path.split('/').filter((s) => s.length > 0)
     const client = ensureClient(namespaceSegments)
 
-    for (const endpoint of endpoints) {
+    for (const endpoint of route.endpoints) {
       client.methods.push(createClientMethod(endpoint))
     }
   }
@@ -114,9 +109,7 @@ const createClientMethod = (endpoint: Endpoint): PhpClientMethod => {
   return {
     methodName: endpoint.name,
     path: endpoint.path,
-    parameters: endpoint.request.parameters
-      .filter((parameter) => !parameter.isUndocumented)
-      .map((parameter) => ({
+    parameters: endpoint.request.parameters.map((parameter) => ({
         name: parameter.name,
         type: getPhpType(parameter),
         required: parameter.isRequired,
