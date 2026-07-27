@@ -1,9 +1,11 @@
-// Builds the resource object class model for src/Objects from the blueprint.
+// Builds the resource class model for src/Resources from the blueprint.
 //
-// Each blueprint resource becomes a PHP class. Nested object properties and
-// lists of objects are split into their own classes named after the base
-// resource and the property, e.g. the device battery property becomes
-// DeviceBattery. Discriminated unions (events, action attempts, and
+// Each blueprint resource becomes a PHP class in its own file. Nested object
+// properties and lists of objects are split into their own classes, named
+// after the base resource and the property, e.g. the device battery property
+// becomes DeviceBattery. Those classes only exist to type a resource
+// property, so they are emitted as local classes in the file of the resource
+// that introduced them. Discriminated unions (events, action attempts, and
 // discriminated object lists) are flattened into a single class with the
 // union of the variant properties.
 
@@ -12,24 +14,28 @@ import { pascalCase } from 'change-case'
 
 import { getPhpType } from './map-php-type.js'
 
-export type ResourceObjectProperty =
+export type ResourceClassProperty =
   | { name: string; kind: 'value'; phpType: string }
   | { name: string; kind: 'objectReference'; referenceName: string }
   | { name: string; kind: 'listReference'; referenceName: string }
 
-export interface ResourceObjectSchema {
+export interface ResourceClassSchema {
   name: string
-  properties: ResourceObjectProperty[]
+  properties: ResourceClassProperty[]
 }
 
-export interface ResourceObjectModel {
-  baseResourceNames: string[]
-  schemas: ResourceObjectSchema[]
+export interface ResourceSchema {
+  name: string
+  resourceClass: ResourceClassSchema
+  localClasses: ResourceClassSchema[]
 }
 
-export const createResourceObjectModel = (
-  blueprint: Blueprint,
-): ResourceObjectModel => {
+export interface ResourceModel {
+  resourceNames: string[]
+  resources: ResourceSchema[]
+}
+
+export const createResourceModel = (blueprint: Blueprint): ResourceModel => {
   const baseResources = new Map<string, Property[]>()
 
   for (const resource of blueprint.resources) {
@@ -57,50 +63,74 @@ export const createResourceObjectModel = (
     )
   }
 
-  const schemas = new Map<string, ResourceObjectSchema>()
+  const classes = new Map<string, ResourceClassSchema>()
+  const localClassNames = new Map<string, string[]>()
 
-  const addSchema = (
+  let currentResourceName = ''
+
+  const addClass = (
     name: string,
     properties: Property[],
     baseName: string,
   ): void => {
-    if (schemas.has(name)) return
-    const schema: ResourceObjectSchema = { name, properties: [] }
-    schemas.set(name, schema)
+    if (classes.has(name)) return
+    const schema: ResourceClassSchema = { name, properties: [] }
+    classes.set(name, schema)
+    if (name !== currentResourceName) {
+      localClassNames.get(currentResourceName)?.push(name)
+    }
     schema.properties = properties.map((property) =>
-      createResourceObjectProperty(property, baseName, addSchema),
+      createResourceClassProperty(property, baseName, addClass),
     )
   }
 
   const baseResourceTypes = [...baseResources.keys()].sort()
-  for (const resourceType of baseResourceTypes) {
-    addSchema(
-      pascalCase(resourceType),
-      baseResources.get(resourceType) ?? [],
-      resourceType,
-    )
-  }
+  const resources = baseResourceTypes.map((resourceType) => {
+    const name = pascalCase(resourceType)
+    currentResourceName = name
+    localClassNames.set(name, [])
+    addClass(name, baseResources.get(resourceType) ?? [], resourceType)
+
+    const resourceClass = classes.get(name)
+    if (resourceClass == null) {
+      throw new Error(
+        `Missing class for resource ${resourceType}: ${name} is already used by a property class of another resource`,
+      )
+    }
+
+    return {
+      name,
+      resourceClass,
+      localClasses: (localClassNames.get(name) ?? [])
+        .map((localClassName) => {
+          const localClass = classes.get(localClassName)
+          if (localClass == null) {
+            throw new Error(`Missing local class ${localClassName}`)
+          }
+          return localClass
+        })
+        .sort((a, b) => a.name.localeCompare(b.name)),
+    }
+  })
 
   return {
-    baseResourceNames: baseResourceTypes.map((resourceType) =>
-      pascalCase(resourceType),
-    ),
-    schemas: [...schemas.values()],
+    resourceNames: resources.map((resource) => resource.name),
+    resources,
   }
 }
 
-const createResourceObjectProperty = (
+const createResourceClassProperty = (
   property: Property,
   baseName: string,
-  addSchema: (name: string, properties: Property[], baseName: string) => void,
-): ResourceObjectProperty => {
+  addClass: (name: string, properties: Property[], baseName: string) => void,
+): ResourceClassProperty => {
   const referenceName = pascalCase(`${baseName}_${property.name}`)
 
   if (property.format === 'object') {
     const { properties } = property
 
     if (properties.length > 0) {
-      addSchema(referenceName, properties, baseName)
+      addClass(referenceName, properties, baseName)
       return { name: property.name, kind: 'objectReference', referenceName }
     }
   }
@@ -116,7 +146,7 @@ const createResourceObjectProperty = (
           : []
 
     if (itemProperties.length > 0) {
-      addSchema(referenceName, itemProperties, baseName)
+      addClass(referenceName, itemProperties, baseName)
       return { name: property.name, kind: 'listReference', referenceName }
     }
   }

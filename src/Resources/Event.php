@@ -1,0 +1,515 @@
+<?php
+
+namespace Seam\Resources;
+
+class Event
+{
+    public static function from_json(mixed $json): Event|null
+    {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+            access_code_errors: array_map(
+                fn($a) => EventAccessCodeErrors::from_json($a),
+                $json->access_code_errors ?? [],
+            ),
+            access_code_id: $json->access_code_id ?? null,
+            access_code_is_managed: $json->access_code_is_managed ?? null,
+            access_code_warnings: array_map(
+                fn($a) => EventAccessCodeWarnings::from_json($a),
+                $json->access_code_warnings ?? [],
+            ),
+            access_grant_id: $json->access_grant_id ?? null,
+            access_grant_ids: $json->access_grant_ids ?? null,
+            access_grant_key: $json->access_grant_key ?? null,
+            access_grant_keys: $json->access_grant_keys ?? null,
+            access_method_id: $json->access_method_id ?? null,
+            acs_access_group_id: $json->acs_access_group_id ?? null,
+            acs_credential_id: $json->acs_credential_id ?? null,
+            acs_encoder_id: $json->acs_encoder_id ?? null,
+            acs_entrance_id: $json->acs_entrance_id ?? null,
+            acs_entrance_ids: $json->acs_entrance_ids ?? null,
+            acs_system_errors: array_map(
+                fn($a) => EventAcsSystemErrors::from_json($a),
+                $json->acs_system_errors ?? [],
+            ),
+            acs_system_id: $json->acs_system_id ?? null,
+            acs_system_warnings: array_map(
+                fn($a) => EventAcsSystemWarnings::from_json($a),
+                $json->acs_system_warnings ?? [],
+            ),
+            acs_user_id: $json->acs_user_id ?? null,
+            action_attempt_id: $json->action_attempt_id ?? null,
+            action_type: $json->action_type ?? null,
+            activation_reason: $json->activation_reason ?? null,
+            backup_access_code_id: $json->backup_access_code_id ?? null,
+            battery_level: $json->battery_level ?? null,
+            battery_status: $json->battery_status ?? null,
+            change_reason: $json->change_reason ?? null,
+            changed_properties: array_map(
+                fn($c) => EventChangedProperties::from_json($c),
+                $json->changed_properties ?? [],
+            ),
+            client_session_id: $json->client_session_id ?? null,
+            climate_preset_key: $json->climate_preset_key ?? null,
+            code: $json->code ?? null,
+            connect_webview_id: $json->connect_webview_id ?? null,
+            connected_account_custom_metadata: $json->connected_account_custom_metadata ??
+                null,
+            connected_account_errors: array_map(
+                fn($c) => EventConnectedAccountErrors::from_json($c),
+                $json->connected_account_errors ?? [],
+            ),
+            connected_account_id: $json->connected_account_id ?? null,
+            connected_account_type: $json->connected_account_type ?? null,
+            connected_account_warnings: array_map(
+                fn($c) => EventConnectedAccountWarnings::from_json($c),
+                $json->connected_account_warnings ?? [],
+            ),
+            cooling_set_point_celsius: $json->cooling_set_point_celsius ?? null,
+            cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
+                null,
+            created_at: $json->created_at ?? null,
+            customer_key: $json->customer_key ?? null,
+            description: $json->description ?? null,
+            desired_temperature_celsius: $json->desired_temperature_celsius ??
+                null,
+            desired_temperature_fahrenheit: $json->desired_temperature_fahrenheit ??
+                null,
+            device_custom_metadata: $json->device_custom_metadata ?? null,
+            device_errors: array_map(
+                fn($d) => EventDeviceErrors::from_json($d),
+                $json->device_errors ?? [],
+            ),
+            device_id: $json->device_id ?? null,
+            device_ids: $json->device_ids ?? null,
+            device_name: $json->device_name ?? null,
+            device_warnings: array_map(
+                fn($d) => EventDeviceWarnings::from_json($d),
+                $json->device_warnings ?? [],
+            ),
+            ends_at: $json->ends_at ?? null,
+            error_code: $json->error_code ?? null,
+            error_message: $json->error_message ?? null,
+            event_description: $json->event_description ?? null,
+            event_id: $json->event_id ?? null,
+            event_type: $json->event_type ?? null,
+            fan_mode_setting: $json->fan_mode_setting ?? null,
+            from: isset($json->from) ? EventFrom::from_json($json->from) : null,
+            heating_set_point_celsius: $json->heating_set_point_celsius ?? null,
+            heating_set_point_fahrenheit: $json->heating_set_point_fahrenheit ??
+                null,
+            hvac_mode_setting: $json->hvac_mode_setting ?? null,
+            image_url: $json->image_url ?? null,
+            is_backup_code: $json->is_backup_code ?? null,
+            is_fallback_climate_preset: $json->is_fallback_climate_preset ??
+                null,
+            is_via_bluetooth: $json->is_via_bluetooth ?? null,
+            is_via_nfc: $json->is_via_nfc ?? null,
+            lower_limit_celsius: $json->lower_limit_celsius ?? null,
+            lower_limit_fahrenheit: $json->lower_limit_fahrenheit ?? null,
+            method: $json->method ?? null,
+            minut_metadata: $json->minut_metadata ?? null,
+            missing_device_ids: $json->missing_device_ids ?? null,
+            motion_sub_type: $json->motion_sub_type ?? null,
+            noise_level_decibels: $json->noise_level_decibels ?? null,
+            noise_level_nrs: $json->noise_level_nrs ?? null,
+            noise_threshold_id: $json->noise_threshold_id ?? null,
+            noise_threshold_name: $json->noise_threshold_name ?? null,
+            noiseaware_metadata: $json->noiseaware_metadata ?? null,
+            occurred_at: $json->occurred_at ?? null,
+            reason: isset($json->reason)
+                ? EventReason::from_json($json->reason)
+                : null,
+            requested_mutations: array_map(
+                fn($r) => EventRequestedMutations::from_json($r),
+                $json->requested_mutations ?? [],
+            ),
+            space_id: $json->space_id ?? null,
+            space_key: $json->space_key ?? null,
+            starts_at: $json->starts_at ?? null,
+            status: $json->status ?? null,
+            temperature_celsius: $json->temperature_celsius ?? null,
+            temperature_fahrenheit: $json->temperature_fahrenheit ?? null,
+            thermostat_schedule_id: $json->thermostat_schedule_id ?? null,
+            to: isset($json->to) ? EventTo::from_json($json->to) : null,
+            upper_limit_celsius: $json->upper_limit_celsius ?? null,
+            upper_limit_fahrenheit: $json->upper_limit_fahrenheit ?? null,
+            user_identity_id: $json->user_identity_id ?? null,
+            video_url: $json->video_url ?? null,
+            workspace_id: $json->workspace_id ?? null,
+        );
+    }
+
+    public function __construct(
+        public array $access_code_errors,
+        public string|null $access_code_id,
+        public bool|null $access_code_is_managed,
+        public array $access_code_warnings,
+        public string|null $access_grant_id,
+        public array|null $access_grant_ids,
+        public string|null $access_grant_key,
+        public array|null $access_grant_keys,
+        public string|null $access_method_id,
+        public string|null $acs_access_group_id,
+        public string|null $acs_credential_id,
+        public string|null $acs_encoder_id,
+        public string|null $acs_entrance_id,
+        public array|null $acs_entrance_ids,
+        public array $acs_system_errors,
+        public string|null $acs_system_id,
+        public array $acs_system_warnings,
+        public string|null $acs_user_id,
+        public string|null $action_attempt_id,
+        public string|null $action_type,
+        public string|null $activation_reason,
+        public string|null $backup_access_code_id,
+        public float|null $battery_level,
+        public string|null $battery_status,
+        public string|null $change_reason,
+        public array $changed_properties,
+        public string|null $client_session_id,
+        public string|null $climate_preset_key,
+        public string|null $code,
+        public string|null $connect_webview_id,
+        public mixed $connected_account_custom_metadata,
+        public array $connected_account_errors,
+        public string|null $connected_account_id,
+        public string|null $connected_account_type,
+        public array $connected_account_warnings,
+        public float|null $cooling_set_point_celsius,
+        public float|null $cooling_set_point_fahrenheit,
+        public string|null $created_at,
+        public string|null $customer_key,
+        public string|null $description,
+        public float|null $desired_temperature_celsius,
+        public float|null $desired_temperature_fahrenheit,
+        public mixed $device_custom_metadata,
+        public array $device_errors,
+        public string|null $device_id,
+        public array|null $device_ids,
+        public string|null $device_name,
+        public array $device_warnings,
+        public string|null $ends_at,
+        public string|null $error_code,
+        public string|null $error_message,
+        public string|null $event_description,
+        public string|null $event_id,
+        public string|null $event_type,
+        public string|null $fan_mode_setting,
+        public EventFrom|null $from,
+        public float|null $heating_set_point_celsius,
+        public float|null $heating_set_point_fahrenheit,
+        public string|null $hvac_mode_setting,
+        public string|null $image_url,
+        public bool|null $is_backup_code,
+        public bool|null $is_fallback_climate_preset,
+        public bool|null $is_via_bluetooth,
+        public bool|null $is_via_nfc,
+        public float|null $lower_limit_celsius,
+        public float|null $lower_limit_fahrenheit,
+        public string|null $method,
+        public mixed $minut_metadata,
+        public array|null $missing_device_ids,
+        public string|null $motion_sub_type,
+        public float|null $noise_level_decibels,
+        public float|null $noise_level_nrs,
+        public string|null $noise_threshold_id,
+        public string|null $noise_threshold_name,
+        public mixed $noiseaware_metadata,
+        public string|null $occurred_at,
+        public EventReason|null $reason,
+        public array $requested_mutations,
+        public string|null $space_id,
+        public string|null $space_key,
+        public string|null $starts_at,
+        public string|null $status,
+        public float|null $temperature_celsius,
+        public float|null $temperature_fahrenheit,
+        public string|null $thermostat_schedule_id,
+        public EventTo|null $to,
+        public float|null $upper_limit_celsius,
+        public float|null $upper_limit_fahrenheit,
+        public string|null $user_identity_id,
+        public string|null $video_url,
+        public string|null $workspace_id,
+    ) {}
+}
+
+class EventAccessCodeErrors
+{
+    public static function from_json(mixed $json): EventAccessCodeErrors|null
+    {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+            created_at: $json->created_at ?? null,
+            error_code: $json->error_code ?? null,
+            message: $json->message ?? null,
+        );
+    }
+
+    public function __construct(
+        public string|null $created_at,
+        public string|null $error_code,
+        public string|null $message,
+    ) {}
+}
+
+class EventAccessCodeWarnings
+{
+    public static function from_json(mixed $json): EventAccessCodeWarnings|null
+    {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+            created_at: $json->created_at ?? null,
+            message: $json->message ?? null,
+            warning_code: $json->warning_code ?? null,
+        );
+    }
+
+    public function __construct(
+        public string|null $created_at,
+        public string|null $message,
+        public string|null $warning_code,
+    ) {}
+}
+
+class EventAcsSystemErrors
+{
+    public static function from_json(mixed $json): EventAcsSystemErrors|null
+    {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+            created_at: $json->created_at ?? null,
+            error_code: $json->error_code ?? null,
+            message: $json->message ?? null,
+        );
+    }
+
+    public function __construct(
+        public string|null $created_at,
+        public string|null $error_code,
+        public string|null $message,
+    ) {}
+}
+
+class EventAcsSystemWarnings
+{
+    public static function from_json(mixed $json): EventAcsSystemWarnings|null
+    {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+            created_at: $json->created_at ?? null,
+            message: $json->message ?? null,
+            warning_code: $json->warning_code ?? null,
+        );
+    }
+
+    public function __construct(
+        public string|null $created_at,
+        public string|null $message,
+        public string|null $warning_code,
+    ) {}
+}
+
+class EventChangedProperties
+{
+    public static function from_json(mixed $json): EventChangedProperties|null
+    {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+            from: $json->from ?? null,
+            property: $json->property ?? null,
+            to: $json->to ?? null,
+        );
+    }
+
+    public function __construct(
+        public string|null $from,
+        public string|null $property,
+        public string|null $to,
+    ) {}
+}
+
+class EventConnectedAccountErrors
+{
+    public static function from_json(
+        mixed $json,
+    ): EventConnectedAccountErrors|null {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+            created_at: $json->created_at ?? null,
+            error_code: $json->error_code ?? null,
+            message: $json->message ?? null,
+        );
+    }
+
+    public function __construct(
+        public string|null $created_at,
+        public string|null $error_code,
+        public string|null $message,
+    ) {}
+}
+
+class EventConnectedAccountWarnings
+{
+    public static function from_json(
+        mixed $json,
+    ): EventConnectedAccountWarnings|null {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+            created_at: $json->created_at ?? null,
+            message: $json->message ?? null,
+            warning_code: $json->warning_code ?? null,
+        );
+    }
+
+    public function __construct(
+        public string|null $created_at,
+        public string|null $message,
+        public string|null $warning_code,
+    ) {}
+}
+
+class EventDeviceErrors
+{
+    public static function from_json(mixed $json): EventDeviceErrors|null
+    {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+            created_at: $json->created_at ?? null,
+            error_code: $json->error_code ?? null,
+            message: $json->message ?? null,
+        );
+    }
+
+    public function __construct(
+        public string|null $created_at,
+        public string|null $error_code,
+        public string|null $message,
+    ) {}
+}
+
+class EventDeviceWarnings
+{
+    public static function from_json(mixed $json): EventDeviceWarnings|null
+    {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+            created_at: $json->created_at ?? null,
+            message: $json->message ?? null,
+            warning_code: $json->warning_code ?? null,
+        );
+    }
+
+    public function __construct(
+        public string|null $created_at,
+        public string|null $message,
+        public string|null $warning_code,
+    ) {}
+}
+
+class EventFrom
+{
+    public static function from_json(mixed $json): EventFrom|null
+    {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+            code: $json->code ?? null,
+            ends_at: $json->ends_at ?? null,
+            name: $json->name ?? null,
+            starts_at: $json->starts_at ?? null,
+        );
+    }
+
+    public function __construct(
+        public string|null $code,
+        public string|null $ends_at,
+        public string|null $name,
+        public string|null $starts_at,
+    ) {}
+}
+
+class EventReason
+{
+    public static function from_json(mixed $json): EventReason|null
+    {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+            message: $json->message ?? null,
+            reason_code: $json->reason_code ?? null,
+        );
+    }
+
+    public function __construct(
+        public string|null $message,
+        public string|null $reason_code,
+    ) {}
+}
+
+class EventRequestedMutations
+{
+    public static function from_json(mixed $json): EventRequestedMutations|null
+    {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+            from: $json->from ?? null,
+            mutation_code: $json->mutation_code ?? null,
+            to: $json->to ?? null,
+        );
+    }
+
+    public function __construct(
+        public mixed $from,
+        public string|null $mutation_code,
+        public mixed $to,
+    ) {}
+}
+
+class EventTo
+{
+    public static function from_json(mixed $json): EventTo|null
+    {
+        if (!$json) {
+            return null;
+        }
+        return new self(
+            code: $json->code ?? null,
+            ends_at: $json->ends_at ?? null,
+            name: $json->name ?? null,
+            starts_at: $json->starts_at ?? null,
+        );
+    }
+
+    public function __construct(
+        public string|null $code,
+        public string|null $ends_at,
+        public string|null $name,
+        public string|null $starts_at,
+    ) {}
+}

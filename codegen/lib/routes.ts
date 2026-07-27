@@ -1,7 +1,7 @@
 // The Metalsmith plugin that generates the PHP SDK source files.
 //
 // The blueprint from @seamapi/blueprint is the only input: it drives the
-// resource object classes written to src/Objects, and the resource client
+// resource classes written to src/Resources, and the resource client
 // classes serialized into src/SeamClient.php.
 
 import type { Blueprint, Endpoint } from '@seamapi/blueprint'
@@ -9,16 +9,16 @@ import { pascalCase } from 'change-case'
 import type Metalsmith from 'metalsmith'
 
 import type { PhpClient, PhpClientMethod } from './class-model.js'
-import { setObjectLayoutContext } from './layouts/object.js'
+import { setResourceLayoutContext } from './layouts/resource.js'
 import { setSeamClientLayoutContext } from './layouts/seam-client.js'
 import { getPhpType } from './map-php-type.js'
-import { createResourceObjectModel } from './resource-model.js'
+import { createResourceModel } from './resource-model.js'
 
 interface Metadata {
   blueprint: Blueprint
 }
 
-const objectsPath = 'src/Objects'
+const resourcesPath = 'src/Resources'
 const seamClientPath = 'src/SeamClient.php'
 
 export const routes = (
@@ -28,15 +28,16 @@ export const routes = (
   const metadata = metalsmith.metadata() as Metadata
   const { blueprint } = metadata
 
-  // Resource object classes, one file per (deeply extracted) schema. The base
-  // resource names drive the SeamClient use statements.
-  const { baseResourceNames, schemas } = createResourceObjectModel(blueprint)
+  // Resource classes, one file per resource holding the resource class and
+  // the local classes for its object properties. The resource names drive the
+  // SeamClient use statements.
+  const { resourceNames, resources } = createResourceModel(blueprint)
 
-  for (const schema of schemas) {
-    files[`${objectsPath}/${schema.name}.php`] = {
+  for (const resource of resources) {
+    files[`${resourcesPath}/${resource.name}.php`] = {
       contents: Buffer.from('\n'),
-      layout: 'object.hbs',
-      ...setObjectLayoutContext(schema),
+      layout: 'resource.hbs',
+      ...setResourceLayoutContext(resource),
     }
   }
 
@@ -83,7 +84,7 @@ export const routes = (
   files[seamClientPath] = {
     contents: Buffer.from('\n'),
     layout: 'seam-client.hbs',
-    ...setSeamClientLayoutContext([...classMap.values()], baseResourceNames),
+    ...setSeamClientLayoutContext([...classMap.values()], resourceNames),
   }
 }
 
@@ -93,9 +94,9 @@ const createClientMethod = (endpoint: Endpoint): PhpClientMethod => {
   const responseKey = response.responseType === 'void' ? '' : response.responseKey
 
   // Batch responses have no single resource type; they deserialize into the
-  // Batch resource object. A response whose resource type the blueprint
-  // cannot resolve ('unknown') has no resource object class to deserialize
-  // into, so the method is generated as returning void.
+  // Batch resource. A response whose resource type the blueprint cannot
+  // resolve ('unknown') has no resource class to deserialize into, so the
+  // method is generated as returning void.
   const resourceType =
     response.responseType === 'void'
       ? ''

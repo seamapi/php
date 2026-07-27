@@ -83,9 +83,9 @@ const getMethodLayoutContext = (
 
 export const setSeamClientLayoutContext = (
   clients: PhpClient[],
-  baseResourceObjectNames: string[],
+  resourceNames: string[],
 ): SeamClientLayoutContext => ({
-  useStatements: baseResourceObjectNames,
+  useStatements: resourceNames,
   parentClients: clients
     .filter((c) => c.isParentClient)
     .map((c) => ({ clientName: c.clientName, namespace: c.namespace })),
