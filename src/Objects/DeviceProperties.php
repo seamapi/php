@@ -26,6 +26,9 @@ class DeviceProperties
             appearance: isset($json->appearance)
                 ? DeviceAppearance::from_json($json->appearance)
                 : null,
+            aqara_metadata: isset($json->aqara_metadata)
+                ? DeviceAqaraMetadata::from_json($json->aqara_metadata)
+                : null,
             assa_abloy_credential_service_metadata: isset(
                 $json->assa_abloy_credential_service_metadata,
             )
@@ -299,6 +302,7 @@ class DeviceProperties
         public string|null $active_thermostat_schedule_id,
         public DeviceAkilesMetadata|null $akiles_metadata,
         public DeviceAppearance|null $appearance,
+        public DeviceAqaraMetadata|null $aqara_metadata,
         public DeviceAssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata,
         public DeviceAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
         public DeviceAugustMetadata|null $august_metadata,
