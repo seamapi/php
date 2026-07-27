@@ -3476,12 +3476,14 @@ class CustomersClient
     public function create_portal(
         ?array $customer_resources_filters = null,
         ?string $customization_profile_id = null,
+        mixed $deep_link = null,
         ?bool $exclude_locale_picker = null,
         mixed $features = null,
         ?bool $is_embedded = null,
         mixed $landing_page = null,
         ?string $locale = null,
         ?string $navigation_mode = null,
+        ?bool $read_only = null,
         mixed $customer_data = null,
     ): CustomerPortal {
         $request_payload = [];
@@ -3495,6 +3497,9 @@ class CustomersClient
             $request_payload[
                 "customization_profile_id"
             ] = $customization_profile_id;
+        }
+        if ($deep_link !== null) {
+            $request_payload["deep_link"] = $deep_link;
         }
         if ($exclude_locale_picker !== null) {
             $request_payload["exclude_locale_picker"] = $exclude_locale_picker;
@@ -3513,6 +3518,9 @@ class CustomersClient
         }
         if ($navigation_mode !== null) {
             $request_payload["navigation_mode"] = $navigation_mode;
+        }
+        if ($read_only !== null) {
+            $request_payload["read_only"] = $read_only;
         }
         if ($customer_data !== null) {
             $request_payload["customer_data"] = $customer_data;

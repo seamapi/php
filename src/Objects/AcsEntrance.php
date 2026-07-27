@@ -12,6 +12,9 @@ class AcsEntrance
         return new self(
             acs_entrance_id: $json->acs_entrance_id ?? null,
             acs_system_id: $json->acs_system_id ?? null,
+            akiles_metadata: isset($json->akiles_metadata)
+                ? AcsEntranceAkilesMetadata::from_json($json->akiles_metadata)
+                : null,
             assa_abloy_vostio_metadata: isset($json->assa_abloy_vostio_metadata)
                 ? AcsEntranceAssaAbloyVostioMetadata::from_json(
                     $json->assa_abloy_vostio_metadata,
@@ -85,6 +88,7 @@ class AcsEntrance
     public function __construct(
         public string|null $acs_entrance_id,
         public string|null $acs_system_id,
+        public AcsEntranceAkilesMetadata|null $akiles_metadata,
         public AcsEntranceAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
         public AcsEntranceAvigilonAltaMetadata|null $avigilon_alta_metadata,
         public AcsEntranceBrivoMetadata|null $brivo_metadata,
