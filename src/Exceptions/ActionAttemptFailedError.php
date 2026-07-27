@@ -2,7 +2,7 @@
 
 namespace Seam;
 
-use Seam\Objects\ActionAttempt;
+use Seam\Resources\ActionAttempt;
 
 class ActionAttemptFailedError extends ActionAttemptError
 {
