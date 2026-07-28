@@ -2,6 +2,9 @@
 
 namespace Seam\Resources;
 
+/**
+ * Represents an unmanaged access method. Unmanaged access methods do not have client sessions, instant keys, customization profiles, or keys.
+ */
 class UnmanagedAccessMethod
 {
     public static function from_json(mixed $json): UnmanagedAccessMethod|null
@@ -38,24 +41,72 @@ class UnmanagedAccessMethod
     }
 
     public function __construct(
+        /**
+         * ID of the access method.
+         */
         public string|null $access_method_id,
+        /**
+         * The actual PIN code for code access methods.
+         */
         public string|null $code,
+        /**
+         * Date and time at which the access method was created.
+         */
         public string|null $created_at,
+        /**
+         * Display name of the access method.
+         */
         public string|null $display_name,
+        /**
+         * Errors associated with the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant).
+         */
         public array $errors,
+        /**
+         * Indicates whether an existing card credential must be assigned to this access method before it can be issued. Only applies to card-mode access methods on systems that support credential assignment.
+         */
         public bool|null $is_assignment_required,
+        /**
+         * Indicates whether encoding with an card encoder is required to issue or reissue the plastic card associated with the access method.
+         */
         public bool|null $is_encoding_required,
+        /**
+         * Indicates whether the access method has been issued.
+         */
         public bool|null $is_issued,
+        /**
+         * Indicates whether the access method is ready for card assignment. This is true when the access method is in card mode, has not yet been issued, and the system supports credential assignment.
+         */
         public bool|null $is_ready_for_assignment,
+        /**
+         * Indicates whether the access method is ready to be encoded. This is true when the credential has been created and the card has not yet been issued.
+         */
         public bool|null $is_ready_for_encoding,
+        /**
+         * Date and time at which the access method was issued.
+         */
         public string|null $issued_at,
+        /**
+         * Access method mode. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
+         */
         public string|null $mode,
+        /**
+         * Pending mutations for the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant). Indicates operations that are in progress.
+         */
         public array $pending_mutations,
+        /**
+         * Warnings associated with the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant).
+         */
         public array $warnings,
+        /**
+         * ID of the Seam workspace associated with the access method.
+         */
         public string|null $workspace_id,
     ) {}
 }
 
+/**
+ * Errors associated with the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant).
+ */
 class UnmanagedAccessMethodErrors
 {
     public static function from_json(
@@ -72,12 +123,24 @@ class UnmanagedAccessMethodErrors
     }
 
     public function __construct(
+        /**
+         * Date and time at which Seam created the error.
+         */
         public string|null $created_at,
+        /**
+         * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+         */
         public string|null $error_code,
+        /**
+         * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+         */
         public string|null $message,
     ) {}
 }
 
+/**
+ * Previous device configuration.
+ */
 class UnmanagedAccessMethodFrom
 {
     public static function from_json(
@@ -94,12 +157,24 @@ class UnmanagedAccessMethodFrom
     }
 
     public function __construct(
+        /**
+         * Previous device IDs where access was provisioned.
+         */
         public array|null $device_ids,
+        /**
+         * Previous end time for access.
+         */
         public string|null $ends_at,
+        /**
+         * Previous start time for access.
+         */
         public string|null $starts_at,
     ) {}
 }
 
+/**
+ * Pending mutations for the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant). Indicates operations that are in progress.
+ */
 class UnmanagedAccessMethodPendingMutations
 {
     public static function from_json(
@@ -122,14 +197,32 @@ class UnmanagedAccessMethodPendingMutations
     }
 
     public function __construct(
+        /**
+         * Date and time at which the mutation was created.
+         */
         public string|null $created_at,
+        /**
+         * Previous device configuration.
+         */
         public UnmanagedAccessMethodFrom|null $from,
+        /**
+         * Detailed description of the mutation.
+         */
         public string|null $message,
+        /**
+         * Mutation code to indicate that Seam is in the process of provisioning access for this access method on new devices.
+         */
         public string|null $mutation_code,
+        /**
+         * New device configuration.
+         */
         public UnmanagedAccessMethodTo|null $to,
     ) {}
 }
 
+/**
+ * New device configuration.
+ */
 class UnmanagedAccessMethodTo
 {
     public static function from_json(mixed $json): UnmanagedAccessMethodTo|null
@@ -145,12 +238,24 @@ class UnmanagedAccessMethodTo
     }
 
     public function __construct(
+        /**
+         * New device IDs where access is being provisioned.
+         */
         public array|null $device_ids,
+        /**
+         * New end time for access.
+         */
         public string|null $ends_at,
+        /**
+         * New start time for access.
+         */
         public string|null $starts_at,
     ) {}
 }
 
+/**
+ * Warnings associated with the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant).
+ */
 class UnmanagedAccessMethodWarnings
 {
     public static function from_json(
@@ -168,9 +273,21 @@ class UnmanagedAccessMethodWarnings
     }
 
     public function __construct(
+        /**
+         * Date and time at which Seam created the warning.
+         */
         public string|null $created_at,
+        /**
+         * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+         */
         public string|null $message,
+        /**
+         * ID of the original access method from which this backup access method was split, if applicable.
+         */
         public string|null $original_access_method_id,
+        /**
+         * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+         */
         public string|null $warning_code,
     ) {}
 }

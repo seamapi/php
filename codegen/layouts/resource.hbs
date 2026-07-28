@@ -3,6 +3,9 @@
 namespace Seam\Resources;
 
 {{#each classes}}
+{{#if (hasPhpDoc this)}}
+{{{resourcePhpDoc this}}}
+{{/if}}
 class {{className}}
 {
     public static function from_json(mixed $json): {{className}}|null
@@ -19,7 +22,10 @@ class {{className}}
 
     public function __construct(
 {{#each constructorParams}}
-        {{{this}}}
+{{#if (hasPhpDoc this)}}
+{{{propertyPhpDoc this}}}
+{{/if}}
+        {{{declaration}}}
 {{/each}}
     ) {
     }

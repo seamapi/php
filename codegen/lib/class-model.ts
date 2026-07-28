@@ -4,6 +4,7 @@
 export interface PhpClientMethodParameter {
   name: string
   type: string
+  description: string
   required?: boolean | undefined
   position?: number | undefined
 }
@@ -11,6 +12,10 @@ export interface PhpClientMethodParameter {
 export interface PhpClientMethod {
   methodName: string
   path: string
+  description: string
+  responseDescription: string
+  isDeprecated: boolean
+  deprecationMessage: string
   parameters: PhpClientMethodParameter[]
   returnResource: string
   returnPath: string

@@ -15,12 +15,22 @@ import { pascalCase } from 'change-case'
 import { getPhpType } from './map-php-type.js'
 
 export type ResourceClassProperty =
-  | { name: string; kind: 'value'; phpType: string }
-  | { name: string; kind: 'objectReference'; referenceName: string }
-  | { name: string; kind: 'listReference'; referenceName: string }
+  | ({ kind: 'value'; phpType: string } & ResourceClassPropertyMetadata)
+  | ({ kind: 'objectReference'; referenceName: string } & ResourceClassPropertyMetadata)
+  | ({ kind: 'listReference'; referenceName: string } & ResourceClassPropertyMetadata)
+
+interface ResourceClassPropertyMetadata {
+  name: string
+  description: string
+  isDeprecated: boolean
+  deprecationMessage: string
+}
 
 export interface ResourceClassSchema {
   name: string
+  description: string
+  isDeprecated: boolean
+  deprecationMessage: string
   properties: ResourceClassProperty[]
 }
 
@@ -72,9 +82,18 @@ export const createResourceModel = (blueprint: Blueprint): ResourceModel => {
     name: string,
     properties: Property[],
     baseName: string,
+    description = '',
+    isDeprecated = false,
+    deprecationMessage = '',
   ): void => {
     if (classes.has(name)) return
-    const schema: ResourceClassSchema = { name, properties: [] }
+    const schema: ResourceClassSchema = {
+      name,
+      description,
+      isDeprecated,
+      deprecationMessage,
+      properties: [],
+    }
     classes.set(name, schema)
     if (name !== currentResourceName) {
       localClassNames.get(currentResourceName)?.push(name)
@@ -89,7 +108,17 @@ export const createResourceModel = (blueprint: Blueprint): ResourceModel => {
     const name = pascalCase(resourceType)
     currentResourceName = name
     localClassNames.set(name, [])
-    addClass(name, baseResources.get(resourceType) ?? [], resourceType)
+    const sourceResource =
+      blueprint.resources.find((resource) => resource.resourceType === resourceType) ??
+      (resourceType === 'event' ? blueprint.events[0] : blueprint.actionAttempts[0])
+    addClass(
+      name,
+      baseResources.get(resourceType) ?? [],
+      resourceType,
+      sourceResource?.description,
+      sourceResource?.isDeprecated,
+      sourceResource?.deprecationMessage,
+    )
 
     const resourceClass = classes.get(name)
     if (resourceClass == null) {
@@ -122,16 +151,29 @@ export const createResourceModel = (blueprint: Blueprint): ResourceModel => {
 const createResourceClassProperty = (
   property: Property,
   baseName: string,
-  addClass: (name: string, properties: Property[], baseName: string) => void,
+  addClass: (
+    name: string,
+    properties: Property[],
+    baseName: string,
+    description?: string,
+    isDeprecated?: boolean,
+    deprecationMessage?: string,
+  ) => void,
 ): ResourceClassProperty => {
   const referenceName = pascalCase(`${baseName}_${property.name}`)
+  const metadata = {
+    name: property.name,
+    description: property.description,
+    isDeprecated: property.isDeprecated,
+    deprecationMessage: property.deprecationMessage,
+  }
 
   if (property.format === 'object') {
     const { properties } = property
 
     if (properties.length > 0) {
-      addClass(referenceName, properties, baseName)
-      return { name: property.name, kind: 'objectReference', referenceName }
+      addClass(referenceName, properties, baseName, property.description)
+      return { ...metadata, kind: 'objectReference', referenceName }
     }
   }
 
@@ -146,13 +188,13 @@ const createResourceClassProperty = (
           : []
 
     if (itemProperties.length > 0) {
-      addClass(referenceName, itemProperties, baseName)
-      return { name: property.name, kind: 'listReference', referenceName }
+      addClass(referenceName, itemProperties, baseName, property.description)
+      return { ...metadata, kind: 'listReference', referenceName }
     }
   }
 
   return {
-    name: property.name,
+    ...metadata,
     kind: 'value',
     phpType: getPhpType(property),
   }

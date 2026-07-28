@@ -2,6 +2,9 @@
 
 namespace Seam\Resources;
 
+/**
+ * Represents a thermostat daily program, consisting of a set of periods, each of which has a starting time and the key that identifies the climate preset to apply at the starting time.
+ */
 class ThermostatDailyProgram
 {
     public static function from_json(mixed $json): ThermostatDailyProgram|null
@@ -24,15 +27,36 @@ class ThermostatDailyProgram
     }
 
     public function __construct(
+        /**
+         * Date and time at which the thermostat daily program was created.
+         */
         public string|null $created_at,
+        /**
+         * ID of the thermostat device on which the thermostat daily program is configured.
+         */
         public string|null $device_id,
+        /**
+         * User-friendly name to identify the thermostat daily program.
+         */
         public string|null $name,
+        /**
+         * Array of thermostat daily program periods.
+         */
         public array $periods,
+        /**
+         * ID of the thermostat daily program.
+         */
         public string|null $thermostat_daily_program_id,
+        /**
+         * ID of the workspace that contains the thermostat daily program.
+         */
         public string|null $workspace_id,
     ) {}
 }
 
+/**
+ * Array of thermostat daily program periods.
+ */
 class ThermostatDailyProgramPeriods
 {
     public static function from_json(
@@ -48,7 +72,13 @@ class ThermostatDailyProgramPeriods
     }
 
     public function __construct(
+        /**
+         * Key of the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) to activate at the `starts_at_time`.
+         */
         public string|null $climate_preset_key,
+        /**
+         * Time at which the thermostat daily program period starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+         */
         public string|null $starts_at_time,
     ) {}
 }

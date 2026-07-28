@@ -2,6 +2,9 @@
 
 namespace Seam\Resources;
 
+/**
+ * Represents an unmanaged Access Grant. Unmanaged Access Grants do not have client sessions, instant keys, customization profiles, or keys.
+ */
 class UnmanagedAccessGrant
 {
     public static function from_json(mixed $json): UnmanagedAccessGrant|null
@@ -44,25 +47,76 @@ class UnmanagedAccessGrant
     }
 
     public function __construct(
+        /**
+         * ID of the Access Grant.
+         */
         public string|null $access_grant_id,
+        /**
+         * IDs of the access methods created for the Access Grant.
+         */
         public array|null $access_method_ids,
+        /**
+         * Date and time at which the Access Grant was created.
+         */
         public string|null $created_at,
+        /**
+         * Display name of the Access Grant.
+         */
         public string|null $display_name,
+        /**
+         * Date and time at which the Access Grant ends.
+         */
         public string|null $ends_at,
+        /**
+         * Errors associated with the [access grant](https://docs.seam.co/use-cases/granting-access).
+         */
         public array $errors,
+        /**
+         * @deprecated Use `space_ids`.
+         */
         public array|null $location_ids,
+        /**
+         * Name of the Access Grant. If not provided, the display name will be computed.
+         */
         public string|null $name,
+        /**
+         * List of pending mutations for the access grant. This shows updates that are in progress.
+         */
         public array $pending_mutations,
+        /**
+         * Access methods that the user requested for the Access Grant.
+         */
         public array $requested_access_methods,
+        /**
+         * Reservation key for the access grant.
+         */
         public string|null $reservation_key,
+        /**
+         * IDs of the spaces to which the Access Grant gives access.
+         */
         public array|null $space_ids,
+        /**
+         * Date and time at which the Access Grant starts.
+         */
         public string|null $starts_at,
+        /**
+         * ID of user identity to which the Access Grant gives access.
+         */
         public string|null $user_identity_id,
+        /**
+         * Warnings associated with the [access grant](https://docs.seam.co/use-cases/granting-access).
+         */
         public array $warnings,
+        /**
+         * ID of the Seam workspace associated with the Access Grant.
+         */
         public string|null $workspace_id,
     ) {}
 }
 
+/**
+ * Errors associated with the [access grant](https://docs.seam.co/use-cases/granting-access).
+ */
 class UnmanagedAccessGrantErrors
 {
     public static function from_json(
@@ -80,13 +134,28 @@ class UnmanagedAccessGrantErrors
     }
 
     public function __construct(
+        /**
+         * Date and time at which Seam created the error.
+         */
         public string|null $created_at,
+        /**
+         * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+         */
         public string|null $error_code,
+        /**
+         * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+         */
         public string|null $message,
+        /**
+         * IDs of the devices that did not receive an access code at grant creation. Use these to identify which specific devices failed when the message reports a partial failure.
+         */
         public array|null $missing_device_ids,
     ) {}
 }
 
+/**
+ * Devices whose access codes could not be revoked during reconciliation. Present when the provider does not support revoking an offline access code (e.g. Dormakaba oracode with exhausted override budget).
+ */
 class UnmanagedAccessGrantFailedDevices
 {
     public static function from_json(
@@ -103,12 +172,24 @@ class UnmanagedAccessGrantFailedDevices
     }
 
     public function __construct(
+        /**
+         * Device whose access code could not be revoked.
+         */
         public string|null $device_id,
+        /**
+         * Reason the access code could not be revoked (e.g. `offline_access_code_not_revocable`).
+         */
         public string|null $error_code,
+        /**
+         * Human-readable description of why revocation failed.
+         */
         public string|null $message,
     ) {}
 }
 
+/**
+ * Previous location configuration.
+ */
 class UnmanagedAccessGrantFrom
 {
     public static function from_json(mixed $json): UnmanagedAccessGrantFrom|null
@@ -124,12 +205,24 @@ class UnmanagedAccessGrantFrom
     }
 
     public function __construct(
+        /**
+         * Previous device IDs where access codes existed.
+         */
         public array|null $device_ids,
+        /**
+         * Previous end time for access.
+         */
         public string|null $ends_at,
+        /**
+         * Previous start time for access.
+         */
         public string|null $starts_at,
     ) {}
 }
 
+/**
+ * List of pending mutations for the access grant. This shows updates that are in progress.
+ */
 class UnmanagedAccessGrantPendingMutations
 {
     public static function from_json(
@@ -153,15 +246,36 @@ class UnmanagedAccessGrantPendingMutations
     }
 
     public function __construct(
+        /**
+         * IDs of the access methods being updated.
+         */
         public array|null $access_method_ids,
+        /**
+         * Date and time at which the mutation was created.
+         */
         public string|null $created_at,
+        /**
+         * Previous location configuration.
+         */
         public UnmanagedAccessGrantFrom|null $from,
+        /**
+         * Detailed description of the mutation.
+         */
         public string|null $message,
+        /**
+         * Mutation code to indicate that Seam is in the process of updating the spaces (devices) associated with this access grant.
+         */
         public string|null $mutation_code,
+        /**
+         * New location configuration.
+         */
         public UnmanagedAccessGrantTo|null $to,
     ) {}
 }
 
+/**
+ * Access methods that the user requested for the Access Grant.
+ */
 class UnmanagedAccessGrantRequestedAccessMethods
 {
     public static function from_json(
@@ -181,15 +295,36 @@ class UnmanagedAccessGrantRequestedAccessMethods
     }
 
     public function __construct(
+        /**
+         * Specific PIN code to use for this access method. Only applicable when mode is 'code'.
+         */
         public string|null $code,
+        /**
+         * IDs of the access methods created for the requested access method.
+         */
         public array|null $created_access_method_ids,
+        /**
+         * Date and time at which the requested access method was added to the Access Grant.
+         */
         public string|null $created_at,
+        /**
+         * Display name of the access method.
+         */
         public string|null $display_name,
+        /**
+         * Maximum number of times the instant key can be used. Only applicable when mode is 'mobile_key'. Defaults to 1 if not specified.
+         */
         public int|null $instant_key_max_use_count,
+        /**
+         * Access method mode. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
+         */
         public string|null $mode,
     ) {}
 }
 
+/**
+ * New location configuration.
+ */
 class UnmanagedAccessGrantTo
 {
     public static function from_json(mixed $json): UnmanagedAccessGrantTo|null
@@ -206,13 +341,28 @@ class UnmanagedAccessGrantTo
     }
 
     public function __construct(
+        /**
+         * Common code key to ensure PIN code reuse across devices.
+         */
         public string|null $common_code_key,
+        /**
+         * New device IDs where access codes should be created.
+         */
         public array|null $device_ids,
+        /**
+         * New end time for access.
+         */
         public string|null $ends_at,
+        /**
+         * New start time for access.
+         */
         public string|null $starts_at,
     ) {}
 }
 
+/**
+ * Warnings associated with the [access grant](https://docs.seam.co/use-cases/granting-access).
+ */
 class UnmanagedAccessGrantWarnings
 {
     public static function from_json(
@@ -238,14 +388,41 @@ class UnmanagedAccessGrantWarnings
     }
 
     public function __construct(
+        /**
+         * IDs of the access methods being updated.
+         */
         public array|null $access_method_ids,
+        /**
+         * Date and time at which Seam created the warning.
+         */
         public string|null $created_at,
+        /**
+         * ID of the device where the requested code was unavailable.
+         */
         public string|null $device_id,
+        /**
+         * Devices whose access codes could not be revoked during reconciliation. Present when the provider does not support revoking an offline access code (e.g. Dormakaba oracode with exhausted override budget).
+         */
         public array $failed_devices,
+        /**
+         * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+         */
         public string|null $message,
+        /**
+         * The new PIN code that was assigned instead.
+         */
         public string|null $new_code,
+        /**
+         * The originally requested PIN code that was unavailable.
+         */
         public string|null $original_code,
+        /**
+         * Specific reason why the grant's times are not programmable on the device.
+         */
         public string|null $reason,
+        /**
+         * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+         */
         public string|null $warning_code,
     ) {}
 }

@@ -2,6 +2,9 @@
 
 namespace Seam\Resources;
 
+/**
+ * Represents a [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) associated with an application user account.
+ */
 class UserIdentity
 {
     public static function from_json(mixed $json): UserIdentity|null
@@ -31,20 +34,56 @@ class UserIdentity
     }
 
     public function __construct(
+        /**
+         * Array of access system user IDs associated with the user identity.
+         */
         public array|null $acs_user_ids,
+        /**
+         * Date and time at which the user identity was created.
+         */
         public string|null $created_at,
+        /**
+         * Display name for the user identity.
+         */
         public string|null $display_name,
+        /**
+         * Unique email address for the user identity.
+         */
         public string|null $email_address,
+        /**
+         * Array of errors associated with the user identity. Each error object within the array contains fields like "error_code" and "message." "error_code" is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. "message" provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
+         */
         public array $errors,
+        /**
+         * Full name of the user associated with the user identity.
+         */
         public string|null $full_name,
+        /**
+         * Unique phone number for the user identity in [E.164 format](https://www.itu.int/rec/T-REC-E.164/en) (for example, +15555550100).
+         */
         public string|null $phone_number,
+        /**
+         * ID of the user identity.
+         */
         public string|null $user_identity_id,
+        /**
+         * Unique key for the user identity.
+         */
         public string|null $user_identity_key,
+        /**
+         * Array of warnings associated with the user identity. Each warning object within the array contains two fields: "warning_code" and "message." "warning_code" is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. "message" provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
+         */
         public array $warnings,
+        /**
+         * ID of the workspace that contains the user identity.
+         */
         public string|null $workspace_id,
     ) {}
 }
 
+/**
+ * Array of errors associated with the user identity. Each error object within the array contains fields like "error_code" and "message." "error_code" is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. "message" provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
+ */
 class UserIdentityErrors
 {
     public static function from_json(mixed $json): UserIdentityErrors|null
@@ -62,14 +101,32 @@ class UserIdentityErrors
     }
 
     public function __construct(
+        /**
+         * ID of the access system that the user identity is associated with.
+         */
         public string|null $acs_system_id,
+        /**
+         * ID of the access system user that has an issue.
+         */
         public string|null $acs_user_id,
+        /**
+         * Date and time at which Seam created the error.
+         */
         public string|null $created_at,
+        /**
+         * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+         */
         public string|null $error_code,
+        /**
+         * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+         */
         public string|null $message,
     ) {}
 }
 
+/**
+ * Array of warnings associated with the user identity. Each warning object within the array contains two fields: "warning_code" and "message." "warning_code" is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. "message" provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
+ */
 class UserIdentityWarnings
 {
     public static function from_json(mixed $json): UserIdentityWarnings|null
@@ -85,8 +142,17 @@ class UserIdentityWarnings
     }
 
     public function __construct(
+        /**
+         * Date and time at which Seam created the warning.
+         */
         public string|null $created_at,
+        /**
+         * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+         */
         public string|null $message,
+        /**
+         * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+         */
         public string|null $warning_code,
     ) {}
 }
