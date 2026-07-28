@@ -27,7 +27,10 @@ use Seam\Resources\Space;
 use Seam\Resources\ThermostatDailyProgram;
 use Seam\Resources\ThermostatSchedule;
 use Seam\Resources\UnmanagedAccessCode;
+use Seam\Resources\UnmanagedAccessGrant;
+use Seam\Resources\UnmanagedAccessMethod;
 use Seam\Resources\UnmanagedDevice;
+use Seam\Resources\UnmanagedUserIdentity;
 use Seam\Resources\UserIdentity;
 use Seam\Resources\Webhook;
 use Seam\Resources\Workspace;
@@ -1137,7 +1140,7 @@ class AccessGrantsUnmanagedClient
         $this->seam = $seam;
     }
 
-    public function get(string $access_grant_id): void
+    public function get(string $access_grant_id): UnmanagedAccessGrant
     {
         $request_payload = [];
 
@@ -1145,11 +1148,13 @@ class AccessGrantsUnmanagedClient
             $request_payload["access_grant_id"] = $access_grant_id;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/access_grants/unmanaged/get",
             json: (object) $request_payload,
         );
+
+        return UnmanagedAccessGrant::from_json($res->access_grant);
     }
 
     public function list(
@@ -1160,7 +1165,7 @@ class AccessGrantsUnmanagedClient
         ?string $reservation_key = null,
         ?string $user_identity_id = null,
         ?callable $on_response = null,
-    ): void {
+    ): array {
         $request_payload = [];
 
         if ($acs_entrance_id !== null) {
@@ -1182,7 +1187,7 @@ class AccessGrantsUnmanagedClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/access_grants/unmanaged/list",
             json: (object) $request_payload,
@@ -1191,6 +1196,11 @@ class AccessGrantsUnmanagedClient
         if ($on_response !== null) {
             $on_response($res);
         }
+
+        return array_map(
+            fn($r) => UnmanagedAccessGrant::from_json($r),
+            $res->access_grants,
+        );
     }
 
     public function update(
@@ -1363,7 +1373,10 @@ class AccessMethodsClient
         ?string $access_grant_key = null,
         ?string $acs_entrance_id = null,
         ?string $device_id = null,
+        ?int $limit = null,
+        ?string $page_cursor = null,
         ?string $space_id = null,
+        ?callable $on_response = null,
     ): array {
         $request_payload = [];
 
@@ -1382,6 +1395,12 @@ class AccessMethodsClient
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
         }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($page_cursor !== null) {
+            $request_payload["page_cursor"] = $page_cursor;
+        }
         if ($space_id !== null) {
             $request_payload["space_id"] = $space_id;
         }
@@ -1391,6 +1410,10 @@ class AccessMethodsClient
             "/access_methods/list",
             json: (object) $request_payload,
         );
+
+        if ($on_response !== null) {
+            $on_response($res);
+        }
 
         return array_map(
             fn($r) => AccessMethod::from_json($r),
@@ -1439,7 +1462,7 @@ class AccessMethodsUnmanagedClient
         $this->seam = $seam;
     }
 
-    public function get(string $access_method_id): void
+    public function get(string $access_method_id): UnmanagedAccessMethod
     {
         $request_payload = [];
 
@@ -1447,11 +1470,13 @@ class AccessMethodsUnmanagedClient
             $request_payload["access_method_id"] = $access_method_id;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/access_methods/unmanaged/get",
             json: (object) $request_payload,
         );
+
+        return UnmanagedAccessMethod::from_json($res->access_method);
     }
 
     public function list(
@@ -1459,7 +1484,7 @@ class AccessMethodsUnmanagedClient
         ?string $acs_entrance_id = null,
         ?string $device_id = null,
         ?string $space_id = null,
-    ): void {
+    ): array {
         $request_payload = [];
 
         if ($access_grant_id !== null) {
@@ -1475,10 +1500,15 @@ class AccessMethodsUnmanagedClient
             $request_payload["space_id"] = $space_id;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/access_methods/unmanaged/list",
             json: (object) $request_payload,
+        );
+
+        return array_map(
+            fn($r) => UnmanagedAccessMethod::from_json($r),
+            $res->access_methods,
         );
     }
 }
@@ -2261,6 +2291,7 @@ class AcsEntrancesClient
     }
 
     public function list(
+        ?string $access_method_id = null,
         ?string $acs_credential_id = null,
         ?array $acs_entrance_ids = null,
         ?string $acs_system_id = null,
@@ -2275,6 +2306,9 @@ class AcsEntrancesClient
     ): array {
         $request_payload = [];
 
+        if ($access_method_id !== null) {
+            $request_payload["access_method_id"] = $access_method_id;
+        }
         if ($acs_credential_id !== null) {
             $request_payload["acs_credential_id"] = $acs_credential_id;
         }
@@ -6673,7 +6707,7 @@ class UserIdentitiesUnmanagedClient
         $this->seam = $seam;
     }
 
-    public function get(string $user_identity_id): void
+    public function get(string $user_identity_id): UnmanagedUserIdentity
     {
         $request_payload = [];
 
@@ -6681,11 +6715,13 @@ class UserIdentitiesUnmanagedClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/user_identities/unmanaged/get",
             json: (object) $request_payload,
         );
+
+        return UnmanagedUserIdentity::from_json($res->user_identity);
     }
 
     public function list(
@@ -6694,7 +6730,7 @@ class UserIdentitiesUnmanagedClient
         ?string $page_cursor = null,
         ?string $search = null,
         ?callable $on_response = null,
-    ): void {
+    ): array {
         $request_payload = [];
 
         if ($created_before !== null) {
@@ -6710,7 +6746,7 @@ class UserIdentitiesUnmanagedClient
             $request_payload["search"] = $search;
         }
 
-        $this->seam->request(
+        $res = $this->seam->request(
             "POST",
             "/user_identities/unmanaged/list",
             json: (object) $request_payload,
@@ -6719,6 +6755,11 @@ class UserIdentitiesUnmanagedClient
         if ($on_response !== null) {
             $on_response($res);
         }
+
+        return array_map(
+            fn($r) => UnmanagedUserIdentity::from_json($r),
+            $res->user_identities,
+        );
     }
 
     public function update(
