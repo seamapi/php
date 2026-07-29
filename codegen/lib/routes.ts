@@ -110,9 +110,14 @@ const createClientMethod = (endpoint: Endpoint): PhpClientMethod => {
   return {
     methodName: endpoint.name,
     path: endpoint.path,
+    description: endpoint.description,
+    responseDescription: response.description,
+    isDeprecated: endpoint.isDeprecated,
+    deprecationMessage: endpoint.deprecationMessage,
     parameters: endpoint.request.parameters.map((parameter) => ({
         name: parameter.name,
         type: getPhpType(parameter),
+        description: parameter.description,
         required: parameter.isRequired,
         // The primary identifier of a get endpoint always sorts first in the
         // method signature.

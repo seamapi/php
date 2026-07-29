@@ -2,6 +2,22 @@
 
 namespace Seam\Resources;
 
+/**
+ * Represents a hardware device that encodes [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) data onto physical cards within an [access control system](https://docs.seam.co/low-level-apis/access-systems).
+ *
+ * Some access control systems require credentials to be encoded onto plastic key cards using a card encoder. This process involves the following two key steps:
+ *
+ * 1. Credential creation
+ *    Configure the access parameters for the credential.
+ * 2. Card encoding
+ *    Write the credential data onto the card using a compatible card encoder.
+ *
+ * Separately, the Seam API also supports card scanning, which enables you to scan and read the encoded data on a card. You can use this action to confirm consistency with access control system records or diagnose discrepancies if needed.
+ *
+ * See [Working with Card Encoders and Scanners](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+ *
+ * To verify if your access control system requires a card encoder, see the corresponding [system integration guide](https://docs.seam.co/device-and-system-integration-guides#access-control-systems).
+ */
 class AcsEncoder
 {
     public static function from_json(mixed $json): AcsEncoder|null
@@ -24,16 +40,40 @@ class AcsEncoder
     }
 
     public function __construct(
+        /**
+         * ID of the [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+         */
         public string|null $acs_encoder_id,
+        /**
+         * ID of the [access control system](https://docs.seam.co/low-level-apis/access-systems) that contains the [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+         */
         public string|null $acs_system_id,
+        /**
+         * ID of the connected account that contains the [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+         */
         public string|null $connected_account_id,
+        /**
+         * Date and time at which the [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners) was created.
+         */
         public string|null $created_at,
+        /**
+         * Display name for the [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+         */
         public string|null $display_name,
+        /**
+         * Errors associated with the [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+         */
         public array $errors,
+        /**
+         * ID of the workspace that contains the [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+         */
         public string|null $workspace_id,
     ) {}
 }
 
+/**
+ * Errors associated with the [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+ */
 class AcsEncoderErrors
 {
     public static function from_json(mixed $json): AcsEncoderErrors|null
@@ -49,8 +89,17 @@ class AcsEncoderErrors
     }
 
     public function __construct(
+        /**
+         * Date and time at which Seam created the error.
+         */
         public string|null $created_at,
+        /**
+         * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+         */
         public string|null $error_code,
+        /**
+         * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+         */
         public string|null $message,
     ) {}
 }

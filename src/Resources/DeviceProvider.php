@@ -48,29 +48,101 @@ class DeviceProvider
     }
 
     public function __construct(
+        /**
+         * Indicates whether the lock supports configuring automatic locking.
+         */
         public bool|null $can_configure_auto_lock,
+        /**
+         * Indicates whether the thermostat supports cooling.
+         */
         public bool|null $can_hvac_cool,
+        /**
+         * Indicates whether the thermostat supports heating.
+         */
         public bool|null $can_hvac_heat,
+        /**
+         * Indicates whether the thermostat supports simultaneous heating and cooling.
+         */
         public bool|null $can_hvac_heat_cool,
+        /**
+         * Indicates whether the device supports programming offline access codes.
+         */
         public bool|null $can_program_offline_access_codes,
+        /**
+         * Indicates whether the device supports programming online access codes.
+         */
         public bool|null $can_program_online_access_codes,
+        /**
+         * Indicates whether the thermostat supports different climate programs for each day of the week.
+         */
         public bool|null $can_program_thermostat_programs_as_different_each_day,
+        /**
+         * Indicates whether the thermostat supports a single climate program applied to every day.
+         */
         public bool|null $can_program_thermostat_programs_as_same_each_day,
+        /**
+         * Indicates whether the thermostat supports weekday/weekend climate programs.
+         */
         public bool|null $can_program_thermostat_programs_as_weekday_weekend,
+        /**
+         * Indicates whether the device supports remote locking.
+         */
         public bool|null $can_remotely_lock,
+        /**
+         * Indicates whether the device supports remote unlocking.
+         */
         public bool|null $can_remotely_unlock,
+        /**
+         * Indicates whether the thermostat supports running climate programs.
+         */
         public bool|null $can_run_thermostat_programs,
+        /**
+         * Indicates whether the device supports simulating connection in a sandbox.
+         */
         public bool|null $can_simulate_connection,
+        /**
+         * Indicates whether the device supports simulating disconnection in a sandbox.
+         */
         public bool|null $can_simulate_disconnection,
+        /**
+         * Indicates whether the hub supports simulating connection in a sandbox.
+         */
         public bool|null $can_simulate_hub_connection,
+        /**
+         * Indicates whether the hub supports simulating disconnection in a sandbox.
+         */
         public bool|null $can_simulate_hub_disconnection,
+        /**
+         * Indicates whether the device supports simulating a paid subscription in a sandbox.
+         */
         public bool|null $can_simulate_paid_subscription,
+        /**
+         * Indicates whether the device supports simulating removal in a sandbox.
+         */
         public bool|null $can_simulate_removal,
+        /**
+         * Indicates whether the thermostat can be turned off.
+         */
         public bool|null $can_turn_off_hvac,
+        /**
+         * Indicates whether the lock supports unlocking with an access code.
+         */
         public bool|null $can_unlock_with_code,
+        /**
+         * Name of the device provider.
+         */
         public string|null $device_provider_name,
+        /**
+         * Display name for the device provider.
+         */
         public string|null $display_name,
+        /**
+         * Image URL for the device provider.
+         */
         public string|null $image_url,
+        /**
+         * List of provider categories to which the device provider belongs, such as `stable`, `consumer_smartlocks`, `thermostats`, and so on.
+         */
         public array|null $provider_categories,
     ) {}
 }

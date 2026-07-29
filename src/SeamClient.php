@@ -180,6 +180,33 @@ class AccessCodesClient
         $this->unmanaged = new AccessCodesUnmanagedClient($seam);
     }
 
+    /**
+     * Creates a new [access code](https://docs.seam.co/low-level-apis/access-codes). For granting access, we recommend [Access Grants](https://docs.seam.co/use-cases/granting-access) instead: they work across both standalone smart locks and access control systems and manage the underlying codes for you. Use this low-level endpoint only when you need direct control over a code on a single device, such as setting a custom PIN value.
+     *
+     * @param string $device_id ID of the device for which you want to create the new access code.
+     * @param bool $allow_external_modification Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the code is allowed. Default: `false`.
+     * @param bool $attempt_for_offline_device
+     * @param string $code Code to be used for access.
+     * @param string $common_code_key Key to identify access codes that should have the same code. Any two access codes with the same `common_code_key` are guaranteed to have the same `code`. See also [Creating and Updating Multiple Linked Access Codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/creating-and-updating-multiple-linked-access-codes).
+     * @param string $ends_at Date and time at which the validity of the new access code ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
+     * @param bool $is_external_modification_allowed Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the code is allowed. Default: `false`.
+     * @param bool $is_offline_access_code Indicates whether the access code is an [offline access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/offline-access-codes).
+     * @param bool $is_one_time_use Indicates whether the [offline access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/offline-access-codes) is a single-use access code.
+     * @param string $max_time_rounding Maximum rounding adjustment. To create a daily-bound [offline access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/offline-access-codes) for devices that support this feature, set this parameter to `1d`.
+     * @param string $name Name of the new access code. Enables administrators and users to identify the access code easily, especially when there are numerous access codes.
+
+Note that the name provided on Seam is used to identify the code on Seam and is not necessarily the name that will appear in the lock provider's app or on the device. This is because lock providers may have constraints on names, such as length, uniqueness, or characters that can be used. In addition, some lock providers may break down names into components such as `first_name` and `last_name`.
+
+To provide a consistent experience, Seam identifies the code on Seam by its name but may modify the name that appears on the lock provider's app or on the device. For example, Seam may add additional characters or truncate the name to meet provider constraints.
+
+To help your users identify codes set by Seam, Seam provides the name exactly as it appears on the lock provider's app or on the device as a separate property called `appearance`. This is an object with a `name` property and, optionally, `first_name` and `last_name` properties (for providers that break down a name into components).
+     * @param bool $prefer_native_scheduling Indicates whether [native scheduling](https://docs.seam.co/low-level-apis/smart-locks/access-codes#native-scheduling) should be used for time-bound codes when supported by the provider. Default: `true`.
+     * @param float $preferred_code_length Preferred code length. Only applicable if you do not specify a `code`. If the affected device does not support the preferred code length, Seam reverts to using the shortest supported code length.
+     * @param string $starts_at Date and time at which the validity of the new access code starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+     * @param bool $use_backup_access_code_pool Indicates whether to use a [backup access code pool](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes) provided by Seam. If `true`, you can use [`/access_codes/pull_backup_access_code`](https://docs.seam.co/api/access_codes/pull_backup_access_code).
+     * @param bool $use_offline_access_code
+     * @return AccessCode OK
+     */
     public function create(
         string $device_id,
         ?bool $allow_external_modification = null,
@@ -272,6 +299,39 @@ class AccessCodesClient
         return AccessCode::from_json($res->access_code);
     }
 
+    /**
+     * Creates new [access codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes) that share a common code across multiple devices.
+     *
+     * Users with more than one door lock in a property may want to create groups of linked access codes, all of which have the same code (PIN). For example, a short-term rental host may want to provide guests the same PIN for both a front door lock and a back door lock.
+     *
+     * If you specify a custom code, Seam assigns this custom code to each of the resulting access codes. However, in this case, Seam does not link these access codes together with a `common_code_key`. That is, `common_code_key` remains null for these access codes.
+     *
+     * If you want to change these access codes that are not linked by a `common_code_key`, you cannot use `/access_codes/update_multiple`. However, you can update each of these access codes individually, using `/access_codes/update`.
+     *
+     * See also [Creating and Updating Multiple Linked Access Codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/creating-and-updating-multiple-linked-access-codes).
+     *
+     * For granting a person access to a space, [Access Grants](https://docs.seam.co/use-cases/granting-access) are the default and recommended approach and work across both standalone smart locks and access systems. Use the lower-level Access Codes API directly only when you specifically need to manage individual PIN codes.
+     *
+     * @param array $device_ids IDs of the devices for which you want to create the new access codes.
+     * @param bool $allow_external_modification Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the code is allowed. Default: `false`.
+     * @param bool $attempt_for_offline_device
+     * @param string $behavior_when_code_cannot_be_shared Desired behavior if any device cannot share a code. If `throw` (default), no access codes will be created if any device cannot share a code. If `create_random_code`, a random code will be created on devices that cannot share a code.
+     * @param string $code Code to be used for access.
+     * @param string $ends_at Date and time at which the validity of the new access code ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
+     * @param bool $is_external_modification_allowed Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the code is allowed. Default: `false`.
+     * @param string $name Name of the new access code. Enables administrators and users to identify the access code easily, especially when there are numerous access codes.
+
+Note that the name provided on Seam is used to identify the code on Seam and is not necessarily the name that will appear in the lock provider's app or on the device. This is because lock providers may have constraints on names, such as length, uniqueness, or characters that can be used. In addition, some lock providers may break down names into components such as `first_name` and `last_name`.
+
+To provide a consistent experience, Seam identifies the code on Seam by its name but may modify the name that appears on the lock provider's app or on the device. For example, Seam may add additional characters or truncate the name to meet provider constraints.
+
+To help your users identify codes set by Seam, Seam provides the name exactly as it appears on the lock provider's app or on the device as a separate property called `appearance`. This is an object with a `name` property and, optionally, `first_name` and `last_name` properties (for providers that break down a name into components).
+     * @param bool $prefer_native_scheduling Indicates whether [native scheduling](https://docs.seam.co/low-level-apis/smart-locks/access-codes#native-scheduling) should be used for time-bound codes when supported by the provider. Default: `true`.
+     * @param float $preferred_code_length Preferred code length. If the affected devices do not support the preferred code length, Seam reverts to using the shortest supported code length.
+     * @param string $starts_at Date and time at which the validity of the new access code starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+     * @param bool $use_backup_access_code_pool Indicates whether to use a [backup access code pool](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes) provided by Seam. If `true`, you can use [`/access_codes/pull_backup_access_code`](https://docs.seam.co/api/access_codes/pull_backup_access_code).
+     * @return array OK
+     */
     public function create_multiple(
         array $device_ids,
         ?bool $allow_external_modification = null,
@@ -349,6 +409,13 @@ class AccessCodesClient
         );
     }
 
+    /**
+     * Deletes an [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+     *
+     * @param string $access_code_id ID of the access code that you want to delete.
+     * @param string $device_id ID of the device for which you want to delete the access code.
+     * @return void OK
+     */
     public function delete(
         string $access_code_id,
         ?string $device_id = null,
@@ -369,6 +436,12 @@ class AccessCodesClient
         );
     }
 
+    /**
+     * Generates a code for an [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes), given a device ID.
+     *
+     * @param string $device_id ID of the device for which you want to generate a code.
+     * @return AccessCode OK
+     */
     public function generate_code(string $device_id): AccessCode
     {
         $request_payload = [];
@@ -386,6 +459,16 @@ class AccessCodesClient
         return AccessCode::from_json($res->generated_code);
     }
 
+    /**
+     * Returns a specified [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+     *
+     * You must specify either `access_code_id` or both `device_id` and `code`.
+     *
+     * @param string $access_code_id ID of the access code that you want to get. You must specify either `access_code_id` or both `device_id` and `code`.
+     * @param string $code Code of the access code that you want to get. You must specify either `access_code_id` or both `device_id` and `code`.
+     * @param string $device_id ID of the device containing the access code that you want to get. You must specify either `access_code_id` or both `device_id` and `code`.
+     * @return AccessCode OK
+     */
     public function get(
         ?string $access_code_id = null,
         ?string $code = null,
@@ -412,6 +495,23 @@ class AccessCodesClient
         return AccessCode::from_json($res->access_code);
     }
 
+    /**
+     * Returns a list of all [access codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+     *
+     * Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
+     *
+     * @param array $access_code_ids IDs of the access codes that you want to retrieve. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
+     * @param string $access_grant_id ID of the access grant for which you want to list access codes. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
+     * @param string $access_grant_key Key of the access grant for which you want to list access codes. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
+     * @param string $access_method_id ID of the access method for which you want to list access codes. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
+     * @param string $customer_key Customer key for which you want to list access codes.
+     * @param string $device_id ID of the device for which you want to list access codes. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
+     * @param float $limit Numerical limit on the number of access codes to return.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned access codes to include all records that satisfy a partial match using `name`, `code` or `access_code_id`.
+     * @param string $user_identifier_key Your user ID for the user by which to filter access codes.
+     * @return array OK
+     */
     public function list(
         ?array $access_code_ids = null,
         ?string $access_grant_id = null,
@@ -474,6 +574,20 @@ class AccessCodesClient
         );
     }
 
+    /**
+     * Retrieves a backup access code for an [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes). See also [Managing Backup Access Codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes).
+     *
+     * A backup access code pool is a collection of pre-programmed access codes stored on a device, ready for use. These codes are programmed in addition to the regular access codes on Seam, serving as a safety net for any issues with the primary codes. If there's ever a complication with a primary access code—be it due to intermittent connectivity, manual removal from a device, or provider outages—a backup code can be retrieved. Its end time can then be adjusted to align with the original code, facilitating seamless and uninterrupted access.
+     *
+     * You can pull a backup access code from the pool at any time. These backup codes are guaranteed to work immediately and automatically programmed to be removed from the device after the access code ends.
+     *
+     * You can only pull backup access codes for time-bound access codes.
+     *
+     * Before pulling a backup access code, make sure that the device's `properties.supports_backup_access_code_pool` is `true`. Then, to activate the backup pool, set `use_backup_access_code_pool` to `true` when creating an access code.
+     *
+     * @param string $access_code_id ID of the access code for which you want to pull a backup access code.
+     * @return AccessCode OK
+     */
     public function pull_backup_access_code(string $access_code_id): AccessCode
     {
         $request_payload = [];
@@ -491,6 +605,17 @@ class AccessCodesClient
         return AccessCode::from_json($res->access_code);
     }
 
+    /**
+     * Enables you to report access code-related constraints for a device. Currently, supports reporting supported code length constraints for SmartThings devices.
+     *
+     * Specify either `supported_code_lengths` or `min_code_length`/`max_code_length`.
+     *
+     * @param string $device_id ID of the device for which you want to report constraints.
+     * @param int $max_code_length Maximum supported code length as an integer between 4 and 20, inclusive. You can specify either `min_code_length`/`max_code_length` or `supported_code_lengths`.
+     * @param int $min_code_length Minimum supported code length as an integer between 4 and 20, inclusive. You can specify either `min_code_length`/`max_code_length` or `supported_code_lengths`.
+     * @param array $supported_code_lengths Array of supported code lengths as integers between 4 and 20, inclusive. You can specify either `supported_code_lengths` or `min_code_length`/`max_code_length`.
+     * @return void OK
+     */
     public function report_device_constraints(
         string $device_id,
         ?int $max_code_length = null,
@@ -521,6 +646,37 @@ class AccessCodesClient
         );
     }
 
+    /**
+     * Updates a specified active or upcoming [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+     *
+     * See also [Modifying Access Codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/modifying-access-codes).
+     *
+     * @param string $access_code_id ID of the access code that you want to update.
+     * @param bool $allow_external_modification Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the code is allowed. Default: `false`.
+     * @param bool $attempt_for_offline_device
+     * @param string $code Code to be used for access.
+     * @param string $device_id ID of the device containing the access code that you want to update.
+     * @param string $ends_at Date and time at which the validity of the new access code ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
+     * @param bool $is_external_modification_allowed Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the code is allowed. Default: `false`.
+     * @param bool $is_managed Indicates whether the access code is managed through Seam. Note that to convert an unmanaged access code into a managed access code, use `/access_codes/unmanaged/convert_to_managed`.
+     * @param bool $is_offline_access_code Indicates whether the access code is an [offline access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/offline-access-codes).
+     * @param bool $is_one_time_use Indicates whether the [offline access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/offline-access-codes) is a single-use access code.
+     * @param string $max_time_rounding Maximum rounding adjustment. To create a daily-bound [offline access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/offline-access-codes) for devices that support this feature, set this parameter to `1d`.
+     * @param string $name Name of the new access code. Enables administrators and users to identify the access code easily, especially when there are numerous access codes.
+
+Note that the name provided on Seam is used to identify the code on Seam and is not necessarily the name that will appear in the lock provider's app or on the device. This is because lock providers may have constraints on names, such as length, uniqueness, or characters that can be used. In addition, some lock providers may break down names into components such as `first_name` and `last_name`.
+
+To provide a consistent experience, Seam identifies the code on Seam by its name but may modify the name that appears on the lock provider's app or on the device. For example, Seam may add additional characters or truncate the name to meet provider constraints.
+
+To help your users identify codes set by Seam, Seam provides the name exactly as it appears on the lock provider's app or on the device as a separate property called `appearance`. This is an object with a `name` property and, optionally, `first_name` and `last_name` properties (for providers that break down a name into components).
+     * @param bool $prefer_native_scheduling Indicates whether [native scheduling](https://docs.seam.co/low-level-apis/smart-locks/access-codes#native-scheduling) should be used for time-bound codes when supported by the provider. Default: `true`.
+     * @param float $preferred_code_length Preferred code length. Only applicable if you do not specify a `code`. If the affected device does not support the preferred code length, Seam reverts to using the shortest supported code length.
+     * @param string $starts_at Date and time at which the validity of the new access code starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+     * @param string $type Type to which you want to convert the access code. To convert a time-bound access code to an ongoing access code, set `type` to `ongoing`. See also [Changing a time-bound access code to permanent access](https://docs.seam.co/low-level-apis/smart-locks/access-codes/modifying-access-codes#special-case-2-changing-a-time-bound-access-code-to-permanent-access).
+     * @param bool $use_backup_access_code_pool Indicates whether to use a [backup access code pool](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes) provided by Seam. If `true`, you can use [`/access_codes/pull_backup_access_code`](https://docs.seam.co/api/access_codes/pull_backup_access_code).
+     * @param bool $use_offline_access_code
+     * @return void OK
+     */
     public function update(
         string $access_code_id,
         ?bool $allow_external_modification = null,
@@ -619,6 +775,25 @@ class AccessCodesClient
         );
     }
 
+    /**
+     * Updates [access codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes) that share a common code across multiple devices.
+     *
+     * Specify the `common_code_key` to identify the set of access codes that you want to update.
+     *
+     * See also [Update Linked Access Codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/creating-and-updating-multiple-linked-access-codes#update-linked-access-codes).
+     *
+     * @param string $common_code_key Key that links the group of access codes, assigned on creation by `/access_codes/create_multiple`.
+     * @param string $ends_at Date and time at which the validity of the new access code ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
+     * @param string $name Name of the new access code. Enables administrators and users to identify the access code easily, especially when there are numerous access codes.
+
+Note that the name provided on Seam is used to identify the code on Seam and is not necessarily the name that will appear in the lock provider's app or on the device. This is because lock providers may have constraints on names, such as length, uniqueness, or characters that can be used. In addition, some lock providers may break down names into components such as `first_name` and `last_name`.
+
+To provide a consistent experience, Seam identifies the code on Seam by its name but may modify the name that appears on the lock provider's app or on the device. For example, Seam may add additional characters or truncate the name to meet provider constraints.
+
+To help your users identify codes set by Seam, Seam provides the name exactly as it appears on the lock provider's app or on the device as a separate property called `appearance`. This is an object with a `name` property and, optionally, `first_name` and `last_name` properties (for providers that break down a name into components).
+     * @param string $starts_at Date and time at which the validity of the new access code starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+     * @return void OK
+     */
     public function update_multiple(
         string $common_code_key,
         ?string $ends_at = null,
@@ -657,6 +832,14 @@ class AccessCodesSimulateClient
         $this->seam = $seam;
     }
 
+    /**
+     * Simulates the creation of an [unmanaged access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) in a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     *
+     * @param string $code Code of the simulated unmanaged access code.
+     * @param string $device_id ID of the device for which you want to simulate the creation of an unmanaged access code.
+     * @param string $name Name of the simulated unmanaged access code.
+     * @return UnmanagedAccessCode OK
+     */
     public function create_unmanaged_access_code(
         string $code,
         string $device_id,
@@ -693,6 +876,19 @@ class AccessCodesUnmanagedClient
         $this->seam = $seam;
     }
 
+    /**
+     * Converts an [unmanaged access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) to an [access code managed through Seam](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+     *
+     * An unmanaged access code has a limited set of operations that you can perform on it. Once you convert an unmanaged access code to a managed access code, the full set of access code operations and lifecycle events becomes available for it.
+     *
+     * Note that not all device providers support converting an unmanaged access code to a managed access code.
+     *
+     * @param string $access_code_id ID of the unmanaged access code that you want to convert to a managed access code.
+     * @param bool $allow_external_modification Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the access code is allowed.
+     * @param bool $force Indicates whether to force the access code conversion. To switch management of an access code from one Seam workspace to another, set `force` to `true`.
+     * @param bool $is_external_modification_allowed Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the access code is allowed.
+     * @return void OK
+     */
     public function convert_to_managed(
         string $access_code_id,
         ?bool $allow_external_modification = null,
@@ -725,6 +921,12 @@ class AccessCodesUnmanagedClient
         );
     }
 
+    /**
+     * Deletes an [unmanaged access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
+     *
+     * @param string $access_code_id ID of the unmanaged access code that you want to delete.
+     * @return void OK
+     */
     public function delete(string $access_code_id): void
     {
         $request_payload = [];
@@ -740,6 +942,16 @@ class AccessCodesUnmanagedClient
         );
     }
 
+    /**
+     * Returns a specified [unmanaged access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
+     *
+     * You must specify either `access_code_id` or both `device_id` and `code`.
+     *
+     * @param string $access_code_id ID of the unmanaged access code that you want to get. You must specify either `access_code_id` or both `device_id` and `code`.
+     * @param string $code Code of the unmanaged access code that you want to get. You must specify either `access_code_id` or both `device_id` and `code`.
+     * @param string $device_id ID of the device containing the unmanaged access code that you want to get. You must specify either `access_code_id` or both `device_id` and `code`.
+     * @return UnmanagedAccessCode OK
+     */
     public function get(
         ?string $access_code_id = null,
         ?string $code = null,
@@ -766,6 +978,16 @@ class AccessCodesUnmanagedClient
         return UnmanagedAccessCode::from_json($res->access_code);
     }
 
+    /**
+     * Returns a list of all [unmanaged access codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
+     *
+     * @param string $device_id ID of the device for which you want to list unmanaged access codes.
+     * @param float $limit Numerical limit on the number of unmanaged access codes to return.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned access codes to include all records that satisfy a partial match using `name`, `code` or `access_code_id`.
+     * @param string $user_identifier_key Your user ID for the user by which to filter unmanaged access codes.
+     * @return array OK
+     */
     public function list(
         string $device_id,
         ?float $limit = null,
@@ -808,6 +1030,16 @@ class AccessCodesUnmanagedClient
         );
     }
 
+    /**
+     * Updates a specified [unmanaged access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
+     *
+     * @param string $access_code_id ID of the unmanaged access code that you want to update.
+     * @param bool $is_managed
+     * @param bool $allow_external_modification Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the code is allowed.
+     * @param bool $force Indicates whether to force the unmanaged access code update.
+     * @param bool $is_external_modification_allowed Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the code is allowed.
+     * @return void OK
+     */
     public function update(
         string $access_code_id,
         bool $is_managed,
@@ -855,6 +1087,26 @@ class AccessGrantsClient
         $this->unmanaged = new AccessGrantsUnmanagedClient($seam);
     }
 
+    /**
+     * Creates a new [Access Grant](https://docs.seam.co/use-cases/granting-access/access-grants). Access Grants are the default and recommended way to grant a user access to any physical space, irrespective of the locking hardware. They work with both standalone smart locks (using `device_ids`) and access control systems (using `acs_entrance_ids` or `space_ids`), and can issue PIN codes, key cards, and mobile keys through a single request.
+     *
+     * @param array $requested_access_methods
+     * @param string $user_identity_id ID of user identity for whom access is being granted.
+     * @param mixed $user_identity When used, creates a new user identity with the given details, and grants them access.
+     * @param string $access_grant_key Unique key for the access grant within the workspace.
+     * @param array $acs_entrance_ids Set of IDs of the [entrances](https://docs.seam.co/api/acs/systems/list) to which access is being granted.
+     * @param string $customization_profile_id ID of the customization profile to apply to the Access Grant and its access methods.
+     * @param array $device_ids Set of IDs of the [devices](https://docs.seam.co/api/devices/list) to which access is being granted.
+     * @param string $ends_at Date and time at which the validity of the new grant ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
+     * @param mixed $location
+     * @param array $location_ids
+     * @param string $name Name for the access grant.
+     * @param string $reservation_key Reservation key for the access grant.
+     * @param array $space_ids Set of IDs of existing spaces to which access is being granted.
+     * @param array $space_keys Set of keys of existing spaces to which access is being granted.
+     * @param string $starts_at Date and time at which the validity of the new grant starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+     * @return AccessGrant OK
+     */
     public function create(
         array $requested_access_methods,
         ?string $user_identity_id = null,
@@ -933,6 +1185,12 @@ class AccessGrantsClient
         return AccessGrant::from_json($res->access_grant);
     }
 
+    /**
+     * Delete an Access Grant.
+     *
+     * @param string $access_grant_id ID of Access Grant to delete.
+     * @return void OK
+     */
     public function delete(string $access_grant_id): void
     {
         $request_payload = [];
@@ -948,6 +1206,13 @@ class AccessGrantsClient
         );
     }
 
+    /**
+     * Get an Access Grant.
+     *
+     * @param string $access_grant_id ID of Access Grant to get.
+     * @param string $access_grant_key Unique key of Access Grant to get.
+     * @return AccessGrant OK
+     */
     public function get(
         ?string $access_grant_id = null,
         ?string $access_grant_key = null,
@@ -970,6 +1235,15 @@ class AccessGrantsClient
         return AccessGrant::from_json($res->access_grant);
     }
 
+    /**
+     * Gets all related resources for one or more Access Grants.
+     *
+     * @param array $access_grant_ids IDs of the access grants that you want to get along with their related resources.
+     * @param array $access_grant_keys Keys of the access grants that you want to get along with their related resources.
+     * @param array $exclude
+     * @param array $include
+     * @return Batch OK
+     */
     public function get_related(
         ?array $access_grant_ids = null,
         ?array $access_grant_keys = null,
@@ -1000,6 +1274,24 @@ class AccessGrantsClient
         return Batch::from_json($res->batch);
     }
 
+    /**
+     * Gets an Access Grant.
+     *
+     * @param string $access_code_id ID of the access code by which you want to filter the list of Access Grants.
+     * @param array $access_grant_ids IDs of the access grants to retrieve.
+     * @param string $access_grant_key Filter Access Grants by access_grant_key. Use null to filter for Access Grants without an access_grant_key.
+     * @param string $acs_entrance_id ID of the entrance by which you want to filter the list of Access Grants.
+     * @param string $acs_system_id ID of the access system by which you want to filter the list of Access Grants.
+     * @param string $customer_key Customer key for which you want to list access grants.
+     * @param string $device_id ID of the device by which you want to filter the list of Access Grants.
+     * @param float $limit Numerical limit on the number of access grants to return.
+     * @param string $location_id
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $reservation_key Filter Access Grants by reservation_key.
+     * @param string $space_id ID of the space by which you want to filter the list of Access Grants.
+     * @param string $user_identity_id ID of user identity by which you want to filter the list of Access Grants.
+     * @return array OK
+     */
     public function list(
         ?string $access_code_id = null,
         ?array $access_grant_ids = null,
@@ -1074,6 +1366,13 @@ class AccessGrantsClient
         );
     }
 
+    /**
+     * Adds additional requested access methods to an existing Access Grant.
+     *
+     * @param string $access_grant_id ID of the Access Grant to add access methods to.
+     * @param array $requested_access_methods Array of requested access methods to add to the access grant.
+     * @return AccessGrant OK
+     */
     public function request_access_methods(
         string $access_grant_id,
         array $requested_access_methods,
@@ -1098,6 +1397,16 @@ class AccessGrantsClient
         return AccessGrant::from_json($res->access_grant);
     }
 
+    /**
+     * Updates an existing Access Grant's time window.
+     *
+     * @param string $access_grant_id ID of the Access Grant to update. Provide either `access_grant_id` or `access_grant_key`.
+     * @param string $access_grant_key Key of the Access Grant to update. Provide either `access_grant_id` or `access_grant_key`.
+     * @param string $ends_at Date and time at which the validity of the grant ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
+     * @param string $name Display name for the access grant.
+     * @param string $starts_at Date and time at which the validity of the grant starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+     * @return void OK
+     */
     public function update(
         ?string $access_grant_id = null,
         ?string $access_grant_key = null,
@@ -1140,6 +1449,12 @@ class AccessGrantsUnmanagedClient
         $this->seam = $seam;
     }
 
+    /**
+     * Get an unmanaged Access Grant (where is_managed = false).
+     *
+     * @param string $access_grant_id ID of unmanaged Access Grant to get.
+     * @return UnmanagedAccessGrant OK
+     */
     public function get(string $access_grant_id): UnmanagedAccessGrant
     {
         $request_payload = [];
@@ -1157,6 +1472,17 @@ class AccessGrantsUnmanagedClient
         return UnmanagedAccessGrant::from_json($res->access_grant);
     }
 
+    /**
+     * Gets unmanaged Access Grants (where is_managed = false).
+     *
+     * @param string $acs_entrance_id ID of the entrance by which you want to filter the list of unmanaged Access Grants.
+     * @param string $acs_system_id ID of the access system by which you want to filter the list of unmanaged Access Grants.
+     * @param float $limit Numerical limit on the number of unmanaged access grants to return.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $reservation_key Filter unmanaged Access Grants by reservation_key.
+     * @param string $user_identity_id ID of user identity by which you want to filter the list of unmanaged Access Grants.
+     * @return array OK
+     */
     public function list(
         ?string $acs_entrance_id = null,
         ?string $acs_system_id = null,
@@ -1203,6 +1529,18 @@ class AccessGrantsUnmanagedClient
         );
     }
 
+    /**
+     * Updates an unmanaged Access Grant to make it managed.
+     *
+     * This endpoint can only be used to convert unmanaged access grants to managed ones by setting `is_managed` to `true`. It cannot be used to convert managed access grants back to unmanaged.
+     *
+     * When converting an unmanaged access grant to managed, all associated access methods will also be converted to managed.
+     *
+     * @param string $access_grant_id ID of the unmanaged Access Grant to update.
+     * @param bool $is_managed Must be set to true to convert the unmanaged access grant to managed.
+     * @param string $access_grant_key Unique key for the access grant. If not provided, the existing key will be preserved.
+     * @return void OK
+     */
     public function update(
         string $access_grant_id,
         bool $is_managed,
@@ -1238,6 +1576,13 @@ class AccessMethodsClient
         $this->unmanaged = new AccessMethodsUnmanagedClient($seam);
     }
 
+    /**
+     * Assigns a pre-registered card credential, identified by `card_number`, to a card-mode access method. Use this endpoint for access systems that use pre-registered cards, where a physical card must be associated with an access method before it can be used for access. Assigning a card credential also triggers issuance of the access method.
+     *
+     * @param string $access_method_id ID of the `access_method` to assign the credential to.
+     * @param string $card_number Card number of the credential to assign.
+     * @return ActionAttempt OK
+     */
     public function assign_card(
         string $access_method_id,
         string $card_number,
@@ -1269,6 +1614,14 @@ class AccessMethodsClient
         return $action_attempt;
     }
 
+    /**
+     * Deletes an access method.
+     *
+     * @param string $access_method_id ID of access method to delete.
+     * @param string $access_grant_id ID of access grant whose access methods should be deleted.
+     * @param string $reservation_key Reservation key of the access grant whose access methods should be deleted.
+     * @return void OK
+     */
     public function delete(
         ?string $access_method_id = null,
         ?string $access_grant_id = null,
@@ -1293,6 +1646,13 @@ class AccessMethodsClient
         );
     }
 
+    /**
+     * Encodes an existing access method onto a plastic card placed on the specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+     *
+     * @param string $access_method_id ID of the `access_method` to encode onto a card.
+     * @param string $acs_encoder_id ID of the `acs_encoder` to use to encode the `access_method`.
+     * @return ActionAttempt OK
+     */
     public function encode(
         string $access_method_id,
         string $acs_encoder_id,
@@ -1324,6 +1684,12 @@ class AccessMethodsClient
         return $action_attempt;
     }
 
+    /**
+     * Gets an access method.
+     *
+     * @param string $access_method_id ID of access method to get.
+     * @return AccessMethod OK
+     */
     public function get(string $access_method_id): AccessMethod
     {
         $request_payload = [];
@@ -1341,6 +1707,14 @@ class AccessMethodsClient
         return AccessMethod::from_json($res->access_method);
     }
 
+    /**
+     * Gets all related resources for one or more Access Methods.
+     *
+     * @param array $access_method_ids IDs of the access methods that you want to get along with their related resources.
+     * @param array $exclude
+     * @param array $include
+     * @return Batch OK
+     */
     public function get_related(
         array $access_method_ids,
         ?array $exclude = null,
@@ -1367,6 +1741,19 @@ class AccessMethodsClient
         return Batch::from_json($res->batch);
     }
 
+    /**
+     * Lists all access methods, usually filtered by Access Grant.
+     *
+     * @param string $access_code_id ID of the access code by which to filter the returned access methods. Must be combined with `access_grant_id`, `access_grant_key`, or `acs_entrance_id`.
+     * @param string $access_grant_id ID of Access Grant to list access methods for.
+     * @param string $access_grant_key Key of Access Grant to list access methods for.
+     * @param string $acs_entrance_id ID of the entrance for which you want to retrieve all access methods that grant access to it.
+     * @param string $device_id ID of the device by which to filter the returned access methods. Must be combined with `access_grant_id`, `access_grant_key`, or `acs_entrance_id`.
+     * @param int $limit Maximum number of records to return per page.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $space_id ID of the space by which to filter the returned access methods. Must be combined with `access_grant_id`, `access_grant_key`, or `acs_entrance_id`.
+     * @return array OK
+     */
     public function list(
         ?string $access_code_id = null,
         ?string $access_grant_id = null,
@@ -1421,6 +1808,13 @@ class AccessMethodsClient
         );
     }
 
+    /**
+     * Remotely unlocks a specified [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) using the cloud key credential associated with an access method. Returns an action attempt that tracks the progress of the unlock operation.
+     *
+     * @param string $access_method_id ID of the cloud_key `access_method` to use for the unlock operation.
+     * @param string $acs_entrance_id ID of the entrance to unlock.
+     * @return ActionAttempt OK
+     */
     public function unlock_door(
         string $access_method_id,
         string $acs_entrance_id,
@@ -1462,6 +1856,12 @@ class AccessMethodsUnmanagedClient
         $this->seam = $seam;
     }
 
+    /**
+     * Gets an unmanaged access method (where is_managed = false).
+     *
+     * @param string $access_method_id ID of unmanaged access method to get.
+     * @return UnmanagedAccessMethod OK
+     */
     public function get(string $access_method_id): UnmanagedAccessMethod
     {
         $request_payload = [];
@@ -1479,6 +1879,15 @@ class AccessMethodsUnmanagedClient
         return UnmanagedAccessMethod::from_json($res->access_method);
     }
 
+    /**
+     * Lists all unmanaged access methods (where is_managed = false), usually filtered by Access Grant.
+     *
+     * @param string $access_grant_id ID of Access Grant to list unmanaged access methods for.
+     * @param string $acs_entrance_id ID of the entrance for which you want to retrieve all unmanaged access methods.
+     * @param string $device_id ID of the device for which you want to retrieve all unmanaged access methods.
+     * @param string $space_id ID of the space for which you want to retrieve all unmanaged access methods.
+     * @return array OK
+     */
     public function list(
         string $access_grant_id,
         ?string $acs_entrance_id = null,
@@ -1522,6 +1931,14 @@ class AcsAccessGroupsClient
         $this->seam = $seam;
     }
 
+    /**
+     * Adds a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) to a specified [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     *
+     * @param string $acs_access_group_id ID of the access group to which you want to add an access system user.
+     * @param string $acs_user_id ID of the access system user that you want to add to an access group. You can only provide one of acs_user_id or user_identity_id.
+     * @param string $user_identity_id ID of the desired user identity that you want to add to an access group. You can only provide one of acs_user_id or user_identity_id. If the ACS system contains an ACS user with the same `email_address` or `phone_number` as the user identity that you specify, they are linked, and the access group membership belongs to the ACS user. If the ACS system does not have a corresponding ACS user, one is created.
+     * @return void OK
+     */
     public function add_user(
         string $acs_access_group_id,
         ?string $acs_user_id = null,
@@ -1546,6 +1963,12 @@ class AcsAccessGroupsClient
         );
     }
 
+    /**
+     * Deletes a specified [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     *
+     * @param string $acs_access_group_id ID of the access group that you want to delete.
+     * @return void OK
+     */
     public function delete(string $acs_access_group_id): void
     {
         $request_payload = [];
@@ -1561,6 +1984,12 @@ class AcsAccessGroupsClient
         );
     }
 
+    /**
+     * Returns a specified [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     *
+     * @param string $acs_access_group_id ID of the access group that you want to get.
+     * @return AcsAccessGroup OK
+     */
     public function get(string $acs_access_group_id): AcsAccessGroup
     {
         $request_payload = [];
@@ -1578,6 +2007,15 @@ class AcsAccessGroupsClient
         return AcsAccessGroup::from_json($res->acs_access_group);
     }
 
+    /**
+     * Returns a list of all [access groups](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     *
+     * @param string $acs_system_id ID of the access system for which you want to retrieve all access groups.
+     * @param string $acs_user_id ID of the access system user for which you want to retrieve all access groups.
+     * @param string $search String for which to search. Filters returned access groups to include all records that satisfy a partial match using `name` or `acs_access_group_id`.
+     * @param string $user_identity_id ID of the user identity for which you want to retrieve all access groups.
+     * @return array OK
+     */
     public function list(
         ?string $acs_system_id = null,
         ?string $acs_user_id = null,
@@ -1611,6 +2049,12 @@ class AcsAccessGroupsClient
         );
     }
 
+    /**
+     * Returns a list of all accessible entrances for a specified [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     *
+     * @param string $acs_access_group_id ID of the access group for which you want to retrieve all accessible entrances.
+     * @return array OK
+     */
     public function list_accessible_entrances(
         string $acs_access_group_id,
     ): array {
@@ -1632,6 +2076,12 @@ class AcsAccessGroupsClient
         );
     }
 
+    /**
+     * Returns a list of all [access system users](https://docs.seam.co/low-level-apis/access-systems/user-management) in an [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     *
+     * @param string $acs_access_group_id ID of the access group for which you want to retrieve all access system users.
+     * @return array OK
+     */
     public function list_users(string $acs_access_group_id): array
     {
         $request_payload = [];
@@ -1649,6 +2099,14 @@ class AcsAccessGroupsClient
         return array_map(fn($r) => AcsUser::from_json($r), $res->acs_users);
     }
 
+    /**
+     * Removes a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) from a specified [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     *
+     * @param string $acs_access_group_id ID of the access group from which you want to remove an access system user.
+     * @param string $acs_user_id ID of the access system user that you want to remove from an access group.
+     * @param string $user_identity_id ID of the user identity associated with the user that you want to remove from an access group.
+     * @return void OK
+     */
     public function remove_user(
         string $acs_access_group_id,
         ?string $acs_user_id = null,
@@ -1704,6 +2162,14 @@ class AcsCredentialsClient
         $this->seam = $seam;
     }
 
+    /**
+     * Assigns a specified [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) to a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     *
+     * @param string $acs_credential_id ID of the credential that you want to assign to an access system user.
+     * @param string $acs_user_id ID of the access system user to whom you want to assign a credential. You can only provide one of acs_user_id or user_identity_id.
+     * @param string $user_identity_id ID of the user identity to whom you want to assign a credential. You can only provide one of acs_user_id or user_identity_id. If the ACS system contains an ACS user with the same `email_address` or `phone_number` as the user identity that you specify, they are linked, and the credential belongs to the ACS user. If the ACS system does not have a corresponding ACS user, one is created.
+     * @return void OK
+     */
     public function assign(
         string $acs_credential_id,
         ?string $acs_user_id = null,
@@ -1728,6 +2194,24 @@ class AcsCredentialsClient
         );
     }
 
+    /**
+     * Creates a new [credential](https://docs.seam.co/low-level-apis/managing-credentials) for a specified [ACS user](https://docs.seam.co/low-level-apis/access-systems/user-management). For granting access, we recommend [Access Grants](https://docs.seam.co/use-cases/granting-access) instead: they create and manage the underlying credentials for you, across access systems and standalone smart locks alike. Use this low-level endpoint only when you need direct control over an individual ACS credential.
+     *
+     * @param string $access_method Access method for the new credential. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
+     * @param string $acs_system_id ID of the access system to which the new credential belongs. You must provide either `acs_user_id` or the combination of `user_identity_id` and `acs_system_id`.
+     * @param string $acs_user_id ID of the access system user to whom the new credential belongs. You must provide either `acs_user_id` or the combination of `user_identity_id` and `acs_system_id`.
+     * @param array $allowed_acs_entrance_ids Set of IDs of the [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) for which the new credential grants access.
+     * @param mixed $assa_abloy_vostio_metadata Vostio-specific metadata for the new credential.
+     * @param string $code Access (PIN) code for the new credential. There may be manufacturer-specific code restrictions. For details, see the applicable [device or system integration guide](https://docs.seam.co/device-and-system-integration-guides).
+     * @param string $credential_manager_acs_system_id ACS system ID of the credential manager for the new credential.
+     * @param string $ends_at Date and time at which the validity of the new credential ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
+     * @param bool $is_multi_phone_sync_credential Indicates whether the new credential is a [multi-phone sync credential](https://docs.seam.co/capability-guides/mobile-access/issuing-mobile-credentials-from-an-access-control-system#what-are-multi-phone-sync-credentials).
+     * @param mixed $salto_space_metadata Salto Space-specific metadata for the new credential.
+     * @param string $starts_at Date and time at which the validity of the new credential starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+     * @param string $user_identity_id ID of the user identity to whom the new credential belongs. You must provide either `acs_user_id` or the combination of `user_identity_id` and `acs_system_id`. If the access system contains a user with the same `email_address` or `phone_number` as the user identity that you specify, they are linked, and the credential belongs to the access system user. If the access system does not have a corresponding user, one is created.
+     * @param mixed $visionline_metadata Visionline-specific metadata for the new credential.
+     * @return AcsCredential OK
+     */
     public function create(
         string $access_method,
         ?string $acs_system_id = null,
@@ -1802,6 +2286,12 @@ class AcsCredentialsClient
         return AcsCredential::from_json($res->acs_credential);
     }
 
+    /**
+     * Deletes a specified [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     *
+     * @param string $acs_credential_id ID of the credential that you want to delete.
+     * @return void OK
+     */
     public function delete(string $acs_credential_id): void
     {
         $request_payload = [];
@@ -1817,6 +2307,12 @@ class AcsCredentialsClient
         );
     }
 
+    /**
+     * Returns a specified [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     *
+     * @param string $acs_credential_id ID of the credential that you want to get.
+     * @return AcsCredential OK
+     */
     public function get(string $acs_credential_id): AcsCredential
     {
         $request_payload = [];
@@ -1834,6 +2330,19 @@ class AcsCredentialsClient
         return AcsCredential::from_json($res->acs_credential);
     }
 
+    /**
+     * Returns a list of all [credentials](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     *
+     * @param string $acs_user_id ID of the access system user for which you want to retrieve all credentials.
+     * @param string $acs_system_id ID of the access system for which you want to retrieve all credentials.
+     * @param string $user_identity_id ID of the user identity for which you want to retrieve all credentials.
+     * @param string $created_before Date and time, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format, before which events to return were created.
+     * @param bool $is_multi_phone_sync_credential Indicates whether you want to retrieve only multi-phone sync credentials or non-multi-phone sync credentials.
+     * @param float $limit Number of credentials to return.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned credentials to include all records that satisfy a partial match using `display_name`, `code`, `card_number`, `acs_user_id` or `acs_credential_id`.
+     * @return array OK
+     */
     public function list(
         ?string $acs_user_id = null,
         ?string $acs_system_id = null,
@@ -1890,6 +2399,12 @@ class AcsCredentialsClient
         );
     }
 
+    /**
+     * Returns a list of all [entrances](https://docs.seam.co/api/acs/entrances) to which a [credential](https://docs.seam.co/api/acs/credentials) grants access.
+     *
+     * @param string $acs_credential_id ID of the credential for which you want to retrieve all entrances to which the credential grants access.
+     * @return array OK
+     */
     public function list_accessible_entrances(string $acs_credential_id): array
     {
         $request_payload = [];
@@ -1910,6 +2425,14 @@ class AcsCredentialsClient
         );
     }
 
+    /**
+     * Unassigns a specified [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) from a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     *
+     * @param string $acs_credential_id ID of the credential that you want to unassign from an access system user.
+     * @param string $acs_user_id ID of the access system user from which you want to unassign a credential. You can only provide one of acs_user_id or user_identity_id.
+     * @param string $user_identity_id ID of the user identity from which you want to unassign a credential. You can only provide one of acs_user_id or user_identity_id.
+     * @return void OK
+     */
     public function unassign(
         string $acs_credential_id,
         ?string $acs_user_id = null,
@@ -1934,6 +2457,14 @@ class AcsCredentialsClient
         );
     }
 
+    /**
+     * Updates the code and ends at date and time for a specified [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     *
+     * @param string $acs_credential_id ID of the credential that you want to update.
+     * @param string $code Replacement access (PIN) code for the credential that you want to update.
+     * @param string $ends_at Replacement date and time at which the validity of the credential ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after the `starts_at` value that you set when creating the credential.
+     * @return void OK
+     */
     public function update(
         string $acs_credential_id,
         ?string $code = null,
@@ -1969,6 +2500,14 @@ class AcsEncodersClient
         $this->simulate = new AcsEncodersSimulateClient($seam);
     }
 
+    /**
+     * Encodes an existing [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) onto a plastic card placed on the specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners). Either provide an `acs_credential_id` or an `access_method_id`
+     *
+     * @param string $acs_encoder_id ID of the `acs_encoder` to use to encode the `acs_credential`.
+     * @param string $access_method_id ID of the `access_method` to encode onto a card.
+     * @param string $acs_credential_id ID of the `acs_credential` to encode onto a card.
+     * @return ActionAttempt OK
+     */
     public function encode_credential(
         string $acs_encoder_id,
         ?string $access_method_id = null,
@@ -2004,6 +2543,12 @@ class AcsEncodersClient
         return $action_attempt;
     }
 
+    /**
+     * Returns a specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+     *
+     * @param string $acs_encoder_id ID of the encoder that you want to get.
+     * @return AcsEncoder OK
+     */
     public function get(string $acs_encoder_id): AcsEncoder
     {
         $request_payload = [];
@@ -2021,6 +2566,16 @@ class AcsEncodersClient
         return AcsEncoder::from_json($res->acs_encoder);
     }
 
+    /**
+     * Returns a list of all [encoders](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+     *
+     * @param string $acs_system_id ID of the access system for which you want to retrieve all encoders.
+     * @param array $acs_system_ids IDs of the access systems for which you want to retrieve all encoders.
+     * @param array $acs_encoder_ids IDs of the encoders that you want to retrieve.
+     * @param float $limit Number of encoders to return.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @return array OK
+     */
     public function list(
         ?string $acs_system_id = null,
         ?array $acs_system_ids = null,
@@ -2063,6 +2618,13 @@ class AcsEncodersClient
         );
     }
 
+    /**
+     * Scans an encoded [acs_credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) from a plastic card placed on the specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+     *
+     * @param string $acs_encoder_id ID of the encoder to use for the scan.
+     * @param mixed $salto_ks_metadata Salto KS-specific metadata for the scan action.
+     * @return ActionAttempt OK
+     */
     public function scan_credential(
         string $acs_encoder_id,
         mixed $salto_ks_metadata = null,
@@ -2094,6 +2656,15 @@ class AcsEncodersClient
         return $action_attempt;
     }
 
+    /**
+     * Scans a physical card placed on the specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners) and assigns the scanned credential to an ACS user. Provide either an `acs_user_id` or a `user_identity_id`.
+     *
+     * @param string $acs_encoder_id ID of the `acs_encoder` to use to scan the credential.
+     * @param string $acs_user_id ID of the `acs_user` to assign the scanned credential to.
+     * @param mixed $salto_ks_metadata Salto KS-specific metadata for the scan action.
+     * @param string $user_identity_id ID of the `user_identity` to assign the scanned credential to. If the ACS system contains an ACS user linked to this user identity, it is used. Otherwise, one is created.
+     * @return ActionAttempt OK
+     */
     public function scan_to_assign_credential(
         string $acs_encoder_id,
         ?string $acs_user_id = null,
@@ -2143,6 +2714,14 @@ class AcsEncodersSimulateClient
         $this->seam = $seam;
     }
 
+    /**
+     * Simulates that the next attempt to encode a [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) using the specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners) will fail. You can only perform this action within a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     *
+     * @param string $acs_encoder_id ID of the `acs_encoder` that will be used in the next request to encode the `acs_credential`.
+     * @param string $error_code Code of the error to simulate.
+     * @param string $acs_credential_id ID of the `acs_credential` that will fail to be encoded onto a card in the next request.
+     * @return void OK
+     */
     public function next_credential_encode_will_fail(
         string $acs_encoder_id,
         ?string $error_code = null,
@@ -2167,6 +2746,13 @@ class AcsEncodersSimulateClient
         );
     }
 
+    /**
+     * Simulates that the next attempt to encode a [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) using the specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners) will succeed. You can only perform this action within a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     *
+     * @param string $acs_encoder_id ID of the `acs_encoder` that will be used in the next request to encode the `acs_credential`.
+     * @param string $scenario Scenario to simulate.
+     * @return void OK
+     */
     public function next_credential_encode_will_succeed(
         string $acs_encoder_id,
         ?string $scenario = null,
@@ -2187,6 +2773,14 @@ class AcsEncodersSimulateClient
         );
     }
 
+    /**
+     * Simulates that the next attempt to scan a [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) using the specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners) will fail. You can only perform this action within a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     *
+     * @param string $acs_encoder_id ID of the `acs_encoder` that will fail to scan the `acs_credential` in the next request.
+     * @param string $error_code
+     * @param string $acs_credential_id_on_seam
+     * @return void OK
+     */
     public function next_credential_scan_will_fail(
         string $acs_encoder_id,
         ?string $error_code = null,
@@ -2213,6 +2807,14 @@ class AcsEncodersSimulateClient
         );
     }
 
+    /**
+     * Simulates that the next attempt to scan a [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) using the specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners) will succeed. You can only perform this action within a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     *
+     * @param string $acs_encoder_id ID of the `acs_encoder` that will be used in the next request to scan the `acs_credential`.
+     * @param string $acs_credential_id_on_seam ID of the Seam `acs_credential` that matches the `acs_credential` on the encoder in this simulation.
+     * @param string $scenario Scenario to simulate.
+     * @return void OK
+     */
     public function next_credential_scan_will_succeed(
         string $acs_encoder_id,
         ?string $acs_credential_id_on_seam = null,
@@ -2249,6 +2851,12 @@ class AcsEntrancesClient
         $this->seam = $seam;
     }
 
+    /**
+     * Returns a specified [access system entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+     *
+     * @param string $acs_entrance_id ID of the entrance that you want to get.
+     * @return AcsEntrance OK
+     */
     public function get(string $acs_entrance_id): AcsEntrance
     {
         $request_payload = [];
@@ -2266,6 +2874,14 @@ class AcsEntrancesClient
         return AcsEntrance::from_json($res->acs_entrance);
     }
 
+    /**
+     * Grants a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) access to a specified [access system entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+     *
+     * @param string $acs_entrance_id ID of the entrance to which you want to grant an access system user access.
+     * @param string $acs_user_id ID of the access system user to whom you want to grant access to an entrance. You can only provide one of acs_user_id or user_identity_id.
+     * @param string $user_identity_id ID of the user identity to whom you want to grant access to an entrance. You can only provide one of acs_user_id or user_identity_id. If the ACS system contains an ACS user with the same `email_address` or `phone_number` as the user identity that you specify, they are linked, and the access group membership belongs to the ACS user. If the ACS system does not have a corresponding ACS user, one is created.
+     * @return void OK
+     */
     public function grant_access(
         string $acs_entrance_id,
         ?string $acs_user_id = null,
@@ -2290,6 +2906,22 @@ class AcsEntrancesClient
         );
     }
 
+    /**
+     * Returns a list of all [access system entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+     *
+     * @param string $access_method_id ID of the access method for which you want to retrieve all entrances to which it grants access.
+     * @param string $acs_credential_id ID of the credential for which you want to retrieve all entrances.
+     * @param array $acs_entrance_ids IDs of the entrances for which you want to retrieve all entrances.
+     * @param string $acs_system_id ID of the access system for which you want to retrieve all entrances.
+     * @param string $connected_account_id ID of the connected account for which you want to retrieve all entrances.
+     * @param string $customer_key Customer key for which you want to list entrances.
+     * @param int $limit Maximum number of records to return per page.
+     * @param string $location_id
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned entrances to include all records that satisfy a partial match using `display_name`.
+     * @param string $space_id ID of the space for which you want to list entrances.
+     * @return array OK
+     */
     public function list(
         ?string $access_method_id = null,
         ?string $acs_credential_id = null,
@@ -2356,6 +2988,13 @@ class AcsEntrancesClient
         );
     }
 
+    /**
+     * Returns a list of all [credentials](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) with access to a specified [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+     *
+     * @param string $acs_entrance_id ID of the entrance for which you want to list all credentials that grant access.
+     * @param array $include_if Conditions that credentials must meet to be included in the returned list.
+     * @return array OK
+     */
     public function list_credentials_with_access(
         string $acs_entrance_id,
         ?array $include_if = null,
@@ -2381,6 +3020,13 @@ class AcsEntrancesClient
         );
     }
 
+    /**
+     * Remotely unlocks a specified [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) using a cloud_key credential. Returns an action attempt that tracks the progress of the unlock operation.
+     *
+     * @param string $acs_credential_id ID of the cloud_key credential to use for the unlock operation.
+     * @param string $acs_entrance_id ID of the entrance to unlock.
+     * @return ActionAttempt OK
+     */
     public function unlock(
         string $acs_credential_id,
         string $acs_entrance_id,
@@ -2422,6 +3068,12 @@ class AcsSystemsClient
         $this->seam = $seam;
     }
 
+    /**
+     * Returns a specified [access system](https://docs.seam.co/low-level-apis/access-systems).
+     *
+     * @param string $acs_system_id ID of the access system that you want to get.
+     * @return AcsSystem OK
+     */
     public function get(string $acs_system_id): AcsSystem
     {
         $request_payload = [];
@@ -2439,6 +3091,16 @@ class AcsSystemsClient
         return AcsSystem::from_json($res->acs_system);
     }
 
+    /**
+     * Returns a list of all [access systems](https://docs.seam.co/low-level-apis/access-systems).
+     *
+     * To filter the list of returned access systems by a specific connected account ID, include the `connected_account_id` in the request body. If you omit the `connected_account_id` parameter, the response includes all access systems connected to your workspace.
+     *
+     * @param string $connected_account_id ID of the connected account by which you want to filter the list of access systems.
+     * @param string $customer_key Customer key for which you want to list access systems.
+     * @param string $search String for which to search. Filters returned access systems to include all records that satisfy a partial match using `name` or `acs_system_id`.
+     * @return array OK
+     */
     public function list(
         ?string $connected_account_id = null,
         ?string $customer_key = null,
@@ -2465,6 +3127,14 @@ class AcsSystemsClient
         return array_map(fn($r) => AcsSystem::from_json($r), $res->acs_systems);
     }
 
+    /**
+     * Returns a list of all credential manager systems that are compatible with a specified [access system](https://docs.seam.co/low-level-apis/access-systems).
+     *
+     * Specify the access system for which you want to retrieve all compatible credential manager systems by including the corresponding `acs_system_id` in the request body.
+     *
+     * @param string $acs_system_id ID of the access system for which you want to retrieve all compatible credential manager systems.
+     * @return array OK
+     */
     public function list_compatible_credential_manager_acs_systems(
         string $acs_system_id,
     ): array {
@@ -2483,6 +3153,14 @@ class AcsSystemsClient
         return array_map(fn($r) => AcsSystem::from_json($r), $res->acs_systems);
     }
 
+    /**
+     * Reports ACS system device status including encoders and entrances.
+     *
+     * @param string $acs_system_id ID of the ACS system to report resources for
+     * @param array $acs_encoders Array of ACS encoders to report
+     * @param array $acs_entrances Array of ACS entrances to report
+     * @return void OK
+     */
     public function report_devices(
         string $acs_system_id,
         ?array $acs_encoders = null,
@@ -2517,6 +3195,13 @@ class AcsUsersClient
         $this->seam = $seam;
     }
 
+    /**
+     * Adds a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) to a specified [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     *
+     * @param string $acs_access_group_id ID of the access group to which you want to add an access system user.
+     * @param string $acs_user_id ID of the access system user that you want to add to an access group.
+     * @return void OK
+     */
     public function add_to_access_group(
         string $acs_access_group_id,
         string $acs_user_id,
@@ -2537,6 +3222,19 @@ class AcsUsersClient
         );
     }
 
+    /**
+     * Creates a new [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     *
+     * @param string $acs_system_id ID of the access system to which you want to add the new access system user.
+     * @param string $full_name Full name of the new access system user.
+     * @param mixed $access_schedule `starts_at` and `ends_at` timestamps for the new access system user's access. If you specify an `access_schedule`, you may include both `starts_at` and `ends_at`. If you omit `starts_at`, it defaults to the current time. `ends_at` is optional and must be a time in the future and after `starts_at`.
+     * @param array $acs_access_group_ids Array of access group IDs to indicate the access groups to which you want to add the new access system user.
+     * @param string $email
+     * @param string $email_address Email address of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * @param string $phone_number Phone number of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
+     * @param string $user_identity_id ID of the user identity with which you want to associate the new access system user.
+     * @return AcsUser OK
+     */
     public function create(
         string $acs_system_id,
         string $full_name,
@@ -2583,6 +3281,14 @@ class AcsUsersClient
         return AcsUser::from_json($res->acs_user);
     }
 
+    /**
+     * Deletes a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) and invalidates the access system user's [credentials](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     *
+     * @param string $acs_system_id ID of the access system that you want to delete. You must provide acs_system_id with user_identity_id.
+     * @param string $acs_user_id ID of the access system user that you want to delete. You must provide either acs_user_id or user_identity_id
+     * @param string $user_identity_id ID of the user identity that you want to delete. You must provide either acs_user_id or user_identity_id. If you provide user_identity_id, you must also provide acs_system_id.
+     * @return void OK
+     */
     public function delete(
         ?string $acs_system_id = null,
         ?string $acs_user_id = null,
@@ -2607,6 +3313,14 @@ class AcsUsersClient
         );
     }
 
+    /**
+     * Returns a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     *
+     * @param string $acs_user_id ID of the access system user that you want to get. You can only provide acs_user_id or user_identity_id.
+     * @param string $acs_system_id ID of the access system that you want to get. You can only provide acs_user_id or user_identity_id.
+     * @param string $user_identity_id ID of the user identity that you want to get. You can only provide acs_user_id or user_identity_id.
+     * @return AcsUser OK
+     */
     public function get(
         ?string $acs_user_id = null,
         ?string $acs_system_id = null,
@@ -2633,6 +3347,19 @@ class AcsUsersClient
         return AcsUser::from_json($res->acs_user);
     }
 
+    /**
+     * Returns a list of all [access system users](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     *
+     * @param string $acs_system_id ID of the `acs_system` for which you want to retrieve all access system users.
+     * @param string $created_before Timestamp by which to limit returned access system users. Returns users created before this timestamp.
+     * @param int $limit Maximum number of records to return per page.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned access system users to include all records that satisfy a partial match using `full_name`, `phone_number`, `email_address`, `acs_user_id`, `user_identity_id`, `user_identity_full_name` or `user_identity_phone_number`.
+     * @param string $user_identity_email_address Email address of the user identity for which you want to retrieve all access system users.
+     * @param string $user_identity_id ID of the user identity for which you want to retrieve all access system users.
+     * @param string $user_identity_phone_number Phone number of the user identity for which you want to retrieve all access system users, in [E.164 format](https://www.itu.int/rec/T-REC-E.164/en) (for example, `+15555550100`).
+     * @return array OK
+     */
     public function list(
         ?string $acs_system_id = null,
         ?string $created_before = null,
@@ -2688,6 +3415,14 @@ class AcsUsersClient
         return array_map(fn($r) => AcsUser::from_json($r), $res->acs_users);
     }
 
+    /**
+     * Lists the [entrances](https://docs.seam.co/api/acs/entrances) to which a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) has access.
+     *
+     * @param string $acs_system_id ID of the access system for which you want to list accessible entrances. You can only provide acs_system_id with user_identity_id.
+     * @param string $acs_user_id ID of the access system user for whom you want to list accessible entrances. You can only provide acs_user_id or user_identity_id.
+     * @param string $user_identity_id ID of the user identity for whom you want to list accessible entrances. You can only provide acs_user_id or user_identity_id.
+     * @return array OK
+     */
     public function list_accessible_entrances(
         ?string $acs_system_id = null,
         ?string $acs_user_id = null,
@@ -2717,6 +3452,14 @@ class AcsUsersClient
         );
     }
 
+    /**
+     * Removes a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) from a specified [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     *
+     * @param string $acs_access_group_id ID of the access group from which you want to remove an access system user.
+     * @param string $acs_user_id ID of the access system user that you want to remove from an access group. You can only provide acs_user_id or user_identity_id.
+     * @param string $user_identity_id ID of the user identity that you want to remove from an access group. You can only provide acs_user_id or user_identity_id.
+     * @return void OK
+     */
     public function remove_from_access_group(
         string $acs_access_group_id,
         ?string $acs_user_id = null,
@@ -2741,6 +3484,14 @@ class AcsUsersClient
         );
     }
 
+    /**
+     * Revokes access to all [entrances](https://docs.seam.co/api/acs/entrances) for a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     *
+     * @param string $acs_system_id ID of the access system for which you want to revoke access. You can only provide acs_system_id with user_identity_id.
+     * @param string $acs_user_id ID of the access system user for whom you want to revoke access. You can only provide acs_user_id or user_identity_id.
+     * @param string $user_identity_id ID of the user identity for whom you want to revoke access. You can only provide acs_user_id or user_identity_id.
+     * @return void OK
+     */
     public function revoke_access_to_all_entrances(
         ?string $acs_system_id = null,
         ?string $acs_user_id = null,
@@ -2765,6 +3516,14 @@ class AcsUsersClient
         );
     }
 
+    /**
+     * [Suspends](https://docs.seam.co/low-level-apis/access-systems/user-management/suspending-and-unsuspending-users#suspend-an-acs-user) a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management). Suspending an access system user revokes their access temporarily. To restore an access system user's access, you can [unsuspend](https://docs.seam.co/api/acs/users/unsuspend) them.
+     *
+     * @param string $acs_system_id ID of the access system that you want to suspend. You can only provide acs_user_id or the combination of acs_system_id and user_identity_id.
+     * @param string $acs_user_id ID of the access system user that you want to suspend. You can only provide acs_user_id or the combination of acs_system_id and user_identity_id.
+     * @param string $user_identity_id ID of the user identity that you want to suspend. You can only provide acs_user_id or the combination of acs_system_id and user_identity_id.
+     * @return void OK
+     */
     public function suspend(
         ?string $acs_system_id = null,
         ?string $acs_user_id = null,
@@ -2789,6 +3548,14 @@ class AcsUsersClient
         );
     }
 
+    /**
+     * [Unsuspends](https://docs.seam.co/low-level-apis/access-systems/user-management/suspending-and-unsuspending-users#unsuspend-an-acs-user) a specified suspended [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management). While [suspending an access system user](https://docs.seam.co/api/acs/users/suspend) revokes their access temporarily, unsuspending the access system user restores their access.
+     *
+     * @param string $acs_system_id ID of the access system of the user that you want to unsuspend. You can only provide acs_system_id with user_identity_id.
+     * @param string $acs_user_id ID of the access system user that you want to unsuspend. You can only provide acs_user_id or the combination of acs_system_id and user_identity_id.
+     * @param string $user_identity_id ID of the user identity that you want to unsuspend. You can only provide acs_user_id or the combination of acs_system_id and user_identity_id.
+     * @return void OK
+     */
     public function unsuspend(
         ?string $acs_system_id = null,
         ?string $acs_user_id = null,
@@ -2813,6 +3580,20 @@ class AcsUsersClient
         );
     }
 
+    /**
+     * Updates the properties of a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     *
+     * @param mixed $access_schedule `starts_at` and `ends_at` timestamps for the access system user's access. If you specify an `access_schedule`, you may include both `starts_at` and `ends_at`. If you omit `starts_at`, it defaults to the current time. `ends_at` is optional and must be a time in the future and after `starts_at`.
+     * @param string $acs_system_id ID of the access system that you want to update. You can only provide acs_system_id with user_identity_id.
+     * @param string $acs_user_id ID of the access system user that you want to update. You can only provide acs_user_id or user_identity_id.
+     * @param string $email
+     * @param string $email_address Email address of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * @param string $full_name Full name of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * @param string $hid_acs_system_id ID of the HID access control system associated with the user.
+     * @param string $phone_number Phone number of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
+     * @param string $user_identity_id ID of the user identity that you want to update. You can only provide acs_user_id or user_identity_id. If you provide user_identity_id, you must also provide acs_system_id.
+     * @return void OK
+     */
     public function update(
         mixed $access_schedule = null,
         ?string $acs_system_id = null,
@@ -2871,6 +3652,12 @@ class ActionAttemptsClient
         $this->seam = $seam;
     }
 
+    /**
+     * Returns a specified [action attempt](https://docs.seam.co/core-concepts/action-attempts).
+     *
+     * @param string $action_attempt_id ID of the action attempt that you want to get.
+     * @return ActionAttempt OK
+     */
     public function get(string $action_attempt_id): ActionAttempt
     {
         $request_payload = [];
@@ -2888,6 +3675,15 @@ class ActionAttemptsClient
         return ActionAttempt::from_json($res->action_attempt);
     }
 
+    /**
+     * Returns a list of the [action attempts](https://docs.seam.co/core-concepts/action-attempts) that you specify as an array of `action_attempt_id`s.
+     *
+     * @param array $action_attempt_ids IDs of the action attempts that you want to retrieve.
+     * @param string $device_id ID of the device to filter action attempts by.
+     * @param int $limit Maximum number of records to return per page.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @return array OK
+     */
     public function list(
         ?array $action_attempt_ids = null,
         ?string $device_id = null,
@@ -2962,6 +3758,19 @@ class ClientSessionsClient
         $this->seam = $seam;
     }
 
+    /**
+     * Creates a new [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
+     *
+     * @param array $connect_webview_ids IDs of the [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) for which you want to create a client session.
+     * @param array $connected_account_ids IDs of the [connected accounts](https://docs.seam.co/core-concepts/connected-accounts) for which you want to create a client session.
+     * @param string $customer_id Customer ID that you want to associate with the new client session.
+     * @param string $customer_key Customer key that you want to associate with the new client session.
+     * @param string $expires_at Date and time at which the client session should expire, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+     * @param string $user_identifier_key Your user ID for the user for whom you want to create a client session.
+     * @param string $user_identity_id ID of the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) for which you want to create a client session.
+     * @param array $user_identity_ids IDs of the [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
+     * @return ClientSession OK
+     */
     public function create(
         ?array $connect_webview_ids = null,
         ?array $connected_account_ids = null,
@@ -3008,6 +3817,12 @@ class ClientSessionsClient
         return ClientSession::from_json($res->client_session);
     }
 
+    /**
+     * Deletes a [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
+     *
+     * @param string $client_session_id ID of the client session that you want to delete.
+     * @return void OK
+     */
     public function delete(string $client_session_id): void
     {
         $request_payload = [];
@@ -3023,6 +3838,13 @@ class ClientSessionsClient
         );
     }
 
+    /**
+     * Returns a specified [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
+     *
+     * @param string $client_session_id ID of the client session that you want to get.
+     * @param string $user_identifier_key User identifier key associated with the client session that you want to get.
+     * @return ClientSession OK
+     */
     public function get(
         ?string $client_session_id = null,
         ?string $user_identifier_key = null,
@@ -3045,6 +3867,17 @@ class ClientSessionsClient
         return ClientSession::from_json($res->client_session);
     }
 
+    /**
+     * Returns a [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens) with specific characteristics or creates a new client session with these characteristics if it does not yet exist.
+     *
+     * @param array $connect_webview_ids IDs of the [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) that you want to associate with the client session (or that are already associated with the existing client session).
+     * @param array $connected_account_ids IDs of the [connected accounts](https://docs.seam.co/api/connected_accounts) that you want to associate with the client session (or that are already associated with the existing client session).
+     * @param string $expires_at Date and time at which the client session should expire in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. If the client session already exists, this will update the expiration before returning it.
+     * @param string $user_identifier_key Your user ID for the user that you want to associate with the client session (or that is already associated with the existing client session).
+     * @param string $user_identity_id ID of the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session (or that are already associated with the existing client session).
+     * @param array $user_identity_ids IDs of the [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
+     * @return ClientSession OK
+     */
     public function get_or_create(
         ?array $connect_webview_ids = null,
         ?array $connected_account_ids = null,
@@ -3083,6 +3916,17 @@ class ClientSessionsClient
         return ClientSession::from_json($res->client_session);
     }
 
+    /**
+     * Grants a [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens) access to one or more resources, such as [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews), [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity), and so on.
+     *
+     * @param string $client_session_id ID of the client session to which you want to grant access to resources.
+     * @param array $connect_webview_ids IDs of the [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) that you want to associate with the client session.
+     * @param array $connected_account_ids IDs of the [connected accounts](https://docs.seam.co/core-concepts/connected-accounts) that you want to associate with the client session.
+     * @param string $user_identifier_key Your user ID for the user that you want to associate with the client session.
+     * @param string $user_identity_id ID of the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
+     * @param array $user_identity_ids IDs of the [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
+     * @return void OK
+     */
     public function grant_access(
         ?string $client_session_id = null,
         ?array $connect_webview_ids = null,
@@ -3119,6 +3963,16 @@ class ClientSessionsClient
         );
     }
 
+    /**
+     * Returns a list of all [client sessions](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
+     *
+     * @param string $client_session_id ID of the client session that you want to retrieve.
+     * @param string $connect_webview_id ID of the [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews) for which you want to retrieve client sessions.
+     * @param string $user_identifier_key Your user ID for the user by which you want to filter client sessions.
+     * @param string $user_identity_id ID of the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) for which you want to retrieve client sessions.
+     * @param bool $without_user_identifier_key Indicates whether to retrieve only client sessions without associated user identifier keys.
+     * @return array OK
+     */
     public function list(
         ?string $client_session_id = null,
         ?string $connect_webview_id = null,
@@ -3158,6 +4012,14 @@ class ClientSessionsClient
         );
     }
 
+    /**
+     * Revokes a [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
+     *
+     * Note that [deleting a client session](https://docs.seam.co/api/client_sessions/delete) is a separate action.
+     *
+     * @param string $client_session_id ID of the client session that you want to revoke.
+     * @return void OK
+     */
     public function revoke(string $client_session_id): void
     {
         $request_payload = [];
@@ -3183,6 +4045,27 @@ class ConnectWebviewsClient
         $this->seam = $seam;
     }
 
+    /**
+     * Creates a new [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews).
+     *
+     * To enable a user to connect their devices or systems to Seam, they must sign in to their device or system account. To enable a user to sign in, you create a `connect_webview`. After creating the Connect Webview, you receive a URL that you can use to display the visual component of this Connect Webview for your user. You can open an iframe or new window to display the Connect Webview.
+     *
+     * You should make a new `connect_webview` for each unique login request. Each `connect_webview` tracks the user that signed in with it. You receive an error if you reuse a Connect Webview for the same user twice or if you use the same Connect Webview for multiple users.
+     *
+     * See also: [Connect Webview Process](https://docs.seam.co/core-concepts/connect-webviews/connect-webview-process).
+     *
+     * @param array $accepted_capabilities List of accepted device capabilities that restrict the types of devices that can be connected through the Connect Webview. If not provided, defaults will be determined based on the accepted providers.
+     * @param array $accepted_providers Accepted device provider keys as an alternative to `provider_category`. Use this parameter to specify accepted providers explicitly. See [Customize the Brands to Display in Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-brands-to-display-in-your-connect-webviews). To list all provider keys, use [`/devices/list_device_providers`](https://docs.seam.co/api/devices/list_device_providers) with no filters.
+     * @param bool $automatically_manage_new_devices Indicates whether newly-added devices should appear as [managed devices](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices). See also: [Customize the Behavior Settings of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-behavior-settings-of-your-connect-webviews).
+     * @param mixed $custom_metadata Custom metadata that you want to associate with the Connect Webview. Supports up to 50 JSON key:value pairs. [Adding custom metadata to a Connect Webview](https://docs.seam.co/core-concepts/connect-webviews/attaching-custom-data-to-the-connect-webview) enables you to store custom information, like customer details or internal IDs from your application. The custom metadata is then transferred to any [connected accounts](https://docs.seam.co/core-concepts/connected-accounts) that were connected using the Connect Webview, making it easy to find and filter these resources in your [workspace](https://docs.seam.co/core-concepts/workspaces). You can also [filter Connect Webviews by custom metadata](https://docs.seam.co/core-concepts/connect-webviews/filtering-connect-webviews-by-custom-metadata).
+     * @param string $custom_redirect_failure_url Alternative URL that you want to redirect the user to on an error. If you do not set this parameter, the Connect Webview falls back to the `custom_redirect_url`.
+     * @param string $custom_redirect_url URL that you want to redirect the user to after the provider login is complete.
+     * @param string $customer_key Associate the Connect Webview, the connected account, and all resources under the connected account with a customer. If the connected account already exists, it will be associated with the customer. If the connected account already exists, but is already associated with a customer, the Connect Webview will show an error.
+     * @param array $excluded_providers List of provider keys to exclude from the Connect Webview. These providers will not be shown when the user tries to connect an account.
+     * @param string $provider_category Specifies the category of providers that you want to include. To list all providers within a category, use [`/devices/list_device_providers`](https://docs.seam.co/api/devices/list_device_providers) with the desired `provider_category` filter.
+     * @param bool $wait_for_device_creation Indicates whether Seam should finish syncing all devices in a newly-connected account before completing the associated Connect Webview. See also: [Customize the Behavior Settings of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-behavior-settings-of-your-connect-webviews).
+     * @return ConnectWebview OK
+     */
     public function create(
         ?array $accepted_capabilities = null,
         ?array $accepted_providers = null,
@@ -3243,6 +4126,14 @@ class ConnectWebviewsClient
         return ConnectWebview::from_json($res->connect_webview);
     }
 
+    /**
+     * Deletes a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews).
+     *
+     * You do not need to delete a Connect Webview once a user completes it. Instead, you can simply ignore completed Connect Webviews.
+     *
+     * @param string $connect_webview_id ID of the Connect Webview that you want to delete.
+     * @return void OK
+     */
     public function delete(string $connect_webview_id): void
     {
         $request_payload = [];
@@ -3258,6 +4149,14 @@ class ConnectWebviewsClient
         );
     }
 
+    /**
+     * Returns a specified [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews).
+     *
+     * Unless you're using a `custom_redirect_url`, you should poll a newly-created `connect_webview` to find out if the user has signed in or to get details about what devices they've connected.
+     *
+     * @param string $connect_webview_id ID of the Connect Webview that you want to get.
+     * @return ConnectWebview OK
+     */
     public function get(string $connect_webview_id): ConnectWebview
     {
         $request_payload = [];
@@ -3275,6 +4174,17 @@ class ConnectWebviewsClient
         return ConnectWebview::from_json($res->connect_webview);
     }
 
+    /**
+     * Returns a list of all [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews).
+     *
+     * @param mixed $custom_metadata_has Custom metadata pairs by which you want to [filter Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/filtering-connect-webviews-by-custom-metadata). Returns Connect Webviews with `custom_metadata` that contains all of the provided key:value pairs.
+     * @param string $customer_key Customer key for which you want to list connect webviews.
+     * @param float $limit Maximum number of records to return per page.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned Connect Webviews to include all records that satisfy a partial match using `connect_webview_id`, `accepted_providers`, `custom_metadata`, or `customer_key`.
+     * @param string $user_identifier_key Your user ID for the user by which you want to filter Connect Webviews.
+     * @return array OK
+     */
     public function list(
         mixed $custom_metadata_has = null,
         ?string $customer_key = null,
@@ -3332,6 +4242,16 @@ class ConnectedAccountsClient
         $this->simulate = new ConnectedAccountsSimulateClient($seam);
     }
 
+    /**
+     * Deletes a specified [connected account](https://docs.seam.co/core-concepts/connected-accounts).
+     *
+     * Deleting a connected account triggers a `connected_account.deleted` event and removes the connected account and all data associated with the connected account from Seam, including devices, events, access codes, and so on. For every deleted resource, Seam sends a corresponding deleted event, but the resource is not deleted from the provider.
+     *
+     * For example, if you delete a connected account with a device that has an access code, Seam sends a `connected_account.deleted` event, a `device.deleted` event, and an `access_code.deleted` event, but Seam does not remove the access code from the device.
+     *
+     * @param string $connected_account_id ID of the connected account that you want to delete.
+     * @return void OK
+     */
     public function delete(string $connected_account_id): void
     {
         $request_payload = [];
@@ -3347,6 +4267,13 @@ class ConnectedAccountsClient
         );
     }
 
+    /**
+     * Returns a specified [connected account](https://docs.seam.co/core-concepts/connected-accounts).
+     *
+     * @param string $connected_account_id ID of the connected account that you want to get.
+     * @param string $email Email address associated with the connected account that you want to get.
+     * @return ConnectedAccount OK
+     */
     public function get(
         ?string $connected_account_id = null,
         ?string $email = null,
@@ -3369,6 +4296,18 @@ class ConnectedAccountsClient
         return ConnectedAccount::from_json($res->connected_account);
     }
 
+    /**
+     * Returns a list of all [connected accounts](https://docs.seam.co/core-concepts/connected-accounts).
+     *
+     * @param mixed $custom_metadata_has Custom metadata pairs by which you want to filter connected accounts. Returns connected accounts with `custom_metadata` that contains all of the provided key:value pairs.
+     * @param string $customer_key Customer key by which you want to filter connected accounts.
+     * @param int $limit Maximum number of records to return per page.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned connected accounts to include all records that satisfy a partial match using `connected_account_id`, `account_type`, `customer_key`, `custom_metadata`, `user_identifier.username`, `user_identifier.email` or `user_identifier.phone`.
+     * @param string $space_id ID of the space by which you want to filter connected accounts.
+     * @param string $user_identifier_key Your user ID for the user by which you want to filter connected accounts.
+     * @return array OK
+     */
     public function list(
         mixed $custom_metadata_has = null,
         ?string $customer_key = null,
@@ -3419,6 +4358,12 @@ class ConnectedAccountsClient
         );
     }
 
+    /**
+     * Request a [connected account](https://docs.seam.co/core-concepts/connected-accounts) sync attempt for the specified `connected_account_id`.
+     *
+     * @param string $connected_account_id ID of the connected account that you want to sync.
+     * @return void OK
+     */
     public function sync(string $connected_account_id): void
     {
         $request_payload = [];
@@ -3434,6 +4379,17 @@ class ConnectedAccountsClient
         );
     }
 
+    /**
+     * Updates a [connected account](https://docs.seam.co/core-concepts/connected-accounts).
+     *
+     * @param string $connected_account_id ID of the connected account that you want to update.
+     * @param array $accepted_capabilities List of accepted device capabilities that restrict the types of devices that can be connected through this connected account. Valid values are `lock`, `thermostat`, `noise_sensor`, and `access_control`.
+     * @param bool $automatically_manage_new_devices Indicates whether newly-added devices should appear as [managed devices](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices).
+     * @param mixed $custom_metadata Custom metadata that you want to associate with the connected account. Entirely replaces the existing custom metadata object. If a new Connect Webview contains custom metadata and is used to reconnect a connected account, the custom metadata from the Connect Webview will entirely replace the entire custom metadata object on the connected account. Supports up to 50 JSON key:value pairs. [Adding custom metadata to a connected account](https://docs.seam.co/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account) enables you to store custom information, like customer details or internal IDs from your application. Then, you can [filter connected accounts by the desired metadata](https://docs.seam.co/core-concepts/connected-accounts/filtering-connected-accounts-by-custom-metadata).
+     * @param string $customer_key The customer key to associate with this connected account. If provided, the connected account and all resources under the connected account will be moved to this customer. May only be provided if the connected account is not already associated with a customer.
+     * @param string $display_name Human-readable name for the connected account, shown in the dashboard. For example, `Booking from Airbnb House 1`.
+     * @return void OK
+     */
     public function update(
         string $connected_account_id,
         ?array $accepted_capabilities = null,
@@ -3482,6 +4438,12 @@ class ConnectedAccountsSimulateClient
         $this->seam = $seam;
     }
 
+    /**
+     * Simulates a connected account becoming disconnected from Seam. Only applicable for [sandbox workspaces](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     *
+     * @param string $connected_account_id ID of the connected account you want to simulate as disconnected.
+     * @return void OK
+     */
     public function disconnect(string $connected_account_id): void
     {
         $request_payload = [];
@@ -3507,6 +4469,22 @@ class CustomersClient
         $this->seam = $seam;
     }
 
+    /**
+     * Creates a new customer portal magic link with configurable features.
+     *
+     * @param array $customer_resources_filters Filter configuration for resources based on their custom_metadata. Each filter specifies a field, operation, and value to match against resource custom_metadata.
+     * @param string $customization_profile_id The ID of the customization profile to use for the portal.
+     * @param mixed $deep_link Deep link target resource for initial redirect. When set, the portal will navigate directly to the specified resource.
+     * @param bool $exclude_locale_picker Whether to exclude the option to select a locale within the portal UI.
+     * @param mixed $features
+     * @param bool $is_embedded Whether the portal is embedded in another application.
+     * @param mixed $landing_page Configuration for the landing page when the portal loads.
+     * @param string $locale The locale to use for the portal.
+     * @param string $navigation_mode Navigation mode for the portal. 'restricted' tells frontend to hide navigation UI, typically used for embedded deep links.
+     * @param bool $read_only Whether the portal is read-only. When true, the customer can browse the portal but cannot perform any mutating action; write requests made with the portal's client session are rejected.
+     * @param mixed $customer_data
+     * @return CustomerPortal OK
+     */
     public function create_portal(
         ?array $customer_resources_filters = null,
         ?string $customization_profile_id = null,
@@ -3569,6 +4547,31 @@ class CustomersClient
         return CustomerPortal::from_json($res->customer_portal);
     }
 
+    /**
+     * Deletes customer data including resources like spaces, properties, rooms, users, etc.
+     * This will delete the partner resources and any related Seam resources (user identities, access grants, spaces).
+     *
+     * @param array $access_grant_keys List of access grant keys to delete.
+     * @param array $booking_keys List of booking keys to delete.
+     * @param array $building_keys List of building keys to delete.
+     * @param array $common_area_keys List of common area keys to delete.
+     * @param array $customer_keys List of customer keys to delete all data for.
+     * @param array $facility_keys List of facility keys to delete.
+     * @param array $guest_keys List of guest keys to delete.
+     * @param array $listing_keys List of listing keys to delete.
+     * @param array $property_keys List of property keys to delete.
+     * @param array $property_listing_keys List of property listing keys to delete.
+     * @param array $reservation_keys List of reservation keys to delete.
+     * @param array $resident_keys List of resident keys to delete.
+     * @param array $room_keys List of room keys to delete.
+     * @param array $space_keys List of space keys to delete.
+     * @param array $staff_member_keys List of staff member keys to delete.
+     * @param array $tenant_keys List of tenant keys to delete.
+     * @param array $unit_keys List of unit keys to delete.
+     * @param array $user_identity_keys List of user identity keys to delete.
+     * @param array $user_keys List of user keys to delete.
+     * @return void OK
+     */
     public function delete_data(
         ?array $access_grant_keys = null,
         ?array $booking_keys = null,
@@ -3657,6 +4660,31 @@ class CustomersClient
         );
     }
 
+    /**
+     * Pushes customer data including resources like spaces, properties, rooms, users, etc.
+     *
+     * @param string $customer_key Your unique identifier for the customer.
+     * @param array $access_grants List of access grants.
+     * @param array $bookings List of bookings.
+     * @param array $buildings List of buildings.
+     * @param array $common_areas List of shared common areas.
+     * @param array $facilities List of gym or fitness facilities.
+     * @param array $guests List of guests.
+     * @param array $listings List of property listings.
+     * @param array $properties List of short-term rental properties.
+     * @param array $property_listings List of property listings.
+     * @param array $reservations List of reservations.
+     * @param array $residents List of residents.
+     * @param array $rooms List of hotel or hospitality rooms.
+     * @param array $sites List of general sites or areas.
+     * @param array $spaces List of general spaces or areas.
+     * @param array $staff_members List of staff members.
+     * @param array $tenants List of tenants.
+     * @param array $units List of multi-family residential units.
+     * @param array $user_identities List of user identities.
+     * @param array $users List of users.
+     * @return void OK
+     */
     public function push_data(
         string $customer_key,
         ?array $access_grants = null,
@@ -3762,6 +4790,15 @@ class DevicesClient
         $this->unmanaged = new DevicesUnmanagedClient($seam);
     }
 
+    /**
+     * Returns a specified [device](https://docs.seam.co/core-concepts/devices).
+     *
+     * You must specify either `device_id` or `name`.
+     *
+     * @param string $device_id ID of the device that you want to get.
+     * @param string $name Name of the device that you want to get.
+     * @return Device OK
+     */
     public function get(?string $device_id = null, ?string $name = null): Device
     {
         $request_payload = [];
@@ -3782,6 +4819,27 @@ class DevicesClient
         return Device::from_json($res->device);
     }
 
+    /**
+     * Returns a list of all [devices](https://docs.seam.co/core-concepts/devices).
+     *
+     * @param string $connect_webview_id ID of the Connect Webview for which you want to list devices.
+     * @param string $connected_account_id ID of the connected account for which you want to list devices.
+     * @param array $connected_account_ids Array of IDs of the connected accounts for which you want to list devices.
+     * @param string $created_before Timestamp by which to limit returned devices. Returns devices created before this timestamp.
+     * @param mixed $custom_metadata_has Set of key:value [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) pairs for which you want to list devices.
+     * @param string $customer_key Customer key for which you want to list devices.
+     * @param array $device_ids Array of device IDs for which you want to list devices.
+     * @param string $device_type Device type for which you want to list devices.
+     * @param array $device_types Array of device types for which you want to list devices.
+     * @param float $limit Numerical limit on the number of devices to return.
+     * @param string $manufacturer Manufacturer for which you want to list devices.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned devices to include all records that satisfy a partial match using `device_id` (full or partial UUID prefix, minimum 4 characters), `connected_account_id`, `display_name`, `custom_metadata` or `location.location_name`.
+     * @param string $space_id ID of the space for which you want to list devices.
+     * @param string $unstable_location_id
+     * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
+     * @return array OK
+     */
     public function list(
         ?string $connect_webview_id = null,
         ?string $connected_account_id = null,
@@ -3865,6 +4923,16 @@ class DevicesClient
         return array_map(fn($r) => Device::from_json($r), $res->devices);
     }
 
+    /**
+     * Returns a list of all device providers.
+     *
+     * The information that this endpoint returns for each provider includes a set of [capability flags](https://docs.seam.co/capability-guides/device-and-system-capabilities#capability-flags), such as `device_provider.can_remotely_unlock`. If at least one supported device from a provider has a specific capability, the corresponding capability flag is `true`.
+     *
+     * When you create a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews), you can customize the providers—that is, the brands—that it displays. In the `/connect_webviews/create` request, include the desired set of device provider keys in the `accepted_providers` parameter. See also [Customize the Brands to Display in Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-brands-to-display-in-your-connect-webviews).
+     *
+     * @param string $provider_category Category for which you want to list providers.
+     * @return array OK
+     */
     public function list_device_providers(
         ?string $provider_category = null,
     ): array {
@@ -3886,6 +4954,12 @@ class DevicesClient
         );
     }
 
+    /**
+     * Updates provider-specific metadata for devices.
+     *
+     * @param array $devices Array of devices with provider metadata to update
+     * @return void OK
+     */
     public function report_provider_metadata(array $devices): void
     {
         $request_payload = [];
@@ -3901,6 +4975,19 @@ class DevicesClient
         );
     }
 
+    /**
+     * Updates a specified [device](https://docs.seam.co/core-concepts/devices).
+     *
+     * You can add or change [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) for a device, change the device's name, or [convert a managed device to unmanaged](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices).
+     *
+     * @param string $device_id ID of the device that you want to update.
+     * @param bool $backup_access_code_pool_enabled Indicates whether the device's [backup access code pool](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes) is enabled. Set to `false` to disable the pool: Seam stops refilling it and removes any backup codes that have not yet been pulled into active use.
+     * @param mixed $custom_metadata Custom metadata that you want to associate with the device. Supports up to 50 JSON key:value pairs. [Adding custom metadata to a device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) enables you to store custom information, like customer details or internal IDs from your application. Then, you can [filter devices by the desired metadata](https://docs.seam.co/core-concepts/devices/filtering-devices-by-custom-metadata).
+     * @param bool $is_managed Indicates whether the device is managed. To unmanage a device, set `is_managed` to `false`.
+     * @param string $name Name for the device.
+     * @param mixed $properties
+     * @return void OK
+     */
     public function update(
         string $device_id,
         ?bool $backup_access_code_pool_enabled = null,
@@ -3949,6 +5036,12 @@ class DevicesSimulateClient
         $this->seam = $seam;
     }
 
+    /**
+     * Simulates connecting a device to Seam. Only applicable for [sandbox devices](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces). See also [Testing Your App Against Device Disconnection and Removal](https://docs.seam.co/core-concepts/devices/testing-your-app-against-device-disconnection-and-removal).
+     *
+     * @param string $device_id ID of the device that you want to simulate connecting to Seam.
+     * @return void OK
+     */
     public function connect(string $device_id): void
     {
         $request_payload = [];
@@ -3964,6 +5057,15 @@ class DevicesSimulateClient
         );
     }
 
+    /**
+     * Simulates bringing the Wi‑Fi hub (bridge) back online for a device.
+     * Only applicable for sandbox workspaces and currently
+     * implemented for August and TTLock locks.
+     * This will clear the `hub_disconnected` error on the device.
+     *
+     * @param string $device_id ID of the device whose hub you want to reconnect.
+     * @return void OK
+     */
     public function connect_to_hub(string $device_id): void
     {
         $request_payload = [];
@@ -3979,6 +5081,12 @@ class DevicesSimulateClient
         );
     }
 
+    /**
+     * Simulates disconnecting a device from Seam. Only applicable for [sandbox devices](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces). See also [Testing Your App Against Device Disconnection and Removal](https://docs.seam.co/core-concepts/devices/testing-your-app-against-device-disconnection-and-removal).
+     *
+     * @param string $device_id ID of the device that you want to simulate disconnecting from Seam.
+     * @return void OK
+     */
     public function disconnect(string $device_id): void
     {
         $request_payload = [];
@@ -3994,6 +5102,16 @@ class DevicesSimulateClient
         );
     }
 
+    /**
+     * Simulates taking the Wi‑Fi hub (bridge) offline for a device.
+     * Only applicable for sandbox workspaces and currently
+     * implemented for August, TTLock, and IglooHome devices.
+     * This will set the `hub_disconnected` error on the device, or mark the
+     * IglooHome bridge offline in sandbox.
+     *
+     * @param string $device_id ID of the device whose hub you want to disconnect.
+     * @return void OK
+     */
     public function disconnect_from_hub(string $device_id): void
     {
         $request_payload = [];
@@ -4009,6 +5127,15 @@ class DevicesSimulateClient
         );
     }
 
+    /**
+     * Toggle the simulated Nuki Smart Hosting subscription for a device (sandbox only).
+     * Send `is_expired: true` to simulate an expired subscription, or `false` to simulate an active subscription.
+     * The actual device error is created/cleared by the poller after this state change.
+     *
+     * @param string $device_id
+     * @param bool $is_expired
+     * @return void OK
+     */
     public function paid_subscription(string $device_id, bool $is_expired): void
     {
         $request_payload = [];
@@ -4027,6 +5154,12 @@ class DevicesSimulateClient
         );
     }
 
+    /**
+     * Simulates removing a device from Seam. Only applicable for [sandbox devices](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces). See also [Testing Your App Against Device Disconnection and Removal](https://docs.seam.co/core-concepts/devices/testing-your-app-against-device-disconnection-and-removal).
+     *
+     * @param string $device_id ID of the device that you want to simulate removing from Seam.
+     * @return void OK
+     */
     public function remove(string $device_id): void
     {
         $request_payload = [];
@@ -4052,6 +5185,17 @@ class DevicesUnmanagedClient
         $this->seam = $seam;
     }
 
+    /**
+     * Returns a specified [unmanaged device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices).
+     *
+     * An unmanaged device has a limited set of visible properties and a subset of supported events. You cannot control an unmanaged device. Any [access codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) on an unmanaged device are unmanaged. To control an unmanaged device with Seam, [convert it to a managed device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices#convert-an-unmanaged-device-to-managed).
+     *
+     * You must specify either `device_id` or `name`.
+     *
+     * @param string $device_id ID of the unmanaged device that you want to get.
+     * @param string $name Name of the unmanaged device that you want to get.
+     * @return UnmanagedDevice OK
+     */
     public function get(
         ?string $device_id = null,
         ?string $name = null,
@@ -4074,6 +5218,29 @@ class DevicesUnmanagedClient
         return UnmanagedDevice::from_json($res->device);
     }
 
+    /**
+     * Returns a list of all [unmanaged devices](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices).
+     *
+     * An unmanaged device has a limited set of visible properties and a subset of supported events. You cannot control an unmanaged device. Any [access codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) on an unmanaged device are unmanaged. To control an unmanaged device with Seam, [convert it to a managed device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices#convert-an-unmanaged-device-to-managed).
+     *
+     * @param string $connect_webview_id ID of the Connect Webview for which you want to list devices.
+     * @param string $connected_account_id ID of the connected account for which you want to list devices.
+     * @param array $connected_account_ids Array of IDs of the connected accounts for which you want to list devices.
+     * @param string $created_before Timestamp by which to limit returned devices. Returns devices created before this timestamp.
+     * @param mixed $custom_metadata_has Set of key:value [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) pairs for which you want to list devices.
+     * @param string $customer_key Customer key for which you want to list devices.
+     * @param array $device_ids Array of device IDs for which you want to list devices.
+     * @param string $device_type Device type for which you want to list devices.
+     * @param array $device_types Array of device types for which you want to list devices.
+     * @param float $limit Numerical limit on the number of devices to return.
+     * @param string $manufacturer Manufacturer for which you want to list devices.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned devices to include all records that satisfy a partial match using `device_id` (full or partial UUID prefix, minimum 4 characters), `connected_account_id`, `display_name`, `custom_metadata` or `location.location_name`.
+     * @param string $space_id ID of the space for which you want to list devices.
+     * @param string $unstable_location_id
+     * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
+     * @return array OK
+     */
     public function list(
         ?string $connect_webview_id = null,
         ?string $connected_account_id = null,
@@ -4160,6 +5327,16 @@ class DevicesUnmanagedClient
         );
     }
 
+    /**
+     * Updates a specified [unmanaged device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices). To convert an unmanaged device to managed, set `is_managed` to `true`.
+     *
+     * An unmanaged device has a limited set of visible properties and a subset of supported events. You cannot control an unmanaged device. Any [access codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) on an unmanaged device are unmanaged. To control an unmanaged device with Seam, [convert it to a managed device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices#convert-an-unmanaged-device-to-managed).
+     *
+     * @param string $device_id ID of the unmanaged device that you want to update.
+     * @param mixed $custom_metadata Custom metadata that you want to associate with the device. Supports up to 50 JSON key:value pairs.
+     * @param bool $is_managed Indicates whether the device is managed. Set this parameter to `true` to convert an unmanaged device to managed.
+     * @return void OK
+     */
     public function update(
         string $device_id,
         mixed $custom_metadata = null,
@@ -4194,6 +5371,14 @@ class EventsClient
         $this->seam = $seam;
     }
 
+    /**
+     * Returns a specified event. This endpoint returns the same event that would be sent to a [webhook](https://docs.seam.co/developer-tools/webhooks), but it enables you to retrieve an event that already took place.
+     *
+     * @param string $event_id Unique identifier for the event that you want to get.
+     * @param string $device_id Unique identifier for the device that triggered the event that you want to get.
+     * @param string $event_type Type of the event that you want to get.
+     * @return Event OK
+     */
     public function get(
         ?string $event_id = null,
         ?string $device_id = null,
@@ -4220,6 +5405,39 @@ class EventsClient
         return Event::from_json($res->event);
     }
 
+    /**
+     * Returns a list of all events. This endpoint returns the same events that would be sent to a [webhook](https://docs.seam.co/developer-tools/webhooks), but it enables you to filter or see events that already took place.
+     *
+     * @param string $access_code_id ID of the access code for which you want to list events.
+     * @param array $access_code_ids IDs of the access codes for which you want to list events.
+     * @param string $access_grant_id ID of the access grant for which you want to list events.
+     * @param array $access_grant_ids IDs of the access grants for which you want to list events.
+     * @param string $access_method_id ID of the access method for which you want to list events.
+     * @param array $access_method_ids IDs of the access methods for which you want to list events.
+     * @param string $acs_access_group_id ID of the ACS access group for which you want to list events.
+     * @param string $acs_credential_id ID of the ACS credential for which you want to list events.
+     * @param string $acs_encoder_id ID of the ACS encoder for which you want to list events.
+     * @param string $acs_entrance_id ID of the ACS entrance for which you want to list events.
+     * @param string $acs_system_id ID of the access system for which you want to list events.
+     * @param array $acs_system_ids IDs of the access systems for which you want to list events.
+     * @param string $acs_user_id ID of the ACS user for which you want to list events.
+     * @param array $between Lower and upper timestamps to define an exclusive interval containing the events that you want to list. You must include `since` or `between`.
+     * @param string $connect_webview_id ID of the Connect Webview for which you want to list events.
+     * @param string $connected_account_id ID of the connected account for which you want to list events.
+     * @param string $customer_key Customer key for which you want to list events.
+     * @param string $device_id ID of the device for which you want to list events.
+     * @param array $device_ids IDs of the devices for which you want to list events.
+     * @param array $event_ids IDs of the events that you want to list.
+     * @param string $event_type Type of the events that you want to list.
+     * @param array $event_types Types of the events that you want to list.
+     * @param float $limit Numerical limit on the number of events to return.
+     * @param string $since Timestamp to indicate the beginning generation time for the events that you want to list. You must include `since` or `between`.
+     * @param string $space_id ID of the space for which you want to list events.
+     * @param array $space_ids IDs of the spaces for which you want to list events.
+     * @param float $unstable_offset Offset for the events that you want to list.
+     * @param string $user_identity_id ID of the user identity for which you want to list events.
+     * @return array OK
+     */
     public function list(
         ?string $access_code_id = null,
         ?array $access_code_ids = null,
@@ -4356,6 +5574,12 @@ class InstantKeysClient
         $this->seam = $seam;
     }
 
+    /**
+     * Deletes a specified [Instant Key](https://docs.seam.co/capability-guides/instant-keys).
+     *
+     * @param string $instant_key_id ID of the Instant Key that you want to delete.
+     * @return void OK
+     */
     public function delete(string $instant_key_id): void
     {
         $request_payload = [];
@@ -4371,6 +5595,13 @@ class InstantKeysClient
         );
     }
 
+    /**
+     * Gets an [instant key](https://docs.seam.co/capability-guides/instant-keys).
+     *
+     * @param string $instant_key_id ID of the instant key to get.
+     * @param string $instant_key_url URL of the instant key to get.
+     * @return InstantKey OK
+     */
     public function get(
         ?string $instant_key_id = null,
         ?string $instant_key_url = null,
@@ -4393,6 +5624,12 @@ class InstantKeysClient
         return InstantKey::from_json($res->instant_key);
     }
 
+    /**
+     * Returns a list of all [instant keys](https://docs.seam.co/capability-guides/instant-keys).
+     *
+     * @param string $user_identity_id ID of the user identity by which you want to filter the list of Instant Keys.
+     * @return array OK
+     */
     public function list(?string $user_identity_id = null): array
     {
         $request_payload = [];
@@ -4424,6 +5661,14 @@ class LocksClient
         $this->simulate = new LocksSimulateClient($seam);
     }
 
+    /**
+     * Configures the auto-lock setting for a specified [lock](https://docs.seam.co/low-level-apis/smart-locks).
+     *
+     * @param bool $auto_lock_enabled Whether to enable or disable auto-lock.
+     * @param string $device_id ID of the lock for which you want to configure the auto-lock.
+     * @param float $auto_lock_delay_seconds Delay in seconds before the lock automatically locks. Required when enabling auto-lock. Must be between 1 and 60.
+     * @return ActionAttempt OK
+     */
     public function configure_auto_lock(
         bool $auto_lock_enabled,
         string $device_id,
@@ -4461,6 +5706,14 @@ class LocksClient
         return $action_attempt;
     }
 
+    /**
+     * Returns a specified [lock](https://docs.seam.co/low-level-apis/smart-locks).
+     *
+     * @param string $device_id ID of the lock that you want to get.
+     * @param string $name Name of the lock that you want to get.
+     * @return Device OK
+     * @deprecated Use `/devices/get` instead.
+     */
     public function get(?string $device_id = null, ?string $name = null): Device
     {
         $request_payload = [];
@@ -4481,6 +5734,27 @@ class LocksClient
         return Device::from_json($res->device);
     }
 
+    /**
+     * Returns a list of all [locks](https://docs.seam.co/low-level-apis/smart-locks).
+     *
+     * @param string $connect_webview_id ID of the Connect Webview for which you want to list devices.
+     * @param string $connected_account_id ID of the connected account for which you want to list devices.
+     * @param array $connected_account_ids Array of IDs of the connected accounts for which you want to list devices.
+     * @param string $created_before Timestamp by which to limit returned devices. Returns devices created before this timestamp.
+     * @param mixed $custom_metadata_has Set of key:value [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) pairs for which you want to list devices.
+     * @param string $customer_key Customer key for which you want to list devices.
+     * @param array $device_ids Array of device IDs for which you want to list devices.
+     * @param string $device_type Device type of the locks that you want to list.
+     * @param array $device_types Device types of the locks that you want to list.
+     * @param float $limit Numerical limit on the number of devices to return.
+     * @param string $manufacturer Manufacturer of the locks that you want to list.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned devices to include all records that satisfy a partial match using `device_id` (full or partial UUID prefix, minimum 4 characters), `connected_account_id`, `display_name`, `custom_metadata` or `location.location_name`.
+     * @param string $space_id ID of the space for which you want to list devices.
+     * @param string $unstable_location_id
+     * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
+     * @return array OK
+     */
     public function list(
         ?string $connect_webview_id = null,
         ?string $connected_account_id = null,
@@ -4564,6 +5838,12 @@ class LocksClient
         return array_map(fn($r) => Device::from_json($r), $res->devices);
     }
 
+    /**
+     * Locks a [lock](https://docs.seam.co/low-level-apis/smart-locks). See also [Locking and Unlocking Smart Locks](https://docs.seam.co/low-level-apis/smart-locks/lock-and-unlock).
+     *
+     * @param string $device_id ID of the lock that you want to lock.
+     * @return ActionAttempt OK
+     */
     public function lock_door(
         string $device_id,
         bool $wait_for_action_attempt = true,
@@ -4591,6 +5871,12 @@ class LocksClient
         return $action_attempt;
     }
 
+    /**
+     * Unlocks a [lock](https://docs.seam.co/low-level-apis/smart-locks). See also [Locking and Unlocking Smart Locks](https://docs.seam.co/low-level-apis/smart-locks/lock-and-unlock).
+     *
+     * @param string $device_id ID of the lock that you want to unlock.
+     * @return ActionAttempt OK
+     */
     public function unlock_door(
         string $device_id,
         bool $wait_for_action_attempt = true,
@@ -4628,6 +5914,13 @@ class LocksSimulateClient
         $this->seam = $seam;
     }
 
+    /**
+     * Simulates the entry of a code on a keypad. You can only perform this action for [August](https://docs.seam.co/device-and-system-integration-guides/august-locks) devices within [sandbox workspaces](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     *
+     * @param string $code Code that you want to simulate entering on a keypad.
+     * @param string $device_id ID of the device for which you want to simulate a keypad code entry.
+     * @return ActionAttempt OK
+     */
     public function keypad_code_entry(
         string $code,
         string $device_id,
@@ -4659,6 +5952,12 @@ class LocksSimulateClient
         return $action_attempt;
     }
 
+    /**
+     * Simulates a manual lock action using a keypad. You can only perform this action for [August](https://docs.seam.co/device-and-system-integration-guides/august-locks) devices within [sandbox workspaces](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     *
+     * @param string $device_id ID of the device for which you want to simulate a manual lock action using a keypad.
+     * @return ActionAttempt OK
+     */
     public function manual_lock_via_keypad(
         string $device_id,
         bool $wait_for_action_attempt = true,
@@ -4699,6 +5998,27 @@ class NoiseSensorsClient
         $this->simulate = new NoiseSensorsSimulateClient($seam);
     }
 
+    /**
+     * Returns a list of all [noise sensors](https://docs.seam.co/capability-guides/noise-sensors).
+     *
+     * @param string $connect_webview_id ID of the Connect Webview for which you want to list devices.
+     * @param string $connected_account_id ID of the connected account for which you want to list devices.
+     * @param array $connected_account_ids Array of IDs of the connected accounts for which you want to list devices.
+     * @param string $created_before Timestamp by which to limit returned devices. Returns devices created before this timestamp.
+     * @param mixed $custom_metadata_has Set of key:value [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) pairs for which you want to list devices.
+     * @param string $customer_key Customer key for which you want to list devices.
+     * @param array $device_ids Array of device IDs for which you want to list devices.
+     * @param string $device_type Device type of the noise sensors that you want to list.
+     * @param array $device_types Device types of the noise sensors that you want to list.
+     * @param float $limit Numerical limit on the number of devices to return.
+     * @param string $manufacturer Manufacturers of the noise sensors that you want to list.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned devices to include all records that satisfy a partial match using `device_id` (full or partial UUID prefix, minimum 4 characters), `connected_account_id`, `display_name`, `custom_metadata` or `location.location_name`.
+     * @param string $space_id ID of the space for which you want to list devices.
+     * @param string $unstable_location_id
+     * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
+     * @return array OK
+     */
     public function list(
         ?string $connect_webview_id = null,
         ?string $connected_account_id = null,
@@ -4792,6 +6112,17 @@ class NoiseSensorsNoiseThresholdsClient
         $this->seam = $seam;
     }
 
+    /**
+     * Creates a new [noise threshold](https://docs.seam.co/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://docs.seam.co/capability-guides/noise-sensors). Thresholds represent the limits of noise tolerated at a property, which can be customized for each hour of the day. Each device has its own default thresholds, but you can use the Seam API to modify them.
+     *
+     * @param string $device_id ID of the device for which you want to create a noise threshold.
+     * @param string $ends_daily_at Time at which the new noise threshold should become inactive daily.
+     * @param string $starts_daily_at Time at which the new noise threshold should become active daily.
+     * @param string $name Name of the new noise threshold.
+     * @param float $noise_threshold_decibels Noise level in decibels for the new noise threshold.
+     * @param float $noise_threshold_nrs Noise level in Noiseaware Noise Risk Score (NRS) for the new noise threshold. This parameter is only relevant for [Noiseaware sensors](https://docs.seam.co/device-and-system-integration-guides/noiseaware-sensors).
+     * @return NoiseThreshold OK
+     */
     public function create(
         string $device_id,
         string $ends_daily_at,
@@ -4832,6 +6163,13 @@ class NoiseSensorsNoiseThresholdsClient
         return NoiseThreshold::from_json($res->noise_threshold);
     }
 
+    /**
+     * Deletes a [noise threshold](https://docs.seam.co/capability-guides/noise-sensors/configure-noise-threshold-settings) from a [noise sensor](https://docs.seam.co/capability-guides/noise-sensors).
+     *
+     * @param string $device_id ID of the device that contains the noise threshold that you want to delete.
+     * @param string $noise_threshold_id ID of the noise threshold that you want to delete.
+     * @return void OK
+     */
     public function delete(string $device_id, string $noise_threshold_id): void
     {
         $request_payload = [];
@@ -4850,6 +6188,12 @@ class NoiseSensorsNoiseThresholdsClient
         );
     }
 
+    /**
+     * Returns a specified [noise threshold](https://docs.seam.co/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://docs.seam.co/capability-guides/noise-sensors).
+     *
+     * @param string $noise_threshold_id ID of the noise threshold that you want to get.
+     * @return NoiseThreshold OK
+     */
     public function get(string $noise_threshold_id): NoiseThreshold
     {
         $request_payload = [];
@@ -4867,6 +6211,12 @@ class NoiseSensorsNoiseThresholdsClient
         return NoiseThreshold::from_json($res->noise_threshold);
     }
 
+    /**
+     * Returns a list of all [noise thresholds](https://docs.seam.co/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://docs.seam.co/capability-guides/noise-sensors).
+     *
+     * @param string $device_id ID of the device for which you want to list noise thresholds.
+     * @return array OK
+     */
     public function list(string $device_id): array
     {
         $request_payload = [];
@@ -4887,6 +6237,18 @@ class NoiseSensorsNoiseThresholdsClient
         );
     }
 
+    /**
+     * Updates a [noise threshold](https://docs.seam.co/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://docs.seam.co/capability-guides/noise-sensors).
+     *
+     * @param string $device_id ID of the device that contains the noise threshold that you want to update.
+     * @param string $noise_threshold_id ID of the noise threshold that you want to update.
+     * @param string $ends_daily_at Time at which the noise threshold should become inactive daily.
+     * @param string $name Name of the noise threshold that you want to update.
+     * @param float $noise_threshold_decibels Noise level in decibels for the noise threshold.
+     * @param float $noise_threshold_nrs Noise level in Noiseaware Noise Risk Score (NRS) for the noise threshold. This parameter is only relevant for [Noiseaware sensors](https://docs.seam.co/device-and-system-integration-guides/noiseaware-sensors).
+     * @param string $starts_daily_at Time at which the noise threshold should become active daily.
+     * @return void OK
+     */
     public function update(
         string $device_id,
         string $noise_threshold_id,
@@ -4939,6 +6301,12 @@ class NoiseSensorsSimulateClient
         $this->seam = $seam;
     }
 
+    /**
+     * Simulates the triggering of a [noise threshold](https://docs.seam.co/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://docs.seam.co/capability-guides/noise-sensors) in a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     *
+     * @param string $device_id ID of the device for which you want to simulate the triggering of a noise threshold.
+     * @return void OK
+     */
     public function trigger_noise_threshold(string $device_id): void
     {
         $request_payload = [];
@@ -4965,6 +6333,12 @@ class PhonesClient
         $this->simulate = new PhonesSimulateClient($seam);
     }
 
+    /**
+     * Deactivates a phone, which is useful, for example, if a user has lost their phone. For more information, see [App User Lost Phone Process](https://docs.seam.co/capability-guides/mobile-access/managing-phones-for-a-user-identity#app-user-lost-phone-process).
+     *
+     * @param string $device_id Device ID of the phone that you want to deactivate.
+     * @return void OK
+     */
     public function deactivate(string $device_id): void
     {
         $request_payload = [];
@@ -4980,6 +6354,12 @@ class PhonesClient
         );
     }
 
+    /**
+     * Returns a specified [phone](https://docs.seam.co/capability-guides/mobile-access/managing-phones-for-a-user-identity).
+     *
+     * @param string $device_id Device ID of the phone that you want to get.
+     * @return Phone OK
+     */
     public function get(string $device_id): Phone
     {
         $request_payload = [];
@@ -4997,6 +6377,13 @@ class PhonesClient
         return Phone::from_json($res->phone);
     }
 
+    /**
+     * Returns a list of all [phones](https://docs.seam.co/capability-guides/mobile-access/managing-phones-for-a-user-identity). To filter the list of returned phones by a specific owner user identity or credential, include the `owner_user_identity_id` or `acs_credential_id`, respectively, in the request body.
+     *
+     * @param string $acs_credential_id ID of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) by which you want to filter the list of returned phones.
+     * @param string $owner_user_identity_id ID of the user identity that represents the owner by which you want to filter the list of returned phones.
+     * @return array OK
+     */
     public function list(
         ?string $acs_credential_id = null,
         ?string $owner_user_identity_id = null,
@@ -5031,6 +6418,15 @@ class PhonesSimulateClient
         $this->seam = $seam;
     }
 
+    /**
+     * Creates a new simulated phone in a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces). See also [Creating a Simulated Phone for a User Identity](https://docs.seam.co/capability-guides/mobile-access/developing-in-a-sandbox-workspace#creating-a-simulated-phone-for-a-user-identity).
+     *
+     * @param string $user_identity_id ID of the user identity that you want to associate with the simulated phone.
+     * @param mixed $assa_abloy_metadata ASSA ABLOY metadata that you want to associate with the simulated phone.
+     * @param string $custom_sdk_installation_id ID of the custom SDK installation that you want to use for the simulated phone.
+     * @param mixed $phone_metadata Metadata that you want to associate with the simulated phone.
+     * @return Phone OK
+     */
     public function create_sandbox_phone(
         string $user_identity_id,
         mixed $assa_abloy_metadata = null,
@@ -5073,6 +6469,13 @@ class SpacesClient
         $this->seam = $seam;
     }
 
+    /**
+     * Adds [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) to a specific space.
+     *
+     * @param array $acs_entrance_ids IDs of the entrances that you want to add to the space.
+     * @param string $space_id ID of the space to which you want to add entrances.
+     * @return void OK
+     */
     public function add_acs_entrances(
         array $acs_entrance_ids,
         string $space_id,
@@ -5093,6 +6496,13 @@ class SpacesClient
         );
     }
 
+    /**
+     * Adds a [connected account](https://docs.seam.co/core-concepts/connected-accounts) to a specific space.
+     *
+     * @param string $connected_account_id ID of the connected account that you want to add to the space.
+     * @param string $space_id ID of the space to which you want to add the connected account.
+     * @return void OK
+     */
     public function add_connected_account(
         string $connected_account_id,
         string $space_id,
@@ -5113,6 +6523,13 @@ class SpacesClient
         );
     }
 
+    /**
+     * Adds devices to a specific space.
+     *
+     * @param array $device_ids IDs of the devices that you want to add to the space.
+     * @param string $space_id ID of the space to which you want to add devices.
+     * @return void OK
+     */
     public function add_devices(array $device_ids, string $space_id): void
     {
         $request_payload = [];
@@ -5131,6 +6548,18 @@ class SpacesClient
         );
     }
 
+    /**
+     * Creates a new space.
+     *
+     * @param string $name Name of the space that you want to create.
+     * @param array $acs_entrance_ids IDs of the entrances that you want to add to the new space.
+     * @param array $connected_account_ids IDs of connected accounts to associate with the new space. Persisted on seam.location_third_party_account so the UI can show which provider account(s) a space came from.
+     * @param mixed $customer_data Reservation/stay-related defaults for the space.
+     * @param string $customer_key Customer key for which you want to create the space.
+     * @param array $device_ids IDs of the devices that you want to add to the new space.
+     * @param string $space_key Unique key for the space within the workspace.
+     * @return Space OK
+     */
     public function create(
         string $name,
         ?array $acs_entrance_ids = null,
@@ -5173,6 +6602,12 @@ class SpacesClient
         return Space::from_json($res->space);
     }
 
+    /**
+     * Deletes a space.
+     *
+     * @param string $space_id ID of the space that you want to delete.
+     * @return void OK
+     */
     public function delete(string $space_id): void
     {
         $request_payload = [];
@@ -5188,6 +6623,13 @@ class SpacesClient
         );
     }
 
+    /**
+     * Gets a space.
+     *
+     * @param string $space_id ID of the space that you want to get.
+     * @param string $space_key Unique key of the space that you want to get.
+     * @return Space OK
+     */
     public function get(
         ?string $space_id = null,
         ?string $space_key = null,
@@ -5210,6 +6652,15 @@ class SpacesClient
         return Space::from_json($res->space);
     }
 
+    /**
+     * Gets all related resources for one or more Spaces.
+     *
+     * @param array $exclude
+     * @param array $include
+     * @param array $space_ids IDs of the spaces that you want to get along with their related resources.
+     * @param array $space_keys Keys of the spaces that you want to get along with their related resources.
+     * @return Batch OK
+     */
     public function get_related(
         ?array $exclude = null,
         ?array $include = null,
@@ -5240,6 +6691,16 @@ class SpacesClient
         return Batch::from_json($res->batch);
     }
 
+    /**
+     * Returns a list of all spaces.
+     *
+     * @param string $customer_key Customer key for which you want to list spaces.
+     * @param float $limit Maximum number of records to return per page.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned spaces to include all records that satisfy a partial match using `name`, `space_key`, or `customer_key`.
+     * @param string $space_key Filter spaces by space_key.
+     * @return array OK
+     */
     public function list(
         ?string $customer_key = null,
         ?float $limit = null,
@@ -5279,6 +6740,13 @@ class SpacesClient
         return array_map(fn($r) => Space::from_json($r), $res->spaces);
     }
 
+    /**
+     * Removes [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) from a specific space.
+     *
+     * @param array $acs_entrance_ids IDs of the entrances that you want to remove from the space.
+     * @param string $space_id ID of the space from which you want to remove entrances.
+     * @return void OK
+     */
     public function remove_acs_entrances(
         array $acs_entrance_ids,
         string $space_id,
@@ -5299,6 +6767,13 @@ class SpacesClient
         );
     }
 
+    /**
+     * Removes a [connected account](https://docs.seam.co/core-concepts/connected-accounts) from a specific space.
+     *
+     * @param string $connected_account_id ID of the connected account that you want to remove from the space.
+     * @param string $space_id ID of the space from which you want to remove the connected account.
+     * @return void OK
+     */
     public function remove_connected_account(
         string $connected_account_id,
         string $space_id,
@@ -5319,6 +6794,13 @@ class SpacesClient
         );
     }
 
+    /**
+     * Removes devices from a specific space.
+     *
+     * @param array $device_ids IDs of the devices that you want to remove from the space.
+     * @param string $space_id ID of the space from which you want to remove devices.
+     * @return void OK
+     */
     public function remove_devices(array $device_ids, string $space_id): void
     {
         $request_payload = [];
@@ -5337,6 +6819,17 @@ class SpacesClient
         );
     }
 
+    /**
+     * Updates an existing space.
+     *
+     * @param array $acs_entrance_ids IDs of the entrances that you want to set for the space. If specified, this will replace all existing entrances.
+     * @param mixed $customer_data Reservation/stay-related defaults for the space. Only the keys you provide are updated; omit a key to leave it unchanged. Pass null on a key to clear it.
+     * @param array $device_ids IDs of the devices that you want to set for the space. If specified, this will replace all existing devices.
+     * @param string $name Name of the space.
+     * @param string $space_id ID of the space that you want to update.
+     * @param string $space_key Unique key of the space that you want to update.
+     * @return Space OK
+     */
     public function update(
         ?array $acs_entrance_ids = null,
         mixed $customer_data = null,
@@ -5390,6 +6883,13 @@ class ThermostatsClient
         $this->simulate = new ThermostatsSimulateClient($seam);
     }
 
+    /**
+     * Activates a specified [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     *
+     * @param string $climate_preset_key Climate preset key of the climate preset that you want to activate.
+     * @param string $device_id ID of the thermostat device for which you want to activate a climate preset.
+     * @return ActionAttempt OK
+     */
     public function activate_climate_preset(
         string $climate_preset_key,
         string $device_id,
@@ -5421,6 +6921,14 @@ class ThermostatsClient
         return $action_attempt;
     }
 
+    /**
+     * Sets a specified [thermostat](https://docs.seam.co/capability-guides/thermostats) to [cool mode](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings).
+     *
+     * @param string $device_id ID of the thermostat device that you want to set to cool mode.
+     * @param float $cooling_set_point_celsius [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
+     * @param float $cooling_set_point_fahrenheit [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
+     * @return ActionAttempt OK
+     */
     public function cool(
         string $device_id,
         ?float $cooling_set_point_celsius = null,
@@ -5460,6 +6968,23 @@ class ThermostatsClient
         return $action_attempt;
     }
 
+    /**
+     * Creates a [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     *
+     * @param string $climate_preset_key Unique key to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
+     * @param string $device_id ID of the thermostat device for which you want create a climate preset.
+     * @param string $climate_preset_mode The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
+     * @param float $cooling_set_point_celsius Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param float $cooling_set_point_fahrenheit Temperature to which the thermostat should cool (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param mixed $ecobee_metadata Metadata specific to the Ecobee climate, if applicable.
+     * @param string $fan_mode_setting Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
+     * @param float $heating_set_point_celsius Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param float $heating_set_point_fahrenheit Temperature to which the thermostat should heat (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param string $hvac_mode_setting Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
+     * @param bool $manual_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings.
+     * @param string $name User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
+     * @return void OK
+     */
     public function create_climate_preset(
         string $climate_preset_key,
         string $device_id,
@@ -5530,6 +7055,13 @@ class ThermostatsClient
         );
     }
 
+    /**
+     * Deletes a specified [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     *
+     * @param string $climate_preset_key Climate preset key of the climate preset that you want to delete.
+     * @param string $device_id ID of the thermostat device for which you want to delete a climate preset.
+     * @return void OK
+     */
     public function delete_climate_preset(
         string $climate_preset_key,
         string $device_id,
@@ -5550,6 +7082,14 @@ class ThermostatsClient
         );
     }
 
+    /**
+     * Sets a specified [thermostat](https://docs.seam.co/capability-guides/thermostats) to [heat mode](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings).
+     *
+     * @param string $device_id ID of the thermostat device that you want to set to heat mode.
+     * @param float $heating_set_point_celsius [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @param float $heating_set_point_fahrenheit [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @return ActionAttempt OK
+     */
     public function heat(
         string $device_id,
         ?float $heating_set_point_celsius = null,
@@ -5589,6 +7129,16 @@ class ThermostatsClient
         return $action_attempt;
     }
 
+    /**
+     * Sets a specified [thermostat](https://docs.seam.co/capability-guides/thermostats) to [heat-cool ("auto") mode](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings).
+     *
+     * @param string $device_id ID of the thermostat device that you want to set to heat-cool mode.
+     * @param float $cooling_set_point_celsius [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
+     * @param float $cooling_set_point_fahrenheit [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
+     * @param float $heating_set_point_celsius [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @param float $heating_set_point_fahrenheit [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @return ActionAttempt OK
+     */
     public function heat_cool(
         string $device_id,
         ?float $cooling_set_point_celsius = null,
@@ -5640,6 +7190,27 @@ class ThermostatsClient
         return $action_attempt;
     }
 
+    /**
+     * Returns a list of all [thermostats](https://docs.seam.co/capability-guides/thermostats).
+     *
+     * @param string $connect_webview_id ID of the Connect Webview for which you want to list devices.
+     * @param string $connected_account_id ID of the connected account for which you want to list devices.
+     * @param array $connected_account_ids Array of IDs of the connected accounts for which you want to list devices.
+     * @param string $created_before Timestamp by which to limit returned devices. Returns devices created before this timestamp.
+     * @param mixed $custom_metadata_has Set of key:value [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) pairs for which you want to list devices.
+     * @param string $customer_key Customer key for which you want to list devices.
+     * @param array $device_ids Array of device IDs for which you want to list devices.
+     * @param string $device_type Device type by which you want to filter thermostat devices.
+     * @param array $device_types Array of device types by which you want to filter thermostat devices.
+     * @param float $limit Numerical limit on the number of devices to return.
+     * @param string $manufacturer Manufacturer by which you want to filter thermostat devices.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned devices to include all records that satisfy a partial match using `device_id` (full or partial UUID prefix, minimum 4 characters), `connected_account_id`, `display_name`, `custom_metadata` or `location.location_name`.
+     * @param string $space_id ID of the space for which you want to list devices.
+     * @param string $unstable_location_id
+     * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
+     * @return array OK
+     */
     public function list(
         ?string $connect_webview_id = null,
         ?string $connected_account_id = null,
@@ -5723,6 +7294,12 @@ class ThermostatsClient
         return array_map(fn($r) => Device::from_json($r), $res->devices);
     }
 
+    /**
+     * Sets a specified [thermostat](https://docs.seam.co/capability-guides/thermostats) to ["off" mode](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings).
+     *
+     * @param string $device_id ID of the thermostat device that you want to set to off mode.
+     * @return ActionAttempt OK
+     */
     public function off(
         string $device_id,
         bool $wait_for_action_attempt = true,
@@ -5750,6 +7327,13 @@ class ThermostatsClient
         return $action_attempt;
     }
 
+    /**
+     * Sets a specified [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) as the ["fallback"](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets/setting-the-fallback-climate-preset) preset for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     *
+     * @param string $climate_preset_key Climate preset key of the climate preset that you want to set as the fallback climate preset.
+     * @param string $device_id ID of the thermostat device for which you want to set the fallback climate preset.
+     * @return void OK
+     */
     public function set_fallback_climate_preset(
         string $climate_preset_key,
         string $device_id,
@@ -5770,6 +7354,14 @@ class ThermostatsClient
         );
     }
 
+    /**
+     * Sets the [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     *
+     * @param string $device_id ID of the thermostat device for which you want to set the fan mode.
+     * @param string $fan_mode Fan mode setting for the thermostat, such as `auto`, `on`, or `circulate`.
+     * @param string $fan_mode_setting [Fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings) that you want to set for the thermostat.
+     * @return ActionAttempt OK
+     */
     public function set_fan_mode(
         string $device_id,
         ?string $fan_mode = null,
@@ -5805,6 +7397,17 @@ class ThermostatsClient
         return $action_attempt;
     }
 
+    /**
+     * Sets the [HVAC mode](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     *
+     * @param string $device_id ID of the thermostat device for which you want to set the HVAC mode.
+     * @param string $hvac_mode_setting
+     * @param float $cooling_set_point_celsius [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
+     * @param float $cooling_set_point_fahrenheit [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
+     * @param float $heating_set_point_celsius [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @param float $heating_set_point_fahrenheit [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @return ActionAttempt OK
+     */
     public function set_hvac_mode(
         string $device_id,
         string $hvac_mode_setting,
@@ -5860,6 +7463,16 @@ class ThermostatsClient
         return $action_attempt;
     }
 
+    /**
+     * Sets a [temperature threshold](https://docs.seam.co/capability-guides/thermostats/setting-and-monitoring-temperature-thresholds) for a specified thermostat. Seam emits a `thermostat.temperature_threshold_exceeded` event and adds a warning on a thermostat if it reports a temperature outside the threshold range.
+     *
+     * @param string $device_id ID of the thermostat device for which you want to set a temperature threshold.
+     * @param float $lower_limit_celsius Lower temperature limit in in °C. Seam alerts you if the reported temperature is lower than this value. You can specify either `lower_limit` but not both.
+     * @param float $lower_limit_fahrenheit Lower temperature limit in in °F. Seam alerts you if the reported temperature is lower than this value. You can specify either `lower_limit` but not both.
+     * @param float $upper_limit_celsius Upper temperature limit in in °C. Seam alerts you if the reported temperature is higher than this value. You can specify either `upper_limit` but not both.
+     * @param float $upper_limit_fahrenheit Upper temperature limit in in °C. Seam alerts you if the reported temperature is higher than this value. You can specify either `upper_limit` but not both.
+     * @return void OK
+     */
     public function set_temperature_threshold(
         string $device_id,
         ?float $lower_limit_celsius = null,
@@ -5896,6 +7509,23 @@ class ThermostatsClient
         );
     }
 
+    /**
+     * Updates a specified [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     *
+     * @param string $climate_preset_key Unique key to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
+     * @param string $device_id ID of the thermostat device for which you want to update a climate preset.
+     * @param string $climate_preset_mode The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
+     * @param float $cooling_set_point_celsius Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param float $cooling_set_point_fahrenheit Temperature to which the thermostat should cool (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param mixed $ecobee_metadata Metadata specific to the Ecobee climate, if applicable.
+     * @param string $fan_mode_setting Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
+     * @param float $heating_set_point_celsius Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param float $heating_set_point_fahrenheit Temperature to which the thermostat should heat (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param string $hvac_mode_setting Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
+     * @param bool $manual_override_allowed Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+     * @param string $name User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
+     * @return void OK
+     */
     public function update_climate_preset(
         string $climate_preset_key,
         string $device_id,
@@ -5966,6 +7596,19 @@ class ThermostatsClient
         );
     }
 
+    /**
+     * Updates the thermostat weekly program for a thermostat device. To configure a weekly program, specify the ID of the daily program that you want to use for each day of the week. When you update a weekly program, the set of programs that you specify overwrites any previous weekly program for the thermostat.
+     *
+     * @param string $device_id ID of the thermostat device for which you want to update the weekly program.
+     * @param string $friday_program_id ID of the thermostat daily program to run on Fridays.
+     * @param string $monday_program_id ID of the thermostat daily program to run on Mondays.
+     * @param string $saturday_program_id ID of the thermostat daily program to run on Saturdays.
+     * @param string $sunday_program_id ID of the thermostat daily program to run on Sundays.
+     * @param string $thursday_program_id ID of the thermostat daily program to run on Thursdays.
+     * @param string $tuesday_program_id ID of the thermostat daily program to run on Tuesdays.
+     * @param string $wednesday_program_id ID of the thermostat daily program to run on Wednesdays.
+     * @return ActionAttempt OK
+     */
     public function update_weekly_program(
         string $device_id,
         ?string $friday_program_id = null,
@@ -6031,6 +7674,14 @@ class ThermostatsDailyProgramsClient
         $this->seam = $seam;
     }
 
+    /**
+     * Creates a new thermostat daily program. A daily program consists of a set of periods, where each period includes a start time and the key of a configured climate preset. Once you have defined a daily program, you can assign it to one or more days within a weekly program.
+     *
+     * @param string $device_id ID of the thermostat device for which you want to create a daily program.
+     * @param string $name Name of the thermostat daily program.
+     * @param array $periods Array of thermostat daily program periods.
+     * @return ThermostatDailyProgram OK
+     */
     public function create(
         string $device_id,
         string $name,
@@ -6059,6 +7710,12 @@ class ThermostatsDailyProgramsClient
         );
     }
 
+    /**
+     * Deletes a thermostat daily program.
+     *
+     * @param string $thermostat_daily_program_id ID of the thermostat daily program that you want to delete.
+     * @return void OK
+     */
     public function delete(string $thermostat_daily_program_id): void
     {
         $request_payload = [];
@@ -6076,6 +7733,14 @@ class ThermostatsDailyProgramsClient
         );
     }
 
+    /**
+     * Updates a specified thermostat daily program. The periods that you specify overwrite any existing periods for the daily program.
+     *
+     * @param string $name Name of the thermostat daily program that you want to update.
+     * @param array $periods Array of thermostat daily program periods. The periods that you specify overwrite any existing periods for the daily program.
+     * @param string $thermostat_daily_program_id ID of the thermostat daily program that you want to update.
+     * @return ActionAttempt OK
+     */
     public function update(
         string $name,
         array $periods,
@@ -6123,6 +7788,18 @@ class ThermostatsSchedulesClient
         $this->seam = $seam;
     }
 
+    /**
+     * Creates a new [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     *
+     * @param string $climate_preset_key Key of the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) to use for the new thermostat schedule.
+     * @param string $device_id ID of the thermostat device for which you want to create a schedule.
+     * @param string $ends_at Date and time at which the new thermostat schedule ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+     * @param string $starts_at Date and time at which the new thermostat schedule starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+     * @param bool $is_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings while the new schedule is active. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+     * @param int $max_override_period_minutes Number of minutes for which a person at the thermostat or using the API can change the thermostat's settings after the activation of the scheduled climate preset. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+     * @param string $name Name of the thermostat schedule.
+     * @return ThermostatSchedule OK
+     */
     public function create(
         string $climate_preset_key,
         string $device_id,
@@ -6167,6 +7844,12 @@ class ThermostatsSchedulesClient
         return ThermostatSchedule::from_json($res->thermostat_schedule);
     }
 
+    /**
+     * Deletes a [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     *
+     * @param string $thermostat_schedule_id ID of the thermostat schedule that you want to delete.
+     * @return void OK
+     */
     public function delete(string $thermostat_schedule_id): void
     {
         $request_payload = [];
@@ -6184,6 +7867,12 @@ class ThermostatsSchedulesClient
         );
     }
 
+    /**
+     * Returns a specified [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
+     *
+     * @param string $thermostat_schedule_id ID of the thermostat schedule that you want to get.
+     * @return ThermostatSchedule OK
+     */
     public function get(string $thermostat_schedule_id): ThermostatSchedule
     {
         $request_payload = [];
@@ -6203,6 +7892,13 @@ class ThermostatsSchedulesClient
         return ThermostatSchedule::from_json($res->thermostat_schedule);
     }
 
+    /**
+     * Returns a list of all [thermostat schedules](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     *
+     * @param string $device_id ID of the thermostat device for which you want to list schedules.
+     * @param string $user_identifier_key User identifier key by which to filter the list of returned thermostat schedules.
+     * @return array OK
+     */
     public function list(
         string $device_id,
         ?string $user_identifier_key = null,
@@ -6228,6 +7924,18 @@ class ThermostatsSchedulesClient
         );
     }
 
+    /**
+     * Updates a specified [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
+     *
+     * @param string $thermostat_schedule_id ID of the thermostat schedule that you want to update.
+     * @param string $climate_preset_key Key of the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) to use for the thermostat schedule.
+     * @param string $ends_at Date and time at which the thermostat schedule ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+     * @param bool $is_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings while the schedule is active. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+     * @param int $max_override_period_minutes Number of minutes for which a person at the thermostat or using the API can change the thermostat's settings after the activation of the scheduled climate preset. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+     * @param string $name Name of the thermostat schedule.
+     * @param string $starts_at Date and time at which the thermostat schedule starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+     * @return void OK
+     */
     public function update(
         string $thermostat_schedule_id,
         ?string $climate_preset_key = null,
@@ -6282,6 +7990,17 @@ class ThermostatsSimulateClient
         $this->seam = $seam;
     }
 
+    /**
+     * Simulates having adjusted the [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) for a [thermostat](https://docs.seam.co/capability-guides/thermostats). Only applicable for [sandbox devices](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces). See also [Testing Your Thermostat App with Simulate Endpoints](https://docs.seam.co/capability-guides/thermostats/testing-your-thermostat-app-with-simulate-endpoints).
+     *
+     * @param string $device_id ID of the thermostat device for which you want to simulate having adjusted the HVAC mode.
+     * @param string $hvac_mode HVAC mode that you want to simulate.
+     * @param float $cooling_set_point_celsius Cooling [set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to simulate. You must set `cooling_set_point_celsius` or `cooling_set_point_fahrenheit`.
+     * @param float $cooling_set_point_fahrenheit Cooling [set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to simulate. You must set `cooling_set_point_fahrenheit` or `cooling_set_point_celsius`.
+     * @param float $heating_set_point_celsius Heating [set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to simulate. You must set `heating_set_point_celsius` or `heating_set_point_fahrenheit`.
+     * @param float $heating_set_point_fahrenheit Heating [set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to simulate. You must set `heating_set_point_fahrenheit` or `heating_set_point_celsius`.
+     * @return void OK
+     */
     public function hvac_mode_adjusted(
         string $device_id,
         string $hvac_mode,
@@ -6326,6 +8045,14 @@ class ThermostatsSimulateClient
         );
     }
 
+    /**
+     * Simulates a [thermostat](https://docs.seam.co/capability-guides/thermostats) reaching a specified temperature. Only applicable for [sandbox devices](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces). See also [Testing Your Thermostat App with Simulate Endpoints](https://docs.seam.co/capability-guides/thermostats/testing-your-thermostat-app-with-simulate-endpoints).
+     *
+     * @param string $device_id ID of the thermostat device that you want to simulate reaching a specified temperature.
+     * @param float $temperature_celsius Temperature in °C that you want simulate the thermostat reaching. You must set `temperature_celsius` or `temperature_fahrenheit`.
+     * @param float $temperature_fahrenheit Temperature in °F that you want simulate the thermostat reaching. You must set `temperature_fahrenheit` or `temperature_celsius`.
+     * @return void OK
+     */
     public function temperature_reached(
         string $device_id,
         ?float $temperature_celsius = null,
@@ -6363,6 +8090,18 @@ class UserIdentitiesClient
         $this->unmanaged = new UserIdentitiesUnmanagedClient($seam);
     }
 
+    /**
+     * Adds a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) to a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     *
+     * You must specify either `user_identity_id` or `user_identity_key` to identify the user identity.
+     *
+     * If `user_identity_key` is provided, but the user identity doesn't exist, a new user identity will be created automatically using information from the ACS user.
+     *
+     * @param string $acs_user_id ID of the access system user that you want to add to the user identity.
+     * @param string $user_identity_id ID of the user identity to which you want to add an access system user.
+     * @param string $user_identity_key Key of the user identity to which you want to add an access system user.
+     * @return void OK
+     */
     public function add_acs_user(
         string $acs_user_id,
         ?string $user_identity_id = null,
@@ -6387,6 +8126,16 @@ class UserIdentitiesClient
         );
     }
 
+    /**
+     * Creates a new [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     *
+     * @param array $acs_system_ids List of access system IDs to associate with the new user identity through access system users. If there's no user with the same email address or phone number in the specified access systems, a new access system user is created. If there is an existing user with the same email or phone number in the specified access systems, the user is linked to the user identity.
+     * @param string $email_address Unique email address for the new user identity.
+     * @param string $full_name Full name of the user associated with the new user identity.
+     * @param string $phone_number Unique phone number for the new user identity in E.164 format (for example, +15555550100).
+     * @param string $user_identity_key Unique key for the new user identity.
+     * @return UserIdentity OK
+     */
     public function create(
         ?array $acs_system_ids = null,
         ?string $email_address = null,
@@ -6421,6 +8170,12 @@ class UserIdentitiesClient
         return UserIdentity::from_json($res->user_identity);
     }
 
+    /**
+     * Deletes a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity). This deletes the user identity and all associated resources, including any [credentials](https://docs.seam.co/api/acs/credentials), [acs users](https://docs.seam.co/api/acs/users) and [client sessions](https://docs.seam.co/api/client_sessions).
+     *
+     * @param string $user_identity_id ID of the user identity that you want to delete.
+     * @return void OK
+     */
     public function delete(string $user_identity_id): void
     {
         $request_payload = [];
@@ -6436,6 +8191,14 @@ class UserIdentitiesClient
         );
     }
 
+    /**
+     * Generates a new [instant key](https://docs.seam.co/capability-guides/instant-keys) for a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     *
+     * @param string $user_identity_id ID of the user identity for which you want to generate an instant key.
+     * @param string $customization_profile_id
+     * @param float $max_use_count Maximum number of times the instant key can be used. Default: 1.
+     * @return InstantKey OK
+     */
     public function generate_instant_key(
         string $user_identity_id,
         ?string $customization_profile_id = null,
@@ -6464,6 +8227,13 @@ class UserIdentitiesClient
         return InstantKey::from_json($res->instant_key);
     }
 
+    /**
+     * Returns a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     *
+     * @param string $user_identity_id ID of the user identity that you want to get.
+     * @param string $user_identity_key
+     * @return UserIdentity OK
+     */
     public function get(
         ?string $user_identity_id = null,
         ?string $user_identity_key = null,
@@ -6486,6 +8256,13 @@ class UserIdentitiesClient
         return UserIdentity::from_json($res->user_identity);
     }
 
+    /**
+     * Grants a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) access to a specified [device](https://docs.seam.co/core-concepts/devices/).
+     *
+     * @param string $device_id ID of the managed device to which you want to grant access to the user identity.
+     * @param string $user_identity_id ID of the user identity that you want to grant access to a device.
+     * @return void OK
+     */
     public function grant_access_to_device(
         string $device_id,
         string $user_identity_id,
@@ -6506,6 +8283,17 @@ class UserIdentitiesClient
         );
     }
 
+    /**
+     * Returns a list of all [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     *
+     * @param string $created_before Timestamp by which to limit returned user identities. Returns user identities created before this timestamp.
+     * @param string $credential_manager_acs_system_id `acs_system_id` of the credential manager by which you want to filter the list of user identities.
+     * @param int $limit Maximum number of records to return per page.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned user identities to include all records that satisfy a partial match using `full_name`, `phone_number`, `email_address` or `user_identity_id`.
+     * @param array $user_identity_ids Array of user identity IDs by which to filter the list of user identities.
+     * @return array OK
+     */
     public function list(
         ?string $created_before = null,
         ?string $credential_manager_acs_system_id = null,
@@ -6554,6 +8342,12 @@ class UserIdentitiesClient
         );
     }
 
+    /**
+     * Returns a list of all [devices](https://docs.seam.co/core-concepts/devices) associated with a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity). This includes devices derived from the access grants assigned to the user identity and devices directly linked to the user identity.
+     *
+     * @param string $user_identity_id ID of the user identity for which you want to retrieve all accessible devices.
+     * @return array OK
+     */
     public function list_accessible_devices(string $user_identity_id): array
     {
         $request_payload = [];
@@ -6571,6 +8365,12 @@ class UserIdentitiesClient
         return array_map(fn($r) => Device::from_json($r), $res->devices);
     }
 
+    /**
+     * Returns a list of all [ACS entrances](https://docs.seam.co/api/acs/entrances) accessible to a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity). This includes entrances derived from the access grants assigned to the user identity and entrances accessible through ACS users linked to the user identity.
+     *
+     * @param string $user_identity_id ID of the user identity for which you want to retrieve all accessible entrances.
+     * @return array OK
+     */
     public function list_accessible_entrances(string $user_identity_id): array
     {
         $request_payload = [];
@@ -6591,6 +8391,12 @@ class UserIdentitiesClient
         );
     }
 
+    /**
+     * Returns a list of all [access systems](https://docs.seam.co/low-level-apis/access-systems) associated with a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     *
+     * @param string $user_identity_id ID of the user identity for which you want to retrieve all access systems.
+     * @return array OK
+     */
     public function list_acs_systems(string $user_identity_id): array
     {
         $request_payload = [];
@@ -6608,6 +8414,12 @@ class UserIdentitiesClient
         return array_map(fn($r) => AcsSystem::from_json($r), $res->acs_systems);
     }
 
+    /**
+     * Returns a list of all [access system users](https://docs.seam.co/low-level-apis/access-systems/user-management) assigned to a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     *
+     * @param string $user_identity_id ID of the user identity for which you want to retrieve all access system users.
+     * @return array OK
+     */
     public function list_acs_users(string $user_identity_id): array
     {
         $request_payload = [];
@@ -6625,6 +8437,13 @@ class UserIdentitiesClient
         return array_map(fn($r) => AcsUser::from_json($r), $res->acs_users);
     }
 
+    /**
+     * Removes a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) from a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     *
+     * @param string $acs_user_id ID of the access system user that you want to remove from the user identity..
+     * @param string $user_identity_id ID of the user identity from which you want to remove an access system user.
+     * @return void OK
+     */
     public function remove_acs_user(
         string $acs_user_id,
         string $user_identity_id,
@@ -6645,6 +8464,13 @@ class UserIdentitiesClient
         );
     }
 
+    /**
+     * Revokes access to a specified [device](https://docs.seam.co/core-concepts/devices/) from a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     *
+     * @param string $device_id ID of the managed device to which you want to revoke access from the user identity.
+     * @param string $user_identity_id ID of the user identity from which you want to revoke access to a device.
+     * @return void OK
+     */
     public function revoke_access_to_device(
         string $device_id,
         string $user_identity_id,
@@ -6665,6 +8491,16 @@ class UserIdentitiesClient
         );
     }
 
+    /**
+     * Updates a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     *
+     * @param string $user_identity_id ID of the user identity that you want to update.
+     * @param string $email_address Unique email address for the user identity.
+     * @param string $full_name Full name of the user associated with the user identity.
+     * @param string $phone_number Unique phone number for the user identity.
+     * @param string $user_identity_key Unique key for the user identity.
+     * @return void OK
+     */
     public function update(
         string $user_identity_id,
         ?string $email_address = null,
@@ -6707,6 +8543,12 @@ class UserIdentitiesUnmanagedClient
         $this->seam = $seam;
     }
 
+    /**
+     * Returns a specified unmanaged [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) (where is_managed = false).
+     *
+     * @param string $user_identity_id ID of the unmanaged user identity that you want to get.
+     * @return UnmanagedUserIdentity OK
+     */
     public function get(string $user_identity_id): UnmanagedUserIdentity
     {
         $request_payload = [];
@@ -6724,6 +8566,15 @@ class UserIdentitiesUnmanagedClient
         return UnmanagedUserIdentity::from_json($res->user_identity);
     }
 
+    /**
+     * Returns a list of all unmanaged [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) (where is_managed = false).
+     *
+     * @param string $created_before Timestamp by which to limit returned unmanaged user identities. Returns user identities created before this timestamp.
+     * @param int $limit Maximum number of records to return per page.
+     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string $search String for which to search. Filters returned unmanaged user identities to include all records that satisfy a partial match using `full_name`, `phone_number`, `email_address`,  `user_identity_id` or `acs_system_id`.
+     * @return array OK
+     */
     public function list(
         ?string $created_before = null,
         ?int $limit = null,
@@ -6762,6 +8613,16 @@ class UserIdentitiesUnmanagedClient
         );
     }
 
+    /**
+     * Updates an unmanaged [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) to make it managed.
+     *
+     * This endpoint can only be used to convert unmanaged user identities to managed ones by setting `is_managed` to `true`. It cannot be used to convert managed user identities back to unmanaged.
+     *
+     * @param bool $is_managed Must be set to true to convert the unmanaged user identity to managed.
+     * @param string $user_identity_id ID of the unmanaged user identity that you want to update.
+     * @param string $user_identity_key Unique key for the user identity. If not provided, the existing key will be preserved.
+     * @return void OK
+     */
     public function update(
         bool $is_managed,
         string $user_identity_id,
@@ -6796,6 +8657,13 @@ class WebhooksClient
         $this->seam = $seam;
     }
 
+    /**
+     * Creates a new [webhook](https://docs.seam.co/developer-tools/webhooks).
+     *
+     * @param string $url URL for the new webhook.
+     * @param array $event_types Types of events that you want the new webhook to receive.
+     * @return Webhook OK
+     */
     public function create(string $url, ?array $event_types = null): Webhook
     {
         $request_payload = [];
@@ -6816,6 +8684,12 @@ class WebhooksClient
         return Webhook::from_json($res->webhook);
     }
 
+    /**
+     * Deletes a specified [webhook](https://docs.seam.co/developer-tools/webhooks).
+     *
+     * @param string $webhook_id ID of the webhook that you want to delete.
+     * @return void OK
+     */
     public function delete(string $webhook_id): void
     {
         $request_payload = [];
@@ -6831,6 +8705,12 @@ class WebhooksClient
         );
     }
 
+    /**
+     * Gets a specified [webhook](https://docs.seam.co/developer-tools/webhooks).
+     *
+     * @param string $webhook_id ID of the webhook that you want to get.
+     * @return Webhook OK
+     */
     public function get(string $webhook_id): Webhook
     {
         $request_payload = [];
@@ -6848,6 +8728,11 @@ class WebhooksClient
         return Webhook::from_json($res->webhook);
     }
 
+    /**
+     * Returns a list of all [webhooks](https://docs.seam.co/developer-tools/webhooks).
+     *
+     * @return array OK
+     */
     public function list(): array
     {
         $res = $this->seam->request("POST", "/webhooks/list");
@@ -6855,6 +8740,13 @@ class WebhooksClient
         return array_map(fn($r) => Webhook::from_json($r), $res->webhooks);
     }
 
+    /**
+     * Updates a specified [webhook](https://docs.seam.co/developer-tools/webhooks).
+     *
+     * @param array $event_types Types of events that you want the webhook to receive.
+     * @param string $webhook_id ID of the webhook that you want to update.
+     * @return void OK
+     */
     public function update(array $event_types, string $webhook_id): void
     {
         $request_payload = [];
@@ -6883,6 +8775,21 @@ class WorkspacesClient
         $this->seam = $seam;
     }
 
+    /**
+     * Creates a new [workspace](https://docs.seam.co/core-concepts/workspaces).
+     *
+     * @param string $name Name of the new workspace.
+     * @param string $company_name Company name for the new workspace.
+     * @param string $connect_partner_name Connect partner name for the new workspace.
+     * @param mixed $connect_webview_customization [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews) customizations for the new workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
+     * @param bool $is_sandbox Indicates whether the new workspace is a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     * @param string $organization_id ID of the organization to associate with the new workspace.
+     * @param string $webview_logo_shape
+     * @param string $webview_primary_button_color
+     * @param string $webview_primary_button_text_color
+     * @param string $webview_success_message
+     * @return Workspace OK
+     */
     public function create(
         string $name,
         ?string $company_name = null,
@@ -6945,6 +8852,11 @@ class WorkspacesClient
         return Workspace::from_json($res->workspace);
     }
 
+    /**
+     * Returns the [workspace](https://docs.seam.co/core-concepts/workspaces) associated with the authentication value.
+     *
+     * @return Workspace OK
+     */
     public function get(): Workspace
     {
         $res = $this->seam->request("POST", "/workspaces/get");
@@ -6952,6 +8864,11 @@ class WorkspacesClient
         return Workspace::from_json($res->workspace);
     }
 
+    /**
+     * Returns a list of [workspaces](https://docs.seam.co/core-concepts/workspaces) associated with the authentication value.
+     *
+     * @return array OK
+     */
     public function list(): array
     {
         $res = $this->seam->request("POST", "/workspaces/list");
@@ -6959,6 +8876,11 @@ class WorkspacesClient
         return array_map(fn($r) => Workspace::from_json($r), $res->workspaces);
     }
 
+    /**
+     * Resets the [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces) associated with the authentication value. Note that this endpoint is only available for sandbox workspaces.
+     *
+     * @return ActionAttempt OK
+     */
     public function reset_sandbox(
         bool $wait_for_action_attempt = true,
     ): ActionAttempt {
@@ -6975,6 +8897,17 @@ class WorkspacesClient
         return $action_attempt;
     }
 
+    /**
+     * Updates the [workspace](https://docs.seam.co/core-concepts/workspaces) associated with the authentication value.
+     *
+     * @param string $connect_partner_name Connect partner name for the workspace.
+     * @param mixed $connect_webview_customization [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews) customizations for the workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
+     * @param bool $is_publishable_key_auth_enabled Indicates whether publishable key authentication is enabled for this workspace.
+     * @param bool $is_suspended Indicates whether the workspace is suspended.
+     * @param string $name Name of the workspace.
+     * @param string $organization_id ID of the organization to assign the workspace to. The authenticated user must be the owner of the workspace and an admin of the target organization.
+     * @return void OK
+     */
     public function update(
         ?string $connect_partner_name = null,
         mixed $connect_webview_customization = null,

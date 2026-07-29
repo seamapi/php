@@ -2,6 +2,9 @@
 
 namespace Seam\Resources;
 
+/**
+ * Represents an app user's mobile phone.
+ */
 class Phone
 {
     public static function from_json(mixed $json): Phone|null
@@ -32,19 +35,52 @@ class Phone
     }
 
     public function __construct(
+        /**
+         * Date and time at which the phone was created.
+         */
         public string|null $created_at,
+        /**
+         * Optional [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) for the phone.
+         */
         public mixed $custom_metadata,
+        /**
+         * ID of the phone.
+         */
         public string|null $device_id,
+        /**
+         * Type of the phone device, such as `ios_phone` or `android_phone`.
+         */
         public string|null $device_type,
+        /**
+         * Display name of the phone. Defaults to `nickname` (if it is set) or `properties.appearance.name`, otherwise. Enables administrators and users to identify the phone easily, especially when there are numerous phones.
+         */
         public string|null $display_name,
+        /**
+         * Errors associated with the phone.
+         */
         public array $errors,
+        /**
+         * Optional nickname to describe the phone, settable through Seam.
+         */
         public string|null $nickname,
+        /**
+         * Properties of the phone.
+         */
         public PhoneProperties|null $properties,
+        /**
+         * Warnings associated with the phone.
+         */
         public array $warnings,
+        /**
+         * ID of the workspace that contains the phone.
+         */
         public string|null $workspace_id,
     ) {}
 }
 
+/**
+ * ASSA ABLOY Credential Service metadata for the phone.
+ */
 class PhoneAssaAbloyCredentialServiceMetadata
 {
     public static function from_json(
@@ -63,11 +99,20 @@ class PhoneAssaAbloyCredentialServiceMetadata
     }
 
     public function __construct(
+        /**
+         * Endpoints associated with the phone.
+         */
         public array $endpoints,
+        /**
+         * Indicates whether the credential service has active endpoints associated with the phone.
+         */
         public bool|null $has_active_endpoint,
     ) {}
 }
 
+/**
+ * Endpoints associated with the phone.
+ */
 class PhoneEndpoints
 {
     public static function from_json(mixed $json): PhoneEndpoints|null
@@ -82,11 +127,20 @@ class PhoneEndpoints
     }
 
     public function __construct(
+        /**
+         * ID of the associated endpoint.
+         */
         public string|null $endpoint_id,
+        /**
+         * Indicated whether the endpoint is active.
+         */
         public bool|null $is_active,
     ) {}
 }
 
+/**
+ * Errors associated with the phone.
+ */
 class PhoneErrors
 {
     public static function from_json(mixed $json): PhoneErrors|null
@@ -102,12 +156,24 @@ class PhoneErrors
     }
 
     public function __construct(
+        /**
+         * Date and time at which Seam created the error.
+         */
         public string|null $created_at,
+        /**
+         * Unique identifier of the type of error.
+         */
         public string|null $error_code,
+        /**
+         * Detailed description of the error.
+         */
         public string|null $message,
     ) {}
 }
 
+/**
+ * Properties of the phone.
+ */
 class PhoneProperties
 {
     public static function from_json(mixed $json): PhoneProperties|null
@@ -134,11 +200,20 @@ class PhoneProperties
     }
 
     public function __construct(
+        /**
+         * ASSA ABLOY Credential Service metadata for the phone.
+         */
         public PhoneAssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata,
+        /**
+         * Salto Space credential service metadata for the phone.
+         */
         public PhoneSaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata,
     ) {}
 }
 
+/**
+ * Salto Space credential service metadata for the phone.
+ */
 class PhoneSaltoSpaceCredentialServiceMetadata
 {
     public static function from_json(
@@ -150,9 +225,17 @@ class PhoneSaltoSpaceCredentialServiceMetadata
         return new self(has_active_phone: $json->has_active_phone ?? null);
     }
 
-    public function __construct(public bool|null $has_active_phone) {}
+    public function __construct(
+        /**
+         * Indicates whether the credential service has an active associated phone.
+         */
+        public bool|null $has_active_phone,
+    ) {}
 }
 
+/**
+ * Warnings associated with the phone.
+ */
 class PhoneWarnings
 {
     public static function from_json(mixed $json): PhoneWarnings|null
@@ -168,8 +251,17 @@ class PhoneWarnings
     }
 
     public function __construct(
+        /**
+         * Date and time at which Seam created the warning.
+         */
         public string|null $created_at,
+        /**
+         * Detailed description of the warning.
+         */
         public string|null $message,
+        /**
+         * Unique identifier of the type of warning.
+         */
         public string|null $warning_code,
     ) {}
 }

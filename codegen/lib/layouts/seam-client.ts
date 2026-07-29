@@ -10,6 +10,11 @@ import {
 
 export interface MethodLayoutContext {
   methodName: string
+  description: string
+  responseDescription: string
+  isDeprecated: boolean
+  deprecationMessage: string
+  parameters: Array<{ name: string; type: string; description: string }>
   path: string
   returnType: string
   hasParams: boolean
@@ -67,6 +72,15 @@ const getMethodLayoutContext = (
 
   return {
     methodName,
+    description: method.description,
+    responseDescription: method.responseDescription,
+    isDeprecated: method.isDeprecated,
+    deprecationMessage: method.deprecationMessage,
+    parameters: sortedParameters.map(({ name, type, description }) => ({
+      name,
+      type,
+      description,
+    })),
     path,
     returnType,
     hasParams: parameters.length > 0,

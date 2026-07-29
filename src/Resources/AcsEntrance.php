@@ -2,6 +2,11 @@
 
 namespace Seam\Resources;
 
+/**
+ * Represents an [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) within an [access control system](https://docs.seam.co/low-level-apis/access-systems).
+ *
+ * In an access control system, an entrance is a secured door, gate, zone, or other method of entry. You can list details for all the `acs_entrance` resources in your workspace or get these details for a specific `acs_entrance`. You can also list all entrances associated with a specific credential, and you can list all credentials associated with a specific entrance.
+ */
 class AcsEntrance
 {
     public static function from_json(mixed $json): AcsEntrance|null
@@ -86,34 +91,112 @@ class AcsEntrance
     }
 
     public function __construct(
+        /**
+         * ID of the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public string|null $acs_entrance_id,
+        /**
+         * ID of the [access control system](https://docs.seam.co/low-level-apis/access-systems) that contains the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public string|null $acs_system_id,
+        /**
+         * Akiles-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public AcsEntranceAkilesMetadata|null $akiles_metadata,
+        /**
+         * ASSA ABLOY Vostio-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public AcsEntranceAssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
+        /**
+         * Avigilon Alta-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public AcsEntranceAvigilonAltaMetadata|null $avigilon_alta_metadata,
+        /**
+         * Brivo-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public AcsEntranceBrivoMetadata|null $brivo_metadata,
+        /**
+         * Indicates whether the ACS entrance can belong to a reservation via an access_grant.reservation_key.
+         */
         public bool|null $can_belong_to_reservation,
+        /**
+         * Indicates whether the ACS entrance can be unlocked with card credentials.
+         */
         public bool|null $can_unlock_with_card,
+        /**
+         * Indicates whether the ACS entrance can be unlocked with cloud key credentials.
+         */
         public bool|null $can_unlock_with_cloud_key,
+        /**
+         * Indicates whether the ACS entrance can be unlocked with pin codes.
+         */
         public bool|null $can_unlock_with_code,
+        /**
+         * Indicates whether the ACS entrance can be unlocked with mobile key credentials.
+         */
         public bool|null $can_unlock_with_mobile_key,
+        /**
+         * ID of the [connected account](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public string|null $connected_account_id,
+        /**
+         * Date and time at which the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) was created.
+         */
         public string|null $created_at,
+        /**
+         * Display name for the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public string|null $display_name,
+        /**
+         * dormakaba Ambiance-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public AcsEntranceDormakabaAmbianceMetadata|null $dormakaba_ambiance_metadata,
+        /**
+         * dormakaba Community-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public AcsEntranceDormakabaCommunityMetadata|null $dormakaba_community_metadata,
+        /**
+         * Errors associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public array $errors,
+        /**
+         * Hotek-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public AcsEntranceHotekMetadata|null $hotek_metadata,
+        /**
+         * Indicates whether the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) is currently locked.
+         */
         public bool|null $is_locked,
+        /**
+         * Latch-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public AcsEntranceLatchMetadata|null $latch_metadata,
+        /**
+         * Salto KS-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public AcsEntranceSaltoKsMetadata|null $salto_ks_metadata,
+        /**
+         * Salto Space-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public AcsEntranceSaltoSpaceMetadata|null $salto_space_metadata,
+        /**
+         * IDs of the spaces that the entrance is in.
+         */
         public array|null $space_ids,
+        /**
+         * Visionline-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public AcsEntranceVisionlineMetadata|null $visionline_metadata,
+        /**
+         * Warnings associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+         */
         public array $warnings,
     ) {}
 }
 
+/**
+ * Actions the gadget exposes (for example, open).
+ */
 class AcsEntranceActions
 {
     public static function from_json(mixed $json): AcsEntranceActions|null
@@ -125,11 +208,20 @@ class AcsEntranceActions
     }
 
     public function __construct(
+        /**
+         * ID of the gadget action.
+         */
         public string|null $id,
+        /**
+         * Name of the gadget action.
+         */
         public string|null $name,
     ) {}
 }
 
+/**
+ * Akiles-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+ */
 class AcsEntranceAkilesMetadata
 {
     public static function from_json(
@@ -150,13 +242,28 @@ class AcsEntranceAkilesMetadata
     }
 
     public function __construct(
+        /**
+         * Actions the gadget exposes (for example, open).
+         */
         public array $actions,
+        /**
+         * ID of the Akiles gadget.
+         */
         public string|null $gadget_id,
+        /**
+         * ID of the Akiles site the gadget belongs to.
+         */
         public string|null $site_id,
+        /**
+         * Name of the Akiles site the gadget belongs to.
+         */
         public string|null $site_name,
     ) {}
 }
 
+/**
+ * ASSA ABLOY Vostio-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+ */
 class AcsEntranceAssaAbloyVostioMetadata
 {
     public static function from_json(
@@ -175,14 +282,32 @@ class AcsEntranceAssaAbloyVostioMetadata
     }
 
     public function __construct(
+        /**
+         * Name of the door in the Vostio access system.
+         */
         public string|null $door_name,
+        /**
+         * Number of the door in the Vostio access system.
+         */
         public float|null $door_number,
+        /**
+         * Type of the door in the Vostio access system.
+         */
         public string|null $door_type,
+        /**
+         * PMS ID of the door in the Vostio access system.
+         */
         public string|null $pms_id,
+        /**
+         * Indicates whether keys are allowed to set the door in stand open mode in the Vostio access system.
+         */
         public bool|null $stand_open,
     ) {}
 }
 
+/**
+ * Avigilon Alta-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+ */
 class AcsEntranceAvigilonAltaMetadata
 {
     public static function from_json(
@@ -203,16 +328,40 @@ class AcsEntranceAvigilonAltaMetadata
     }
 
     public function __construct(
+        /**
+         * Entry name for an Avigilon Alta system.
+         */
         public string|null $entry_name,
+        /**
+         * Total count of entry relays for an Avigilon Alta system.
+         */
         public float|null $entry_relays_total_count,
+        /**
+         * Organization name for an Avigilon Alta system.
+         */
         public string|null $org_name,
+        /**
+         * Site ID for an Avigilon Alta system.
+         */
         public float|null $site_id,
+        /**
+         * Site name for an Avigilon Alta system.
+         */
         public string|null $site_name,
+        /**
+         * Zone ID for an Avigilon Alta system.
+         */
         public float|null $zone_id,
+        /**
+         * Zone name for an Avigilon Alta system.
+         */
         public string|null $zone_name,
     ) {}
 }
 
+/**
+ * Brivo-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+ */
 class AcsEntranceBrivoMetadata
 {
     public static function from_json(mixed $json): AcsEntranceBrivoMetadata|null
@@ -228,12 +377,24 @@ class AcsEntranceBrivoMetadata
     }
 
     public function __construct(
+        /**
+         * ID of the access point in the Brivo access system.
+         */
         public string|null $access_point_id,
+        /**
+         * ID of the site that the access point belongs to.
+         */
         public float|null $site_id,
+        /**
+         * Name of the site that the access point belongs to.
+         */
         public string|null $site_name,
     ) {}
 }
 
+/**
+ * dormakaba Ambiance-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+ */
 class AcsEntranceDormakabaAmbianceMetadata
 {
     public static function from_json(
@@ -245,9 +406,17 @@ class AcsEntranceDormakabaAmbianceMetadata
         return new self(access_point_name: $json->access_point_name ?? null);
     }
 
-    public function __construct(public string|null $access_point_name) {}
+    public function __construct(
+        /**
+         * Name of the access point in the dormakaba Ambiance access system.
+         */
+        public string|null $access_point_name,
+    ) {}
 }
 
+/**
+ * dormakaba Community-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+ */
 class AcsEntranceDormakabaCommunityMetadata
 {
     public static function from_json(
@@ -261,9 +430,17 @@ class AcsEntranceDormakabaCommunityMetadata
         );
     }
 
-    public function __construct(public string|null $access_point_profile) {}
+    public function __construct(
+        /**
+         * Type of access point profile in the dormakaba Community access system.
+         */
+        public string|null $access_point_profile,
+    ) {}
 }
 
+/**
+ * Errors associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+ */
 class AcsEntranceErrors
 {
     public static function from_json(mixed $json): AcsEntranceErrors|null
@@ -279,12 +456,24 @@ class AcsEntranceErrors
     }
 
     public function __construct(
+        /**
+         * Date and time at which Seam created the error.
+         */
         public string|null $created_at,
+        /**
+         * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+         */
         public string|null $error_code,
+        /**
+         * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+         */
         public string|null $message,
     ) {}
 }
 
+/**
+ * Hotek-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+ */
 class AcsEntranceHotekMetadata
 {
     public static function from_json(mixed $json): AcsEntranceHotekMetadata|null
@@ -300,12 +489,24 @@ class AcsEntranceHotekMetadata
     }
 
     public function __construct(
+        /**
+         * Display name of the entrance.
+         */
         public string|null $common_area_name,
+        /**
+         * Display name of the entrance.
+         */
         public string|null $common_area_number,
+        /**
+         * Room number of the entrance.
+         */
         public string|null $room_number,
     ) {}
 }
 
+/**
+ * Latch-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+ */
 class AcsEntranceLatchMetadata
 {
     public static function from_json(mixed $json): AcsEntranceLatchMetadata|null
@@ -322,13 +523,28 @@ class AcsEntranceLatchMetadata
     }
 
     public function __construct(
+        /**
+         * Accessibility type in the Latch access system.
+         */
         public string|null $accessibility_type,
+        /**
+         * Name of the door in the Latch access system.
+         */
         public string|null $door_name,
+        /**
+         * Type of the door in the Latch access system.
+         */
         public string|null $door_type,
+        /**
+         * Indicates whether the entrance is connected.
+         */
         public bool|null $is_connected,
     ) {}
 }
 
+/**
+ * Profile for the door in the Visionline access system.
+ */
 class AcsEntranceProfiles
 {
     public static function from_json(mixed $json): AcsEntranceProfiles|null
@@ -345,11 +561,20 @@ class AcsEntranceProfiles
     }
 
     public function __construct(
+        /**
+         * Door profile ID in the Visionline access system.
+         */
         public string|null $visionline_door_profile_id,
+        /**
+         * Door profile type in the Visionline access system.
+         */
         public string|null $visionline_door_profile_type,
     ) {}
 }
 
+/**
+ * Salto KS-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+ */
 class AcsEntranceSaltoKsMetadata
 {
     public static function from_json(
@@ -371,17 +596,44 @@ class AcsEntranceSaltoKsMetadata
     }
 
     public function __construct(
+        /**
+         * Battery level of the door access device.
+         */
         public string|null $battery_level,
+        /**
+         * Name of the door in the Salto KS access system.
+         */
         public string|null $door_name,
+        /**
+         * Indicates whether an intrusion alarm is active on the door.
+         */
         public bool|null $intrusion_alarm,
+        /**
+         * Indicates whether the door is left open.
+         */
         public bool|null $left_open_alarm,
+        /**
+         * Type of the lock in the Salto KS access system.
+         */
         public string|null $lock_type,
+        /**
+         * Locked state of the door in the Salto KS access system.
+         */
         public string|null $locked_state,
+        /**
+         * Indicates whether the door access device is online.
+         */
         public bool|null $online,
+        /**
+         * Indicates whether privacy mode is enabled for the lock.
+         */
         public bool|null $privacy_mode,
     ) {}
 }
 
+/**
+ * Salto Space-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+ */
 class AcsEntranceSaltoSpaceMetadata
 {
     public static function from_json(
@@ -401,15 +653,36 @@ class AcsEntranceSaltoSpaceMetadata
     }
 
     public function __construct(
+        /**
+         * Indicates whether AuditOnKeys is enabled for the door in the Salto Space access system.
+         */
         public bool|null $audit_on_keys,
+        /**
+         * Description of the door in the Salto Space access system.
+         */
         public string|null $door_description,
+        /**
+         * Door ID in the Salto Space access system.
+         */
         public string|null $door_id,
+        /**
+         * Name of the door in the Salto Space access system.
+         */
         public string|null $door_name,
+        /**
+         * Description of the room in the Salto Space access system.
+         */
         public string|null $room_description,
+        /**
+         * Name of the room in the Salto Space access system.
+         */
         public string|null $room_name,
     ) {}
 }
 
+/**
+ * Visionline-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+ */
 class AcsEntranceVisionlineMetadata
 {
     public static function from_json(
@@ -429,12 +702,24 @@ class AcsEntranceVisionlineMetadata
     }
 
     public function __construct(
+        /**
+         * Category of the door in the Visionline access system.
+         */
         public string|null $door_category,
+        /**
+         * Name of the door in the Visionline access system.
+         */
         public string|null $door_name,
+        /**
+         * Profile for the door in the Visionline access system.
+         */
         public array $profiles,
     ) {}
 }
 
+/**
+ * Warnings associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+ */
 class AcsEntranceWarnings
 {
     public static function from_json(mixed $json): AcsEntranceWarnings|null
@@ -450,8 +735,17 @@ class AcsEntranceWarnings
     }
 
     public function __construct(
+        /**
+         * Date and time at which Seam created the warning.
+         */
         public string|null $created_at,
+        /**
+         * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+         */
         public string|null $message,
+        /**
+         * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+         */
         public string|null $warning_code,
     ) {}
 }

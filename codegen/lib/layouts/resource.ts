@@ -15,8 +15,18 @@ import type {
 
 export interface ClassLayoutContext {
   className: string
+  description: string
+  isDeprecated: boolean
+  deprecationMessage: string
   fromJsonProps: string[]
-  constructorParams: string[]
+  constructorParams: ConstructorParamLayoutContext[]
+}
+
+export interface ConstructorParamLayoutContext {
+  declaration: string
+  description: string
+  isDeprecated: boolean
+  deprecationMessage: string
 }
 
 export interface ResourceLayoutContext {
@@ -38,19 +48,32 @@ const generateFromJsonProp = (property: ResourceClassProperty): string => {
   }
 }
 
-const generateConstructorParam = (property: ResourceClassProperty): string => {
+const generateConstructorParam = (
+  property: ResourceClassProperty,
+): ConstructorParamLayoutContext => {
+  let declaration: string
   switch (property.kind) {
     case 'objectReference':
-      return `public ${property.referenceName}|null $${property.name},`
+      declaration = `public ${property.referenceName}|null $${property.name},`
+      break
 
     case 'listReference':
-      return `public array $${property.name},`
+      declaration = `public array $${property.name},`
+      break
 
     case 'value': {
       const { phpType } = property
       const nullSuffix = phpType === 'mixed' ? '' : '|null'
-      return `public ${phpType}${nullSuffix} $${property.name},`
+      declaration = `public ${phpType}${nullSuffix} $${property.name},`
+      break
     }
+  }
+
+  return {
+    declaration,
+    description: property.description,
+    isDeprecated: property.isDeprecated,
+    deprecationMessage: property.deprecationMessage,
   }
 }
 
@@ -63,6 +86,9 @@ const getClassLayoutContext = (
 
   return {
     className: schema.name,
+    description: schema.description,
+    isDeprecated: schema.isDeprecated,
+    deprecationMessage: schema.deprecationMessage,
     fromJsonProps: sorted.map(generateFromJsonProp),
     constructorParams: sorted.map(generateConstructorParam),
   }

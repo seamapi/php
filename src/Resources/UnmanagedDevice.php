@@ -2,6 +2,9 @@
 
 namespace Seam\Resources;
 
+/**
+ * Represents an [unmanaged device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices). An unmanaged device has a limited set of visible properties and a subset of supported events. You cannot control an unmanaged device. Any [access codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) on an unmanaged device are unmanaged. To control an unmanaged device with Seam, [convert it to a managed device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices#convert-an-unmanaged-device-to-managed).
+ */
 class UnmanagedDevice
 {
     public static function from_json(mixed $json): UnmanagedDevice|null
@@ -66,41 +69,140 @@ class UnmanagedDevice
     }
 
     public function __construct(
+        /**
+         * Indicates whether the lock supports configuring automatic locking.
+         */
         public bool|null $can_configure_auto_lock,
+        /**
+         * Indicates whether the thermostat supports cooling.
+         */
         public bool|null $can_hvac_cool,
+        /**
+         * Indicates whether the thermostat supports heating.
+         */
         public bool|null $can_hvac_heat,
+        /**
+         * Indicates whether the thermostat supports simultaneous heating and cooling.
+         */
         public bool|null $can_hvac_heat_cool,
+        /**
+         * Indicates whether the device supports programming offline access codes.
+         */
         public bool|null $can_program_offline_access_codes,
+        /**
+         * Indicates whether the device supports programming online access codes.
+         */
         public bool|null $can_program_online_access_codes,
+        /**
+         * Indicates whether the thermostat supports different climate programs for each day of the week.
+         */
         public bool|null $can_program_thermostat_programs_as_different_each_day,
+        /**
+         * Indicates whether the thermostat supports a single climate program applied to every day.
+         */
         public bool|null $can_program_thermostat_programs_as_same_each_day,
+        /**
+         * Indicates whether the thermostat supports weekday/weekend climate programs.
+         */
         public bool|null $can_program_thermostat_programs_as_weekday_weekend,
+        /**
+         * Indicates whether the device supports remote locking.
+         */
         public bool|null $can_remotely_lock,
+        /**
+         * Indicates whether the device supports remote unlocking.
+         */
         public bool|null $can_remotely_unlock,
+        /**
+         * Indicates whether the thermostat supports running climate programs.
+         */
         public bool|null $can_run_thermostat_programs,
+        /**
+         * Indicates whether the device supports simulating connection in a sandbox.
+         */
         public bool|null $can_simulate_connection,
+        /**
+         * Indicates whether the device supports simulating disconnection in a sandbox.
+         */
         public bool|null $can_simulate_disconnection,
+        /**
+         * Indicates whether the hub supports simulating connection in a sandbox.
+         */
         public bool|null $can_simulate_hub_connection,
+        /**
+         * Indicates whether the hub supports simulating disconnection in a sandbox.
+         */
         public bool|null $can_simulate_hub_disconnection,
+        /**
+         * Indicates whether the device supports simulating a paid subscription in a sandbox.
+         */
         public bool|null $can_simulate_paid_subscription,
+        /**
+         * Indicates whether the device supports simulating removal in a sandbox.
+         */
         public bool|null $can_simulate_removal,
+        /**
+         * Indicates whether the thermostat can be turned off.
+         */
         public bool|null $can_turn_off_hvac,
+        /**
+         * Indicates whether the lock supports unlocking with an access code.
+         */
         public bool|null $can_unlock_with_code,
+        /**
+         * Collection of capabilities that the device supports when connected to Seam. Values are `access_code`, which indicates that the device can manage and utilize digital PIN codes for secure access; `lock`, which indicates that the device controls a door locking mechanism, enabling the remote opening and closing of doors and other entry points; `noise_detection`, which indicates that the device supports monitoring and responding to ambient noise levels; `thermostat`, which indicates that the device can regulate and adjust indoor temperatures; `battery`, which indicates that the device can manage battery life and health; and `phone`, which indicates that the device is a mobile device, such as a smartphone. **Important:** Superseded by [capability flags](https://docs.seam.co/capability-guides/device-and-system-capabilities#capability-flags).
+         */
         public array|null $capabilities_supported,
+        /**
+         * Unique identifier for the account associated with the device.
+         */
         public string|null $connected_account_id,
+        /**
+         * Date and time at which the device object was created.
+         */
         public string|null $created_at,
+        /**
+         * Set of key:value pairs. Adding custom metadata to a resource, such as a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews/attaching-custom-data-to-the-connect-webview), [connected account](https://docs.seam.co/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account), or [device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device), enables you to store custom information, like customer details or internal IDs from your application.
+         */
         public mixed $custom_metadata,
+        /**
+         * ID of the device.
+         */
         public string|null $device_id,
+        /**
+         * Type of the device.
+         */
         public string|null $device_type,
+        /**
+         * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
+         */
         public array $errors,
+        /**
+         * Indicates that Seam does not manage the device.
+         */
         public bool|null $is_managed,
+        /**
+         * Location information for the device.
+         */
         public UnmanagedDeviceLocation|null $location,
+        /**
+         * properties of the device.
+         */
         public UnmanagedDeviceProperties|null $properties,
+        /**
+         * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
+         */
         public array $warnings,
+        /**
+         * Unique identifier for the Seam workspace associated with the device.
+         */
         public string|null $workspace_id,
     ) {}
 }
 
+/**
+ * Accessory keypad properties and state.
+ */
 class UnmanagedDeviceAccessoryKeypad
 {
     public static function from_json(
@@ -118,11 +220,20 @@ class UnmanagedDeviceAccessoryKeypad
     }
 
     public function __construct(
+        /**
+         * Keypad battery properties.
+         */
         public UnmanagedDeviceBattery|null $battery,
+        /**
+         * Indicates if an accessory keypad is connected to the device.
+         */
         public bool|null $is_connected,
     ) {}
 }
 
+/**
+ * Keypad battery properties.
+ */
 class UnmanagedDeviceBattery
 {
     public static function from_json(mixed $json): UnmanagedDeviceBattery|null
@@ -136,6 +247,9 @@ class UnmanagedDeviceBattery
     public function __construct(public float|null $level) {}
 }
 
+/**
+ * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
+ */
 class UnmanagedDeviceErrors
 {
     public static function from_json(mixed $json): UnmanagedDeviceErrors|null
@@ -155,15 +269,36 @@ class UnmanagedDeviceErrors
     }
 
     public function __construct(
+        /**
+         * Date and time at which Seam created the error.
+         */
         public string|null $created_at,
+        /**
+         * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+         */
         public string|null $error_code,
+        /**
+         * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
+         */
         public bool|null $is_bridge_error,
+        /**
+         * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
+         */
         public bool|null $is_connected_account_error,
+        /**
+         * Indicates that the error is not a device error.
+         */
         public bool|null $is_device_error,
+        /**
+         * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+         */
         public string|null $message,
     ) {}
 }
 
+/**
+ * Location information for the device.
+ */
 class UnmanagedDeviceLocation
 {
     public static function from_json(mixed $json): UnmanagedDeviceLocation|null
@@ -179,12 +314,26 @@ class UnmanagedDeviceLocation
     }
 
     public function __construct(
+        /**
+         * Name of the device location.
+         */
         public string|null $location_name,
+        /**
+         * Time zone of the device location.
+         */
         public string|null $time_zone,
+        /**
+         * Time zone of the device location.
+         *
+         * @deprecated Use `time_zone` instead.
+         */
         public string|null $timezone,
     ) {}
 }
 
+/**
+ * Device model-related properties.
+ */
 class UnmanagedDeviceModel
 {
     public static function from_json(mixed $json): UnmanagedDeviceModel|null
@@ -208,16 +357,40 @@ class UnmanagedDeviceModel
     }
 
     public function __construct(
+        /**
+         * @deprecated use device.properties.model.can_connect_accessory_keypad
+         */
         public bool|null $accessory_keypad_supported,
+        /**
+         * Indicates whether the device can connect a accessory keypad.
+         */
         public bool|null $can_connect_accessory_keypad,
+        /**
+         * Display name of the device model.
+         */
         public string|null $display_name,
+        /**
+         * Indicates whether the device has a built in accessory keypad.
+         */
         public bool|null $has_built_in_keypad,
+        /**
+         * Display name that corresponds to the manufacturer-specific terminology for the device.
+         */
         public string|null $manufacturer_display_name,
+        /**
+         * @deprecated use device.can_program_offline_access_codes.
+         */
         public bool|null $offline_access_codes_supported,
+        /**
+         * @deprecated use device.can_program_online_access_codes.
+         */
         public bool|null $online_access_codes_supported,
     ) {}
 }
 
+/**
+ * properties of the device.
+ */
 class UnmanagedDeviceProperties
 {
     public static function from_json(
@@ -252,20 +425,62 @@ class UnmanagedDeviceProperties
     }
 
     public function __construct(
+        /**
+         * Accessory keypad properties and state.
+         */
         public UnmanagedDeviceAccessoryKeypad|null $accessory_keypad,
+        /**
+         * Represents the current status of the battery charge level.
+         */
         public UnmanagedDeviceBattery|null $battery,
+        /**
+         * Indicates the battery level of the device as a decimal value between 0 and 1, inclusive.
+         */
         public float|null $battery_level,
+        /**
+         * Alt text for the device image.
+         */
         public string|null $image_alt_text,
+        /**
+         * Image URL for the device.
+         */
         public string|null $image_url,
+        /**
+         * Manufacturer of the device. When a device, such as a smart lock, is connected through a smart hub, the manufacturer of the device might be different from that of the smart hub.
+         */
         public string|null $manufacturer,
+        /**
+         * Device model-related properties.
+         */
         public UnmanagedDeviceModel|null $model,
+        /**
+         * Name of the device.
+         *
+         * @deprecated use device.display_name instead
+         */
         public string|null $name,
+        /**
+         * Indicates whether it is currently possible to use offline access codes for the device.
+         *
+         * @deprecated use device.can_program_offline_access_codes
+         */
         public bool|null $offline_access_codes_enabled,
+        /**
+         * Indicates whether the device is online.
+         */
         public bool|null $online,
+        /**
+         * Indicates whether it is currently possible to use online access codes for the device.
+         *
+         * @deprecated use device.can_program_online_access_codes
+         */
         public bool|null $online_access_codes_enabled,
     ) {}
 }
 
+/**
+ * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
+ */
 class UnmanagedDeviceWarnings
 {
     public static function from_json(mixed $json): UnmanagedDeviceWarnings|null
@@ -284,10 +499,25 @@ class UnmanagedDeviceWarnings
     }
 
     public function __construct(
+        /**
+         * Number of active access codes on the device when the warning was set.
+         */
         public int|null $active_access_code_count,
+        /**
+         * Date and time at which Seam created the warning.
+         */
         public string|null $created_at,
+        /**
+         * Maximum number of active access codes supported by the device.
+         */
         public int|null $max_active_access_code_count,
+        /**
+         * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+         */
         public string|null $message,
+        /**
+         * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+         */
         public string|null $warning_code,
     ) {}
 }
