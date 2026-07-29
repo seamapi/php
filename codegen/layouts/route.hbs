@@ -1,0 +1,9 @@
+<?php
+
+namespace Seam\Routes;
+
+{{#each useStatements}}
+use {{this}};
+{{/each}}
+
+{{> client-class}}
