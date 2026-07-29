@@ -218,7 +218,7 @@ PHPUnit is configured in `phpunit.xml.dist`.
 ### Requirements
 
 This package supports PHP 8.0 and later.
-Continuous integration exercises the latest two releases, PHP 8.4 and 8.5.
+Continuous integration exercises both ends of that range, PHP 8.0 and 8.5.
 
 ### Publishing
 

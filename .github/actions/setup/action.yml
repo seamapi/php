@@ -6,7 +6,7 @@ inputs:
   php_version:
     description: The PHP version.
     required: false
-    default: '8.4'
+    default: '8.5'
   install_dependencies:
     description: Install dependencies.
     required: false
