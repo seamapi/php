@@ -1,3 +1,4 @@
+---
 name: Publish
 
 run-name: Publish ${{ github.ref_name }}
@@ -8,16 +9,24 @@ on:
       - v*
 
 jobs:
+  build:
+    name: Build
+    uses: ./.github/workflows/_build.yml
   release:
     name: GitHub Releases
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    needs: build
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-
+      - name: Download artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ needs.build.outputs.artifact_name }}
+          path: pkg/
       - name: Generate release notes
         id: changelog
         run: |
@@ -26,11 +35,11 @@ jobs:
           echo "outfile=${outfile}" >> $GITHUB_OUTPUT
           npx standard-changelog@^5.0.0 --release-count 2 --infile $outfile.tmp --outfile $outfile.tmp
           sed '1,3d' $outfile.tmp > $outfile
-
       - name: Create GitHub release
         uses: softprops/action-gh-release@v3
         with:
           token: ${{ secrets.GH_TOKEN }}
+          fail_on_unmatched_files: true
           prerelease: ${{ contains(github.ref_name, '-') }}
-          files: ''
+          files: pkg/*
           body_path: ${{ github.workspace }}/${{ steps.changelog.outputs.outfile }}
