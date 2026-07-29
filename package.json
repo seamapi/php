@@ -5,6 +5,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "version": "tsx ./version.ts && git add src/Utils/PackageVersion.php",
     "postversion": "git push --follow-tags",
     "generate": "tsx codegen/smith.ts",
     "postgenerate": "npm run format",

@@ -54,24 +54,26 @@
   "archive": {
     "exclude": [
       "/.devcontainer",
-      "/.github",
-      "/codegen",
-      "/node_modules",
-      "/pkg",
-      "/tests",
-      "/tmp",
-      "/vendor",
       "/.editorconfig",
       "/.env.example",
+      "/.github",
       "/.npmrc",
       "/.phpunit.result.cache",
       "/.prettierignore",
       "/.prettierrc.json",
       "/.releaserc.json",
+      "/codegen",
       "/eslint.config.ts",
+      "/node_modules",
       "/package-lock.json",
+      "/package.json",
       "/phpunit.xml.dist",
-      "/tsconfig.json"
+      "/pkg",
+      "/tests",
+      "/tmp",
+      "/tsconfig.json",
+      "/vendor",
+      "/version.ts"
     ]
   },
   "scripts": {

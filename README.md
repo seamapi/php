@@ -234,15 +234,25 @@ and dispatches the [Version](.github/workflows/version.yml) workflow.
 Run the [Version](.github/workflows/version.yml) workflow with the
 version to cut.
 It runs `npm version`, which bumps the `version` field in `package.json`,
-creates a signed `v*` git tag and pushes it.
+injects that version into `Seam\Utils\PackageVersion`, creates a signed `v*`
+git tag and pushes it.
 Pushing the tag triggers the [Publish](.github/workflows/publish.yml)
 workflow, and [Packagist](https://packagist.org/packages/seamapi/seam)
 picks up the new tag from its GitHub webhook.
 
 > Composer has no canonical place to store a package version, since Packagist
-> derives it from the git tag.
-> This repository therefore keeps the version in `package.json` and lets
-> `npm version` manage the tag.
-> The SDK also reads that field at runtime via `Seam\Utils\PackageVersion`
-> to set its `seam-sdk-version` header, so `package.json` must remain in the
-> published package.
+> derives it from the git tag, and it publishes the tag as-is with no build
+> step in between.
+> This repository therefore keeps the version in `package.json`, which is a
+> development manifest that is not published, and injects it into the
+> `Seam\Utils\PackageVersion::VERSION` constant used for the
+> `seam-sdk-version` header.
+>
+> The injection runs from `version.ts`, wired to the `version` lifecycle
+> script, which npm runs after the bump but before the commit, so the
+> updated constant is part of the tagged commit.
+> Never edit that constant by hand; a test asserts it matches `package.json`.
+
+Development files are kept out of the published package with `export-ignore`
+rules in `.gitattributes`, which `git archive` honours when GitHub builds the
+archives Composer downloads as `dist`.
