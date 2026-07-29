@@ -16,8 +16,14 @@ import { getPhpType } from './map-php-type.js'
 
 export type ResourceClassProperty =
   | ({ kind: 'value'; phpType: string } & ResourceClassPropertyMetadata)
-  | ({ kind: 'objectReference'; referenceName: string } & ResourceClassPropertyMetadata)
-  | ({ kind: 'listReference'; referenceName: string } & ResourceClassPropertyMetadata)
+  | ({
+      kind: 'objectReference'
+      referenceName: string
+    } & ResourceClassPropertyMetadata)
+  | ({
+      kind: 'listReference'
+      referenceName: string
+    } & ResourceClassPropertyMetadata)
 
 interface ResourceClassPropertyMetadata {
   name: string
@@ -109,8 +115,12 @@ export const createResourceModel = (blueprint: Blueprint): ResourceModel => {
     currentResourceName = name
     localClassNames.set(name, [])
     const sourceResource =
-      blueprint.resources.find((resource) => resource.resourceType === resourceType) ??
-      (resourceType === 'event' ? blueprint.events[0] : blueprint.actionAttempts[0])
+      blueprint.resources.find(
+        (resource) => resource.resourceType === resourceType,
+      ) ??
+      (resourceType === 'event'
+        ? blueprint.events[0]
+        : blueprint.actionAttempts[0])
     addClass(
       name,
       baseResources.get(resourceType) ?? [],

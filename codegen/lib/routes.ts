@@ -102,7 +102,8 @@ export const routes = (
 const createClientMethod = (endpoint: Endpoint): PhpClientMethod => {
   const { response } = endpoint
 
-  const responseKey = response.responseType === 'void' ? '' : response.responseKey
+  const responseKey =
+    response.responseType === 'void' ? '' : response.responseKey
 
   // Batch responses have no single resource type; they deserialize into the
   // Batch resource. A response whose resource type the blueprint cannot
@@ -126,17 +127,17 @@ const createClientMethod = (endpoint: Endpoint): PhpClientMethod => {
     isDeprecated: endpoint.isDeprecated,
     deprecationMessage: endpoint.deprecationMessage,
     parameters: endpoint.request.parameters.map((parameter) => ({
-        name: parameter.name,
-        type: getPhpType(parameter),
-        description: parameter.description,
-        required: parameter.isRequired,
-        // The primary identifier of a get endpoint always sorts first in the
-        // method signature.
-        position:
-          endpoint.name === 'get' && parameter.name === `${responseKey}_id`
-            ? 0
-            : undefined,
-      })),
+      name: parameter.name,
+      type: getPhpType(parameter),
+      description: parameter.description,
+      required: parameter.isRequired,
+      // The primary identifier of a get endpoint always sorts first in the
+      // method signature.
+      position:
+        endpoint.name === 'get' && parameter.name === `${responseKey}_id`
+          ? 0
+          : undefined,
+    })),
     returnPath: responseKey,
     returnResource: resourceType === '' ? '' : pascalCase(resourceType),
     isArrayResponse:
