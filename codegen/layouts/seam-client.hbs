@@ -3,7 +3,7 @@
 namespace Seam;
 
 {{#each useStatements}}
-use Seam\Resources\\{{this}};
+use {{this}};
 {{/each}}
 use Seam\Utils\PackageVersion;
 
@@ -12,8 +12,6 @@ use \Exception as Exception;
 use Seam\HttpApiError;
 use Seam\HttpUnauthorizedError;
 use Seam\HttpInvalidInputError;
-use Seam\ActionAttemptFailedError;
-use Seam\ActionAttemptTimeoutError;
 
 define('LTS_VERSION', '1.0.0');
 
@@ -100,8 +98,3 @@ class SeamClient
       return new Paginator($request, $params);
   }
 }
-
-{{#each clients}}
-{{> client-class}}
-
-{{/each}}

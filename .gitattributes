@@ -1,1 +1,3 @@
 src/Resources/*.php linguist-generated
+src/Routes/*.php linguist-generated
+src/SeamClient.php linguist-generated

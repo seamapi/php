@@ -1,8 +1,8 @@
 // The Metalsmith plugin that generates the PHP SDK source files.
 //
 // The blueprint from @seamapi/blueprint is the only input: it drives the
-// resource classes written to src/Resources, and the resource client
-// classes serialized into src/SeamClient.php.
+// resource classes written to src/Resources, the resource client classes
+// written to src/Routes, and the SeamClient class in src/SeamClient.php.
 
 import type { Blueprint, Endpoint } from '@seamapi/blueprint'
 import { pascalCase } from 'change-case'
@@ -10,6 +10,7 @@ import type Metalsmith from 'metalsmith'
 
 import type { PhpClient, PhpClientMethod } from './class-model.js'
 import { setResourceLayoutContext } from './layouts/resource.js'
+import { setRouteLayoutContext } from './layouts/route.js'
 import { setSeamClientLayoutContext } from './layouts/seam-client.js'
 import { getPhpType } from './map-php-type.js'
 import { createResourceModel } from './resource-model.js'
@@ -19,6 +20,7 @@ interface Metadata {
 }
 
 const resourcesPath = 'src/Resources'
+const routesPath = 'src/Routes'
 const seamClientPath = 'src/SeamClient.php'
 
 export const routes = (
@@ -29,9 +31,8 @@ export const routes = (
   const { blueprint } = metadata
 
   // Resource classes, one file per resource holding the resource class and
-  // the local classes for its object properties. The resource names drive the
-  // SeamClient use statements.
-  const { resourceNames, resources } = createResourceModel(blueprint)
+  // the local classes for its object properties.
+  const { resources } = createResourceModel(blueprint)
 
   for (const resource of resources) {
     files[`${resourcesPath}/${resource.name}.php`] = {
@@ -41,10 +42,10 @@ export const routes = (
     }
   }
 
-  // Resource client classes, all serialized into SeamClient.php. Each route
-  // path maps to a client class, e.g. /acs/users to AcsUsersClient, wired to
-  // a property on its parent client (AcsClient) or, for top-level routes, on
-  // the SeamClient itself.
+  // Resource client classes, one file per client. Each route path maps to a
+  // client class, e.g. /acs/users to AcsUsersClient, wired to a property on
+  // its parent client (AcsClient) or, for top-level routes, on the SeamClient
+  // itself.
   const classMap = new Map<string, PhpClient>()
 
   const ensureClient = (namespaceSegments: string[]): PhpClient => {
@@ -81,10 +82,20 @@ export const routes = (
     }
   }
 
+  const clients = [...classMap.values()]
+
+  for (const client of clients) {
+    files[`${routesPath}/${client.clientName}Client.php`] = {
+      contents: Buffer.from('\n'),
+      layout: 'route.hbs',
+      ...setRouteLayoutContext(client),
+    }
+  }
+
   files[seamClientPath] = {
     contents: Buffer.from('\n'),
     layout: 'seam-client.hbs',
-    ...setSeamClientLayoutContext([...classMap.values()], resourceNames),
+    ...setSeamClientLayoutContext(clients),
   }
 }
 
