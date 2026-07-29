@@ -14,12 +14,26 @@
     "format": "prettier --write --ignore-path .gitignore --ignore-path .prettierignore .",
     "preformat": "eslint --fix ."
   },
+  "engines": {
+    "node": ">=22.11.0",
+    "npm": ">=10.9.4"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "^24.11.0 || ^22.11.0"
+    },
+    "packageManager": {
+      "name": "npm",
+      "version": "^11.0.0 || ^10.9.4"
+    }
+  },
   "devDependencies": {
-    "@prettier/plugin-php": "^0.24.0",
-    "@seamapi/blueprint": "^1.1.0",
+    "@prettier/plugin-php": "^0.25.0",
+    "@seamapi/blueprint": "^1.2.0",
     "@seamapi/smith": "^1.1.0",
-    "@seamapi/types": "1.983.0",
+    "@seamapi/types": "1.985.0",
     "change-case": "^5.4.4",
-    "prettier": "^3.0.0"
+    "prettier": "^3.9.6"
   }
 }

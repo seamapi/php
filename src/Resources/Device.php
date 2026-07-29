@@ -3432,6 +3432,8 @@ class DeviceSensiMetadata
             device_name: $json->device_name ?? null,
             dual_setpoints_not_supported: $json->dual_setpoints_not_supported ??
                 null,
+            enforced_setpoint_range_celsius: $json->enforced_setpoint_range_celsius ??
+                null,
             product_type: $json->product_type ?? null,
         );
     }
@@ -3449,6 +3451,10 @@ class DeviceSensiMetadata
          * Set to true when the device does not support the /dual-setpoints API endpoint.
          */
         public bool|null $dual_setpoints_not_supported,
+        /**
+         * Enforced setpoint range in Celsius for a Sensi device, derived from an OutOfRange API error.
+         */
+        public array|null $enforced_setpoint_range_celsius,
         /**
          * Product type for a Sensi device.
          */

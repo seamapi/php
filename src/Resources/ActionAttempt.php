@@ -116,6 +116,9 @@ class ActionAttemptAcsCredentialOnSeam
             acs_credential_pool_id: $json->acs_credential_pool_id ?? null,
             acs_system_id: $json->acs_system_id ?? null,
             acs_user_id: $json->acs_user_id ?? null,
+            akiles_metadata: isset($json->akiles_metadata)
+                ? ActionAttemptAkilesMetadata::from_json($json->akiles_metadata)
+                : null,
             assa_abloy_vostio_metadata: isset($json->assa_abloy_vostio_metadata)
                 ? ActionAttemptAssaAbloyVostioMetadata::from_json(
                     $json->assa_abloy_vostio_metadata,
@@ -181,6 +184,10 @@ class ActionAttemptAcsCredentialOnSeam
          * ID of the [ACS user](https://docs.seam.co/low-level-apis/access-systems/user-management) to whom the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
          */
         public string|null $acs_user_id,
+        /**
+         * Akiles-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+         */
+        public ActionAttemptAkilesMetadata|null $akiles_metadata,
         /**
          * Vostio-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
          */
@@ -270,6 +277,28 @@ class ActionAttemptAcsCredentialOnSeam
          * ID of the workspace that contains the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
          */
         public string|null $workspace_id,
+    ) {}
+}
+
+/**
+ * Akiles-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+ */
+class ActionAttemptAkilesMetadata
+{
+    public static function from_json(
+        mixed $json,
+    ): ActionAttemptAkilesMetadata|null {
+        if (!$json) {
+            return null;
+        }
+        return new self(member_pin_id: $json->member_pin_id ?? null);
+    }
+
+    public function __construct(
+        /**
+         * ID of the Akiles member PIN.
+         */
+        public string|null $member_pin_id,
     ) {}
 }
 
@@ -463,6 +492,7 @@ class ActionAttemptResult
             return null;
         }
         return new self(
+            access_code: $json->access_code ?? null,
             access_method: $json->access_method ?? null,
             access_method_id: $json->access_method_id ?? null,
             acs_credential_id: $json->acs_credential_id ?? null,
@@ -479,6 +509,9 @@ class ActionAttemptResult
             acs_credential_pool_id: $json->acs_credential_pool_id ?? null,
             acs_system_id: $json->acs_system_id ?? null,
             acs_user_id: $json->acs_user_id ?? null,
+            akiles_metadata: isset($json->akiles_metadata)
+                ? ActionAttemptAkilesMetadata::from_json($json->akiles_metadata)
+                : null,
             assa_abloy_vostio_metadata: isset($json->assa_abloy_vostio_metadata)
                 ? ActionAttemptAssaAbloyVostioMetadata::from_json(
                     $json->assa_abloy_vostio_metadata,
@@ -515,6 +548,7 @@ class ActionAttemptResult
             latest_desired_state_synced_with_provider_at: $json->latest_desired_state_synced_with_provider_at ??
                 null,
             mode: $json->mode ?? null,
+            noise_threshold: $json->noise_threshold ?? null,
             parent_acs_credential_id: $json->parent_acs_credential_id ?? null,
             pending_mutations: array_map(
                 fn($p) => ActionAttemptPendingMutations::from_json($p),
@@ -537,6 +571,10 @@ class ActionAttemptResult
     }
 
     public function __construct(
+        /**
+         * Created access code.
+         */
+        public mixed $access_code,
         /**
          * Access method for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials). Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
          */
@@ -569,6 +607,10 @@ class ActionAttemptResult
          * ID of the [ACS user](https://docs.seam.co/low-level-apis/access-systems/user-management) to whom the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
          */
         public string|null $acs_user_id,
+        /**
+         * Akiles-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+         */
+        public ActionAttemptAkilesMetadata|null $akiles_metadata,
         /**
          * Vostio-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
          */
@@ -666,6 +708,10 @@ class ActionAttemptResult
          * Access method mode. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
          */
         public string|null $mode,
+        /**
+         * Created noise threshold.
+         */
+        public mixed $noise_threshold,
         /**
          * ID of the parent [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
          */

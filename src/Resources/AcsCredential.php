@@ -24,6 +24,9 @@ class AcsCredential
             acs_credential_pool_id: $json->acs_credential_pool_id ?? null,
             acs_system_id: $json->acs_system_id ?? null,
             acs_user_id: $json->acs_user_id ?? null,
+            akiles_metadata: isset($json->akiles_metadata)
+                ? AcsCredentialAkilesMetadata::from_json($json->akiles_metadata)
+                : null,
             assa_abloy_vostio_metadata: isset($json->assa_abloy_vostio_metadata)
                 ? AcsCredentialAssaAbloyVostioMetadata::from_json(
                     $json->assa_abloy_vostio_metadata,
@@ -89,6 +92,10 @@ class AcsCredential
          * ID of the [ACS user](https://docs.seam.co/low-level-apis/access-systems/user-management) to whom the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
          */
         public string|null $acs_user_id,
+        /**
+         * Akiles-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+         */
+        public AcsCredentialAkilesMetadata|null $akiles_metadata,
         /**
          * Vostio-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
          */
@@ -181,6 +188,28 @@ class AcsCredential
          * ID of the workspace that contains the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
          */
         public string|null $workspace_id,
+    ) {}
+}
+
+/**
+ * Akiles-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+ */
+class AcsCredentialAkilesMetadata
+{
+    public static function from_json(
+        mixed $json,
+    ): AcsCredentialAkilesMetadata|null {
+        if (!$json) {
+            return null;
+        }
+        return new self(member_pin_id: $json->member_pin_id ?? null);
+    }
+
+    public function __construct(
+        /**
+         * ID of the Akiles member PIN.
+         */
+        public string|null $member_pin_id,
     ) {}
 }
 
