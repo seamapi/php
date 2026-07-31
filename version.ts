@@ -1,6 +1,8 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 
+import { $ } from 'execa'
+
 const versionFile = './src/Utils/PackageVersion.php'
 
 const versionPattern = /public const VERSION = "[^"]*";/
@@ -11,6 +13,10 @@ const main = async (): Promise<void> => {
   )
   // eslint-disable-next-line no-console
   console.log(`✓ Version ${version} injected into ${versionFile}`)
+
+  const { command } = await $`git add ${versionFile}`
+  // eslint-disable-next-line no-console
+  console.log(`✓ Staged with '${command}'`)
 }
 
 const injectVersion = async (path: string): Promise<string> => {
