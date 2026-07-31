@@ -1,15 +1,12 @@
 ---
 name: Setup
-description: Setup Node.js and install dependencies.
+description: Setup PHP and install dependencies.
+
 inputs:
-  node_version:
-    description: The Node.js version.
+  php_version:
+    description: The PHP version.
     required: false
-    default: '24'
-  registry_url:
-    description: The Node.js package registry URL.
-    required: false
-    default: https://registry.npmjs.org
+    default: '8.5'
   install_dependencies:
     description: Install dependencies.
     required: false
@@ -18,28 +15,30 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Setup Node.js
-      uses: actions/setup-node@v7
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ inputs.php_version }}
+        tools: composer:v2
+        coverage: none
+    - name: Check lockfile
+      if: inputs.install_dependencies == 'true'
+      shell: bash
+      run: composer validate --strict
+    - name: Get Composer cache directory
+      id: composer_cache
+      if: inputs.install_dependencies == 'true'
+      shell: bash
+      run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+    - name: Setup Composer cache
+      uses: actions/cache@v4
       if: inputs.install_dependencies == 'true'
       with:
-        node-version: ${{ inputs.node_version }}
-        registry-url: ${{ inputs.registry_url }}
-    - name: Setup Node.js without cache
-      uses: actions/setup-node@v7
-      if: inputs.install_dependencies == 'false'
-      with:
-        node-version: ${{ inputs.node_version }}
-        registry-url: ${{ inputs.registry_url }}
+        key: composer-${{ inputs.php_version }}-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('composer.lock') }}
+        restore-keys: |
+          composer-${{ inputs.php_version }}-${{ runner.os }}-${{ runner.arch }}-
+        path: ${{ steps.composer_cache.outputs.dir }}
     - name: Install dependencies
       if: inputs.install_dependencies == 'true'
       shell: bash
-      run: npm ci --ignore-scripts
-    - name: Rebuild Node.js modules
-      shell: bash
-      run: npm rebuild
-    - name: Run postinstall script
-      shell: bash
-      run: npm run postinstall --if-present
-    - name: Run prepare script
-      shell: bash
-      run: npm run prepare --if-present
+      run: composer install --prefer-dist

@@ -5,6 +5,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "version": "tsx ./version.ts",
     "postversion": "git push --follow-tags",
     "generate": "tsx codegen/smith.ts",
     "postgenerate": "npm run format",
@@ -34,6 +35,7 @@
     "@seamapi/smith": "^1.1.0",
     "@seamapi/types": "1.985.0",
     "change-case": "^5.4.4",
+    "execa": "^10.0.1",
     "prettier": "^3.9.6"
   }
 }

@@ -52,10 +52,14 @@ const createPhpDoc = (
     .split(/\r?\n/)
     .map(sanitizePhpDocLine)
   const populatedDescription = description.trim() === '' ? [] : descriptionLines
-  const populatedTags = tags.filter((tag) => tag.trim() !== '').map(sanitizePhpDocLine)
+  const populatedTags = tags
+    .filter((tag) => tag.trim() !== '')
+    .map(sanitizePhpDocLine)
   const lines = [
     ...populatedDescription,
-    ...(populatedDescription.length > 0 && populatedTags.length > 0 ? [''] : []),
+    ...(populatedDescription.length > 0 && populatedTags.length > 0
+      ? ['']
+      : []),
     ...populatedTags,
   ]
 

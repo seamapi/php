@@ -1,0 +1,124 @@
+---
+name: Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  test:
+    name: Test (PHP ${{ matrix.php }} on ${{ matrix.os_name }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        php:
+          - '8.0'
+          - '8.5'
+        include:
+          - os: ubuntu-latest
+            os_name: Linux
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          php_version: ${{ matrix.php }}
+      - name: Setup Node.js
+        uses: ./.github/actions/setup-node
+      - name: Test
+        run: composer test
+  lint:
+    name: Lint (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        php:
+          - '8.0'
+          - '8.5'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          php_version: ${{ matrix.php }}
+      - name: Setup Node.js
+        uses: ./.github/actions/setup-node
+      - name: Lint
+        run: composer lint
+      - name: Lint with ESLint and Prettier
+        run: npm run lint
+  build:
+    name: Build
+    uses: ./.github/workflows/_build.yml
+  install:
+    name: Install (PHP ${{ matrix.php }} on ${{ matrix.os_name }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        php:
+          - '8.0'
+          - '8.5'
+        include:
+          - os: ubuntu-latest
+            os_name: Linux
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+      - name: Download artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ needs.build.outputs.artifact_name }}
+          path: pkg/
+      - name: Extract package
+        run: unzip -q pkg/seam.zip -d package
+      - name: Create composer.json
+        uses: DamianReeves/write-file-action@v1.3
+        with:
+          write-mode: overwrite
+          path: composer.json
+          contents: |
+            {
+              "repositories": [
+                {
+                  "type": "path",
+                  "url": "./package",
+                  "options": { "symlink": false }
+                }
+              ],
+              "require": { "seamapi/seam": "*" },
+              "minimum-stability": "dev"
+            }
+      - name: Create main.php
+        uses: DamianReeves/write-file-action@v1.3
+        with:
+          write-mode: overwrite
+          path: main.php
+          contents: |
+            <?php
+            require __DIR__ . '/vendor/autoload.php';
+            new Seam\SeamClient('seam_apikey1_token');
+      - name: Install
+        run: composer install --no-interaction --no-progress
+      - name: Run
+        run: php main.php

@@ -1,24 +1,22 @@
 ---
-name: Version
-
-run-name: Cut ${{ github.event.inputs.version }}
+name: Format
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: Version to cut
-        required: true
+  push:
+    branches-ignore:
+      - main
+  workflow_dispatch: {}
 
 jobs:
-  tag:
-    name: Tag
+  commit:
+    name: Format code
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
+          ref: ${{ github.head_ref }}
           token: ${{ secrets.GH_TOKEN }}
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v7
@@ -31,5 +29,13 @@ jobs:
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Setup Node.js
         uses: ./.github/actions/setup-node
-      - name: Cut ${{ github.event.inputs.version }} version
-        run: npm version --sign-git-tag=true ${{ github.event.inputs.version }}
+      - name: Format with Prettier
+        run: npm run format
+      - name: Commit
+        uses: stefanzweifel/git-auto-commit-action@v7
+        if: always()
+        with:
+          commit_message: 'ci: Format code'
+          commit_user_name: ${{ secrets.GIT_USER_NAME }}
+          commit_user_email: ${{ secrets.GIT_USER_EMAIL }}
+          commit_author: ${{ secrets.GIT_USER_NAME }} <${{ secrets.GIT_USER_EMAIL }}>

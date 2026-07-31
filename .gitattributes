@@ -1,3 +1,25 @@
 src/Resources/*.php linguist-generated
 src/Routes/*.php linguist-generated
 src/SeamClient.php linguist-generated
+
+# Keep development files out of the published package.
+# GitHub builds the archives Composer downloads as dist with git archive,
+# which honours these rules.
+/.devcontainer export-ignore
+/.editorconfig export-ignore
+/.env.example export-ignore
+/.gitattributes export-ignore
+/.github export-ignore
+/.gitignore export-ignore
+/.npmrc export-ignore
+/.prettierignore export-ignore
+/.prettierrc.json export-ignore
+/.releaserc.json export-ignore
+/codegen export-ignore
+/eslint.config.ts export-ignore
+/package-lock.json export-ignore
+/package.json export-ignore
+/phpunit.xml.dist export-ignore
+/tests export-ignore
+/tsconfig.json export-ignore
+/version.ts export-ignore

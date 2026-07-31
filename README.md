@@ -163,15 +163,96 @@ If you want to install our previous handwritten version, run:
 
 `composer require seamapi/seam:1.1`
 
-## Development Setup
+## Development and Testing
 
-1. Run `yarn install` to get prettier installed for formatting
-2. Install [composer](https://getcomposer.org/).
-3. Run `composer install` in this directory
-4. Run `composer exec phpunit tests`
+### Quickstart
 
-> To run a specific test file, do `composer exec phpunit tests/MyTest.php`
+Install [PHP](https://www.php.net/) 8.0 or later,
+[Composer](https://getcomposer.org/) and [Node.js](https://nodejs.org/),
+then run
+
+```
+$ git clone git@github.com:seamapi/php.git
+$ cd php
+$ composer install
+$ npm install
+```
+
+Primary development tasks are defined as [Composer scripts](https://getcomposer.org/doc/articles/scripts.md)
+in `composer.json` and available via `composer`.
+View them with
+
+```
+$ composer run-script --list
+```
+
+| Task              | Command            |
+| ----------------- | ------------------ |
+| Run the tests     | `composer test`    |
+| Lint              | `composer lint`    |
+| Format            | `npm run format`   |
+| Build the package | `composer build`   |
+| Generate the SDK  | `npm run generate` |
+
+Formatting is handled by [Prettier](https://prettier.io/) via
+[@prettier/plugin-php](https://github.com/prettier/plugin-php),
+so PHP, TypeScript, JSON, YAML and Markdown are all formatted by
+`npm run format`.
 
 ### Running Tests
 
-You'll need to export `SEAM_API_KEY` to a sandbox workspace API key.
+Run the full suite with
+
+```
+$ composer test
+```
+
+To run a specific test file, pass it as an argument
+
+```
+$ composer test -- tests/MyTest.php
+```
+
+PHPUnit is configured in `phpunit.xml.dist`.
+
+### Requirements
+
+This package supports PHP 8.0 and later.
+Continuous integration exercises both ends of that range, PHP 8.0 and 8.5.
+
+### Publishing
+
+#### Automatic
+
+New versions are released automatically from `main` by the
+[Semantic Release](.github/workflows/semantic-release.yml) workflow,
+which reads [Conventional Commits](https://www.conventionalcommits.org/)
+and dispatches the [Version](.github/workflows/version.yml) workflow.
+
+#### Manual
+
+Run the [Version](.github/workflows/version.yml) workflow with the
+version to cut.
+It runs `npm version`, which bumps the `version` field in `package.json`,
+injects that version into `Seam\Utils\PackageVersion`, creates a signed `v*`
+git tag and pushes it.
+Pushing the tag triggers the [Publish](.github/workflows/publish.yml)
+workflow, and [Packagist](https://packagist.org/packages/seamapi/seam)
+picks up the new tag from its GitHub webhook.
+
+> Composer has no canonical place to store a package version, since Packagist
+> derives it from the git tag, and it publishes the tag as-is with no build
+> step in between.
+> This repository therefore keeps the version in `package.json`, which is a
+> development manifest that is not published, and injects it into the
+> `Seam\Utils\PackageVersion::VERSION` constant used for the
+> `seam-sdk-version` header.
+>
+> The injection runs from `version.ts`, wired to the `version` lifecycle
+> script, which npm runs after the bump but before the commit, so the
+> updated constant is part of the tagged commit.
+> Never edit that constant by hand; a test asserts it matches `package.json`.
+
+Development files are kept out of the published package with `export-ignore`
+rules in `.gitattributes`, which `git archive` honours when GitHub builds the
+archives Composer downloads as `dist`.

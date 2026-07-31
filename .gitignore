@@ -12,8 +12,12 @@ CODEGEN.md
 vendor
 tmp
 
+# PHPUnit result cache
+.phpunit.result.cache
+
 # Build directories
 package
+/pkg/
 
 # Environment versions file
 .versions
