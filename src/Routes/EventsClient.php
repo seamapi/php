@@ -2,16 +2,25 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\Event;
-use Seam\SeamClient;
 
 class EventsClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -39,7 +48,7 @@ class EventsClient
             $request_payload["event_type"] = $event_type;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/events/get",
             json: (object) $request_payload,
@@ -198,7 +207,7 @@ class EventsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/events/list",
             json: (object) $request_payload,

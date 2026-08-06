@@ -2,18 +2,28 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\ResolveActionAttempt;
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\ActionAttempt;
 use Seam\Resources\Device;
-use Seam\SeamClient;
 
 class LocksClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
+
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
     public LocksSimulateClient $simulate;
-    public function __construct(SeamClient $seam)
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
-        $this->simulate = new LocksSimulateClient($seam);
+        $this->client = $client;
+        $this->defaults = $defaults;
+        $this->simulate = new LocksSimulateClient($client, $defaults);
     }
 
     /**
@@ -22,43 +32,37 @@ class LocksClient
      * @param bool $auto_lock_enabled Whether to enable or disable auto-lock.
      * @param string $device_id ID of the lock for which you want to configure the auto-lock.
      * @param float $auto_lock_delay_seconds Delay in seconds before the lock automatically locks. Required when enabling auto-lock. Must be between 1 and 60.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function configure_auto_lock(
         bool $auto_lock_enabled,
         string $device_id,
         ?float $auto_lock_delay_seconds = null,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($auto_lock_enabled !== null) {
-            $request_payload["auto_lock_enabled"] = $auto_lock_enabled;
-        }
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["auto_lock_enabled"] = $auto_lock_enabled;
+        $request_payload["device_id"] = $device_id;
         if ($auto_lock_delay_seconds !== null) {
             $request_payload[
                 "auto_lock_delay_seconds"
             ] = $auto_lock_delay_seconds;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/locks/configure_auto_lock",
             json: (object) $request_payload,
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json($res->action_attempt),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 
     /**
@@ -80,7 +84,7 @@ class LocksClient
             $request_payload["name"] = $name;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/locks/get",
             json: (object) $request_payload,
@@ -108,6 +112,7 @@ class LocksClient
      * @param string $space_id ID of the space for which you want to list devices.
      * @param string $unstable_location_id
      * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -180,7 +185,7 @@ class LocksClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/locks/list",
             json: (object) $request_payload,
@@ -197,65 +202,57 @@ class LocksClient
      * Locks a [lock](https://docs.seam.co/low-level-apis/smart-locks). See also [Locking and Unlocking Smart Locks](https://docs.seam.co/low-level-apis/smart-locks/lock-and-unlock).
      *
      * @param string $device_id ID of the lock that you want to lock.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function lock_door(
         string $device_id,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/locks/lock_door",
             json: (object) $request_payload,
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json($res->action_attempt),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 
     /**
      * Unlocks a [lock](https://docs.seam.co/low-level-apis/smart-locks). See also [Locking and Unlocking Smart Locks](https://docs.seam.co/low-level-apis/smart-locks/lock-and-unlock).
      *
      * @param string $device_id ID of the lock that you want to unlock.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function unlock_door(
         string $device_id,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/locks/unlock_door",
             json: (object) $request_payload,
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json($res->action_attempt),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 }

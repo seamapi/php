@@ -2,17 +2,27 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\ResolveActionAttempt;
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\ActionAttempt;
 use Seam\Resources\Workspace;
-use Seam\SeamClient;
 
 class WorkspacesClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -44,9 +54,7 @@ class WorkspacesClient
     ): Workspace {
         $request_payload = [];
 
-        if ($name !== null) {
-            $request_payload["name"] = $name;
-        }
+        $request_payload["name"] = $name;
         if ($company_name !== null) {
             $request_payload["company_name"] = $company_name;
         }
@@ -83,7 +91,7 @@ class WorkspacesClient
             ] = $webview_success_message;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/workspaces/create",
             json: (object) $request_payload,
@@ -99,7 +107,7 @@ class WorkspacesClient
      */
     public function get(): Workspace
     {
-        $res = $this->seam->request("POST", "/workspaces/get");
+        $res = $this->client->request("POST", "/workspaces/get");
 
         return Workspace::from_json($res->workspace);
     }
@@ -111,7 +119,7 @@ class WorkspacesClient
      */
     public function list(): array
     {
-        $res = $this->seam->request("POST", "/workspaces/list");
+        $res = $this->client->request("POST", "/workspaces/list");
 
         return array_map(fn($r) => Workspace::from_json($r), $res->workspaces);
     }
@@ -119,22 +127,20 @@ class WorkspacesClient
     /**
      * Resets the [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces) associated with the authentication value. Note that this endpoint is only available for sandbox workspaces.
      *
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function reset_sandbox(
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
-        $res = $this->seam->request("POST", "/workspaces/reset_sandbox");
+        $res = $this->client->request("POST", "/workspaces/reset_sandbox");
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json($res->action_attempt),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 
     /**
@@ -181,7 +187,7 @@ class WorkspacesClient
             $request_payload["organization_id"] = $organization_id;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/workspaces/update",
             json: (object) $request_payload,

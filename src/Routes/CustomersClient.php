@@ -2,16 +2,25 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\CustomerPortal;
-use Seam\SeamClient;
 
 class CustomersClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -83,7 +92,7 @@ class CustomersClient
             $request_payload["customer_data"] = $customer_data;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/customers/create_portal",
             json: (object) $request_payload,
@@ -198,7 +207,7 @@ class CustomersClient
             $request_payload["user_keys"] = $user_keys;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/customers/delete_data",
             json: (object) $request_payload,
@@ -254,9 +263,7 @@ class CustomersClient
     ): void {
         $request_payload = [];
 
-        if ($customer_key !== null) {
-            $request_payload["customer_key"] = $customer_key;
-        }
+        $request_payload["customer_key"] = $customer_key;
         if ($access_grants !== null) {
             $request_payload["access_grants"] = $access_grants;
         }
@@ -315,7 +322,7 @@ class CustomersClient
             $request_payload["users"] = $users;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/customers/push_data",
             json: (object) $request_payload,

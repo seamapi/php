@@ -8,12 +8,9 @@ import {
   sortPhpClientMethodParameters,
 } from '../class-model.js'
 
-const seamClientClass = 'Seam\\SeamClient'
+const seamHttpClientClass = 'Seam\\Http\\SeamHttpClient'
+const resolveActionAttemptClass = 'Seam\\Http\\ResolveActionAttempt'
 const resourcesNamespace = 'Seam\\Resources'
-const actionAttemptErrorClasses = [
-  'Seam\\ActionAttemptFailedError',
-  'Seam\\ActionAttemptTimeoutError',
-]
 
 export interface MethodLayoutContext {
   methodName: string
@@ -21,12 +18,21 @@ export interface MethodLayoutContext {
   responseDescription: string
   isDeprecated: boolean
   deprecationMessage: string
-  parameters: Array<{ name: string; type: string; description: string }>
+  parameters: Array<{
+    name: string
+    type: string
+    description: string
+    required: boolean
+  }>
+  documentedParameters: Array<{
+    name: string
+    type: string
+    description: string
+  }>
   path: string
   returnType: string
   hasParams: boolean
   signatureParams: string
-  paramNames: string[]
   usesActionAttempt: boolean
   usesOnResponse: boolean
   returnsVoid: boolean
@@ -40,21 +46,34 @@ export interface ClientLayoutContext {
   hasChildClients: boolean
   childClients: Array<{ clientName: string; namespace: string }>
   methods: MethodLayoutContext[]
-  isActionAttempts: boolean
 }
 
 export interface RouteLayoutContext extends ClientLayoutContext {
   useStatements: string[]
 }
 
+const waitForActionAttemptParameter = {
+  name: 'wait_for_action_attempt',
+  type: 'bool|array|null',
+  description:
+    'Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.',
+  required: false,
+}
+
+const onResponseParameter = {
+  name: 'on_response',
+  type: 'callable|null',
+  description:
+    'Called with the raw response envelope, used by the paginator to read the pagination metadata.',
+  required: false,
+}
+
 const getMethodLayoutContext = (
   method: PhpClientMethod,
-  clientName: string,
 ): MethodLayoutContext => {
   const { methodName, path, parameters, returnResource, returnPath } = method
 
-  const usesActionAttempt =
-    returnResource === 'ActionAttempt' && clientName !== 'ActionAttempts'
+  const usesActionAttempt = returnResource === 'ActionAttempt'
   const usesOnResponse =
     parameters.some((p) => p.name === 'page_cursor') && methodName === 'list'
   const returnsVoid = returnResource === ''
@@ -71,9 +90,22 @@ const getMethodLayoutContext = (
       (p) =>
         `${!(p.required ?? false) && p.type !== 'mixed' ? '?' : ''}${p.type} $${p.name}${(p.required ?? false) ? '' : ' = null'}`,
     )
-    .concat(usesActionAttempt ? ['bool $wait_for_action_attempt = true'] : [])
+    .concat(
+      usesActionAttempt
+        ? ['bool|array|null $wait_for_action_attempt = null']
+        : [],
+    )
     .concat(usesOnResponse ? ['?callable $on_response = null'] : [])
     .join(', ')
+
+  const documentedEndpointParameters = sortedParameters.map(
+    ({ name, type, description, required }) => ({
+      name,
+      type,
+      description,
+      required: required ?? false,
+    }),
+  )
 
   return {
     methodName,
@@ -81,16 +113,19 @@ const getMethodLayoutContext = (
     responseDescription: method.responseDescription,
     isDeprecated: method.isDeprecated,
     deprecationMessage: method.deprecationMessage,
-    parameters: sortedParameters.map(({ name, type, description }) => ({
-      name,
-      type,
-      description,
-    })),
+    // The request payload is built from the endpoint parameters alone.
+    parameters: documentedEndpointParameters,
+    // The SDK level parameters are documented alongside them so editors
+    // surface all of them, but they never reach the payload.
+    documentedParameters: [
+      ...documentedEndpointParameters,
+      ...(usesActionAttempt ? [waitForActionAttemptParameter] : []),
+      ...(usesOnResponse ? [onResponseParameter] : []),
+    ],
     path,
     returnType,
     hasParams: parameters.length > 0,
     signatureParams,
-    paramNames: sortedParameters.map((p) => p.name),
     usesActionAttempt,
     usesOnResponse,
     returnsVoid,
@@ -100,44 +135,34 @@ const getMethodLayoutContext = (
   }
 }
 
-// Child clients live in the same namespace as their parent, so only the
-// SeamClient, the resource classes returned by the methods, and the action
-// attempt errors thrown by poll_until_ready need importing.
-const getUseStatements = (
-  client: PhpClient,
-  isActionAttempts: boolean,
-): string[] => {
+// Child clients live in the same namespace as their parent, so only the HTTP
+// client, the action attempt resolver, and the resource classes returned by
+// the methods need importing.
+const getUseStatements = (client: PhpClient): string[] => {
   const resourceNames = new Set(
     client.methods
       .map((m) => m.returnResource)
       .filter((resourceName) => resourceName !== ''),
   )
 
-  if (isActionAttempts) resourceNames.add('ActionAttempt')
+  const usesActionAttempt = resourceNames.has('ActionAttempt')
 
   return [
-    seamClientClass,
+    seamHttpClientClass,
+    ...(usesActionAttempt ? [resolveActionAttemptClass] : []),
     ...[...resourceNames].map((name) => `${resourcesNamespace}\\${name}`),
-    ...(isActionAttempts ? actionAttemptErrorClasses : []),
   ].sort((a, b) => a.localeCompare(b))
 }
 
 export const setRouteLayoutContext = (
   client: PhpClient,
-): RouteLayoutContext => {
-  const isActionAttempts = client.clientName === 'ActionAttempts'
-
-  return {
-    useStatements: getUseStatements(client, isActionAttempts),
-    clientName: client.clientName,
-    hasChildClients: client.childClientIdentifiers.length > 0,
-    childClients: client.childClientIdentifiers.map((i) => ({
-      clientName: i.clientName,
-      namespace: i.namespace,
-    })),
-    methods: client.methods.map((m) =>
-      getMethodLayoutContext(m, client.clientName),
-    ),
-    isActionAttempts,
-  }
-}
+): RouteLayoutContext => ({
+  useStatements: getUseStatements(client),
+  clientName: client.clientName,
+  hasChildClients: client.childClientIdentifiers.length > 0,
+  childClients: client.childClientIdentifiers.map((i) => ({
+    clientName: i.clientName,
+    namespace: i.namespace,
+  })),
+  methods: client.methods.map(getMethodLayoutContext),
+})

@@ -28,8 +28,8 @@ final class PackageVersionTest extends TestCase
 
     public function testVersionIsUsedAsTheSdkVersionHeader(): void
     {
-        $seam = new \Seam\SeamClient("seam_apikey1_token");
-        $headers = $seam->client->getConfig("headers");
+        $seam = new \Seam\Seam("seam_apikey1_token");
+        $headers = $seam->client->get_client()->getConfig("headers");
 
         $this->assertSame(PackageVersion::get(), $headers["seam-sdk-version"]);
     }

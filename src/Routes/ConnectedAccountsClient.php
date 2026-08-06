@@ -2,17 +2,29 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\ConnectedAccount;
-use Seam\SeamClient;
 
 class ConnectedAccountsClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
+
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
     public ConnectedAccountsSimulateClient $simulate;
-    public function __construct(SeamClient $seam)
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
-        $this->simulate = new ConnectedAccountsSimulateClient($seam);
+        $this->client = $client;
+        $this->defaults = $defaults;
+        $this->simulate = new ConnectedAccountsSimulateClient(
+            $client,
+            $defaults,
+        );
     }
 
     /**
@@ -29,11 +41,9 @@ class ConnectedAccountsClient
     {
         $request_payload = [];
 
-        if ($connected_account_id !== null) {
-            $request_payload["connected_account_id"] = $connected_account_id;
-        }
+        $request_payload["connected_account_id"] = $connected_account_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/connected_accounts/delete",
             json: (object) $request_payload,
@@ -60,7 +70,7 @@ class ConnectedAccountsClient
             $request_payload["email"] = $email;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/connected_accounts/get",
             json: (object) $request_payload,
@@ -79,6 +89,7 @@ class ConnectedAccountsClient
      * @param string $search String for which to search. Filters returned connected accounts to include all records that satisfy a partial match using `connected_account_id`, `account_type`, `customer_key`, `custom_metadata`, `user_identifier.username`, `user_identifier.email` or `user_identifier.phone`.
      * @param string $space_id ID of the space by which you want to filter connected accounts.
      * @param string $user_identifier_key Your user ID for the user by which you want to filter connected accounts.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -115,7 +126,7 @@ class ConnectedAccountsClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/connected_accounts/list",
             json: (object) $request_payload,
@@ -141,11 +152,9 @@ class ConnectedAccountsClient
     {
         $request_payload = [];
 
-        if ($connected_account_id !== null) {
-            $request_payload["connected_account_id"] = $connected_account_id;
-        }
+        $request_payload["connected_account_id"] = $connected_account_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/connected_accounts/sync",
             json: (object) $request_payload,
@@ -173,9 +182,7 @@ class ConnectedAccountsClient
     ): void {
         $request_payload = [];
 
-        if ($connected_account_id !== null) {
-            $request_payload["connected_account_id"] = $connected_account_id;
-        }
+        $request_payload["connected_account_id"] = $connected_account_id;
         if ($accepted_capabilities !== null) {
             $request_payload["accepted_capabilities"] = $accepted_capabilities;
         }
@@ -194,7 +201,7 @@ class ConnectedAccountsClient
             $request_payload["display_name"] = $display_name;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/connected_accounts/update",
             json: (object) $request_payload,

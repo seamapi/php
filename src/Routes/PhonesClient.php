@@ -2,17 +2,26 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\Phone;
-use Seam\SeamClient;
 
 class PhonesClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
+
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
     public PhonesSimulateClient $simulate;
-    public function __construct(SeamClient $seam)
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
-        $this->simulate = new PhonesSimulateClient($seam);
+        $this->client = $client;
+        $this->defaults = $defaults;
+        $this->simulate = new PhonesSimulateClient($client, $defaults);
     }
 
     /**
@@ -25,11 +34,9 @@ class PhonesClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/phones/deactivate",
             json: (object) $request_payload,
@@ -46,11 +53,9 @@ class PhonesClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/phones/get",
             json: (object) $request_payload,
@@ -81,7 +86,7 @@ class PhonesClient
             ] = $owner_user_identity_id;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/phones/list",
             json: (object) $request_payload,

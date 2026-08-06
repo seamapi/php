@@ -2,15 +2,24 @@
 
 namespace Seam\Routes;
 
-use Seam\SeamClient;
+use Seam\Http\SeamHttpClient;
 
 class DevicesSimulateClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -23,11 +32,9 @@ class DevicesSimulateClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/devices/simulate/connect",
             json: (object) $request_payload,
@@ -47,11 +54,9 @@ class DevicesSimulateClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/devices/simulate/connect_to_hub",
             json: (object) $request_payload,
@@ -68,11 +73,9 @@ class DevicesSimulateClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/devices/simulate/disconnect",
             json: (object) $request_payload,
@@ -93,11 +96,9 @@ class DevicesSimulateClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/devices/simulate/disconnect_from_hub",
             json: (object) $request_payload,
@@ -117,14 +118,10 @@ class DevicesSimulateClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($is_expired !== null) {
-            $request_payload["is_expired"] = $is_expired;
-        }
+        $request_payload["device_id"] = $device_id;
+        $request_payload["is_expired"] = $is_expired;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/devices/simulate/paid_subscription",
             json: (object) $request_payload,
@@ -141,11 +138,9 @@ class DevicesSimulateClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/devices/simulate/remove",
             json: (object) $request_payload,

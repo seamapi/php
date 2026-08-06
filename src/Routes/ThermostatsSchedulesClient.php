@@ -2,16 +2,25 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\ThermostatSchedule;
-use Seam\SeamClient;
 
 class ThermostatsSchedulesClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -37,18 +46,10 @@ class ThermostatsSchedulesClient
     ): ThermostatSchedule {
         $request_payload = [];
 
-        if ($climate_preset_key !== null) {
-            $request_payload["climate_preset_key"] = $climate_preset_key;
-        }
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($ends_at !== null) {
-            $request_payload["ends_at"] = $ends_at;
-        }
-        if ($starts_at !== null) {
-            $request_payload["starts_at"] = $starts_at;
-        }
+        $request_payload["climate_preset_key"] = $climate_preset_key;
+        $request_payload["device_id"] = $device_id;
+        $request_payload["ends_at"] = $ends_at;
+        $request_payload["starts_at"] = $starts_at;
         if ($is_override_allowed !== null) {
             $request_payload["is_override_allowed"] = $is_override_allowed;
         }
@@ -61,7 +62,7 @@ class ThermostatsSchedulesClient
             $request_payload["name"] = $name;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/thermostats/schedules/create",
             json: (object) $request_payload,
@@ -80,13 +81,9 @@ class ThermostatsSchedulesClient
     {
         $request_payload = [];
 
-        if ($thermostat_schedule_id !== null) {
-            $request_payload[
-                "thermostat_schedule_id"
-            ] = $thermostat_schedule_id;
-        }
+        $request_payload["thermostat_schedule_id"] = $thermostat_schedule_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/thermostats/schedules/delete",
             json: (object) $request_payload,
@@ -103,13 +100,9 @@ class ThermostatsSchedulesClient
     {
         $request_payload = [];
 
-        if ($thermostat_schedule_id !== null) {
-            $request_payload[
-                "thermostat_schedule_id"
-            ] = $thermostat_schedule_id;
-        }
+        $request_payload["thermostat_schedule_id"] = $thermostat_schedule_id;
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/thermostats/schedules/get",
             json: (object) $request_payload,
@@ -131,14 +124,12 @@ class ThermostatsSchedulesClient
     ): array {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($user_identifier_key !== null) {
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/thermostats/schedules/list",
             json: (object) $request_payload,
@@ -173,11 +164,7 @@ class ThermostatsSchedulesClient
     ): void {
         $request_payload = [];
 
-        if ($thermostat_schedule_id !== null) {
-            $request_payload[
-                "thermostat_schedule_id"
-            ] = $thermostat_schedule_id;
-        }
+        $request_payload["thermostat_schedule_id"] = $thermostat_schedule_id;
         if ($climate_preset_key !== null) {
             $request_payload["climate_preset_key"] = $climate_preset_key;
         }
@@ -199,7 +186,7 @@ class ThermostatsSchedulesClient
             $request_payload["starts_at"] = $starts_at;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/thermostats/schedules/update",
             json: (object) $request_payload,

@@ -2,16 +2,25 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\ClientSession;
-use Seam\SeamClient;
 
 class ClientSessionsClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -64,7 +73,7 @@ class ClientSessionsClient
             $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/client_sessions/create",
             json: (object) $request_payload,
@@ -83,11 +92,9 @@ class ClientSessionsClient
     {
         $request_payload = [];
 
-        if ($client_session_id !== null) {
-            $request_payload["client_session_id"] = $client_session_id;
-        }
+        $request_payload["client_session_id"] = $client_session_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/client_sessions/delete",
             json: (object) $request_payload,
@@ -114,7 +121,7 @@ class ClientSessionsClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/client_sessions/get",
             json: (object) $request_payload,
@@ -163,7 +170,7 @@ class ClientSessionsClient
             $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/client_sessions/get_or_create",
             json: (object) $request_payload,
@@ -212,7 +219,7 @@ class ClientSessionsClient
             $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/client_sessions/grant_access",
             json: (object) $request_payload,
@@ -256,7 +263,7 @@ class ClientSessionsClient
             ] = $without_user_identifier_key;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/client_sessions/list",
             json: (object) $request_payload,
@@ -280,11 +287,9 @@ class ClientSessionsClient
     {
         $request_payload = [];
 
-        if ($client_session_id !== null) {
-            $request_payload["client_session_id"] = $client_session_id;
-        }
+        $request_payload["client_session_id"] = $client_session_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/client_sessions/revoke",
             json: (object) $request_payload,
