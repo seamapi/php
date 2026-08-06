@@ -108,18 +108,18 @@ By default the SDK waits for the action attempt to finish:
 
 - It polls up to a timeout at a polling interval.
 - It returns a fresh copy of the successful action attempt.
-- It throws `Seam\Exceptions\ActionAttemptFailedError` if the action failed.
-- It throws `Seam\Exceptions\ActionAttemptTimeoutError` if the timeout
+- It throws `Seam\ActionAttemptFailedError` if the action failed.
+- It throws `Seam\ActionAttemptTimeoutError` if the timeout
   elapses first.
 
-Both errors extend `Seam\Exceptions\ActionAttemptError` and expose the action
+Both errors extend `Seam\ActionAttemptError` and expose the action
 attempt with `getActionAttempt()`.
 
 [action attempt]: https://docs.seam.co/latest/core-concepts/action-attempts
 
 ```php
-use Seam\Exceptions\ActionAttemptFailedError;
-use Seam\Exceptions\ActionAttemptTimeoutError;
+use Seam\ActionAttemptFailedError;
+use Seam\ActionAttemptTimeoutError;
 
 try {
     $seam->locks->unlock_door($device_id);
@@ -355,7 +355,7 @@ $seam = Seam\Seam::from_client($client);
 
 #### Errors
 
-Every exception the SDK raises implements `Seam\Exceptions\SeamException`.
+Every exception the SDK raises implements `Seam\SeamException`.
 
 | Error                       | Raised when                                        |
 | --------------------------- | -------------------------------------------------- |
@@ -373,8 +373,8 @@ BadResponseException` instead. Transport failures surface as the
 corresponding Guzzle exception.
 
 ```php
-use Seam\Exceptions\HttpApiError;
-use Seam\Exceptions\HttpInvalidInputError;
+use Seam\HttpApiError;
+use Seam\HttpInvalidInputError;
 
 try {
     $seam->devices->get($device_id);
@@ -397,8 +397,9 @@ Version 4 brings this SDK in line with the Seam SDKs for other languages.
 - The constructor takes named options. `$endpoint` is no longer the second
   positional argument, and `$throw_http_errors` is gone; API errors always
   raise a Seam exception.
-- Exceptions moved to the `Seam\Exceptions` namespace, e.g.
-  `Seam\HttpApiError` is now `Seam\Exceptions\HttpApiError`.
+- The exception classes keep their `Seam\` namespace. They now all implement
+  a shared `Seam\SeamException` interface, and `Seam\InvalidOptionsError` and
+  `Seam\InvalidTokenError` are new.
 - `$seam->action_attempts->poll_until_ready()` was removed. Use
   `wait_for_action_attempt`, which now also accepts a `timeout` and
   `polling_interval`. The defaults changed from 20s/0.4s to 10s/1s.

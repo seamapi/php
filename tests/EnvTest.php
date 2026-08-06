@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Seam\Exceptions\InvalidOptionsError;
+use Seam\InvalidOptionsError;
 use Seam\Options;
 use Seam\Seam;
 use Tests\Support\FakeSeamConnectTestCase;

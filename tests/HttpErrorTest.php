@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Seam\Exceptions\HttpApiError;
-use Seam\Exceptions\HttpInvalidInputError;
-use Seam\Exceptions\HttpUnauthorizedError;
+use Seam\HttpApiError;
+use Seam\HttpInvalidInputError;
+use Seam\HttpUnauthorizedError;
 use Seam\Seam;
 use Tests\Support\FakeSeamConnectTestCase;
 

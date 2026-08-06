@@ -1,6 +1,6 @@
 <?php
 
-namespace Seam\Exceptions;
+namespace Seam;
 
 /**
  * Raised when the Seam API rejects the request parameters.

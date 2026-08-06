@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Seam\Exceptions\ActionAttemptError;
-use Seam\Exceptions\ActionAttemptFailedError;
-use Seam\Exceptions\ActionAttemptTimeoutError;
+use Seam\ActionAttemptError;
+use Seam\ActionAttemptFailedError;
+use Seam\ActionAttemptTimeoutError;
 use Seam\Resources\ActionAttempt;
 use Seam\Seam;
 use Tests\Support\FakeSeamConnectTestCase;

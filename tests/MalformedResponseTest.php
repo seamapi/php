@@ -8,7 +8,7 @@ use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Seam\Exceptions\HttpApiError;
+use Seam\HttpApiError;
 use Seam\Seam;
 use Tests\Support\RecordingClient;
 

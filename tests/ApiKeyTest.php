@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Seam\Exceptions\HttpUnauthorizedError;
-use Seam\Exceptions\InvalidTokenError;
+use Seam\HttpUnauthorizedError;
+use Seam\InvalidTokenError;
 use Seam\Seam;
 use Tests\Support\FakeSeamConnectTestCase;
 
