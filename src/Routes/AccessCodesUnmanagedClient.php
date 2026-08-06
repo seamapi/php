@@ -2,16 +2,25 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\UnmanagedAccessCode;
-use Seam\SeamClient;
 
 class AccessCodesUnmanagedClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -35,9 +44,7 @@ class AccessCodesUnmanagedClient
     ): void {
         $request_payload = [];
 
-        if ($access_code_id !== null) {
-            $request_payload["access_code_id"] = $access_code_id;
-        }
+        $request_payload["access_code_id"] = $access_code_id;
         if ($allow_external_modification !== null) {
             $request_payload[
                 "allow_external_modification"
@@ -52,7 +59,7 @@ class AccessCodesUnmanagedClient
             ] = $is_external_modification_allowed;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/access_codes/unmanaged/convert_to_managed",
             json: (object) $request_payload,
@@ -69,11 +76,9 @@ class AccessCodesUnmanagedClient
     {
         $request_payload = [];
 
-        if ($access_code_id !== null) {
-            $request_payload["access_code_id"] = $access_code_id;
-        }
+        $request_payload["access_code_id"] = $access_code_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/access_codes/unmanaged/delete",
             json: (object) $request_payload,
@@ -107,7 +112,7 @@ class AccessCodesUnmanagedClient
             $request_payload["device_id"] = $device_id;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/access_codes/unmanaged/get",
             json: (object) $request_payload,
@@ -124,6 +129,7 @@ class AccessCodesUnmanagedClient
      * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned access codes to include all records that satisfy a partial match using `name`, `code` or `access_code_id`.
      * @param string $user_identifier_key Your user ID for the user by which to filter unmanaged access codes.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -136,9 +142,7 @@ class AccessCodesUnmanagedClient
     ): array {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($limit !== null) {
             $request_payload["limit"] = $limit;
         }
@@ -152,7 +156,7 @@ class AccessCodesUnmanagedClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/access_codes/unmanaged/list",
             json: (object) $request_payload,
@@ -187,12 +191,8 @@ class AccessCodesUnmanagedClient
     ): void {
         $request_payload = [];
 
-        if ($access_code_id !== null) {
-            $request_payload["access_code_id"] = $access_code_id;
-        }
-        if ($is_managed !== null) {
-            $request_payload["is_managed"] = $is_managed;
-        }
+        $request_payload["access_code_id"] = $access_code_id;
+        $request_payload["is_managed"] = $is_managed;
         if ($allow_external_modification !== null) {
             $request_payload[
                 "allow_external_modification"
@@ -207,7 +207,7 @@ class AccessCodesUnmanagedClient
             ] = $is_external_modification_allowed;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/access_codes/unmanaged/update",
             json: (object) $request_payload,

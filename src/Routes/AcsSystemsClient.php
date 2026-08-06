@@ -2,16 +2,25 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\AcsSystem;
-use Seam\SeamClient;
 
 class AcsSystemsClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -24,11 +33,9 @@ class AcsSystemsClient
     {
         $request_payload = [];
 
-        if ($acs_system_id !== null) {
-            $request_payload["acs_system_id"] = $acs_system_id;
-        }
+        $request_payload["acs_system_id"] = $acs_system_id;
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/acs/systems/get",
             json: (object) $request_payload,
@@ -64,7 +71,7 @@ class AcsSystemsClient
             $request_payload["search"] = $search;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/acs/systems/list",
             json: (object) $request_payload,
@@ -86,11 +93,9 @@ class AcsSystemsClient
     ): array {
         $request_payload = [];
 
-        if ($acs_system_id !== null) {
-            $request_payload["acs_system_id"] = $acs_system_id;
-        }
+        $request_payload["acs_system_id"] = $acs_system_id;
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/acs/systems/list_compatible_credential_manager_acs_systems",
             json: (object) $request_payload,
@@ -114,9 +119,7 @@ class AcsSystemsClient
     ): void {
         $request_payload = [];
 
-        if ($acs_system_id !== null) {
-            $request_payload["acs_system_id"] = $acs_system_id;
-        }
+        $request_payload["acs_system_id"] = $acs_system_id;
         if ($acs_encoders !== null) {
             $request_payload["acs_encoders"] = $acs_encoders;
         }
@@ -124,7 +127,7 @@ class AcsSystemsClient
             $request_payload["acs_entrances"] = $acs_entrances;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/acs/systems/report_devices",
             json: (object) $request_payload,

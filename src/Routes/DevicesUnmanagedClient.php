@@ -2,16 +2,25 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\UnmanagedDevice;
-use Seam\SeamClient;
 
 class DevicesUnmanagedClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -38,7 +47,7 @@ class DevicesUnmanagedClient
             $request_payload["name"] = $name;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/devices/unmanaged/get",
             json: (object) $request_payload,
@@ -68,6 +77,7 @@ class DevicesUnmanagedClient
      * @param string $space_id ID of the space for which you want to list devices.
      * @param string $unstable_location_id
      * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -140,7 +150,7 @@ class DevicesUnmanagedClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/devices/unmanaged/list",
             json: (object) $request_payload,
@@ -173,9 +183,7 @@ class DevicesUnmanagedClient
     ): void {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($custom_metadata !== null) {
             $request_payload["custom_metadata"] = $custom_metadata;
         }
@@ -183,7 +191,7 @@ class DevicesUnmanagedClient
             $request_payload["is_managed"] = $is_managed;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/devices/unmanaged/update",
             json: (object) $request_payload,

@@ -1,6 +1,11 @@
 class {{clientName}}Client
 {
-  private SeamClient $seam;
+  private SeamHttpClient $client;
+
+  /**
+   * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+   */
+  private array $defaults;
 {{#if hasChildClients}}
 {{#each childClients}}
   public {{clientName}}Client ${{namespace}};
@@ -8,18 +13,19 @@ class {{clientName}}Client
 {{else}}
 
 {{/if}}
-  public function __construct(SeamClient $seam)
+  /**
+   * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+   */
+  public function __construct(SeamHttpClient $client, array $defaults)
   {
-    $this->seam = $seam;
+    $this->client = $client;
+    $this->defaults = $defaults;
 {{#each childClients}}
-    $this->{{namespace}} = new {{clientName}}Client($seam);
+    $this->{{namespace}} = new {{clientName}}Client($client, $defaults);
 {{/each}}
   }
 {{#each methods}}
 
 {{> route-method}}
 {{/each}}
-{{#if isActionAttempts}}
-{{> poll-until-ready}}
-{{/if}}
 }

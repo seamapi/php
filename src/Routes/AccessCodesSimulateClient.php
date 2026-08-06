@@ -2,16 +2,25 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\UnmanagedAccessCode;
-use Seam\SeamClient;
 
 class AccessCodesSimulateClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -29,17 +38,11 @@ class AccessCodesSimulateClient
     ): UnmanagedAccessCode {
         $request_payload = [];
 
-        if ($code !== null) {
-            $request_payload["code"] = $code;
-        }
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($name !== null) {
-            $request_payload["name"] = $name;
-        }
+        $request_payload["code"] = $code;
+        $request_payload["device_id"] = $device_id;
+        $request_payload["name"] = $name;
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/access_codes/simulate/create_unmanaged_access_code",
             json: (object) $request_payload,

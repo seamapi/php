@@ -2,16 +2,25 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\Webhook;
-use Seam\SeamClient;
 
 class WebhooksClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -25,14 +34,12 @@ class WebhooksClient
     {
         $request_payload = [];
 
-        if ($url !== null) {
-            $request_payload["url"] = $url;
-        }
+        $request_payload["url"] = $url;
         if ($event_types !== null) {
             $request_payload["event_types"] = $event_types;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/webhooks/create",
             json: (object) $request_payload,
@@ -51,11 +58,9 @@ class WebhooksClient
     {
         $request_payload = [];
 
-        if ($webhook_id !== null) {
-            $request_payload["webhook_id"] = $webhook_id;
-        }
+        $request_payload["webhook_id"] = $webhook_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/webhooks/delete",
             json: (object) $request_payload,
@@ -72,11 +77,9 @@ class WebhooksClient
     {
         $request_payload = [];
 
-        if ($webhook_id !== null) {
-            $request_payload["webhook_id"] = $webhook_id;
-        }
+        $request_payload["webhook_id"] = $webhook_id;
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/webhooks/get",
             json: (object) $request_payload,
@@ -92,7 +95,7 @@ class WebhooksClient
      */
     public function list(): array
     {
-        $res = $this->seam->request("POST", "/webhooks/list");
+        $res = $this->client->request("POST", "/webhooks/list");
 
         return array_map(fn($r) => Webhook::from_json($r), $res->webhooks);
     }
@@ -108,14 +111,10 @@ class WebhooksClient
     {
         $request_payload = [];
 
-        if ($event_types !== null) {
-            $request_payload["event_types"] = $event_types;
-        }
-        if ($webhook_id !== null) {
-            $request_payload["webhook_id"] = $webhook_id;
-        }
+        $request_payload["event_types"] = $event_types;
+        $request_payload["webhook_id"] = $webhook_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/webhooks/update",
             json: (object) $request_payload,

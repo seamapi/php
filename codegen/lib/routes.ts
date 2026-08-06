@@ -21,7 +21,7 @@ interface Metadata {
 
 const resourcesPath = 'src/Resources'
 const routesPath = 'src/Routes'
-const seamClientPath = 'src/SeamClient.php'
+const seamClientPath = 'src/Seam.php'
 
 export const routes = (
   files: Metalsmith.Files,

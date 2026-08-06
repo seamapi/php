@@ -9,7 +9,13 @@ export interface DeprecatedPhpDocContext {
 export interface MethodPhpDocContext extends DeprecatedPhpDocContext {
   returnType: string
   responseDescription: string
-  parameters: Array<{ name: string; type: string; description: string }>
+  // The endpoint parameters plus the SDK level ones, e.g.
+  // wait_for_action_attempt, so editors surface all of them.
+  documentedParameters: Array<{
+    name: string
+    type: string
+    description: string
+  }>
 }
 
 export const resourcePhpDoc = (context: DeprecatedPhpDocContext): string =>
@@ -25,7 +31,7 @@ export const methodPhpDoc = (context: MethodPhpDocContext): string =>
   createPhpDoc(
     context.description,
     [
-      ...context.parameters.map(
+      ...context.documentedParameters.map(
         (parameter) =>
           `@param ${parameter.type} $${parameter.name}${parameter.description === '' ? '' : ` ${parameter.description}`}`,
       ),

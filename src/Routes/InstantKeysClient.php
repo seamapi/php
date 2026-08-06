@@ -2,16 +2,25 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\InstantKey;
-use Seam\SeamClient;
 
 class InstantKeysClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -24,11 +33,9 @@ class InstantKeysClient
     {
         $request_payload = [];
 
-        if ($instant_key_id !== null) {
-            $request_payload["instant_key_id"] = $instant_key_id;
-        }
+        $request_payload["instant_key_id"] = $instant_key_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/instant_keys/delete",
             json: (object) $request_payload,
@@ -55,7 +62,7 @@ class InstantKeysClient
             $request_payload["instant_key_url"] = $instant_key_url;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/instant_keys/get",
             json: (object) $request_payload,
@@ -78,7 +85,7 @@ class InstantKeysClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/instant_keys/list",
             json: (object) $request_payload,

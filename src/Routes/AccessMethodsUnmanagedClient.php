@@ -2,16 +2,25 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\UnmanagedAccessMethod;
-use Seam\SeamClient;
 
 class AccessMethodsUnmanagedClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -24,11 +33,9 @@ class AccessMethodsUnmanagedClient
     {
         $request_payload = [];
 
-        if ($access_method_id !== null) {
-            $request_payload["access_method_id"] = $access_method_id;
-        }
+        $request_payload["access_method_id"] = $access_method_id;
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/access_methods/unmanaged/get",
             json: (object) $request_payload,
@@ -54,9 +61,7 @@ class AccessMethodsUnmanagedClient
     ): array {
         $request_payload = [];
 
-        if ($access_grant_id !== null) {
-            $request_payload["access_grant_id"] = $access_grant_id;
-        }
+        $request_payload["access_grant_id"] = $access_grant_id;
         if ($acs_entrance_id !== null) {
             $request_payload["acs_entrance_id"] = $acs_entrance_id;
         }
@@ -67,7 +72,7 @@ class AccessMethodsUnmanagedClient
             $request_payload["space_id"] = $space_id;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/access_methods/unmanaged/list",
             json: (object) $request_payload,
