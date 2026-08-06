@@ -2,15 +2,24 @@
 
 namespace Seam\Routes;
 
-use Seam\SeamClient;
+use Seam\Http\SeamHttpClient;
 
 class ThermostatsSimulateClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -34,12 +43,8 @@ class ThermostatsSimulateClient
     ): void {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($hvac_mode !== null) {
-            $request_payload["hvac_mode"] = $hvac_mode;
-        }
+        $request_payload["device_id"] = $device_id;
+        $request_payload["hvac_mode"] = $hvac_mode;
         if ($cooling_set_point_celsius !== null) {
             $request_payload[
                 "cooling_set_point_celsius"
@@ -61,7 +66,7 @@ class ThermostatsSimulateClient
             ] = $heating_set_point_fahrenheit;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/thermostats/simulate/hvac_mode_adjusted",
             json: (object) $request_payload,
@@ -83,9 +88,7 @@ class ThermostatsSimulateClient
     ): void {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($temperature_celsius !== null) {
             $request_payload["temperature_celsius"] = $temperature_celsius;
         }
@@ -95,7 +98,7 @@ class ThermostatsSimulateClient
             ] = $temperature_fahrenheit;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/thermostats/simulate/temperature_reached",
             json: (object) $request_payload,

@@ -2,15 +2,24 @@
 
 namespace Seam\Routes;
 
-use Seam\SeamClient;
+use Seam\Http\SeamHttpClient;
 
 class AcsEncodersSimulateClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -28,9 +37,7 @@ class AcsEncodersSimulateClient
     ): void {
         $request_payload = [];
 
-        if ($acs_encoder_id !== null) {
-            $request_payload["acs_encoder_id"] = $acs_encoder_id;
-        }
+        $request_payload["acs_encoder_id"] = $acs_encoder_id;
         if ($error_code !== null) {
             $request_payload["error_code"] = $error_code;
         }
@@ -38,7 +45,7 @@ class AcsEncodersSimulateClient
             $request_payload["acs_credential_id"] = $acs_credential_id;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/acs/encoders/simulate/next_credential_encode_will_fail",
             json: (object) $request_payload,
@@ -58,14 +65,12 @@ class AcsEncodersSimulateClient
     ): void {
         $request_payload = [];
 
-        if ($acs_encoder_id !== null) {
-            $request_payload["acs_encoder_id"] = $acs_encoder_id;
-        }
+        $request_payload["acs_encoder_id"] = $acs_encoder_id;
         if ($scenario !== null) {
             $request_payload["scenario"] = $scenario;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/acs/encoders/simulate/next_credential_encode_will_succeed",
             json: (object) $request_payload,
@@ -87,9 +92,7 @@ class AcsEncodersSimulateClient
     ): void {
         $request_payload = [];
 
-        if ($acs_encoder_id !== null) {
-            $request_payload["acs_encoder_id"] = $acs_encoder_id;
-        }
+        $request_payload["acs_encoder_id"] = $acs_encoder_id;
         if ($error_code !== null) {
             $request_payload["error_code"] = $error_code;
         }
@@ -99,7 +102,7 @@ class AcsEncodersSimulateClient
             ] = $acs_credential_id_on_seam;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/acs/encoders/simulate/next_credential_scan_will_fail",
             json: (object) $request_payload,
@@ -121,9 +124,7 @@ class AcsEncodersSimulateClient
     ): void {
         $request_payload = [];
 
-        if ($acs_encoder_id !== null) {
-            $request_payload["acs_encoder_id"] = $acs_encoder_id;
-        }
+        $request_payload["acs_encoder_id"] = $acs_encoder_id;
         if ($acs_credential_id_on_seam !== null) {
             $request_payload[
                 "acs_credential_id_on_seam"
@@ -133,7 +134,7 @@ class AcsEncodersSimulateClient
             $request_payload["scenario"] = $scenario;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/acs/encoders/simulate/next_credential_scan_will_succeed",
             json: (object) $request_payload,

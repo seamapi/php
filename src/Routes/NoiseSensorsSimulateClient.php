@@ -2,15 +2,24 @@
 
 namespace Seam\Routes;
 
-use Seam\SeamClient;
+use Seam\Http\SeamHttpClient;
 
 class NoiseSensorsSimulateClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -23,11 +32,9 @@ class NoiseSensorsSimulateClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/noise_sensors/simulate/trigger_noise_threshold",
             json: (object) $request_payload,

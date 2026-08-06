@@ -2,19 +2,28 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\AccessCode;
-use Seam\SeamClient;
 
 class AccessCodesClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
+
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
     public AccessCodesSimulateClient $simulate;
     public AccessCodesUnmanagedClient $unmanaged;
-    public function __construct(SeamClient $seam)
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
-        $this->simulate = new AccessCodesSimulateClient($seam);
-        $this->unmanaged = new AccessCodesUnmanagedClient($seam);
+        $this->client = $client;
+        $this->defaults = $defaults;
+        $this->simulate = new AccessCodesSimulateClient($client, $defaults);
+        $this->unmanaged = new AccessCodesUnmanagedClient($client, $defaults);
     }
 
     /**
@@ -64,9 +73,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
     ): AccessCode {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($allow_external_modification !== null) {
             $request_payload[
                 "allow_external_modification"
@@ -127,7 +134,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             ] = $use_offline_access_code;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/access_codes/create",
             json: (object) $request_payload,
@@ -185,9 +192,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
     ): array {
         $request_payload = [];
 
-        if ($device_ids !== null) {
-            $request_payload["device_ids"] = $device_ids;
-        }
+        $request_payload["device_ids"] = $device_ids;
         if ($allow_external_modification !== null) {
             $request_payload[
                 "allow_external_modification"
@@ -234,7 +239,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             ] = $use_backup_access_code_pool;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/access_codes/create_multiple",
             json: (object) $request_payload,
@@ -259,14 +264,12 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
     ): void {
         $request_payload = [];
 
-        if ($access_code_id !== null) {
-            $request_payload["access_code_id"] = $access_code_id;
-        }
+        $request_payload["access_code_id"] = $access_code_id;
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/access_codes/delete",
             json: (object) $request_payload,
@@ -283,11 +286,9 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/access_codes/generate_code",
             json: (object) $request_payload,
@@ -323,7 +324,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             $request_payload["device_id"] = $device_id;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/access_codes/get",
             json: (object) $request_payload,
@@ -347,6 +348,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned access codes to include all records that satisfy a partial match using `name`, `code` or `access_code_id`.
      * @param string $user_identifier_key Your user ID for the user by which to filter access codes.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -395,7 +397,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/access_codes/list",
             json: (object) $request_payload,
@@ -429,11 +431,9 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
     {
         $request_payload = [];
 
-        if ($access_code_id !== null) {
-            $request_payload["access_code_id"] = $access_code_id;
-        }
+        $request_payload["access_code_id"] = $access_code_id;
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/access_codes/pull_backup_access_code",
             json: (object) $request_payload,
@@ -461,9 +461,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
     ): void {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($max_code_length !== null) {
             $request_payload["max_code_length"] = $max_code_length;
         }
@@ -476,7 +474,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             ] = $supported_code_lengths;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/access_codes/report_device_constraints",
             json: (object) $request_payload,
@@ -536,9 +534,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
     ): void {
         $request_payload = [];
 
-        if ($access_code_id !== null) {
-            $request_payload["access_code_id"] = $access_code_id;
-        }
+        $request_payload["access_code_id"] = $access_code_id;
         if ($allow_external_modification !== null) {
             $request_payload[
                 "allow_external_modification"
@@ -605,7 +601,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             ] = $use_offline_access_code;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/access_codes/update",
             json: (object) $request_payload,
@@ -639,9 +635,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
     ): void {
         $request_payload = [];
 
-        if ($common_code_key !== null) {
-            $request_payload["common_code_key"] = $common_code_key;
-        }
+        $request_payload["common_code_key"] = $common_code_key;
         if ($ends_at !== null) {
             $request_payload["ends_at"] = $ends_at;
         }
@@ -652,7 +646,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             $request_payload["starts_at"] = $starts_at;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/access_codes/update_multiple",
             json: (object) $request_payload,

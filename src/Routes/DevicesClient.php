@@ -2,20 +2,29 @@
 
 namespace Seam\Routes;
 
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\Device;
 use Seam\Resources\DeviceProvider;
-use Seam\SeamClient;
 
 class DevicesClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
+
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
     public DevicesSimulateClient $simulate;
     public DevicesUnmanagedClient $unmanaged;
-    public function __construct(SeamClient $seam)
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
-        $this->simulate = new DevicesSimulateClient($seam);
-        $this->unmanaged = new DevicesUnmanagedClient($seam);
+        $this->client = $client;
+        $this->defaults = $defaults;
+        $this->simulate = new DevicesSimulateClient($client, $defaults);
+        $this->unmanaged = new DevicesUnmanagedClient($client, $defaults);
     }
 
     /**
@@ -38,7 +47,7 @@ class DevicesClient
             $request_payload["name"] = $name;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/devices/get",
             json: (object) $request_payload,
@@ -66,6 +75,7 @@ class DevicesClient
      * @param string $space_id ID of the space for which you want to list devices.
      * @param string $unstable_location_id
      * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -138,7 +148,7 @@ class DevicesClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/devices/list",
             json: (object) $request_payload,
@@ -170,7 +180,7 @@ class DevicesClient
             $request_payload["provider_category"] = $provider_category;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/devices/list_device_providers",
             json: (object) $request_payload,
@@ -192,11 +202,9 @@ class DevicesClient
     {
         $request_payload = [];
 
-        if ($devices !== null) {
-            $request_payload["devices"] = $devices;
-        }
+        $request_payload["devices"] = $devices;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/devices/report_provider_metadata",
             json: (object) $request_payload,
@@ -226,9 +234,7 @@ class DevicesClient
     ): void {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($backup_access_code_pool_enabled !== null) {
             $request_payload[
                 "backup_access_code_pool_enabled"
@@ -247,7 +253,7 @@ class DevicesClient
             $request_payload["properties"] = $properties;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/devices/update",
             json: (object) $request_payload,

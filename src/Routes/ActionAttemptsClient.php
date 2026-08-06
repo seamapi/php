@@ -2,41 +2,55 @@
 
 namespace Seam\Routes;
 
-use Seam\ActionAttemptFailedError;
-use Seam\ActionAttemptTimeoutError;
+use Seam\Http\ResolveActionAttempt;
+use Seam\Http\SeamHttpClient;
 use Seam\Resources\ActionAttempt;
-use Seam\SeamClient;
 
 class ActionAttemptsClient
 {
-    private SeamClient $seam;
+    private SeamHttpClient $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(SeamHttpClient $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
      * Returns a specified [action attempt](https://docs.seam.co/core-concepts/action-attempts).
      *
      * @param string $action_attempt_id ID of the action attempt that you want to get.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
-    public function get(string $action_attempt_id): ActionAttempt
-    {
+    public function get(
+        string $action_attempt_id,
+        bool|array|null $wait_for_action_attempt = null,
+    ): ActionAttempt {
         $request_payload = [];
 
-        if ($action_attempt_id !== null) {
-            $request_payload["action_attempt_id"] = $action_attempt_id;
-        }
+        $request_payload["action_attempt_id"] = $action_attempt_id;
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/action_attempts/get",
             json: (object) $request_payload,
         );
 
-        return ActionAttempt::from_json($res->action_attempt);
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json($res->action_attempt),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
+        );
     }
 
     /**
@@ -46,6 +60,8 @@ class ActionAttemptsClient
      * @param string $device_id ID of the device to filter action attempts by.
      * @param int $limit Maximum number of records to return per page.
      * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -53,6 +69,7 @@ class ActionAttemptsClient
         ?string $device_id = null,
         ?int $limit = null,
         ?string $page_cursor = null,
+        bool|array|null $wait_for_action_attempt = null,
         ?callable $on_response = null,
     ): array {
         $request_payload = [];
@@ -70,45 +87,17 @@ class ActionAttemptsClient
             $request_payload["page_cursor"] = $page_cursor;
         }
 
-        $res = $this->seam->request(
+        $res = $this->client->request(
             "POST",
             "/action_attempts/list",
             json: (object) $request_payload,
         );
 
-        if ($on_response !== null) {
-            $on_response($res);
-        }
-
-        return array_map(
-            fn($r) => ActionAttempt::from_json($r),
-            $res->action_attempts,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json($res->action_attempts),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-    }
-    public function poll_until_ready(
-        string $action_attempt_id,
-        float $timeout = 20.0,
-    ): ActionAttempt {
-        $seam = $this->seam;
-        $time_waiting = 0.0;
-        $polling_interval = 0.4;
-        $action_attempt = $seam->action_attempts->get($action_attempt_id);
-
-        while ($action_attempt->status == "pending") {
-            $action_attempt = $seam->action_attempts->get(
-                $action_attempt->action_attempt_id,
-            );
-            if ($time_waiting > $timeout) {
-                throw new ActionAttemptTimeoutError($action_attempt, $timeout);
-            }
-            $time_waiting += $polling_interval;
-            usleep($polling_interval * 1000000);
-        }
-
-        if ($action_attempt->status == "error") {
-            throw new ActionAttemptFailedError($action_attempt);
-        }
-
-        return $action_attempt;
     }
 }
