@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Seam\Exceptions\InvalidOptionsError;
-use Seam\Exceptions\InvalidTokenError;
+use Seam\InvalidOptionsError;
+use Seam\InvalidTokenError;
 use Seam\Seam;
 use Seam\SeamMultiWorkspace;
 use Tests\Support\FakeSeamConnectTestCase;

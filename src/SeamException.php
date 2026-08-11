@@ -1,6 +1,6 @@
 <?php
 
-namespace Seam\Exceptions;
+namespace Seam;
 
 /**
  * Implemented by every exception this SDK raises, so callers can catch

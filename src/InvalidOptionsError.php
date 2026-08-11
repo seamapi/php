@@ -1,6 +1,6 @@
 <?php
 
-namespace Seam\Exceptions;
+namespace Seam;
 
 /**
  * Raised when incompatible or incomplete options are given to a Seam client,

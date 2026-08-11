@@ -2,9 +2,6 @@
 
 namespace Seam;
 
-use Seam\Exceptions\InvalidOptionsError;
-use Seam\Exceptions\InvalidTokenError;
-
 /**
  * Builds the authorization headers for a Seam client.
  *

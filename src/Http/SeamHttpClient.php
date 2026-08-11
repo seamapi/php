@@ -11,9 +11,9 @@ use GuzzleHttp\Utils;
 use GuzzleRetry\GuzzleRetryMiddleware;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Seam\Exceptions\HttpApiError;
-use Seam\Exceptions\HttpInvalidInputError;
-use Seam\Exceptions\HttpUnauthorizedError;
+use Seam\HttpApiError;
+use Seam\HttpInvalidInputError;
+use Seam\HttpUnauthorizedError;
 use Seam\Utils\PackageVersion;
 
 /**

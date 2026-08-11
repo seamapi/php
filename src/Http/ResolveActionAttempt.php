@@ -2,8 +2,8 @@
 
 namespace Seam\Http;
 
-use Seam\Exceptions\ActionAttemptFailedError;
-use Seam\Exceptions\ActionAttemptTimeoutError;
+use Seam\ActionAttemptFailedError;
+use Seam\ActionAttemptTimeoutError;
 use Seam\Resources\ActionAttempt;
 
 /**

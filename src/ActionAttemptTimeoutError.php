@@ -1,6 +1,6 @@
 <?php
 
-namespace Seam\Exceptions;
+namespace Seam;
 
 use Seam\Resources\ActionAttempt;
 

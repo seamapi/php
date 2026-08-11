@@ -36,7 +36,7 @@ class SeamMultiWorkspace
             $this->client = SeamHttpClient::from_client($client);
         } else {
             if ($personal_access_token === null) {
-                throw new Exceptions\InvalidOptionsError(
+                throw new InvalidOptionsError(
                     "Must specify a personal_access_token",
                 );
             }

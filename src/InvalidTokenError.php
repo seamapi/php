@@ -1,6 +1,6 @@
 <?php
 
-namespace Seam\Exceptions;
+namespace Seam;
 
 /**
  * Raised when a token of the wrong kind or format is used to authenticate.
