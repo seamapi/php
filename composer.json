@@ -48,6 +48,9 @@
     }
   },
   "config": {
+    "platform": {
+      "php": "8.1.31"
+    },
     "sort-packages": true
   },
   "archive": {
