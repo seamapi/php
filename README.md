@@ -39,6 +39,14 @@ $ composer require seamapi/seam
 > [!NOTE]
 > These examples assume `SEAM_API_KEY` is set in your environment.
 
+Endpoint methods take [named arguments], which is the supported way to call
+them. PHP allows the parameters to be passed positionally too, but their order
+is derived from the API definition and can change as endpoints gain parameters,
+so a positional call can start binding a value to the wrong parameter after an
+upgrade. Passing them by name is stable.
+
+[named arguments]: https://www.php.net/manual/en/functions.arguments.php#functions.named-arguments
+
 ### Examples
 
 #### List devices
@@ -55,7 +63,7 @@ $devices = $seam->devices->list();
 $seam = new Seam\Seam();
 
 $lock = $seam->locks->get(name: "Front Door");
-$seam->locks->unlock_door($lock->device_id);
+$seam->locks->unlock_door(device_id: $lock->device_id);
 ```
 
 ### Authentication Method
@@ -122,7 +130,7 @@ use Seam\ActionAttemptFailedError;
 use Seam\ActionAttemptTimeoutError;
 
 try {
-    $seam->locks->unlock_door($device_id);
+    $seam->locks->unlock_door(device_id: $device_id);
 } catch (ActionAttemptFailedError $error) {
     print "Could not unlock the door: " . $error->getMessage();
     print "Error code: " . $error->getErrorCode();
@@ -137,7 +145,7 @@ Waiting may be disabled for the whole client:
 ```php
 $seam = new Seam\Seam(wait_for_action_attempt: false);
 
-$action_attempt = $seam->locks->unlock_door($device_id);
+$action_attempt = $seam->locks->unlock_door(device_id: $device_id);
 $action_attempt->status; // "pending"
 ```
 
@@ -145,7 +153,7 @@ or for a single request:
 
 ```php
 $action_attempt = $seam->locks->unlock_door(
-    $device_id,
+    device_id: $device_id,
     wait_for_action_attempt: false
 );
 ```
@@ -159,7 +167,7 @@ $seam = new Seam\Seam(
 );
 
 $seam->locks->unlock_door(
-    $device_id,
+    device_id: $device_id,
     wait_for_action_attempt: ["timeout" => 5.0]
 );
 ```
@@ -377,7 +385,7 @@ use Seam\HttpApiError;
 use Seam\HttpInvalidInputError;
 
 try {
-    $seam->devices->get($device_id);
+    $seam->devices->get(device_id: $device_id);
 } catch (HttpInvalidInputError $error) {
     print_r($error->getValidationErrorMessages("device_id"));
 } catch (HttpApiError $error) {
