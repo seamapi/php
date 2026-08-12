@@ -259,13 +259,13 @@ $pages = $seam->createPaginator(
 $connectedAccounts = $pages->flattenToArray();
 ```
 
-### Interacting with Multiple Workspaces
+### Requests without a Workspace in scope
 
-Some endpoints are not scoped to a workspace. Use `SeamMultiWorkspace` with a
+Some endpoints are not scoped to a workspace. Use `SeamWithoutWorkspace` with a
 personal access token to reach them.
 
 ```php
-$seam = Seam\SeamMultiWorkspace::from_personal_access_token(
+$seam = Seam\SeamWithoutWorkspace::from_personal_access_token(
     "your-personal-access-token"
 );
 

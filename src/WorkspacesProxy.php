@@ -7,7 +7,7 @@ use Seam\Routes\WorkspacesClient;
 
 /**
  * Exposes only the workspace endpoints that work without a workspace in
- * scope, which are the only ones a SeamMultiWorkspace client can call.
+ * scope, which are the only ones a SeamWithoutWorkspace client can call.
  */
 class WorkspacesProxy
 {

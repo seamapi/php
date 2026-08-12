@@ -12,7 +12,7 @@ use Seam\Routes\WorkspacesClient;
  * Authenticates with a personal access token and exposes only the workspace
  * listing and creation endpoints. Use Seam\Seam for everything else.
  */
-class SeamMultiWorkspace
+class SeamWithoutWorkspace
 {
     public const LTS_VERSION = SeamHttpClient::LTS_VERSION;
 
@@ -43,7 +43,7 @@ class SeamMultiWorkspace
 
             $this->client = new SeamHttpClient(
                 Options::get_endpoint($endpoint),
-                Auth::get_auth_headers_for_multi_workspace_personal_access_token(
+                Auth::get_auth_headers_for_personal_access_token_without_workspace(
                     $personal_access_token,
                 ),
                 $guzzle_options,

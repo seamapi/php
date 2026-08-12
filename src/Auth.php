@@ -109,7 +109,7 @@ final class Auth
      *
      * @return array<string, string>
      */
-    public static function get_auth_headers_for_multi_workspace_personal_access_token(
+    public static function get_auth_headers_for_personal_access_token_without_workspace(
         string $personal_access_token,
     ): array {
         self::assert_personal_access_token($personal_access_token);

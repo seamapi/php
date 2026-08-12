@@ -7,7 +7,7 @@ namespace Tests;
 use Seam\InvalidOptionsError;
 use Seam\InvalidTokenError;
 use Seam\Seam;
-use Seam\SeamMultiWorkspace;
+use Seam\SeamWithoutWorkspace;
 use Tests\Support\FakeSeamConnectTestCase;
 
 final class PersonalAccessTokenTest extends FakeSeamConnectTestCase
@@ -78,9 +78,9 @@ final class PersonalAccessTokenTest extends FakeSeamConnectTestCase
         );
     }
 
-    public function testMultiWorkspaceClientListsWorkspaces(): void
+    public function testWithoutWorkspaceClientListsWorkspaces(): void
     {
-        $seam = SeamMultiWorkspace::from_personal_access_token(
+        $seam = SeamWithoutWorkspace::from_personal_access_token(
             $this->seed["seam_at1_token"],
             endpoint: $this->endpoint,
         );
@@ -95,9 +95,9 @@ final class PersonalAccessTokenTest extends FakeSeamConnectTestCase
         $this->assertContains($this->seed["seed_workspace_1"], $workspace_ids);
     }
 
-    public function testMultiWorkspaceConstructorListsWorkspaces(): void
+    public function testWithoutWorkspaceConstructorListsWorkspaces(): void
     {
-        $seam = new SeamMultiWorkspace(
+        $seam = new SeamWithoutWorkspace(
             personal_access_token: $this->seed["seam_at1_token"],
             endpoint: $this->endpoint,
         );
@@ -105,9 +105,9 @@ final class PersonalAccessTokenTest extends FakeSeamConnectTestCase
         $this->assertNotEmpty($seam->workspaces->list());
     }
 
-    public function testMultiWorkspaceClientCreatesAWorkspace(): void
+    public function testWithoutWorkspaceClientCreatesAWorkspace(): void
     {
-        $seam = SeamMultiWorkspace::from_personal_access_token(
+        $seam = SeamWithoutWorkspace::from_personal_access_token(
             $this->seed["seam_at1_token"],
             endpoint: $this->endpoint,
         );
@@ -121,18 +121,18 @@ final class PersonalAccessTokenTest extends FakeSeamConnectTestCase
         $this->assertSame("Test Workspace", $workspace->name);
     }
 
-    public function testMultiWorkspaceClientRequiresAToken(): void
+    public function testWithoutWorkspaceClientRequiresAToken(): void
     {
         $this->expectException(InvalidOptionsError::class);
 
-        new SeamMultiWorkspace(endpoint: $this->endpoint);
+        new SeamWithoutWorkspace(endpoint: $this->endpoint);
     }
 
-    public function testMultiWorkspaceClientChecksTheTokenFormat(): void
+    public function testWithoutWorkspaceClientChecksTheTokenFormat(): void
     {
         $this->expectException(InvalidTokenError::class);
 
-        SeamMultiWorkspace::from_personal_access_token(
+        SeamWithoutWorkspace::from_personal_access_token(
             $this->seed["seam_apikey1_token"],
             endpoint: $this->endpoint,
         );
