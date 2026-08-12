@@ -18,14 +18,16 @@ export interface MethodPhpDocContext extends DeprecatedPhpDocContext {
   }>
 }
 
+// Resource classes and their properties are emitted inside a braced namespace
+// block, so both sit one level deeper than a docblock at file scope would.
 export const resourcePhpDoc = (context: DeprecatedPhpDocContext): string =>
-  createPhpDoc(context.description, deprecatedTag(context))
+  createPhpDoc(context.description, deprecatedTag(context), '    ')
 
 export const hasPhpDoc = (context: DeprecatedPhpDocContext): boolean =>
   context.description.trim() !== '' || context.isDeprecated
 
 export const propertyPhpDoc = (context: DeprecatedPhpDocContext): string =>
-  createPhpDoc(context.description, deprecatedTag(context), '        ')
+  createPhpDoc(context.description, deprecatedTag(context), '            ')
 
 export const methodPhpDoc = (context: MethodPhpDocContext): string =>
   createPhpDoc(
