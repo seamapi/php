@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "05bbb1b6caed944f0bc5ea91d511b7de",
+  "content-hash": "fcadd2bfc0a095fb22d744660cd07366",
   "packages": [
     {
       "name": "caseyamcl/guzzle_retry_middleware",
@@ -4519,47 +4519,47 @@
     },
     {
       "name": "symfony/console",
-      "version": "v6.4.43",
+      "version": "v7.4.16",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/console.git",
-        "reference": "3b643aa587acbc42f967a429af088a56ed8f046d"
+        "reference": "f4c69c9aed03abf933b294257d618bdd9b30a06d"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/symfony/console/zipball/3b643aa587acbc42f967a429af088a56ed8f046d",
-        "reference": "3b643aa587acbc42f967a429af088a56ed8f046d",
+        "url": "https://api.github.com/repos/symfony/console/zipball/f4c69c9aed03abf933b294257d618bdd9b30a06d",
+        "reference": "f4c69c9aed03abf933b294257d618bdd9b30a06d",
         "shasum": ""
       },
       "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "symfony/deprecation-contracts": "^2.5|^3",
         "symfony/polyfill-mbstring": "~1.0",
         "symfony/service-contracts": "^2.5|^3",
-        "symfony/string": "^5.4|^6.0|^7.0"
+        "symfony/string": "^7.2|^8.0"
       },
       "conflict": {
-        "symfony/dependency-injection": "<5.4",
-        "symfony/dotenv": "<5.4",
-        "symfony/event-dispatcher": "<5.4",
-        "symfony/lock": "<5.4",
-        "symfony/process": "<5.4"
+        "symfony/dependency-injection": "<6.4",
+        "symfony/dotenv": "<6.4",
+        "symfony/event-dispatcher": "<6.4",
+        "symfony/lock": "<6.4",
+        "symfony/process": "<6.4"
       },
       "provide": {
         "psr/log-implementation": "1.0|2.0|3.0"
       },
       "require-dev": {
         "psr/log": "^1|^2|^3",
-        "symfony/config": "^5.4|^6.0|^7.0",
-        "symfony/dependency-injection": "^5.4|^6.0|^7.0",
-        "symfony/event-dispatcher": "^5.4|^6.0|^7.0",
-        "symfony/http-foundation": "^6.4|^7.0",
-        "symfony/http-kernel": "^6.4|^7.0",
-        "symfony/lock": "^5.4|^6.0|^7.0",
-        "symfony/messenger": "^5.4|^6.0|^7.0",
-        "symfony/process": "^5.4|^6.0|^7.0",
-        "symfony/stopwatch": "^5.4|^6.0|^7.0",
-        "symfony/var-dumper": "^5.4|^6.0|^7.0"
+        "symfony/config": "^6.4|^7.0|^8.0",
+        "symfony/dependency-injection": "^6.4|^7.0|^8.0",
+        "symfony/event-dispatcher": "^6.4|^7.0|^8.0",
+        "symfony/http-foundation": "^6.4|^7.0|^8.0",
+        "symfony/http-kernel": "^6.4|^7.0|^8.0",
+        "symfony/lock": "^6.4|^7.0|^8.0",
+        "symfony/messenger": "^6.4|^7.0|^8.0",
+        "symfony/process": "^6.4|^7.0|^8.0",
+        "symfony/stopwatch": "^6.4|^7.0|^8.0",
+        "symfony/var-dumper": "^6.4|^7.0|^8.0"
       },
       "type": "library",
       "autoload": {
@@ -4593,7 +4593,7 @@
         "terminal"
       ],
       "support": {
-        "source": "https://github.com/symfony/console/tree/v6.4.43"
+        "source": "https://github.com/symfony/console/tree/v7.4.16"
       },
       "funding": [
         {
@@ -4613,29 +4613,29 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-07-26T14:44:19+00:00"
+      "time": "2026-07-31T12:37:14+00:00"
     },
     {
       "name": "symfony/filesystem",
-      "version": "v6.4.43",
+      "version": "v7.4.15",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/filesystem.git",
-        "reference": "9ff03da12d67649fbd1f34ca95951554624d0a16"
+        "reference": "ff16a16bf87fdf264638b8f6995b3515975e3c79"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/symfony/filesystem/zipball/9ff03da12d67649fbd1f34ca95951554624d0a16",
-        "reference": "9ff03da12d67649fbd1f34ca95951554624d0a16",
+        "url": "https://api.github.com/repos/symfony/filesystem/zipball/ff16a16bf87fdf264638b8f6995b3515975e3c79",
+        "reference": "ff16a16bf87fdf264638b8f6995b3515975e3c79",
         "shasum": ""
       },
       "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "symfony/polyfill-ctype": "~1.8",
         "symfony/polyfill-mbstring": "~1.8"
       },
       "require-dev": {
-        "symfony/process": "^5.4|^6.4|^7.0"
+        "symfony/process": "^6.4|^7.0|^8.0"
       },
       "type": "library",
       "autoload": {
@@ -4663,7 +4663,7 @@
       "description": "Provides basic utilities for the filesystem",
       "homepage": "https://symfony.com",
       "support": {
-        "source": "https://github.com/symfony/filesystem/tree/v6.4.43"
+        "source": "https://github.com/symfony/filesystem/tree/v7.4.15"
       },
       "funding": [
         {
@@ -4683,7 +4683,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-06-27T10:13:35+00:00"
+      "time": "2026-07-22T07:36:05+00:00"
     },
     {
       "name": "symfony/polyfill-ctype",
@@ -5189,22 +5189,23 @@
     },
     {
       "name": "symfony/string",
-      "version": "v6.4.43",
+      "version": "v7.4.15",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/string.git",
-        "reference": "2a8d515c3eaa5d33cf76d5fa277cdadd0a4e5b49"
+        "reference": "e394af32256bf9e7bf80849d95e589167c10097b"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/symfony/string/zipball/2a8d515c3eaa5d33cf76d5fa277cdadd0a4e5b49",
-        "reference": "2a8d515c3eaa5d33cf76d5fa277cdadd0a4e5b49",
+        "url": "https://api.github.com/repos/symfony/string/zipball/e394af32256bf9e7bf80849d95e589167c10097b",
+        "reference": "e394af32256bf9e7bf80849d95e589167c10097b",
         "shasum": ""
       },
       "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
+        "symfony/deprecation-contracts": "^2.5|^3.0",
         "symfony/polyfill-ctype": "~1.8",
-        "symfony/polyfill-intl-grapheme": "~1.0",
+        "symfony/polyfill-intl-grapheme": "~1.33",
         "symfony/polyfill-intl-normalizer": "~1.0",
         "symfony/polyfill-mbstring": "~1.0"
       },
@@ -5212,10 +5213,11 @@
         "symfony/translation-contracts": "<2.5"
       },
       "require-dev": {
-        "symfony/http-client": "^5.4|^6.0|^7.0",
-        "symfony/intl": "^6.2|^7.0",
+        "symfony/emoji": "^7.1|^8.0",
+        "symfony/http-client": "^6.4|^7.0|^8.0",
+        "symfony/intl": "^6.4|^7.0|^8.0",
         "symfony/translation-contracts": "^2.5|^3.0",
-        "symfony/var-exporter": "^5.4|^6.0|^7.0"
+        "symfony/var-exporter": "^6.4|^7.0|^8.0"
       },
       "type": "library",
       "autoload": {
@@ -5254,7 +5256,7 @@
         "utf8"
       ],
       "support": {
-        "source": "https://github.com/symfony/string/tree/v6.4.43"
+        "source": "https://github.com/symfony/string/tree/v7.4.15"
       },
       "funding": [
         {
@@ -5274,7 +5276,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-07-28T07:28:15+00:00"
+      "time": "2026-07-28T07:33:02+00:00"
     },
     {
       "name": "theseer/tokenizer",
@@ -5446,23 +5448,23 @@
     },
     {
       "name": "webmozart/assert",
-      "version": "1.12.1",
+      "version": "2.4.1",
       "source": {
         "type": "git",
         "url": "https://github.com/webmozarts/assert.git",
-        "reference": "9be6926d8b485f55b9229203f962b51ed377ba68"
+        "reference": "2ccb7c2e821038c03a3e6e1700c570c158c55f70"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/webmozarts/assert/zipball/9be6926d8b485f55b9229203f962b51ed377ba68",
-        "reference": "9be6926d8b485f55b9229203f962b51ed377ba68",
+        "url": "https://api.github.com/repos/webmozarts/assert/zipball/2ccb7c2e821038c03a3e6e1700c570c158c55f70",
+        "reference": "2ccb7c2e821038c03a3e6e1700c570c158c55f70",
         "shasum": ""
       },
       "require": {
         "ext-ctype": "*",
         "ext-date": "*",
         "ext-filter": "*",
-        "php": "^7.2 || ^8.0"
+        "php": "^8.2"
       },
       "suggest": {
         "ext-intl": "",
@@ -5471,8 +5473,12 @@
       },
       "type": "library",
       "extra": {
+        "psalm": {
+          "pluginClass": "Webmozart\\Assert\\PsalmPlugin"
+        },
         "branch-alias": {
-          "dev-master": "1.10-dev"
+          "dev-master": "2.0-dev",
+          "dev-feature/2-0": "2.0-dev"
         }
       },
       "autoload": {
@@ -5488,6 +5494,10 @@
         {
           "name": "Bernhard Schussek",
           "email": "bschussek@gmail.com"
+        },
+        {
+          "name": "Woody Gilk",
+          "email": "woody.gilk@gmail.com"
         }
       ],
       "description": "Assertions to validate method input/output with nice error messages.",
@@ -5498,9 +5508,9 @@
       ],
       "support": {
         "issues": "https://github.com/webmozarts/assert/issues",
-        "source": "https://github.com/webmozarts/assert/tree/1.12.1"
+        "source": "https://github.com/webmozarts/assert/tree/2.4.1"
       },
-      "time": "2025-10-29T15:56:20+00:00"
+      "time": "2026-06-15T15:31:57+00:00"
     }
   ],
   "aliases": [],
@@ -5509,11 +5519,11 @@
   "prefer-stable": false,
   "prefer-lowest": false,
   "platform": {
-    "php": "^8.1"
+    "php": "^8.2"
   },
   "platform-dev": {},
   "platform-overrides": {
-    "php": "8.1.31"
+    "php": "8.2.27"
   },
   "plugin-api-version": "2.6.0"
 }

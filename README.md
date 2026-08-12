@@ -391,7 +391,8 @@ try {
 
 Version 4 brings this SDK in line with the Seam SDKs for other languages.
 
-- PHP 8.1 or later is now required.
+- PHP 8.2 or later is now required. PHP 8.1 reached end of life in
+  December 2025.
 - The client class is `Seam\Seam`. `Seam\SeamClient` still works as a
   deprecated alias.
 - The constructor takes named options. `$endpoint` is no longer the second
@@ -416,7 +417,7 @@ Version 4 brings this SDK in line with the Seam SDKs for other languages.
 
 ### Quickstart
 
-Install [PHP](https://www.php.net/) 8.1 or later,
+Install [PHP](https://www.php.net/) 8.2 or later,
 [Composer](https://getcomposer.org/) and [Node.js](https://nodejs.org/),
 then run
 
@@ -471,8 +472,8 @@ create pressure to change the generator.
 
 ### Requirements
 
-This package supports PHP 8.1 and later.
-Continuous integration exercises every supported version, PHP 8.1 through 8.5.
+This package supports PHP 8.2 and later.
+Continuous integration exercises every supported version, PHP 8.2 through 8.5.
 
 The test suite runs against [@seamapi/fake-seam-connect], which is started
 automatically for each test, so `npm install` must have been run first.

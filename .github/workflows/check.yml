@@ -20,7 +20,6 @@ jobs:
         os:
           - ubuntu-latest
         php:
-          - '8.1'
           - '8.2'
           - '8.3'
           - '8.4'
@@ -47,7 +46,7 @@ jobs:
       fail-fast: false
       matrix:
         php:
-          - '8.1'
+          - '8.2'
           - '8.5'
     steps:
       - name: Checkout
@@ -76,7 +75,6 @@ jobs:
         os:
           - ubuntu-latest
         php:
-          - '8.1'
           - '8.2'
           - '8.3'
           - '8.4'
