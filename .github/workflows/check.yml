@@ -121,7 +121,7 @@ jobs:
           contents: |
             <?php
             require __DIR__ . '/vendor/autoload.php';
-            new Seam\SeamClient('seam_apikey1_token');
+            new Seam\Seam(api_key: 'seam_apikey1_token');
       - name: Install
         run: composer install --no-interaction --no-progress
       - name: Run
