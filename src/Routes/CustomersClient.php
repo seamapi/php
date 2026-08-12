@@ -2,12 +2,13 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\CustomerPortal;
 
 class CustomersClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -17,7 +18,7 @@ class CustomersClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -92,10 +93,10 @@ class CustomersClient
             $request_payload["customer_data"] = $customer_data;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/customers/create_portal",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/customers/create_portal", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return CustomerPortal::from_json($res->customer_portal);
@@ -207,11 +208,9 @@ class CustomersClient
             $request_payload["user_keys"] = $user_keys;
         }
 
-        $this->client->request(
-            "POST",
-            "/customers/delete_data",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/customers/delete_data", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -322,10 +321,8 @@ class CustomersClient
             $request_payload["users"] = $users;
         }
 
-        $this->client->request(
-            "POST",
-            "/customers/push_data",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/customers/push_data", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

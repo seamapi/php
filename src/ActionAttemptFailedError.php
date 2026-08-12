@@ -24,8 +24,7 @@ class ActionAttemptFailedError extends ActionAttemptError
      * The action attempt error type.
      *
      * Named `getErrorCode` rather than `getCode` because `Exception::getCode`
-     * is final and returns an int. This is the equivalent of the `code`
-     * property on the same error in the other Seam SDKs.
+     * is final and returns an int.
      */
     public function getErrorCode(): string
     {

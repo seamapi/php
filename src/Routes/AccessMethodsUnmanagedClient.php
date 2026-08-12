@@ -2,12 +2,13 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\UnmanagedAccessMethod;
 
 class AccessMethodsUnmanagedClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -17,7 +18,7 @@ class AccessMethodsUnmanagedClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -35,10 +36,10 @@ class AccessMethodsUnmanagedClient
 
         $request_payload["access_method_id"] = $access_method_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/access_methods/unmanaged/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_methods/unmanaged/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return UnmanagedAccessMethod::from_json($res->access_method);
@@ -72,10 +73,10 @@ class AccessMethodsUnmanagedClient
             $request_payload["space_id"] = $space_id;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/access_methods/unmanaged/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_methods/unmanaged/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return array_map(

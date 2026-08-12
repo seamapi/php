@@ -2,14 +2,15 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Http\ResolveActionAttempt;
-use Seam\Http\SeamHttpClient;
 use Seam\Resources\ActionAttempt;
 use Seam\Resources\Device;
 
 class ThermostatsClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -21,7 +22,7 @@ class ThermostatsClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -51,10 +52,12 @@ class ThermostatsClient
         $request_payload["climate_preset_key"] = $climate_preset_key;
         $request_payload["device_id"] = $device_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/thermostats/activate_climate_preset",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/thermostats/activate_climate_preset",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -94,10 +97,10 @@ class ThermostatsClient
             ] = $cooling_set_point_fahrenheit;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/thermostats/cool",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/cool", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -184,11 +187,9 @@ class ThermostatsClient
             $request_payload["name"] = $name;
         }
 
-        $this->client->request(
-            "POST",
-            "/thermostats/create_climate_preset",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/thermostats/create_climate_preset", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -207,11 +208,9 @@ class ThermostatsClient
         $request_payload["climate_preset_key"] = $climate_preset_key;
         $request_payload["device_id"] = $device_id;
 
-        $this->client->request(
-            "POST",
-            "/thermostats/delete_climate_preset",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/thermostats/delete_climate_preset", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -243,10 +242,10 @@ class ThermostatsClient
             ] = $heating_set_point_fahrenheit;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/thermostats/heat",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/heat", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -300,10 +299,10 @@ class ThermostatsClient
             ] = $heating_set_point_fahrenheit;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/thermostats/heat_cool",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/heat_cool", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -406,10 +405,10 @@ class ThermostatsClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/thermostats/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -434,10 +433,10 @@ class ThermostatsClient
 
         $request_payload["device_id"] = $device_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/thermostats/off",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/off", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -467,7 +466,7 @@ class ThermostatsClient
         $this->client->request(
             "POST",
             "/thermostats/set_fallback_climate_preset",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -496,10 +495,10 @@ class ThermostatsClient
             $request_payload["fan_mode_setting"] = $fan_mode_setting;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/thermostats/set_fan_mode",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/set_fan_mode", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -556,10 +555,10 @@ class ThermostatsClient
             ] = $heating_set_point_fahrenheit;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/thermostats/set_hvac_mode",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/set_hvac_mode", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -610,7 +609,7 @@ class ThermostatsClient
         $this->client->request(
             "POST",
             "/thermostats/set_temperature_threshold",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -690,11 +689,9 @@ class ThermostatsClient
             $request_payload["name"] = $name;
         }
 
-        $this->client->request(
-            "POST",
-            "/thermostats/update_climate_preset",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/thermostats/update_climate_preset", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -747,10 +744,12 @@ class ThermostatsClient
             $request_payload["wednesday_program_id"] = $wednesday_program_id;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/thermostats/update_weekly_program",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/thermostats/update_weekly_program",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(

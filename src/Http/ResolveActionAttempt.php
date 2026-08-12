@@ -2,6 +2,7 @@
 
 namespace Seam\Http;
 
+use GuzzleHttp\ClientInterface;
 use Seam\ActionAttemptFailedError;
 use Seam\ActionAttemptTimeoutError;
 use Seam\Resources\ActionAttempt;
@@ -9,9 +10,8 @@ use Seam\Resources\ActionAttempt;
 /**
  * Waits for an action attempt to reach a terminal state.
  *
- * Mirrors resolveActionAttempt in the JavaScript SDK: a successful attempt is
- * returned as is, a failed one raises, and a pending one is polled until it
- * finishes or the timeout elapses.
+ * A successful attempt is returned as is, a failed one raises, and a pending
+ * one is polled until it finishes or the timeout elapses.
  */
 final class ResolveActionAttempt
 {
@@ -24,7 +24,7 @@ final class ResolveActionAttempt
      */
     public static function resolve_action_attempt(
         ActionAttempt $action_attempt,
-        SeamHttpClient $client,
+        ClientInterface $client,
         bool|array|null $wait_for_action_attempt,
     ): ActionAttempt {
         if ($wait_for_action_attempt === false) {
@@ -45,7 +45,7 @@ final class ResolveActionAttempt
 
     private static function poll(
         ActionAttempt $action_attempt,
-        SeamHttpClient $client,
+        ClientInterface $client,
         float $timeout,
         float $polling_interval,
     ): ActionAttempt {
@@ -74,13 +74,13 @@ final class ResolveActionAttempt
     }
 
     private static function get_action_attempt(
-        SeamHttpClient $client,
+        ClientInterface $client,
         string $action_attempt_id,
     ): ActionAttempt {
-        $res = $client->request(
-            "POST",
-            "/action_attempts/get",
-            json: (object) ["action_attempt_id" => $action_attempt_id],
+        $res = Body::decode(
+            $client->request("POST", "/action_attempts/get", [
+                "json" => (object) ["action_attempt_id" => $action_attempt_id],
+            ]),
         );
 
         $action_attempt = ActionAttempt::from_json(

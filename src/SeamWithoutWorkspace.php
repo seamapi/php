@@ -3,7 +3,7 @@
 namespace Seam;
 
 use GuzzleHttp\ClientInterface;
-use Seam\Http\SeamHttpClient;
+use Seam\Http\ClientFactory;
 use Seam\Routes\WorkspacesClient;
 
 /**
@@ -14,9 +14,12 @@ use Seam\Routes\WorkspacesClient;
  */
 class SeamWithoutWorkspace
 {
-    public const LTS_VERSION = SeamHttpClient::LTS_VERSION;
+    public const LTS_VERSION = ClientFactory::LTS_VERSION;
 
-    public SeamHttpClient $client;
+    /**
+     * The Guzzle client this instance makes its requests with.
+     */
+    public ClientInterface $client;
 
     public WorkspacesProxy $workspaces;
 
@@ -28,12 +31,13 @@ class SeamWithoutWorkspace
         ?string $endpoint = null,
         array $guzzle_options = [],
         ?int $retries = null,
+        ?float $timeout = null,
         ?ClientInterface $client = null,
     ) {
         // A client carries its own endpoint and authorization, so the
         // authentication options are only read when one has to be built.
         if ($client !== null) {
-            $this->client = SeamHttpClient::from_client($client);
+            $this->client = $client;
         } else {
             if ($personal_access_token === null) {
                 throw new InvalidOptionsError(
@@ -41,13 +45,14 @@ class SeamWithoutWorkspace
                 );
             }
 
-            $this->client = new SeamHttpClient(
+            $this->client = ClientFactory::create(
                 Options::get_endpoint($endpoint),
                 Auth::get_auth_headers_for_personal_access_token_without_workspace(
                     $personal_access_token,
                 ),
                 $guzzle_options,
                 $retries,
+                $timeout,
             );
         }
 
@@ -67,12 +72,14 @@ class SeamWithoutWorkspace
         ?string $endpoint = null,
         array $guzzle_options = [],
         ?int $retries = null,
+        ?float $timeout = null,
     ): static {
         return new static(
             personal_access_token: $personal_access_token,
             endpoint: $endpoint,
             guzzle_options: $guzzle_options,
             retries: $retries,
+            timeout: $timeout,
         );
     }
 

@@ -2,13 +2,14 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\AccessGrant;
 use Seam\Resources\Batch;
 
 class AccessGrantsClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -18,7 +19,7 @@ class AccessGrantsClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -112,10 +113,10 @@ class AccessGrantsClient
             $request_payload["starts_at"] = $starts_at;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/access_grants/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_grants/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return AccessGrant::from_json($res->access_grant);
@@ -133,11 +134,9 @@ class AccessGrantsClient
 
         $request_payload["access_grant_id"] = $access_grant_id;
 
-        $this->client->request(
-            "POST",
-            "/access_grants/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/access_grants/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -160,10 +159,10 @@ class AccessGrantsClient
             $request_payload["access_grant_key"] = $access_grant_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/access_grants/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_grants/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return AccessGrant::from_json($res->access_grant);
@@ -199,10 +198,10 @@ class AccessGrantsClient
             $request_payload["include"] = $include;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/access_grants/get_related",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_grants/get_related", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return Batch::from_json($res->batch);
@@ -285,10 +284,10 @@ class AccessGrantsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/access_grants/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_grants/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -319,10 +318,12 @@ class AccessGrantsClient
             "requested_access_methods"
         ] = $requested_access_methods;
 
-        $res = $this->client->request(
-            "POST",
-            "/access_grants/request_access_methods",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/access_grants/request_access_methods",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return AccessGrant::from_json($res->access_grant);
@@ -363,10 +364,8 @@ class AccessGrantsClient
             $request_payload["starts_at"] = $starts_at;
         }
 
-        $this->client->request(
-            "POST",
-            "/access_grants/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/access_grants/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

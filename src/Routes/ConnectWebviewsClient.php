@@ -2,12 +2,13 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\ConnectWebview;
 
 class ConnectWebviewsClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -17,7 +18,7 @@ class ConnectWebviewsClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -95,10 +96,10 @@ class ConnectWebviewsClient
             ] = $wait_for_device_creation;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/connect_webviews/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/connect_webviews/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ConnectWebview::from_json($res->connect_webview);
@@ -118,11 +119,9 @@ class ConnectWebviewsClient
 
         $request_payload["connect_webview_id"] = $connect_webview_id;
 
-        $this->client->request(
-            "POST",
-            "/connect_webviews/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/connect_webviews/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -139,10 +138,10 @@ class ConnectWebviewsClient
 
         $request_payload["connect_webview_id"] = $connect_webview_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/connect_webviews/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/connect_webviews/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ConnectWebview::from_json($res->connect_webview);
@@ -190,10 +189,10 @@ class ConnectWebviewsClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/connect_webviews/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/connect_webviews/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {

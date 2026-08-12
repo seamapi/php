@@ -4,7 +4,7 @@ namespace Seam;
 
 /**
  * Resolves the API endpoint and validates mutually exclusive authentication
- * options, mirroring the option handling in the other Seam SDKs.
+ * options.
  */
 final class Options
 {

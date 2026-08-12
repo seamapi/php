@@ -2,11 +2,11 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
 
 class ThermostatsSimulateClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -16,7 +16,7 @@ class ThermostatsSimulateClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -69,7 +69,7 @@ class ThermostatsSimulateClient
         $this->client->request(
             "POST",
             "/thermostats/simulate/hvac_mode_adjusted",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -101,7 +101,7 @@ class ThermostatsSimulateClient
         $this->client->request(
             "POST",
             "/thermostats/simulate/temperature_reached",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 }

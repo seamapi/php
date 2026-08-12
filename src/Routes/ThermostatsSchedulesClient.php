@@ -2,12 +2,13 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\ThermostatSchedule;
 
 class ThermostatsSchedulesClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -17,7 +18,7 @@ class ThermostatsSchedulesClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -62,10 +63,10 @@ class ThermostatsSchedulesClient
             $request_payload["name"] = $name;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/thermostats/schedules/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/schedules/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ThermostatSchedule::from_json($res->thermostat_schedule);
@@ -83,11 +84,9 @@ class ThermostatsSchedulesClient
 
         $request_payload["thermostat_schedule_id"] = $thermostat_schedule_id;
 
-        $this->client->request(
-            "POST",
-            "/thermostats/schedules/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/thermostats/schedules/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -102,10 +101,10 @@ class ThermostatsSchedulesClient
 
         $request_payload["thermostat_schedule_id"] = $thermostat_schedule_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/thermostats/schedules/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/schedules/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ThermostatSchedule::from_json($res->thermostat_schedule);
@@ -129,10 +128,10 @@ class ThermostatsSchedulesClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/thermostats/schedules/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/schedules/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return array_map(
@@ -186,10 +185,8 @@ class ThermostatsSchedulesClient
             $request_payload["starts_at"] = $starts_at;
         }
 
-        $this->client->request(
-            "POST",
-            "/thermostats/schedules/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/thermostats/schedules/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

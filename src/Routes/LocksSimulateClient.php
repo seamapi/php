@@ -2,13 +2,14 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Http\ResolveActionAttempt;
-use Seam\Http\SeamHttpClient;
 use Seam\Resources\ActionAttempt;
 
 class LocksSimulateClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -18,7 +19,7 @@ class LocksSimulateClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -42,10 +43,12 @@ class LocksSimulateClient
         $request_payload["code"] = $code;
         $request_payload["device_id"] = $device_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/locks/simulate/keypad_code_entry",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/locks/simulate/keypad_code_entry",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -71,10 +74,12 @@ class LocksSimulateClient
 
         $request_payload["device_id"] = $device_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/locks/simulate/manual_lock_via_keypad",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/locks/simulate/manual_lock_via_keypad",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(

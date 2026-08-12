@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use Seam\Http\SeamHttpClient;
+use Seam\Http\ClientFactory;
 use Seam\Seam;
 use Seam\Utils\PackageVersion;
 use Tests\Support\RecordingClient;
@@ -50,7 +50,7 @@ final class HeadersTest extends TestCase
             $request->getHeaderLine("seam-sdk-version"),
         );
         $this->assertSame(
-            SeamHttpClient::LTS_VERSION,
+            ClientFactory::LTS_VERSION,
             $request->getHeaderLine("seam-lts-version"),
         );
         $this->assertSame(

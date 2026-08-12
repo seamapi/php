@@ -317,27 +317,29 @@ the client the SDK builds, so the authorization and SDK headers are kept.
 ```php
 $seam = new Seam\Seam(
     guzzle_options: [
-        "timeout" => 30,
         "headers" => ["X-Custom-Header" => "value"],
         "proxy" => "http://localhost:8125",
     ]
 );
 ```
 
-> [!NOTE]
-> Unlike the other Seam SDKs, this one sets a default request timeout of 60
-> seconds so a hung connection eventually fails. Pass `timeout` to change it,
-> or `0` to disable it.
+#### Setting the timeout
+
+Requests time out after 30 seconds by default, covering both connecting and
+reading. Pass `timeout` in seconds to change it, or `0` to disable it.
+
+```php
+$seam = new Seam\Seam(timeout: 60.0);
+```
 
 #### Retries
 
 Failed requests are retried twice by default, with exponential backoff.
 
-A request that never reached the server, e.g. a connection failure, is always
-retried. A request that did reach the server is only retried on a retryable
-status when the HTTP method is idempotent. Every Seam endpoint is a `POST`, so
-retrying one that the server may already have processed could duplicate a
-write. The other Seam SDKs make the same trade.
+A request that never reached the server, such as a connection failure, is
+always retried, since it cannot have had an effect. A request the server may
+already have processed is retried only when repeating it is safe, so a retry
+never risks duplicating a write.
 
 ```php
 // Retry more times
@@ -345,6 +347,21 @@ $seam = new Seam\Seam(retries: 5);
 
 // Turn retries off
 $seam = new Seam\Seam(retries: 0);
+```
+
+#### Using the Guzzle client
+
+`$seam->client` is the [Guzzle] client, already carrying the endpoint and
+authorization, so it can be used to reach an endpoint the SDK does not expose.
+
+[Guzzle]: https://docs.guzzlephp.org/
+
+```php
+$response = $seam->client->request("POST", "/devices/list", [
+    "json" => (object) ["limit" => 10],
+]);
+
+$devices = Seam\Http\Body::decode($response)->devices;
 ```
 
 #### Overriding the client
@@ -363,22 +380,11 @@ $seam = Seam\Seam::from_client($client);
 
 #### Errors
 
-Every exception the SDK raises implements `Seam\SeamException`.
-
-| Error                       | Raised when                                        |
-| --------------------------- | -------------------------------------------------- |
-| `HttpApiError`              | The API returned an error response.                |
-| `HttpUnauthorizedError`     | The credentials were rejected.                     |
-| `HttpInvalidInputError`     | The request parameters were rejected.              |
-| `InvalidOptionsError`       | The client options are incomplete or incompatible. |
-| `InvalidTokenError`         | The token is of the wrong kind or format.          |
-| `ActionAttemptFailedError`  | An action attempt finished in the error state.     |
-| `ActionAttemptTimeoutError` | An action attempt did not finish in time.          |
-
-An error response that is not shaped like a Seam error, e.g. a gateway
-returning HTML, surfaces as the underlying `GuzzleHttp\Exception\
-BadResponseException` instead. Transport failures surface as the
-corresponding Guzzle exception.
+Every exception the SDK raises implements `Seam\SeamException`, so it can be
+caught as a group. An API error is a `Seam\HttpApiError` carrying
+`getErrorCode()`, `getStatusCode()` and `getRequestId()`, with
+`Seam\HttpUnauthorizedError` and `Seam\HttpInvalidInputError` as the two
+specific cases worth catching on their own.
 
 ```php
 use Seam\HttpApiError;
@@ -390,36 +396,29 @@ try {
     print_r($error->getValidationErrorMessages("device_id"));
 } catch (HttpApiError $error) {
     print $error->getErrorCode();
-    print $error->getStatusCode();
-    print $error->getRequestId();
 }
 ```
 
+A response that is not shaped like a Seam error, such as a gateway returning
+HTML, raises the underlying Guzzle exception instead.
+
 ## Upgrading from 3.x
 
-Version 4 brings this SDK in line with the Seam SDKs for other languages.
-
-- PHP 8.2 or later is now required. PHP 8.1 reached end of life in
-  December 2025.
-- The client class is `Seam\Seam`. `Seam\SeamClient` still works as a
-  deprecated alias.
-- The constructor takes named options. `$endpoint` is no longer the second
-  positional argument, and `$throw_http_errors` is gone; API errors always
-  raise a Seam exception.
-- The exception classes keep their `Seam\` namespace. They now all implement
-  a shared `Seam\SeamException` interface, and `Seam\InvalidOptionsError` and
-  `Seam\InvalidTokenError` are new.
-- `$seam->action_attempts->poll_until_ready()` was removed. Use
-  `wait_for_action_attempt`, which now also accepts a `timeout` and
-  `polling_interval`. The defaults changed from 20s/0.4s to 10s/1s.
-- `$seam->client` is a `Seam\Http\SeamHttpClient`. The Guzzle client is
-  available with `$seam->client->get_client()`.
-- The `$seam->api_key` property and the global `LTS_VERSION` constant were
-  removed. Use `Seam\Seam::LTS_VERSION`.
-- Responses in the 3xx range are no longer treated as successful.
-- Requests are now retried; see [Retries](#retries).
-- Pagination metadata is a `Seam\Pagination` object rather than a
-  `stdClass`.
+- PHP 8.2 or later is required. PHP 8.1 reached end of life in December 2025.
+- The client class is `Seam\Seam`, replacing `Seam\SeamClient`.
+- The constructor takes named options, so `$endpoint` is no longer the second
+  positional argument, and `$throw_http_errors` is gone: an API error always
+  raises.
+- The exception classes stay in the `Seam\` namespace and now share a
+  `Seam\SeamException` interface.
+- `$seam->action_attempts->poll_until_ready()` is gone. Use
+  `wait_for_action_attempt`, which also takes a `timeout` and
+  `polling_interval`.
+- `$seam->client` is the Guzzle client, and `$seam->api_key` and the global
+  `LTS_VERSION` constant are gone. Use `Seam\Seam::LTS_VERSION`.
+- A response in the 3xx range is no longer treated as successful.
+- Requests time out after 30 seconds and are retried twice.
+- Pagination metadata is a `Seam\Pagination` rather than a `stdClass`.
 
 ## Development and Testing
 
@@ -456,6 +455,17 @@ Formatting is handled by [Prettier](https://prettier.io/) via
 [@prettier/plugin-php](https://github.com/prettier/plugin-php),
 so PHP, TypeScript, JSON, YAML and Markdown are all formatted by
 `npm run format`.
+
+### Source code
+
+The [source code] is hosted on GitHub.
+Clone the project with
+
+```
+$ git clone git@github.com:seamapi/php.git
+```
+
+[source code]: https://github.com/seamapi/php
 
 ### Running Tests
 
@@ -524,3 +534,56 @@ picks up the new tag from its GitHub webhook.
 Development files are kept out of the published package with `export-ignore`
 rules in `.gitattributes`, which `git archive` honours when GitHub builds the
 archives Composer downloads as `dist`.
+
+## GitHub Actions
+
+_GitHub Actions should already be configured: this section is for reference only._
+
+Publishing is handled by [Packagist], which reads new versions from the git
+tags this repository pushes, so no registry token is needed.
+
+[Packagist]: https://packagist.org/packages/seamapi/seam
+
+### Secrets for Optional GitHub Actions
+
+The version, format, generate, and semantic-release GitHub actions
+require a user with write access to the repository.
+Set these additional secrets to enable the action:
+
+- `GH_TOKEN`: A personal access token for the user.
+- `GIT_USER_NAME`: The GitHub user's real name.
+- `GIT_USER_EMAIL`: The GitHub user's email.
+- `GPG_PRIVATE_KEY`: The GitHub user's [GPG private key].
+- `GPG_PASSPHRASE`: The GitHub user's GPG passphrase.
+
+[GPG private key]: https://github.com/marketplace/actions/import-gpg#prerequisites
+
+## Contributing
+
+Please submit and comment on bug reports and feature requests.
+
+To submit a patch:
+
+1. Fork it (https://github.com/seamapi/php/fork).
+2. Create your feature branch (`git checkout -b my-new-feature`).
+3. Make changes.
+4. Commit your changes (`git commit -am 'Add some feature'`).
+5. Push to the branch (`git push origin my-new-feature`).
+6. Create a new Pull Request.
+
+## License
+
+This PHP package is licensed under the MIT license.
+
+## Warranty
+
+This software is provided by the copyright holders and contributors "as is" and
+any express or implied warranties, including, but not limited to, the implied
+warranties of merchantability and fitness for a particular purpose are
+disclaimed. In no event shall the copyright holder or contributors be liable for
+any direct, indirect, incidental, special, exemplary, or consequential damages
+(including, but not limited to, procurement of substitute goods or services;
+loss of use, data, or profits; or business interruption) however caused and on
+any theory of liability, whether in contract, strict liability, or tort
+(including negligence or otherwise) arising in any way out of the use of this
+software, even if advised of the possibility of such damage.

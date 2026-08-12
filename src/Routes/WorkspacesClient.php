@@ -2,14 +2,15 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Http\ResolveActionAttempt;
-use Seam\Http\SeamHttpClient;
 use Seam\Resources\ActionAttempt;
 use Seam\Resources\Workspace;
 
 class WorkspacesClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -19,7 +20,7 @@ class WorkspacesClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -91,10 +92,10 @@ class WorkspacesClient
             ] = $webview_success_message;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/workspaces/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/workspaces/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return Workspace::from_json($res->workspace);
@@ -107,7 +108,7 @@ class WorkspacesClient
      */
     public function get(): Workspace
     {
-        $res = $this->client->request("POST", "/workspaces/get");
+        $res = Body::decode($this->client->request("POST", "/workspaces/get"));
 
         return Workspace::from_json($res->workspace);
     }
@@ -119,7 +120,7 @@ class WorkspacesClient
      */
     public function list(): array
     {
-        $res = $this->client->request("POST", "/workspaces/list");
+        $res = Body::decode($this->client->request("POST", "/workspaces/list"));
 
         return array_map(fn($r) => Workspace::from_json($r), $res->workspaces);
     }
@@ -133,7 +134,9 @@ class WorkspacesClient
     public function reset_sandbox(
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
-        $res = $this->client->request("POST", "/workspaces/reset_sandbox");
+        $res = Body::decode(
+            $this->client->request("POST", "/workspaces/reset_sandbox"),
+        );
 
         return ResolveActionAttempt::resolve_action_attempt(
             ActionAttempt::from_json($res->action_attempt),
@@ -187,10 +190,8 @@ class WorkspacesClient
             $request_payload["organization_id"] = $organization_id;
         }
 
-        $this->client->request(
-            "POST",
-            "/workspaces/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/workspaces/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

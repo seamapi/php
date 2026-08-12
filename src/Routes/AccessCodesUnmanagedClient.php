@@ -2,12 +2,13 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\UnmanagedAccessCode;
 
 class AccessCodesUnmanagedClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -17,7 +18,7 @@ class AccessCodesUnmanagedClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -62,7 +63,7 @@ class AccessCodesUnmanagedClient
         $this->client->request(
             "POST",
             "/access_codes/unmanaged/convert_to_managed",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -78,11 +79,9 @@ class AccessCodesUnmanagedClient
 
         $request_payload["access_code_id"] = $access_code_id;
 
-        $this->client->request(
-            "POST",
-            "/access_codes/unmanaged/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/access_codes/unmanaged/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -112,10 +111,10 @@ class AccessCodesUnmanagedClient
             $request_payload["device_id"] = $device_id;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/access_codes/unmanaged/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_codes/unmanaged/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return UnmanagedAccessCode::from_json($res->access_code);
@@ -156,10 +155,10 @@ class AccessCodesUnmanagedClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/access_codes/unmanaged/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_codes/unmanaged/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -207,10 +206,8 @@ class AccessCodesUnmanagedClient
             ] = $is_external_modification_allowed;
         }
 
-        $this->client->request(
-            "POST",
-            "/access_codes/unmanaged/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/access_codes/unmanaged/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

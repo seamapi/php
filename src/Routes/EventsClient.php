@@ -2,12 +2,13 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\Event;
 
 class EventsClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -17,7 +18,7 @@ class EventsClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -48,10 +49,10 @@ class EventsClient
             $request_payload["event_type"] = $event_type;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/events/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/events/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return Event::from_json($res->event);
@@ -207,10 +208,10 @@ class EventsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/events/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/events/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return array_map(fn($r) => Event::from_json($r), $res->events);

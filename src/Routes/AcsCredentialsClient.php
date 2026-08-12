@@ -2,13 +2,14 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\AcsCredential;
 use Seam\Resources\AcsEntrance;
 
 class AcsCredentialsClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -18,7 +19,7 @@ class AcsCredentialsClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -47,11 +48,9 @@ class AcsCredentialsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->client->request(
-            "POST",
-            "/acs/credentials/assign",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/credentials/assign", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -135,10 +134,10 @@ class AcsCredentialsClient
             $request_payload["visionline_metadata"] = $visionline_metadata;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/credentials/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/credentials/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return AcsCredential::from_json($res->acs_credential);
@@ -156,11 +155,9 @@ class AcsCredentialsClient
 
         $request_payload["acs_credential_id"] = $acs_credential_id;
 
-        $this->client->request(
-            "POST",
-            "/acs/credentials/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/credentials/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -175,10 +172,10 @@ class AcsCredentialsClient
 
         $request_payload["acs_credential_id"] = $acs_credential_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/credentials/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/credentials/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return AcsCredential::from_json($res->acs_credential);
@@ -238,10 +235,10 @@ class AcsCredentialsClient
             $request_payload["search"] = $search;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/credentials/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/credentials/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -266,10 +263,12 @@ class AcsCredentialsClient
 
         $request_payload["acs_credential_id"] = $acs_credential_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/credentials/list_accessible_entrances",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/acs/credentials/list_accessible_entrances",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return array_map(
@@ -301,11 +300,9 @@ class AcsCredentialsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->client->request(
-            "POST",
-            "/acs/credentials/unassign",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/credentials/unassign", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -331,10 +328,8 @@ class AcsCredentialsClient
             $request_payload["ends_at"] = $ends_at;
         }
 
-        $this->client->request(
-            "POST",
-            "/acs/credentials/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/credentials/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

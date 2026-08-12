@@ -2,13 +2,14 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\Device;
 use Seam\Resources\DeviceProvider;
 
 class DevicesClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -19,7 +20,7 @@ class DevicesClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -47,10 +48,10 @@ class DevicesClient
             $request_payload["name"] = $name;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/devices/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/devices/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return Device::from_json($res->device);
@@ -148,10 +149,10 @@ class DevicesClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/devices/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/devices/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -180,10 +181,10 @@ class DevicesClient
             $request_payload["provider_category"] = $provider_category;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/devices/list_device_providers",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/devices/list_device_providers", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return array_map(
@@ -204,11 +205,9 @@ class DevicesClient
 
         $request_payload["devices"] = $devices;
 
-        $this->client->request(
-            "POST",
-            "/devices/report_provider_metadata",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/devices/report_provider_metadata", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -253,10 +252,8 @@ class DevicesClient
             $request_payload["properties"] = $properties;
         }
 
-        $this->client->request(
-            "POST",
-            "/devices/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/devices/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

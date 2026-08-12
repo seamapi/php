@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Seam\Http\SeamHttpClient;
+use Seam\Http\Body;
+use Seam\Http\ClientFactory;
 use Seam\Seam;
 use Tests\Support\FakeSeamConnectTestCase;
 
@@ -14,12 +15,12 @@ final class ClientTest extends FakeSeamConnectTestCase
     {
         $seam = $this->seam();
 
-        $res = $seam->client->request(
-            "POST",
-            "/devices/get",
-            (object) [
-                "device_id" => $this->seed["august_device_1"],
-            ],
+        $res = Body::decode(
+            $seam->client->request("POST", "/devices/get", [
+                "json" => (object) [
+                    "device_id" => $this->seed["august_device_1"],
+                ],
+            ]),
         );
 
         $this->assertSame(
@@ -32,21 +33,11 @@ final class ClientTest extends FakeSeamConnectTestCase
         );
     }
 
-    public function testRequestDelegatesToTheClient(): void
+    public function testClientIsTheGuzzleClient(): void
     {
-        $seam = $this->seam();
-
-        $res = $seam->request(
-            "POST",
-            "/devices/get",
-            (object) [
-                "device_id" => $this->seed["august_device_1"],
-            ],
-        );
-
-        $this->assertSame(
-            $this->seed["august_device_1"],
-            $res->device->device_id,
+        $this->assertInstanceOf(
+            \GuzzleHttp\ClientInterface::class,
+            $this->seam()->client,
         );
     }
 
@@ -58,7 +49,7 @@ final class ClientTest extends FakeSeamConnectTestCase
     {
         $authorized = $this->seam();
 
-        $seam = Seam::from_client($authorized->client->get_client());
+        $seam = Seam::from_client($authorized->client);
 
         $device = $seam->devices->get($this->seed["august_device_1"]);
 
@@ -71,7 +62,7 @@ final class ClientTest extends FakeSeamConnectTestCase
 
     public function testClientOptionReusesAnotherInstancesClient(): void
     {
-        $seam = new Seam(client: $this->seam()->client->get_client());
+        $seam = new Seam(client: $this->seam()->client);
 
         $device = $seam->devices->get($this->seed["august_device_1"]);
 
@@ -87,7 +78,7 @@ final class ClientTest extends FakeSeamConnectTestCase
             ],
         );
 
-        $config = $seam->client->get_client()->getConfig();
+        $config = $seam->client->getConfig();
 
         $this->assertSame(30, $config["timeout"]);
         $this->assertSame("Test-Value", $config["headers"]["Custom-Header"]);
@@ -111,11 +102,27 @@ final class ClientTest extends FakeSeamConnectTestCase
         $this->assertSame($this->seed["august_device_1"], $device->device_id);
     }
 
-    public function testTimeoutDefaultsToSixtySeconds(): void
+    public function testTimeoutDefaultsToThirtySeconds(): void
     {
-        $config = $this->seam()->client->get_client()->getConfig();
+        $config = $this->seam()->client->getConfig();
 
-        $this->assertSame(SeamHttpClient::DEFAULT_TIMEOUT, $config["timeout"]);
+        $this->assertSame(30.0, ClientFactory::DEFAULT_TIMEOUT);
+        $this->assertSame(30.0, $config["timeout"]);
+        $this->assertSame(30.0, $config["connect_timeout"]);
+    }
+
+    public function testTimeoutCanBeSet(): void
+    {
+        $seam = Seam::from_api_key(
+            $this->seed["seam_apikey1_token"],
+            endpoint: $this->endpoint,
+            timeout: 5.0,
+        );
+
+        $config = $seam->client->getConfig();
+
+        $this->assertSame(5.0, $config["timeout"]);
+        $this->assertSame(5.0, $config["connect_timeout"]);
     }
 
     /**
@@ -140,9 +147,7 @@ final class ClientTest extends FakeSeamConnectTestCase
                 $this->seed["seed_workspace_1"],
                 endpoint: $this->endpoint,
             ),
-            "from_client" => Seam::from_client(
-                $this->seam()->client->get_client(),
-            ),
+            "from_client" => Seam::from_client($this->seam()->client),
         ];
 
         foreach ($clients as $name => $seam) {

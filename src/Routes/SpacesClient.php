@@ -2,13 +2,14 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\Batch;
 use Seam\Resources\Space;
 
 class SpacesClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -18,7 +19,7 @@ class SpacesClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -40,11 +41,9 @@ class SpacesClient
         $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
         $request_payload["space_id"] = $space_id;
 
-        $this->client->request(
-            "POST",
-            "/spaces/add_acs_entrances",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/spaces/add_acs_entrances", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -63,11 +62,9 @@ class SpacesClient
         $request_payload["connected_account_id"] = $connected_account_id;
         $request_payload["space_id"] = $space_id;
 
-        $this->client->request(
-            "POST",
-            "/spaces/add_connected_account",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/spaces/add_connected_account", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -84,11 +81,9 @@ class SpacesClient
         $request_payload["device_ids"] = $device_ids;
         $request_payload["space_id"] = $space_id;
 
-        $this->client->request(
-            "POST",
-            "/spaces/add_devices",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/spaces/add_devices", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -134,10 +129,10 @@ class SpacesClient
             $request_payload["space_key"] = $space_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/spaces/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/spaces/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return Space::from_json($res->space);
@@ -155,11 +150,9 @@ class SpacesClient
 
         $request_payload["space_id"] = $space_id;
 
-        $this->client->request(
-            "POST",
-            "/spaces/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/spaces/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -182,10 +175,10 @@ class SpacesClient
             $request_payload["space_key"] = $space_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/spaces/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/spaces/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return Space::from_json($res->space);
@@ -221,10 +214,10 @@ class SpacesClient
             $request_payload["space_keys"] = $space_keys;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/spaces/get_related",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/spaces/get_related", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return Batch::from_json($res->batch);
@@ -267,10 +260,10 @@ class SpacesClient
             $request_payload["space_key"] = $space_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/spaces/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/spaces/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -296,11 +289,9 @@ class SpacesClient
         $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
         $request_payload["space_id"] = $space_id;
 
-        $this->client->request(
-            "POST",
-            "/spaces/remove_acs_entrances",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/spaces/remove_acs_entrances", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -319,11 +310,9 @@ class SpacesClient
         $request_payload["connected_account_id"] = $connected_account_id;
         $request_payload["space_id"] = $space_id;
 
-        $this->client->request(
-            "POST",
-            "/spaces/remove_connected_account",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/spaces/remove_connected_account", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -340,11 +329,9 @@ class SpacesClient
         $request_payload["device_ids"] = $device_ids;
         $request_payload["space_id"] = $space_id;
 
-        $this->client->request(
-            "POST",
-            "/spaces/remove_devices",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/spaces/remove_devices", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -387,10 +374,10 @@ class SpacesClient
             $request_payload["space_key"] = $space_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/spaces/update",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/spaces/update", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return Space::from_json($res->space);

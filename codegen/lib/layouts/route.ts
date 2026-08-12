@@ -8,7 +8,8 @@ import {
   sortPhpClientMethodParameters,
 } from '../class-model.js'
 
-const seamHttpClientClass = 'Seam\\Http\\SeamHttpClient'
+const clientInterfaceClass = 'GuzzleHttp\\ClientInterface'
+const bodyClass = 'Seam\\Http\\Body'
 const resolveActionAttemptClass = 'Seam\\Http\\ResolveActionAttempt'
 const resourcesNamespace = 'Seam\\Resources'
 
@@ -147,8 +148,12 @@ const getUseStatements = (client: PhpClient): string[] => {
 
   const usesActionAttempt = resourceNames.has('ActionAttempt')
 
+  // Void endpoints never read the response, so they do not decode it.
+  const readsBody = client.methods.some((m) => m.returnResource !== '')
+
   return [
-    seamHttpClientClass,
+    clientInterfaceClass,
+    ...(readsBody ? [bodyClass] : []),
     ...(usesActionAttempt ? [resolveActionAttemptClass] : []),
     ...[...resourceNames].map((name) => `${resourcesNamespace}\\${name}`),
   ].sort((a, b) => a.localeCompare(b))

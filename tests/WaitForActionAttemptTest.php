@@ -32,15 +32,13 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
         string $status,
         ?array $error = null,
     ): void {
-        $seam->client->request(
-            "POST",
-            "/_fake/update_action_attempt",
-            (object) array_filter([
+        $seam->client->request("POST", "/_fake/update_action_attempt", [
+            "json" => (object) array_filter([
                 "action_attempt_id" => $action_attempt->action_attempt_id,
                 "status" => $status,
                 "error" => $error,
             ]),
-        );
+        ]);
     }
 
     public function testWaitsByDefault(): void

@@ -2,14 +2,15 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Http\ResolveActionAttempt;
-use Seam\Http\SeamHttpClient;
 use Seam\Resources\AcsEncoder;
 use Seam\Resources\ActionAttempt;
 
 class AcsEncodersClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -19,7 +20,7 @@ class AcsEncodersClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -51,10 +52,10 @@ class AcsEncodersClient
             $request_payload["acs_credential_id"] = $acs_credential_id;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/encoders/encode_credential",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/encoders/encode_credential", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -77,10 +78,10 @@ class AcsEncodersClient
 
         $request_payload["acs_encoder_id"] = $acs_encoder_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/encoders/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/encoders/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return AcsEncoder::from_json($res->acs_encoder);
@@ -123,10 +124,10 @@ class AcsEncodersClient
             $request_payload["page_cursor"] = $page_cursor;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/encoders/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/encoders/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -159,10 +160,10 @@ class AcsEncodersClient
             $request_payload["salto_ks_metadata"] = $salto_ks_metadata;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/encoders/scan_credential",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/encoders/scan_credential", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -203,10 +204,12 @@ class AcsEncodersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/encoders/scan_to_assign_credential",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/acs/encoders/scan_to_assign_credential",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(

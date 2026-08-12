@@ -2,12 +2,13 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\UnmanagedAccessGrant;
 
 class AccessGrantsUnmanagedClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -17,7 +18,7 @@ class AccessGrantsUnmanagedClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -35,10 +36,10 @@ class AccessGrantsUnmanagedClient
 
         $request_payload["access_grant_id"] = $access_grant_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/access_grants/unmanaged/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_grants/unmanaged/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return UnmanagedAccessGrant::from_json($res->access_grant);
@@ -86,10 +87,10 @@ class AccessGrantsUnmanagedClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/access_grants/unmanaged/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_grants/unmanaged/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -127,10 +128,8 @@ class AccessGrantsUnmanagedClient
             $request_payload["access_grant_key"] = $access_grant_key;
         }
 
-        $this->client->request(
-            "POST",
-            "/access_grants/unmanaged/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/access_grants/unmanaged/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

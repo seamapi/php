@@ -2,12 +2,13 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\ConnectedAccount;
 
 class ConnectedAccountsClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -17,7 +18,7 @@ class ConnectedAccountsClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -43,11 +44,9 @@ class ConnectedAccountsClient
 
         $request_payload["connected_account_id"] = $connected_account_id;
 
-        $this->client->request(
-            "POST",
-            "/connected_accounts/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/connected_accounts/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -70,10 +69,10 @@ class ConnectedAccountsClient
             $request_payload["email"] = $email;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/connected_accounts/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/connected_accounts/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ConnectedAccount::from_json($res->connected_account);
@@ -126,10 +125,10 @@ class ConnectedAccountsClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/connected_accounts/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/connected_accounts/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -154,11 +153,9 @@ class ConnectedAccountsClient
 
         $request_payload["connected_account_id"] = $connected_account_id;
 
-        $this->client->request(
-            "POST",
-            "/connected_accounts/sync",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/connected_accounts/sync", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -201,10 +198,8 @@ class ConnectedAccountsClient
             $request_payload["display_name"] = $display_name;
         }
 
-        $this->client->request(
-            "POST",
-            "/connected_accounts/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/connected_accounts/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

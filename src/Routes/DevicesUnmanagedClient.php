@@ -2,12 +2,13 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\UnmanagedDevice;
 
 class DevicesUnmanagedClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -17,7 +18,7 @@ class DevicesUnmanagedClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -47,10 +48,10 @@ class DevicesUnmanagedClient
             $request_payload["name"] = $name;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/devices/unmanaged/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/devices/unmanaged/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return UnmanagedDevice::from_json($res->device);
@@ -150,10 +151,10 @@ class DevicesUnmanagedClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/devices/unmanaged/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/devices/unmanaged/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -191,10 +192,8 @@ class DevicesUnmanagedClient
             $request_payload["is_managed"] = $is_managed;
         }
 
-        $this->client->request(
-            "POST",
-            "/devices/unmanaged/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/devices/unmanaged/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

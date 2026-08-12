@@ -14,13 +14,13 @@
 {{/each}}
 
 {{/if}}
-        {{#unless returnsVoid}}$res = {{/unless}}$this->client->request(
+        {{#unless returnsVoid}}$res = Body::decode({{/unless}}$this->client->request(
             "POST",
             "{{path}}",
 {{#if hasParams}}
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
 {{/if}}
-        );
+        ){{#unless returnsVoid}}){{/unless}};
 {{#if usesActionAttempt}}
 
         return ResolveActionAttempt::resolve_action_attempt(

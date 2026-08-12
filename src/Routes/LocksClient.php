@@ -2,14 +2,15 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Http\ResolveActionAttempt;
-use Seam\Http\SeamHttpClient;
 use Seam\Resources\ActionAttempt;
 use Seam\Resources\Device;
 
 class LocksClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -19,7 +20,7 @@ class LocksClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -51,10 +52,10 @@ class LocksClient
             ] = $auto_lock_delay_seconds;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/locks/configure_auto_lock",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/locks/configure_auto_lock", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -84,10 +85,10 @@ class LocksClient
             $request_payload["name"] = $name;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/locks/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/locks/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return Device::from_json($res->device);
@@ -185,10 +186,10 @@ class LocksClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/locks/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/locks/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -213,10 +214,10 @@ class LocksClient
 
         $request_payload["device_id"] = $device_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/locks/lock_door",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/locks/lock_door", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -242,10 +243,10 @@ class LocksClient
 
         $request_payload["device_id"] = $device_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/locks/unlock_door",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/locks/unlock_door", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(

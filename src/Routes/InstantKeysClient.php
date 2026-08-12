@@ -2,12 +2,13 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\InstantKey;
 
 class InstantKeysClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -17,7 +18,7 @@ class InstantKeysClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -35,11 +36,9 @@ class InstantKeysClient
 
         $request_payload["instant_key_id"] = $instant_key_id;
 
-        $this->client->request(
-            "POST",
-            "/instant_keys/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/instant_keys/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -62,10 +61,10 @@ class InstantKeysClient
             $request_payload["instant_key_url"] = $instant_key_url;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/instant_keys/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/instant_keys/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return InstantKey::from_json($res->instant_key);
@@ -85,10 +84,10 @@ class InstantKeysClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/instant_keys/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/instant_keys/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return array_map(

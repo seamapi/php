@@ -23,8 +23,9 @@ use Seam\Routes\UserIdentitiesClient;
 use Seam\Routes\WebhooksClient;
 use Seam\Routes\WorkspacesClient;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use Seam\Http\SeamHttpClient;
+use Seam\Http\ClientFactory;
 
 /**
  * Client for the Seam API.
@@ -61,9 +62,12 @@ class Seam
     /**
      * The long term support version of the Seam API this SDK targets.
      */
-    public const LTS_VERSION = SeamHttpClient::LTS_VERSION;
+    public const LTS_VERSION = ClientFactory::LTS_VERSION;
 
-    public SeamHttpClient $client;
+    /**
+     * The Guzzle client this instance makes its requests with.
+     */
+    public ClientInterface $client;
 
     /**
      * Default request options applied to every call, currently just
@@ -75,9 +79,10 @@ class Seam
 
     /**
      * @param bool|array{timeout?: float, polling_interval?: float}|null $wait_for_action_attempt Whether to wait for action attempts to finish, optionally with timeout and polling_interval in seconds. Defaults to true.
-     * @param array<string, mixed> $guzzle_options Options merged into the underlying Guzzle client, e.g. timeout or headers.
+     * @param array<string, mixed> $guzzle_options Options merged into the underlying Guzzle client, e.g. headers or proxy.
      * @param int|null $retries How many times to retry a failed request. Defaults to 2; pass 0 to disable.
-     * @param ClientInterface|null $client A preconfigured Guzzle client. It carries its own endpoint and authorization, so no other authentication option may be given with it.
+     * @param float|null $timeout Request timeout in seconds, covering connecting and reading. Defaults to 30; pass 0 to disable.
+     * @param ClientInterface|null $client A preconfigured Guzzle client, used as is. It carries its own endpoint and authorization, so no other authentication option applies to it.
      */
     public function __construct(
         ?string $api_key = null,
@@ -87,6 +92,7 @@ class Seam
         bool|array|null $wait_for_action_attempt = null,
         array $guzzle_options = [],
         ?int $retries = null,
+        ?float $timeout = null,
         ?ClientInterface $client = null,
     ) {
         $this->defaults = [
@@ -96,18 +102,18 @@ class Seam
         // A client carries its own endpoint and authorization, so the
         // authentication options are only read when one has to be built.
         $this->client =
-            $client !== null
-                ? SeamHttpClient::from_client($client)
-                : new SeamHttpClient(
-                    Options::get_endpoint($endpoint),
-                    Auth::get_auth_headers(
-                        $api_key,
-                        $personal_access_token,
-                        $workspace_id,
-                    ),
-                    $guzzle_options,
-                    $retries,
-                );
+            $client ??
+            ClientFactory::create(
+                Options::get_endpoint($endpoint),
+                Auth::get_auth_headers(
+                    $api_key,
+                    $personal_access_token,
+                    $workspace_id,
+                ),
+                $guzzle_options,
+                $retries,
+                $timeout,
+            );
 
         $this->access_codes = new AccessCodesClient(
             $this->client,
@@ -176,6 +182,7 @@ class Seam
         bool|array|null $wait_for_action_attempt = null,
         array $guzzle_options = [],
         ?int $retries = null,
+        ?float $timeout = null,
     ): static {
         return new static(
             api_key: $api_key,
@@ -183,6 +190,7 @@ class Seam
             wait_for_action_attempt: $wait_for_action_attempt,
             guzzle_options: $guzzle_options,
             retries: $retries,
+            timeout: $timeout,
         );
     }
 
@@ -197,6 +205,7 @@ class Seam
         bool|array|null $wait_for_action_attempt = null,
         array $guzzle_options = [],
         ?int $retries = null,
+        ?float $timeout = null,
     ): static {
         return new static(
             personal_access_token: $personal_access_token,
@@ -204,6 +213,7 @@ class Seam
             endpoint: $endpoint,
             wait_for_action_attempt: $wait_for_action_attempt,
             retries: $retries,
+            timeout: $timeout,
             guzzle_options: $guzzle_options,
         );
     }
@@ -224,21 +234,6 @@ class Seam
     public function lts_version(): string
     {
         return self::LTS_VERSION;
-    }
-
-    /**
-     * Makes a request against the Seam API with this client's authorization.
-     *
-     * @param array<string, mixed>|object|null $json
-     * @param array<string, mixed>|null $query
-     */
-    public function request(
-        string $method,
-        string $path,
-        mixed $json = null,
-        ?array $query = null,
-    ): mixed {
-        return $this->client->request($method, $path, $json, $query);
     }
 
     /**

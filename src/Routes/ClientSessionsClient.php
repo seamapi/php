@@ -2,12 +2,13 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\ClientSession;
 
 class ClientSessionsClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -17,7 +18,7 @@ class ClientSessionsClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -73,10 +74,10 @@ class ClientSessionsClient
             $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/client_sessions/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/client_sessions/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ClientSession::from_json($res->client_session);
@@ -94,11 +95,9 @@ class ClientSessionsClient
 
         $request_payload["client_session_id"] = $client_session_id;
 
-        $this->client->request(
-            "POST",
-            "/client_sessions/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/client_sessions/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -121,10 +120,10 @@ class ClientSessionsClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/client_sessions/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/client_sessions/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ClientSession::from_json($res->client_session);
@@ -170,10 +169,10 @@ class ClientSessionsClient
             $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/client_sessions/get_or_create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/client_sessions/get_or_create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ClientSession::from_json($res->client_session);
@@ -219,11 +218,9 @@ class ClientSessionsClient
             $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
-        $this->client->request(
-            "POST",
-            "/client_sessions/grant_access",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/client_sessions/grant_access", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -263,10 +260,10 @@ class ClientSessionsClient
             ] = $without_user_identifier_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/client_sessions/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/client_sessions/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return array_map(
@@ -289,10 +286,8 @@ class ClientSessionsClient
 
         $request_payload["client_session_id"] = $client_session_id;
 
-        $this->client->request(
-            "POST",
-            "/client_sessions/revoke",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/client_sessions/revoke", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

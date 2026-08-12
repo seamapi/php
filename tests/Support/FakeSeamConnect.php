@@ -6,8 +6,7 @@ namespace Tests\Support;
  * Runs a fake Seam Connect server for the duration of a single test.
  *
  * Prefer this over stubbing HTTP responses: the fake exercises the SDK against
- * a real server and seeded records, which is how the other Seam SDKs are
- * tested.
+ * a real server and seeded records.
  */
 class FakeSeamConnect
 {

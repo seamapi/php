@@ -2,15 +2,16 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Http\ResolveActionAttempt;
-use Seam\Http\SeamHttpClient;
 use Seam\Resources\AccessMethod;
 use Seam\Resources\ActionAttempt;
 use Seam\Resources\Batch;
 
 class AccessMethodsClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -20,7 +21,7 @@ class AccessMethodsClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -45,10 +46,10 @@ class AccessMethodsClient
         $request_payload["access_method_id"] = $access_method_id;
         $request_payload["card_number"] = $card_number;
 
-        $res = $this->client->request(
-            "POST",
-            "/access_methods/assign_card",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_methods/assign_card", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -84,11 +85,9 @@ class AccessMethodsClient
             $request_payload["reservation_key"] = $reservation_key;
         }
 
-        $this->client->request(
-            "POST",
-            "/access_methods/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/access_methods/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -109,10 +108,10 @@ class AccessMethodsClient
         $request_payload["access_method_id"] = $access_method_id;
         $request_payload["acs_encoder_id"] = $acs_encoder_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/access_methods/encode",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_methods/encode", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -135,10 +134,10 @@ class AccessMethodsClient
 
         $request_payload["access_method_id"] = $access_method_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/access_methods/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_methods/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return AccessMethod::from_json($res->access_method);
@@ -167,10 +166,10 @@ class AccessMethodsClient
             $request_payload["include"] = $include;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/access_methods/get_related",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_methods/get_related", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return Batch::from_json($res->batch);
@@ -228,10 +227,10 @@ class AccessMethodsClient
             $request_payload["space_id"] = $space_id;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/access_methods/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_methods/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -262,10 +261,10 @@ class AccessMethodsClient
         $request_payload["access_method_id"] = $access_method_id;
         $request_payload["acs_entrance_id"] = $acs_entrance_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/access_methods/unlock_door",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_methods/unlock_door", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(

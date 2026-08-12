@@ -50,13 +50,9 @@ final class HttpErrorTest extends FakeSeamConnectTestCase
     public function testThrowsInvalidInputErrorWithValidationMessages(): void
     {
         try {
-            $this->seam()->client->request(
-                "POST",
-                "/devices/list",
-                (object) [
-                    "device_ids" => 4242,
-                ],
-            );
+            $this->seam()->client->request("POST", "/devices/list", [
+                "json" => (object) ["device_ids" => 4242],
+            ]);
             $this->fail("Expected HttpInvalidInputError");
         } catch (HttpInvalidInputError $error) {
             $this->assertSame(400, $error->getStatusCode());
@@ -75,13 +71,9 @@ final class HttpErrorTest extends FakeSeamConnectTestCase
     public function testValidationMessagesAreEmptyForAnUnknownParam(): void
     {
         try {
-            $this->seam()->client->request(
-                "POST",
-                "/devices/list",
-                (object) [
-                    "device_ids" => 4242,
-                ],
-            );
+            $this->seam()->client->request("POST", "/devices/list", [
+                "json" => (object) ["device_ids" => 4242],
+            ]);
             $this->fail("Expected HttpInvalidInputError");
         } catch (HttpInvalidInputError $error) {
             $this->assertSame(
@@ -94,20 +86,18 @@ final class HttpErrorTest extends FakeSeamConnectTestCase
     /**
      * A workspace outage answers with a 503 that is not a Seam error
      * envelope, so it surfaces as the underlying transport error rather than
-     * a Seam exception, which is what the other Seam SDKs do too.
+     * a Seam exception.
      */
     public function testWorkspaceOutageSurfacesTheTransportError(): void
     {
         $seam = $this->seam(retries: 0);
 
-        $seam->client->request(
-            "POST",
-            "/_fake/simulate_workspace_outage",
-            (object) [
+        $seam->client->request("POST", "/_fake/simulate_workspace_outage", [
+            "json" => (object) [
                 "workspace_id" => $this->seed["seed_workspace_1"],
                 "routes" => ["/devices/list"],
             ],
-        );
+        ]);
 
         try {
             $seam->devices->list();

@@ -2,12 +2,13 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\UnmanagedUserIdentity;
 
 class UserIdentitiesUnmanagedClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -17,7 +18,7 @@ class UserIdentitiesUnmanagedClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -35,10 +36,10 @@ class UserIdentitiesUnmanagedClient
 
         $request_payload["user_identity_id"] = $user_identity_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/user_identities/unmanaged/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/user_identities/unmanaged/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return UnmanagedUserIdentity::from_json($res->user_identity);
@@ -76,10 +77,10 @@ class UserIdentitiesUnmanagedClient
             $request_payload["search"] = $search;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/user_identities/unmanaged/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/user_identities/unmanaged/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -115,10 +116,8 @@ class UserIdentitiesUnmanagedClient
             $request_payload["user_identity_key"] = $user_identity_key;
         }
 
-        $this->client->request(
-            "POST",
-            "/user_identities/unmanaged/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/user_identities/unmanaged/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

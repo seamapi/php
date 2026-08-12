@@ -2,15 +2,16 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Http\ResolveActionAttempt;
-use Seam\Http\SeamHttpClient;
 use Seam\Resources\AcsCredential;
 use Seam\Resources\AcsEntrance;
 use Seam\Resources\ActionAttempt;
 
 class AcsEntrancesClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -20,7 +21,7 @@ class AcsEntrancesClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -38,10 +39,10 @@ class AcsEntrancesClient
 
         $request_payload["acs_entrance_id"] = $acs_entrance_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/entrances/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/entrances/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return AcsEntrance::from_json($res->acs_entrance);
@@ -70,11 +71,9 @@ class AcsEntrancesClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->client->request(
-            "POST",
-            "/acs/entrances/grant_access",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/entrances/grant_access", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -144,10 +143,10 @@ class AcsEntrancesClient
             $request_payload["space_id"] = $space_id;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/entrances/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/entrances/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -178,10 +177,12 @@ class AcsEntrancesClient
             $request_payload["include_if"] = $include_if;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/entrances/list_credentials_with_access",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/acs/entrances/list_credentials_with_access",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return array_map(
@@ -208,10 +209,10 @@ class AcsEntrancesClient
         $request_payload["acs_credential_id"] = $acs_credential_id;
         $request_payload["acs_entrance_id"] = $acs_entrance_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/entrances/unlock",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/entrances/unlock", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(

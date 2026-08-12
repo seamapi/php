@@ -2,14 +2,15 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\AcsAccessGroup;
 use Seam\Resources\AcsEntrance;
 use Seam\Resources\AcsUser;
 
 class AcsAccessGroupsClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -19,7 +20,7 @@ class AcsAccessGroupsClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -48,11 +49,9 @@ class AcsAccessGroupsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->client->request(
-            "POST",
-            "/acs/access_groups/add_user",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/access_groups/add_user", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -67,11 +66,9 @@ class AcsAccessGroupsClient
 
         $request_payload["acs_access_group_id"] = $acs_access_group_id;
 
-        $this->client->request(
-            "POST",
-            "/acs/access_groups/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/access_groups/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -86,10 +83,10 @@ class AcsAccessGroupsClient
 
         $request_payload["acs_access_group_id"] = $acs_access_group_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/access_groups/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/access_groups/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return AcsAccessGroup::from_json($res->acs_access_group);
@@ -125,10 +122,10 @@ class AcsAccessGroupsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/access_groups/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/access_groups/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return array_map(
@@ -150,10 +147,12 @@ class AcsAccessGroupsClient
 
         $request_payload["acs_access_group_id"] = $acs_access_group_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/access_groups/list_accessible_entrances",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/acs/access_groups/list_accessible_entrances",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return array_map(
@@ -174,10 +173,10 @@ class AcsAccessGroupsClient
 
         $request_payload["acs_access_group_id"] = $acs_access_group_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/access_groups/list_users",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/access_groups/list_users", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return array_map(fn($r) => AcsUser::from_json($r), $res->acs_users);
@@ -206,10 +205,8 @@ class AcsAccessGroupsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->client->request(
-            "POST",
-            "/acs/access_groups/remove_user",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/access_groups/remove_user", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

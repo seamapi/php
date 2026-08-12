@@ -2,13 +2,14 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Http\ResolveActionAttempt;
-use Seam\Http\SeamHttpClient;
 use Seam\Resources\ActionAttempt;
 
 class ActionAttemptsClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -18,7 +19,7 @@ class ActionAttemptsClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -39,10 +40,10 @@ class ActionAttemptsClient
 
         $request_payload["action_attempt_id"] = $action_attempt_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/action_attempts/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/action_attempts/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
@@ -87,10 +88,10 @@ class ActionAttemptsClient
             $request_payload["page_cursor"] = $page_cursor;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/action_attempts/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/action_attempts/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(

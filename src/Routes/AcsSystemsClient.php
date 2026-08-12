@@ -2,12 +2,13 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\AcsSystem;
 
 class AcsSystemsClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -17,7 +18,7 @@ class AcsSystemsClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -35,10 +36,10 @@ class AcsSystemsClient
 
         $request_payload["acs_system_id"] = $acs_system_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/systems/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/systems/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return AcsSystem::from_json($res->acs_system);
@@ -71,10 +72,10 @@ class AcsSystemsClient
             $request_payload["search"] = $search;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/systems/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/systems/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return array_map(fn($r) => AcsSystem::from_json($r), $res->acs_systems);
@@ -95,10 +96,12 @@ class AcsSystemsClient
 
         $request_payload["acs_system_id"] = $acs_system_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/acs/systems/list_compatible_credential_manager_acs_systems",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/acs/systems/list_compatible_credential_manager_acs_systems",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return array_map(fn($r) => AcsSystem::from_json($r), $res->acs_systems);
@@ -127,10 +130,8 @@ class AcsSystemsClient
             $request_payload["acs_entrances"] = $acs_entrances;
         }
 
-        $this->client->request(
-            "POST",
-            "/acs/systems/report_devices",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/systems/report_devices", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

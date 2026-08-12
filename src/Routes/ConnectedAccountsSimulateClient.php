@@ -2,11 +2,11 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
 
 class ConnectedAccountsSimulateClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -16,7 +16,7 @@ class ConnectedAccountsSimulateClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -37,7 +37,7 @@ class ConnectedAccountsSimulateClient
         $this->client->request(
             "POST",
             "/connected_accounts/simulate/disconnect",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 }

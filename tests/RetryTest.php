@@ -7,6 +7,7 @@ namespace Tests;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\TestCase;
+use Seam\Http\Body;
 use Seam\Seam;
 use Tests\Support\RecordingClient;
 
@@ -41,9 +42,8 @@ final class RetryTest extends TestCase
     }
 
     /**
-     * Every Seam endpoint is a POST. Retrying one the server may already have
-     * processed could duplicate a write, so a status code never triggers a
-     * retry. The Ruby SDK asserts the same thing.
+     * A POST the server may already have processed could duplicate a write if
+     * repeated, so a status code never triggers a retry for one.
      */
     public function testDoesNotRetryPostOnServiceUnavailable(): void
     {
@@ -131,7 +131,9 @@ final class RetryTest extends TestCase
             self::devices(),
         ]);
 
-        $res = $this->seam($recorder)->client->request("GET", "/devices/list");
+        $res = Body::decode(
+            $this->seam($recorder)->client->request("GET", "/devices/list"),
+        );
 
         $this->assertSame([], $res->devices);
         $this->assertSame(3, $recorder->attempt_count());

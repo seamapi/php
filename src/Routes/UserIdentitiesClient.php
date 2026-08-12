@@ -2,7 +2,8 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\AcsEntrance;
 use Seam\Resources\AcsSystem;
 use Seam\Resources\AcsUser;
@@ -12,7 +13,7 @@ use Seam\Resources\UserIdentity;
 
 class UserIdentitiesClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -22,7 +23,7 @@ class UserIdentitiesClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -59,11 +60,9 @@ class UserIdentitiesClient
             $request_payload["user_identity_key"] = $user_identity_key;
         }
 
-        $this->client->request(
-            "POST",
-            "/user_identities/add_acs_user",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/user_identities/add_acs_user", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -101,10 +100,10 @@ class UserIdentitiesClient
             $request_payload["user_identity_key"] = $user_identity_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/user_identities/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/user_identities/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return UserIdentity::from_json($res->user_identity);
@@ -122,11 +121,9 @@ class UserIdentitiesClient
 
         $request_payload["user_identity_id"] = $user_identity_id;
 
-        $this->client->request(
-            "POST",
-            "/user_identities/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/user_identities/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -154,10 +151,12 @@ class UserIdentitiesClient
             $request_payload["max_use_count"] = $max_use_count;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/user_identities/generate_instant_key",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/user_identities/generate_instant_key",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return InstantKey::from_json($res->instant_key);
@@ -183,10 +182,10 @@ class UserIdentitiesClient
             $request_payload["user_identity_key"] = $user_identity_key;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/user_identities/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/user_identities/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return UserIdentity::from_json($res->user_identity);
@@ -211,7 +210,7 @@ class UserIdentitiesClient
         $this->client->request(
             "POST",
             "/user_identities/grant_access_to_device",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -259,10 +258,10 @@ class UserIdentitiesClient
             $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/user_identities/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/user_identities/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -287,10 +286,12 @@ class UserIdentitiesClient
 
         $request_payload["user_identity_id"] = $user_identity_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/user_identities/list_accessible_devices",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/user_identities/list_accessible_devices",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return array_map(fn($r) => Device::from_json($r), $res->devices);
@@ -308,10 +309,12 @@ class UserIdentitiesClient
 
         $request_payload["user_identity_id"] = $user_identity_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/user_identities/list_accessible_entrances",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/user_identities/list_accessible_entrances",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return array_map(
@@ -332,10 +335,12 @@ class UserIdentitiesClient
 
         $request_payload["user_identity_id"] = $user_identity_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/user_identities/list_acs_systems",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/user_identities/list_acs_systems",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return array_map(fn($r) => AcsSystem::from_json($r), $res->acs_systems);
@@ -353,10 +358,10 @@ class UserIdentitiesClient
 
         $request_payload["user_identity_id"] = $user_identity_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/user_identities/list_acs_users",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/user_identities/list_acs_users", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return array_map(fn($r) => AcsUser::from_json($r), $res->acs_users);
@@ -378,11 +383,9 @@ class UserIdentitiesClient
         $request_payload["acs_user_id"] = $acs_user_id;
         $request_payload["user_identity_id"] = $user_identity_id;
 
-        $this->client->request(
-            "POST",
-            "/user_identities/remove_acs_user",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/user_identities/remove_acs_user", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -404,7 +407,7 @@ class UserIdentitiesClient
         $this->client->request(
             "POST",
             "/user_identities/revoke_access_to_device",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -441,10 +444,8 @@ class UserIdentitiesClient
             $request_payload["user_identity_key"] = $user_identity_key;
         }
 
-        $this->client->request(
-            "POST",
-            "/user_identities/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/user_identities/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

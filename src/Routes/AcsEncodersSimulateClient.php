@@ -2,11 +2,11 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
 
 class AcsEncodersSimulateClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -16,7 +16,7 @@ class AcsEncodersSimulateClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -48,7 +48,7 @@ class AcsEncodersSimulateClient
         $this->client->request(
             "POST",
             "/acs/encoders/simulate/next_credential_encode_will_fail",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -73,7 +73,7 @@ class AcsEncodersSimulateClient
         $this->client->request(
             "POST",
             "/acs/encoders/simulate/next_credential_encode_will_succeed",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -105,7 +105,7 @@ class AcsEncodersSimulateClient
         $this->client->request(
             "POST",
             "/acs/encoders/simulate/next_credential_scan_will_fail",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -137,7 +137,7 @@ class AcsEncodersSimulateClient
         $this->client->request(
             "POST",
             "/acs/encoders/simulate/next_credential_scan_will_succeed",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 }

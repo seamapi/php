@@ -2,12 +2,13 @@
 
 namespace Seam\Routes;
 
-use Seam\Http\SeamHttpClient;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\Phone;
 
 class PhonesClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -17,7 +18,7 @@ class PhonesClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -36,11 +37,9 @@ class PhonesClient
 
         $request_payload["device_id"] = $device_id;
 
-        $this->client->request(
-            "POST",
-            "/phones/deactivate",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/phones/deactivate", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -55,10 +54,10 @@ class PhonesClient
 
         $request_payload["device_id"] = $device_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/phones/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/phones/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return Phone::from_json($res->phone);
@@ -86,10 +85,10 @@ class PhonesClient
             ] = $owner_user_identity_id;
         }
 
-        $res = $this->client->request(
-            "POST",
-            "/phones/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/phones/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return array_map(fn($r) => Phone::from_json($r), $res->phones);

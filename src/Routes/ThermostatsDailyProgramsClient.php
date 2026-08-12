@@ -2,14 +2,15 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Http\ResolveActionAttempt;
-use Seam\Http\SeamHttpClient;
 use Seam\Resources\ActionAttempt;
 use Seam\Resources\ThermostatDailyProgram;
 
 class ThermostatsDailyProgramsClient
 {
-    private SeamHttpClient $client;
+    private ClientInterface $client;
 
     /**
      * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
@@ -19,7 +20,7 @@ class ThermostatsDailyProgramsClient
     /**
      * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
      */
-    public function __construct(SeamHttpClient $client, array $defaults)
+    public function __construct(ClientInterface $client, array $defaults)
     {
         $this->client = $client;
         $this->defaults = $defaults;
@@ -44,10 +45,12 @@ class ThermostatsDailyProgramsClient
         $request_payload["name"] = $name;
         $request_payload["periods"] = $periods;
 
-        $res = $this->client->request(
-            "POST",
-            "/thermostats/daily_programs/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/thermostats/daily_programs/create",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return ThermostatDailyProgram::from_json(
@@ -69,11 +72,9 @@ class ThermostatsDailyProgramsClient
             "thermostat_daily_program_id"
         ] = $thermostat_daily_program_id;
 
-        $this->client->request(
-            "POST",
-            "/thermostats/daily_programs/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/thermostats/daily_programs/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -99,10 +100,12 @@ class ThermostatsDailyProgramsClient
             "thermostat_daily_program_id"
         ] = $thermostat_daily_program_id;
 
-        $res = $this->client->request(
-            "POST",
-            "/thermostats/daily_programs/update",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/thermostats/daily_programs/update",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
