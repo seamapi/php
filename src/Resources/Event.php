@@ -447,142 +447,6 @@ namespace Seam\Resources {
 
 namespace Seam\Resources\Event {
     /**
-     * List of properties that changed on the access code.
-     */
-    class ChangedProperties
-    {
-        public static function from_json(mixed $json): ChangedProperties|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                from: $json->from ?? null,
-                property: $json->property ?? null,
-                to: $json->to ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Previous value of the property, or null if not set.
-             */
-            public string|null $from,
-            /**
-             * Name of the property that changed (e.g. `code`).
-             */
-            public string|null $property,
-            /**
-             * New value of the property, or null if cleared.
-             */
-            public string|null $to,
-        ) {}
-    }
-
-    class From
-    {
-        public static function from_json(mixed $json): From|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                code: $json->code ?? null,
-                ends_at: $json->ends_at ?? null,
-                name: $json->name ?? null,
-                starts_at: $json->starts_at ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Previous pin code.
-             */
-            public string|null $code,
-            /**
-             * Previous end time.
-             */
-            public string|null $ends_at,
-            /**
-             * Previous name of the access code.
-             */
-            public string|null $name,
-            /**
-             * Previous start time.
-             */
-            public string|null $starts_at,
-        ) {}
-    }
-
-    class To
-    {
-        public static function from_json(mixed $json): To|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                code: $json->code ?? null,
-                ends_at: $json->ends_at ?? null,
-                name: $json->name ?? null,
-                starts_at: $json->starts_at ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * New pin code.
-             */
-            public string|null $code,
-            /**
-             * New end time.
-             */
-            public string|null $ends_at,
-            /**
-             * New name of the access code.
-             */
-            public string|null $name,
-            /**
-             * New start time.
-             */
-            public string|null $starts_at,
-        ) {}
-    }
-
-    /**
-     * Array of mutations requested on the access code, each containing the mutation type and from/to values.
-     */
-    class RequestedMutations
-    {
-        public static function from_json(mixed $json): RequestedMutations|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                from: $json->from ?? null,
-                mutation_code: $json->mutation_code ?? null,
-                to: $json->to ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Previous property values before the requested change. Keys depend on the mutation type. Absent for non-property mutations like `deleting`.
-             */
-            public mixed $from,
-            /**
-             * Code identifying the type of mutation requested, such as `updating_name`, `updating_code`, `updating_time_frame`, or `deleting`.
-             */
-            public string|null $mutation_code,
-            /**
-             * New property values after the requested change. Keys depend on the mutation type. Absent for non-property mutations like `deleting`.
-             */
-            public mixed $to,
-        ) {}
-    }
-
-    /**
      * Errors associated with the access code.
      */
     class AccessCodeErrors
@@ -645,6 +509,105 @@ namespace Seam\Resources\Event {
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
              */
             public string|null $warning_code,
+        ) {}
+    }
+
+    /**
+     * Errors associated with the access control system.
+     */
+    class AcsSystemErrors
+    {
+        public static function from_json(mixed $json): AcsSystemErrors|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            public string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $error_code,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+        ) {}
+    }
+
+    /**
+     * Warnings associated with the access control system.
+     */
+    class AcsSystemWarnings
+    {
+        public static function from_json(mixed $json): AcsSystemWarnings|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            public string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $warning_code,
+        ) {}
+    }
+
+    /**
+     * List of properties that changed on the access code.
+     */
+    class ChangedProperties
+    {
+        public static function from_json(mixed $json): ChangedProperties|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                from: $json->from ?? null,
+                property: $json->property ?? null,
+                to: $json->to ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Previous value of the property, or null if not set.
+             */
+            public string|null $from,
+            /**
+             * Name of the property that changed (e.g. `code`).
+             */
+            public string|null $property,
+            /**
+             * New value of the property, or null if cleared.
+             */
+            public string|null $to,
         ) {}
     }
 
@@ -782,69 +745,38 @@ namespace Seam\Resources\Event {
         ) {}
     }
 
-    /**
-     * Errors associated with the access control system.
-     */
-    class AcsSystemErrors
+    class From
     {
-        public static function from_json(mixed $json): AcsSystemErrors|null
+        public static function from_json(mixed $json): From|null
         {
             if (!$json) {
                 return null;
             }
             return new self(
-                created_at: $json->created_at ?? null,
-                error_code: $json->error_code ?? null,
-                message: $json->message ?? null,
+                code: $json->code ?? null,
+                ends_at: $json->ends_at ?? null,
+                name: $json->name ?? null,
+                starts_at: $json->starts_at ?? null,
             );
         }
 
         public function __construct(
             /**
-             * Date and time at which Seam created the error.
+             * Previous pin code.
              */
-            public string|null $created_at,
+            public string|null $code,
             /**
-             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             * Previous end time.
              */
-            public string|null $error_code,
+            public string|null $ends_at,
             /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             * Previous name of the access code.
              */
-            public string|null $message,
-        ) {}
-    }
-
-    /**
-     * Warnings associated with the access control system.
-     */
-    class AcsSystemWarnings
-    {
-        public static function from_json(mixed $json): AcsSystemWarnings|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                warning_code: $json->warning_code ?? null,
-            );
-        }
-
-        public function __construct(
+            public string|null $name,
             /**
-             * Date and time at which Seam created the warning.
+             * Previous start time.
              */
-            public string|null $created_at,
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            public string|null $message,
-            /**
-             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
-             */
-            public string|null $warning_code,
+            public string|null $starts_at,
         ) {}
     }
 
@@ -873,6 +805,74 @@ namespace Seam\Resources\Event {
              * Normalized reason a lock denied access. Provider-agnostic; not all providers report every value.
              */
             public string|null $reason_code,
+        ) {}
+    }
+
+    /**
+     * Array of mutations requested on the access code, each containing the mutation type and from/to values.
+     */
+    class RequestedMutations
+    {
+        public static function from_json(mixed $json): RequestedMutations|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                from: $json->from ?? null,
+                mutation_code: $json->mutation_code ?? null,
+                to: $json->to ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Previous property values before the requested change. Keys depend on the mutation type. Absent for non-property mutations like `deleting`.
+             */
+            public mixed $from,
+            /**
+             * Code identifying the type of mutation requested, such as `updating_name`, `updating_code`, `updating_time_frame`, or `deleting`.
+             */
+            public string|null $mutation_code,
+            /**
+             * New property values after the requested change. Keys depend on the mutation type. Absent for non-property mutations like `deleting`.
+             */
+            public mixed $to,
+        ) {}
+    }
+
+    class To
+    {
+        public static function from_json(mixed $json): To|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                code: $json->code ?? null,
+                ends_at: $json->ends_at ?? null,
+                name: $json->name ?? null,
+                starts_at: $json->starts_at ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * New pin code.
+             */
+            public string|null $code,
+            /**
+             * New end time.
+             */
+            public string|null $ends_at,
+            /**
+             * New name of the access code.
+             */
+            public string|null $name,
+            /**
+             * New start time.
+             */
+            public string|null $starts_at,
         ) {}
     }
 }

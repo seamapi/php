@@ -545,44 +545,6 @@ namespace Seam\Resources\ActionAttempt\Result {
         ) {}
     }
 
-    class Warnings
-    {
-        public static function from_json(mixed $json): Warnings|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                original_access_method_id: $json->original_access_method_id ??
-                    null,
-                warning_code: $json->warning_code ?? null,
-                warning_message: $json->warning_message ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the warning.
-             */
-            public string|null $created_at,
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            public string|null $message,
-            /**
-             * ID of the original access method from which this backup access method was split, if applicable.
-             */
-            public string|null $original_access_method_id,
-            public string|null $warning_code,
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            public string|null $warning_message,
-        ) {}
-    }
-
     /**
      * Akiles-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
      */
@@ -685,6 +647,53 @@ namespace Seam\Resources\ActionAttempt\Result {
     }
 
     /**
+     * Pending mutations for the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant). Indicates operations that are in progress.
+     */
+    class PendingMutations
+    {
+        public static function from_json(mixed $json): PendingMutations|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                from: isset($json->from)
+                    ? PendingMutations\From::from_json($json->from)
+                    : null,
+                message: $json->message ?? null,
+                mutation_code: $json->mutation_code ?? null,
+                to: isset($json->to)
+                    ? PendingMutations\To::from_json($json->to)
+                    : null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which the mutation was created.
+             */
+            public string|null $created_at,
+            /**
+             * Previous access time configuration.
+             */
+            public PendingMutations\From|null $from,
+            /**
+             * Detailed description of the mutation.
+             */
+            public string|null $message,
+            /**
+             * Mutation code to indicate that Seam is in the process of updating the access times for this access method.
+             */
+            public string|null $mutation_code,
+            /**
+             * New access time configuration.
+             */
+            public PendingMutations\To|null $to,
+        ) {}
+    }
+
+    /**
      * Visionline-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
      */
     class VisionlineMetadata
@@ -743,50 +752,41 @@ namespace Seam\Resources\ActionAttempt\Result {
         ) {}
     }
 
-    /**
-     * Pending mutations for the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant). Indicates operations that are in progress.
-     */
-    class PendingMutations
+    class Warnings
     {
-        public static function from_json(mixed $json): PendingMutations|null
+        public static function from_json(mixed $json): Warnings|null
         {
             if (!$json) {
                 return null;
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                from: isset($json->from)
-                    ? PendingMutations\From::from_json($json->from)
-                    : null,
                 message: $json->message ?? null,
-                mutation_code: $json->mutation_code ?? null,
-                to: isset($json->to)
-                    ? PendingMutations\To::from_json($json->to)
-                    : null,
+                original_access_method_id: $json->original_access_method_id ??
+                    null,
+                warning_code: $json->warning_code ?? null,
+                warning_message: $json->warning_message ?? null,
             );
         }
 
         public function __construct(
             /**
-             * Date and time at which the mutation was created.
+             * Date and time at which Seam created the warning.
              */
             public string|null $created_at,
             /**
-             * Previous access time configuration.
-             */
-            public PendingMutations\From|null $from,
-            /**
-             * Detailed description of the mutation.
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
             public string|null $message,
             /**
-             * Mutation code to indicate that Seam is in the process of updating the access times for this access method.
+             * ID of the original access method from which this backup access method was split, if applicable.
              */
-            public string|null $mutation_code,
+            public string|null $original_access_method_id,
+            public string|null $warning_code,
             /**
-             * New access time configuration.
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
-            public PendingMutations\To|null $to,
+            public string|null $warning_message,
         ) {}
     }
 }
