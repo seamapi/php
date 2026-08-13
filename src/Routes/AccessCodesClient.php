@@ -495,9 +495,6 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      * @param string $ends_at Date and time at which the validity of the new access code ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
      * @param bool $is_external_modification_allowed Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the code is allowed. Default: `false`.
      * @param bool $is_managed Indicates whether the access code is managed through Seam. Note that to convert an unmanaged access code into a managed access code, use `/access_codes/unmanaged/convert_to_managed`.
-     * @param bool $is_offline_access_code Indicates whether the access code is an [offline access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/offline-access-codes).
-     * @param bool $is_one_time_use Indicates whether the [offline access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/offline-access-codes) is a single-use access code.
-     * @param string $max_time_rounding Maximum rounding adjustment. To create a daily-bound [offline access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/offline-access-codes) for devices that support this feature, set this parameter to `1d`.
      * @param string $name Name of the new access code. Enables administrators and users to identify the access code easily, especially when there are numerous access codes.
 
 Note that the name provided on Seam is used to identify the code on Seam and is not necessarily the name that will appear in the lock provider's app or on the device. This is because lock providers may have constraints on names, such as length, uniqueness, or characters that can be used. In addition, some lock providers may break down names into components such as `first_name` and `last_name`.
@@ -505,12 +502,8 @@ Note that the name provided on Seam is used to identify the code on Seam and is 
 To provide a consistent experience, Seam identifies the code on Seam by its name but may modify the name that appears on the lock provider's app or on the device. For example, Seam may add additional characters or truncate the name to meet provider constraints.
 
 To help your users identify codes set by Seam, Seam provides the name exactly as it appears on the lock provider's app or on the device as a separate property called `appearance`. This is an object with a `name` property and, optionally, `first_name` and `last_name` properties (for providers that break down a name into components).
-     * @param bool $prefer_native_scheduling Indicates whether [native scheduling](https://docs.seam.co/low-level-apis/smart-locks/access-codes#native-scheduling) should be used for time-bound codes when supported by the provider. Default: `true`.
-     * @param float $preferred_code_length Preferred code length. Only applicable if you do not specify a `code`. If the affected device does not support the preferred code length, Seam reverts to using the shortest supported code length.
      * @param string $starts_at Date and time at which the validity of the new access code starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @param string $type Type to which you want to convert the access code. To convert a time-bound access code to an ongoing access code, set `type` to `ongoing`. See also [Changing a time-bound access code to permanent access](https://docs.seam.co/low-level-apis/smart-locks/access-codes/modifying-access-codes#special-case-2-changing-a-time-bound-access-code-to-permanent-access).
-     * @param bool $use_backup_access_code_pool Indicates whether to use a [backup access code pool](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes) provided by Seam. If `true`, you can use [`/access_codes/pull_backup_access_code`](https://docs.seam.co/api/access_codes/pull_backup_access_code).
-     * @param bool $use_offline_access_code
      * @return void OK
      */
     public function update(
@@ -522,16 +515,9 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         ?string $ends_at = null,
         ?bool $is_external_modification_allowed = null,
         ?bool $is_managed = null,
-        ?bool $is_offline_access_code = null,
-        ?bool $is_one_time_use = null,
-        ?string $max_time_rounding = null,
         ?string $name = null,
-        ?bool $prefer_native_scheduling = null,
-        ?float $preferred_code_length = null,
         ?string $starts_at = null,
         ?string $type = null,
-        ?bool $use_backup_access_code_pool = null,
-        ?bool $use_offline_access_code = null,
     ): void {
         $request_payload = [];
 
@@ -563,43 +549,14 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         if ($is_managed !== null) {
             $request_payload["is_managed"] = $is_managed;
         }
-        if ($is_offline_access_code !== null) {
-            $request_payload[
-                "is_offline_access_code"
-            ] = $is_offline_access_code;
-        }
-        if ($is_one_time_use !== null) {
-            $request_payload["is_one_time_use"] = $is_one_time_use;
-        }
-        if ($max_time_rounding !== null) {
-            $request_payload["max_time_rounding"] = $max_time_rounding;
-        }
         if ($name !== null) {
             $request_payload["name"] = $name;
-        }
-        if ($prefer_native_scheduling !== null) {
-            $request_payload[
-                "prefer_native_scheduling"
-            ] = $prefer_native_scheduling;
-        }
-        if ($preferred_code_length !== null) {
-            $request_payload["preferred_code_length"] = $preferred_code_length;
         }
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;
         }
         if ($type !== null) {
             $request_payload["type"] = $type;
-        }
-        if ($use_backup_access_code_pool !== null) {
-            $request_payload[
-                "use_backup_access_code_pool"
-            ] = $use_backup_access_code_pool;
-        }
-        if ($use_offline_access_code !== null) {
-            $request_payload[
-                "use_offline_access_code"
-            ] = $use_offline_access_code;
         }
 
         $this->client->request("POST", "/access_codes/update", [

@@ -367,6 +367,8 @@ namespace Seam\Resources\AcsCredential {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
+                new_code: $json->new_code ?? null,
+                original_code: $json->original_code ?? null,
                 warning_code: $json->warning_code ?? null,
             );
         }
@@ -380,6 +382,14 @@ namespace Seam\Resources\AcsCredential {
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
             public string|null $message,
+            /**
+             * The PIN code that was assigned instead.
+             */
+            public string|null $new_code,
+            /**
+             * The originally requested PIN code that could not be used.
+             */
+            public string|null $original_code,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
              */

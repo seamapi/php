@@ -762,8 +762,10 @@ namespace Seam\Resources\ActionAttempt\Result {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
+                new_code: $json->new_code ?? null,
                 original_access_method_id: $json->original_access_method_id ??
                     null,
+                original_code: $json->original_code ?? null,
                 warning_code: $json->warning_code ?? null,
                 warning_message: $json->warning_message ?? null,
             );
@@ -779,9 +781,17 @@ namespace Seam\Resources\ActionAttempt\Result {
              */
             public string|null $message,
             /**
+             * The PIN code that was assigned instead.
+             */
+            public string|null $new_code,
+            /**
              * ID of the original access method from which this backup access method was split, if applicable.
              */
             public string|null $original_access_method_id,
+            /**
+             * The originally requested PIN code that could not be used.
+             */
+            public string|null $original_code,
             public string|null $warning_code,
             /**
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
@@ -1042,6 +1052,8 @@ namespace Seam\Resources\ActionAttempt\Result\AcsCredentialOnSeam {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
+                new_code: $json->new_code ?? null,
+                original_code: $json->original_code ?? null,
                 warning_code: $json->warning_code ?? null,
             );
         }
@@ -1055,6 +1067,14 @@ namespace Seam\Resources\ActionAttempt\Result\AcsCredentialOnSeam {
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
             public string|null $message,
+            /**
+             * The PIN code that was assigned instead.
+             */
+            public string|null $new_code,
+            /**
+             * The originally requested PIN code that could not be used.
+             */
+            public string|null $original_code,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
              */

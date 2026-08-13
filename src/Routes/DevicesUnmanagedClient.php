@@ -66,7 +66,6 @@ class DevicesUnmanagedClient
      * @param string $connected_account_id ID of the connected account for which you want to list devices.
      * @param array $connected_account_ids Array of IDs of the connected accounts for which you want to list devices.
      * @param string $created_before Timestamp by which to limit returned devices. Returns devices created before this timestamp.
-     * @param mixed $custom_metadata_has Set of key:value [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) pairs for which you want to list devices.
      * @param string $customer_key Customer key for which you want to list devices.
      * @param array $device_ids Array of device IDs for which you want to list devices.
      * @param string $device_type Device type for which you want to list devices.
@@ -75,9 +74,6 @@ class DevicesUnmanagedClient
      * @param string $manufacturer Manufacturer for which you want to list devices.
      * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned devices to include all records that satisfy a partial match using `device_id` (full or partial UUID prefix, minimum 4 characters), `connected_account_id`, `display_name`, `custom_metadata` or `location.location_name`.
-     * @param string $space_id ID of the space for which you want to list devices.
-     * @param string $unstable_location_id
-     * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
@@ -86,7 +82,6 @@ class DevicesUnmanagedClient
         ?string $connected_account_id = null,
         ?array $connected_account_ids = null,
         ?string $created_before = null,
-        mixed $custom_metadata_has = null,
         ?string $customer_key = null,
         ?array $device_ids = null,
         ?string $device_type = null,
@@ -95,9 +90,6 @@ class DevicesUnmanagedClient
         ?string $manufacturer = null,
         ?string $page_cursor = null,
         ?string $search = null,
-        ?string $space_id = null,
-        ?string $unstable_location_id = null,
-        ?string $user_identifier_key = null,
         ?callable $on_response = null,
     ): array {
         $request_payload = [];
@@ -113,9 +105,6 @@ class DevicesUnmanagedClient
         }
         if ($created_before !== null) {
             $request_payload["created_before"] = $created_before;
-        }
-        if ($custom_metadata_has !== null) {
-            $request_payload["custom_metadata_has"] = $custom_metadata_has;
         }
         if ($customer_key !== null) {
             $request_payload["customer_key"] = $customer_key;
@@ -140,15 +129,6 @@ class DevicesUnmanagedClient
         }
         if ($search !== null) {
             $request_payload["search"] = $search;
-        }
-        if ($space_id !== null) {
-            $request_payload["space_id"] = $space_id;
-        }
-        if ($unstable_location_id !== null) {
-            $request_payload["unstable_location_id"] = $unstable_location_id;
-        }
-        if ($user_identifier_key !== null) {
-            $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
         $res = Body::decode(

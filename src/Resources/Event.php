@@ -61,7 +61,6 @@ namespace Seam\Resources {
                     $json->connected_account_errors ?? [],
                 ),
                 connected_account_id: $json->connected_account_id ?? null,
-                connected_account_type: $json->connected_account_type ?? null,
                 connected_account_warnings: array_map(
                     fn($c) => Event\ConnectedAccountWarnings::from_json($c),
                     $json->connected_account_warnings ?? [],
@@ -139,7 +138,6 @@ namespace Seam\Resources {
                 to: isset($json->to) ? Event\To::from_json($json->to) : null,
                 upper_limit_celsius: $json->upper_limit_celsius ?? null,
                 upper_limit_fahrenheit: $json->upper_limit_fahrenheit ?? null,
-                user_identity_id: $json->user_identity_id ?? null,
                 video_url: $json->video_url ?? null,
                 workspace_id: $json->workspace_id ?? null,
             );
@@ -197,11 +195,17 @@ namespace Seam\Resources {
              * Errors associated with the access control system.
              */
             public array $acs_system_errors,
+            /**
+             * ID of the access system.
+             */
             public string|null $acs_system_id,
             /**
              * Warnings associated with the access control system.
              */
             public array $acs_system_warnings,
+            /**
+             * ID of the affected access system user.
+             */
             public string|null $acs_user_id,
             public string|null $action_attempt_id,
             /**
@@ -248,10 +252,6 @@ namespace Seam\Resources {
              */
             public array $connected_account_errors,
             public string|null $connected_account_id,
-            /**
-             * undocumented: Unreleased.
-             */
-            public string|null $connected_account_type,
             /**
              * Warnings associated with the connected account.
              */
@@ -435,7 +435,6 @@ namespace Seam\Resources {
              * Upper temperature limit, in °F, defined by the set threshold.
              */
             public float|null $upper_limit_fahrenheit,
-            public string|null $user_identity_id,
             public string|null $video_url,
             /**
              * ID of the workspace associated with the event.

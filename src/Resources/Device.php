@@ -358,6 +358,7 @@ namespace Seam\Resources\Device {
             }
             return new self(
                 location_name: $json->location_name ?? null,
+                room_name: $json->room_name ?? null,
                 time_zone: $json->time_zone ?? null,
                 timezone: $json->timezone ?? null,
             );
@@ -368,6 +369,10 @@ namespace Seam\Resources\Device {
              * Name of the device location.
              */
             public string|null $location_name,
+            /**
+             * Name of the room within the device location, when the provider reports one.
+             */
+            public string|null $room_name,
             /**
              * Time zone of the device location.
              */
@@ -714,6 +719,9 @@ namespace Seam\Resources\Device {
                 wyze_metadata: isset($json->wyze_metadata)
                     ? Properties\WyzeMetadata::from_json($json->wyze_metadata)
                     : null,
+                yacan_metadata: isset($json->yacan_metadata)
+                    ? Properties\YacanMetadata::from_json($json->yacan_metadata)
+                    : null,
             );
         }
 
@@ -1049,7 +1057,7 @@ namespace Seam\Resources\Device {
             /**
              * Metada for a Salto device.
              *
-             * @deprecated Use `salto_ks_metadata ` instead.
+             * @deprecated Use `salto_ks_metadata` instead.
              */
             public Properties\SaltoMetadata|null $salto_metadata,
             /**
@@ -1144,6 +1152,10 @@ namespace Seam\Resources\Device {
              * Metadata for a Wyze device.
              */
             public Properties\WyzeMetadata|null $wyze_metadata,
+            /**
+             * Metadata for a Yacan device.
+             */
+            public Properties\YacanMetadata|null $yacan_metadata,
         ) {}
     }
 
@@ -1709,7 +1721,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a dormakaba Oracode device.
              */
-            public mixed $device_id,
+            public string|null $device_id,
             /**
              * Door ID for a dormakaba Oracode device.
              */
@@ -2279,6 +2291,8 @@ namespace Seam\Resources\Device\Properties {
                 device_name: $json->device_name ?? null,
                 display_name: $json->display_name ?? null,
                 nest_device_id: $json->nest_device_id ?? null,
+                nest_structure_id: $json->nest_structure_id ?? null,
+                structure_name: $json->structure_name ?? null,
             );
         }
 
@@ -2299,6 +2313,14 @@ namespace Seam\Resources\Device\Properties {
              * Device ID for a Google Nest device.
              */
             public string|null $nest_device_id,
+            /**
+             * ID of the Google Nest structure containing the device.
+             */
+            public string|null $nest_structure_id,
+            /**
+             * Name of the Google Nest structure containing the device. The device owner sets this value.
+             */
+            public string|null $structure_name,
         ) {}
     }
 
@@ -2536,7 +2558,7 @@ namespace Seam\Resources\Device\Properties {
     /**
      * Metada for a Salto device.
      *
-     * @deprecated Use `salto_ks_metadata ` instead.
+     * @deprecated Use `salto_ks_metadata` instead.
      */
     class SaltoMetadata
     {
@@ -3023,6 +3045,44 @@ namespace Seam\Resources\Device\Properties {
              * Product type for a Wyze device.
              */
             public string|null $product_type,
+        ) {}
+    }
+
+    /**
+     * Metadata for a Yacan device.
+     */
+    class YacanMetadata
+    {
+        public static function from_json(mixed $json): YacanMetadata|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                device_id: $json->device_id ?? null,
+                device_name: $json->device_name ?? null,
+                device_type: $json->device_type ?? null,
+                serial_number: $json->serial_number ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Device ID for a Yacan device.
+             */
+            public string|null $device_id,
+            /**
+             * Device name for a Yacan device.
+             */
+            public string|null $device_name,
+            /**
+             * Device type for a Yacan device.
+             */
+            public string|null $device_type,
+            /**
+             * Serial number for a Yacan device.
+             */
+            public string|null $serial_number,
         ) {}
     }
 

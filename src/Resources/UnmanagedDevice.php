@@ -256,6 +256,7 @@ namespace Seam\Resources\UnmanagedDevice {
             }
             return new self(
                 location_name: $json->location_name ?? null,
+                room_name: $json->room_name ?? null,
                 time_zone: $json->time_zone ?? null,
                 timezone: $json->timezone ?? null,
             );
@@ -266,6 +267,10 @@ namespace Seam\Resources\UnmanagedDevice {
              * Name of the device location.
              */
             public string|null $location_name,
+            /**
+             * Name of the room within the device location, when the provider reports one.
+             */
+            public string|null $room_name,
             /**
              * Time zone of the device location.
              */
