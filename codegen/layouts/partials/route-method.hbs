@@ -18,7 +18,7 @@
             "{{httpMethod}}",
             "{{path}}",
 {{#if hasParams}}
-            ["json" => (object) $request_payload],
+            ["{{#if usesQueryParams}}query{{else}}json{{/if}}" => {{#unless usesQueryParams}}(object) {{/unless}}$request_payload],
 {{/if}}
         ){{#unless returnsVoid}}){{/unless}};
 {{#if usesActionAttempt}}

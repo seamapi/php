@@ -16,6 +16,7 @@ const resourcesNamespace = 'Seam\\Resources'
 export interface MethodLayoutContext {
   methodName: string
   httpMethod: string
+  usesQueryParams: boolean
   description: string
   responseDescription: string
   isDeprecated: boolean
@@ -115,6 +116,7 @@ const getMethodLayoutContext = (
   return {
     methodName,
     httpMethod: method.httpMethod,
+    usesQueryParams: ['GET', 'DELETE'].includes(method.httpMethod),
     description: method.description,
     responseDescription: method.responseDescription,
     isDeprecated: method.isDeprecated,
