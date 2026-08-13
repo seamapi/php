@@ -30,13 +30,8 @@ class AccessGrantsUnmanagedClient
      * @param string $access_grant_id ID of unmanaged Access Grant to get.
      * @return UnmanagedAccessGrant OK
      */
-    public function get(?string $access_grant_id = null): UnmanagedAccessGrant
+    public function get(string $access_grant_id): UnmanagedAccessGrant
     {
-        if ($access_grant_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_grants/unmanaged/get",
-            );
-        }
         $request_payload = [];
 
         $request_payload["access_grant_id"] = $access_grant_id;
@@ -121,15 +116,10 @@ class AccessGrantsUnmanagedClient
      * @return void OK
      */
     public function update(
-        ?string $access_grant_id = null,
-        ?bool $is_managed = null,
+        string $access_grant_id,
+        bool $is_managed,
         ?string $access_grant_key = null,
     ): void {
-        if ($access_grant_id === null && $is_managed === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_grants/unmanaged/update",
-            );
-        }
         $request_payload = [];
 
         $request_payload["access_grant_id"] = $access_grant_id;

@@ -113,13 +113,8 @@ class ConnectWebviewsClient
      * @param string $connect_webview_id ID of the Connect Webview that you want to delete.
      * @return void OK
      */
-    public function delete(?string $connect_webview_id = null): void
+    public function delete(string $connect_webview_id): void
     {
-        if ($connect_webview_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /connect_webviews/delete",
-            );
-        }
         $request_payload = [];
 
         $request_payload["connect_webview_id"] = $connect_webview_id;
@@ -137,13 +132,8 @@ class ConnectWebviewsClient
      * @param string $connect_webview_id ID of the Connect Webview that you want to get.
      * @return ConnectWebview OK
      */
-    public function get(?string $connect_webview_id = null): ConnectWebview
+    public function get(string $connect_webview_id): ConnectWebview
     {
-        if ($connect_webview_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /connect_webviews/get",
-            );
-        }
         $request_payload = [];
 
         $request_payload["connect_webview_id"] = $connect_webview_id;

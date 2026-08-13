@@ -33,15 +33,10 @@ class AccessCodesSimulateClient
      * @return UnmanagedAccessCode OK
      */
     public function create_unmanaged_access_code(
-        ?string $code = null,
-        ?string $device_id = null,
-        ?string $name = null,
+        string $code,
+        string $device_id,
+        string $name,
     ): UnmanagedAccessCode {
-        if ($code === null && $device_id === null && $name === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_codes/simulate/create_unmanaged_access_code",
-            );
-        }
         $request_payload = [];
 
         $request_payload["code"] = $code;

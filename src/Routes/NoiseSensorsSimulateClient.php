@@ -28,13 +28,8 @@ class NoiseSensorsSimulateClient
      * @param string $device_id ID of the device for which you want to simulate the triggering of a noise threshold.
      * @return void OK
      */
-    public function trigger_noise_threshold(?string $device_id = null): void
+    public function trigger_noise_threshold(string $device_id): void
     {
-        if ($device_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /noise_sensors/simulate/trigger_noise_threshold",
-            );
-        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;

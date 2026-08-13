@@ -28,13 +28,8 @@ class DevicesSimulateClient
      * @param string $device_id ID of the device that you want to simulate connecting to Seam.
      * @return void OK
      */
-    public function connect(?string $device_id = null): void
+    public function connect(string $device_id): void
     {
-        if ($device_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /devices/simulate/connect",
-            );
-        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -53,13 +48,8 @@ class DevicesSimulateClient
      * @param string $device_id ID of the device whose hub you want to reconnect.
      * @return void OK
      */
-    public function connect_to_hub(?string $device_id = null): void
+    public function connect_to_hub(string $device_id): void
     {
-        if ($device_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /devices/simulate/connect_to_hub",
-            );
-        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -75,13 +65,8 @@ class DevicesSimulateClient
      * @param string $device_id ID of the device that you want to simulate disconnecting from Seam.
      * @return void OK
      */
-    public function disconnect(?string $device_id = null): void
+    public function disconnect(string $device_id): void
     {
-        if ($device_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /devices/simulate/disconnect",
-            );
-        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -101,13 +86,8 @@ class DevicesSimulateClient
      * @param string $device_id ID of the device whose hub you want to disconnect.
      * @return void OK
      */
-    public function disconnect_from_hub(?string $device_id = null): void
+    public function disconnect_from_hub(string $device_id): void
     {
-        if ($device_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /devices/simulate/disconnect_from_hub",
-            );
-        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -128,15 +108,8 @@ class DevicesSimulateClient
      * @param bool $is_expired
      * @return void OK
      */
-    public function paid_subscription(
-        ?string $device_id = null,
-        ?bool $is_expired = null,
-    ): void {
-        if ($device_id === null && $is_expired === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /devices/simulate/paid_subscription",
-            );
-        }
+    public function paid_subscription(string $device_id, bool $is_expired): void
+    {
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -153,13 +126,8 @@ class DevicesSimulateClient
      * @param string $device_id ID of the device that you want to simulate removing from Seam.
      * @return void OK
      */
-    public function remove(?string $device_id = null): void
+    public function remove(string $device_id): void
     {
-        if ($device_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /devices/simulate/remove",
-            );
-        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;

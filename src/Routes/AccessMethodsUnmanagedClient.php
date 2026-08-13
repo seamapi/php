@@ -30,13 +30,8 @@ class AccessMethodsUnmanagedClient
      * @param string $access_method_id ID of unmanaged access method to get.
      * @return UnmanagedAccessMethod OK
      */
-    public function get(?string $access_method_id = null): UnmanagedAccessMethod
+    public function get(string $access_method_id): UnmanagedAccessMethod
     {
-        if ($access_method_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_methods/unmanaged/get",
-            );
-        }
         $request_payload = [];
 
         $request_payload["access_method_id"] = $access_method_id;
@@ -60,16 +55,11 @@ class AccessMethodsUnmanagedClient
      * @return array OK
      */
     public function list(
-        ?string $access_grant_id = null,
+        string $access_grant_id,
         ?string $acs_entrance_id = null,
         ?string $device_id = null,
         ?string $space_id = null,
     ): array {
-        if ($access_grant_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_methods/unmanaged/list",
-            );
-        }
         $request_payload = [];
 
         $request_payload["access_grant_id"] = $access_grant_id;

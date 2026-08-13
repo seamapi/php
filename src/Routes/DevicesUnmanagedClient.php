@@ -158,15 +158,10 @@ class DevicesUnmanagedClient
      * @return void OK
      */
     public function update(
-        ?string $device_id = null,
+        string $device_id,
         mixed $custom_metadata = null,
         ?bool $is_managed = null,
     ): void {
-        if ($device_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /devices/unmanaged/update",
-            );
-        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;

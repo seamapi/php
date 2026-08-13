@@ -38,13 +38,8 @@ class ConnectedAccountsClient
      * @param string $connected_account_id ID of the connected account that you want to delete.
      * @return void OK
      */
-    public function delete(?string $connected_account_id = null): void
+    public function delete(string $connected_account_id): void
     {
-        if ($connected_account_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /connected_accounts/delete",
-            );
-        }
         $request_payload = [];
 
         $request_payload["connected_account_id"] = $connected_account_id;
@@ -152,13 +147,8 @@ class ConnectedAccountsClient
      * @param string $connected_account_id ID of the connected account that you want to sync.
      * @return void OK
      */
-    public function sync(?string $connected_account_id = null): void
+    public function sync(string $connected_account_id): void
     {
-        if ($connected_account_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /connected_accounts/sync",
-            );
-        }
         $request_payload = [];
 
         $request_payload["connected_account_id"] = $connected_account_id;
@@ -180,18 +170,13 @@ class ConnectedAccountsClient
      * @return void OK
      */
     public function update(
-        ?string $connected_account_id = null,
+        string $connected_account_id,
         ?array $accepted_capabilities = null,
         ?bool $automatically_manage_new_devices = null,
         mixed $custom_metadata = null,
         ?string $customer_key = null,
         ?string $display_name = null,
     ): void {
-        if ($connected_account_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /connected_accounts/update",
-            );
-        }
         $request_payload = [];
 
         $request_payload["connected_account_id"] = $connected_account_id;

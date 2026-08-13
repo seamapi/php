@@ -30,13 +30,8 @@ class AcsSystemsClient
      * @param string $acs_system_id ID of the access system that you want to get.
      * @return AcsSystem OK
      */
-    public function get(?string $acs_system_id = null): AcsSystem
+    public function get(string $acs_system_id): AcsSystem
     {
-        if ($acs_system_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/systems/get",
-            );
-        }
         $request_payload = [];
 
         $request_payload["acs_system_id"] = $acs_system_id;
@@ -95,13 +90,8 @@ class AcsSystemsClient
      * @return array OK
      */
     public function list_compatible_credential_manager_acs_systems(
-        ?string $acs_system_id = null,
+        string $acs_system_id,
     ): array {
-        if ($acs_system_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/systems/list_compatible_credential_manager_acs_systems",
-            );
-        }
         $request_payload = [];
 
         $request_payload["acs_system_id"] = $acs_system_id;
@@ -126,15 +116,10 @@ class AcsSystemsClient
      * @return void OK
      */
     public function report_devices(
-        ?string $acs_system_id = null,
+        string $acs_system_id,
         ?array $acs_encoders = null,
         ?array $acs_entrances = null,
     ): void {
-        if ($acs_system_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/systems/report_devices",
-            );
-        }
         $request_payload = [];
 
         $request_payload["acs_system_id"] = $acs_system_id;

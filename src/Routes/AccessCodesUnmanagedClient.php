@@ -38,16 +38,11 @@ class AccessCodesUnmanagedClient
      * @return void OK
      */
     public function convert_to_managed(
-        ?string $access_code_id = null,
+        string $access_code_id,
         ?bool $allow_external_modification = null,
         ?bool $force = null,
         ?bool $is_external_modification_allowed = null,
     ): void {
-        if ($access_code_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_codes/unmanaged/convert_to_managed",
-            );
-        }
         $request_payload = [];
 
         $request_payload["access_code_id"] = $access_code_id;
@@ -78,13 +73,8 @@ class AccessCodesUnmanagedClient
      * @param string $access_code_id ID of the unmanaged access code that you want to delete.
      * @return void OK
      */
-    public function delete(?string $access_code_id = null): void
+    public function delete(string $access_code_id): void
     {
-        if ($access_code_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_codes/unmanaged/delete",
-            );
-        }
         $request_payload = [];
 
         $request_payload["access_code_id"] = $access_code_id;
@@ -142,18 +132,13 @@ class AccessCodesUnmanagedClient
      * @return array OK
      */
     public function list(
-        ?string $device_id = null,
+        string $device_id,
         ?float $limit = null,
         ?string $page_cursor = null,
         ?string $search = null,
         ?string $user_identifier_key = null,
         ?callable $on_response = null,
     ): array {
-        if ($device_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_codes/unmanaged/list",
-            );
-        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -197,17 +182,12 @@ class AccessCodesUnmanagedClient
      * @return void OK
      */
     public function update(
-        ?string $access_code_id = null,
-        ?bool $is_managed = null,
+        string $access_code_id,
+        bool $is_managed,
         ?bool $allow_external_modification = null,
         ?bool $force = null,
         ?bool $is_external_modification_allowed = null,
     ): void {
-        if ($access_code_id === null && $is_managed === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_codes/unmanaged/update",
-            );
-        }
         $request_payload = [];
 
         $request_payload["access_code_id"] = $access_code_id;

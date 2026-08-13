@@ -89,13 +89,8 @@ class ClientSessionsClient
      * @param string $client_session_id ID of the client session that you want to delete.
      * @return void OK
      */
-    public function delete(?string $client_session_id = null): void
+    public function delete(string $client_session_id): void
     {
-        if ($client_session_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /client_sessions/delete",
-            );
-        }
         $request_payload = [];
 
         $request_payload["client_session_id"] = $client_session_id;
@@ -285,13 +280,8 @@ class ClientSessionsClient
      * @param string $client_session_id ID of the client session that you want to revoke.
      * @return void OK
      */
-    public function revoke(?string $client_session_id = null): void
+    public function revoke(string $client_session_id): void
     {
-        if ($client_session_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /client_sessions/revoke",
-            );
-        }
         $request_payload = [];
 
         $request_payload["client_session_id"] = $client_session_id;

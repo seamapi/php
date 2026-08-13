@@ -34,16 +34,11 @@ class PhonesSimulateClient
      * @return Phone OK
      */
     public function create_sandbox_phone(
-        ?string $user_identity_id = null,
+        string $user_identity_id,
         mixed $assa_abloy_metadata = null,
         ?string $custom_sdk_installation_id = null,
         mixed $phone_metadata = null,
     ): Phone {
-        if ($user_identity_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /phones/simulate/create_sandbox_phone",
-            );
-        }
         $request_payload = [];
 
         $request_payload["user_identity_id"] = $user_identity_id;

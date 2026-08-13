@@ -35,15 +35,10 @@ class AcsAccessGroupsClient
      * @return void OK
      */
     public function add_user(
-        ?string $acs_access_group_id = null,
+        string $acs_access_group_id,
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
-        if ($acs_access_group_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/access_groups/add_user",
-            );
-        }
         $request_payload = [];
 
         $request_payload["acs_access_group_id"] = $acs_access_group_id;
@@ -65,13 +60,8 @@ class AcsAccessGroupsClient
      * @param string $acs_access_group_id ID of the access group that you want to delete.
      * @return void OK
      */
-    public function delete(?string $acs_access_group_id = null): void
+    public function delete(string $acs_access_group_id): void
     {
-        if ($acs_access_group_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/access_groups/delete",
-            );
-        }
         $request_payload = [];
 
         $request_payload["acs_access_group_id"] = $acs_access_group_id;
@@ -87,13 +77,8 @@ class AcsAccessGroupsClient
      * @param string $acs_access_group_id ID of the access group that you want to get.
      * @return AcsAccessGroup OK
      */
-    public function get(?string $acs_access_group_id = null): AcsAccessGroup
+    public function get(string $acs_access_group_id): AcsAccessGroup
     {
-        if ($acs_access_group_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/access_groups/get",
-            );
-        }
         $request_payload = [];
 
         $request_payload["acs_access_group_id"] = $acs_access_group_id;
@@ -156,13 +141,8 @@ class AcsAccessGroupsClient
      * @return array OK
      */
     public function list_accessible_entrances(
-        ?string $acs_access_group_id = null,
+        string $acs_access_group_id,
     ): array {
-        if ($acs_access_group_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/access_groups/list_accessible_entrances",
-            );
-        }
         $request_payload = [];
 
         $request_payload["acs_access_group_id"] = $acs_access_group_id;
@@ -187,13 +167,8 @@ class AcsAccessGroupsClient
      * @param string $acs_access_group_id ID of the access group for which you want to retrieve all access system users.
      * @return array OK
      */
-    public function list_users(?string $acs_access_group_id = null): array
+    public function list_users(string $acs_access_group_id): array
     {
-        if ($acs_access_group_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/access_groups/list_users",
-            );
-        }
         $request_payload = [];
 
         $request_payload["acs_access_group_id"] = $acs_access_group_id;
@@ -216,15 +191,10 @@ class AcsAccessGroupsClient
      * @return void OK
      */
     public function remove_user(
-        ?string $acs_access_group_id = null,
+        string $acs_access_group_id,
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
-        if ($acs_access_group_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/access_groups/remove_user",
-            );
-        }
         $request_payload = [];
 
         $request_payload["acs_access_group_id"] = $acs_access_group_id;

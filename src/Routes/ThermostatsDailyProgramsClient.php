@@ -35,15 +35,10 @@ class ThermostatsDailyProgramsClient
      * @return ThermostatDailyProgram OK
      */
     public function create(
-        ?string $device_id = null,
-        ?string $name = null,
-        ?array $periods = null,
+        string $device_id,
+        string $name,
+        array $periods,
     ): ThermostatDailyProgram {
-        if ($device_id === null && $name === null && $periods === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /thermostats/daily_programs/create",
-            );
-        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -69,13 +64,8 @@ class ThermostatsDailyProgramsClient
      * @param string $thermostat_daily_program_id ID of the thermostat daily program that you want to delete.
      * @return void OK
      */
-    public function delete(?string $thermostat_daily_program_id = null): void
+    public function delete(string $thermostat_daily_program_id): void
     {
-        if ($thermostat_daily_program_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /thermostats/daily_programs/delete",
-            );
-        }
         $request_payload = [];
 
         $request_payload[
@@ -97,20 +87,11 @@ class ThermostatsDailyProgramsClient
      * @return ActionAttempt OK
      */
     public function update(
-        ?string $name = null,
-        ?array $periods = null,
-        ?string $thermostat_daily_program_id = null,
+        string $name,
+        array $periods,
+        string $thermostat_daily_program_id,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
-        if (
-            $name === null &&
-            $periods === null &&
-            $thermostat_daily_program_id === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /thermostats/daily_programs/update",
-            );
-        }
         $request_payload = [];
 
         $request_payload["name"] = $name;

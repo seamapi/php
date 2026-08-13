@@ -42,7 +42,7 @@ class WorkspacesClient
      * @return Workspace OK
      */
     public function create(
-        ?string $name = null,
+        string $name,
         ?string $company_name = null,
         ?string $connect_partner_name = null,
         mixed $connect_webview_customization = null,
@@ -53,11 +53,6 @@ class WorkspacesClient
         ?string $webview_primary_button_text_color = null,
         ?string $webview_success_message = null,
     ): Workspace {
-        if ($name === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /workspaces/create",
-            );
-        }
         $request_payload = [];
 
         $request_payload["name"] = $name;

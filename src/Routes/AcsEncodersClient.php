@@ -37,16 +37,11 @@ class AcsEncodersClient
      * @return ActionAttempt OK
      */
     public function encode_credential(
-        ?string $acs_encoder_id = null,
+        string $acs_encoder_id,
         ?string $access_method_id = null,
         ?string $acs_credential_id = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
-        if ($acs_encoder_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/encoders/encode_credential",
-            );
-        }
         $request_payload = [];
 
         $request_payload["acs_encoder_id"] = $acs_encoder_id;
@@ -77,13 +72,8 @@ class AcsEncodersClient
      * @param string $acs_encoder_id ID of the encoder that you want to get.
      * @return AcsEncoder OK
      */
-    public function get(?string $acs_encoder_id = null): AcsEncoder
+    public function get(string $acs_encoder_id): AcsEncoder
     {
-        if ($acs_encoder_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/encoders/get",
-            );
-        }
         $request_payload = [];
 
         $request_payload["acs_encoder_id"] = $acs_encoder_id;
@@ -159,15 +149,10 @@ class AcsEncodersClient
      * @return ActionAttempt OK
      */
     public function scan_credential(
-        ?string $acs_encoder_id = null,
+        string $acs_encoder_id,
         mixed $salto_ks_metadata = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
-        if ($acs_encoder_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/encoders/scan_credential",
-            );
-        }
         $request_payload = [];
 
         $request_payload["acs_encoder_id"] = $acs_encoder_id;
@@ -200,17 +185,12 @@ class AcsEncodersClient
      * @return ActionAttempt OK
      */
     public function scan_to_assign_credential(
-        ?string $acs_encoder_id = null,
+        string $acs_encoder_id,
         ?string $acs_user_id = null,
         mixed $salto_ks_metadata = null,
         ?string $user_identity_id = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
-        if ($acs_encoder_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/encoders/scan_to_assign_credential",
-            );
-        }
         $request_payload = [];
 
         $request_payload["acs_encoder_id"] = $acs_encoder_id;
