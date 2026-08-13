@@ -242,11 +242,6 @@ class Seam
         );
     }
 
-    public function lts_version(): string
-    {
-        return self::LTS_VERSION;
-    }
-
     /**
      * Creates a paginator for a list endpoint.
      *

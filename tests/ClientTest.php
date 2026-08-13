@@ -244,6 +244,5 @@ final class ClientTest extends FakeSeamConnectTestCase
     public function testLtsVersionIsExposed(): void
     {
         $this->assertSame("1.0.0", Seam::LTS_VERSION);
-        $this->assertSame("1.0.0", $this->seam()->lts_version());
     }
 }

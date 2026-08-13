@@ -93,9 +93,4 @@ class SeamWithoutWorkspace
     {
         return new static(client: $client);
     }
-
-    public function lts_version(): string
-    {
-        return self::LTS_VERSION;
-    }
 }
