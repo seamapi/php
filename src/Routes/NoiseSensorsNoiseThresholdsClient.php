@@ -86,7 +86,7 @@ class NoiseSensorsNoiseThresholdsClient
         $request_payload["noise_threshold_id"] = $noise_threshold_id;
 
         $this->client->request(
-            "POST",
+            "DELETE",
             "/noise_sensors/noise_thresholds/delete",
             ["json" => (object) $request_payload],
         );
@@ -106,7 +106,7 @@ class NoiseSensorsNoiseThresholdsClient
 
         $res = Body::decode(
             $this->client->request(
-                "POST",
+                "GET",
                 "/noise_sensors/noise_thresholds/get",
                 ["json" => (object) $request_payload],
             ),
@@ -129,7 +129,7 @@ class NoiseSensorsNoiseThresholdsClient
 
         $res = Body::decode(
             $this->client->request(
-                "POST",
+                "GET",
                 "/noise_sensors/noise_thresholds/list",
                 ["json" => (object) $request_payload],
             ),
@@ -185,7 +185,7 @@ class NoiseSensorsNoiseThresholdsClient
         }
 
         $this->client->request(
-            "POST",
+            "PUT",
             "/noise_sensors/noise_thresholds/update",
             ["json" => (object) $request_payload],
         );

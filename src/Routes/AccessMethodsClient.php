@@ -85,7 +85,7 @@ class AccessMethodsClient
             $request_payload["reservation_key"] = $reservation_key;
         }
 
-        $this->client->request("POST", "/access_methods/delete", [
+        $this->client->request("DELETE", "/access_methods/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -135,7 +135,7 @@ class AccessMethodsClient
         $request_payload["access_method_id"] = $access_method_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_methods/get", [
+            $this->client->request("GET", "/access_methods/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -228,7 +228,7 @@ class AccessMethodsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_methods/list", [
+            $this->client->request("GET", "/access_methods/list", [
                 "json" => (object) $request_payload,
             ]),
         );

@@ -37,7 +37,7 @@ class PhonesClient
 
         $request_payload["device_id"] = $device_id;
 
-        $this->client->request("POST", "/phones/deactivate", [
+        $this->client->request("DELETE", "/phones/deactivate", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -55,7 +55,7 @@ class PhonesClient
         $request_payload["device_id"] = $device_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/phones/get", [
+            $this->client->request("GET", "/phones/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -86,7 +86,7 @@ class PhonesClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/phones/list", [
+            $this->client->request("GET", "/phones/list", [
                 "json" => (object) $request_payload,
             ]),
         );

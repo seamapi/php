@@ -61,7 +61,7 @@ class AccessCodesUnmanagedClient
         }
 
         $this->client->request(
-            "POST",
+            "PATCH",
             "/access_codes/unmanaged/convert_to_managed",
             ["json" => (object) $request_payload],
         );
@@ -79,7 +79,7 @@ class AccessCodesUnmanagedClient
 
         $request_payload["access_code_id"] = $access_code_id;
 
-        $this->client->request("POST", "/access_codes/unmanaged/delete", [
+        $this->client->request("DELETE", "/access_codes/unmanaged/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -112,7 +112,7 @@ class AccessCodesUnmanagedClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_codes/unmanaged/get", [
+            $this->client->request("GET", "/access_codes/unmanaged/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -156,7 +156,7 @@ class AccessCodesUnmanagedClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_codes/unmanaged/list", [
+            $this->client->request("GET", "/access_codes/unmanaged/list", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -206,7 +206,7 @@ class AccessCodesUnmanagedClient
             ] = $is_external_modification_allowed;
         }
 
-        $this->client->request("POST", "/access_codes/unmanaged/update", [
+        $this->client->request("PATCH", "/access_codes/unmanaged/update", [
             "json" => (object) $request_payload,
         ]);
     }

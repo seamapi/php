@@ -72,7 +72,7 @@ class ThermostatsDailyProgramsClient
             "thermostat_daily_program_id"
         ] = $thermostat_daily_program_id;
 
-        $this->client->request("POST", "/thermostats/daily_programs/delete", [
+        $this->client->request("DELETE", "/thermostats/daily_programs/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -102,7 +102,7 @@ class ThermostatsDailyProgramsClient
 
         $res = Body::decode(
             $this->client->request(
-                "POST",
+                "PATCH",
                 "/thermostats/daily_programs/update",
                 ["json" => (object) $request_payload],
             ),

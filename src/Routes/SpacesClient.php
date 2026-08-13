@@ -41,7 +41,7 @@ class SpacesClient
         $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
         $request_payload["space_id"] = $space_id;
 
-        $this->client->request("POST", "/spaces/add_acs_entrances", [
+        $this->client->request("PUT", "/spaces/add_acs_entrances", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -62,7 +62,7 @@ class SpacesClient
         $request_payload["connected_account_id"] = $connected_account_id;
         $request_payload["space_id"] = $space_id;
 
-        $this->client->request("POST", "/spaces/add_connected_account", [
+        $this->client->request("PUT", "/spaces/add_connected_account", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -81,7 +81,7 @@ class SpacesClient
         $request_payload["device_ids"] = $device_ids;
         $request_payload["space_id"] = $space_id;
 
-        $this->client->request("POST", "/spaces/add_devices", [
+        $this->client->request("PUT", "/spaces/add_devices", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -150,7 +150,7 @@ class SpacesClient
 
         $request_payload["space_id"] = $space_id;
 
-        $this->client->request("POST", "/spaces/delete", [
+        $this->client->request("DELETE", "/spaces/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -176,7 +176,7 @@ class SpacesClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/spaces/get", [
+            $this->client->request("GET", "/spaces/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -261,7 +261,7 @@ class SpacesClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/spaces/list", [
+            $this->client->request("GET", "/spaces/list", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -310,7 +310,7 @@ class SpacesClient
         $request_payload["connected_account_id"] = $connected_account_id;
         $request_payload["space_id"] = $space_id;
 
-        $this->client->request("POST", "/spaces/remove_connected_account", [
+        $this->client->request("DELETE", "/spaces/remove_connected_account", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -375,7 +375,7 @@ class SpacesClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/spaces/update", [
+            $this->client->request("PATCH", "/spaces/update", [
                 "json" => (object) $request_payload,
             ]),
         );

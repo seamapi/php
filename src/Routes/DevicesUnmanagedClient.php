@@ -49,7 +49,7 @@ class DevicesUnmanagedClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/devices/unmanaged/get", [
+            $this->client->request("GET", "/devices/unmanaged/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -172,7 +172,7 @@ class DevicesUnmanagedClient
             $request_payload["is_managed"] = $is_managed;
         }
 
-        $this->client->request("POST", "/devices/unmanaged/update", [
+        $this->client->request("PATCH", "/devices/unmanaged/update", [
             "json" => (object) $request_payload,
         ]);
     }

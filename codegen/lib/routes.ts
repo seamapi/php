@@ -121,6 +121,7 @@ const createClientMethod = (endpoint: Endpoint): PhpClientMethod => {
 
   return {
     methodName: endpoint.name,
+    httpMethod: endpoint.request.preferredMethod,
     path: endpoint.path,
     description: endpoint.description,
     responseDescription: response.description,

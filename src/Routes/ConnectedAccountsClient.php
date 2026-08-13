@@ -44,7 +44,7 @@ class ConnectedAccountsClient
 
         $request_payload["connected_account_id"] = $connected_account_id;
 
-        $this->client->request("POST", "/connected_accounts/delete", [
+        $this->client->request("DELETE", "/connected_accounts/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -70,7 +70,7 @@ class ConnectedAccountsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/connected_accounts/get", [
+            $this->client->request("GET", "/connected_accounts/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -198,7 +198,7 @@ class ConnectedAccountsClient
             $request_payload["display_name"] = $display_name;
         }
 
-        $this->client->request("POST", "/connected_accounts/update", [
+        $this->client->request("PATCH", "/connected_accounts/update", [
             "json" => (object) $request_payload,
         ]);
     }

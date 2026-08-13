@@ -134,7 +134,7 @@ class AccessGrantsClient
 
         $request_payload["access_grant_id"] = $access_grant_id;
 
-        $this->client->request("POST", "/access_grants/delete", [
+        $this->client->request("DELETE", "/access_grants/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -160,7 +160,7 @@ class AccessGrantsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_grants/get", [
+            $this->client->request("GET", "/access_grants/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -364,7 +364,7 @@ class AccessGrantsClient
             $request_payload["starts_at"] = $starts_at;
         }
 
-        $this->client->request("POST", "/access_grants/update", [
+        $this->client->request("PATCH", "/access_grants/update", [
             "json" => (object) $request_payload,
         ]);
     }

@@ -84,7 +84,7 @@ class ThermostatsSchedulesClient
 
         $request_payload["thermostat_schedule_id"] = $thermostat_schedule_id;
 
-        $this->client->request("POST", "/thermostats/schedules/delete", [
+        $this->client->request("DELETE", "/thermostats/schedules/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -102,7 +102,7 @@ class ThermostatsSchedulesClient
         $request_payload["thermostat_schedule_id"] = $thermostat_schedule_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/thermostats/schedules/get", [
+            $this->client->request("GET", "/thermostats/schedules/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -129,7 +129,7 @@ class ThermostatsSchedulesClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/thermostats/schedules/list", [
+            $this->client->request("GET", "/thermostats/schedules/list", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -185,7 +185,7 @@ class ThermostatsSchedulesClient
             $request_payload["starts_at"] = $starts_at;
         }
 
-        $this->client->request("POST", "/thermostats/schedules/update", [
+        $this->client->request("PATCH", "/thermostats/schedules/update", [
             "json" => (object) $request_payload,
         ]);
     }

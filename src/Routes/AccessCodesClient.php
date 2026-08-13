@@ -241,7 +241,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_codes/create_multiple", [
+            $this->client->request("PUT", "/access_codes/create_multiple", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -270,7 +270,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             $request_payload["device_id"] = $device_id;
         }
 
-        $this->client->request("POST", "/access_codes/delete", [
+        $this->client->request("DELETE", "/access_codes/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -288,7 +288,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         $request_payload["device_id"] = $device_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_codes/generate_code", [
+            $this->client->request("GET", "/access_codes/generate_code", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -324,7 +324,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_codes/get", [
+            $this->client->request("GET", "/access_codes/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -559,7 +559,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             $request_payload["type"] = $type;
         }
 
-        $this->client->request("POST", "/access_codes/update", [
+        $this->client->request("PUT", "/access_codes/update", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -602,7 +602,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             $request_payload["starts_at"] = $starts_at;
         }
 
-        $this->client->request("POST", "/access_codes/update_multiple", [
+        $this->client->request("PATCH", "/access_codes/update_multiple", [
             "json" => (object) $request_payload,
         ]);
     }

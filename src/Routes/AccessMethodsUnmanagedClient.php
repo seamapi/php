@@ -37,7 +37,7 @@ class AccessMethodsUnmanagedClient
         $request_payload["access_method_id"] = $access_method_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_methods/unmanaged/get", [
+            $this->client->request("GET", "/access_methods/unmanaged/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -74,7 +74,7 @@ class AccessMethodsUnmanagedClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_methods/unmanaged/list", [
+            $this->client->request("GET", "/access_methods/unmanaged/list", [
                 "json" => (object) $request_payload,
             ]),
         );

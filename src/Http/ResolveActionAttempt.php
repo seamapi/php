@@ -78,7 +78,7 @@ final class ResolveActionAttempt
         string $action_attempt_id,
     ): ActionAttempt {
         $res = Body::decode(
-            $client->request("POST", "/action_attempts/get", [
+            $client->request("GET", "/action_attempts/get", [
                 "json" => (object) ["action_attempt_id" => $action_attempt_id],
             ]),
         );

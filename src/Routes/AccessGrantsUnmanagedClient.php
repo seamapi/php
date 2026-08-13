@@ -37,7 +37,7 @@ class AccessGrantsUnmanagedClient
         $request_payload["access_grant_id"] = $access_grant_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_grants/unmanaged/get", [
+            $this->client->request("GET", "/access_grants/unmanaged/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -88,7 +88,7 @@ class AccessGrantsUnmanagedClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_grants/unmanaged/list", [
+            $this->client->request("GET", "/access_grants/unmanaged/list", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -128,7 +128,7 @@ class AccessGrantsUnmanagedClient
             $request_payload["access_grant_key"] = $access_grant_key;
         }
 
-        $this->client->request("POST", "/access_grants/unmanaged/update", [
+        $this->client->request("PATCH", "/access_grants/unmanaged/update", [
             "json" => (object) $request_payload,
         ]);
     }

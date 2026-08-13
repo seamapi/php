@@ -79,7 +79,7 @@ class AcsEncodersClient
         $request_payload["acs_encoder_id"] = $acs_encoder_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/acs/encoders/get", [
+            $this->client->request("GET", "/acs/encoders/get", [
                 "json" => (object) $request_payload,
             ]),
         );

@@ -75,7 +75,7 @@ class ClientSessionsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/client_sessions/create", [
+            $this->client->request("PUT", "/client_sessions/create", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -95,7 +95,7 @@ class ClientSessionsClient
 
         $request_payload["client_session_id"] = $client_session_id;
 
-        $this->client->request("POST", "/client_sessions/delete", [
+        $this->client->request("DELETE", "/client_sessions/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -121,7 +121,7 @@ class ClientSessionsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/client_sessions/get", [
+            $this->client->request("GET", "/client_sessions/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -218,7 +218,7 @@ class ClientSessionsClient
             $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
-        $this->client->request("POST", "/client_sessions/grant_access", [
+        $this->client->request("PATCH", "/client_sessions/grant_access", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -261,7 +261,7 @@ class ClientSessionsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/client_sessions/list", [
+            $this->client->request("GET", "/client_sessions/list", [
                 "json" => (object) $request_payload,
             ]),
         );

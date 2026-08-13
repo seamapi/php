@@ -119,7 +119,7 @@ class ConnectWebviewsClient
 
         $request_payload["connect_webview_id"] = $connect_webview_id;
 
-        $this->client->request("POST", "/connect_webviews/delete", [
+        $this->client->request("DELETE", "/connect_webviews/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -139,7 +139,7 @@ class ConnectWebviewsClient
         $request_payload["connect_webview_id"] = $connect_webview_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/connect_webviews/get", [
+            $this->client->request("GET", "/connect_webviews/get", [
                 "json" => (object) $request_payload,
             ]),
         );

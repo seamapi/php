@@ -41,7 +41,7 @@ class ActionAttemptsClient
         $request_payload["action_attempt_id"] = $action_attempt_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/action_attempts/get", [
+            $this->client->request("GET", "/action_attempts/get", [
                 "json" => (object) $request_payload,
             ]),
         );

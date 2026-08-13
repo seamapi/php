@@ -108,7 +108,7 @@ class WorkspacesClient
      */
     public function get(): Workspace
     {
-        $res = Body::decode($this->client->request("POST", "/workspaces/get"));
+        $res = Body::decode($this->client->request("GET", "/workspaces/get"));
 
         return Workspace::from_json($res->workspace);
     }
@@ -120,7 +120,7 @@ class WorkspacesClient
      */
     public function list(): array
     {
-        $res = Body::decode($this->client->request("POST", "/workspaces/list"));
+        $res = Body::decode($this->client->request("GET", "/workspaces/list"));
 
         return array_map(fn($r) => Workspace::from_json($r), $res->workspaces);
     }
@@ -190,7 +190,7 @@ class WorkspacesClient
             $request_payload["organization_id"] = $organization_id;
         }
 
-        $this->client->request("POST", "/workspaces/update", [
+        $this->client->request("PATCH", "/workspaces/update", [
             "json" => (object) $request_payload,
         ]);
     }

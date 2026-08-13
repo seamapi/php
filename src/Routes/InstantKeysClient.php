@@ -36,7 +36,7 @@ class InstantKeysClient
 
         $request_payload["instant_key_id"] = $instant_key_id;
 
-        $this->client->request("POST", "/instant_keys/delete", [
+        $this->client->request("DELETE", "/instant_keys/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -62,7 +62,7 @@ class InstantKeysClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/instant_keys/get", [
+            $this->client->request("GET", "/instant_keys/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -85,7 +85,7 @@ class InstantKeysClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/instant_keys/list", [
+            $this->client->request("GET", "/instant_keys/list", [
                 "json" => (object) $request_payload,
             ]),
         );

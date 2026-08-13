@@ -41,7 +41,7 @@ class AcsUsersClient
         $request_payload["acs_access_group_id"] = $acs_access_group_id;
         $request_payload["acs_user_id"] = $acs_user_id;
 
-        $this->client->request("POST", "/acs/users/add_to_access_group", [
+        $this->client->request("PUT", "/acs/users/add_to_access_group", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -126,7 +126,7 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->client->request("POST", "/acs/users/delete", [
+        $this->client->request("DELETE", "/acs/users/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -157,7 +157,7 @@ class AcsUsersClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/acs/users/get", [
+            $this->client->request("GET", "/acs/users/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -222,7 +222,7 @@ class AcsUsersClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/acs/users/list", [
+            $this->client->request("GET", "/acs/users/list", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -261,7 +261,7 @@ class AcsUsersClient
 
         $res = Body::decode(
             $this->client->request(
-                "POST",
+                "GET",
                 "/acs/users/list_accessible_entrances",
                 ["json" => (object) $request_payload],
             ),
@@ -296,9 +296,13 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->client->request("POST", "/acs/users/remove_from_access_group", [
-            "json" => (object) $request_payload,
-        ]);
+        $this->client->request(
+            "DELETE",
+            "/acs/users/remove_from_access_group",
+            [
+                "json" => (object) $request_payload,
+            ],
+        );
     }
 
     /**
@@ -448,7 +452,7 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->client->request("POST", "/acs/users/update", [
+        $this->client->request("PATCH", "/acs/users/update", [
             "json" => (object) $request_payload,
         ]);
     }

@@ -37,7 +37,7 @@ class UserIdentitiesUnmanagedClient
         $request_payload["user_identity_id"] = $user_identity_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/user_identities/unmanaged/get", [
+            $this->client->request("GET", "/user_identities/unmanaged/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -78,7 +78,7 @@ class UserIdentitiesUnmanagedClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/user_identities/unmanaged/list", [
+            $this->client->request("GET", "/user_identities/unmanaged/list", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -116,7 +116,7 @@ class UserIdentitiesUnmanagedClient
             $request_payload["user_identity_key"] = $user_identity_key;
         }
 
-        $this->client->request("POST", "/user_identities/unmanaged/update", [
+        $this->client->request("PATCH", "/user_identities/unmanaged/update", [
             "json" => (object) $request_payload,
         ]);
     }

@@ -40,7 +40,7 @@ class AcsEntrancesClient
         $request_payload["acs_entrance_id"] = $acs_entrance_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/acs/entrances/get", [
+            $this->client->request("GET", "/acs/entrances/get", [
                 "json" => (object) $request_payload,
             ]),
         );

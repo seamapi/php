@@ -208,7 +208,7 @@ class ThermostatsClient
         $request_payload["climate_preset_key"] = $climate_preset_key;
         $request_payload["device_id"] = $device_id;
 
-        $this->client->request("POST", "/thermostats/delete_climate_preset", [
+        $this->client->request("DELETE", "/thermostats/delete_climate_preset", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -551,7 +551,7 @@ class ThermostatsClient
         }
 
         $this->client->request(
-            "POST",
+            "PATCH",
             "/thermostats/set_temperature_threshold",
             ["json" => (object) $request_payload],
         );
@@ -633,7 +633,7 @@ class ThermostatsClient
             $request_payload["name"] = $name;
         }
 
-        $this->client->request("POST", "/thermostats/update_climate_preset", [
+        $this->client->request("PATCH", "/thermostats/update_climate_preset", [
             "json" => (object) $request_payload,
         ]);
     }

@@ -49,7 +49,7 @@ class AcsAccessGroupsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->client->request("POST", "/acs/access_groups/add_user", [
+        $this->client->request("PUT", "/acs/access_groups/add_user", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -66,7 +66,7 @@ class AcsAccessGroupsClient
 
         $request_payload["acs_access_group_id"] = $acs_access_group_id;
 
-        $this->client->request("POST", "/acs/access_groups/delete", [
+        $this->client->request("DELETE", "/acs/access_groups/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -84,7 +84,7 @@ class AcsAccessGroupsClient
         $request_payload["acs_access_group_id"] = $acs_access_group_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/acs/access_groups/get", [
+            $this->client->request("GET", "/acs/access_groups/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -123,7 +123,7 @@ class AcsAccessGroupsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/acs/access_groups/list", [
+            $this->client->request("GET", "/acs/access_groups/list", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -149,7 +149,7 @@ class AcsAccessGroupsClient
 
         $res = Body::decode(
             $this->client->request(
-                "POST",
+                "GET",
                 "/acs/access_groups/list_accessible_entrances",
                 ["json" => (object) $request_payload],
             ),
@@ -174,7 +174,7 @@ class AcsAccessGroupsClient
         $request_payload["acs_access_group_id"] = $acs_access_group_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/acs/access_groups/list_users", [
+            $this->client->request("GET", "/acs/access_groups/list_users", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -205,7 +205,7 @@ class AcsAccessGroupsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->client->request("POST", "/acs/access_groups/remove_user", [
+        $this->client->request("DELETE", "/acs/access_groups/remove_user", [
             "json" => (object) $request_payload,
         ]);
     }

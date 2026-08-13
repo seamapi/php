@@ -49,7 +49,7 @@ class DevicesClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/devices/get", [
+            $this->client->request("GET", "/devices/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -182,7 +182,7 @@ class DevicesClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/devices/list_device_providers", [
+            $this->client->request("GET", "/devices/list_device_providers", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -252,7 +252,7 @@ class DevicesClient
             $request_payload["properties"] = $properties;
         }
 
-        $this->client->request("POST", "/devices/update", [
+        $this->client->request("PATCH", "/devices/update", [
             "json" => (object) $request_payload,
         ]);
     }

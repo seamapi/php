@@ -48,7 +48,7 @@ class AcsCredentialsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->client->request("POST", "/acs/credentials/assign", [
+        $this->client->request("PATCH", "/acs/credentials/assign", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -155,7 +155,7 @@ class AcsCredentialsClient
 
         $request_payload["acs_credential_id"] = $acs_credential_id;
 
-        $this->client->request("POST", "/acs/credentials/delete", [
+        $this->client->request("DELETE", "/acs/credentials/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -173,7 +173,7 @@ class AcsCredentialsClient
         $request_payload["acs_credential_id"] = $acs_credential_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/acs/credentials/get", [
+            $this->client->request("GET", "/acs/credentials/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -236,7 +236,7 @@ class AcsCredentialsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/acs/credentials/list", [
+            $this->client->request("GET", "/acs/credentials/list", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -265,7 +265,7 @@ class AcsCredentialsClient
 
         $res = Body::decode(
             $this->client->request(
-                "POST",
+                "GET",
                 "/acs/credentials/list_accessible_entrances",
                 ["json" => (object) $request_payload],
             ),
@@ -300,7 +300,7 @@ class AcsCredentialsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->client->request("POST", "/acs/credentials/unassign", [
+        $this->client->request("PATCH", "/acs/credentials/unassign", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -328,7 +328,7 @@ class AcsCredentialsClient
             $request_payload["ends_at"] = $ends_at;
         }
 
-        $this->client->request("POST", "/acs/credentials/update", [
+        $this->client->request("PATCH", "/acs/credentials/update", [
             "json" => (object) $request_payload,
         ]);
     }

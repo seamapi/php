@@ -61,7 +61,7 @@ class WebhooksClient
 
         $request_payload["webhook_id"] = $webhook_id;
 
-        $this->client->request("POST", "/webhooks/delete", [
+        $this->client->request("DELETE", "/webhooks/delete", [
             "json" => (object) $request_payload,
         ]);
     }
@@ -79,7 +79,7 @@ class WebhooksClient
         $request_payload["webhook_id"] = $webhook_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/webhooks/get", [
+            $this->client->request("GET", "/webhooks/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -94,7 +94,7 @@ class WebhooksClient
      */
     public function list(): array
     {
-        $res = Body::decode($this->client->request("POST", "/webhooks/list"));
+        $res = Body::decode($this->client->request("GET", "/webhooks/list"));
 
         return array_map(fn($r) => Webhook::from_json($r), $res->webhooks);
     }
@@ -113,7 +113,7 @@ class WebhooksClient
         $request_payload["event_types"] = $event_types;
         $request_payload["webhook_id"] = $webhook_id;
 
-        $this->client->request("POST", "/webhooks/update", [
+        $this->client->request("PUT", "/webhooks/update", [
             "json" => (object) $request_payload,
         ]);
     }

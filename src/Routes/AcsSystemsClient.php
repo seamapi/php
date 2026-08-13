@@ -37,7 +37,7 @@ class AcsSystemsClient
         $request_payload["acs_system_id"] = $acs_system_id;
 
         $res = Body::decode(
-            $this->client->request("POST", "/acs/systems/get", [
+            $this->client->request("GET", "/acs/systems/get", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -73,7 +73,7 @@ class AcsSystemsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/acs/systems/list", [
+            $this->client->request("GET", "/acs/systems/list", [
                 "json" => (object) $request_payload,
             ]),
         );
@@ -98,7 +98,7 @@ class AcsSystemsClient
 
         $res = Body::decode(
             $this->client->request(
-                "POST",
+                "GET",
                 "/acs/systems/list_compatible_credential_manager_acs_systems",
                 ["json" => (object) $request_payload],
             ),

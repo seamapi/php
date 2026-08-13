@@ -15,7 +15,7 @@
 
 {{/if}}
         {{#unless returnsVoid}}$res = Body::decode({{/unless}}$this->client->request(
-            "POST",
+            "{{httpMethod}}",
             "{{path}}",
 {{#if hasParams}}
             ["json" => (object) $request_payload],

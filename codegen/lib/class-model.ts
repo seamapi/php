@@ -11,6 +11,7 @@ export interface PhpClientMethodParameter {
 
 export interface PhpClientMethod {
   methodName: string
+  httpMethod: string
   path: string
   description: string
   responseDescription: string
