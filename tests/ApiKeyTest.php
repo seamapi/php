@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Seam\HttpUnauthorizedError;
 use Seam\InvalidTokenError;
 use Seam\Seam;
@@ -51,9 +52,7 @@ final class ApiKeyTest extends FakeSeamConnectTestCase
         $seam->devices->list();
     }
 
-    /**
-     * @dataProvider unusableTokens
-     */
+    #[DataProvider("unusableTokens")]
     public function testApiKeyFormatIsChecked(
         string $token,
         string $expected_message,

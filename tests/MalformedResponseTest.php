@@ -7,6 +7,7 @@ namespace Tests;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Seam\HttpApiError;
 use Seam\Seam;
@@ -29,9 +30,7 @@ final class MalformedResponseTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider nonSeamErrorResponses
-     */
+    #[DataProvider("nonSeamErrorResponses")]
     public function testNonSeamErrorResponsesSurfaceTheTransportError(
         Response $response,
     ): void {
