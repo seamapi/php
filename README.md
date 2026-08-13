@@ -358,6 +358,35 @@ $seam = new Seam\Seam(retries: 5);
 $seam = new Seam\Seam(retries: 0);
 ```
 
+#### URL search params serialization
+
+Requests with query params follow the [Seam URL search params serialization
+standard](https://github.com/seamapi/url-search-params-serializer): nested
+objects join keys with dots (`{"page": {"size": 10}}` becomes
+`page.size=10`), arrays repeat the name (`ids=a&ids=b`), an empty array
+serializes to an empty value (`ids=`), and values are encoded and sorted
+exactly as JavaScript's `URLSearchParams` would. Servers can read such
+query strings with
+[`@seamapi/url-search-params-parser`](https://github.com/seamapi/url-search-params-parser).
+
+The serializer is exported for callers building requests with their own
+HTTP client:
+
+```php
+use Seam\UrlSearchParamsSerializer;
+
+$query = UrlSearchParamsSerializer::serialize([
+    "device_ids" => ["device1", "device2"],
+    "custom_metadata_has" => ["tag" => "front"],
+    "limit" => 20,
+]);
+// => 'custom_metadata_has.tag=front&device_ids=device1&device_ids=device2&limit=20'
+```
+
+A param that cannot be represented in the standard, such as `NAN` or a key
+containing a dot, raises `Seam\UnserializableParamError` before any request
+is sent.
+
 #### Using the Guzzle client
 
 `$seam->client` is the [Guzzle] client, already carrying the endpoint and
