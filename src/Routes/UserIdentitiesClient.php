@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\AcsEntrance;
 use Seam\Resources\AcsSystem;
 use Seam\Resources\AcsUser;
@@ -69,18 +70,18 @@ class UserIdentitiesClient
      * Creates a new [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * @param array $acs_system_ids List of access system IDs to associate with the new user identity through access system users. If there's no user with the same email address or phone number in the specified access systems, a new access system user is created. If there is an existing user with the same email or phone number in the specified access systems, the user is linked to the user identity.
-     * @param string $email_address Unique email address for the new user identity.
-     * @param string $full_name Full name of the user associated with the new user identity.
-     * @param string $phone_number Unique phone number for the new user identity in E.164 format (for example, +15555550100).
-     * @param string $user_identity_key Unique key for the new user identity.
+     * @param string|NullValue $email_address Unique email address for the new user identity.
+     * @param string|NullValue $full_name Full name of the user associated with the new user identity.
+     * @param string|NullValue $phone_number Unique phone number for the new user identity in E.164 format (for example, +15555550100).
+     * @param string|NullValue $user_identity_key Unique key for the new user identity.
      * @return UserIdentity OK
      */
     public function create(
         ?array $acs_system_ids = null,
-        ?string $email_address = null,
-        ?string $full_name = null,
-        ?string $phone_number = null,
-        ?string $user_identity_key = null,
+        string|NullValue|null $email_address = null,
+        string|NullValue|null $full_name = null,
+        string|NullValue|null $phone_number = null,
+        string|NullValue|null $user_identity_key = null,
     ): UserIdentity {
         $request_payload = [];
 
@@ -225,7 +226,7 @@ class UserIdentitiesClient
      * @param string $created_before Timestamp by which to limit returned user identities. Returns user identities created before this timestamp.
      * @param string $credential_manager_acs_system_id `acs_system_id` of the credential manager by which you want to filter the list of user identities.
      * @param int $limit Maximum number of records to return per page.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned user identities to include all records that satisfy a partial match using `full_name`, `phone_number`, `email_address` or `user_identity_id`.
      * @param array $user_identity_ids Array of user identity IDs by which to filter the list of user identities.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
@@ -235,7 +236,7 @@ class UserIdentitiesClient
         ?string $created_before = null,
         ?string $credential_manager_acs_system_id = null,
         ?int $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?array $user_identity_ids = null,
         ?callable $on_response = null,
@@ -418,18 +419,18 @@ class UserIdentitiesClient
      * Updates a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * @param string $user_identity_id ID of the user identity that you want to update.
-     * @param string $email_address Unique email address for the user identity.
-     * @param string $full_name Full name of the user associated with the user identity.
-     * @param string $phone_number Unique phone number for the user identity.
-     * @param string $user_identity_key Unique key for the user identity.
+     * @param string|NullValue $email_address Unique email address for the user identity.
+     * @param string|NullValue $full_name Full name of the user associated with the user identity.
+     * @param string|NullValue $phone_number Unique phone number for the user identity.
+     * @param string|NullValue $user_identity_key Unique key for the user identity.
      * @return void OK
      */
     public function update(
         string $user_identity_id,
-        ?string $email_address = null,
-        ?string $full_name = null,
-        ?string $phone_number = null,
-        ?string $user_identity_key = null,
+        string|NullValue|null $email_address = null,
+        string|NullValue|null $full_name = null,
+        string|NullValue|null $phone_number = null,
+        string|NullValue|null $user_identity_key = null,
     ): void {
         $request_payload = [];
 

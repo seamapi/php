@@ -5,6 +5,7 @@ namespace Seam\Routes;
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
 use Seam\Http\ResolveActionAttempt;
+use Seam\NullValue;
 use Seam\Resources\ActionAttempt;
 use Seam\Resources\Workspace;
 
@@ -31,7 +32,7 @@ class WorkspacesClient
      *
      * @param string $name Name of the new workspace.
      * @param string $company_name Company name for the new workspace.
-     * @param string $connect_partner_name Connect partner name for the new workspace.
+     * @param string|NullValue $connect_partner_name Connect partner name for the new workspace.
      * @param mixed $connect_webview_customization [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews) customizations for the new workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
      * @param bool $is_sandbox Indicates whether the new workspace is a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
      * @param string $organization_id ID of the organization to associate with the new workspace.
@@ -44,7 +45,7 @@ class WorkspacesClient
     public function create(
         string $name,
         ?string $company_name = null,
-        ?string $connect_partner_name = null,
+        string|NullValue|null $connect_partner_name = null,
         mixed $connect_webview_customization = null,
         ?bool $is_sandbox = null,
         ?string $organization_id = null,

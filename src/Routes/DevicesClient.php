@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\Device;
 use Seam\Resources\DeviceProvider;
 
@@ -76,10 +77,10 @@ class DevicesClient
      * @param array $device_types Array of device types for which you want to list devices.
      * @param float $limit Numerical limit on the number of devices to return.
      * @param string $manufacturer Manufacturer for which you want to list devices.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned devices to include all records that satisfy a partial match using `device_id` (full or partial UUID prefix, minimum 4 characters), `connected_account_id`, `display_name`, `custom_metadata` or `location.location_name`.
      * @param string $space_id ID of the space for which you want to list devices.
-     * @param string $unstable_location_id
+     * @param string|NullValue $unstable_location_id
      * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
@@ -96,10 +97,10 @@ class DevicesClient
         ?array $device_types = null,
         ?float $limit = null,
         ?string $manufacturer = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?string $space_id = null,
-        ?string $unstable_location_id = null,
+        string|NullValue|null $unstable_location_id = null,
         ?string $user_identifier_key = null,
         ?callable $on_response = null,
     ): array {
@@ -224,7 +225,7 @@ class DevicesClient
      * @param bool $backup_access_code_pool_enabled Indicates whether the device's [backup access code pool](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes) is enabled. Set to `false` to disable the pool: Seam stops refilling it and removes any backup codes that have not yet been pulled into active use.
      * @param mixed $custom_metadata Custom metadata that you want to associate with the device. Supports up to 50 JSON key:value pairs. [Adding custom metadata to a device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) enables you to store custom information, like customer details or internal IDs from your application. Then, you can [filter devices by the desired metadata](https://docs.seam.co/core-concepts/devices/filtering-devices-by-custom-metadata).
      * @param bool $is_managed Indicates whether the device is managed. To unmanage a device, set `is_managed` to `false`.
-     * @param string $name Name for the device.
+     * @param string|NullValue $name Name for the device.
      * @param mixed $properties
      * @return void OK
      */
@@ -233,7 +234,7 @@ class DevicesClient
         ?bool $backup_access_code_pool_enabled = null,
         mixed $custom_metadata = null,
         ?bool $is_managed = null,
-        ?string $name = null,
+        string|NullValue|null $name = null,
         mixed $properties = null,
     ): void {
         $request_payload = [];

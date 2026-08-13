@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\ConnectedAccount;
 
 class ConnectedAccountsClient
@@ -89,7 +90,7 @@ class ConnectedAccountsClient
      * @param mixed $custom_metadata_has Custom metadata pairs by which you want to filter connected accounts. Returns connected accounts with `custom_metadata` that contains all of the provided key:value pairs.
      * @param string $customer_key Customer key by which you want to filter connected accounts.
      * @param int $limit Maximum number of records to return per page.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned connected accounts to include all records that satisfy a partial match using `connected_account_id`, `account_type`, `customer_key`, `custom_metadata`, `user_identifier.username`, `user_identifier.email` or `user_identifier.phone`.
      * @param string $space_id ID of the space by which you want to filter connected accounts.
      * @param string $user_identifier_key Your user ID for the user by which you want to filter connected accounts.
@@ -100,7 +101,7 @@ class ConnectedAccountsClient
         mixed $custom_metadata_has = null,
         ?string $customer_key = null,
         ?int $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?string $space_id = null,
         ?string $user_identifier_key = null,

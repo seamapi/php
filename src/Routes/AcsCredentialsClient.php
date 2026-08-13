@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\AcsCredential;
 use Seam\Resources\AcsEntrance;
 
@@ -190,7 +191,7 @@ class AcsCredentialsClient
      * @param string $created_before Date and time, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format, before which events to return were created.
      * @param bool $is_multi_phone_sync_credential Indicates whether you want to retrieve only multi-phone sync credentials or non-multi-phone sync credentials.
      * @param float $limit Number of credentials to return.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned credentials to include all records that satisfy a partial match using `display_name`, `code`, `card_number`, `acs_user_id` or `acs_credential_id`.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
@@ -202,7 +203,7 @@ class AcsCredentialsClient
         ?string $created_before = null,
         ?bool $is_multi_phone_sync_credential = null,
         ?float $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?callable $on_response = null,
     ): array {

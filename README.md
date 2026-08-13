@@ -358,6 +358,36 @@ $seam = new Seam\Seam(retries: 5);
 $seam = new Seam\Seam(retries: 0);
 ```
 
+#### Setting a param to null
+
+The Seam API distinguishes an omitted param from a param explicitly set to
+null: in an update request, an omitted param leaves the current value
+unchanged, while a null param unsets it. PHP has a single absence value, so
+the SDK spells the two states differently:
+
+- `null`, or simply omitting the param, means **omit**: the param is not
+  sent at all.
+- `Seam\NullValue::NULL` means **send null**: the value is unset.
+
+Since unsetting a value cannot be undone, it is never the default and is
+always spelled explicitly.
+
+```php
+use Seam\NullValue;
+
+// Unset the device name.
+$seam->devices->update(device_id: $device_id, name: NullValue::NULL);
+
+// Leave the device name unchanged.
+$seam->devices->update(device_id: $device_id, name: null);
+```
+
+Only params the API documents as nullable accept the sentinel: a nullable
+param is typed `string|NullValue|null`, while a merely optional one is typed
+`?string` and rejects it. The sentinel works on every route, whether the
+request is sent as a query string (serialized as `name=`) or as a JSON body
+(serialized as `null`).
+
 #### URL search params serialization
 
 Requests with query params follow the [Seam URL search params serialization

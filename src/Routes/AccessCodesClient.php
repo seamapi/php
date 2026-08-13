@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\AccessCode;
 
 class AccessCodesClient
@@ -349,7 +350,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      * @param string $customer_key Customer key for which you want to list access codes.
      * @param string $device_id ID of the device for which you want to list access codes. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
      * @param float $limit Numerical limit on the number of access codes to return.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned access codes to include all records that satisfy a partial match using `name`, `code` or `access_code_id`.
      * @param string $user_identifier_key Your user ID for the user by which to filter access codes.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
@@ -363,7 +364,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         ?string $customer_key = null,
         ?string $device_id = null,
         ?float $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?string $user_identifier_key = null,
         ?callable $on_response = null,

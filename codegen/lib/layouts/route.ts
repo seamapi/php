@@ -10,6 +10,7 @@ import {
 
 const clientInterfaceClass = 'GuzzleHttp\\ClientInterface'
 const bodyClass = 'Seam\\Http\\Body'
+const nullValueClass = 'Seam\\NullValue'
 const resolveActionAttemptClass = 'Seam\\Http\\ResolveActionAttempt'
 const resourcesNamespace = 'Seam\\Resources'
 
@@ -74,6 +75,21 @@ const onResponseParameter = {
   required: false,
 }
 
+// A nullable param accepts the NullValue::NULL sentinel, which sends an
+// explicit null to unset a value. A merely optional param does not: optional
+// means omit by passing null, and sending null there would unset a value
+// instead. Optionality composes with nullability rather than replacing it.
+const getParameterPhpType = (parameter: {
+  type: string
+  isOptional: boolean
+  isNullable: boolean
+}): string => {
+  const { type, isOptional, isNullable } = parameter
+  if (type === 'mixed') return type
+  if (isNullable) return `${type}|NullValue${isOptional ? '|null' : ''}`
+  return `${isOptional ? '?' : ''}${type}`
+}
+
 const getMethodLayoutContext = (
   method: PhpClientMethod,
 ): MethodLayoutContext => {
@@ -96,7 +112,7 @@ const getMethodLayoutContext = (
   const signatureParams = sortedParameters
     .map(
       (p) =>
-        `${(p.isNullable || p.isOptional) && p.type !== 'mixed' ? '?' : ''}${p.type} $${p.name}${p.isOptional ? ' = null' : ''}`,
+        `${getParameterPhpType(p)} $${p.name}${p.isOptional ? ' = null' : ''}`,
     )
     .concat(
       usesActionAttempt
@@ -109,7 +125,7 @@ const getMethodLayoutContext = (
   const documentedEndpointParameters = sortedParameters.map(
     ({ name, type, description, isOptional, isNullable }) => ({
       name,
-      type,
+      type: isNullable && type !== 'mixed' ? `${type}|NullValue` : type,
       description,
       required: !isOptional,
       isOptional,
@@ -165,9 +181,16 @@ const getUseStatements = (client: PhpClient): string[] => {
   // Void endpoints never read the response, so they do not decode it.
   const readsBody = client.methods.some((m) => m.returnResource !== '')
 
+  // Only nullable params reference the null sentinel type; importing it
+  // elsewhere would trip the unused-import lint.
+  const usesNullValue = client.methods.some((m) =>
+    m.parameters.some((p) => p.isNullable && p.type !== 'mixed'),
+  )
+
   return [
     clientInterfaceClass,
     ...(readsBody ? [bodyClass] : []),
+    ...(usesNullValue ? [nullValueClass] : []),
     ...(usesActionAttempt ? [resolveActionAttemptClass] : []),
     ...[...resourceNames].map((name) => `${resourcesNamespace}\\${name}`),
   ].sort((a, b) => a.localeCompare(b))
