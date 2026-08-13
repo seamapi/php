@@ -38,7 +38,7 @@ class AccessGrantsUnmanagedClient
 
         $res = Body::decode(
             $this->client->request("GET", "/access_grants/unmanaged/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -89,7 +89,7 @@ class AccessGrantsUnmanagedClient
 
         $res = Body::decode(
             $this->client->request("GET", "/access_grants/unmanaged/list", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 

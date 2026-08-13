@@ -73,7 +73,7 @@ class ThermostatsDailyProgramsClient
         ] = $thermostat_daily_program_id;
 
         $this->client->request("DELETE", "/thermostats/daily_programs/delete", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 

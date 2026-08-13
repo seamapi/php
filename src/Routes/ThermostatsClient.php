@@ -209,7 +209,7 @@ class ThermostatsClient
         $request_payload["device_id"] = $device_id;
 
         $this->client->request("DELETE", "/thermostats/delete_climate_preset", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 

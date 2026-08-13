@@ -127,7 +127,7 @@ class AcsUsersClient
         }
 
         $this->client->request("DELETE", "/acs/users/delete", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 
@@ -158,7 +158,7 @@ class AcsUsersClient
 
         $res = Body::decode(
             $this->client->request("GET", "/acs/users/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -223,7 +223,7 @@ class AcsUsersClient
 
         $res = Body::decode(
             $this->client->request("GET", "/acs/users/list", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -263,7 +263,7 @@ class AcsUsersClient
             $this->client->request(
                 "GET",
                 "/acs/users/list_accessible_entrances",
-                ["json" => (object) $request_payload],
+                ["query" => $request_payload],
             ),
         );
 
@@ -299,7 +299,7 @@ class AcsUsersClient
         $this->client->request(
             "DELETE",
             "/acs/users/remove_from_access_group",
-            ["json" => (object) $request_payload],
+            ["query" => $request_payload],
         );
     }
 

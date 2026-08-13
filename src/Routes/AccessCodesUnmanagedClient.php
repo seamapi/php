@@ -80,7 +80,7 @@ class AccessCodesUnmanagedClient
         $request_payload["access_code_id"] = $access_code_id;
 
         $this->client->request("DELETE", "/access_codes/unmanaged/delete", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 
@@ -113,7 +113,7 @@ class AccessCodesUnmanagedClient
 
         $res = Body::decode(
             $this->client->request("GET", "/access_codes/unmanaged/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -157,7 +157,7 @@ class AccessCodesUnmanagedClient
 
         $res = Body::decode(
             $this->client->request("GET", "/access_codes/unmanaged/list", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 

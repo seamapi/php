@@ -151,7 +151,7 @@ class SpacesClient
         $request_payload["space_id"] = $space_id;
 
         $this->client->request("DELETE", "/spaces/delete", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 
@@ -177,7 +177,7 @@ class SpacesClient
 
         $res = Body::decode(
             $this->client->request("GET", "/spaces/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -262,7 +262,7 @@ class SpacesClient
 
         $res = Body::decode(
             $this->client->request("GET", "/spaces/list", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -311,7 +311,7 @@ class SpacesClient
         $request_payload["space_id"] = $space_id;
 
         $this->client->request("DELETE", "/spaces/remove_connected_account", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 

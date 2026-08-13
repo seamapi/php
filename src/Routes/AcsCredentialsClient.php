@@ -156,7 +156,7 @@ class AcsCredentialsClient
         $request_payload["acs_credential_id"] = $acs_credential_id;
 
         $this->client->request("DELETE", "/acs/credentials/delete", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 
@@ -174,7 +174,7 @@ class AcsCredentialsClient
 
         $res = Body::decode(
             $this->client->request("GET", "/acs/credentials/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -237,7 +237,7 @@ class AcsCredentialsClient
 
         $res = Body::decode(
             $this->client->request("GET", "/acs/credentials/list", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -267,7 +267,7 @@ class AcsCredentialsClient
             $this->client->request(
                 "GET",
                 "/acs/credentials/list_accessible_entrances",
-                ["json" => (object) $request_payload],
+                ["query" => $request_payload],
             ),
         );
 

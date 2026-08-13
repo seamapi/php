@@ -45,7 +45,7 @@ class ConnectedAccountsClient
         $request_payload["connected_account_id"] = $connected_account_id;
 
         $this->client->request("DELETE", "/connected_accounts/delete", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 
@@ -71,7 +71,7 @@ class ConnectedAccountsClient
 
         $res = Body::decode(
             $this->client->request("GET", "/connected_accounts/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 

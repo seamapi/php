@@ -122,7 +122,7 @@ class UserIdentitiesClient
         $request_payload["user_identity_id"] = $user_identity_id;
 
         $this->client->request("DELETE", "/user_identities/delete", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 
@@ -184,7 +184,7 @@ class UserIdentitiesClient
 
         $res = Body::decode(
             $this->client->request("GET", "/user_identities/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -290,7 +290,7 @@ class UserIdentitiesClient
             $this->client->request(
                 "GET",
                 "/user_identities/list_accessible_devices",
-                ["json" => (object) $request_payload],
+                ["query" => $request_payload],
             ),
         );
 
@@ -313,7 +313,7 @@ class UserIdentitiesClient
             $this->client->request(
                 "GET",
                 "/user_identities/list_accessible_entrances",
-                ["json" => (object) $request_payload],
+                ["query" => $request_payload],
             ),
         );
 
@@ -337,7 +337,7 @@ class UserIdentitiesClient
 
         $res = Body::decode(
             $this->client->request("GET", "/user_identities/list_acs_systems", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -358,7 +358,7 @@ class UserIdentitiesClient
 
         $res = Body::decode(
             $this->client->request("GET", "/user_identities/list_acs_users", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -382,7 +382,7 @@ class UserIdentitiesClient
         $request_payload["user_identity_id"] = $user_identity_id;
 
         $this->client->request("DELETE", "/user_identities/remove_acs_user", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 
@@ -405,7 +405,7 @@ class UserIdentitiesClient
         $this->client->request(
             "DELETE",
             "/user_identities/revoke_access_to_device",
-            ["json" => (object) $request_payload],
+            ["query" => $request_payload],
         );
     }
 

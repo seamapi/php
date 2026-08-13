@@ -86,7 +86,7 @@ class AccessMethodsClient
         }
 
         $this->client->request("DELETE", "/access_methods/delete", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 
@@ -136,7 +136,7 @@ class AccessMethodsClient
 
         $res = Body::decode(
             $this->client->request("GET", "/access_methods/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -229,7 +229,7 @@ class AccessMethodsClient
 
         $res = Body::decode(
             $this->client->request("GET", "/access_methods/list", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 

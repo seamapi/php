@@ -62,7 +62,7 @@ class WebhooksClient
         $request_payload["webhook_id"] = $webhook_id;
 
         $this->client->request("DELETE", "/webhooks/delete", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 
@@ -80,7 +80,7 @@ class WebhooksClient
 
         $res = Body::decode(
             $this->client->request("GET", "/webhooks/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 

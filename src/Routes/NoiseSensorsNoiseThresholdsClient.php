@@ -88,7 +88,7 @@ class NoiseSensorsNoiseThresholdsClient
         $this->client->request(
             "DELETE",
             "/noise_sensors/noise_thresholds/delete",
-            ["json" => (object) $request_payload],
+            ["query" => $request_payload],
         );
     }
 
@@ -108,7 +108,7 @@ class NoiseSensorsNoiseThresholdsClient
             $this->client->request(
                 "GET",
                 "/noise_sensors/noise_thresholds/get",
-                ["json" => (object) $request_payload],
+                ["query" => $request_payload],
             ),
         );
 
@@ -131,7 +131,7 @@ class NoiseSensorsNoiseThresholdsClient
             $this->client->request(
                 "GET",
                 "/noise_sensors/noise_thresholds/list",
-                ["json" => (object) $request_payload],
+                ["query" => $request_payload],
             ),
         );
 

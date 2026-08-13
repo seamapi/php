@@ -135,7 +135,7 @@ class AccessGrantsClient
         $request_payload["access_grant_id"] = $access_grant_id;
 
         $this->client->request("DELETE", "/access_grants/delete", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 
@@ -161,7 +161,7 @@ class AccessGrantsClient
 
         $res = Body::decode(
             $this->client->request("GET", "/access_grants/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 

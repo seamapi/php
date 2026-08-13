@@ -50,7 +50,7 @@ class DevicesClient
 
         $res = Body::decode(
             $this->client->request("GET", "/devices/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -183,7 +183,7 @@ class DevicesClient
 
         $res = Body::decode(
             $this->client->request("GET", "/devices/list_device_providers", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 

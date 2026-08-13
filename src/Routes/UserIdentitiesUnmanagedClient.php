@@ -38,7 +38,7 @@ class UserIdentitiesUnmanagedClient
 
         $res = Body::decode(
             $this->client->request("GET", "/user_identities/unmanaged/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -79,7 +79,7 @@ class UserIdentitiesUnmanagedClient
 
         $res = Body::decode(
             $this->client->request("GET", "/user_identities/unmanaged/list", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 

@@ -41,7 +41,7 @@ class AcsEntrancesClient
 
         $res = Body::decode(
             $this->client->request("GET", "/acs/entrances/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 

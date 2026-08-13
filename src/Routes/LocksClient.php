@@ -87,7 +87,7 @@ class LocksClient
 
         $res = Body::decode(
             $this->client->request("GET", "/locks/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 

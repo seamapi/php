@@ -96,7 +96,7 @@ class ClientSessionsClient
         $request_payload["client_session_id"] = $client_session_id;
 
         $this->client->request("DELETE", "/client_sessions/delete", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 
@@ -122,7 +122,7 @@ class ClientSessionsClient
 
         $res = Body::decode(
             $this->client->request("GET", "/client_sessions/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -262,7 +262,7 @@ class ClientSessionsClient
 
         $res = Body::decode(
             $this->client->request("GET", "/client_sessions/list", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 

@@ -50,7 +50,7 @@ class DevicesUnmanagedClient
 
         $res = Body::decode(
             $this->client->request("GET", "/devices/unmanaged/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 

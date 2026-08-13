@@ -42,7 +42,7 @@ class ActionAttemptsClient
 
         $res = Body::decode(
             $this->client->request("GET", "/action_attempts/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 

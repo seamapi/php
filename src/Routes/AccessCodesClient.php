@@ -271,7 +271,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         }
 
         $this->client->request("DELETE", "/access_codes/delete", [
-            "json" => (object) $request_payload,
+            "query" => $request_payload,
         ]);
     }
 
@@ -289,7 +289,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
 
         $res = Body::decode(
             $this->client->request("GET", "/access_codes/generate_code", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
@@ -325,7 +325,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
 
         $res = Body::decode(
             $this->client->request("GET", "/access_codes/get", [
-                "json" => (object) $request_payload,
+                "query" => $request_payload,
             ]),
         );
 
