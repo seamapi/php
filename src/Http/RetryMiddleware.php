@@ -49,11 +49,7 @@ final class RetryMiddleware
                         2.0 ** (float) ($retry_count - 1);
                     $jittered_backoff = random_int(
                         (int) ($backoff * 1000.0),
-                        (int) (
-                            $backoff *
-                            self::JITTER_MULTIPLIER *
-                            1000.0
-                        ),
+                        (int) ($backoff * self::JITTER_MULTIPLIER * 1000.0),
                     );
 
                     $options["delay"] = max(
