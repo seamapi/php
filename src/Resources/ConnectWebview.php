@@ -95,7 +95,7 @@ namespace Seam\Resources {
             /**
              * The customer key associated with this webview, if any.
              */
-            public string|null $customer_key,
+            public string|null $customer_key = null,
             /**
              * Device selection mode of the Connect Webview. Supported values: `none`, `single`, `multiple`.
              */

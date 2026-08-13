@@ -152,7 +152,7 @@ namespace Seam\Resources {
             /**
              * Whether the access code is managed by Seam (true) or unmanaged (false). Only present when access_code_id is set.
              */
-            public bool|null $access_code_is_managed,
+            public bool|null $access_code_is_managed = null,
             /**
              * Warnings associated with the access code.
              */
@@ -168,11 +168,11 @@ namespace Seam\Resources {
             /**
              * Key of the affected Access Grant (if present).
              */
-            public string|null $access_grant_key,
+            public string|null $access_grant_key = null,
             /**
              * Keys of the access grants associated with this access method (if present).
              */
-            public array|null $access_grant_keys,
+            public array|null $access_grant_keys = null,
             /**
              * ID of the affected access method.
              */
@@ -231,11 +231,11 @@ namespace Seam\Resources {
             /**
              * Human-readable reason for the change (e.g. `ongoing code auto-renewed`).
              */
-            public string|null $change_reason,
+            public string|null $change_reason = null,
             /**
              * List of properties that changed on the access code.
              */
-            public array $changed_properties,
+            public array|null $changed_properties = null,
             /**
              * ID of the affected client session.
              */
@@ -245,8 +245,8 @@ namespace Seam\Resources {
              */
             public string|null $climate_preset_key,
             public string|null $code,
-            public string|null $connect_webview_id,
-            public mixed $connected_account_custom_metadata,
+            public string|null $connect_webview_id = null,
+            public mixed $connected_account_custom_metadata = null,
             /**
              * Errors associated with the connected account.
              */
@@ -259,16 +259,16 @@ namespace Seam\Resources {
             /**
              * Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $cooling_set_point_celsius,
+            public float|null $cooling_set_point_celsius = null,
             /**
              * Temperature to which the thermostat should cool (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $cooling_set_point_fahrenheit,
+            public float|null $cooling_set_point_fahrenheit = null,
             /**
              * Date and time at which the event was created.
              */
             public string|null $created_at,
-            public string|null $customer_key,
+            public string|null $customer_key = null,
             /**
              * Human-readable description of the change and its source.
              */
@@ -276,19 +276,19 @@ namespace Seam\Resources {
             /**
              * Desired temperature, in °C, defined by the affected thermostat's cooling or heating set point.
              */
-            public float|null $desired_temperature_celsius,
+            public float|null $desired_temperature_celsius = null,
             /**
              * Desired temperature, in °F, defined by the affected thermostat's cooling or heating set point.
              */
-            public float|null $desired_temperature_fahrenheit,
-            public mixed $device_custom_metadata,
+            public float|null $desired_temperature_fahrenheit = null,
+            public mixed $device_custom_metadata = null,
             /**
              * Errors associated with the device.
              */
             public array $device_errors,
             public string|null $device_id,
             public array|null $device_ids,
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Warnings associated with the device.
              */
@@ -296,7 +296,7 @@ namespace Seam\Resources {
             /**
              * The new end time for the access grant.
              */
-            public string|null $ends_at,
+            public string|null $ends_at = null,
             /**
              * Error code associated with the disconnection event, if any.
              */
@@ -308,7 +308,7 @@ namespace Seam\Resources {
             /**
              * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
              */
-            public string|null $event_description,
+            public string|null $event_description = null,
             /**
              * ID of the event.
              */
@@ -320,31 +320,31 @@ namespace Seam\Resources {
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
              */
-            public string|null $fan_mode_setting,
+            public string|null $fan_mode_setting = null,
             public Event\From|null $from,
             /**
              * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $heating_set_point_celsius,
+            public float|null $heating_set_point_celsius = null,
             /**
              * Temperature to which the thermostat should heat (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $heating_set_point_fahrenheit,
+            public float|null $heating_set_point_fahrenheit = null,
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
              */
-            public string|null $hvac_mode_setting,
-            public string|null $image_url,
+            public string|null $hvac_mode_setting = null,
+            public string|null $image_url = null,
             /**
              * Indicates whether the code is a backup code (only present when mode is 'code' and a backup code was used).
              */
-            public bool|null $is_backup_code,
+            public bool|null $is_backup_code = null,
             /**
              * Indicates whether the climate preset that was activated is the fallback climate preset for the thermostat.
              */
             public bool|null $is_fallback_climate_preset,
-            public bool|null $is_via_bluetooth,
-            public bool|null $is_via_nfc,
+            public bool|null $is_via_bluetooth = null,
+            public bool|null $is_via_nfc = null,
             /**
              * Lower temperature limit, in °C, defined by the set threshold.
              */
@@ -357,35 +357,35 @@ namespace Seam\Resources {
             /**
              * Metadata from Minut.
              */
-            public mixed $minut_metadata,
+            public mixed $minut_metadata = null,
             /**
              * IDs of the devices that did not receive a requested access method. Use these to identify which specific devices failed without having to fetch the Access Grant.
              */
-            public array|null $missing_device_ids,
+            public array|null $missing_device_ids = null,
             /**
              * Sub-type of motion detected, if available.
              */
-            public string|null $motion_sub_type,
+            public string|null $motion_sub_type = null,
             /**
              * Detected noise level in decibels.
              */
-            public float|null $noise_level_decibels,
+            public float|null $noise_level_decibels = null,
             /**
              * Detected noise level in Noiseaware Noise Risk Score (NRS).
              */
-            public float|null $noise_level_nrs,
+            public float|null $noise_level_nrs = null,
             /**
              * ID of the noise threshold that was triggered.
              */
-            public string|null $noise_threshold_id,
+            public string|null $noise_threshold_id = null,
             /**
              * Name of the noise threshold that was triggered.
              */
-            public string|null $noise_threshold_name,
+            public string|null $noise_threshold_name = null,
             /**
              * Metadata from Noiseaware.
              */
-            public mixed $noiseaware_metadata,
+            public mixed $noiseaware_metadata = null,
             /**
              * Date and time at which the event occurred.
              */
@@ -393,7 +393,7 @@ namespace Seam\Resources {
             /**
              * Why access was denied, when the provider reports a determinable cause. Omitted when unknown.
              */
-            public Event\Reason|null $reason,
+            public Event\Reason|null $reason = null,
             /**
              * Array of mutations requested on the access code, each containing the mutation type and from/to values.
              */
@@ -405,11 +405,11 @@ namespace Seam\Resources {
             /**
              * Unique key for the space within the workspace.
              */
-            public string|null $space_key,
+            public string|null $space_key = null,
             /**
              * The new start time for the access grant.
              */
-            public string|null $starts_at,
+            public string|null $starts_at = null,
             /**
              * Status of the action.
              */
@@ -435,7 +435,7 @@ namespace Seam\Resources {
              * Upper temperature limit, in °F, defined by the set threshold.
              */
             public float|null $upper_limit_fahrenheit,
-            public string|null $video_url,
+            public string|null $video_url = null,
             /**
              * ID of the workspace associated with the event.
              */
@@ -828,7 +828,7 @@ namespace Seam\Resources\Event {
             /**
              * Previous property values before the requested change. Keys depend on the mutation type. Absent for non-property mutations like `deleting`.
              */
-            public mixed $from,
+            public mixed $from = null,
             /**
              * Code identifying the type of mutation requested, such as `updating_name`, `updating_code`, `updating_time_frame`, or `deleting`.
              */
@@ -836,7 +836,7 @@ namespace Seam\Resources\Event {
             /**
              * New property values after the requested change. Keys depend on the mutation type. Absent for non-property mutations like `deleting`.
              */
-            public mixed $to,
+            public mixed $to = null,
         ) {}
     }
 

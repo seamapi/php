@@ -65,7 +65,7 @@ namespace Seam\Resources {
             /**
              * Publishable key for the [workspace](https://docs.seam.co/core-concepts/workspaces). This key is used to identify the workspace in client-side applications.
              */
-            public string|null $publishable_key,
+            public string|null $publishable_key = null,
             /**
              * ID of the workspace.
              */
@@ -97,23 +97,23 @@ namespace Seam\Resources\Workspace {
             /**
              * URL of the inviter logo for [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) in the workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
              */
-            public string|null $inviter_logo_url,
+            public string|null $inviter_logo_url = null,
             /**
              * Logo shape for [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) in the workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
              */
-            public string|null $logo_shape,
+            public string|null $logo_shape = null,
             /**
              * Primary button color for [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) in the workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
              */
-            public string|null $primary_button_color,
+            public string|null $primary_button_color = null,
             /**
              * Primary button text color for [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) in the workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
              */
-            public string|null $primary_button_text_color,
+            public string|null $primary_button_text_color = null,
             /**
              * Success message for [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) in the workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
              */
-            public string|null $success_message,
+            public string|null $success_message = null,
         ) {}
     }
 }

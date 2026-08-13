@@ -58,7 +58,7 @@ namespace Seam\Resources {
             /**
              * Number of access groups in the [access control system](https://docs.seam.co/low-level-apis/access-systems).
              */
-            public float|null $acs_access_group_count,
+            public float|null $acs_access_group_count = null,
             /**
              * ID of the [access control system](https://docs.seam.co/low-level-apis/access-systems).
              */
@@ -66,7 +66,7 @@ namespace Seam\Resources {
             /**
              * Number of users in the [access control system](https://docs.seam.co/low-level-apis/access-systems).
              */
-            public float|null $acs_user_count,
+            public float|null $acs_user_count = null,
             /**
              * ID of the connected account associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems).
              */
@@ -84,7 +84,7 @@ namespace Seam\Resources {
             /**
              * ID of the default credential manager `acs_system` for this [access control system](https://docs.seam.co/low-level-apis/access-systems).
              */
-            public string|null $default_credential_manager_acs_system_id,
+            public string|null $default_credential_manager_acs_system_id = null,
             /**
              * Errors associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems).
              */
@@ -92,11 +92,11 @@ namespace Seam\Resources {
             /**
              * Brand-specific terminology for the [access control system](https://docs.seam.co/low-level-apis/access-systems) type.
              */
-            public string|null $external_type,
+            public string|null $external_type = null,
             /**
              * Display name that corresponds to the brand-specific terminology for the [access control system](https://docs.seam.co/low-level-apis/access-systems) type.
              */
-            public string|null $external_type_display_name,
+            public string|null $external_type_display_name = null,
             /**
              * Alternative text for the [access control system](https://docs.seam.co/low-level-apis/access-systems) image.
              */
@@ -120,15 +120,15 @@ namespace Seam\Resources {
             /**
              * @deprecated Use `external_type`.
              */
-            public string|null $system_type,
+            public string|null $system_type = null,
             /**
              * @deprecated Use `external_type_display_name`.
              */
-            public string|null $system_type_display_name,
+            public string|null $system_type_display_name = null,
             /**
              * Visionline-specific metadata for the [access control system](https://docs.seam.co/low-level-apis/access-systems).
              */
-            public AcsSystem\VisionlineMetadata|null $visionline_metadata,
+            public AcsSystem\VisionlineMetadata|null $visionline_metadata = null,
             /**
              * Warnings associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems).
              */
@@ -172,7 +172,7 @@ namespace Seam\Resources\AcsSystem {
             /**
              * Indicates whether the error is related to the [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
              */
-            public bool|null $is_bridge_error,
+            public bool|null $is_bridge_error = null,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -222,15 +222,15 @@ namespace Seam\Resources\AcsSystem {
             /**
              * IP address or hostname of the main Visionline server relative to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge) on the local network.
              */
-            public string|null $lan_address,
+            public string|null $lan_address = null,
             /**
              * Keyset loaded into a reader. Mobile keys and reader administration tools securely authenticate only with readers programmed with a matching keyset.
              */
-            public string|null $mobile_access_uuid,
+            public string|null $mobile_access_uuid = null,
             /**
              * Unique ID assigned by the ASSA ABLOY licensing team that identifies each hotel in your credential manager.
              */
-            public string|null $system_id,
+            public string|null $system_id = null,
         ) {}
     }
 
@@ -265,7 +265,7 @@ namespace Seam\Resources\AcsSystem {
             /**
              * @deprecated this field is deprecated.
              */
-            public array|null $misconfigured_acs_entrance_ids,
+            public array|null $misconfigured_acs_entrance_ids = null,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
              */

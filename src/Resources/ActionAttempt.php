@@ -183,7 +183,7 @@ namespace Seam\Resources\ActionAttempt {
             /**
              * ID of the credential pool to which the credential belongs.
              */
-            public string|null $acs_credential_pool_id,
+            public string|null $acs_credential_pool_id = null,
             /**
              * ID of the [access control system](https://docs.seam.co/low-level-apis/access-systems) that contains the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
@@ -191,24 +191,24 @@ namespace Seam\Resources\ActionAttempt {
             /**
              * ID of the [ACS user](https://docs.seam.co/low-level-apis/access-systems/user-management) to whom the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
              */
-            public string|null $acs_user_id,
+            public string|null $acs_user_id = null,
             /**
              * Akiles-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public Result\AkilesMetadata|null $akiles_metadata,
+            public Result\AkilesMetadata|null $akiles_metadata = null,
             /**
              * Vostio-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public Result\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
+            public Result\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata = null,
             /**
              * Number of the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public string|null $card_number,
+            public string|null $card_number = null,
             /**
              * Token of the client session associated with the access method.
              */
-            public string|null $client_session_token,
-            public string|null $code,
+            public string|null $client_session_token = null,
+            public string|null $code = null,
             /**
              * ID of the [connected account](https://docs.seam.co/core-concepts/connected-accounts) to which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
              */
@@ -217,38 +217,38 @@ namespace Seam\Resources\ActionAttempt {
             /**
              * ID of the customization profile associated with the access method.
              */
-            public string|null $customization_profile_id,
+            public string|null $customization_profile_id = null,
             public string|null $display_name,
             /**
              * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) validity ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
              */
-            public string|null $ends_at,
+            public string|null $ends_at = null,
             public array $errors,
             /**
              * Brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type. Supported values: `pti_card`, `brivo_credential`, `hid_credential`, `visionline_card`.
              */
-            public string|null $external_type,
+            public string|null $external_type = null,
             /**
              * Display name that corresponds to the brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type.
              */
-            public string|null $external_type_display_name,
+            public string|null $external_type_display_name = null,
             /**
              * URL of the Instant Key for mobile key access methods.
              */
-            public string|null $instant_key_url,
+            public string|null $instant_key_url = null,
             /**
              * Indicates whether an existing card credential must be assigned to this access method before it can be issued. Only applies to card-mode access methods on systems that support credential assignment.
              */
-            public bool|null $is_assignment_required,
+            public bool|null $is_assignment_required = null,
             /**
              * Indicates whether encoding with an card encoder is required to issue or reissue the plastic card associated with the access method.
              */
-            public bool|null $is_encoding_required,
-            public bool|null $is_issued,
+            public bool|null $is_encoding_required = null,
+            public bool|null $is_issued = null,
             /**
              * Indicates whether the latest state of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) has been synced from Seam to the provider.
              */
-            public bool|null $is_latest_desired_state_synced_with_provider,
+            public bool|null $is_latest_desired_state_synced_with_provider = null,
             /**
              * Indicates whether Seam manages the credential.
              */
@@ -256,24 +256,24 @@ namespace Seam\Resources\ActionAttempt {
             /**
              * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is a [multi-phone sync credential](https://docs.seam.co/capability-guides/mobile-access/issuing-mobile-credentials-from-an-access-control-system#what-are-multi-phone-sync-credentials).
              */
-            public bool|null $is_multi_phone_sync_credential,
+            public bool|null $is_multi_phone_sync_credential = null,
             /**
              * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) can only be used once. If `true`, the code becomes invalid after the first use.
              */
-            public bool|null $is_one_time_use,
+            public bool|null $is_one_time_use = null,
             /**
              * Indicates whether the access method is ready for card assignment. This is true when the access method is in card mode, has not yet been issued, and the system supports credential assignment.
              */
-            public bool|null $is_ready_for_assignment,
+            public bool|null $is_ready_for_assignment = null,
             /**
              * Indicates whether the access method is ready to be encoded. This is true when the credential has been created and the card has not yet been issued.
              */
-            public bool|null $is_ready_for_encoding,
-            public string|null $issued_at,
+            public bool|null $is_ready_for_encoding = null,
+            public string|null $issued_at = null,
             /**
              * Date and time at which the state of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was most recently synced from Seam to the provider.
              */
-            public string|null $latest_desired_state_synced_with_provider_at,
+            public string|null $latest_desired_state_synced_with_provider_at = null,
             /**
              * Access method mode. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
              */
@@ -282,7 +282,7 @@ namespace Seam\Resources\ActionAttempt {
             /**
              * ID of the parent [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public string|null $parent_acs_credential_id,
+            public string|null $parent_acs_credential_id = null,
             /**
              * Pending mutations for the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant). Indicates operations that are in progress.
              */
@@ -290,17 +290,17 @@ namespace Seam\Resources\ActionAttempt {
             /**
              * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) validity starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
              */
-            public string|null $starts_at,
+            public string|null $starts_at = null,
             /**
              * ID of the [user identity](https://docs.seam.co/api/user_identities) to whom the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
              */
-            public string|null $user_identity_id,
+            public string|null $user_identity_id = null,
             /**
              * Visionline-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public Result\VisionlineMetadata|null $visionline_metadata,
+            public Result\VisionlineMetadata|null $visionline_metadata = null,
             public array $warnings,
-            public bool|null $was_confirmed_by_device,
+            public bool|null $was_confirmed_by_device = null,
             public string|null $workspace_id,
         ) {}
     }
@@ -356,7 +356,7 @@ namespace Seam\Resources\ActionAttempt\Result {
             /**
              * Visionline-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public AcsCredentialOnEncoder\VisionlineMetadata|null $visionline_metadata,
+            public AcsCredentialOnEncoder\VisionlineMetadata|null $visionline_metadata = null,
         ) {}
     }
 
@@ -440,7 +440,7 @@ namespace Seam\Resources\ActionAttempt\Result {
             /**
              * ID of the credential pool to which the credential belongs.
              */
-            public string|null $acs_credential_pool_id,
+            public string|null $acs_credential_pool_id = null,
             /**
              * ID of the [access control system](https://docs.seam.co/low-level-apis/access-systems) that contains the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
@@ -448,23 +448,23 @@ namespace Seam\Resources\ActionAttempt\Result {
             /**
              * ID of the [ACS user](https://docs.seam.co/low-level-apis/access-systems/user-management) to whom the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
              */
-            public string|null $acs_user_id,
+            public string|null $acs_user_id = null,
             /**
              * Akiles-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public AcsCredentialOnSeam\AkilesMetadata|null $akiles_metadata,
+            public AcsCredentialOnSeam\AkilesMetadata|null $akiles_metadata = null,
             /**
              * Vostio-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public AcsCredentialOnSeam\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
+            public AcsCredentialOnSeam\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata = null,
             /**
              * Number of the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public string|null $card_number,
+            public string|null $card_number = null,
             /**
              * Access (PIN) code for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public string|null $code,
+            public string|null $code = null,
             /**
              * ID of the [connected account](https://docs.seam.co/core-concepts/connected-accounts) to which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
              */
@@ -480,7 +480,7 @@ namespace Seam\Resources\ActionAttempt\Result {
             /**
              * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) validity ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
              */
-            public string|null $ends_at,
+            public string|null $ends_at = null,
             /**
              * Errors associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
@@ -488,52 +488,52 @@ namespace Seam\Resources\ActionAttempt\Result {
             /**
              * Brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type. Supported values: `pti_card`, `brivo_credential`, `hid_credential`, `visionline_card`.
              */
-            public string|null $external_type,
+            public string|null $external_type = null,
             /**
              * Display name that corresponds to the brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type.
              */
-            public string|null $external_type_display_name,
+            public string|null $external_type_display_name = null,
             /**
              * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) has been encoded onto a card.
              */
-            public bool|null $is_issued,
+            public bool|null $is_issued = null,
             /**
              * Indicates whether the latest state of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) has been synced from Seam to the provider.
              */
-            public bool|null $is_latest_desired_state_synced_with_provider,
+            public bool|null $is_latest_desired_state_synced_with_provider = null,
             public bool|null $is_managed,
             /**
              * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is a [multi-phone sync credential](https://docs.seam.co/capability-guides/mobile-access/issuing-mobile-credentials-from-an-access-control-system#what-are-multi-phone-sync-credentials).
              */
-            public bool|null $is_multi_phone_sync_credential,
+            public bool|null $is_multi_phone_sync_credential = null,
             /**
              * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) can only be used once. If `true`, the code becomes invalid after the first use.
              */
-            public bool|null $is_one_time_use,
+            public bool|null $is_one_time_use = null,
             /**
              * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was encoded onto a card.
              */
-            public string|null $issued_at,
+            public string|null $issued_at = null,
             /**
              * Date and time at which the state of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was most recently synced from Seam to the provider.
              */
-            public string|null $latest_desired_state_synced_with_provider_at,
+            public string|null $latest_desired_state_synced_with_provider_at = null,
             /**
              * ID of the parent [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public string|null $parent_acs_credential_id,
+            public string|null $parent_acs_credential_id = null,
             /**
              * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) validity starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
              */
-            public string|null $starts_at,
+            public string|null $starts_at = null,
             /**
              * ID of the [user identity](https://docs.seam.co/api/user_identities) to whom the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
              */
-            public string|null $user_identity_id,
+            public string|null $user_identity_id = null,
             /**
              * Visionline-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public AcsCredentialOnSeam\VisionlineMetadata|null $visionline_metadata,
+            public AcsCredentialOnSeam\VisionlineMetadata|null $visionline_metadata = null,
             /**
              * Warnings associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
@@ -562,7 +562,7 @@ namespace Seam\Resources\ActionAttempt\Result {
             /**
              * ID of the Akiles member PIN.
              */
-            public string|null $member_pin_id,
+            public string|null $member_pin_id = null,
         ) {}
     }
 
@@ -592,27 +592,27 @@ namespace Seam\Resources\ActionAttempt\Result {
             /**
              * Indicates whether the credential should auto-join. For an auto-join credential, Seam automatically issues an override card if there are no other cards and a joiner card if there are existing cards on the doors.
              */
-            public bool|null $auto_join,
+            public bool|null $auto_join = null,
             /**
              * Names of the doors to which to grant access in the Vostio access system.
              */
-            public array|null $door_names,
+            public array|null $door_names = null,
             /**
              * Endpoint ID in the Vostio access system.
              */
-            public string|null $endpoint_id,
+            public string|null $endpoint_id = null,
             /**
              * Key ID in the Vostio access system.
              */
-            public string|null $key_id,
+            public string|null $key_id = null,
             /**
              * Key issuing request ID in the Vostio access system.
              */
-            public string|null $key_issuing_request_id,
+            public string|null $key_issuing_request_id = null,
             /**
              * IDs of the guest entrances to override in the Vostio access system.
              */
-            public array|null $override_guest_acs_entrance_ids,
+            public array|null $override_guest_acs_entrance_ids = null,
         ) {}
     }
 
@@ -720,35 +720,35 @@ namespace Seam\Resources\ActionAttempt\Result {
             /**
              * Indicates whether the credential should auto-join. For an auto-join credential, Seam automatically issues an override card if there are no other cards and a joiner card if there are existing cards on the doors.
              */
-            public bool|null $auto_join,
+            public bool|null $auto_join = null,
             /**
              * Card function type in the Visionline access system.
              */
-            public string|null $card_function_type,
+            public string|null $card_function_type = null,
             /**
              * ID of the card in the Visionline access system.
              */
-            public string|null $card_id,
+            public string|null $card_id = null,
             /**
              * Common entrance IDs in the Visionline access system.
              */
-            public array|null $common_acs_entrance_ids,
+            public array|null $common_acs_entrance_ids = null,
             /**
              * ID of the credential in the Visionline access system.
              */
-            public string|null $credential_id,
+            public string|null $credential_id = null,
             /**
              * Guest entrance IDs in the Visionline access system.
              */
-            public array|null $guest_acs_entrance_ids,
+            public array|null $guest_acs_entrance_ids = null,
             /**
              * Indicates whether the credential is valid.
              */
-            public bool|null $is_valid,
+            public bool|null $is_valid = null,
             /**
              * IDs of the credentials to which you want to join.
              */
-            public array|null $joiner_acs_credential_ids,
+            public array|null $joiner_acs_credential_ids = null,
         ) {}
     }
 
@@ -783,15 +783,15 @@ namespace Seam\Resources\ActionAttempt\Result {
             /**
              * The PIN code that was assigned instead.
              */
-            public string|null $new_code,
+            public string|null $new_code = null,
             /**
              * ID of the original access method from which this backup access method was split, if applicable.
              */
-            public string|null $original_access_method_id,
+            public string|null $original_access_method_id = null,
             /**
              * The originally requested PIN code that could not be used.
              */
-            public string|null $original_code,
+            public string|null $original_code = null,
             public string|null $warning_code,
             /**
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
@@ -832,51 +832,51 @@ namespace Seam\Resources\ActionAttempt\Result\AcsCredentialOnEncoder {
             /**
              * Indicates whether the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is cancelled.
              */
-            public bool|null $cancelled,
+            public bool|null $cancelled = null,
             /**
              * Format of the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public string|null $card_format,
+            public string|null $card_format = null,
             /**
              * Holder of the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public string|null $card_holder,
+            public string|null $card_holder = null,
             /**
              * Card ID for the Visionline card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public string|null $card_id,
+            public string|null $card_id = null,
             /**
              * IDs of the common [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public array|null $common_acs_entrance_ids,
+            public array|null $common_acs_entrance_ids = null,
             /**
              * Indicates whether the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is discarded.
              */
-            public bool|null $discarded,
+            public bool|null $discarded = null,
             /**
              * Indicates whether the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is expired.
              */
-            public bool|null $expired,
+            public bool|null $expired = null,
             /**
              * IDs of the guest [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public array|null $guest_acs_entrance_ids,
+            public array|null $guest_acs_entrance_ids = null,
             /**
              * Number of issued cards associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
-            public float|null $number_of_issued_cards,
+            public float|null $number_of_issued_cards = null,
             /**
              * Indicates whether the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is overridden.
              */
-            public bool|null $overridden,
+            public bool|null $overridden = null,
             /**
              * Indicates whether the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is overwritten.
              */
-            public bool|null $overwritten,
+            public bool|null $overwritten = null,
             /**
              * Indicates whether the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is pending auto-update.
              */
-            public bool|null $pending_auto_update,
+            public bool|null $pending_auto_update = null,
         ) {}
     }
 }
@@ -899,7 +899,7 @@ namespace Seam\Resources\ActionAttempt\Result\AcsCredentialOnSeam {
             /**
              * ID of the Akiles member PIN.
              */
-            public string|null $member_pin_id,
+            public string|null $member_pin_id = null,
         ) {}
     }
 
@@ -929,27 +929,27 @@ namespace Seam\Resources\ActionAttempt\Result\AcsCredentialOnSeam {
             /**
              * Indicates whether the credential should auto-join. For an auto-join credential, Seam automatically issues an override card if there are no other cards and a joiner card if there are existing cards on the doors.
              */
-            public bool|null $auto_join,
+            public bool|null $auto_join = null,
             /**
              * Names of the doors to which to grant access in the Vostio access system.
              */
-            public array|null $door_names,
+            public array|null $door_names = null,
             /**
              * Endpoint ID in the Vostio access system.
              */
-            public string|null $endpoint_id,
+            public string|null $endpoint_id = null,
             /**
              * Key ID in the Vostio access system.
              */
-            public string|null $key_id,
+            public string|null $key_id = null,
             /**
              * Key issuing request ID in the Vostio access system.
              */
-            public string|null $key_issuing_request_id,
+            public string|null $key_issuing_request_id = null,
             /**
              * IDs of the guest entrances to override in the Vostio access system.
              */
-            public array|null $override_guest_acs_entrance_ids,
+            public array|null $override_guest_acs_entrance_ids = null,
         ) {}
     }
 
@@ -1007,35 +1007,35 @@ namespace Seam\Resources\ActionAttempt\Result\AcsCredentialOnSeam {
             /**
              * Indicates whether the credential should auto-join. For an auto-join credential, Seam automatically issues an override card if there are no other cards and a joiner card if there are existing cards on the doors.
              */
-            public bool|null $auto_join,
+            public bool|null $auto_join = null,
             /**
              * Card function type in the Visionline access system.
              */
-            public string|null $card_function_type,
+            public string|null $card_function_type = null,
             /**
              * ID of the card in the Visionline access system.
              */
-            public string|null $card_id,
+            public string|null $card_id = null,
             /**
              * Common entrance IDs in the Visionline access system.
              */
-            public array|null $common_acs_entrance_ids,
+            public array|null $common_acs_entrance_ids = null,
             /**
              * ID of the credential in the Visionline access system.
              */
-            public string|null $credential_id,
+            public string|null $credential_id = null,
             /**
              * Guest entrance IDs in the Visionline access system.
              */
-            public array|null $guest_acs_entrance_ids,
+            public array|null $guest_acs_entrance_ids = null,
             /**
              * Indicates whether the credential is valid.
              */
-            public bool|null $is_valid,
+            public bool|null $is_valid = null,
             /**
              * IDs of the credentials to which you want to join.
              */
-            public array|null $joiner_acs_credential_ids,
+            public array|null $joiner_acs_credential_ids = null,
         ) {}
     }
 
@@ -1070,11 +1070,11 @@ namespace Seam\Resources\ActionAttempt\Result\AcsCredentialOnSeam {
             /**
              * The PIN code that was assigned instead.
              */
-            public string|null $new_code,
+            public string|null $new_code = null,
             /**
              * The originally requested PIN code that could not be used.
              */
-            public string|null $original_code,
+            public string|null $original_code = null,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
              */

@@ -47,7 +47,7 @@ namespace Seam\Resources {
             /**
              * Noise level in Noiseaware Noise Risk Score (NRS) for the noise threshold. This parameter is only relevant for [Noiseaware sensors](https://docs.seam.co/device-and-system-integration-guides/noiseaware-sensors).
              */
-            public float|null $noise_threshold_nrs,
+            public float|null $noise_threshold_nrs = null,
             /**
              * Time at which the noise threshold should become active daily.
              */

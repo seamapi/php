@@ -113,39 +113,39 @@ namespace Seam\Resources {
             /**
              * Akiles-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\AkilesMetadata|null $akiles_metadata,
+            public AcsEntrance\AkilesMetadata|null $akiles_metadata = null,
             /**
              * ASSA ABLOY Vostio-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
+            public AcsEntrance\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata = null,
             /**
              * Avigilon Alta-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\AvigilonAltaMetadata|null $avigilon_alta_metadata,
+            public AcsEntrance\AvigilonAltaMetadata|null $avigilon_alta_metadata = null,
             /**
              * Brivo-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\BrivoMetadata|null $brivo_metadata,
+            public AcsEntrance\BrivoMetadata|null $brivo_metadata = null,
             /**
              * Indicates whether the ACS entrance can belong to a reservation via an access_grant.reservation_key.
              */
-            public bool|null $can_belong_to_reservation,
+            public bool|null $can_belong_to_reservation = null,
             /**
              * Indicates whether the ACS entrance can be unlocked with card credentials.
              */
-            public bool|null $can_unlock_with_card,
+            public bool|null $can_unlock_with_card = null,
             /**
              * Indicates whether the ACS entrance can be unlocked with cloud key credentials.
              */
-            public bool|null $can_unlock_with_cloud_key,
+            public bool|null $can_unlock_with_cloud_key = null,
             /**
              * Indicates whether the ACS entrance can be unlocked with pin codes.
              */
-            public bool|null $can_unlock_with_code,
+            public bool|null $can_unlock_with_code = null,
             /**
              * Indicates whether the ACS entrance can be unlocked with mobile key credentials.
              */
-            public bool|null $can_unlock_with_mobile_key,
+            public bool|null $can_unlock_with_mobile_key = null,
             /**
              * ID of the [connected account](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
@@ -161,11 +161,11 @@ namespace Seam\Resources {
             /**
              * dormakaba Ambiance-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\DormakabaAmbianceMetadata|null $dormakaba_ambiance_metadata,
+            public AcsEntrance\DormakabaAmbianceMetadata|null $dormakaba_ambiance_metadata = null,
             /**
              * dormakaba Community-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\DormakabaCommunityMetadata|null $dormakaba_community_metadata,
+            public AcsEntrance\DormakabaCommunityMetadata|null $dormakaba_community_metadata = null,
             /**
              * Errors associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
@@ -173,23 +173,23 @@ namespace Seam\Resources {
             /**
              * Hotek-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\HotekMetadata|null $hotek_metadata,
+            public AcsEntrance\HotekMetadata|null $hotek_metadata = null,
             /**
              * Indicates whether the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) is currently locked.
              */
-            public bool|null $is_locked,
+            public bool|null $is_locked = null,
             /**
              * Latch-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\LatchMetadata|null $latch_metadata,
+            public AcsEntrance\LatchMetadata|null $latch_metadata = null,
             /**
              * Salto KS-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\SaltoKsMetadata|null $salto_ks_metadata,
+            public AcsEntrance\SaltoKsMetadata|null $salto_ks_metadata = null,
             /**
              * Salto Space-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\SaltoSpaceMetadata|null $salto_space_metadata,
+            public AcsEntrance\SaltoSpaceMetadata|null $salto_space_metadata = null,
             /**
              * IDs of the spaces that the entrance is in.
              */
@@ -197,7 +197,7 @@ namespace Seam\Resources {
             /**
              * Visionline-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\VisionlineMetadata|null $visionline_metadata,
+            public AcsEntrance\VisionlineMetadata|null $visionline_metadata = null,
             /**
              * Warnings associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
@@ -232,19 +232,19 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Actions the gadget exposes (for example, open).
              */
-            public array $actions,
+            public array|null $actions = null,
             /**
              * ID of the Akiles gadget.
              */
-            public string|null $gadget_id,
+            public string|null $gadget_id = null,
             /**
              * ID of the Akiles site the gadget belongs to.
              */
-            public string|null $site_id,
+            public string|null $site_id = null,
             /**
              * Name of the Akiles site the gadget belongs to.
              */
-            public string|null $site_name,
+            public string|null $site_name = null,
         ) {}
     }
 
@@ -272,23 +272,23 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Name of the door in the Vostio access system.
              */
-            public string|null $door_name,
+            public string|null $door_name = null,
             /**
              * Number of the door in the Vostio access system.
              */
-            public float|null $door_number,
+            public float|null $door_number = null,
             /**
              * Type of the door in the Vostio access system.
              */
-            public string|null $door_type,
+            public string|null $door_type = null,
             /**
              * PMS ID of the door in the Vostio access system.
              */
-            public string|null $pms_id,
+            public string|null $pms_id = null,
             /**
              * Indicates whether keys are allowed to set the door in stand open mode in the Vostio access system.
              */
-            public bool|null $stand_open,
+            public bool|null $stand_open = null,
         ) {}
     }
 
@@ -318,31 +318,31 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Entry name for an Avigilon Alta system.
              */
-            public string|null $entry_name,
+            public string|null $entry_name = null,
             /**
              * Total count of entry relays for an Avigilon Alta system.
              */
-            public float|null $entry_relays_total_count,
+            public float|null $entry_relays_total_count = null,
             /**
              * Organization name for an Avigilon Alta system.
              */
-            public string|null $org_name,
+            public string|null $org_name = null,
             /**
              * Site ID for an Avigilon Alta system.
              */
-            public float|null $site_id,
+            public float|null $site_id = null,
             /**
              * Site name for an Avigilon Alta system.
              */
-            public string|null $site_name,
+            public string|null $site_name = null,
             /**
              * Zone ID for an Avigilon Alta system.
              */
-            public float|null $zone_id,
+            public float|null $zone_id = null,
             /**
              * Zone name for an Avigilon Alta system.
              */
-            public string|null $zone_name,
+            public string|null $zone_name = null,
         ) {}
     }
 
@@ -367,15 +367,15 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * ID of the access point in the Brivo access system.
              */
-            public string|null $access_point_id,
+            public string|null $access_point_id = null,
             /**
              * ID of the site that the access point belongs to.
              */
-            public float|null $site_id,
+            public float|null $site_id = null,
             /**
              * Name of the site that the access point belongs to.
              */
-            public string|null $site_name,
+            public string|null $site_name = null,
         ) {}
     }
 
@@ -399,7 +399,7 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Name of the access point in the dormakaba Ambiance access system.
              */
-            public string|null $access_point_name,
+            public string|null $access_point_name = null,
         ) {}
     }
 
@@ -423,7 +423,7 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Type of access point profile in the dormakaba Community access system.
              */
-            public string|null $access_point_profile,
+            public string|null $access_point_profile = null,
         ) {}
     }
 
@@ -481,15 +481,15 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Display name of the entrance.
              */
-            public string|null $common_area_name,
+            public string|null $common_area_name = null,
             /**
              * Display name of the entrance.
              */
-            public string|null $common_area_number,
+            public string|null $common_area_number = null,
             /**
              * Room number of the entrance.
              */
-            public string|null $room_number,
+            public string|null $room_number = null,
         ) {}
     }
 
@@ -515,19 +515,19 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Accessibility type in the Latch access system.
              */
-            public string|null $accessibility_type,
+            public string|null $accessibility_type = null,
             /**
              * Name of the door in the Latch access system.
              */
-            public string|null $door_name,
+            public string|null $door_name = null,
             /**
              * Type of the door in the Latch access system.
              */
-            public string|null $door_type,
+            public string|null $door_type = null,
             /**
              * Indicates whether the entrance is connected.
              */
-            public bool|null $is_connected,
+            public bool|null $is_connected = null,
         ) {}
     }
 
@@ -557,35 +557,35 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Battery level of the door access device.
              */
-            public string|null $battery_level,
+            public string|null $battery_level = null,
             /**
              * Name of the door in the Salto KS access system.
              */
-            public string|null $door_name,
+            public string|null $door_name = null,
             /**
              * Indicates whether an intrusion alarm is active on the door.
              */
-            public bool|null $intrusion_alarm,
+            public bool|null $intrusion_alarm = null,
             /**
              * Indicates whether the door is left open.
              */
-            public bool|null $left_open_alarm,
+            public bool|null $left_open_alarm = null,
             /**
              * Type of the lock in the Salto KS access system.
              */
-            public string|null $lock_type,
+            public string|null $lock_type = null,
             /**
              * Locked state of the door in the Salto KS access system.
              */
-            public string|null $locked_state,
+            public string|null $locked_state = null,
             /**
              * Indicates whether the door access device is online.
              */
-            public bool|null $online,
+            public bool|null $online = null,
             /**
              * Indicates whether privacy mode is enabled for the lock.
              */
-            public bool|null $privacy_mode,
+            public bool|null $privacy_mode = null,
         ) {}
     }
 
@@ -613,27 +613,27 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Indicates whether AuditOnKeys is enabled for the door in the Salto Space access system.
              */
-            public bool|null $audit_on_keys,
+            public bool|null $audit_on_keys = null,
             /**
              * Description of the door in the Salto Space access system.
              */
-            public string|null $door_description,
+            public string|null $door_description = null,
             /**
              * Door ID in the Salto Space access system.
              */
-            public string|null $door_id,
+            public string|null $door_id = null,
             /**
              * Name of the door in the Salto Space access system.
              */
-            public string|null $door_name,
+            public string|null $door_name = null,
             /**
              * Description of the room in the Salto Space access system.
              */
-            public string|null $room_description,
+            public string|null $room_description = null,
             /**
              * Name of the room in the Salto Space access system.
              */
-            public string|null $room_name,
+            public string|null $room_name = null,
         ) {}
     }
 
@@ -661,15 +661,15 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Category of the door in the Visionline access system.
              */
-            public string|null $door_category,
+            public string|null $door_category = null,
             /**
              * Name of the door in the Visionline access system.
              */
-            public string|null $door_name,
+            public string|null $door_name = null,
             /**
              * Profile for the door in the Visionline access system.
              */
-            public array $profiles,
+            public array|null $profiles = null,
         ) {}
     }
 
@@ -725,11 +725,11 @@ namespace Seam\Resources\AcsEntrance\AkilesMetadata {
             /**
              * ID of the gadget action.
              */
-            public string|null $id,
+            public string|null $id = null,
             /**
              * Name of the gadget action.
              */
-            public string|null $name,
+            public string|null $name = null,
         ) {}
     }
 }
@@ -757,11 +757,11 @@ namespace Seam\Resources\AcsEntrance\VisionlineMetadata {
             /**
              * Door profile ID in the Visionline access system.
              */
-            public string|null $visionline_door_profile_id,
+            public string|null $visionline_door_profile_id = null,
             /**
              * Door profile type in the Visionline access system.
              */
-            public string|null $visionline_door_profile_type,
+            public string|null $visionline_door_profile_type = null,
         ) {}
     }
 }

@@ -61,7 +61,7 @@ namespace Seam\Resources {
             /**
              * Optional nickname to describe the phone, settable through Seam.
              */
-            public string|null $nickname,
+            public string|null $nickname = null,
             /**
              * Properties of the phone.
              */
@@ -144,11 +144,11 @@ namespace Seam\Resources\Phone {
             /**
              * ASSA ABLOY Credential Service metadata for the phone.
              */
-            public Properties\AssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata,
+            public Properties\AssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata = null,
             /**
              * Salto Space credential service metadata for the phone.
              */
-            public Properties\SaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata,
+            public Properties\SaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata = null,
         ) {}
     }
 
@@ -215,11 +215,11 @@ namespace Seam\Resources\Phone\Properties {
             /**
              * Endpoints associated with the phone.
              */
-            public array $endpoints,
+            public array|null $endpoints = null,
             /**
              * Indicates whether the credential service has active endpoints associated with the phone.
              */
-            public bool|null $has_active_endpoint,
+            public bool|null $has_active_endpoint = null,
         ) {}
     }
 
@@ -241,7 +241,7 @@ namespace Seam\Resources\Phone\Properties {
             /**
              * Indicates whether the credential service has an active associated phone.
              */
-            public bool|null $has_active_phone,
+            public bool|null $has_active_phone = null,
         ) {}
     }
 }
@@ -267,11 +267,11 @@ namespace Seam\Resources\Phone\Properties\AssaAbloyCredentialServiceMetadata {
             /**
              * ID of the associated endpoint.
              */
-            public string|null $endpoint_id,
+            public string|null $endpoint_id = null,
             /**
              * Indicated whether the endpoint is active.
              */
-            public bool|null $is_active,
+            public bool|null $is_active = null,
         ) {}
     }
 }

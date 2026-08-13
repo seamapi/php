@@ -41,11 +41,11 @@ namespace Seam\Resources {
             /**
              * Customization applied to the Instant Key UI.
              */
-            public InstantKey\Customization|null $customization,
+            public InstantKey\Customization|null $customization = null,
             /**
              * ID of the customization profile associated with the Instant Key.
              */
-            public string|null $customization_profile_id,
+            public string|null $customization_profile_id = null,
             /**
              * Date and time at which the Instant Key expires.
              */
@@ -92,15 +92,15 @@ namespace Seam\Resources\InstantKey {
             /**
              * URL of the logo displayed on the Instant Key.
              */
-            public string|null $logo_url,
+            public string|null $logo_url = null,
             /**
              * Primary color used in the Instant Key UI.
              */
-            public string|null $primary_color,
+            public string|null $primary_color = null,
             /**
              * Secondary color used in the Instant Key UI.
              */
-            public string|null $secondary_color,
+            public string|null $secondary_color = null,
         ) {}
     }
 }

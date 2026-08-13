@@ -54,11 +54,11 @@ namespace Seam\Resources {
             /**
              * Indicates whether a person at the thermostat can change the thermostat's settings after the [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules) starts.
              */
-            public bool|null $is_override_allowed,
+            public bool|null $is_override_allowed = null,
             /**
              * Number of minutes for which a person at the thermostat can change the thermostat's settings after the activation of the scheduled [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets). See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
              */
-            public int|null $max_override_period_minutes,
+            public int|null $max_override_period_minutes = null,
             /**
              * User-friendly name to identify the [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
              */

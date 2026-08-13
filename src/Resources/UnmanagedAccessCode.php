@@ -62,11 +62,11 @@ namespace Seam\Resources {
             /**
              * Indicates that Seam cannot convert this unmanaged access code to a managed access code. Some providers do not support management of unmanaged access codes through API integrations.
              */
-            public bool|null $cannot_be_managed,
+            public bool|null $cannot_be_managed = null,
             /**
              * Indicates that Seam cannot delete this unmanaged access code through the provider. If this access code needs to be deleted, it will only be possible from the manufacturer app.
              */
-            public bool|null $cannot_delete_unmanaged_access_code,
+            public bool|null $cannot_delete_unmanaged_access_code = null,
             /**
              * Code used for access. Typically, a numeric or alphanumeric string.
              */
@@ -82,11 +82,11 @@ namespace Seam\Resources {
             /**
              * Metadata for a dormakaba Oracode unmanaged access code. Only present for unmanaged access codes from dormakaba Oracode devices.
              */
-            public UnmanagedAccessCode\DormakabaOracodeMetadata|null $dormakaba_oracode_metadata,
+            public UnmanagedAccessCode\DormakabaOracodeMetadata|null $dormakaba_oracode_metadata = null,
             /**
              * Date and time after which the time-bound access code becomes inactive.
              */
-            public string|null $ends_at,
+            public string|null $ends_at = null,
             /**
              * Errors associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
              */
@@ -102,7 +102,7 @@ namespace Seam\Resources {
             /**
              * Date and time at which the time-bound access code becomes active.
              */
-            public string|null $starts_at,
+            public string|null $starts_at = null,
             /**
              * Current status of the access code within the operational lifecycle. `set` indicates that the code is active and operational. `unset` indicates that the code exists on the provider but is not usable on the device.
              */
@@ -151,35 +151,35 @@ namespace Seam\Resources\UnmanagedAccessCode {
             /**
              * Indicates whether the stay can be cancelled via the Dormakaba Oracode API.
              */
-            public bool|null $is_cancellable,
+            public bool|null $is_cancellable = null,
             /**
              * Indicates whether early check-in is available for this stay.
              */
-            public bool|null $is_early_checkin_able,
+            public bool|null $is_early_checkin_able = null,
             /**
              * Indicates whether the stay can be extended via the Dormakaba Oracode API.
              */
-            public bool|null $is_extendable,
+            public bool|null $is_extendable = null,
             /**
              * Indicates whether the access code can be overridden. When false, the maximum number of overrides has been reached.
              */
-            public bool|null $is_overridable,
+            public bool|null $is_overridable = null,
             /**
              * Dormakaba Oracode site name associated with this access code.
              */
-            public string|null $site_name,
+            public string|null $site_name = null,
             /**
              * Dormakaba Oracode stay ID associated with this access code.
              */
-            public float|null $stay_id,
+            public float|null $stay_id = null,
             /**
              * Dormakaba Oracode user level ID associated with this access code.
              */
-            public string|null $user_level_id,
+            public string|null $user_level_id = null,
             /**
              * Dormakaba Oracode user level name associated with this access code.
              */
-            public string|null $user_level_name,
+            public string|null $user_level_name = null,
         ) {}
     }
 
@@ -217,11 +217,11 @@ namespace Seam\Resources\UnmanagedAccessCode {
             /**
              * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device.
              */
-            public string|null $change_type,
+            public string|null $change_type = null,
             /**
              * Date and time at which Seam created the error.
              */
-            public string|null $created_at,
+            public string|null $created_at = null,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
              */
@@ -233,13 +233,13 @@ namespace Seam\Resources\UnmanagedAccessCode {
             /**
              * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
              */
-            public bool|null $is_bridge_error,
+            public bool|null $is_bridge_error = null,
             public bool|null $is_connected_account_error,
             public bool|null $is_device_error,
             /**
              * ID of the managed access code that conflicts with this managed access code, when Seam can identify it.
              */
-            public string|null $managed_access_code_id,
+            public string|null $managed_access_code_id = null,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -247,11 +247,11 @@ namespace Seam\Resources\UnmanagedAccessCode {
             /**
              * List of fields that were changed externally, with their previous and new values.
              */
-            public array $modified_fields,
+            public array|null $modified_fields = null,
             /**
              * ID of the unmanaged access code that conflicts with this managed access code, when Seam can identify it.
              */
-            public string|null $unmanaged_access_code_id,
+            public string|null $unmanaged_access_code_id = null,
         ) {}
     }
 
@@ -281,11 +281,11 @@ namespace Seam\Resources\UnmanagedAccessCode {
             /**
              * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device.
              */
-            public string|null $change_type,
+            public string|null $change_type = null,
             /**
              * Date and time at which Seam created the warning.
              */
-            public string|null $created_at,
+            public string|null $created_at = null,
             /**
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
@@ -293,7 +293,7 @@ namespace Seam\Resources\UnmanagedAccessCode {
             /**
              * List of fields that were changed externally, with their previous and new values.
              */
-            public array $modified_fields,
+            public array|null $modified_fields = null,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
              */

@@ -56,7 +56,7 @@ namespace Seam\Resources {
             /**
              * Unique key for the access grant within the workspace.
              */
-            public string|null $access_grant_key,
+            public string|null $access_grant_key = null,
             /**
              * IDs of the access methods created for the Access Grant.
              */
@@ -64,7 +64,7 @@ namespace Seam\Resources {
             /**
              * Client Session Token. Only returned if the Access Grant has a mobile_key access method.
              */
-            public string|null $client_session_token,
+            public string|null $client_session_token = null,
             /**
              * Date and time at which the Access Grant was created.
              */
@@ -72,7 +72,7 @@ namespace Seam\Resources {
             /**
              * ID of the customization profile associated with the Access Grant.
              */
-            public string|null $customization_profile_id,
+            public string|null $customization_profile_id = null,
             /**
              * Display name of the Access Grant.
              */
@@ -88,7 +88,7 @@ namespace Seam\Resources {
             /**
              * Instant Key URL. Only returned if the Access Grant has a single mobile_key access_method.
              */
-            public string|null $instant_key_url,
+            public string|null $instant_key_url = null,
             /**
              * @deprecated Use `space_ids`.
              */
@@ -108,7 +108,7 @@ namespace Seam\Resources {
             /**
              * Reservation key for the access grant.
              */
-            public string|null $reservation_key,
+            public string|null $reservation_key = null,
             /**
              * IDs of the spaces to which the Access Grant gives access.
              */
@@ -168,7 +168,7 @@ namespace Seam\Resources\AccessGrant {
             /**
              * IDs of the devices that did not receive an access code at grant creation. Use these to identify which specific devices failed when the message reports a partial failure.
              */
-            public array|null $missing_device_ids,
+            public array|null $missing_device_ids = null,
         ) {}
     }
 
@@ -242,7 +242,7 @@ namespace Seam\Resources\AccessGrant {
             /**
              * Specific PIN code to use for this access method. Only applicable when mode is 'code'.
              */
-            public string|null $code,
+            public string|null $code = null,
             /**
              * IDs of the access methods created for the requested access method.
              */
@@ -258,7 +258,7 @@ namespace Seam\Resources\AccessGrant {
             /**
              * Maximum number of times the instant key can be used. Only applicable when mode is 'mobile_key'. Defaults to 1 if not specified.
              */
-            public int|null $instant_key_max_use_count,
+            public int|null $instant_key_max_use_count = null,
             /**
              * Access method mode. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
              */
@@ -305,7 +305,7 @@ namespace Seam\Resources\AccessGrant {
             /**
              * Devices whose access codes could not be revoked during reconciliation. Present when the provider does not support revoking an offline access code (e.g. Dormakaba oracode with exhausted override budget).
              */
-            public array $failed_devices,
+            public array|null $failed_devices = null,
             /**
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
@@ -380,7 +380,7 @@ namespace Seam\Resources\AccessGrant\PendingMutations {
             /**
              * Common code key to ensure PIN code reuse across devices.
              */
-            public string|null $common_code_key,
+            public string|null $common_code_key = null,
             /**
              * New device IDs where access codes should be created.
              */

@@ -70,7 +70,7 @@ namespace Seam\Resources {
             /**
              * `starts_at` and `ends_at` timestamps for the [access system user's](https://docs.seam.co/low-level-apis/access-systems/user-management) access.
              */
-            public AcsUser\AccessSchedule|null $access_schedule,
+            public AcsUser\AccessSchedule|null $access_schedule = null,
             /**
              * ID of the [access system](https://docs.seam.co/low-level-apis/access-systems) that contains the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
              */
@@ -94,11 +94,11 @@ namespace Seam\Resources {
             /**
              * @deprecated use email_address.
              */
-            public string|null $email,
+            public string|null $email = null,
             /**
              * Email address of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
              */
-            public string|null $email_address,
+            public string|null $email_address = null,
             /**
              * Errors associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
              */
@@ -106,19 +106,19 @@ namespace Seam\Resources {
             /**
              * Brand-specific terminology for the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) type.
              */
-            public string|null $external_type,
+            public string|null $external_type = null,
             /**
              * Display name that corresponds to the brand-specific terminology for the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) type.
              */
-            public string|null $external_type_display_name,
+            public string|null $external_type_display_name = null,
             /**
              * Full name of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
              */
-            public string|null $full_name,
+            public string|null $full_name = null,
             /**
              * ID of the HID access control system associated with the user.
              */
-            public string|null $hid_acs_system_id,
+            public string|null $hid_acs_system_id = null,
             /**
              * Indicates whether Seam manages the access system user.
              */
@@ -126,39 +126,39 @@ namespace Seam\Resources {
             /**
              * Indicates whether the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) is currently [suspended](https://docs.seam.co/low-level-apis/access-systems/user-management/suspending-and-unsuspending-users).
              */
-            public bool|null $is_suspended,
+            public bool|null $is_suspended = null,
             /**
              * Pending mutations associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management). Seam is in the process of pushing these mutations to the integrated access system.
              */
-            public array $pending_mutations,
+            public array|null $pending_mutations = null,
             /**
              * Phone number of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
              */
-            public string|null $phone_number,
+            public string|null $phone_number = null,
             /**
              * Salto KS-specific metadata associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
              */
-            public AcsUser\SaltoKsMetadata|null $salto_ks_metadata,
+            public AcsUser\SaltoKsMetadata|null $salto_ks_metadata = null,
             /**
              * Salto Space-specific metadata associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
              */
-            public AcsUser\SaltoSpaceMetadata|null $salto_space_metadata,
+            public AcsUser\SaltoSpaceMetadata|null $salto_space_metadata = null,
             /**
              * Email address of the user identity associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
              */
-            public string|null $user_identity_email_address,
+            public string|null $user_identity_email_address = null,
             /**
              * Full name of the user identity associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
              */
-            public string|null $user_identity_full_name,
+            public string|null $user_identity_full_name = null,
             /**
              * ID of the user identity associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
              */
-            public string|null $user_identity_id,
+            public string|null $user_identity_id = null,
             /**
              * Phone number of the user identity associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
              */
-            public string|null $user_identity_phone_number,
+            public string|null $user_identity_phone_number = null,
             /**
              * Warnings associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
              */
@@ -274,7 +274,7 @@ namespace Seam\Resources\AcsUser {
             /**
              * Optional: When the user creation is scheduled to occur.
              */
-            public string|null $scheduled_at,
+            public string|null $scheduled_at = null,
             public PendingMutations\To|null $to,
             /**
              * Whether the user is scheduled to be added to or removed from the access group.
@@ -300,7 +300,7 @@ namespace Seam\Resources\AcsUser {
             /**
              * Indicates whether the user holds an active subscription slot on the Salto KS site. Only subscribed users can unlock doors and count against the site's user-subscription limit. A user may not be subscribed because their access schedule has not started or has ended, the site has reached its subscription limit, or they were manually unsubscribed. This is distinct from `is_suspended`, which reflects whether the user has been explicitly blocked.
              */
-            public bool|null $is_subscribed,
+            public bool|null $is_subscribed = null,
         ) {}
     }
 
@@ -324,11 +324,11 @@ namespace Seam\Resources\AcsUser {
             /**
              * Indicates whether AuditOpenings is enabled for the user in the Salto Space access system.
              */
-            public bool|null $audit_openings,
+            public bool|null $audit_openings = null,
             /**
              * User ID in the Salto Space access system.
              */
-            public string|null $user_id,
+            public string|null $user_id = null,
         ) {}
     }
 
@@ -395,7 +395,7 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             /**
              * Email address of the access system user.
              */
-            public string|null $email_address,
+            public string|null $email_address = null,
             /**
              * Starting time for the access schedule.
              */
@@ -403,12 +403,12 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             /**
              * Full name of the access system user.
              */
-            public string|null $full_name,
+            public string|null $full_name = null,
             public bool|null $is_suspended,
             /**
              * Phone number of the access system user.
              */
-            public string|null $phone_number,
+            public string|null $phone_number = null,
             /**
              * Starting time for the access schedule.
              */
@@ -447,7 +447,7 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             /**
              * Email address of the access system user.
              */
-            public string|null $email_address,
+            public string|null $email_address = null,
             /**
              * Starting time for the access schedule.
              */
@@ -455,12 +455,12 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             /**
              * Full name of the access system user.
              */
-            public string|null $full_name,
+            public string|null $full_name = null,
             public bool|null $is_suspended,
             /**
              * Phone number of the access system user.
              */
-            public string|null $phone_number,
+            public string|null $phone_number = null,
             /**
              * Starting time for the access schedule.
              */

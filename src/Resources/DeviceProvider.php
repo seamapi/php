@@ -50,83 +50,83 @@ namespace Seam\Resources {
             /**
              * Indicates whether the lock supports configuring automatic locking.
              */
-            public bool|null $can_configure_auto_lock,
+            public bool|null $can_configure_auto_lock = null,
             /**
              * Indicates whether the thermostat supports cooling.
              */
-            public bool|null $can_hvac_cool,
+            public bool|null $can_hvac_cool = null,
             /**
              * Indicates whether the thermostat supports heating.
              */
-            public bool|null $can_hvac_heat,
+            public bool|null $can_hvac_heat = null,
             /**
              * Indicates whether the thermostat supports simultaneous heating and cooling.
              */
-            public bool|null $can_hvac_heat_cool,
+            public bool|null $can_hvac_heat_cool = null,
             /**
              * Indicates whether the device supports programming offline access codes.
              */
-            public bool|null $can_program_offline_access_codes,
+            public bool|null $can_program_offline_access_codes = null,
             /**
              * Indicates whether the device supports programming online access codes.
              */
-            public bool|null $can_program_online_access_codes,
+            public bool|null $can_program_online_access_codes = null,
             /**
              * Indicates whether the thermostat supports different climate programs for each day of the week.
              */
-            public bool|null $can_program_thermostat_programs_as_different_each_day,
+            public bool|null $can_program_thermostat_programs_as_different_each_day = null,
             /**
              * Indicates whether the thermostat supports a single climate program applied to every day.
              */
-            public bool|null $can_program_thermostat_programs_as_same_each_day,
+            public bool|null $can_program_thermostat_programs_as_same_each_day = null,
             /**
              * Indicates whether the thermostat supports weekday/weekend climate programs.
              */
-            public bool|null $can_program_thermostat_programs_as_weekday_weekend,
+            public bool|null $can_program_thermostat_programs_as_weekday_weekend = null,
             /**
              * Indicates whether the device supports remote locking.
              */
-            public bool|null $can_remotely_lock,
+            public bool|null $can_remotely_lock = null,
             /**
              * Indicates whether the device supports remote unlocking.
              */
-            public bool|null $can_remotely_unlock,
+            public bool|null $can_remotely_unlock = null,
             /**
              * Indicates whether the thermostat supports running climate programs.
              */
-            public bool|null $can_run_thermostat_programs,
+            public bool|null $can_run_thermostat_programs = null,
             /**
              * Indicates whether the device supports simulating connection in a sandbox.
              */
-            public bool|null $can_simulate_connection,
+            public bool|null $can_simulate_connection = null,
             /**
              * Indicates whether the device supports simulating disconnection in a sandbox.
              */
-            public bool|null $can_simulate_disconnection,
+            public bool|null $can_simulate_disconnection = null,
             /**
              * Indicates whether the hub supports simulating connection in a sandbox.
              */
-            public bool|null $can_simulate_hub_connection,
+            public bool|null $can_simulate_hub_connection = null,
             /**
              * Indicates whether the hub supports simulating disconnection in a sandbox.
              */
-            public bool|null $can_simulate_hub_disconnection,
+            public bool|null $can_simulate_hub_disconnection = null,
             /**
              * Indicates whether the device supports simulating a paid subscription in a sandbox.
              */
-            public bool|null $can_simulate_paid_subscription,
+            public bool|null $can_simulate_paid_subscription = null,
             /**
              * Indicates whether the device supports simulating removal in a sandbox.
              */
-            public bool|null $can_simulate_removal,
+            public bool|null $can_simulate_removal = null,
             /**
              * Indicates whether the thermostat can be turned off.
              */
-            public bool|null $can_turn_off_hvac,
+            public bool|null $can_turn_off_hvac = null,
             /**
              * Indicates whether the lock supports unlocking with an access code.
              */
-            public bool|null $can_unlock_with_code,
+            public bool|null $can_unlock_with_code = null,
             /**
              * Name of the device provider.
              */

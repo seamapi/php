@@ -55,7 +55,7 @@ namespace Seam\Resources {
             /**
              * Customer key associated with the [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
              */
-            public string|null $customer_key,
+            public string|null $customer_key = null,
             /**
              * Number of devices associated with the [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
              */
@@ -75,7 +75,7 @@ namespace Seam\Resources {
             /**
              * ID of the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) associated with the client session.
              */
-            public string|null $user_identity_id,
+            public string|null $user_identity_id = null,
             /**
              * IDs of the [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) associated with the client session.
              *

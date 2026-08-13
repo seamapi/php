@@ -71,83 +71,83 @@ namespace Seam\Resources {
             /**
              * Indicates whether the lock supports configuring automatic locking.
              */
-            public bool|null $can_configure_auto_lock,
+            public bool|null $can_configure_auto_lock = null,
             /**
              * Indicates whether the thermostat supports cooling.
              */
-            public bool|null $can_hvac_cool,
+            public bool|null $can_hvac_cool = null,
             /**
              * Indicates whether the thermostat supports heating.
              */
-            public bool|null $can_hvac_heat,
+            public bool|null $can_hvac_heat = null,
             /**
              * Indicates whether the thermostat supports simultaneous heating and cooling.
              */
-            public bool|null $can_hvac_heat_cool,
+            public bool|null $can_hvac_heat_cool = null,
             /**
              * Indicates whether the device supports programming offline access codes.
              */
-            public bool|null $can_program_offline_access_codes,
+            public bool|null $can_program_offline_access_codes = null,
             /**
              * Indicates whether the device supports programming online access codes.
              */
-            public bool|null $can_program_online_access_codes,
+            public bool|null $can_program_online_access_codes = null,
             /**
              * Indicates whether the thermostat supports different climate programs for each day of the week.
              */
-            public bool|null $can_program_thermostat_programs_as_different_each_day,
+            public bool|null $can_program_thermostat_programs_as_different_each_day = null,
             /**
              * Indicates whether the thermostat supports a single climate program applied to every day.
              */
-            public bool|null $can_program_thermostat_programs_as_same_each_day,
+            public bool|null $can_program_thermostat_programs_as_same_each_day = null,
             /**
              * Indicates whether the thermostat supports weekday/weekend climate programs.
              */
-            public bool|null $can_program_thermostat_programs_as_weekday_weekend,
+            public bool|null $can_program_thermostat_programs_as_weekday_weekend = null,
             /**
              * Indicates whether the device supports remote locking.
              */
-            public bool|null $can_remotely_lock,
+            public bool|null $can_remotely_lock = null,
             /**
              * Indicates whether the device supports remote unlocking.
              */
-            public bool|null $can_remotely_unlock,
+            public bool|null $can_remotely_unlock = null,
             /**
              * Indicates whether the thermostat supports running climate programs.
              */
-            public bool|null $can_run_thermostat_programs,
+            public bool|null $can_run_thermostat_programs = null,
             /**
              * Indicates whether the device supports simulating connection in a sandbox.
              */
-            public bool|null $can_simulate_connection,
+            public bool|null $can_simulate_connection = null,
             /**
              * Indicates whether the device supports simulating disconnection in a sandbox.
              */
-            public bool|null $can_simulate_disconnection,
+            public bool|null $can_simulate_disconnection = null,
             /**
              * Indicates whether the hub supports simulating connection in a sandbox.
              */
-            public bool|null $can_simulate_hub_connection,
+            public bool|null $can_simulate_hub_connection = null,
             /**
              * Indicates whether the hub supports simulating disconnection in a sandbox.
              */
-            public bool|null $can_simulate_hub_disconnection,
+            public bool|null $can_simulate_hub_disconnection = null,
             /**
              * Indicates whether the device supports simulating a paid subscription in a sandbox.
              */
-            public bool|null $can_simulate_paid_subscription,
+            public bool|null $can_simulate_paid_subscription = null,
             /**
              * Indicates whether the device supports simulating removal in a sandbox.
              */
-            public bool|null $can_simulate_removal,
+            public bool|null $can_simulate_removal = null,
             /**
              * Indicates whether the thermostat can be turned off.
              */
-            public bool|null $can_turn_off_hvac,
+            public bool|null $can_turn_off_hvac = null,
             /**
              * Indicates whether the lock supports unlocking with an access code.
              */
-            public bool|null $can_unlock_with_code,
+            public bool|null $can_unlock_with_code = null,
             /**
              * Collection of capabilities that the device supports when connected to Seam. Values are `access_code`, which indicates that the device can manage and utilize digital PIN codes for secure access; `lock`, which indicates that the device controls a door locking mechanism, enabling the remote opening and closing of doors and other entry points; `noise_detection`, which indicates that the device supports monitoring and responding to ambient noise levels; `thermostat`, which indicates that the device can regulate and adjust indoor temperatures; `battery`, which indicates that the device can manage battery life and health; and `phone`, which indicates that the device is a mobile device, such as a smartphone. **Important:** Superseded by [capability flags](https://docs.seam.co/capability-guides/device-and-system-capabilities#capability-flags).
              */
@@ -183,7 +183,7 @@ namespace Seam\Resources {
             /**
              * Location information for the device.
              */
-            public UnmanagedDevice\Location|null $location,
+            public UnmanagedDevice\Location|null $location = null,
             /**
              * properties of the device.
              */
@@ -234,7 +234,7 @@ namespace Seam\Resources\UnmanagedDevice {
             /**
              * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
              */
-            public bool|null $is_bridge_error,
+            public bool|null $is_bridge_error = null,
             public bool|null $is_connected_account_error,
             public bool|null $is_device_error,
             /**
@@ -266,21 +266,21 @@ namespace Seam\Resources\UnmanagedDevice {
             /**
              * Name of the device location.
              */
-            public string|null $location_name,
+            public string|null $location_name = null,
             /**
              * Name of the room within the device location, when the provider reports one.
              */
-            public string|null $room_name,
+            public string|null $room_name = null,
             /**
              * Time zone of the device location.
              */
-            public string|null $time_zone,
+            public string|null $time_zone = null,
             /**
              * Time zone of the device location.
              *
              * @deprecated Use `time_zone` instead.
              */
-            public string|null $timezone,
+            public string|null $timezone = null,
         ) {}
     }
 
@@ -323,27 +323,27 @@ namespace Seam\Resources\UnmanagedDevice {
             /**
              * Accessory keypad properties and state.
              */
-            public Properties\AccessoryKeypad|null $accessory_keypad,
+            public Properties\AccessoryKeypad|null $accessory_keypad = null,
             /**
              * Represents the current status of the battery charge level.
              */
-            public Properties\Battery|null $battery,
+            public Properties\Battery|null $battery = null,
             /**
              * Indicates the battery level of the device as a decimal value between 0 and 1, inclusive.
              */
-            public float|null $battery_level,
+            public float|null $battery_level = null,
             /**
              * Alt text for the device image.
              */
-            public string|null $image_alt_text,
+            public string|null $image_alt_text = null,
             /**
              * Image URL for the device.
              */
-            public string|null $image_url,
+            public string|null $image_url = null,
             /**
              * Manufacturer of the device. When a device, such as a smart lock, is connected through a smart hub, the manufacturer of the device might be different from that of the smart hub.
              */
-            public string|null $manufacturer,
+            public string|null $manufacturer = null,
             /**
              * Device model-related properties.
              */
@@ -359,7 +359,7 @@ namespace Seam\Resources\UnmanagedDevice {
              *
              * @deprecated use device.can_program_offline_access_codes
              */
-            public bool|null $offline_access_codes_enabled,
+            public bool|null $offline_access_codes_enabled = null,
             /**
              * Indicates whether the device is online.
              */
@@ -369,7 +369,7 @@ namespace Seam\Resources\UnmanagedDevice {
              *
              * @deprecated use device.can_program_online_access_codes
              */
-            public bool|null $online_access_codes_enabled,
+            public bool|null $online_access_codes_enabled = null,
         ) {}
     }
 
@@ -442,7 +442,7 @@ namespace Seam\Resources\UnmanagedDevice\Properties {
             /**
              * Keypad battery properties.
              */
-            public AccessoryKeypad\Battery|null $battery,
+            public AccessoryKeypad\Battery|null $battery = null,
             /**
              * Indicates if an accessory keypad is connected to the device.
              */
@@ -508,11 +508,11 @@ namespace Seam\Resources\UnmanagedDevice\Properties {
             /**
              * @deprecated use device.properties.model.can_connect_accessory_keypad
              */
-            public bool|null $accessory_keypad_supported,
+            public bool|null $accessory_keypad_supported = null,
             /**
              * Indicates whether the device can connect a accessory keypad.
              */
-            public bool|null $can_connect_accessory_keypad,
+            public bool|null $can_connect_accessory_keypad = null,
             /**
              * Display name of the device model.
              */
@@ -520,7 +520,7 @@ namespace Seam\Resources\UnmanagedDevice\Properties {
             /**
              * Indicates whether the device has a built in accessory keypad.
              */
-            public bool|null $has_built_in_keypad,
+            public bool|null $has_built_in_keypad = null,
             /**
              * Display name that corresponds to the manufacturer-specific terminology for the device.
              */
@@ -528,11 +528,11 @@ namespace Seam\Resources\UnmanagedDevice\Properties {
             /**
              * @deprecated use device.can_program_offline_access_codes.
              */
-            public bool|null $offline_access_codes_supported,
+            public bool|null $offline_access_codes_supported = null,
             /**
              * @deprecated use device.can_program_online_access_codes.
              */
-            public bool|null $online_access_codes_supported,
+            public bool|null $online_access_codes_supported = null,
         ) {}
     }
 }

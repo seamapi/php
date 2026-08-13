@@ -82,83 +82,83 @@ namespace Seam\Resources {
             /**
              * Indicates whether the lock supports configuring automatic locking.
              */
-            public bool|null $can_configure_auto_lock,
+            public bool|null $can_configure_auto_lock = null,
             /**
              * Indicates whether the thermostat supports cooling.
              */
-            public bool|null $can_hvac_cool,
+            public bool|null $can_hvac_cool = null,
             /**
              * Indicates whether the thermostat supports heating.
              */
-            public bool|null $can_hvac_heat,
+            public bool|null $can_hvac_heat = null,
             /**
              * Indicates whether the thermostat supports simultaneous heating and cooling.
              */
-            public bool|null $can_hvac_heat_cool,
+            public bool|null $can_hvac_heat_cool = null,
             /**
              * Indicates whether the device supports programming offline access codes.
              */
-            public bool|null $can_program_offline_access_codes,
+            public bool|null $can_program_offline_access_codes = null,
             /**
              * Indicates whether the device supports programming online access codes.
              */
-            public bool|null $can_program_online_access_codes,
+            public bool|null $can_program_online_access_codes = null,
             /**
              * Indicates whether the thermostat supports different climate programs for each day of the week.
              */
-            public bool|null $can_program_thermostat_programs_as_different_each_day,
+            public bool|null $can_program_thermostat_programs_as_different_each_day = null,
             /**
              * Indicates whether the thermostat supports a single climate program applied to every day.
              */
-            public bool|null $can_program_thermostat_programs_as_same_each_day,
+            public bool|null $can_program_thermostat_programs_as_same_each_day = null,
             /**
              * Indicates whether the thermostat supports weekday/weekend climate programs.
              */
-            public bool|null $can_program_thermostat_programs_as_weekday_weekend,
+            public bool|null $can_program_thermostat_programs_as_weekday_weekend = null,
             /**
              * Indicates whether the device supports remote locking.
              */
-            public bool|null $can_remotely_lock,
+            public bool|null $can_remotely_lock = null,
             /**
              * Indicates whether the device supports remote unlocking.
              */
-            public bool|null $can_remotely_unlock,
+            public bool|null $can_remotely_unlock = null,
             /**
              * Indicates whether the thermostat supports running climate programs.
              */
-            public bool|null $can_run_thermostat_programs,
+            public bool|null $can_run_thermostat_programs = null,
             /**
              * Indicates whether the device supports simulating connection in a sandbox.
              */
-            public bool|null $can_simulate_connection,
+            public bool|null $can_simulate_connection = null,
             /**
              * Indicates whether the device supports simulating disconnection in a sandbox.
              */
-            public bool|null $can_simulate_disconnection,
+            public bool|null $can_simulate_disconnection = null,
             /**
              * Indicates whether the hub supports simulating connection in a sandbox.
              */
-            public bool|null $can_simulate_hub_connection,
+            public bool|null $can_simulate_hub_connection = null,
             /**
              * Indicates whether the hub supports simulating disconnection in a sandbox.
              */
-            public bool|null $can_simulate_hub_disconnection,
+            public bool|null $can_simulate_hub_disconnection = null,
             /**
              * Indicates whether the device supports simulating a paid subscription in a sandbox.
              */
-            public bool|null $can_simulate_paid_subscription,
+            public bool|null $can_simulate_paid_subscription = null,
             /**
              * Indicates whether the device supports simulating removal in a sandbox.
              */
-            public bool|null $can_simulate_removal,
+            public bool|null $can_simulate_removal = null,
             /**
              * Indicates whether the thermostat can be turned off.
              */
-            public bool|null $can_turn_off_hvac,
+            public bool|null $can_turn_off_hvac = null,
             /**
              * Indicates whether the lock supports unlocking with an access code.
              */
-            public bool|null $can_unlock_with_code,
+            public bool|null $can_unlock_with_code = null,
             /**
              * Collection of capabilities that the device supports when connected to Seam. Values are `access_code`, which indicates that the device can manage and utilize digital PIN codes for secure access; `lock`, which indicates that the device controls a door locking mechanism, enabling the remote opening and closing of doors and other entry points; `noise_detection`, which indicates that the device supports monitoring and responding to ambient noise levels; `thermostat`, which indicates that the device can regulate and adjust indoor temperatures; `battery`, which indicates that the device can manage battery life and health; and `phone`, which indicates that the device is a mobile device, such as a smartphone. **Important:** Superseded by [capability flags](https://docs.seam.co/capability-guides/device-and-system-capabilities#capability-flags).
              */
@@ -182,11 +182,11 @@ namespace Seam\Resources {
             /**
              * Manufacturer of the device. Represents the hardware brand, which may differ from the provider.
              */
-            public Device\DeviceManufacturer|null $device_manufacturer,
+            public Device\DeviceManufacturer|null $device_manufacturer = null,
             /**
              * Provider of the device. Represents the third-party service through which the device is controlled.
              */
-            public Device\DeviceProvider|null $device_provider,
+            public Device\DeviceProvider|null $device_provider = null,
             /**
              * Type of the device.
              */
@@ -206,11 +206,11 @@ namespace Seam\Resources {
             /**
              * Location information for the device.
              */
-            public Device\Location|null $location,
+            public Device\Location|null $location = null,
             /**
              * Optional nickname to describe the device, settable through Seam.
              */
-            public string|null $nickname,
+            public string|null $nickname = null,
             /**
              * Properties of the device.
              */
@@ -257,7 +257,7 @@ namespace Seam\Resources\Device {
             /**
              * Image URL for the manufacturer logo.
              */
-            public string|null $image_url,
+            public string|null $image_url = null,
             /**
              * Manufacturer identifier, such as `august`, `yale`, `salto`, and so on.
              */
@@ -295,7 +295,7 @@ namespace Seam\Resources\Device {
             /**
              * Image URL for the device provider.
              */
-            public string|null $image_url,
+            public string|null $image_url = null,
             /**
              * Provider category. Indicates the third-party provider type, such as `stable`, for stable integrations, or `internal`, for internal integrations.
              */
@@ -336,7 +336,7 @@ namespace Seam\Resources\Device {
             /**
              * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
              */
-            public bool|null $is_bridge_error,
+            public bool|null $is_bridge_error = null,
             public bool|null $is_connected_account_error,
             public bool|null $is_device_error,
             /**
@@ -368,21 +368,21 @@ namespace Seam\Resources\Device {
             /**
              * Name of the device location.
              */
-            public string|null $location_name,
+            public string|null $location_name = null,
             /**
              * Name of the room within the device location, when the provider reports one.
              */
-            public string|null $room_name,
+            public string|null $room_name = null,
             /**
              * Time zone of the device location.
              */
-            public string|null $time_zone,
+            public string|null $time_zone = null,
             /**
              * Time zone of the device location.
              *
              * @deprecated Use `time_zone` instead.
              */
-            public string|null $timezone,
+            public string|null $timezone = null,
         ) {}
     }
 
@@ -729,21 +729,21 @@ namespace Seam\Resources\Device {
             /**
              * Accessory keypad properties and state.
              */
-            public Properties\AccessoryKeypad|null $accessory_keypad,
+            public Properties\AccessoryKeypad|null $accessory_keypad = null,
             /**
              * Active [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
              *
              * @deprecated Use `active_thermostat_schedule_id` with `/thermostats/schedules/get` instead.
              */
-            public Properties\ActiveThermostatSchedule|null $active_thermostat_schedule,
+            public Properties\ActiveThermostatSchedule|null $active_thermostat_schedule = null,
             /**
              * ID of the active [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
              */
-            public string|null $active_thermostat_schedule_id,
+            public string|null $active_thermostat_schedule_id = null,
             /**
              * Metadata for an Akiles device.
              */
-            public Properties\AkilesMetadata|null $akiles_metadata,
+            public Properties\AkilesMetadata|null $akiles_metadata = null,
             /**
              * Appearance-related properties, as reported by the device.
              */
@@ -751,243 +751,243 @@ namespace Seam\Resources\Device {
             /**
              * Metadata for an Aqara device.
              */
-            public Properties\AqaraMetadata|null $aqara_metadata,
+            public Properties\AqaraMetadata|null $aqara_metadata = null,
             /**
              * ASSA ABLOY Credential Service metadata for the phone.
              */
-            public Properties\AssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata,
+            public Properties\AssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata = null,
             /**
              * Metadata for an ASSA ABLOY Vostio system.
              */
-            public Properties\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata,
+            public Properties\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata = null,
             /**
              * Metadata for an August device.
              */
-            public Properties\AugustMetadata|null $august_metadata,
+            public Properties\AugustMetadata|null $august_metadata = null,
             /**
              * The delay in seconds before the lock automatically locks after being unlocked.
              */
-            public float|null $auto_lock_delay_seconds,
+            public float|null $auto_lock_delay_seconds = null,
             /**
              * Indicates whether automatic locking is enabled.
              */
-            public bool|null $auto_lock_enabled,
+            public bool|null $auto_lock_enabled = null,
             /**
              * Climate preset modes that the thermostat supports, such as "home", "away", "wake", "sleep", "occupied", and "unoccupied".
              */
-            public array|null $available_climate_preset_modes,
+            public array|null $available_climate_preset_modes = null,
             /**
              * Available [climate presets](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) for the thermostat.
              */
-            public array $available_climate_presets,
+            public array|null $available_climate_presets = null,
             /**
              * Fan mode settings that the thermostat supports.
              */
-            public array|null $available_fan_mode_settings,
+            public array|null $available_fan_mode_settings = null,
             /**
              * HVAC mode settings that the thermostat supports.
              */
-            public array|null $available_hvac_mode_settings,
+            public array|null $available_hvac_mode_settings = null,
             /**
              * Metadata for an Avigilon Alta system.
              */
-            public Properties\AvigilonAltaMetadata|null $avigilon_alta_metadata,
+            public Properties\AvigilonAltaMetadata|null $avigilon_alta_metadata = null,
             /**
              * Indicates whether the [backup access code pool](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes) is currently enabled for the device. To disable it, set this to `false` using [/devices/update](https://docs.seam.co/api/devices/update).
              */
-            public bool|null $backup_access_code_pool_enabled,
+            public bool|null $backup_access_code_pool_enabled = null,
             /**
              * Represents the current status of the battery charge level.
              */
-            public Properties\Battery|null $battery,
+            public Properties\Battery|null $battery = null,
             /**
              * Indicates the battery level of the device as a decimal value between 0 and 1, inclusive.
              */
-            public float|null $battery_level,
+            public float|null $battery_level = null,
             /**
              * Metadata for a Brivo device.
              */
-            public Properties\BrivoMetadata|null $brivo_metadata,
+            public Properties\BrivoMetadata|null $brivo_metadata = null,
             /**
              * Constraints on access codes for the device. Seam represents each constraint as an object with a `constraint_type` property. Depending on the constraint type, there may also be additional properties. Note that some constraints are manufacturer- or device-specific.
              */
-            public array $code_constraints,
+            public array|null $code_constraints = null,
             /**
              * Metadata for a ControlByWeb device.
              */
-            public Properties\ControlbywebMetadata|null $controlbyweb_metadata,
+            public Properties\ControlbywebMetadata|null $controlbyweb_metadata = null,
             /**
              * Current climate setting.
              */
-            public Properties\CurrentClimateSetting|null $current_climate_setting,
+            public Properties\CurrentClimateSetting|null $current_climate_setting = null,
             /**
              * Array of noise threshold IDs that are currently triggering.
              */
-            public array|null $currently_triggering_noise_threshold_ids,
+            public array|null $currently_triggering_noise_threshold_ids = null,
             /**
              * @deprecated use fallback_climate_preset_key to specify a fallback climate preset instead.
              */
-            public Properties\DefaultClimateSetting|null $default_climate_setting,
+            public Properties\DefaultClimateSetting|null $default_climate_setting = null,
             /**
              * Indicates whether the door is open.
              */
-            public bool|null $door_open,
+            public bool|null $door_open = null,
             /**
              * Metadata for a dormakaba Oracode device.
              */
-            public Properties\DormakabaOracodeMetadata|null $dormakaba_oracode_metadata,
+            public Properties\DormakabaOracodeMetadata|null $dormakaba_oracode_metadata = null,
             /**
              * Metadata for an ecobee device.
              */
-            public Properties\EcobeeMetadata|null $ecobee_metadata,
+            public Properties\EcobeeMetadata|null $ecobee_metadata = null,
             /**
              * Key of the [fallback climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets/setting-the-fallback-climate-preset) for the thermostat.
              */
-            public string|null $fallback_climate_preset_key,
+            public string|null $fallback_climate_preset_key = null,
             /**
              * @deprecated Use `current_climate_setting.fan_mode_setting` instead.
              */
-            public string|null $fan_mode_setting,
+            public string|null $fan_mode_setting = null,
             /**
              * Metadata for a 4SUITES device.
              */
-            public Properties\FourSuitesMetadata|null $four_suites_metadata,
+            public Properties\FourSuitesMetadata|null $four_suites_metadata = null,
             /**
              * Metadata for a Genie device.
              */
-            public Properties\GenieMetadata|null $genie_metadata,
+            public Properties\GenieMetadata|null $genie_metadata = null,
             /**
              * Indicates whether the device has direct power.
              */
-            public bool|null $has_direct_power,
+            public bool|null $has_direct_power = null,
             /**
              * Indicates whether the device supports native entry events.
              */
-            public bool|null $has_native_entry_events,
+            public bool|null $has_native_entry_events = null,
             /**
              * Metadata for a Honeywell Resideo device.
              */
-            public Properties\HoneywellResideoMetadata|null $honeywell_resideo_metadata,
+            public Properties\HoneywellResideoMetadata|null $honeywell_resideo_metadata = null,
             /**
              * Metadata for an igloo device.
              */
-            public Properties\IglooMetadata|null $igloo_metadata,
+            public Properties\IglooMetadata|null $igloo_metadata = null,
             /**
              * Metadata for an igloohome device.
              */
-            public Properties\IgloohomeMetadata|null $igloohome_metadata,
+            public Properties\IgloohomeMetadata|null $igloohome_metadata = null,
             /**
              * Alt text for the device image.
              */
-            public string|null $image_alt_text,
+            public string|null $image_alt_text = null,
             /**
              * Image URL for the device.
              */
-            public string|null $image_url,
+            public string|null $image_url = null,
             /**
              * Indicates whether the connected HVAC system is currently cooling, as reported by the thermostat.
              */
-            public bool|null $is_cooling,
+            public bool|null $is_cooling = null,
             /**
              * Indicates whether the fan in the connected HVAC system is currently running, as reported by the thermostat.
              */
-            public bool|null $is_fan_running,
+            public bool|null $is_fan_running = null,
             /**
              * Indicates whether the connected HVAC system is currently heating, as reported by the thermostat.
              */
-            public bool|null $is_heating,
+            public bool|null $is_heating = null,
             /**
              * Indicates whether the current thermostat settings differ from the most recent active program or schedule that Seam activated. For this condition to occur, `current_climate_setting.manual_override_allowed` must also be `true`.
              */
-            public bool|null $is_temporary_manual_override_active,
+            public bool|null $is_temporary_manual_override_active = null,
             /**
              * Metadata for a KeyNest device.
              */
-            public Properties\KeynestMetadata|null $keynest_metadata,
+            public Properties\KeynestMetadata|null $keynest_metadata = null,
             /**
              * Keypad battery status.
              */
-            public Properties\KeypadBattery|null $keypad_battery,
+            public Properties\KeypadBattery|null $keypad_battery = null,
             /**
              * Metadata for a Kisi device.
              */
-            public Properties\KisiMetadata|null $kisi_metadata,
+            public Properties\KisiMetadata|null $kisi_metadata = null,
             /**
              * Metadata for a Korelock device.
              */
-            public Properties\KorelockMetadata|null $korelock_metadata,
+            public Properties\KorelockMetadata|null $korelock_metadata = null,
             /**
              * Metadata for a Kwikset device.
              */
-            public Properties\KwiksetMetadata|null $kwikset_metadata,
+            public Properties\KwiksetMetadata|null $kwikset_metadata = null,
             /**
              * Indicates whether the lock is locked.
              */
-            public bool|null $locked,
+            public bool|null $locked = null,
             /**
              * Metadata for a Lockly device.
              */
-            public Properties\LocklyMetadata|null $lockly_metadata,
+            public Properties\LocklyMetadata|null $lockly_metadata = null,
             /**
              * Manufacturer of the device. When a device, such as a smart lock, is connected through a smart hub, the manufacturer of the device might be different from that of the smart hub.
              */
-            public string|null $manufacturer,
+            public string|null $manufacturer = null,
             /**
              * Maximum number of active access codes that the device supports.
              */
-            public float|null $max_active_codes_supported,
+            public float|null $max_active_codes_supported = null,
             /**
              * Maximum [cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points#cooling-set-point) in °C.
              */
-            public float|null $max_cooling_set_point_celsius,
+            public float|null $max_cooling_set_point_celsius = null,
             /**
              * Maximum [cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points#cooling-set-point) in °F.
              */
-            public float|null $max_cooling_set_point_fahrenheit,
+            public float|null $max_cooling_set_point_fahrenheit = null,
             /**
              * Maximum [heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points#heating-set-point) in °C.
              */
-            public float|null $max_heating_set_point_celsius,
+            public float|null $max_heating_set_point_celsius = null,
             /**
              * Maximum [heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points#heating-set-point) in °F.
              */
-            public float|null $max_heating_set_point_fahrenheit,
+            public float|null $max_heating_set_point_fahrenheit = null,
             /**
              * Maximum number of periods that the thermostat can support per day. For example, if the thermostat supports 4 periods per day, this value is 4.
              */
-            public float|null $max_thermostat_daily_program_periods_per_day,
+            public float|null $max_thermostat_daily_program_periods_per_day = null,
             /**
              * Maximum number of climate presets that the thermostat can support for weekly programming.
              */
-            public float|null $max_unique_climate_presets_per_thermostat_weekly_program,
+            public float|null $max_unique_climate_presets_per_thermostat_weekly_program = null,
             /**
              * Minimum [cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points#cooling-set-point) in °C.
              */
-            public float|null $min_cooling_set_point_celsius,
+            public float|null $min_cooling_set_point_celsius = null,
             /**
              * Minimum [cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points#cooling-set-point) in °F.
              */
-            public float|null $min_cooling_set_point_fahrenheit,
+            public float|null $min_cooling_set_point_fahrenheit = null,
             /**
              * Minimum [temperature difference](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points#minimum-heating-cooling-temperature-delta) in °C between the cooling and heating set points when in heat-cool (auto) mode.
              */
-            public float|null $min_heating_cooling_delta_celsius,
+            public float|null $min_heating_cooling_delta_celsius = null,
             /**
              * Minimum [temperature difference](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points#minimum-heating-cooling-temperature-delta) in °F between the cooling and heating set points when in heat-cool (auto) mode.
              */
-            public float|null $min_heating_cooling_delta_fahrenheit,
+            public float|null $min_heating_cooling_delta_fahrenheit = null,
             /**
              * Minimum [heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points#heating-set-point) in °C.
              */
-            public float|null $min_heating_set_point_celsius,
+            public float|null $min_heating_set_point_celsius = null,
             /**
              * Minimum [heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points#heating-set-point) in °F.
              */
-            public float|null $min_heating_set_point_fahrenheit,
+            public float|null $min_heating_set_point_fahrenheit = null,
             /**
              * Metadata for a Minut device.
              */
-            public Properties\MinutMetadata|null $minut_metadata,
+            public Properties\MinutMetadata|null $minut_metadata = null,
             /**
              * Device model-related properties.
              */
@@ -1001,33 +1001,33 @@ namespace Seam\Resources\Device {
             /**
              * Metadata for a Google Nest device.
              */
-            public Properties\NestMetadata|null $nest_metadata,
+            public Properties\NestMetadata|null $nest_metadata = null,
             /**
              * Indicates current noise level in decibels, if the device supports noise detection.
              */
-            public float|null $noise_level_decibels,
+            public float|null $noise_level_decibels = null,
             /**
              * Metadata for a NoiseAware device.
              */
-            public Properties\NoiseawareMetadata|null $noiseaware_metadata,
+            public Properties\NoiseawareMetadata|null $noiseaware_metadata = null,
             /**
              * Metadata for a Nuki device.
              */
-            public Properties\NukiMetadata|null $nuki_metadata,
+            public Properties\NukiMetadata|null $nuki_metadata = null,
             /**
              * Indicates whether it is currently possible to use offline access codes for the device.
              *
              * @deprecated use device.can_program_offline_access_codes
              */
-            public bool|null $offline_access_codes_enabled,
+            public bool|null $offline_access_codes_enabled = null,
             /**
              * Time frames that may be requested when creating an offline access code, expressed as a list of options. The caller picks one option (by matching the requested duration when the options' duration ranges do not overlap, or by `display_name` when they do) and satisfies that one option's rules. When `undefined`, any time frame works.
              */
-            public array $offline_time_frame_options,
+            public array|null $offline_time_frame_options = null,
             /**
              * Metadata for an Omnitec device.
              */
-            public Properties\OmnitecMetadata|null $omnitec_metadata,
+            public Properties\OmnitecMetadata|null $omnitec_metadata = null,
             /**
              * Indicates whether the device is online.
              */
@@ -1037,125 +1037,125 @@ namespace Seam\Resources\Device {
              *
              * @deprecated use device.can_program_online_access_codes
              */
-            public bool|null $online_access_codes_enabled,
+            public bool|null $online_access_codes_enabled = null,
             /**
              * Time frames that may be requested when creating an online access code, expressed as a list of options. The caller picks one option (by matching the requested duration when the options' duration ranges do not overlap, or by `display_name` when they do) and satisfies that one option's rules. When `undefined`, any time frame works.
              */
-            public array $online_time_frame_options,
+            public array|null $online_time_frame_options = null,
             /**
              * Reported relative humidity, as a value between 0 and 1, inclusive.
              */
-            public float|null $relative_humidity,
+            public float|null $relative_humidity = null,
             /**
              * Metadata for a Ring device.
              */
-            public Properties\RingMetadata|null $ring_metadata,
+            public Properties\RingMetadata|null $ring_metadata = null,
             /**
              * Metadata for a Salto KS device.
              */
-            public Properties\SaltoKsMetadata|null $salto_ks_metadata,
+            public Properties\SaltoKsMetadata|null $salto_ks_metadata = null,
             /**
              * Metada for a Salto device.
              *
              * @deprecated Use `salto_ks_metadata` instead.
              */
-            public Properties\SaltoMetadata|null $salto_metadata,
+            public Properties\SaltoMetadata|null $salto_metadata = null,
             /**
              * Salto Space credential service metadata for the phone.
              */
-            public Properties\SaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata,
+            public Properties\SaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata = null,
             /**
              * Metadata for a Schlage device.
              */
-            public Properties\SchlageMetadata|null $schlage_metadata,
+            public Properties\SchlageMetadata|null $schlage_metadata = null,
             /**
              * Metadata for Seam Bridge.
              */
-            public Properties\SeamBridgeMetadata|null $seam_bridge_metadata,
+            public Properties\SeamBridgeMetadata|null $seam_bridge_metadata = null,
             /**
              * Metadata for a Sensi device.
              */
-            public Properties\SensiMetadata|null $sensi_metadata,
+            public Properties\SensiMetadata|null $sensi_metadata = null,
             /**
              * Serial number of the device.
              */
-            public string|null $serial_number,
+            public string|null $serial_number = null,
             /**
              * Metadata for a SmartThings device.
              */
-            public Properties\SmartthingsMetadata|null $smartthings_metadata,
+            public Properties\SmartthingsMetadata|null $smartthings_metadata = null,
             /**
              * Supported code lengths for access codes.
              */
-            public array|null $supported_code_lengths,
+            public array|null $supported_code_lengths = null,
             /**
              * @deprecated use device.properties.model.can_connect_accessory_keypad
              */
-            public bool|null $supports_accessory_keypad,
+            public bool|null $supports_accessory_keypad = null,
             /**
              * Indicates whether the device supports a [backup access code pool](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes).
              */
-            public bool|null $supports_backup_access_code_pool,
+            public bool|null $supports_backup_access_code_pool = null,
             /**
              * @deprecated use offline_access_codes_enabled
              */
-            public bool|null $supports_offline_access_codes,
+            public bool|null $supports_offline_access_codes = null,
             /**
              * Metadata for a tado° device.
              */
-            public Properties\TadoMetadata|null $tado_metadata,
+            public Properties\TadoMetadata|null $tado_metadata = null,
             /**
              * Metadata for a Tedee device.
              */
-            public Properties\TedeeMetadata|null $tedee_metadata,
+            public Properties\TedeeMetadata|null $tedee_metadata = null,
             /**
              * Reported temperature in °C.
              */
-            public float|null $temperature_celsius,
+            public float|null $temperature_celsius = null,
             /**
              * Reported temperature in °F.
              */
-            public float|null $temperature_fahrenheit,
+            public float|null $temperature_fahrenheit = null,
             /**
              * Current [temperature threshold](https://docs.seam.co/capability-guides/thermostats/setting-and-monitoring-temperature-thresholds) set for the thermostat.
              */
-            public Properties\TemperatureThreshold|null $temperature_threshold,
+            public Properties\TemperatureThreshold|null $temperature_threshold = null,
             /**
              * Precision of the thermostat's period in minutes. For example, if the thermostat supports 15-minute periods, this value is 15. All values are relative to the top of the hour, so for 15 minutes, the periods would be 0, 15, 30, and 45 minutes past the hour.
              */
-            public float|null $thermostat_daily_program_period_precision_minutes,
+            public float|null $thermostat_daily_program_period_precision_minutes = null,
             /**
              * Configured [daily programs](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-programs) for the thermostat.
              */
-            public array $thermostat_daily_programs,
+            public array|null $thermostat_daily_programs = null,
             /**
              * Current [weekly program](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-programs) for the thermostat.
              */
-            public Properties\ThermostatWeeklyProgram|null $thermostat_weekly_program,
+            public Properties\ThermostatWeeklyProgram|null $thermostat_weekly_program = null,
             /**
              * Metadata for a TTLock device.
              */
-            public Properties\TtlockMetadata|null $ttlock_metadata,
+            public Properties\TtlockMetadata|null $ttlock_metadata = null,
             /**
              * Metadata for a 2N device.
              */
-            public Properties\TwoNMetadata|null $two_n_metadata,
+            public Properties\TwoNMetadata|null $two_n_metadata = null,
             /**
              * Metadata for an Ultraloq device.
              */
-            public Properties\UltraloqMetadata|null $ultraloq_metadata,
+            public Properties\UltraloqMetadata|null $ultraloq_metadata = null,
             /**
              * Metadata for an ASSA ABLOY Visionline system.
              */
-            public Properties\VisionlineMetadata|null $visionline_metadata,
+            public Properties\VisionlineMetadata|null $visionline_metadata = null,
             /**
              * Metadata for a Wyze device.
              */
-            public Properties\WyzeMetadata|null $wyze_metadata,
+            public Properties\WyzeMetadata|null $wyze_metadata = null,
             /**
              * Metadata for a Yacan device.
              */
-            public Properties\YacanMetadata|null $yacan_metadata,
+            public Properties\YacanMetadata|null $yacan_metadata = null,
         ) {}
     }
 
@@ -1228,7 +1228,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Keypad battery properties.
              */
-            public AccessoryKeypad\Battery|null $battery,
+            public AccessoryKeypad\Battery|null $battery = null,
             /**
              * Indicates if an accessory keypad is connected to the device.
              */
@@ -1315,11 +1315,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * @deprecated use device.properties.model.can_connect_accessory_keypad
              */
-            public bool|null $accessory_keypad_supported,
+            public bool|null $accessory_keypad_supported = null,
             /**
              * Indicates whether the device can connect a accessory keypad.
              */
-            public bool|null $can_connect_accessory_keypad,
+            public bool|null $can_connect_accessory_keypad = null,
             /**
              * Display name of the device model.
              */
@@ -1327,7 +1327,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Indicates whether the device has a built in accessory keypad.
              */
-            public bool|null $has_built_in_keypad,
+            public bool|null $has_built_in_keypad = null,
             /**
              * Display name that corresponds to the manufacturer-specific terminology for the device.
              */
@@ -1335,11 +1335,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * @deprecated use device.can_program_offline_access_codes.
              */
-            public bool|null $offline_access_codes_supported,
+            public bool|null $offline_access_codes_supported = null,
             /**
              * @deprecated use device.can_program_online_access_codes.
              */
-            public bool|null $online_access_codes_supported,
+            public bool|null $online_access_codes_supported = null,
         ) {}
     }
 
@@ -1371,11 +1371,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Endpoints associated with the phone.
              */
-            public array $endpoints,
+            public array|null $endpoints = null,
             /**
              * Indicates whether the credential service has active endpoints associated with the phone.
              */
-            public bool|null $has_active_endpoint,
+            public bool|null $has_active_endpoint = null,
         ) {}
     }
 
@@ -1397,7 +1397,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Indicates whether the credential service has an active associated phone.
              */
-            public bool|null $has_active_phone,
+            public bool|null $has_active_phone = null,
         ) {}
     }
 
@@ -1423,19 +1423,19 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Group ID to which to add users for an Akiles device.
              */
-            public string|null $_member_group_id,
+            public string|null $_member_group_id = null,
             /**
              * Gadget ID for an Akiles device.
              */
-            public string|null $gadget_id,
+            public string|null $gadget_id = null,
             /**
              * Gadget name for an Akiles device.
              */
-            public string|null $gadget_name,
+            public string|null $gadget_name = null,
             /**
              * Product name for an Akiles device.
              */
-            public string|null $product_name,
+            public string|null $product_name = null,
         ) {}
     }
 
@@ -1465,35 +1465,35 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device name for an Aqara device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Device ID (did) for an Aqara device.
              */
-            public string|null $did,
+            public string|null $did = null,
             /**
              * Firmware version for an Aqara device.
              */
-            public string|null $firmware_version,
+            public string|null $firmware_version = null,
             /**
              * Model identifier for an Aqara device.
              */
-            public string|null $model,
+            public string|null $model = null,
             /**
              * Model type for an Aqara device.
              */
-            public float|null $model_type,
+            public float|null $model_type = null,
             /**
              * Parent gateway device ID for an Aqara device.
              */
-            public string|null $parent_did,
+            public string|null $parent_did = null,
             /**
              * Position (room) ID for an Aqara device.
              */
-            public string|null $position_id,
+            public string|null $position_id = null,
             /**
              * Time zone reported for an Aqara device (e.g. GMT-07:00).
              */
-            public string|null $time_zone,
+            public string|null $time_zone = null,
         ) {}
     }
 
@@ -1515,7 +1515,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Encoder name for an ASSA ABLOY Vostio system.
              */
-            public string|null $encoder_name,
+            public string|null $encoder_name = null,
         ) {}
     }
 
@@ -1544,31 +1544,31 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Indicates whether an August device has a keypad.
              */
-            public bool|null $has_keypad,
+            public bool|null $has_keypad = null,
             /**
              * House ID for an August device.
              */
-            public string|null $house_id,
+            public string|null $house_id = null,
             /**
              * House name for an August device.
              */
-            public string|null $house_name,
+            public string|null $house_name = null,
             /**
              * Keypad battery level for an August device.
              */
-            public string|null $keypad_battery_level,
+            public string|null $keypad_battery_level = null,
             /**
              * Lock ID for an August device.
              */
-            public string|null $lock_id,
+            public string|null $lock_id = null,
             /**
              * Lock name for an August device.
              */
-            public string|null $lock_name,
+            public string|null $lock_name = null,
             /**
              * Model for an August device.
              */
-            public string|null $model,
+            public string|null $model = null,
         ) {}
     }
 
@@ -1598,31 +1598,31 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Entry name for an Avigilon Alta system.
              */
-            public string|null $entry_name,
+            public string|null $entry_name = null,
             /**
              * Total count of entry relays for an Avigilon Alta system.
              */
-            public float|null $entry_relays_total_count,
+            public float|null $entry_relays_total_count = null,
             /**
              * Organization name for an Avigilon Alta system.
              */
-            public string|null $org_name,
+            public string|null $org_name = null,
             /**
              * Site ID for an Avigilon Alta system.
              */
-            public float|null $site_id,
+            public float|null $site_id = null,
             /**
              * Site name for an Avigilon Alta system.
              */
-            public string|null $site_name,
+            public string|null $site_name = null,
             /**
              * Zone ID for an Avigilon Alta system.
              */
-            public float|null $zone_id,
+            public float|null $zone_id = null,
             /**
              * Zone name for an Avigilon Alta system.
              */
-            public string|null $zone_name,
+            public string|null $zone_name = null,
         ) {}
     }
 
@@ -1646,11 +1646,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Indicates whether the Brivo access point has activation (remote unlock) enabled.
              */
-            public bool|null $activation_enabled,
+            public bool|null $activation_enabled = null,
             /**
              * Device name for a Brivo device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
         ) {}
     }
 
@@ -1675,15 +1675,15 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a ControlByWeb device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device name for a ControlByWeb device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Relay name for a ControlByWeb device.
              */
-            public string|null $relay_name,
+            public string|null $relay_name = null,
         ) {}
     }
 
@@ -1721,37 +1721,37 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a dormakaba Oracode device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Door ID for a dormakaba Oracode device.
              */
-            public float|null $door_id,
+            public float|null $door_id = null,
             /**
              * Indicates whether a door is wireless for a dormakaba Oracode device.
              */
-            public bool|null $door_is_wireless,
+            public bool|null $door_is_wireless = null,
             /**
              * Door name for a dormakaba Oracode device.
              */
-            public string|null $door_name,
+            public string|null $door_name = null,
             /**
              * IANA time zone for a dormakaba Oracode device.
              */
-            public string|null $iana_timezone,
+            public string|null $iana_timezone = null,
             /**
              * Predefined time slots for a dormakaba Oracode device.
              */
-            public array $predefined_time_slots,
+            public array|null $predefined_time_slots = null,
             /**
              * Site ID for a dormakaba Oracode device.
              *
              * @deprecated Previously marked as "@DEPRECATED."
              */
-            public float|null $site_id,
+            public float|null $site_id = null,
             /**
              * Site name for a dormakaba Oracode device.
              */
-            public string|null $site_name,
+            public string|null $site_name = null,
         ) {}
     }
 
@@ -1775,11 +1775,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device name for an ecobee device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Device ID for an ecobee device.
              */
-            public string|null $ecobee_device_id,
+            public string|null $ecobee_device_id = null,
         ) {}
     }
 
@@ -1805,15 +1805,15 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a 4SUITES device.
              */
-            public float|null $device_id,
+            public float|null $device_id = null,
             /**
              * Device name for a 4SUITES device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Reclose delay, in seconds, for a 4SUITES device.
              */
-            public float|null $reclose_delay_in_seconds,
+            public float|null $reclose_delay_in_seconds = null,
         ) {}
     }
 
@@ -1837,11 +1837,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Lock name for a Genie device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Door name for a Genie device.
              */
-            public string|null $door_name,
+            public string|null $door_name = null,
         ) {}
     }
 
@@ -1867,11 +1867,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device name for a Honeywell Resideo device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Device ID for a Honeywell Resideo device.
              */
-            public string|null $honeywell_resideo_device_id,
+            public string|null $honeywell_resideo_device_id = null,
         ) {}
     }
 
@@ -1896,15 +1896,15 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Bridge ID for an igloo device.
              */
-            public string|null $bridge_id,
+            public string|null $bridge_id = null,
             /**
              * Device ID for an igloo device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Model for an igloo device.
              */
-            public string|null $model,
+            public string|null $model = null,
         ) {}
     }
 
@@ -1933,27 +1933,27 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Bridge ID for an igloohome device.
              */
-            public string|null $bridge_id,
+            public string|null $bridge_id = null,
             /**
              * Bridge name for an igloohome device.
              */
-            public string|null $bridge_name,
+            public string|null $bridge_name = null,
             /**
              * Device ID for an igloohome device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device name for an igloohome device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Indicates whether a keypad is linked to a bridge for an igloohome device.
              */
-            public bool|null $is_accessory_keypad_linked_to_bridge,
+            public bool|null $is_accessory_keypad_linked_to_bridge = null,
             /**
              * Keypad ID for an igloohome device.
              */
-            public string|null $keypad_id,
+            public string|null $keypad_id = null,
         ) {}
     }
 
@@ -1998,87 +1998,87 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Address for a KeyNest device.
              */
-            public string|null $address,
+            public string|null $address = null,
             /**
              * Current or last store ID for a KeyNest device.
              */
-            public float|null $current_or_last_store_id,
+            public float|null $current_or_last_store_id = null,
             /**
              * Current status for a KeyNest device.
              */
-            public string|null $current_status,
+            public string|null $current_status = null,
             /**
              * Current user company for a KeyNest device.
              */
-            public string|null $current_user_company,
+            public string|null $current_user_company = null,
             /**
              * Current user email for a KeyNest device.
              */
-            public string|null $current_user_email,
+            public string|null $current_user_email = null,
             /**
              * Current user name for a KeyNest device.
              */
-            public string|null $current_user_name,
+            public string|null $current_user_name = null,
             /**
              * Current user phone number for a KeyNest device.
              */
-            public string|null $current_user_phone_number,
+            public string|null $current_user_phone_number = null,
             /**
              * Default office ID for a KeyNest device.
              */
-            public float|null $default_office_id,
+            public float|null $default_office_id = null,
             /**
              * Device name for a KeyNest device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Fob ID for a KeyNest device.
              */
-            public float|null $fob_id,
+            public float|null $fob_id = null,
             /**
              * Handover method for a KeyNest device.
              */
-            public string|null $handover_method,
+            public string|null $handover_method = null,
             /**
              * Whether the KeyNest device has a photo.
              */
-            public bool|null $has_photo,
+            public bool|null $has_photo = null,
             /**
              * Whether the key is in a locker that does not support the access codes API.
              */
-            public bool|null $is_quadient_locker,
+            public bool|null $is_quadient_locker = null,
             /**
              * Key ID for a KeyNest device.
              */
-            public string|null $key_id,
+            public string|null $key_id = null,
             /**
              * Key notes for a KeyNest device.
              */
-            public string|null $key_notes,
+            public string|null $key_notes = null,
             /**
              * KeyNest app user for a KeyNest device.
              */
-            public string|null $keynest_app_user,
+            public string|null $keynest_app_user = null,
             /**
              * Last movement timestamp for a KeyNest device.
              */
-            public string|null $last_movement,
+            public string|null $last_movement = null,
             /**
              * Property ID for a KeyNest device.
              */
-            public string|null $property_id,
+            public string|null $property_id = null,
             /**
              * Property postcode for a KeyNest device.
              */
-            public string|null $property_postcode,
+            public string|null $property_postcode = null,
             /**
              * Status type for a KeyNest device.
              */
-            public string|null $status_type,
+            public string|null $status_type = null,
             /**
              * Subscription plan for a KeyNest device.
              */
-            public string|null $subscription_plan,
+            public string|null $subscription_plan = null,
         ) {}
     }
 
@@ -2104,19 +2104,19 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Description for a Kisi device.
              */
-            public string|null $description,
+            public string|null $description = null,
             /**
              * Lock ID for a Kisi device.
              */
-            public float|null $lock_id,
+            public float|null $lock_id = null,
             /**
              * Lock name for a Kisi device.
              */
-            public string|null $lock_name,
+            public string|null $lock_name = null,
             /**
              * Place name for a Kisi device.
              */
-            public string|null $place_name,
+            public string|null $place_name = null,
         ) {}
     }
 
@@ -2145,31 +2145,31 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a Korelock device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device name for a Korelock device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Firmware version for a Korelock device.
              */
-            public string|null $firmware_version,
+            public string|null $firmware_version = null,
             /**
              * Location ID for a Korelock device. Required for timebound access codes.
              */
-            public string|null $location_id,
+            public string|null $location_id = null,
             /**
              * Model code for a Korelock device.
              */
-            public string|null $model_code,
+            public string|null $model_code = null,
             /**
              * Serial number for a Korelock device.
              */
-            public string|null $serial_number,
+            public string|null $serial_number = null,
             /**
              * WiFi signal strength (0-1) for a Korelock device.
              */
-            public float|null $wifi_signal_strength,
+            public float|null $wifi_signal_strength = null,
         ) {}
     }
 
@@ -2194,15 +2194,15 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a Kwikset device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device name for a Kwikset device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Model number for a Kwikset device.
              */
-            public string|null $model_number,
+            public string|null $model_number = null,
         ) {}
     }
 
@@ -2227,15 +2227,15 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a Lockly device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device name for a Lockly device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Model for a Lockly device.
              */
-            public string|null $model,
+            public string|null $model = null,
         ) {}
     }
 
@@ -2264,15 +2264,15 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a Minut device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device name for a Minut device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Latest sensor values for a Minut device.
              */
-            public MinutMetadata\LatestSensorValues|null $latest_sensor_values,
+            public MinutMetadata\LatestSensorValues|null $latest_sensor_values = null,
         ) {}
     }
 
@@ -2300,27 +2300,27 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Custom device name for a Google Nest device. The device owner sets this value.
              */
-            public string|null $device_custom_name,
+            public string|null $device_custom_name = null,
             /**
              * Device name for a Google Nest device. Google sets this value.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Display name for a Google Nest device.
              */
-            public string|null $display_name,
+            public string|null $display_name = null,
             /**
              * Device ID for a Google Nest device.
              */
-            public string|null $nest_device_id,
+            public string|null $nest_device_id = null,
             /**
              * ID of the Google Nest structure containing the device.
              */
-            public string|null $nest_structure_id,
+            public string|null $nest_structure_id = null,
             /**
              * Name of the Google Nest structure containing the device. The device owner sets this value.
              */
-            public string|null $structure_name,
+            public string|null $structure_name = null,
         ) {}
     }
 
@@ -2347,23 +2347,23 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a NoiseAware device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device model for a NoiseAware device.
              */
-            public string|null $device_model,
+            public string|null $device_model = null,
             /**
              * Device name for a NoiseAware device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Noise level, in decibels, for a NoiseAware device.
              */
-            public float|null $noise_level_decibel,
+            public float|null $noise_level_decibel = null,
             /**
              * Noise level, expressed as a Noise Risk Score (NRS), for a NoiseAware device.
              */
-            public float|null $noise_level_nrs,
+            public float|null $noise_level_nrs = null,
         ) {}
     }
 
@@ -2390,23 +2390,23 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a Nuki device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device name for a Nuki device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Indicates whether keypad 2 is paired for a Nuki device.
              */
-            public bool|null $keypad_2_paired,
+            public bool|null $keypad_2_paired = null,
             /**
              * Indicates whether the keypad battery is in a critical state for a Nuki device.
              */
-            public bool|null $keypad_battery_critical,
+            public bool|null $keypad_battery_critical = null,
             /**
              * Indicates whether the keypad is paired for a Nuki device.
              */
-            public bool|null $keypad_paired,
+            public bool|null $keypad_paired = null,
         ) {}
     }
 
@@ -2435,31 +2435,31 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Whether the Omnitec lock has a connected gateway for remote operations.
              */
-            public bool|null $has_gateway,
+            public bool|null $has_gateway = null,
             /**
              * Operator-assigned alias for an Omnitec device.
              */
-            public string|null $lock_alias,
+            public string|null $lock_alias = null,
             /**
              * Lock ID for an Omnitec device.
              */
-            public float|null $lock_id,
+            public float|null $lock_id = null,
             /**
              * Bluetooth MAC address for an Omnitec device.
              */
-            public string|null $lock_mac,
+            public string|null $lock_mac = null,
             /**
              * Lock name for an Omnitec device.
              */
-            public string|null $lock_name,
+            public string|null $lock_name = null,
             /**
              * IANA time zone for the Omnitec device, used to schedule time-bound access codes at the correct local time (accounting for DST).
              */
-            public string|null $time_zone,
+            public string|null $time_zone = null,
             /**
              * Static UTC offset of the Omnitec lock in milliseconds. Does not account for DST.
              */
-            public float|null $timezone_raw_offset_ms,
+            public float|null $timezone_raw_offset_ms = null,
         ) {}
     }
 
@@ -2483,11 +2483,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a Ring device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device name for a Ring device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
         ) {}
     }
 
@@ -2519,39 +2519,39 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Battery level for a Salto KS device.
              */
-            public string|null $battery_level,
+            public string|null $battery_level = null,
             /**
              * Customer reference for a Salto KS device.
              */
-            public string|null $customer_reference,
+            public string|null $customer_reference = null,
             /**
              * Indicates whether the site has a Salto KS subscription that supports custom PINs.
              */
-            public bool|null $has_custom_pin_subscription,
+            public bool|null $has_custom_pin_subscription = null,
             /**
              * Lock ID for a Salto KS device.
              */
-            public string|null $lock_id,
+            public string|null $lock_id = null,
             /**
              * Lock type for a Salto KS device.
              */
-            public string|null $lock_type,
+            public string|null $lock_type = null,
             /**
              * Locked state for a Salto KS device.
              */
-            public string|null $locked_state,
+            public string|null $locked_state = null,
             /**
              * Model for a Salto KS device.
              */
-            public string|null $model,
+            public string|null $model = null,
             /**
              * Site ID for the Salto KS site to which the device belongs.
              */
-            public string|null $site_id,
+            public string|null $site_id = null,
             /**
              * Site name for the Salto KS site to which the device belongs.
              */
-            public string|null $site_name,
+            public string|null $site_name = null,
         ) {}
     }
 
@@ -2583,35 +2583,35 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Battery level for a Salto device.
              */
-            public string|null $battery_level,
+            public string|null $battery_level = null,
             /**
              * Customer reference for a Salto device.
              */
-            public string|null $customer_reference,
+            public string|null $customer_reference = null,
             /**
              * Lock ID for a Salto device.
              */
-            public string|null $lock_id,
+            public string|null $lock_id = null,
             /**
              * Lock type for a Salto device.
              */
-            public string|null $lock_type,
+            public string|null $lock_type = null,
             /**
              * Locked state for a Salto device.
              */
-            public string|null $locked_state,
+            public string|null $locked_state = null,
             /**
              * Model for a Salto device.
              */
-            public string|null $model,
+            public string|null $model = null,
             /**
              * Site ID for the Salto KS site to which the device belongs.
              */
-            public string|null $site_id,
+            public string|null $site_id = null,
             /**
              * Site name for the Salto KS site to which the device belongs.
              */
-            public string|null $site_name,
+            public string|null $site_name = null,
         ) {}
     }
 
@@ -2636,15 +2636,15 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a Schlage device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device name for a Schlage device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Model for a Schlage device.
              */
-            public string|null $model,
+            public string|null $model = null,
         ) {}
     }
 
@@ -2669,15 +2669,15 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device number for Seam Bridge.
              */
-            public float|null $device_num,
+            public float|null $device_num = null,
             /**
              * Name for Seam Bridge.
              */
-            public string|null $name,
+            public string|null $name = null,
             /**
              * Unlock method for Seam Bridge.
              */
-            public string|null $unlock_method,
+            public string|null $unlock_method = null,
         ) {}
     }
 
@@ -2706,23 +2706,23 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a Sensi device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device name for a Sensi device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Set to true when the device does not support the /dual-setpoints API endpoint.
              */
-            public bool|null $dual_setpoints_not_supported,
+            public bool|null $dual_setpoints_not_supported = null,
             /**
              * Enforced setpoint range in Celsius for a Sensi device, derived from an OutOfRange API error.
              */
-            public array|null $enforced_setpoint_range_celsius,
+            public array|null $enforced_setpoint_range_celsius = null,
             /**
              * Product type for a Sensi device.
              */
-            public string|null $product_type,
+            public string|null $product_type = null,
         ) {}
     }
 
@@ -2748,19 +2748,19 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a SmartThings device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device name for a SmartThings device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Location ID for a SmartThings device.
              */
-            public string|null $location_id,
+            public string|null $location_id = null,
             /**
              * Model for a SmartThings device.
              */
-            public string|null $model,
+            public string|null $model = null,
         ) {}
     }
 
@@ -2784,11 +2784,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device type for a tado° device.
              */
-            public string|null $device_type,
+            public string|null $device_type = null,
             /**
              * Serial number for a tado° device.
              */
-            public string|null $serial_no,
+            public string|null $serial_no = null,
         ) {}
     }
 
@@ -2817,31 +2817,31 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Bridge ID for a Tedee device.
              */
-            public float|null $bridge_id,
+            public float|null $bridge_id = null,
             /**
              * Bridge name for a Tedee device.
              */
-            public string|null $bridge_name,
+            public string|null $bridge_name = null,
             /**
              * Device ID for a Tedee device.
              */
-            public float|null $device_id,
+            public float|null $device_id = null,
             /**
              * Device model for a Tedee device.
              */
-            public string|null $device_model,
+            public string|null $device_model = null,
             /**
              * Device name for a Tedee device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Keypad ID for a Tedee device.
              */
-            public float|null $keypad_id,
+            public float|null $keypad_id = null,
             /**
              * Serial number for a Tedee device.
              */
-            public string|null $serial_number,
+            public string|null $serial_number = null,
         ) {}
     }
 
@@ -2875,31 +2875,31 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Feature value for a TTLock device.
              */
-            public string|null $feature_value,
+            public string|null $feature_value = null,
             /**
              * Features for a TTLock device.
              */
-            public TtlockMetadata\Features|null $features,
+            public TtlockMetadata\Features|null $features = null,
             /**
              * Indicates whether a TTLock device has a gateway.
              */
-            public bool|null $has_gateway,
+            public bool|null $has_gateway = null,
             /**
              * Lock alias for a TTLock device.
              */
-            public string|null $lock_alias,
+            public string|null $lock_alias = null,
             /**
              * Lock ID for a TTLock device.
              */
-            public float|null $lock_id,
+            public float|null $lock_id = null,
             /**
              * Lock-side timezone offset in milliseconds east of UTC, as configured in the TTLock app. Source of truth for the lock's wall-clock interpretation of access code start/end times — a misconfigured value here is the typical cause of customer "codes offset by N hours" reports. Diagnostic only; Seam does not convert times based on this value.
              */
-            public float|null $timezone_raw_offset_ms,
+            public float|null $timezone_raw_offset_ms = null,
             /**
              * Wireless keypads for a TTLock device.
              */
-            public array $wireless_keypads,
+            public array|null $wireless_keypads = null,
         ) {}
     }
 
@@ -2923,11 +2923,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a 2N device.
              */
-            public float|null $device_id,
+            public float|null $device_id = null,
             /**
              * Device name for a 2N device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
         ) {}
     }
 
@@ -2953,19 +2953,19 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for an Ultraloq device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device name for an Ultraloq device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Device type for an Ultraloq device.
              */
-            public string|null $device_type,
+            public string|null $device_type = null,
             /**
              * IANA timezone for the Ultraloq device.
              */
-            public string|null $time_zone,
+            public string|null $time_zone = null,
         ) {}
     }
 
@@ -2986,7 +2986,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Encoder ID for an ASSA ABLOY Visionline system.
              */
-            public string|null $encoder_id,
+            public string|null $encoder_id = null,
         ) {}
     }
 
@@ -3016,35 +3016,35 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a Wyze device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device information model for a Wyze device.
              */
-            public string|null $device_info_model,
+            public string|null $device_info_model = null,
             /**
              * Device name for a Wyze device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Keypad UUID for a Wyze device.
              */
-            public string|null $keypad_uuid,
+            public string|null $keypad_uuid = null,
             /**
              * Locker status (hardlock) for a Wyze device.
              */
-            public float|null $locker_status_hardlock,
+            public float|null $locker_status_hardlock = null,
             /**
              * Product model for a Wyze device.
              */
-            public string|null $product_model,
+            public string|null $product_model = null,
             /**
              * Product name for a Wyze device.
              */
-            public string|null $product_name,
+            public string|null $product_name = null,
             /**
              * Product type for a Wyze device.
              */
-            public string|null $product_type,
+            public string|null $product_type = null,
         ) {}
     }
 
@@ -3070,19 +3070,19 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device ID for a Yacan device.
              */
-            public string|null $device_id,
+            public string|null $device_id = null,
             /**
              * Device name for a Yacan device.
              */
-            public string|null $device_name,
+            public string|null $device_name = null,
             /**
              * Device type for a Yacan device.
              */
-            public string|null $device_type,
+            public string|null $device_type = null,
             /**
              * Serial number for a Yacan device.
              */
-            public string|null $serial_number,
+            public string|null $serial_number = null,
         ) {}
     }
 
@@ -3108,11 +3108,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Maximum name length constraint for access codes.
              */
-            public float|null $max_length,
+            public float|null $max_length = null,
             /**
              * Minimum name length constraint for access codes.
              */
-            public float|null $min_length,
+            public float|null $min_length = null,
         ) {}
     }
 
@@ -3173,31 +3173,31 @@ namespace Seam\Resources\Device\Properties {
             /**
              * iCalendar recurrence rule (RRULE) that the end date must fall on. Constrains which calendar dates are selectable, independent of the time-of-day rules.
              */
-            public string|null $end_date_recurrence_rule,
+            public string|null $end_date_recurrence_rule = null,
             /**
              * When `true`, the start and end must fall at the same time of day (the caller picks which). Mutually exclusive with `time_pairs`.
              */
-            public bool|null $matching_start_end_time,
+            public bool|null $matching_start_end_time = null,
             /**
              * Maximum duration this option covers, as an ISO 8601 duration (for example, `PT672H` or `P367D`). Omitted when there is no maximum.
              */
-            public string|null $max_duration,
+            public string|null $max_duration = null,
             /**
              * Minimum duration this option covers, as an ISO 8601 duration (for example, `PT1H` or `P29D`). Omitted when there is no minimum.
              */
-            public string|null $min_duration,
+            public string|null $min_duration = null,
             /**
              * iCalendar recurrence rule (RRULE) that the start date must fall on (for example, `FREQ=MONTHLY;BYDAY=1MO,3MO`). Constrains which calendar dates are selectable, independent of the time-of-day rules.
              */
-            public string|null $start_date_recurrence_rule,
+            public string|null $start_date_recurrence_rule = null,
             /**
              * Fixed start/end time pairings the caller chooses from. Mutually exclusive with `matching_start_end_time`.
              */
-            public array $time_pairs,
+            public array|null $time_pairs = null,
             /**
              * IANA time zone for interpreting `time_pairs` and the date recurrence rules. Present only when the option fixes times or dates.
              */
-            public string|null $time_zone,
+            public string|null $time_zone = null,
         ) {}
     }
 
@@ -3237,31 +3237,31 @@ namespace Seam\Resources\Device\Properties {
             /**
              * iCalendar recurrence rule (RRULE) that the end date must fall on. Constrains which calendar dates are selectable, independent of the time-of-day rules.
              */
-            public string|null $end_date_recurrence_rule,
+            public string|null $end_date_recurrence_rule = null,
             /**
              * When `true`, the start and end must fall at the same time of day (the caller picks which). Mutually exclusive with `time_pairs`.
              */
-            public bool|null $matching_start_end_time,
+            public bool|null $matching_start_end_time = null,
             /**
              * Maximum duration this option covers, as an ISO 8601 duration (for example, `PT672H` or `P367D`). Omitted when there is no maximum.
              */
-            public string|null $max_duration,
+            public string|null $max_duration = null,
             /**
              * Minimum duration this option covers, as an ISO 8601 duration (for example, `PT1H` or `P29D`). Omitted when there is no minimum.
              */
-            public string|null $min_duration,
+            public string|null $min_duration = null,
             /**
              * iCalendar recurrence rule (RRULE) that the start date must fall on (for example, `FREQ=MONTHLY;BYDAY=1MO,3MO`). Constrains which calendar dates are selectable, independent of the time-of-day rules.
              */
-            public string|null $start_date_recurrence_rule,
+            public string|null $start_date_recurrence_rule = null,
             /**
              * Fixed start/end time pairings the caller chooses from. Mutually exclusive with `matching_start_end_time`.
              */
-            public array $time_pairs,
+            public array|null $time_pairs = null,
             /**
              * IANA time zone for interpreting `time_pairs` and the date recurrence rules. Present only when the option fixes times or dates.
              */
-            public string|null $time_zone,
+            public string|null $time_zone = null,
         ) {}
     }
 
@@ -3321,11 +3321,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Indicates whether a person at the thermostat can change the thermostat's settings after the [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules) starts.
              */
-            public bool|null $is_override_allowed,
+            public bool|null $is_override_allowed = null,
             /**
              * Number of minutes for which a person at the thermostat can change the thermostat's settings after the activation of the scheduled [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets). See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
              */
-            public int|null $max_override_period_minutes,
+            public int|null $max_override_period_minutes = null,
             /**
              * User-friendly name to identify the [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
              */
@@ -3404,15 +3404,15 @@ namespace Seam\Resources\Device\Properties {
             /**
              * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
              */
-            public string|null $climate_preset_mode,
+            public string|null $climate_preset_mode = null,
             /**
              * Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $cooling_set_point_celsius,
+            public float|null $cooling_set_point_celsius = null,
             /**
              * Temperature to which the thermostat should cool (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $cooling_set_point_fahrenheit,
+            public float|null $cooling_set_point_fahrenheit = null,
             /**
              * Display name for the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
              */
@@ -3420,23 +3420,23 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Metadata specific to the Ecobee climate, if applicable.
              */
-            public AvailableClimatePresets\EcobeeMetadata|null $ecobee_metadata,
+            public AvailableClimatePresets\EcobeeMetadata|null $ecobee_metadata = null,
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
              */
-            public string|null $fan_mode_setting,
+            public string|null $fan_mode_setting = null,
             /**
              * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $heating_set_point_celsius,
+            public float|null $heating_set_point_celsius = null,
             /**
              * Temperature to which the thermostat should heat (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $heating_set_point_fahrenheit,
+            public float|null $heating_set_point_fahrenheit = null,
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
              */
-            public string|null $hvac_mode_setting,
+            public string|null $hvac_mode_setting = null,
             /**
              * Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
              *
@@ -3446,7 +3446,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
              */
-            public string|null $name,
+            public string|null $name = null,
         ) {}
     }
 
@@ -3493,65 +3493,65 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Indicates whether the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) key can be deleted.
              */
-            public bool|null $can_delete,
+            public bool|null $can_delete = null,
             /**
              * Indicates whether the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) key can be edited.
              */
-            public bool|null $can_edit,
+            public bool|null $can_edit = null,
             /**
              * Indicates whether the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) key can be programmed in a thermostat daily program.
              */
-            public bool|null $can_use_with_thermostat_daily_programs,
+            public bool|null $can_use_with_thermostat_daily_programs = null,
             /**
              * Unique key to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
              */
-            public string|null $climate_preset_key,
+            public string|null $climate_preset_key = null,
             /**
              * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
              */
-            public string|null $climate_preset_mode,
+            public string|null $climate_preset_mode = null,
             /**
              * Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $cooling_set_point_celsius,
+            public float|null $cooling_set_point_celsius = null,
             /**
              * Temperature to which the thermostat should cool (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $cooling_set_point_fahrenheit,
+            public float|null $cooling_set_point_fahrenheit = null,
             /**
              * Display name for the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
              */
-            public string|null $display_name,
+            public string|null $display_name = null,
             /**
              * Metadata specific to the Ecobee climate, if applicable.
              */
-            public CurrentClimateSetting\EcobeeMetadata|null $ecobee_metadata,
+            public CurrentClimateSetting\EcobeeMetadata|null $ecobee_metadata = null,
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
              */
-            public string|null $fan_mode_setting,
+            public string|null $fan_mode_setting = null,
             /**
              * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $heating_set_point_celsius,
+            public float|null $heating_set_point_celsius = null,
             /**
              * Temperature to which the thermostat should heat (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $heating_set_point_fahrenheit,
+            public float|null $heating_set_point_fahrenheit = null,
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
              */
-            public string|null $hvac_mode_setting,
+            public string|null $hvac_mode_setting = null,
             /**
              * Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
              *
              * @deprecated Use 'thermostat_schedule.is_override_allowed'
              */
-            public bool|null $manual_override_allowed,
+            public bool|null $manual_override_allowed = null,
             /**
              * User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
              */
-            public string|null $name,
+            public string|null $name = null,
         ) {}
     }
 
@@ -3598,65 +3598,65 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Indicates whether the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) key can be deleted.
              */
-            public bool|null $can_delete,
+            public bool|null $can_delete = null,
             /**
              * Indicates whether the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) key can be edited.
              */
-            public bool|null $can_edit,
+            public bool|null $can_edit = null,
             /**
              * Indicates whether the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) key can be programmed in a thermostat daily program.
              */
-            public bool|null $can_use_with_thermostat_daily_programs,
+            public bool|null $can_use_with_thermostat_daily_programs = null,
             /**
              * Unique key to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
              */
-            public string|null $climate_preset_key,
+            public string|null $climate_preset_key = null,
             /**
              * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
              */
-            public string|null $climate_preset_mode,
+            public string|null $climate_preset_mode = null,
             /**
              * Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $cooling_set_point_celsius,
+            public float|null $cooling_set_point_celsius = null,
             /**
              * Temperature to which the thermostat should cool (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $cooling_set_point_fahrenheit,
+            public float|null $cooling_set_point_fahrenheit = null,
             /**
              * Display name for the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
              */
-            public string|null $display_name,
+            public string|null $display_name = null,
             /**
              * Metadata specific to the Ecobee climate, if applicable.
              */
-            public DefaultClimateSetting\EcobeeMetadata|null $ecobee_metadata,
+            public DefaultClimateSetting\EcobeeMetadata|null $ecobee_metadata = null,
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
              */
-            public string|null $fan_mode_setting,
+            public string|null $fan_mode_setting = null,
             /**
              * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $heating_set_point_celsius,
+            public float|null $heating_set_point_celsius = null,
             /**
              * Temperature to which the thermostat should heat (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
-            public float|null $heating_set_point_fahrenheit,
+            public float|null $heating_set_point_fahrenheit = null,
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
              */
-            public string|null $hvac_mode_setting,
+            public string|null $hvac_mode_setting = null,
             /**
              * Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
              *
              * @deprecated Use 'thermostat_schedule.is_override_allowed'
              */
-            public bool|null $manual_override_allowed,
+            public bool|null $manual_override_allowed = null,
             /**
              * User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
              */
-            public string|null $name,
+            public string|null $name = null,
         ) {}
     }
 
@@ -3850,11 +3850,11 @@ namespace Seam\Resources\Device\Properties\AssaAbloyCredentialServiceMetadata {
             /**
              * ID of the associated endpoint.
              */
-            public string|null $endpoint_id,
+            public string|null $endpoint_id = null,
             /**
              * Indicated whether the endpoint is active.
              */
-            public bool|null $is_active,
+            public bool|null $is_active = null,
         ) {}
     }
 }
@@ -3890,43 +3890,43 @@ namespace Seam\Resources\Device\Properties\DormakabaOracodeMetadata {
             /**
              * Check in time for a time slot for a dormakaba Oracode device.
              */
-            public string|null $check_in_time,
+            public string|null $check_in_time = null,
             /**
              * Checkout time for a time slot for a dormakaba Oracode device.
              */
-            public string|null $check_out_time,
+            public string|null $check_out_time = null,
             /**
              * ID of a user level for a dormakaba Oracode device.
              */
-            public string|null $dormakaba_oracode_user_level_id,
+            public string|null $dormakaba_oracode_user_level_id = null,
             /**
              * Prefix for a user level for a dormakaba Oracode device.
              */
-            public float|null $dormakaba_oracode_user_level_prefix,
+            public float|null $dormakaba_oracode_user_level_prefix = null,
             /**
              * Indicates whether a time slot for a dormakaba Oracode device is a 24-hour time slot.
              */
-            public bool|null $is_24_hour,
+            public bool|null $is_24_hour = null,
             /**
              * Indicates whether a time slot for a dormakaba Oracode device is in biweekly mode.
              */
-            public bool|null $is_biweekly_mode,
+            public bool|null $is_biweekly_mode = null,
             /**
              * Indicates whether a time slot for a dormakaba Oracode device is a master time slot.
              */
-            public bool|null $is_master,
+            public bool|null $is_master = null,
             /**
              * Indicates whether a time slot for a dormakaba Oracode device is a one-shot time slot.
              */
-            public bool|null $is_one_shot,
+            public bool|null $is_one_shot = null,
             /**
              * Name of a time slot for a dormakaba Oracode device.
              */
-            public string|null $name,
+            public string|null $name = null,
             /**
              * Prefix for a time slot for a dormakaba Oracode device.
              */
-            public float|null $prefix,
+            public float|null $prefix = null,
         ) {}
     }
 }
@@ -3969,23 +3969,23 @@ namespace Seam\Resources\Device\Properties\MinutMetadata {
             /**
              * Latest accelerometer Z-axis reading for a Minut device.
              */
-            public LatestSensorValues\AccelerometerZ|null $accelerometer_z,
+            public LatestSensorValues\AccelerometerZ|null $accelerometer_z = null,
             /**
              * Latest humidity reading for a Minut device.
              */
-            public LatestSensorValues\Humidity|null $humidity,
+            public LatestSensorValues\Humidity|null $humidity = null,
             /**
              * Latest pressure reading for a Minut device.
              */
-            public LatestSensorValues\Pressure|null $pressure,
+            public LatestSensorValues\Pressure|null $pressure = null,
             /**
              * Latest sound reading for a Minut device.
              */
-            public LatestSensorValues\Sound|null $sound,
+            public LatestSensorValues\Sound|null $sound = null,
             /**
              * Latest temperature reading for a Minut device.
              */
-            public LatestSensorValues\Temperature|null $temperature,
+            public LatestSensorValues\Temperature|null $temperature = null,
         ) {}
     }
 }
@@ -4011,11 +4011,11 @@ namespace Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues {
             /**
              * Time of latest accelerometer Z-axis reading for a Minut device.
              */
-            public string|null $time,
+            public string|null $time = null,
             /**
              * Value of latest accelerometer Z-axis reading for a Minut device.
              */
-            public float|null $value,
+            public float|null $value = null,
         ) {}
     }
 
@@ -4039,11 +4039,11 @@ namespace Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues {
             /**
              * Time of latest humidity reading for a Minut device.
              */
-            public string|null $time,
+            public string|null $time = null,
             /**
              * Value of latest humidity reading for a Minut device.
              */
-            public float|null $value,
+            public float|null $value = null,
         ) {}
     }
 
@@ -4067,11 +4067,11 @@ namespace Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues {
             /**
              * Time of latest pressure reading for a Minut device.
              */
-            public string|null $time,
+            public string|null $time = null,
             /**
              * Value of latest pressure reading for a Minut device.
              */
-            public float|null $value,
+            public float|null $value = null,
         ) {}
     }
 
@@ -4095,11 +4095,11 @@ namespace Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues {
             /**
              * Time of latest sound reading for a Minut device.
              */
-            public string|null $time,
+            public string|null $time = null,
             /**
              * Value of latest sound reading for a Minut device.
              */
-            public float|null $value,
+            public float|null $value = null,
         ) {}
     }
 
@@ -4123,11 +4123,11 @@ namespace Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues {
             /**
              * Time of latest temperature reading for a Minut device.
              */
-            public string|null $time,
+            public string|null $time = null,
             /**
              * Value of latest temperature reading for a Minut device.
              */
-            public float|null $value,
+            public float|null $value = null,
         ) {}
     }
 }
@@ -4159,31 +4159,31 @@ namespace Seam\Resources\Device\Properties\TtlockMetadata {
             /**
              * Indicates whether a TTLock device supports auto-lock time configuration.
              */
-            public bool|null $auto_lock_time_config,
+            public bool|null $auto_lock_time_config = null,
             /**
              * Indicates whether a TTLock device supports an incomplete keyboard passcode.
              */
-            public bool|null $incomplete_keyboard_passcode,
+            public bool|null $incomplete_keyboard_passcode = null,
             /**
              * Indicates whether a TTLock device supports the lock command.
              */
-            public bool|null $lock_command,
+            public bool|null $lock_command = null,
             /**
              * Indicates whether a TTLock device supports a passcode.
              */
-            public bool|null $passcode,
+            public bool|null $passcode = null,
             /**
              * Indicates whether a TTLock device supports passcode management.
              */
-            public bool|null $passcode_management,
+            public bool|null $passcode_management = null,
             /**
              * Indicates whether a TTLock device supports unlock via gateway.
              */
-            public bool|null $unlock_via_gateway,
+            public bool|null $unlock_via_gateway = null,
             /**
              * Indicates whether a TTLock device supports Wi-Fi.
              */
-            public bool|null $wifi,
+            public bool|null $wifi = null,
         ) {}
     }
 
@@ -4207,11 +4207,11 @@ namespace Seam\Resources\Device\Properties\TtlockMetadata {
             /**
              * ID for a wireless keypad for a TTLock device.
              */
-            public float|null $wireless_keypad_id,
+            public float|null $wireless_keypad_id = null,
             /**
              * Name for a wireless keypad for a TTLock device.
              */
-            public string|null $wireless_keypad_name,
+            public string|null $wireless_keypad_name = null,
         ) {}
     }
 }
@@ -4343,15 +4343,15 @@ namespace Seam\Resources\Device\Properties\AvailableClimatePresets {
             /**
              * Reference to the Ecobee climate, if applicable.
              */
-            public string|null $climate_ref,
+            public string|null $climate_ref = null,
             /**
              * Indicates if the climate preset is optimized by Ecobee.
              */
-            public bool|null $is_optimized,
+            public bool|null $is_optimized = null,
             /**
              * Indicates whether the climate preset is owned by the user or the system.
              */
-            public string|null $owner,
+            public string|null $owner = null,
         ) {}
     }
 }
@@ -4378,15 +4378,15 @@ namespace Seam\Resources\Device\Properties\CurrentClimateSetting {
             /**
              * Reference to the Ecobee climate, if applicable.
              */
-            public string|null $climate_ref,
+            public string|null $climate_ref = null,
             /**
              * Indicates if the climate preset is optimized by Ecobee.
              */
-            public bool|null $is_optimized,
+            public bool|null $is_optimized = null,
             /**
              * Indicates whether the climate preset is owned by the user or the system.
              */
-            public string|null $owner,
+            public string|null $owner = null,
         ) {}
     }
 }
@@ -4413,15 +4413,15 @@ namespace Seam\Resources\Device\Properties\DefaultClimateSetting {
             /**
              * Reference to the Ecobee climate, if applicable.
              */
-            public string|null $climate_ref,
+            public string|null $climate_ref = null,
             /**
              * Indicates if the climate preset is optimized by Ecobee.
              */
-            public bool|null $is_optimized,
+            public bool|null $is_optimized = null,
             /**
              * Indicates whether the climate preset is owned by the user or the system.
              */
-            public string|null $owner,
+            public string|null $owner = null,
         ) {}
     }
 }

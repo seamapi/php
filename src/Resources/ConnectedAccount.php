@@ -53,7 +53,7 @@ namespace Seam\Resources {
             /**
              * Type of connected account.
              */
-            public string|null $account_type,
+            public string|null $account_type = null,
             /**
              * Display name for the connected account type.
              */
@@ -69,7 +69,7 @@ namespace Seam\Resources {
             /**
              * Date and time at which the connected account was created.
              */
-            public string|null $created_at,
+            public string|null $created_at = null,
             /**
              * Set of key:value pairs. Adding custom metadata to a resource, such as a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews/attaching-custom-data-to-the-connect-webview), [connected account](https://docs.seam.co/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account), or [device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device), enables you to store custom information, like customer details or internal IDs from your application.
              */
@@ -77,15 +77,15 @@ namespace Seam\Resources {
             /**
              * Your unique key for the customer associated with this connected account.
              */
-            public string|null $customer_key,
+            public string|null $customer_key = null,
             /**
              * Default reservation check-in time for this connected account, as `HH:mm` (24-hour). Sourced from the connector configuration — set during the connect_webview for providers like Lodgify whose API does not expose check-in times.
              */
-            public string|null $default_checkin_time,
+            public string|null $default_checkin_time = null,
             /**
              * Default reservation check-out time for this connected account, as `HH:mm` (24-hour). Sourced from the connector configuration.
              */
-            public string|null $default_checkout_time,
+            public string|null $default_checkout_time = null,
             /**
              * Display name for the connected account.
              */
@@ -97,25 +97,25 @@ namespace Seam\Resources {
             /**
              * For iCal connected accounts, the platform that produced the feed (for example, `airbnb`, `vrbo`, or `booking`), or `unknown` when it could not be determined. Intended for rendering the source platform's logo.
              */
-            public string|null $ical_feed_origin,
+            public string|null $ical_feed_origin = null,
             /**
              * For iCal connected accounts, the feed URL for the connection. Sourced from the connector configuration.
              */
-            public string|null $ical_url,
+            public string|null $ical_url = null,
             /**
              * Logo URL for the connected account provider.
              */
-            public string|null $image_url,
+            public string|null $image_url = null,
             /**
              * IANA time zone (e.g. America/Los_Angeles) for this connected account. Sourced from the connector configuration.
              */
-            public string|null $time_zone,
+            public string|null $time_zone = null,
             /**
              * User identifier associated with the connected account.
              *
              * @deprecated Use `display_name` instead.
              */
-            public ConnectedAccount\UserIdentifier|null $user_identifier,
+            public ConnectedAccount\UserIdentifier|null $user_identifier = null,
             /**
              * Warnings associated with the connected account.
              */
@@ -162,11 +162,11 @@ namespace Seam\Resources\ConnectedAccount {
             /**
              * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
              */
-            public bool|null $is_bridge_error,
+            public bool|null $is_bridge_error = null,
             /**
              * Indicates whether the error is related specifically to the connected account.
              */
-            public bool|null $is_connected_account_error,
+            public bool|null $is_connected_account_error = null,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -203,23 +203,23 @@ namespace Seam\Resources\ConnectedAccount {
             /**
              * API URL for the user identifier associated with the connected account.
              */
-            public string|null $api_url,
+            public string|null $api_url = null,
             /**
              * Email address of the user identifier associated with the connected account.
              */
-            public string|null $email,
+            public string|null $email = null,
             /**
              * Indicates whether the user identifier associated with the connected account is exclusive.
              */
-            public bool|null $exclusive,
+            public bool|null $exclusive = null,
             /**
              * Phone number of the user identifier associated with the connected account.
              */
-            public string|null $phone,
+            public string|null $phone = null,
             /**
              * Username of the user identifier associated with the connected account.
              */
-            public string|null $username,
+            public string|null $username = null,
         ) {}
     }
 
@@ -289,7 +289,7 @@ namespace Seam\Resources\ConnectedAccount\Errors {
             /**
              * Salto sites associated with the connected account that has an error.
              */
-            public array $sites,
+            public array|null $sites = null,
         ) {}
     }
 }
@@ -319,19 +319,19 @@ namespace Seam\Resources\ConnectedAccount\Errors\SaltoKsMetadata {
             /**
              * ID of a Salto site associated with the connected account that has an error.
              */
-            public string|null $site_id,
+            public string|null $site_id = null,
             /**
              * Name of a Salto site associated with the connected account that has an error.
              */
-            public string|null $site_name,
+            public string|null $site_name = null,
             /**
              * Subscription limit of site users for a Salto site associated with the connected account that has an error.
              */
-            public int|null $site_user_subscription_limit,
+            public int|null $site_user_subscription_limit = null,
             /**
              * Count of subscribed site users for a Salto site associated with the connected account that has an error.
              */
-            public int|null $subscribed_site_user_count,
+            public int|null $subscribed_site_user_count = null,
         ) {}
     }
 }
@@ -359,7 +359,7 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             /**
              * Salto sites associated with the connected account that has a warning.
              */
-            public array $sites,
+            public array|null $sites = null,
         ) {}
     }
 }
@@ -389,19 +389,19 @@ namespace Seam\Resources\ConnectedAccount\Warnings\SaltoKsMetadata {
             /**
              * ID of a Salto site associated with the connected account that has a warning.
              */
-            public string|null $site_id,
+            public string|null $site_id = null,
             /**
              * Name of a Salto site associated with the connected account that has a warning.
              */
-            public string|null $site_name,
+            public string|null $site_name = null,
             /**
              * Subscription limit of site users for a Salto site associated with the connected account that has a warning.
              */
-            public int|null $site_user_subscription_limit,
+            public int|null $site_user_subscription_limit = null,
             /**
              * Count of subscribed site users for a Salto site associated with the connected account that has a warning.
              */
-            public int|null $subscribed_site_user_count,
+            public int|null $subscribed_site_user_count = null,
         ) {}
     }
 }

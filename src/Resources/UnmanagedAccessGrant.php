@@ -93,7 +93,7 @@ namespace Seam\Resources {
             /**
              * Reservation key for the access grant.
              */
-            public string|null $reservation_key,
+            public string|null $reservation_key = null,
             /**
              * IDs of the spaces to which the Access Grant gives access.
              */
@@ -105,7 +105,7 @@ namespace Seam\Resources {
             /**
              * ID of user identity to which the Access Grant gives access.
              */
-            public string|null $user_identity_id,
+            public string|null $user_identity_id = null,
             /**
              * Warnings associated with the [access grant](https://docs.seam.co/use-cases/granting-access).
              */
@@ -153,7 +153,7 @@ namespace Seam\Resources\UnmanagedAccessGrant {
             /**
              * IDs of the devices that did not receive an access code at grant creation. Use these to identify which specific devices failed when the message reports a partial failure.
              */
-            public array|null $missing_device_ids,
+            public array|null $missing_device_ids = null,
         ) {}
     }
 
@@ -227,7 +227,7 @@ namespace Seam\Resources\UnmanagedAccessGrant {
             /**
              * Specific PIN code to use for this access method. Only applicable when mode is 'code'.
              */
-            public string|null $code,
+            public string|null $code = null,
             /**
              * IDs of the access methods created for the requested access method.
              */
@@ -243,7 +243,7 @@ namespace Seam\Resources\UnmanagedAccessGrant {
             /**
              * Maximum number of times the instant key can be used. Only applicable when mode is 'mobile_key'. Defaults to 1 if not specified.
              */
-            public int|null $instant_key_max_use_count,
+            public int|null $instant_key_max_use_count = null,
             /**
              * Access method mode. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
              */
@@ -290,7 +290,7 @@ namespace Seam\Resources\UnmanagedAccessGrant {
             /**
              * Devices whose access codes could not be revoked during reconciliation. Present when the provider does not support revoking an offline access code (e.g. Dormakaba oracode with exhausted override budget).
              */
-            public array $failed_devices,
+            public array|null $failed_devices = null,
             /**
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
@@ -365,7 +365,7 @@ namespace Seam\Resources\UnmanagedAccessGrant\PendingMutations {
             /**
              * Common code key to ensure PIN code reuse across devices.
              */
-            public string|null $common_code_key,
+            public string|null $common_code_key = null,
             /**
              * New device IDs where access codes should be created.
              */
