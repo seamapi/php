@@ -61,7 +61,6 @@ class ActionAttemptsClient
      * @param string $device_id ID of the device to filter action attempts by.
      * @param int $limit Maximum number of records to return per page.
      * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
-     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
@@ -70,7 +69,6 @@ class ActionAttemptsClient
         ?string $device_id = null,
         ?int $limit = null,
         ?string $page_cursor = null,
-        bool|array|null $wait_for_action_attempt = null,
         ?callable $on_response = null,
     ): array {
         $request_payload = [];
@@ -94,11 +92,13 @@ class ActionAttemptsClient
             ]),
         );
 
-        return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempts),
-            $this->client,
-            $wait_for_action_attempt ??
-                $this->defaults["wait_for_action_attempt"],
+        if ($on_response !== null) {
+            $on_response($res);
+        }
+
+        return array_map(
+            fn($r) => ActionAttempt::from_json($r),
+            $res->action_attempts,
         );
     }
 }

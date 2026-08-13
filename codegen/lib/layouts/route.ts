@@ -74,7 +74,10 @@ const getMethodLayoutContext = (
 ): MethodLayoutContext => {
   const { methodName, path, parameters, returnResource, returnPath } = method
 
-  const usesActionAttempt = returnResource === 'ActionAttempt'
+  // A method returning a list of action attempts is an ordinary list
+  // endpoint: only a single returned attempt is resolved.
+  const usesActionAttempt =
+    returnResource === 'ActionAttempt' && !method.isArrayResponse
   const usesOnResponse =
     parameters.some((p) => p.name === 'page_cursor') && methodName === 'list'
   const returnsVoid = returnResource === ''
@@ -146,7 +149,9 @@ const getUseStatements = (client: PhpClient): string[] => {
       .filter((resourceName) => resourceName !== ''),
   )
 
-  const usesActionAttempt = resourceNames.has('ActionAttempt')
+  const usesActionAttempt = client.methods.some(
+    (m) => m.returnResource === 'ActionAttempt' && !m.isArrayResponse,
+  )
 
   // Void endpoints never read the response, so they do not decode it.
   const readsBody = client.methods.some((m) => m.returnResource !== '')

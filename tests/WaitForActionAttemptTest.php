@@ -26,6 +26,28 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
         return $action_attempt;
     }
 
+    /**
+     * A list of action attempts is returned as is: only a single returned
+     * attempt is ever resolved, so listing must not poll pending attempts.
+     */
+    public function testListReturnsActionAttemptsWithoutResolvingThem(): void
+    {
+        $seam = $this->seam(wait_for_action_attempt: false);
+        $pending = $this->pending_action_attempt($seam);
+
+        $attempts = $seam->action_attempts->list(
+            action_attempt_ids: [$pending->action_attempt_id],
+        );
+
+        $this->assertContainsOnlyInstancesOf(ActionAttempt::class, $attempts);
+        $this->assertCount(1, $attempts);
+        $this->assertSame(
+            $pending->action_attempt_id,
+            $attempts[0]->action_attempt_id,
+        );
+        $this->assertSame("pending", $attempts[0]->status);
+    }
+
     private function set_status(
         Seam $seam,
         ActionAttempt $action_attempt,
