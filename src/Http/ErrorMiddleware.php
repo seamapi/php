@@ -14,8 +14,10 @@ use Seam\HttpUnauthorizedError;
  * Guzzle middleware that turns a Seam error response into a Seam exception.
  *
  * The client is built with `http_errors` disabled so this runs instead, and it
- * sits outside the retry middleware so it only sees the response a request
- * finally settled on.
+ * sits outside every other middleware so it only sees a response none of them
+ * could act on: a redirect this deep has already been followed or was opted
+ * out of, and a retried request is judged by the response it finally settled
+ * on.
  *
  * A response that is not a Seam error envelope, such as a gateway returning
  * HTML, raises the transport error Guzzle would have raised on its own.

@@ -15,12 +15,17 @@ final class Body
      *
      * A PSR-7 body is a stream that can only be read once, so it is rewound
      * first: the middleware reads it to look for a Seam error before the
-     * caller ever sees the response.
+     * caller ever sees the response. A body that cannot seek, such as a
+     * streamed response, is simply read from where it stands.
      */
     public static function decode(ResponseInterface $response): mixed
     {
         $body = $response->getBody();
-        $body->rewind();
+
+        if ($body->isSeekable()) {
+            $body->rewind();
+        }
+
         $contents = $body->getContents();
 
         if ($contents === "") {

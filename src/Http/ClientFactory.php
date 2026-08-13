@@ -4,9 +4,6 @@ namespace Seam\Http;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleRetry\GuzzleRetryMiddleware;
-use Psr\Http\Message\RequestInterface;
 use Seam\Utils\PackageVersion;
 
 /**
@@ -28,22 +25,6 @@ final class ClientFactory
      */
     public const DEFAULT_TIMEOUT = 30.0;
 
-    private const RETRYABLE_STATUS_CODES = [429, 500, 502, 503, 504];
-
-    /**
-     * Retrying a request the server may already have processed can duplicate a
-     * write, so a status code only triggers a retry for a method that is safe
-     * to repeat. A request that never reached the server is retried whatever
-     * the method, since it cannot have had an effect.
-     */
-    private const IDEMPOTENT_METHODS = [
-        "GET",
-        "HEAD",
-        "OPTIONS",
-        "PUT",
-        "DELETE",
-    ];
-
     /**
      * @param array<string, string> $auth_headers
      * @param array<string, mixed> $guzzle_options
@@ -63,24 +44,21 @@ final class ClientFactory
         $handler = $guzzle_options["handler"] ?? HandlerStack::create();
 
         if ($handler instanceof HandlerStack) {
-            // Pushed first, so it wraps the retry middleware and only sees the
-            // response a request finally settled on.
-            $handler->push(ErrorMiddleware::create(), "seam_error");
-            $handler->push(
-                self::retry_options_middleware(),
-                "seam_retry_options",
-            );
-            $handler->push(
-                GuzzleRetryMiddleware::factory([
-                    "retry_enabled" => $retries > 0,
-                    "max_retry_attempts" => $retries,
-                    "retry_on_timeout" => true,
-                    // Set per request by the middleware above.
-                    "retry_on_status" => [],
-                ]),
-                "seam_retry",
-            );
+            // Cloned so that building a client does not mutate a stack the
+            // caller may reuse, which would stack this middleware twice.
+            $handler = clone $handler;
+        } else {
+            // A bare handler, such as a MockHandler, is wrapped so the
+            // middleware below still applies to it.
+            $handler = HandlerStack::create($handler);
         }
+
+        // Unshifted so it sits outside every other middleware and only sees
+        // a response none of them could act on: a redirect is followed
+        // rather than raised, and a retried request is judged by the
+        // response it finally settled on.
+        $handler->unshift(ErrorMiddleware::create(), "seam_error");
+        RetryMiddleware::add($handler, $retries);
 
         $headers = array_merge(
             $auth_headers,
@@ -105,29 +83,6 @@ final class ClientFactory
                 ],
             ),
         );
-    }
-
-    /**
-     * Opts a request into status based retries when repeating it is safe.
-     */
-    private static function retry_options_middleware(): callable
-    {
-        return static fn(callable $handler): callable => static function (
-            RequestInterface $request,
-            array $options,
-        ) use ($handler): PromiseInterface {
-            if (
-                in_array(
-                    strtoupper($request->getMethod()),
-                    self::IDEMPOTENT_METHODS,
-                    true,
-                )
-            ) {
-                $options["retry_on_status"] = self::RETRYABLE_STATUS_CODES;
-            }
-
-            return $handler($request, $options);
-        };
     }
 
     /**

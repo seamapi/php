@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\TestCase;
 use Seam\Http\Body;
@@ -82,6 +83,101 @@ final class RetryTest extends TestCase
         $this->assertSame(3, $recorder->attempt_count());
     }
 
+    /**
+     * A timeout may have fired while waiting on a response to a request the
+     * server received and is still processing, so repeating the POST could
+     * duplicate a write.
+     */
+    public function testDoesNotRetryPostOnTimeout(): void
+    {
+        $timeout = new ConnectException(
+            "cURL error 28: Operation timed out after 30001 milliseconds with 0 bytes received",
+            new Request("POST", "/devices/list"),
+            null,
+            ["errno" => 28],
+        );
+
+        $recorder = RecordingClient::repeating_throwable($timeout);
+
+        try {
+            $this->seam($recorder)->devices->list();
+            $this->fail("Expected the timeout to surface");
+        } catch (ConnectException) {
+            // Expected.
+        }
+
+        $this->assertSame(1, $recorder->attempt_count());
+    }
+
+    /**
+     * A handler other than curl reports no errno, so the timeout is
+     * recognized by its message.
+     */
+    public function testDoesNotRetryPostOnTimeoutWithoutAnErrno(): void
+    {
+        $timeout = new ConnectException(
+            "Connection timed out",
+            new Request("POST", "/devices/list"),
+        );
+
+        $recorder = RecordingClient::repeating_throwable($timeout);
+
+        try {
+            $this->seam($recorder)->devices->list();
+            $this->fail("Expected the timeout to surface");
+        } catch (ConnectException) {
+            // Expected.
+        }
+
+        $this->assertSame(1, $recorder->attempt_count());
+    }
+
+    /**
+     * Repeating an idempotent request is safe even when the server may have
+     * received it, so a timeout does get retried there.
+     */
+    public function testRetriesIdempotentRequestsOnTimeout(): void
+    {
+        $timeout = new ConnectException(
+            "cURL error 28: Operation timed out after 30001 milliseconds with 0 bytes received",
+            new Request("GET", "/devices/list"),
+            null,
+            ["errno" => 28],
+        );
+
+        $recorder = new RecordingClient([$timeout, $timeout, self::devices()]);
+
+        $res = Body::decode(
+            $this->seam($recorder)->client->request("GET", "/devices/list"),
+        );
+
+        $this->assertSame([], $res->devices);
+        $this->assertSame(3, $recorder->attempt_count());
+    }
+
+    /**
+     * A connection reset by the peer surfaces as a request exception with
+     * errno 104 rather than a connection exception, but is a transport
+     * failure all the same.
+     */
+    public function testRetriesPostOnConnectionReset(): void
+    {
+        $reset = new RequestException(
+            "Connection reset by peer",
+            new Request("POST", "/devices/list"),
+            null,
+            null,
+            ["errno" => 104],
+        );
+
+        $recorder = new RecordingClient([$reset, self::devices()]);
+
+        $devices = $this->seam($recorder)->devices->list();
+
+        $this->assertSame([], $devices);
+        $this->assertSame(2, $recorder->attempt_count());
+    }
+
     public function testStopsRetryingOnceRetriesAreExhausted(): void
     {
         $connect_error = new ConnectException(
@@ -117,6 +213,39 @@ final class RetryTest extends TestCase
         }
 
         $this->assertSame(1, $recorder->attempt_count());
+    }
+
+    /**
+     * Building a client must not mutate a handler stack the caller may
+     * reuse: a second client built from the same options would otherwise
+     * stack the retry middleware twice and multiply the retries.
+     */
+    public function testBuildingASecondClientDoesNotStackRetries(): void
+    {
+        $recorder = RecordingClient::repeating(self::service_unavailable());
+        $options = $recorder->guzzle_options();
+
+        $first = new Seam(
+            api_key: self::API_KEY,
+            endpoint: "https://example.com",
+            guzzle_options: $options,
+        );
+        $second = new Seam(
+            api_key: self::API_KEY,
+            endpoint: "https://example.com",
+            guzzle_options: $options,
+        );
+
+        $this->assertNotSame($first->client, $second->client);
+
+        try {
+            Body::decode($second->client->request("GET", "/devices/list"));
+            $this->fail("Expected the 503 to surface");
+        } catch (\Throwable) {
+            // The error mapping is covered in HttpErrorTest.
+        }
+
+        $this->assertSame(3, $recorder->attempt_count());
     }
 
     /**
