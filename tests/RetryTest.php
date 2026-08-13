@@ -216,6 +216,36 @@ final class RetryTest extends TestCase
     }
 
     /**
+     * Repeating a read is safe, so a 503 on one should be retried.
+     *
+     * TODO: Every SDK call currently goes over POST, where a status based
+     * retry is never safe, so the SDK's own reads get none and this test
+     * marks itself incomplete. Once the SDK issues GET for the endpoints
+     * that support it, planned for a followup PR, the incomplete branch
+     * stops matching and the real assertions take over.
+     */
+    public function testSdkReadsAreRetriedOnServiceUnavailable(): void
+    {
+        $recorder = new RecordingClient([
+            self::service_unavailable(),
+            self::service_unavailable(),
+            self::devices(),
+        ]);
+
+        try {
+            $devices = $this->seam($recorder)->devices->list();
+        } catch (\Throwable) {
+            $this->assertSame(1, $recorder->attempt_count());
+            $this->markTestIncomplete(
+                "The SDK does not use GET yet, so its reads get no status based retries.",
+            );
+        }
+
+        $this->assertSame([], $devices);
+        $this->assertSame(3, $recorder->attempt_count());
+    }
+
+    /**
      * Building a client must not mutate a handler stack the caller may
      * reuse: a second client built from the same options would otherwise
      * stack the retry middleware twice and multiply the retries.
