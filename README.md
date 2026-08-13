@@ -94,6 +94,9 @@ A Personal Access Token is scoped to a Seam Console user.
 It must be used with a workspace id.
 
 ```php
+// Set the SEAM_PERSONAL_ACCESS_TOKEN and SEAM_WORKSPACE_ID environment variables
+$seam = new Seam\Seam();
+
 // Pass as options to the constructor
 $seam = new Seam\Seam(
     personal_access_token: "your-personal-access-token",
@@ -265,6 +268,10 @@ Some endpoints are not scoped to a workspace. Use `SeamWithoutWorkspace` with a
 personal access token to reach them.
 
 ```php
+// Set the SEAM_PERSONAL_ACCESS_TOKEN environment variable
+$seam = new Seam\SeamWithoutWorkspace();
+
+// Use the factory method
 $seam = Seam\SeamWithoutWorkspace::from_personal_access_token(
     "your-personal-access-token"
 );

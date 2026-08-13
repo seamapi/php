@@ -32,7 +32,8 @@ use Seam\Http\ClientFactory;
  *
  * Authenticate with an API key, which is scoped to a single workspace, or with
  * a personal access token together with the id of the workspace to act on.
- * When neither is given, the SEAM_API_KEY environment variable is used.
+ * When neither is given, the SEAM_API_KEY or SEAM_PERSONAL_ACCESS_TOKEN and
+ * SEAM_WORKSPACE_ID environment variables are used.
  *
  * @see https://docs.seam.co/
  */

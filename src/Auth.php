@@ -24,7 +24,19 @@ final class Auth
         // a stray SEAM_API_KEY.
         if ($api_key === null && $personal_access_token === null) {
             $api_key = Options::get_env("SEAM_API_KEY");
+            $personal_access_token = Options::get_env(
+                "SEAM_PERSONAL_ACCESS_TOKEN",
+            );
+
+            if ($api_key !== null && $personal_access_token !== null) {
+                throw new InvalidOptionsError(
+                    "Both SEAM_API_KEY and SEAM_PERSONAL_ACCESS_TOKEN environment variables are defined. " .
+                        "Please use only one authentication method.",
+                );
+            }
         }
+
+        $workspace_id ??= Options::get_env("SEAM_WORKSPACE_ID");
 
         if (
             Options::is_seam_options_with_api_key(
@@ -50,8 +62,34 @@ final class Auth
 
         throw new InvalidOptionsError(
             "Must specify an api_key or personal_access_token. " .
-                "Attempted reading configuration from the environment, " .
-                "but the environment variable SEAM_API_KEY is not set.",
+                "Attempted reading configuration from the environment, but neither the " .
+                "SEAM_API_KEY nor the SEAM_PERSONAL_ACCESS_TOKEN environment variable is set.",
+        );
+    }
+
+    /**
+     * Builds the headers for a client that is not scoped to a workspace,
+     * falling back to the environment when no token is given.
+     *
+     * @return array<string, string>
+     */
+    public static function get_auth_headers_without_workspace(
+        ?string $personal_access_token = null,
+    ): array {
+        $personal_access_token ??= Options::get_env(
+            "SEAM_PERSONAL_ACCESS_TOKEN",
+        );
+
+        if ($personal_access_token === null) {
+            throw new InvalidOptionsError(
+                "Must specify a personal_access_token. " .
+                    "Attempted reading configuration from the environment, " .
+                    "but the environment variable SEAM_PERSONAL_ACCESS_TOKEN is not set.",
+            );
+        }
+
+        return self::get_auth_headers_for_personal_access_token_without_workspace(
+            $personal_access_token,
         );
     }
 

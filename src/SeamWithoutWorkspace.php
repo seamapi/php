@@ -11,6 +11,9 @@ use Seam\Routes\WorkspacesClient;
  *
  * Authenticates with a personal access token and exposes only the workspace
  * listing and creation endpoints. Use Seam\Seam for everything else.
+ *
+ * When no token is given, the SEAM_PERSONAL_ACCESS_TOKEN environment variable
+ * is used.
  */
 class SeamWithoutWorkspace
 {
@@ -36,25 +39,17 @@ class SeamWithoutWorkspace
     ) {
         // A client carries its own endpoint and authorization, so the
         // authentication options are only read when one has to be built.
-        if ($client !== null) {
-            $this->client = $client;
-        } else {
-            if ($personal_access_token === null) {
-                throw new InvalidOptionsError(
-                    "Must specify a personal_access_token",
-                );
-            }
-
-            $this->client = ClientFactory::create(
+        $this->client =
+            $client ??
+            ClientFactory::create(
                 Options::get_endpoint($endpoint),
-                Auth::get_auth_headers_for_personal_access_token_without_workspace(
+                Auth::get_auth_headers_without_workspace(
                     $personal_access_token,
                 ),
                 $guzzle_options,
                 $retries,
                 $timeout,
             );
-        }
 
         $this->workspaces = new WorkspacesProxy(
             new WorkspacesClient($this->client, [

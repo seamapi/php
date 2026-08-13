@@ -7,11 +7,18 @@ namespace Tests;
 use Seam\InvalidOptionsError;
 use Seam\Options;
 use Seam\Seam;
+use Seam\SeamWithoutWorkspace;
 use Tests\Support\FakeSeamConnectTestCase;
 
 final class EnvTest extends FakeSeamConnectTestCase
 {
-    private const VARIABLES = ["SEAM_API_KEY", "SEAM_ENDPOINT", "SEAM_API_URL"];
+    private const VARIABLES = [
+        "SEAM_API_KEY",
+        "SEAM_PERSONAL_ACCESS_TOKEN",
+        "SEAM_WORKSPACE_ID",
+        "SEAM_ENDPOINT",
+        "SEAM_API_URL",
+    ];
 
     /** @var array<string, string|false> */
     private array $saved_env = [];
@@ -118,10 +125,68 @@ final class EnvTest extends FakeSeamConnectTestCase
         }
     }
 
+    public function testReadsThePersonalAccessTokenAndWorkspaceIdFromTheEnvironment(): void
+    {
+        putenv("SEAM_PERSONAL_ACCESS_TOKEN=" . $this->seed["seam_at1_token"]);
+        putenv("SEAM_WORKSPACE_ID=" . $this->seed["seed_workspace_1"]);
+
+        $seam = new Seam(endpoint: $this->endpoint);
+
+        $device = $seam->devices->get($this->seed["august_device_1"]);
+
+        $this->assertSame($this->seed["august_device_1"], $device->device_id);
+    }
+
+    public function testReadsOnlyTheWorkspaceIdFromTheEnvironment(): void
+    {
+        putenv("SEAM_WORKSPACE_ID=" . $this->seed["seed_workspace_1"]);
+
+        $seam = new Seam(
+            personal_access_token: $this->seed["seam_at1_token"],
+            endpoint: $this->endpoint,
+        );
+
+        $device = $seam->devices->get($this->seed["august_device_1"]);
+
+        $this->assertSame($this->seed["august_device_1"], $device->device_id);
+    }
+
+    public function testWorkspaceIdOptionWinsOverTheEnvironment(): void
+    {
+        putenv("SEAM_WORKSPACE_ID=workspace-from-the-environment");
+
+        $seam = new Seam(
+            personal_access_token: $this->seed["seam_at1_token"],
+            workspace_id: $this->seed["seed_workspace_1"],
+            endpoint: $this->endpoint,
+        );
+
+        $device = $seam->devices->get($this->seed["august_device_1"]);
+
+        $this->assertSame($this->seed["august_device_1"], $device->device_id);
+    }
+
+    /**
+     * Two credentials in the environment are ambiguous, so neither is picked.
+     */
+    public function testFailsWhenBothCredentialEnvironmentVariablesAreSet(): void
+    {
+        putenv("SEAM_API_KEY=" . $this->seed["seam_apikey1_token"]);
+        putenv("SEAM_PERSONAL_ACCESS_TOKEN=" . $this->seed["seam_at1_token"]);
+        putenv("SEAM_WORKSPACE_ID=" . $this->seed["seed_workspace_1"]);
+
+        $this->expectException(InvalidOptionsError::class);
+        $this->expectExceptionMessage(
+            "Both SEAM_API_KEY and SEAM_PERSONAL_ACCESS_TOKEN",
+        );
+
+        new Seam(endpoint: $this->endpoint);
+    }
+
     public function testFailsWhenNoCredentialsAreAvailable(): void
     {
         $this->expectException(InvalidOptionsError::class);
-        $this->expectExceptionMessage("SEAM_API_KEY is not set");
+        $this->expectExceptionMessage("SEAM_API_KEY");
 
         new Seam(endpoint: $this->endpoint);
     }
@@ -139,5 +204,38 @@ final class EnvTest extends FakeSeamConnectTestCase
         $device = $seam->devices->get($this->seed["august_device_1"]);
 
         $this->assertSame($this->seed["august_device_1"], $device->device_id);
+    }
+
+    public function testPersonalAccessTokenEnvironmentVariableIsIgnoredForAnApiKey(): void
+    {
+        putenv("SEAM_PERSONAL_ACCESS_TOKEN=" . $this->seed["seam_at1_token"]);
+
+        $seam = new Seam(
+            api_key: $this->seed["seam_apikey1_token"],
+            endpoint: $this->endpoint,
+        );
+
+        $device = $seam->devices->get($this->seed["august_device_1"]);
+
+        $this->assertSame($this->seed["august_device_1"], $device->device_id);
+    }
+
+    public function testWithoutWorkspaceReadsThePersonalAccessTokenFromTheEnvironment(): void
+    {
+        putenv("SEAM_PERSONAL_ACCESS_TOKEN=" . $this->seed["seam_at1_token"]);
+
+        $seam = new SeamWithoutWorkspace(endpoint: $this->endpoint);
+
+        $workspaces = $seam->workspaces->list();
+
+        $this->assertNotEmpty($workspaces);
+    }
+
+    public function testWithoutWorkspaceFailsWhenNoTokenIsAvailable(): void
+    {
+        $this->expectException(InvalidOptionsError::class);
+        $this->expectExceptionMessage("SEAM_PERSONAL_ACCESS_TOKEN is not set");
+
+        new SeamWithoutWorkspace(endpoint: $this->endpoint);
     }
 }
