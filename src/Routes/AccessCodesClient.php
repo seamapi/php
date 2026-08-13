@@ -55,7 +55,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      * @return AccessCode OK
      */
     public function create(
-        string $device_id,
+        ?string $device_id = null,
         ?bool $allow_external_modification = null,
         ?bool $attempt_for_offline_device = null,
         ?string $code = null,
@@ -72,6 +72,11 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         ?bool $use_backup_access_code_pool = null,
         ?bool $use_offline_access_code = null,
     ): AccessCode {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_codes/create",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -178,7 +183,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      * @return array OK
      */
     public function create_multiple(
-        array $device_ids,
+        ?array $device_ids = null,
         ?bool $allow_external_modification = null,
         ?bool $attempt_for_offline_device = null,
         ?string $behavior_when_code_cannot_be_shared = null,
@@ -191,6 +196,11 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         ?string $starts_at = null,
         ?bool $use_backup_access_code_pool = null,
     ): array {
+        if ($device_ids === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_codes/create_multiple",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_ids"] = $device_ids;
@@ -260,9 +270,14 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      * @return void OK
      */
     public function delete(
-        string $access_code_id,
+        ?string $access_code_id = null,
         ?string $device_id = null,
     ): void {
+        if ($access_code_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_codes/delete",
+            );
+        }
         $request_payload = [];
 
         $request_payload["access_code_id"] = $access_code_id;
@@ -281,8 +296,13 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      * @param string $device_id ID of the device for which you want to generate a code.
      * @return AccessCode OK
      */
-    public function generate_code(string $device_id): AccessCode
+    public function generate_code(?string $device_id = null): AccessCode
     {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_codes/generate_code",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -426,8 +446,14 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      * @param string $access_code_id ID of the access code for which you want to pull a backup access code.
      * @return AccessCode OK
      */
-    public function pull_backup_access_code(string $access_code_id): AccessCode
-    {
+    public function pull_backup_access_code(
+        ?string $access_code_id = null,
+    ): AccessCode {
+        if ($access_code_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_codes/pull_backup_access_code",
+            );
+        }
         $request_payload = [];
 
         $request_payload["access_code_id"] = $access_code_id;
@@ -455,11 +481,16 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      * @return void OK
      */
     public function report_device_constraints(
-        string $device_id,
+        ?string $device_id = null,
         ?int $max_code_length = null,
         ?int $min_code_length = null,
         ?array $supported_code_lengths = null,
     ): void {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_codes/report_device_constraints",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -507,7 +538,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      * @return void OK
      */
     public function update(
-        string $access_code_id,
+        ?string $access_code_id = null,
         ?bool $allow_external_modification = null,
         ?bool $attempt_for_offline_device = null,
         ?string $code = null,
@@ -519,6 +550,11 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         ?string $starts_at = null,
         ?string $type = null,
     ): void {
+        if ($access_code_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_codes/update",
+            );
+        }
         $request_payload = [];
 
         $request_payload["access_code_id"] = $access_code_id;
@@ -584,11 +620,16 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      * @return void OK
      */
     public function update_multiple(
-        string $common_code_key,
+        ?string $common_code_key = null,
         ?string $ends_at = null,
         ?string $name = null,
         ?string $starts_at = null,
     ): void {
+        if ($common_code_key === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_codes/update_multiple",
+            );
+        }
         $request_payload = [];
 
         $request_payload["common_code_key"] = $common_code_key;

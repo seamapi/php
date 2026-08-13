@@ -2,7 +2,7 @@
     public function {{methodName}}({{{signatureParams}}}): {{returnType}} {
 {{#if hasRequiredParams}}
         if ({{requiredParamsMissingCheck}}) {
-            throw new \\InvalidArgumentException("At least one parameter is required for {{path}}");
+            throw new \InvalidArgumentException("At least one parameter is required for {{path}}");
         }
 {{/if}}
 {{#if hasParams}}

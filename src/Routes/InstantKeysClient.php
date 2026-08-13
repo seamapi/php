@@ -30,8 +30,13 @@ class InstantKeysClient
      * @param string $instant_key_id ID of the Instant Key that you want to delete.
      * @return void OK
      */
-    public function delete(string $instant_key_id): void
+    public function delete(?string $instant_key_id = null): void
     {
+        if ($instant_key_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /instant_keys/delete",
+            );
+        }
         $request_payload = [];
 
         $request_payload["instant_key_id"] = $instant_key_id;

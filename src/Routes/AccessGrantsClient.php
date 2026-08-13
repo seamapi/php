@@ -47,7 +47,7 @@ class AccessGrantsClient
      * @return AccessGrant OK
      */
     public function create(
-        array $requested_access_methods,
+        ?array $requested_access_methods = null,
         ?string $user_identity_id = null,
         mixed $user_identity = null,
         ?string $access_grant_key = null,
@@ -63,6 +63,11 @@ class AccessGrantsClient
         ?array $space_keys = null,
         ?string $starts_at = null,
     ): AccessGrant {
+        if ($requested_access_methods === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_grants/create",
+            );
+        }
         $request_payload = [];
 
         $request_payload[
@@ -128,8 +133,13 @@ class AccessGrantsClient
      * @param string $access_grant_id ID of Access Grant to delete.
      * @return void OK
      */
-    public function delete(string $access_grant_id): void
+    public function delete(?string $access_grant_id = null): void
     {
+        if ($access_grant_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_grants/delete",
+            );
+        }
         $request_payload = [];
 
         $request_payload["access_grant_id"] = $access_grant_id;
@@ -308,9 +318,14 @@ class AccessGrantsClient
      * @return AccessGrant OK
      */
     public function request_access_methods(
-        string $access_grant_id,
-        array $requested_access_methods,
+        ?string $access_grant_id = null,
+        ?array $requested_access_methods = null,
     ): AccessGrant {
+        if ($access_grant_id === null && $requested_access_methods === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_grants/request_access_methods",
+            );
+        }
         $request_payload = [];
 
         $request_payload["access_grant_id"] = $access_grant_id;

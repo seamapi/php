@@ -34,10 +34,15 @@ class AcsCredentialsClient
      * @return void OK
      */
     public function assign(
-        string $acs_credential_id,
+        ?string $acs_credential_id = null,
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
+        if ($acs_credential_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/credentials/assign",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_credential_id"] = $acs_credential_id;
@@ -72,7 +77,7 @@ class AcsCredentialsClient
      * @return AcsCredential OK
      */
     public function create(
-        string $access_method,
+        ?string $access_method = null,
         ?string $acs_system_id = null,
         ?string $acs_user_id = null,
         ?array $allowed_acs_entrance_ids = null,
@@ -86,6 +91,11 @@ class AcsCredentialsClient
         ?string $user_identity_id = null,
         mixed $visionline_metadata = null,
     ): AcsCredential {
+        if ($access_method === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/credentials/create",
+            );
+        }
         $request_payload = [];
 
         $request_payload["access_method"] = $access_method;
@@ -149,8 +159,13 @@ class AcsCredentialsClient
      * @param string $acs_credential_id ID of the credential that you want to delete.
      * @return void OK
      */
-    public function delete(string $acs_credential_id): void
+    public function delete(?string $acs_credential_id = null): void
     {
+        if ($acs_credential_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/credentials/delete",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_credential_id"] = $acs_credential_id;
@@ -166,8 +181,13 @@ class AcsCredentialsClient
      * @param string $acs_credential_id ID of the credential that you want to get.
      * @return AcsCredential OK
      */
-    public function get(string $acs_credential_id): AcsCredential
+    public function get(?string $acs_credential_id = null): AcsCredential
     {
+        if ($acs_credential_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/credentials/get",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_credential_id"] = $acs_credential_id;
@@ -257,8 +277,14 @@ class AcsCredentialsClient
      * @param string $acs_credential_id ID of the credential for which you want to retrieve all entrances to which the credential grants access.
      * @return array OK
      */
-    public function list_accessible_entrances(string $acs_credential_id): array
-    {
+    public function list_accessible_entrances(
+        ?string $acs_credential_id = null,
+    ): array {
+        if ($acs_credential_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/credentials/list_accessible_entrances",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_credential_id"] = $acs_credential_id;
@@ -286,10 +312,15 @@ class AcsCredentialsClient
      * @return void OK
      */
     public function unassign(
-        string $acs_credential_id,
+        ?string $acs_credential_id = null,
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
+        if ($acs_credential_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/credentials/unassign",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_credential_id"] = $acs_credential_id;
@@ -314,10 +345,15 @@ class AcsCredentialsClient
      * @return void OK
      */
     public function update(
-        string $acs_credential_id,
+        ?string $acs_credential_id = null,
         ?string $code = null,
         ?string $ends_at = null,
     ): void {
+        if ($acs_credential_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/credentials/update",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_credential_id"] = $acs_credential_id;

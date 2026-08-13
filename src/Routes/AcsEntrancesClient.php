@@ -33,8 +33,13 @@ class AcsEntrancesClient
      * @param string $acs_entrance_id ID of the entrance that you want to get.
      * @return AcsEntrance OK
      */
-    public function get(string $acs_entrance_id): AcsEntrance
+    public function get(?string $acs_entrance_id = null): AcsEntrance
     {
+        if ($acs_entrance_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/entrances/get",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_entrance_id"] = $acs_entrance_id;
@@ -57,10 +62,15 @@ class AcsEntrancesClient
      * @return void OK
      */
     public function grant_access(
-        string $acs_entrance_id,
+        ?string $acs_entrance_id = null,
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
+        if ($acs_entrance_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/entrances/grant_access",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_entrance_id"] = $acs_entrance_id;
@@ -167,9 +177,14 @@ class AcsEntrancesClient
      * @return array OK
      */
     public function list_credentials_with_access(
-        string $acs_entrance_id,
+        ?string $acs_entrance_id = null,
         ?array $include_if = null,
     ): array {
+        if ($acs_entrance_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/entrances/list_credentials_with_access",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_entrance_id"] = $acs_entrance_id;
@@ -200,10 +215,15 @@ class AcsEntrancesClient
      * @return ActionAttempt OK
      */
     public function unlock(
-        string $acs_credential_id,
-        string $acs_entrance_id,
+        ?string $acs_credential_id = null,
+        ?string $acs_entrance_id = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($acs_credential_id === null && $acs_entrance_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/entrances/unlock",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_credential_id"] = $acs_credential_id;

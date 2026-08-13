@@ -31,8 +31,13 @@ class PhonesClient
      * @param string $device_id Device ID of the phone that you want to deactivate.
      * @return void OK
      */
-    public function deactivate(string $device_id): void
+    public function deactivate(?string $device_id = null): void
     {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /phones/deactivate",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -48,8 +53,13 @@ class PhonesClient
      * @param string $device_id Device ID of the phone that you want to get.
      * @return Phone OK
      */
-    public function get(string $device_id): Phone
+    public function get(?string $device_id = null): Phone
     {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /phones/get",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;

@@ -37,11 +37,16 @@ class LocksClient
      * @return ActionAttempt OK
      */
     public function configure_auto_lock(
-        bool $auto_lock_enabled,
-        string $device_id,
+        ?bool $auto_lock_enabled = null,
+        ?string $device_id = null,
         ?float $auto_lock_delay_seconds = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($auto_lock_enabled === null && $device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /locks/configure_auto_lock",
+            );
+        }
         $request_payload = [];
 
         $request_payload["auto_lock_enabled"] = $auto_lock_enabled;
@@ -151,9 +156,14 @@ class LocksClient
      * @return ActionAttempt OK
      */
     public function lock_door(
-        string $device_id,
+        ?string $device_id = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /locks/lock_door",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -180,9 +190,14 @@ class LocksClient
      * @return ActionAttempt OK
      */
     public function unlock_door(
-        string $device_id,
+        ?string $device_id = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /locks/unlock_door",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;

@@ -199,8 +199,13 @@ class DevicesClient
      * @param array $devices Array of devices with provider metadata to update
      * @return void OK
      */
-    public function report_provider_metadata(array $devices): void
+    public function report_provider_metadata(?array $devices = null): void
     {
+        if ($devices === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /devices/report_provider_metadata",
+            );
+        }
         $request_payload = [];
 
         $request_payload["devices"] = $devices;
@@ -224,13 +229,18 @@ class DevicesClient
      * @return void OK
      */
     public function update(
-        string $device_id,
+        ?string $device_id = null,
         ?bool $backup_access_code_pool_enabled = null,
         mixed $custom_metadata = null,
         ?bool $is_managed = null,
         ?string $name = null,
         mixed $properties = null,
     ): void {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /devices/update",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;

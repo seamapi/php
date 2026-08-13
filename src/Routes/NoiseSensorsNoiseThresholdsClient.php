@@ -36,13 +36,22 @@ class NoiseSensorsNoiseThresholdsClient
      * @return NoiseThreshold OK
      */
     public function create(
-        string $device_id,
-        string $ends_daily_at,
-        string $starts_daily_at,
+        ?string $device_id = null,
+        ?string $ends_daily_at = null,
+        ?string $starts_daily_at = null,
         ?string $name = null,
         ?float $noise_threshold_decibels = null,
         ?float $noise_threshold_nrs = null,
     ): NoiseThreshold {
+        if (
+            $device_id === null &&
+            $ends_daily_at === null &&
+            $starts_daily_at === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /noise_sensors/noise_thresholds/create",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -78,8 +87,15 @@ class NoiseSensorsNoiseThresholdsClient
      * @param string $noise_threshold_id ID of the noise threshold that you want to delete.
      * @return void OK
      */
-    public function delete(string $device_id, string $noise_threshold_id): void
-    {
+    public function delete(
+        ?string $device_id = null,
+        ?string $noise_threshold_id = null,
+    ): void {
+        if ($device_id === null && $noise_threshold_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /noise_sensors/noise_thresholds/delete",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -98,8 +114,13 @@ class NoiseSensorsNoiseThresholdsClient
      * @param string $noise_threshold_id ID of the noise threshold that you want to get.
      * @return NoiseThreshold OK
      */
-    public function get(string $noise_threshold_id): NoiseThreshold
+    public function get(?string $noise_threshold_id = null): NoiseThreshold
     {
+        if ($noise_threshold_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /noise_sensors/noise_thresholds/get",
+            );
+        }
         $request_payload = [];
 
         $request_payload["noise_threshold_id"] = $noise_threshold_id;
@@ -121,8 +142,13 @@ class NoiseSensorsNoiseThresholdsClient
      * @param string $device_id ID of the device for which you want to list noise thresholds.
      * @return array OK
      */
-    public function list(string $device_id): array
+    public function list(?string $device_id = null): array
     {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /noise_sensors/noise_thresholds/list",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -154,14 +180,19 @@ class NoiseSensorsNoiseThresholdsClient
      * @return void OK
      */
     public function update(
-        string $device_id,
-        string $noise_threshold_id,
+        ?string $device_id = null,
+        ?string $noise_threshold_id = null,
         ?string $ends_daily_at = null,
         ?string $name = null,
         ?float $noise_threshold_decibels = null,
         ?float $noise_threshold_nrs = null,
         ?string $starts_daily_at = null,
     ): void {
+        if ($device_id === null && $noise_threshold_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /noise_sensors/noise_thresholds/update",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;

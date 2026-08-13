@@ -31,10 +31,15 @@ class AcsEncodersSimulateClient
      * @return void OK
      */
     public function next_credential_encode_will_fail(
-        string $acs_encoder_id,
+        ?string $acs_encoder_id = null,
         ?string $error_code = null,
         ?string $acs_credential_id = null,
     ): void {
+        if ($acs_encoder_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/encoders/simulate/next_credential_encode_will_fail",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_encoder_id"] = $acs_encoder_id;
@@ -60,9 +65,14 @@ class AcsEncodersSimulateClient
      * @return void OK
      */
     public function next_credential_encode_will_succeed(
-        string $acs_encoder_id,
+        ?string $acs_encoder_id = null,
         ?string $scenario = null,
     ): void {
+        if ($acs_encoder_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/encoders/simulate/next_credential_encode_will_succeed",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_encoder_id"] = $acs_encoder_id;
@@ -86,10 +96,15 @@ class AcsEncodersSimulateClient
      * @return void OK
      */
     public function next_credential_scan_will_fail(
-        string $acs_encoder_id,
+        ?string $acs_encoder_id = null,
         ?string $error_code = null,
         ?string $acs_credential_id_on_seam = null,
     ): void {
+        if ($acs_encoder_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/encoders/simulate/next_credential_scan_will_fail",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_encoder_id"] = $acs_encoder_id;
@@ -118,10 +133,15 @@ class AcsEncodersSimulateClient
      * @return void OK
      */
     public function next_credential_scan_will_succeed(
-        string $acs_encoder_id,
+        ?string $acs_encoder_id = null,
         ?string $acs_credential_id_on_seam = null,
         ?string $scenario = null,
     ): void {
+        if ($acs_encoder_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/encoders/simulate/next_credential_scan_will_succeed",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_encoder_id"] = $acs_encoder_id;

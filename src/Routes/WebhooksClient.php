@@ -31,8 +31,15 @@ class WebhooksClient
      * @param array $event_types Types of events that you want the new webhook to receive.
      * @return Webhook OK
      */
-    public function create(string $url, ?array $event_types = null): Webhook
-    {
+    public function create(
+        ?string $url = null,
+        ?array $event_types = null,
+    ): Webhook {
+        if ($url === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /webhooks/create",
+            );
+        }
         $request_payload = [];
 
         $request_payload["url"] = $url;
@@ -55,8 +62,13 @@ class WebhooksClient
      * @param string $webhook_id ID of the webhook that you want to delete.
      * @return void OK
      */
-    public function delete(string $webhook_id): void
+    public function delete(?string $webhook_id = null): void
     {
+        if ($webhook_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /webhooks/delete",
+            );
+        }
         $request_payload = [];
 
         $request_payload["webhook_id"] = $webhook_id;
@@ -72,8 +84,13 @@ class WebhooksClient
      * @param string $webhook_id ID of the webhook that you want to get.
      * @return Webhook OK
      */
-    public function get(string $webhook_id): Webhook
+    public function get(?string $webhook_id = null): Webhook
     {
+        if ($webhook_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /webhooks/get",
+            );
+        }
         $request_payload = [];
 
         $request_payload["webhook_id"] = $webhook_id;
@@ -106,8 +123,15 @@ class WebhooksClient
      * @param string $webhook_id ID of the webhook that you want to update.
      * @return void OK
      */
-    public function update(array $event_types, string $webhook_id): void
-    {
+    public function update(
+        ?array $event_types = null,
+        ?string $webhook_id = null,
+    ): void {
+        if ($event_types === null && $webhook_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /webhooks/update",
+            );
+        }
         $request_payload = [];
 
         $request_payload["event_types"] = $event_types;

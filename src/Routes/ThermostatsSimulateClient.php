@@ -34,13 +34,18 @@ class ThermostatsSimulateClient
      * @return void OK
      */
     public function hvac_mode_adjusted(
-        string $device_id,
-        string $hvac_mode,
+        ?string $device_id = null,
+        ?string $hvac_mode = null,
         ?float $cooling_set_point_celsius = null,
         ?float $cooling_set_point_fahrenheit = null,
         ?float $heating_set_point_celsius = null,
         ?float $heating_set_point_fahrenheit = null,
     ): void {
+        if ($device_id === null && $hvac_mode === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/simulate/hvac_mode_adjusted",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -82,10 +87,15 @@ class ThermostatsSimulateClient
      * @return void OK
      */
     public function temperature_reached(
-        string $device_id,
+        ?string $device_id = null,
         ?float $temperature_celsius = null,
         ?float $temperature_fahrenheit = null,
     ): void {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/simulate/temperature_reached",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;

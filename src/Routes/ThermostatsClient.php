@@ -43,10 +43,15 @@ class ThermostatsClient
      * @return ActionAttempt OK
      */
     public function activate_climate_preset(
-        string $climate_preset_key,
-        string $device_id,
+        ?string $climate_preset_key = null,
+        ?string $device_id = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($climate_preset_key === null && $device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/activate_climate_preset",
+            );
+        }
         $request_payload = [];
 
         $request_payload["climate_preset_key"] = $climate_preset_key;
@@ -78,11 +83,16 @@ class ThermostatsClient
      * @return ActionAttempt OK
      */
     public function cool(
-        string $device_id,
+        ?string $device_id = null,
         ?float $cooling_set_point_celsius = null,
         ?float $cooling_set_point_fahrenheit = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/cool",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -129,8 +139,8 @@ class ThermostatsClient
      * @return void OK
      */
     public function create_climate_preset(
-        string $climate_preset_key,
-        string $device_id,
+        ?string $climate_preset_key = null,
+        ?string $device_id = null,
         ?string $climate_preset_mode = null,
         ?float $cooling_set_point_celsius = null,
         ?float $cooling_set_point_fahrenheit = null,
@@ -142,6 +152,11 @@ class ThermostatsClient
         ?bool $manual_override_allowed = null,
         ?string $name = null,
     ): void {
+        if ($climate_preset_key === null && $device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/create_climate_preset",
+            );
+        }
         $request_payload = [];
 
         $request_payload["climate_preset_key"] = $climate_preset_key;
@@ -200,9 +215,14 @@ class ThermostatsClient
      * @return void OK
      */
     public function delete_climate_preset(
-        string $climate_preset_key,
-        string $device_id,
+        ?string $climate_preset_key = null,
+        ?string $device_id = null,
     ): void {
+        if ($climate_preset_key === null && $device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/delete_climate_preset",
+            );
+        }
         $request_payload = [];
 
         $request_payload["climate_preset_key"] = $climate_preset_key;
@@ -223,11 +243,16 @@ class ThermostatsClient
      * @return ActionAttempt OK
      */
     public function heat(
-        string $device_id,
+        ?string $device_id = null,
         ?float $heating_set_point_celsius = null,
         ?float $heating_set_point_fahrenheit = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/heat",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -268,13 +293,18 @@ class ThermostatsClient
      * @return ActionAttempt OK
      */
     public function heat_cool(
-        string $device_id,
+        ?string $device_id = null,
         ?float $cooling_set_point_celsius = null,
         ?float $cooling_set_point_fahrenheit = null,
         ?float $heating_set_point_celsius = null,
         ?float $heating_set_point_fahrenheit = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/heat_cool",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -370,9 +400,14 @@ class ThermostatsClient
      * @return ActionAttempt OK
      */
     public function off(
-        string $device_id,
+        ?string $device_id = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/off",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -399,9 +434,14 @@ class ThermostatsClient
      * @return void OK
      */
     public function set_fallback_climate_preset(
-        string $climate_preset_key,
-        string $device_id,
+        ?string $climate_preset_key = null,
+        ?string $device_id = null,
     ): void {
+        if ($climate_preset_key === null && $device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/set_fallback_climate_preset",
+            );
+        }
         $request_payload = [];
 
         $request_payload["climate_preset_key"] = $climate_preset_key;
@@ -424,11 +464,16 @@ class ThermostatsClient
      * @return ActionAttempt OK
      */
     public function set_fan_mode(
-        string $device_id,
+        ?string $device_id = null,
         ?string $fan_mode = null,
         ?string $fan_mode_setting = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/set_fan_mode",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -466,14 +511,19 @@ class ThermostatsClient
      * @return ActionAttempt OK
      */
     public function set_hvac_mode(
-        string $device_id,
-        string $hvac_mode_setting,
+        ?string $device_id = null,
+        ?string $hvac_mode_setting = null,
         ?float $cooling_set_point_celsius = null,
         ?float $cooling_set_point_fahrenheit = null,
         ?float $heating_set_point_celsius = null,
         ?float $heating_set_point_fahrenheit = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($device_id === null && $hvac_mode_setting === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/set_hvac_mode",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -524,12 +574,17 @@ class ThermostatsClient
      * @return void OK
      */
     public function set_temperature_threshold(
-        string $device_id,
+        ?string $device_id = null,
         ?float $lower_limit_celsius = null,
         ?float $lower_limit_fahrenheit = null,
         ?float $upper_limit_celsius = null,
         ?float $upper_limit_fahrenheit = null,
     ): void {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/set_temperature_threshold",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -575,8 +630,8 @@ class ThermostatsClient
      * @return void OK
      */
     public function update_climate_preset(
-        string $climate_preset_key,
-        string $device_id,
+        ?string $climate_preset_key = null,
+        ?string $device_id = null,
         ?string $climate_preset_mode = null,
         ?float $cooling_set_point_celsius = null,
         ?float $cooling_set_point_fahrenheit = null,
@@ -588,6 +643,11 @@ class ThermostatsClient
         ?bool $manual_override_allowed = null,
         ?string $name = null,
     ): void {
+        if ($climate_preset_key === null && $device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/update_climate_preset",
+            );
+        }
         $request_payload = [];
 
         $request_payload["climate_preset_key"] = $climate_preset_key;
@@ -653,7 +713,7 @@ class ThermostatsClient
      * @return ActionAttempt OK
      */
     public function update_weekly_program(
-        string $device_id,
+        ?string $device_id = null,
         ?string $friday_program_id = null,
         ?string $monday_program_id = null,
         ?string $saturday_program_id = null,
@@ -663,6 +723,11 @@ class ThermostatsClient
         ?string $wednesday_program_id = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/update_weekly_program",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;

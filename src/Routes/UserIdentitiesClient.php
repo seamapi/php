@@ -46,10 +46,15 @@ class UserIdentitiesClient
      * @return void OK
      */
     public function add_acs_user(
-        string $acs_user_id,
+        ?string $acs_user_id = null,
         ?string $user_identity_id = null,
         ?string $user_identity_key = null,
     ): void {
+        if ($acs_user_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/add_acs_user",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_user_id"] = $acs_user_id;
@@ -115,8 +120,13 @@ class UserIdentitiesClient
      * @param string $user_identity_id ID of the user identity that you want to delete.
      * @return void OK
      */
-    public function delete(string $user_identity_id): void
+    public function delete(?string $user_identity_id = null): void
     {
+        if ($user_identity_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/delete",
+            );
+        }
         $request_payload = [];
 
         $request_payload["user_identity_id"] = $user_identity_id;
@@ -135,10 +145,15 @@ class UserIdentitiesClient
      * @return InstantKey OK
      */
     public function generate_instant_key(
-        string $user_identity_id,
+        ?string $user_identity_id = null,
         ?string $customization_profile_id = null,
         ?float $max_use_count = null,
     ): InstantKey {
+        if ($user_identity_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/generate_instant_key",
+            );
+        }
         $request_payload = [];
 
         $request_payload["user_identity_id"] = $user_identity_id;
@@ -199,9 +214,14 @@ class UserIdentitiesClient
      * @return void OK
      */
     public function grant_access_to_device(
-        string $device_id,
-        string $user_identity_id,
+        ?string $device_id = null,
+        ?string $user_identity_id = null,
     ): void {
+        if ($device_id === null && $user_identity_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/grant_access_to_device",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -280,8 +300,14 @@ class UserIdentitiesClient
      * @param string $user_identity_id ID of the user identity for which you want to retrieve all accessible devices.
      * @return array OK
      */
-    public function list_accessible_devices(string $user_identity_id): array
-    {
+    public function list_accessible_devices(
+        ?string $user_identity_id = null,
+    ): array {
+        if ($user_identity_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/list_accessible_devices",
+            );
+        }
         $request_payload = [];
 
         $request_payload["user_identity_id"] = $user_identity_id;
@@ -303,8 +329,14 @@ class UserIdentitiesClient
      * @param string $user_identity_id ID of the user identity for which you want to retrieve all accessible entrances.
      * @return array OK
      */
-    public function list_accessible_entrances(string $user_identity_id): array
-    {
+    public function list_accessible_entrances(
+        ?string $user_identity_id = null,
+    ): array {
+        if ($user_identity_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/list_accessible_entrances",
+            );
+        }
         $request_payload = [];
 
         $request_payload["user_identity_id"] = $user_identity_id;
@@ -329,8 +361,13 @@ class UserIdentitiesClient
      * @param string $user_identity_id ID of the user identity for which you want to retrieve all access systems.
      * @return array OK
      */
-    public function list_acs_systems(string $user_identity_id): array
+    public function list_acs_systems(?string $user_identity_id = null): array
     {
+        if ($user_identity_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/list_acs_systems",
+            );
+        }
         $request_payload = [];
 
         $request_payload["user_identity_id"] = $user_identity_id;
@@ -350,8 +387,13 @@ class UserIdentitiesClient
      * @param string $user_identity_id ID of the user identity for which you want to retrieve all access system users.
      * @return array OK
      */
-    public function list_acs_users(string $user_identity_id): array
+    public function list_acs_users(?string $user_identity_id = null): array
     {
+        if ($user_identity_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/list_acs_users",
+            );
+        }
         $request_payload = [];
 
         $request_payload["user_identity_id"] = $user_identity_id;
@@ -373,9 +415,14 @@ class UserIdentitiesClient
      * @return void OK
      */
     public function remove_acs_user(
-        string $acs_user_id,
-        string $user_identity_id,
+        ?string $acs_user_id = null,
+        ?string $user_identity_id = null,
     ): void {
+        if ($acs_user_id === null && $user_identity_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/remove_acs_user",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_user_id"] = $acs_user_id;
@@ -394,9 +441,14 @@ class UserIdentitiesClient
      * @return void OK
      */
     public function revoke_access_to_device(
-        string $device_id,
-        string $user_identity_id,
+        ?string $device_id = null,
+        ?string $user_identity_id = null,
     ): void {
+        if ($device_id === null && $user_identity_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/revoke_access_to_device",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -420,12 +472,17 @@ class UserIdentitiesClient
      * @return void OK
      */
     public function update(
-        string $user_identity_id,
+        ?string $user_identity_id = null,
         ?string $email_address = null,
         ?string $full_name = null,
         ?string $phone_number = null,
         ?string $user_identity_key = null,
     ): void {
+        if ($user_identity_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/update",
+            );
+        }
         $request_payload = [];
 
         $request_payload["user_identity_id"] = $user_identity_id;

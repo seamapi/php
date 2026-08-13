@@ -37,14 +37,24 @@ class ThermostatsSchedulesClient
      * @return ThermostatSchedule OK
      */
     public function create(
-        string $climate_preset_key,
-        string $device_id,
-        string $ends_at,
-        string $starts_at,
+        ?string $climate_preset_key = null,
+        ?string $device_id = null,
+        ?string $ends_at = null,
+        ?string $starts_at = null,
         ?bool $is_override_allowed = null,
         ?int $max_override_period_minutes = null,
         ?string $name = null,
     ): ThermostatSchedule {
+        if (
+            $climate_preset_key === null &&
+            $device_id === null &&
+            $ends_at === null &&
+            $starts_at === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/schedules/create",
+            );
+        }
         $request_payload = [];
 
         $request_payload["climate_preset_key"] = $climate_preset_key;
@@ -78,8 +88,13 @@ class ThermostatsSchedulesClient
      * @param string $thermostat_schedule_id ID of the thermostat schedule that you want to delete.
      * @return void OK
      */
-    public function delete(string $thermostat_schedule_id): void
+    public function delete(?string $thermostat_schedule_id = null): void
     {
+        if ($thermostat_schedule_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/schedules/delete",
+            );
+        }
         $request_payload = [];
 
         $request_payload["thermostat_schedule_id"] = $thermostat_schedule_id;
@@ -95,8 +110,14 @@ class ThermostatsSchedulesClient
      * @param string $thermostat_schedule_id ID of the thermostat schedule that you want to get.
      * @return ThermostatSchedule OK
      */
-    public function get(string $thermostat_schedule_id): ThermostatSchedule
-    {
+    public function get(
+        ?string $thermostat_schedule_id = null,
+    ): ThermostatSchedule {
+        if ($thermostat_schedule_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/schedules/get",
+            );
+        }
         $request_payload = [];
 
         $request_payload["thermostat_schedule_id"] = $thermostat_schedule_id;
@@ -118,9 +139,14 @@ class ThermostatsSchedulesClient
      * @return array OK
      */
     public function list(
-        string $device_id,
+        ?string $device_id = null,
         ?string $user_identifier_key = null,
     ): array {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/schedules/list",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;
@@ -153,7 +179,7 @@ class ThermostatsSchedulesClient
      * @return void OK
      */
     public function update(
-        string $thermostat_schedule_id,
+        ?string $thermostat_schedule_id = null,
         ?string $climate_preset_key = null,
         ?string $ends_at = null,
         ?bool $is_override_allowed = null,
@@ -161,6 +187,11 @@ class ThermostatsSchedulesClient
         ?string $name = null,
         ?string $starts_at = null,
     ): void {
+        if ($thermostat_schedule_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /thermostats/schedules/update",
+            );
+        }
         $request_payload = [];
 
         $request_payload["thermostat_schedule_id"] = $thermostat_schedule_id;

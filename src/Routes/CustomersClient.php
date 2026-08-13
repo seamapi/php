@@ -239,7 +239,7 @@ class CustomersClient
      * @return void OK
      */
     public function push_data(
-        string $customer_key,
+        ?string $customer_key = null,
         ?array $access_grants = null,
         ?array $bookings = null,
         ?array $buildings = null,
@@ -260,6 +260,11 @@ class CustomersClient
         ?array $user_identities = null,
         ?array $users = null,
     ): void {
+        if ($customer_key === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /customers/push_data",
+            );
+        }
         $request_payload = [];
 
         $request_payload["customer_key"] = $customer_key;

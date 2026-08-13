@@ -34,10 +34,15 @@ class LocksSimulateClient
      * @return ActionAttempt OK
      */
     public function keypad_code_entry(
-        string $code,
-        string $device_id,
+        ?string $code = null,
+        ?string $device_id = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($code === null && $device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /locks/simulate/keypad_code_entry",
+            );
+        }
         $request_payload = [];
 
         $request_payload["code"] = $code;
@@ -67,9 +72,14 @@ class LocksSimulateClient
      * @return ActionAttempt OK
      */
     public function manual_lock_via_keypad(
-        string $device_id,
+        ?string $device_id = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /locks/simulate/manual_lock_via_keypad",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_id"] = $device_id;

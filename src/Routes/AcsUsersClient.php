@@ -33,9 +33,14 @@ class AcsUsersClient
      * @return void OK
      */
     public function add_to_access_group(
-        string $acs_access_group_id,
-        string $acs_user_id,
+        ?string $acs_access_group_id = null,
+        ?string $acs_user_id = null,
     ): void {
+        if ($acs_access_group_id === null && $acs_user_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/add_to_access_group",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_access_group_id"] = $acs_access_group_id;
@@ -60,8 +65,8 @@ class AcsUsersClient
      * @return AcsUser OK
      */
     public function create(
-        string $acs_system_id,
-        string $full_name,
+        ?string $acs_system_id = null,
+        ?string $full_name = null,
         mixed $access_schedule = null,
         ?array $acs_access_group_ids = null,
         ?string $email = null,
@@ -69,6 +74,11 @@ class AcsUsersClient
         ?string $phone_number = null,
         ?string $user_identity_id = null,
     ): AcsUser {
+        if ($acs_system_id === null && $full_name === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/create",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_system_id"] = $acs_system_id;
@@ -282,10 +292,15 @@ class AcsUsersClient
      * @return void OK
      */
     public function remove_from_access_group(
-        string $acs_access_group_id,
+        ?string $acs_access_group_id = null,
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
+        if ($acs_access_group_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/remove_from_access_group",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_access_group_id"] = $acs_access_group_id;

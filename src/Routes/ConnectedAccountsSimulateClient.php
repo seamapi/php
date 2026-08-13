@@ -28,8 +28,13 @@ class ConnectedAccountsSimulateClient
      * @param string $connected_account_id ID of the connected account you want to simulate as disconnected.
      * @return void OK
      */
-    public function disconnect(string $connected_account_id): void
+    public function disconnect(?string $connected_account_id = null): void
     {
+        if ($connected_account_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /connected_accounts/simulate/disconnect",
+            );
+        }
         $request_payload = [];
 
         $request_payload["connected_account_id"] = $connected_account_id;

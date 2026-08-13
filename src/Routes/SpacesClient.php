@@ -33,9 +33,14 @@ class SpacesClient
      * @return void OK
      */
     public function add_acs_entrances(
-        array $acs_entrance_ids,
-        string $space_id,
+        ?array $acs_entrance_ids = null,
+        ?string $space_id = null,
     ): void {
+        if ($acs_entrance_ids === null && $space_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /spaces/add_acs_entrances",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
@@ -54,9 +59,14 @@ class SpacesClient
      * @return void OK
      */
     public function add_connected_account(
-        string $connected_account_id,
-        string $space_id,
+        ?string $connected_account_id = null,
+        ?string $space_id = null,
     ): void {
+        if ($connected_account_id === null && $space_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /spaces/add_connected_account",
+            );
+        }
         $request_payload = [];
 
         $request_payload["connected_account_id"] = $connected_account_id;
@@ -74,8 +84,15 @@ class SpacesClient
      * @param string $space_id ID of the space to which you want to add devices.
      * @return void OK
      */
-    public function add_devices(array $device_ids, string $space_id): void
-    {
+    public function add_devices(
+        ?array $device_ids = null,
+        ?string $space_id = null,
+    ): void {
+        if ($device_ids === null && $space_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /spaces/add_devices",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_ids"] = $device_ids;
@@ -99,7 +116,7 @@ class SpacesClient
      * @return Space OK
      */
     public function create(
-        string $name,
+        ?string $name = null,
         ?array $acs_entrance_ids = null,
         ?array $connected_account_ids = null,
         mixed $customer_data = null,
@@ -107,6 +124,11 @@ class SpacesClient
         ?array $device_ids = null,
         ?string $space_key = null,
     ): Space {
+        if ($name === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /spaces/create",
+            );
+        }
         $request_payload = [];
 
         $request_payload["name"] = $name;
@@ -144,8 +166,13 @@ class SpacesClient
      * @param string $space_id ID of the space that you want to delete.
      * @return void OK
      */
-    public function delete(string $space_id): void
+    public function delete(?string $space_id = null): void
     {
+        if ($space_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /spaces/delete",
+            );
+        }
         $request_payload = [];
 
         $request_payload["space_id"] = $space_id;
@@ -281,9 +308,14 @@ class SpacesClient
      * @return void OK
      */
     public function remove_acs_entrances(
-        array $acs_entrance_ids,
-        string $space_id,
+        ?array $acs_entrance_ids = null,
+        ?string $space_id = null,
     ): void {
+        if ($acs_entrance_ids === null && $space_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /spaces/remove_acs_entrances",
+            );
+        }
         $request_payload = [];
 
         $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
@@ -302,9 +334,14 @@ class SpacesClient
      * @return void OK
      */
     public function remove_connected_account(
-        string $connected_account_id,
-        string $space_id,
+        ?string $connected_account_id = null,
+        ?string $space_id = null,
     ): void {
+        if ($connected_account_id === null && $space_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /spaces/remove_connected_account",
+            );
+        }
         $request_payload = [];
 
         $request_payload["connected_account_id"] = $connected_account_id;
@@ -322,8 +359,15 @@ class SpacesClient
      * @param string $space_id ID of the space from which you want to remove devices.
      * @return void OK
      */
-    public function remove_devices(array $device_ids, string $space_id): void
-    {
+    public function remove_devices(
+        ?array $device_ids = null,
+        ?string $space_id = null,
+    ): void {
+        if ($device_ids === null && $space_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /spaces/remove_devices",
+            );
+        }
         $request_payload = [];
 
         $request_payload["device_ids"] = $device_ids;

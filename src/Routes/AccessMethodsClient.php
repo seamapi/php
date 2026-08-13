@@ -37,10 +37,15 @@ class AccessMethodsClient
      * @return ActionAttempt OK
      */
     public function assign_card(
-        string $access_method_id,
-        string $card_number,
+        ?string $access_method_id = null,
+        ?string $card_number = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($access_method_id === null && $card_number === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_methods/assign_card",
+            );
+        }
         $request_payload = [];
 
         $request_payload["access_method_id"] = $access_method_id;
@@ -99,10 +104,15 @@ class AccessMethodsClient
      * @return ActionAttempt OK
      */
     public function encode(
-        string $access_method_id,
-        string $acs_encoder_id,
+        ?string $access_method_id = null,
+        ?string $acs_encoder_id = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($access_method_id === null && $acs_encoder_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_methods/encode",
+            );
+        }
         $request_payload = [];
 
         $request_payload["access_method_id"] = $access_method_id;
@@ -128,8 +138,13 @@ class AccessMethodsClient
      * @param string $access_method_id ID of access method to get.
      * @return AccessMethod OK
      */
-    public function get(string $access_method_id): AccessMethod
+    public function get(?string $access_method_id = null): AccessMethod
     {
+        if ($access_method_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_methods/get",
+            );
+        }
         $request_payload = [];
 
         $request_payload["access_method_id"] = $access_method_id;
@@ -152,10 +167,15 @@ class AccessMethodsClient
      * @return Batch OK
      */
     public function get_related(
-        array $access_method_ids,
+        ?array $access_method_ids = null,
         ?array $exclude = null,
         ?array $include = null,
     ): Batch {
+        if ($access_method_ids === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_methods/get_related",
+            );
+        }
         $request_payload = [];
 
         $request_payload["access_method_ids"] = $access_method_ids;
@@ -252,10 +272,15 @@ class AccessMethodsClient
      * @return ActionAttempt OK
      */
     public function unlock_door(
-        string $access_method_id,
-        string $acs_entrance_id,
+        ?string $access_method_id = null,
+        ?string $acs_entrance_id = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($access_method_id === null && $acs_entrance_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_methods/unlock_door",
+            );
+        }
         $request_payload = [];
 
         $request_payload["access_method_id"] = $access_method_id;

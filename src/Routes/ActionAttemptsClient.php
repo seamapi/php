@@ -33,9 +33,14 @@ class ActionAttemptsClient
      * @return ActionAttempt OK
      */
     public function get(
-        string $action_attempt_id,
+        ?string $action_attempt_id = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
+        if ($action_attempt_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /action_attempts/get",
+            );
+        }
         $request_payload = [];
 
         $request_payload["action_attempt_id"] = $action_attempt_id;

@@ -30,8 +30,13 @@ class UserIdentitiesUnmanagedClient
      * @param string $user_identity_id ID of the unmanaged user identity that you want to get.
      * @return UnmanagedUserIdentity OK
      */
-    public function get(string $user_identity_id): UnmanagedUserIdentity
+    public function get(?string $user_identity_id = null): UnmanagedUserIdentity
     {
+        if ($user_identity_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/unmanaged/get",
+            );
+        }
         $request_payload = [];
 
         $request_payload["user_identity_id"] = $user_identity_id;
@@ -104,10 +109,15 @@ class UserIdentitiesUnmanagedClient
      * @return void OK
      */
     public function update(
-        bool $is_managed,
-        string $user_identity_id,
+        ?bool $is_managed = null,
+        ?string $user_identity_id = null,
         ?string $user_identity_key = null,
     ): void {
+        if ($is_managed === null && $user_identity_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/unmanaged/update",
+            );
+        }
         $request_payload = [];
 
         $request_payload["is_managed"] = $is_managed;
