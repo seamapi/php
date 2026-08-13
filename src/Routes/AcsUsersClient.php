@@ -114,6 +114,15 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
+        if (
+            $acs_system_id === null &&
+            $acs_user_id === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/delete",
+            );
+        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -144,6 +153,15 @@ class AcsUsersClient
         ?string $acs_system_id = null,
         ?string $user_identity_id = null,
     ): AcsUser {
+        if (
+            $acs_user_id === null &&
+            $acs_system_id === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/get",
+            );
+        }
         $request_payload = [];
 
         if ($acs_user_id !== null) {
@@ -247,6 +265,15 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): array {
+        if (
+            $acs_system_id === null &&
+            $acs_user_id === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/list_accessible_entrances",
+            );
+        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -316,6 +343,15 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
+        if (
+            $acs_system_id === null &&
+            $acs_user_id === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/revoke_access_to_all_entrances",
+            );
+        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -348,6 +384,15 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
+        if (
+            $acs_system_id === null &&
+            $acs_user_id === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/suspend",
+            );
+        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -378,6 +423,15 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
+        if (
+            $acs_system_id === null &&
+            $acs_user_id === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/unsuspend",
+            );
+        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -420,6 +474,21 @@ class AcsUsersClient
         ?string $phone_number = null,
         ?string $user_identity_id = null,
     ): void {
+        if (
+            $access_schedule === null &&
+            $acs_system_id === null &&
+            $acs_user_id === null &&
+            $email === null &&
+            $email_address === null &&
+            $full_name === null &&
+            $hid_acs_system_id === null &&
+            $phone_number === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/update",
+            );
+        }
         $request_payload = [];
 
         if ($access_schedule !== null) {

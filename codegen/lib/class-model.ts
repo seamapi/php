@@ -18,6 +18,7 @@ export interface PhpClientMethod {
   responseDescription: string
   isDeprecated: boolean
   deprecationMessage: string
+  requiresAtLeastOneParameter: boolean
   parameters: PhpClientMethodParameter[]
   returnResource: string
   returnPath: string

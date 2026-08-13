@@ -311,6 +311,11 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         ?string $code = null,
         ?string $device_id = null,
     ): AccessCode {
+        if ($access_code_id === null && $code === null && $device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_codes/get",
+            );
+        }
         $request_payload = [];
 
         if ($access_code_id !== null) {
@@ -363,6 +368,22 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         ?string $user_identifier_key = null,
         ?callable $on_response = null,
     ): array {
+        if (
+            $access_code_ids === null &&
+            $access_grant_id === null &&
+            $access_grant_key === null &&
+            $access_method_id === null &&
+            $customer_key === null &&
+            $device_id === null &&
+            $limit === null &&
+            $page_cursor === null &&
+            $search === null &&
+            $user_identifier_key === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_codes/list",
+            );
+        }
         $request_payload = [];
 
         if ($access_code_ids !== null) {

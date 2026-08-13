@@ -127,6 +127,11 @@ const createClientMethod = (endpoint: Endpoint): PhpClientMethod => {
     responseDescription: response.description,
     isDeprecated: endpoint.isDeprecated,
     deprecationMessage: endpoint.deprecationMessage,
+    // An endpoint that takes no individually required parameter may still
+    // require one of them, so PHP cannot enforce it through the signature.
+    requiresAtLeastOneParameter:
+      endpoint.request.hasRequiredParameters &&
+      endpoint.request.parameters.every(({ isRequired }) => !isRequired),
     parameters: endpoint.request.parameters.map((parameter) => ({
       name: parameter.name,
       type: getPhpType(parameter),

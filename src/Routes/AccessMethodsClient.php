@@ -73,6 +73,15 @@ class AccessMethodsClient
         ?string $access_grant_id = null,
         ?string $reservation_key = null,
     ): void {
+        if (
+            $access_method_id === null &&
+            $access_grant_id === null &&
+            $reservation_key === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_methods/delete",
+            );
+        }
         $request_payload = [];
 
         if ($access_method_id !== null) {
@@ -200,6 +209,20 @@ class AccessMethodsClient
         ?string $space_id = null,
         ?callable $on_response = null,
     ): array {
+        if (
+            $access_code_id === null &&
+            $access_grant_id === null &&
+            $access_grant_key === null &&
+            $acs_entrance_id === null &&
+            $device_id === null &&
+            $limit === null &&
+            $page_cursor === null &&
+            $space_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_methods/list",
+            );
+        }
         $request_payload = [];
 
         if ($access_code_id !== null) {

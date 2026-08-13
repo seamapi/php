@@ -60,6 +60,11 @@ class ConnectedAccountsClient
         ?string $connected_account_id = null,
         ?string $email = null,
     ): ConnectedAccount {
+        if ($connected_account_id === null && $email === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /connected_accounts/get",
+            );
+        }
         $request_payload = [];
 
         if ($connected_account_id !== null) {

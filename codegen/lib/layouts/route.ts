@@ -37,6 +37,7 @@ export interface MethodLayoutContext {
   path: string
   returnType: string
   hasParams: boolean
+  requiresAtLeastOneParameter: boolean
   signatureParams: string
   usesActionAttempt: boolean
   usesOnResponse: boolean
@@ -136,6 +137,7 @@ const getMethodLayoutContext = (
     path,
     returnType,
     hasParams: parameters.length > 0,
+    requiresAtLeastOneParameter: method.requiresAtLeastOneParameter,
     signatureParams,
     usesActionAttempt,
     usesOnResponse,

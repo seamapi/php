@@ -37,6 +37,11 @@ class EventsClient
         ?string $device_id = null,
         ?string $event_type = null,
     ): Event {
+        if ($event_id === null && $device_id === null && $event_type === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /events/get",
+            );
+        }
         $request_payload = [];
 
         if ($event_id !== null) {
@@ -121,6 +126,40 @@ class EventsClient
         ?float $unstable_offset = null,
         ?string $user_identity_id = null,
     ): array {
+        if (
+            $access_code_id === null &&
+            $access_code_ids === null &&
+            $access_grant_id === null &&
+            $access_grant_ids === null &&
+            $access_method_id === null &&
+            $access_method_ids === null &&
+            $acs_access_group_id === null &&
+            $acs_credential_id === null &&
+            $acs_encoder_id === null &&
+            $acs_entrance_id === null &&
+            $acs_system_id === null &&
+            $acs_system_ids === null &&
+            $acs_user_id === null &&
+            $between === null &&
+            $connect_webview_id === null &&
+            $connected_account_id === null &&
+            $customer_key === null &&
+            $device_id === null &&
+            $device_ids === null &&
+            $event_ids === null &&
+            $event_type === null &&
+            $event_types === null &&
+            $limit === null &&
+            $since === null &&
+            $space_id === null &&
+            $space_ids === null &&
+            $unstable_offset === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /events/list",
+            );
+        }
         $request_payload = [];
 
         if ($access_code_id !== null) {

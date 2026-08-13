@@ -166,6 +166,11 @@ class SpacesClient
         ?string $space_id = null,
         ?string $space_key = null,
     ): Space {
+        if ($space_id === null && $space_key === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /spaces/get",
+            );
+        }
         $request_payload = [];
 
         if ($space_id !== null) {
@@ -199,6 +204,16 @@ class SpacesClient
         ?array $space_ids = null,
         ?array $space_keys = null,
     ): Batch {
+        if (
+            $exclude === null &&
+            $include === null &&
+            $space_ids === null &&
+            $space_keys === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /spaces/get_related",
+            );
+        }
         $request_payload = [];
 
         if ($exclude !== null) {

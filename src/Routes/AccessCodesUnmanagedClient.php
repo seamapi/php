@@ -99,6 +99,11 @@ class AccessCodesUnmanagedClient
         ?string $code = null,
         ?string $device_id = null,
     ): UnmanagedAccessCode {
+        if ($access_code_id === null && $code === null && $device_id === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_codes/unmanaged/get",
+            );
+        }
         $request_payload = [];
 
         if ($access_code_id !== null) {

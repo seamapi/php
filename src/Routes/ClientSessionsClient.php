@@ -197,6 +197,18 @@ class ClientSessionsClient
         ?string $user_identity_id = null,
         ?array $user_identity_ids = null,
     ): void {
+        if (
+            $client_session_id === null &&
+            $connect_webview_ids === null &&
+            $connected_account_ids === null &&
+            $user_identifier_key === null &&
+            $user_identity_id === null &&
+            $user_identity_ids === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /client_sessions/grant_access",
+            );
+        }
         $request_payload = [];
 
         if ($client_session_id !== null) {

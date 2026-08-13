@@ -173,6 +173,11 @@ class UserIdentitiesClient
         ?string $user_identity_id = null,
         ?string $user_identity_key = null,
     ): UserIdentity {
+        if ($user_identity_id === null && $user_identity_key === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/get",
+            );
+        }
         $request_payload = [];
 
         if ($user_identity_id !== null) {

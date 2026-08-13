@@ -52,6 +52,11 @@ class InstantKeysClient
         ?string $instant_key_id = null,
         ?string $instant_key_url = null,
     ): InstantKey {
+        if ($instant_key_id === null && $instant_key_url === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /instant_keys/get",
+            );
+        }
         $request_payload = [];
 
         if ($instant_key_id !== null) {

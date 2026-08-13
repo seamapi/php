@@ -39,6 +39,11 @@ class DevicesUnmanagedClient
         ?string $device_id = null,
         ?string $name = null,
     ): UnmanagedDevice {
+        if ($device_id === null && $name === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /devices/unmanaged/get",
+            );
+        }
         $request_payload = [];
 
         if ($device_id !== null) {

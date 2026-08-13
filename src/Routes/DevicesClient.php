@@ -39,6 +39,11 @@ class DevicesClient
      */
     public function get(?string $device_id = null, ?string $name = null): Device
     {
+        if ($device_id === null && $name === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /devices/get",
+            );
+        }
         $request_payload = [];
 
         if ($device_id !== null) {

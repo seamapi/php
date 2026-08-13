@@ -150,6 +150,11 @@ class AccessGrantsClient
         ?string $access_grant_id = null,
         ?string $access_grant_key = null,
     ): AccessGrant {
+        if ($access_grant_id === null && $access_grant_key === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_grants/get",
+            );
+        }
         $request_payload = [];
 
         if ($access_grant_id !== null) {
@@ -183,6 +188,16 @@ class AccessGrantsClient
         ?array $exclude = null,
         ?array $include = null,
     ): Batch {
+        if (
+            $access_grant_ids === null &&
+            $access_grant_keys === null &&
+            $exclude === null &&
+            $include === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_grants/get_related",
+            );
+        }
         $request_payload = [];
 
         if ($access_grant_ids !== null) {
@@ -346,6 +361,17 @@ class AccessGrantsClient
         ?string $name = null,
         ?string $starts_at = null,
     ): void {
+        if (
+            $access_grant_id === null &&
+            $access_grant_key === null &&
+            $ends_at === null &&
+            $name === null &&
+            $starts_at === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_grants/update",
+            );
+        }
         $request_payload = [];
 
         if ($access_grant_id !== null) {
