@@ -2,19 +2,32 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\Device;
-use Seam\SeamClient;
 
 class NoiseSensorsClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
+
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
     public NoiseSensorsNoiseThresholdsClient $noise_thresholds;
     public NoiseSensorsSimulateClient $simulate;
-    public function __construct(SeamClient $seam)
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
-        $this->noise_thresholds = new NoiseSensorsNoiseThresholdsClient($seam);
-        $this->simulate = new NoiseSensorsSimulateClient($seam);
+        $this->client = $client;
+        $this->defaults = $defaults;
+        $this->noise_thresholds = new NoiseSensorsNoiseThresholdsClient(
+            $client,
+            $defaults,
+        );
+        $this->simulate = new NoiseSensorsSimulateClient($client, $defaults);
     }
 
     /**
@@ -36,6 +49,7 @@ class NoiseSensorsClient
      * @param string $space_id ID of the space for which you want to list devices.
      * @param string $unstable_location_id
      * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -108,10 +122,10 @@ class NoiseSensorsClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/noise_sensors/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/noise_sensors/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {

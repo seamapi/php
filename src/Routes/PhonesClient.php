@@ -2,17 +2,27 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\Phone;
-use Seam\SeamClient;
 
 class PhonesClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
+
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
     public PhonesSimulateClient $simulate;
-    public function __construct(SeamClient $seam)
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
-        $this->simulate = new PhonesSimulateClient($seam);
+        $this->client = $client;
+        $this->defaults = $defaults;
+        $this->simulate = new PhonesSimulateClient($client, $defaults);
     }
 
     /**
@@ -25,15 +35,11 @@ class PhonesClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
-            "POST",
-            "/phones/deactivate",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/phones/deactivate", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -46,14 +52,12 @@ class PhonesClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/phones/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/phones/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return Phone::from_json($res->phone);
@@ -81,10 +85,10 @@ class PhonesClient
             ] = $owner_user_identity_id;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/phones/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/phones/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return array_map(fn($r) => Phone::from_json($r), $res->phones);

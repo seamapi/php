@@ -2,18 +2,28 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\AccessGrant;
 use Seam\Resources\Batch;
-use Seam\SeamClient;
 
 class AccessGrantsClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
+
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
     public AccessGrantsUnmanagedClient $unmanaged;
-    public function __construct(SeamClient $seam)
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
-        $this->unmanaged = new AccessGrantsUnmanagedClient($seam);
+        $this->client = $client;
+        $this->defaults = $defaults;
+        $this->unmanaged = new AccessGrantsUnmanagedClient($client, $defaults);
     }
 
     /**
@@ -55,11 +65,9 @@ class AccessGrantsClient
     ): AccessGrant {
         $request_payload = [];
 
-        if ($requested_access_methods !== null) {
-            $request_payload[
-                "requested_access_methods"
-            ] = $requested_access_methods;
-        }
+        $request_payload[
+            "requested_access_methods"
+        ] = $requested_access_methods;
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
         }
@@ -105,10 +113,10 @@ class AccessGrantsClient
             $request_payload["starts_at"] = $starts_at;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_grants/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_grants/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return AccessGrant::from_json($res->access_grant);
@@ -124,15 +132,11 @@ class AccessGrantsClient
     {
         $request_payload = [];
 
-        if ($access_grant_id !== null) {
-            $request_payload["access_grant_id"] = $access_grant_id;
-        }
+        $request_payload["access_grant_id"] = $access_grant_id;
 
-        $this->seam->request(
-            "POST",
-            "/access_grants/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/access_grants/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -155,10 +159,10 @@ class AccessGrantsClient
             $request_payload["access_grant_key"] = $access_grant_key;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_grants/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_grants/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return AccessGrant::from_json($res->access_grant);
@@ -194,10 +198,10 @@ class AccessGrantsClient
             $request_payload["include"] = $include;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_grants/get_related",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_grants/get_related", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return Batch::from_json($res->batch);
@@ -219,6 +223,7 @@ class AccessGrantsClient
      * @param string $reservation_key Filter Access Grants by reservation_key.
      * @param string $space_id ID of the space by which you want to filter the list of Access Grants.
      * @param string $user_identity_id ID of user identity by which you want to filter the list of Access Grants.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -279,10 +284,10 @@ class AccessGrantsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_grants/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_grants/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -308,19 +313,17 @@ class AccessGrantsClient
     ): AccessGrant {
         $request_payload = [];
 
-        if ($access_grant_id !== null) {
-            $request_payload["access_grant_id"] = $access_grant_id;
-        }
-        if ($requested_access_methods !== null) {
-            $request_payload[
-                "requested_access_methods"
-            ] = $requested_access_methods;
-        }
+        $request_payload["access_grant_id"] = $access_grant_id;
+        $request_payload[
+            "requested_access_methods"
+        ] = $requested_access_methods;
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_grants/request_access_methods",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/access_grants/request_access_methods",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return AccessGrant::from_json($res->access_grant);
@@ -361,10 +364,8 @@ class AccessGrantsClient
             $request_payload["starts_at"] = $starts_at;
         }
 
-        $this->seam->request(
-            "POST",
-            "/access_grants/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/access_grants/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

@@ -2,16 +2,26 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\NoiseThreshold;
-use Seam\SeamClient;
 
 class NoiseSensorsNoiseThresholdsClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -35,15 +45,9 @@ class NoiseSensorsNoiseThresholdsClient
     ): NoiseThreshold {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($ends_daily_at !== null) {
-            $request_payload["ends_daily_at"] = $ends_daily_at;
-        }
-        if ($starts_daily_at !== null) {
-            $request_payload["starts_daily_at"] = $starts_daily_at;
-        }
+        $request_payload["device_id"] = $device_id;
+        $request_payload["ends_daily_at"] = $ends_daily_at;
+        $request_payload["starts_daily_at"] = $starts_daily_at;
         if ($name !== null) {
             $request_payload["name"] = $name;
         }
@@ -56,10 +60,12 @@ class NoiseSensorsNoiseThresholdsClient
             $request_payload["noise_threshold_nrs"] = $noise_threshold_nrs;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/noise_sensors/noise_thresholds/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/noise_sensors/noise_thresholds/create",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return NoiseThreshold::from_json($res->noise_threshold);
@@ -76,17 +82,13 @@ class NoiseSensorsNoiseThresholdsClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($noise_threshold_id !== null) {
-            $request_payload["noise_threshold_id"] = $noise_threshold_id;
-        }
+        $request_payload["device_id"] = $device_id;
+        $request_payload["noise_threshold_id"] = $noise_threshold_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/noise_sensors/noise_thresholds/delete",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -100,14 +102,14 @@ class NoiseSensorsNoiseThresholdsClient
     {
         $request_payload = [];
 
-        if ($noise_threshold_id !== null) {
-            $request_payload["noise_threshold_id"] = $noise_threshold_id;
-        }
+        $request_payload["noise_threshold_id"] = $noise_threshold_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/noise_sensors/noise_thresholds/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/noise_sensors/noise_thresholds/get",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return NoiseThreshold::from_json($res->noise_threshold);
@@ -123,14 +125,14 @@ class NoiseSensorsNoiseThresholdsClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/noise_sensors/noise_thresholds/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/noise_sensors/noise_thresholds/list",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return array_map(
@@ -162,12 +164,8 @@ class NoiseSensorsNoiseThresholdsClient
     ): void {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($noise_threshold_id !== null) {
-            $request_payload["noise_threshold_id"] = $noise_threshold_id;
-        }
+        $request_payload["device_id"] = $device_id;
+        $request_payload["noise_threshold_id"] = $noise_threshold_id;
         if ($ends_daily_at !== null) {
             $request_payload["ends_daily_at"] = $ends_daily_at;
         }
@@ -186,10 +184,10 @@ class NoiseSensorsNoiseThresholdsClient
             $request_payload["starts_daily_at"] = $starts_daily_at;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/noise_sensors/noise_thresholds/update",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 }

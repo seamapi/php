@@ -9,23 +9,31 @@ export interface DeprecatedPhpDocContext {
 export interface MethodPhpDocContext extends DeprecatedPhpDocContext {
   returnType: string
   responseDescription: string
-  parameters: Array<{ name: string; type: string; description: string }>
+  // The endpoint parameters plus the SDK level ones, e.g.
+  // wait_for_action_attempt, so editors surface all of them.
+  documentedParameters: Array<{
+    name: string
+    type: string
+    description: string
+  }>
 }
 
+// Resource classes and their properties are emitted inside a braced namespace
+// block, so both sit one level deeper than a docblock at file scope would.
 export const resourcePhpDoc = (context: DeprecatedPhpDocContext): string =>
-  createPhpDoc(context.description, deprecatedTag(context))
+  createPhpDoc(context.description, deprecatedTag(context), '    ')
 
 export const hasPhpDoc = (context: DeprecatedPhpDocContext): boolean =>
   context.description.trim() !== '' || context.isDeprecated
 
 export const propertyPhpDoc = (context: DeprecatedPhpDocContext): string =>
-  createPhpDoc(context.description, deprecatedTag(context), '        ')
+  createPhpDoc(context.description, deprecatedTag(context), '            ')
 
 export const methodPhpDoc = (context: MethodPhpDocContext): string =>
   createPhpDoc(
     context.description,
     [
-      ...context.parameters.map(
+      ...context.documentedParameters.map(
         (parameter) =>
           `@param ${parameter.type} $${parameter.name}${parameter.description === '' ? '' : ` ${parameter.description}`}`,
       ),

@@ -20,7 +20,9 @@ jobs:
         os:
           - ubuntu-latest
         php:
-          - '8.0'
+          - '8.2'
+          - '8.3'
+          - '8.4'
           - '8.5'
         include:
           - os: ubuntu-latest
@@ -44,7 +46,7 @@ jobs:
       fail-fast: false
       matrix:
         php:
-          - '8.0'
+          - '8.2'
           - '8.5'
     steps:
       - name: Checkout
@@ -73,7 +75,9 @@ jobs:
         os:
           - ubuntu-latest
         php:
-          - '8.0'
+          - '8.2'
+          - '8.3'
+          - '8.4'
           - '8.5'
         include:
           - os: ubuntu-latest
@@ -117,7 +121,7 @@ jobs:
           contents: |
             <?php
             require __DIR__ . '/vendor/autoload.php';
-            new Seam\SeamClient('seam_apikey1_token');
+            new Seam\Seam(api_key: 'seam_apikey1_token');
       - name: Install
         run: composer install --no-interaction --no-progress
       - name: Run

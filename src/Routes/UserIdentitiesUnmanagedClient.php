@@ -2,16 +2,26 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\UnmanagedUserIdentity;
-use Seam\SeamClient;
 
 class UserIdentitiesUnmanagedClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -24,14 +34,12 @@ class UserIdentitiesUnmanagedClient
     {
         $request_payload = [];
 
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
+        $request_payload["user_identity_id"] = $user_identity_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/user_identities/unmanaged/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/user_identities/unmanaged/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return UnmanagedUserIdentity::from_json($res->user_identity);
@@ -44,6 +52,7 @@ class UserIdentitiesUnmanagedClient
      * @param int $limit Maximum number of records to return per page.
      * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned unmanaged user identities to include all records that satisfy a partial match using `full_name`, `phone_number`, `email_address`,  `user_identity_id` or `acs_system_id`.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -68,10 +77,10 @@ class UserIdentitiesUnmanagedClient
             $request_payload["search"] = $search;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/user_identities/unmanaged/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/user_identities/unmanaged/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -101,20 +110,14 @@ class UserIdentitiesUnmanagedClient
     ): void {
         $request_payload = [];
 
-        if ($is_managed !== null) {
-            $request_payload["is_managed"] = $is_managed;
-        }
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
+        $request_payload["is_managed"] = $is_managed;
+        $request_payload["user_identity_id"] = $user_identity_id;
         if ($user_identity_key !== null) {
             $request_payload["user_identity_key"] = $user_identity_key;
         }
 
-        $this->seam->request(
-            "POST",
-            "/user_identities/unmanaged/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/user_identities/unmanaged/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

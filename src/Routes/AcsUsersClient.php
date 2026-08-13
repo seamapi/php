@@ -2,17 +2,27 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\AcsEntrance;
 use Seam\Resources\AcsUser;
-use Seam\SeamClient;
 
 class AcsUsersClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -28,18 +38,12 @@ class AcsUsersClient
     ): void {
         $request_payload = [];
 
-        if ($acs_access_group_id !== null) {
-            $request_payload["acs_access_group_id"] = $acs_access_group_id;
-        }
-        if ($acs_user_id !== null) {
-            $request_payload["acs_user_id"] = $acs_user_id;
-        }
+        $request_payload["acs_access_group_id"] = $acs_access_group_id;
+        $request_payload["acs_user_id"] = $acs_user_id;
 
-        $this->seam->request(
-            "POST",
-            "/acs/users/add_to_access_group",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/users/add_to_access_group", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -67,12 +71,8 @@ class AcsUsersClient
     ): AcsUser {
         $request_payload = [];
 
-        if ($acs_system_id !== null) {
-            $request_payload["acs_system_id"] = $acs_system_id;
-        }
-        if ($full_name !== null) {
-            $request_payload["full_name"] = $full_name;
-        }
+        $request_payload["acs_system_id"] = $acs_system_id;
+        $request_payload["full_name"] = $full_name;
         if ($access_schedule !== null) {
             $request_payload["access_schedule"] = $access_schedule;
         }
@@ -92,10 +92,10 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/users/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/users/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return AcsUser::from_json($res->acs_user);
@@ -126,11 +126,9 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
-            "POST",
-            "/acs/users/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/users/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -158,10 +156,10 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/users/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/users/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return AcsUser::from_json($res->acs_user);
@@ -178,6 +176,7 @@ class AcsUsersClient
      * @param string $user_identity_email_address Email address of the user identity for which you want to retrieve all access system users.
      * @param string $user_identity_id ID of the user identity for which you want to retrieve all access system users.
      * @param string $user_identity_phone_number Phone number of the user identity for which you want to retrieve all access system users, in [E.164 format](https://www.itu.int/rec/T-REC-E.164/en) (for example, `+15555550100`).
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -222,10 +221,10 @@ class AcsUsersClient
             ] = $user_identity_phone_number;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/users/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/users/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -260,10 +259,12 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/users/list_accessible_entrances",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/acs/users/list_accessible_entrances",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return array_map(
@@ -287,9 +288,7 @@ class AcsUsersClient
     ): void {
         $request_payload = [];
 
-        if ($acs_access_group_id !== null) {
-            $request_payload["acs_access_group_id"] = $acs_access_group_id;
-        }
+        $request_payload["acs_access_group_id"] = $acs_access_group_id;
         if ($acs_user_id !== null) {
             $request_payload["acs_user_id"] = $acs_user_id;
         }
@@ -297,11 +296,9 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
-            "POST",
-            "/acs/users/remove_from_access_group",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/users/remove_from_access_group", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -329,10 +326,10 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/acs/users/revoke_access_to_all_entrances",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -361,11 +358,9 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
-            "POST",
-            "/acs/users/suspend",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/users/suspend", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -393,11 +388,9 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
-            "POST",
-            "/acs/users/unsuspend",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/users/unsuspend", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -455,10 +448,8 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
-            "POST",
-            "/acs/users/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/users/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

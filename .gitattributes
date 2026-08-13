@@ -1,6 +1,6 @@
 src/Resources/*.php linguist-generated
 src/Routes/*.php linguist-generated
-src/SeamClient.php linguist-generated
+src/Seam.php linguist-generated
 
 # Keep development files out of the published package.
 # GitHub builds the archives Composer downloads as dist with git archive,

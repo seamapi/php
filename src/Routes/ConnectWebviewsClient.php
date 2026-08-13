@@ -2,16 +2,26 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\ConnectWebview;
-use Seam\SeamClient;
 
 class ConnectWebviewsClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -86,10 +96,10 @@ class ConnectWebviewsClient
             ] = $wait_for_device_creation;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/connect_webviews/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/connect_webviews/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ConnectWebview::from_json($res->connect_webview);
@@ -107,15 +117,11 @@ class ConnectWebviewsClient
     {
         $request_payload = [];
 
-        if ($connect_webview_id !== null) {
-            $request_payload["connect_webview_id"] = $connect_webview_id;
-        }
+        $request_payload["connect_webview_id"] = $connect_webview_id;
 
-        $this->seam->request(
-            "POST",
-            "/connect_webviews/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/connect_webviews/delete", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -130,14 +136,12 @@ class ConnectWebviewsClient
     {
         $request_payload = [];
 
-        if ($connect_webview_id !== null) {
-            $request_payload["connect_webview_id"] = $connect_webview_id;
-        }
+        $request_payload["connect_webview_id"] = $connect_webview_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/connect_webviews/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/connect_webviews/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return ConnectWebview::from_json($res->connect_webview);
@@ -152,6 +156,7 @@ class ConnectWebviewsClient
      * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned Connect Webviews to include all records that satisfy a partial match using `connect_webview_id`, `accepted_providers`, `custom_metadata`, or `customer_key`.
      * @param string $user_identifier_key Your user ID for the user by which you want to filter Connect Webviews.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -184,10 +189,10 @@ class ConnectWebviewsClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/connect_webviews/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/connect_webviews/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {

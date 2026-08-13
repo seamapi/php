@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<psalm
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="https://getpsalm.org/schema/config"
+  xsi:noNamespaceSchemaLocation="vendor/vimeo/psalm/config.xsd"
+  errorLevel="4"
+  findUnusedBaselineEntry="false"
+  findUnusedCode="false"
+>
+  <projectFiles>
+    <directory name="src" />
+    <ignoreFiles>
+      <!-- Generated from the API definition by codegen; analyzing it would
+           only create pressure to change the generator to satisfy Psalm. -->
+      <directory name="src/Resources" />
+      <directory name="src/Routes" />
+      <directory name="vendor" />
+    </ignoreFiles>
+  </projectFiles>
+</psalm>

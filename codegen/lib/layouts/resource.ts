@@ -1,7 +1,7 @@
 // Builds the template context for resource files (src/Resources/{Name}.php):
-// the resource class followed by the local classes for its object properties.
-// Each class contributes its from_json body lines and constructor parameter
-// lines.
+// the resource class and the nested classes for its object properties, grouped
+// into one braced namespace block per namespace. Each class contributes its
+// from_json body lines and constructor parameter lines.
 //
 // The blueprint does not track which resource properties are required, so
 // every property is optional: from_json falls back to null for missing values
@@ -29,8 +29,13 @@ export interface ConstructorParamLayoutContext {
   deprecationMessage: string
 }
 
-export interface ResourceLayoutContext {
+export interface NamespaceLayoutContext {
+  namespace: string
   classes: ClassLayoutContext[]
+}
+
+export interface ResourceLayoutContext {
+  namespaces: NamespaceLayoutContext[]
 }
 
 const generateFromJsonProp = (property: ResourceClassProperty): string => {
@@ -96,8 +101,27 @@ const getClassLayoutContext = (
 
 export const setResourceLayoutContext = (
   resource: ResourceSchema,
-): ResourceLayoutContext => ({
-  classes: [resource.resourceClass, ...resource.localClasses].map(
-    getClassLayoutContext,
-  ),
-})
+): ResourceLayoutContext => {
+  // First appearance order, so the resource class leads the file and every
+  // owning namespace precedes the namespaces nested inside it.
+  const namespaces = new Map<string, ClassLayoutContext[]>()
+
+  for (const schema of resource.classes) {
+    const classes = namespaces.get(schema.namespace)
+    const context = getClassLayoutContext(schema)
+
+    if (classes == null) {
+      namespaces.set(schema.namespace, [context])
+      continue
+    }
+
+    classes.push(context)
+  }
+
+  return {
+    namespaces: [...namespaces.entries()].map(([namespace, classes]) => ({
+      namespace,
+      classes,
+    })),
+  }
+}

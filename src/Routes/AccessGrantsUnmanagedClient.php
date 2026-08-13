@@ -2,16 +2,26 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\UnmanagedAccessGrant;
-use Seam\SeamClient;
 
 class AccessGrantsUnmanagedClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -24,14 +34,12 @@ class AccessGrantsUnmanagedClient
     {
         $request_payload = [];
 
-        if ($access_grant_id !== null) {
-            $request_payload["access_grant_id"] = $access_grant_id;
-        }
+        $request_payload["access_grant_id"] = $access_grant_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_grants/unmanaged/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_grants/unmanaged/get", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         return UnmanagedAccessGrant::from_json($res->access_grant);
@@ -46,6 +54,7 @@ class AccessGrantsUnmanagedClient
      * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $reservation_key Filter unmanaged Access Grants by reservation_key.
      * @param string $user_identity_id ID of user identity by which you want to filter the list of unmanaged Access Grants.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -78,10 +87,10 @@ class AccessGrantsUnmanagedClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_grants/unmanaged/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_grants/unmanaged/list", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -113,20 +122,14 @@ class AccessGrantsUnmanagedClient
     ): void {
         $request_payload = [];
 
-        if ($access_grant_id !== null) {
-            $request_payload["access_grant_id"] = $access_grant_id;
-        }
-        if ($is_managed !== null) {
-            $request_payload["is_managed"] = $is_managed;
-        }
+        $request_payload["access_grant_id"] = $access_grant_id;
+        $request_payload["is_managed"] = $is_managed;
         if ($access_grant_key !== null) {
             $request_payload["access_grant_key"] = $access_grant_key;
         }
 
-        $this->seam->request(
-            "POST",
-            "/access_grants/unmanaged/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/access_grants/unmanaged/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

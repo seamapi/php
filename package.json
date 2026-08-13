@@ -13,7 +13,8 @@
     "lint": "eslint .",
     "postlint": "prettier --check --ignore-path .gitignore --ignore-path .prettierignore .",
     "format": "prettier --write --ignore-path .gitignore --ignore-path .prettierignore .",
-    "preformat": "eslint --fix ."
+    "preformat": "eslint --fix .",
+    "start": "fake-seam-connect --seed"
   },
   "engines": {
     "node": ">=22.11.0",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@prettier/plugin-php": "^0.25.0",
     "@seamapi/blueprint": "^1.2.0",
+    "@seamapi/fake-seam-connect": "1.86.0",
     "@seamapi/smith": "^1.1.0",
     "@seamapi/types": "1.985.0",
     "change-case": "^5.4.4",
