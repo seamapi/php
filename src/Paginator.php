@@ -72,13 +72,25 @@ class Paginator
 
         $data = $request($params);
 
-        return [$data, $this->pagination_cache[$cursor] ?? new Pagination()];
+        if (!array_key_exists($cursor, $this->pagination_cache)) {
+            throw new \InvalidArgumentException(
+                "Cannot use a paginator with an unpaginated endpoint",
+            );
+        }
+
+        return [$data, $this->pagination_cache[$cursor]];
     }
 
     private function cachePagination($response, string $cursor): void
     {
+        if (!is_object($response) || !isset($response->pagination)) {
+            throw new \InvalidArgumentException(
+                "Cannot use a paginator with an unpaginated endpoint",
+            );
+        }
+
         $this->pagination_cache[$cursor] = Pagination::from_json(
-            $response->pagination ?? null,
+            $response->pagination,
         );
     }
 

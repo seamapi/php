@@ -37,6 +37,8 @@ export interface MethodLayoutContext {
   path: string
   returnType: string
   hasParams: boolean
+  hasRequiredParams: boolean
+  requiredParamsMissingCheck: string
   signatureParams: string
   usesActionAttempt: boolean
   usesOnResponse: boolean
@@ -92,11 +94,16 @@ const getMethodLayoutContext = (
       : 'void'
 
   const sortedParameters = sortPhpClientMethodParameters(parameters)
+  const requiredParameters = parameters.filter((p) => !p.isOptional)
+  const hasRequiredParams = requiredParameters.length > 0
+  const requiredParamsMissingCheck = requiredParameters
+    .map((p) => `$${p.name} === null`)
+    .join(' && ')
 
   const signatureParams = sortedParameters
     .map(
       (p) =>
-        `${(p.isNullable || p.isOptional) && p.type !== 'mixed' ? '?' : ''}${p.type} $${p.name}${p.isOptional ? ' = null' : ''}`,
+        `${(p.isNullable || p.isOptional || hasRequiredParams) && p.type !== 'mixed' ? '?' : ''}${p.type} $${p.name}${p.isOptional || hasRequiredParams ? ' = null' : ''}`,
     )
     .concat(
       usesActionAttempt
@@ -137,6 +144,8 @@ const getMethodLayoutContext = (
     path,
     returnType,
     hasParams: parameters.length > 0,
+    hasRequiredParams,
+    requiredParamsMissingCheck,
     signatureParams,
     usesActionAttempt,
     usesOnResponse,

@@ -124,21 +124,15 @@ final class PaginatorTest extends FakeSeamConnectTestCase
         $this->assertSame(array_unique($ids), $ids);
     }
 
-    /**
-     * Not every list endpoint returns pagination metadata, and asking for a
-     * page of one that does not should not fail.
-     */
-    public function testEndpointWithoutPaginationYieldsAnEmptyPagination(): void
+    public function testEndpointWithoutPaginationIsRejected(): void
     {
         $seam = $this->seam();
 
-        $pages = $seam->createPaginator(fn($p) => $seam->workspaces->list());
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("unpaginated endpoint");
 
-        [$workspaces, $pagination] = $pages->firstPage();
-
-        $this->assertNotEmpty($workspaces);
-        $this->assertInstanceOf(Pagination::class, $pagination);
-        $this->assertFalse($pagination->has_next_page);
-        $this->assertNull($pagination->next_page_cursor);
+        $seam
+            ->createPaginator(fn($p) => $seam->workspaces->list())
+            ->firstPage();
     }
 }
