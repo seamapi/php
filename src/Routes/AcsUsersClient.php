@@ -299,9 +299,7 @@ class AcsUsersClient
         $this->client->request(
             "DELETE",
             "/acs/users/remove_from_access_group",
-            [
-                "json" => (object) $request_payload,
-            ],
+            ["json" => (object) $request_payload],
         );
     }
 
