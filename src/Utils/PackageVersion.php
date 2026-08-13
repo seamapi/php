@@ -10,7 +10,7 @@ class PackageVersion
      * Injected from package.json when a version is cut, by the version
      * lifecycle script in package.json. Do not edit by hand.
      */
-    public const VERSION = "4.0.0-beta.2";
+    public const VERSION = "4.0.0-beta.3";
 
     public static function get(): string
     {
