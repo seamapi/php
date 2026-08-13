@@ -80,6 +80,31 @@ final class Options
     }
 
     /**
+     * A preconfigured client carries its own endpoint and authorization, so an
+     * option that would configure one is a mistake to combine with it, and is
+     * rejected rather than silently ignored.
+     *
+     * @param array<string, mixed> $options The other options by name, where
+     * null (or, for an options array, empty) means the option was not given.
+     */
+    public static function check_client_options(
+        ?object $client,
+        array $options,
+    ): void {
+        if ($client === null) {
+            return;
+        }
+
+        foreach ($options as $name => $value) {
+            if ($value !== null && $value !== []) {
+                throw new InvalidOptionsError(
+                    "The {$name} option cannot be used with the client option",
+                );
+            }
+        }
+    }
+
+    /**
      * Reads an environment variable, treating an empty value as unset so that
      * an exported-but-blank variable does not override the default.
      */

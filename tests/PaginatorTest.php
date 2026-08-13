@@ -56,6 +56,27 @@ final class PaginatorTest extends FakeSeamConnectTestCase
         $this->assertEmpty(array_intersect($first_ids, $second_ids));
     }
 
+    /**
+     * The paginator reads the pagination metadata through on_response, but
+     * must not swallow a callback the caller passed in themselves.
+     */
+    public function testOnResponseParamIsChainedNotReplaced(): void
+    {
+        $seen = 0;
+
+        [, $pagination] = $this->paginator([
+            "limit" => 2,
+            "on_response" => function ($response) use (&$seen): void {
+                $seen++;
+                $this->assertObjectHasProperty("pagination", $response);
+            },
+        ])->firstPage();
+
+        $this->assertSame(1, $seen);
+        // The paginator's own callback has to keep working as well.
+        $this->assertTrue($pagination->has_next_page);
+    }
+
     public function testNextPageRequiresACursor(): void
     {
         $this->expectException(\InvalidArgumentException::class);

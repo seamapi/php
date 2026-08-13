@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use GuzzleHttp\Handler\MockHandler;
 use Seam\Http\Body;
 use Seam\Http\ClientFactory;
+use Seam\HttpApiError;
+use Seam\InvalidOptionsError;
 use Seam\Seam;
+use Seam\SeamWithoutWorkspace;
 use Tests\Support\FakeSeamConnectTestCase;
+use Tests\Support\RecordingClient;
 
 final class ClientTest extends FakeSeamConnectTestCase
 {
@@ -67,6 +72,77 @@ final class ClientTest extends FakeSeamConnectTestCase
         $device = $seam->devices->get($this->seed["august_device_1"]);
 
         $this->assertSame($this->seed["august_device_1"], $device->device_id);
+    }
+
+    /**
+     * A credential passed beside a client would be silently discarded, since
+     * the client carries its own authorization, so the mix-up is rejected.
+     */
+    public function testClientOptionRejectsAnyOtherOption(): void
+    {
+        $client = $this->seam()->client;
+
+        $this->expectException(InvalidOptionsError::class);
+        $this->expectExceptionMessage(
+            "The api_key option cannot be used with the client option",
+        );
+
+        new Seam(api_key: $this->seed["seam_apikey1_token"], client: $client);
+    }
+
+    /**
+     * wait_for_action_attempt does not configure the client, so it is the
+     * one option a client can be combined with.
+     */
+    public function testClientOptionStillTakesAWaitForActionAttemptDefault(): void
+    {
+        $seam = new Seam(
+            client: $this->seam()->client,
+            wait_for_action_attempt: false,
+        );
+
+        $this->assertFalse($seam->defaults["wait_for_action_attempt"]);
+    }
+
+    public function testWithoutWorkspaceClientOptionRejectsAnyOtherOption(): void
+    {
+        $client = $this->seam()->client;
+
+        $this->expectException(InvalidOptionsError::class);
+        $this->expectExceptionMessage(
+            "The endpoint option cannot be used with the client option",
+        );
+
+        new SeamWithoutWorkspace(endpoint: $this->endpoint, client: $client);
+    }
+
+    /**
+     * A bare handler, such as a MockHandler, is wrapped in a handler stack
+     * so the error mapping and retries still apply to it.
+     */
+    public function testABareHandlerStillGetsTheErrorMapping(): void
+    {
+        $mock = new MockHandler([
+            RecordingClient::json(404, [
+                "error" => [
+                    "type" => "device_not_found",
+                    "message" => "Device not found",
+                ],
+            ]),
+        ]);
+
+        $seam = new Seam(
+            api_key: $this->seed["seam_apikey1_token"],
+            endpoint: "https://example.com",
+            guzzle_options: ["handler" => $mock],
+        );
+
+        try {
+            $seam->devices->list();
+            $this->fail("Expected the error to be mapped");
+        } catch (HttpApiError $error) {
+            $this->assertSame("device_not_found", $error->getErrorCode());
+        }
     }
 
     public function testGuzzleOptionsAreMergedIntoTheClient(): void

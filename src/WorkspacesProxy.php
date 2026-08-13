@@ -38,17 +38,20 @@ class WorkspacesProxy
         ?string $webview_primary_button_text_color = null,
         ?string $webview_success_message = null,
     ): Workspace {
+        // Forwarded by name: the generated parameter order follows the API
+        // definition, so a positional call could silently shift after a
+        // regeneration.
         return $this->workspaces->create(
-            $name,
-            $company_name,
-            $connect_partner_name,
-            $connect_webview_customization,
-            $is_sandbox,
-            $organization_id,
-            $webview_logo_shape,
-            $webview_primary_button_color,
-            $webview_primary_button_text_color,
-            $webview_success_message,
+            name: $name,
+            company_name: $company_name,
+            connect_partner_name: $connect_partner_name,
+            connect_webview_customization: $connect_webview_customization,
+            is_sandbox: $is_sandbox,
+            organization_id: $organization_id,
+            webview_logo_shape: $webview_logo_shape,
+            webview_primary_button_color: $webview_primary_button_color,
+            webview_primary_button_text_color: $webview_primary_button_text_color,
+            webview_success_message: $webview_success_message,
         );
     }
 }

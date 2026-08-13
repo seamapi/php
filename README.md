@@ -374,7 +374,8 @@ $devices = Seam\Http\Body::decode($response)->devices;
 #### Overriding the client
 
 Pass an already configured Guzzle client. It carries its own endpoint and
-authorization, so no other authentication option may be given alongside it.
+authorization, so it cannot be combined with any option other than
+`wait_for_action_attempt`.
 
 ```php
 $client = new GuzzleHttp\Client([

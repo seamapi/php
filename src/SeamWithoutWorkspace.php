@@ -37,8 +37,16 @@ class SeamWithoutWorkspace
         ?float $timeout = null,
         ?ClientInterface $client = null,
     ) {
-        // A client carries its own endpoint and authorization, so the
-        // authentication options are only read when one has to be built.
+        // A client carries its own endpoint and authorization, so no option
+        // that would configure one can be combined with it.
+        Options::check_client_options($client, [
+            "personal_access_token" => $personal_access_token,
+            "endpoint" => $endpoint,
+            "guzzle_options" => $guzzle_options,
+            "retries" => $retries,
+            "timeout" => $timeout,
+        ]);
+
         $this->client =
             $client ??
             ClientFactory::create(

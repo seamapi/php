@@ -61,9 +61,10 @@ const rootNamespace = 'Seam\\Resources'
 // deep, so exceeding it means the blueprint is cyclic rather than nested.
 const maxDepth = 16
 
-// PHP reserves these as type names, so a class cannot be called any of them.
-// Class names are case insensitive, so the check has to be too.
+// PHP reserves these as type names or keywords, so a class cannot be called
+// any of them. Class names are case insensitive, so the check has to be too.
 const reservedClassNames = new Set([
+  // Type names.
   'array',
   'bool',
   'callable',
@@ -82,6 +83,72 @@ const reservedClassNames = new Set([
   'string',
   'true',
   'void',
+  // Keywords.
+  'abstract',
+  'and',
+  'as',
+  'break',
+  'case',
+  'catch',
+  'class',
+  'clone',
+  'const',
+  'continue',
+  'declare',
+  'default',
+  'die',
+  'do',
+  'echo',
+  'else',
+  'elseif',
+  'empty',
+  'enddeclare',
+  'endfor',
+  'endforeach',
+  'endif',
+  'endswitch',
+  'endwhile',
+  'exit',
+  'extends',
+  'final',
+  'finally',
+  'fn',
+  'for',
+  'foreach',
+  'function',
+  'global',
+  'goto',
+  'if',
+  'implements',
+  'include',
+  'include_once',
+  'instanceof',
+  'insteadof',
+  'interface',
+  'isset',
+  'list',
+  'match',
+  'namespace',
+  'new',
+  'or',
+  'print',
+  'private',
+  'protected',
+  'public',
+  'readonly',
+  'require',
+  'require_once',
+  'return',
+  'switch',
+  'throw',
+  'trait',
+  'try',
+  'unset',
+  'use',
+  'var',
+  'while',
+  'xor',
+  'yield',
 ])
 
 interface ClassDocs {
@@ -209,7 +276,7 @@ const buildClass = (
 
     if (reservedClassNames.has(nestedClassName.toLowerCase())) {
       throw new Error(
-        `Cannot generate ${nestedPath}: ${nestedClassName} is a reserved PHP type name`,
+        `Cannot generate ${nestedPath}: ${nestedClassName} is reserved in PHP`,
       )
     }
 

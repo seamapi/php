@@ -55,10 +55,20 @@ class Paginator
             $params["page_cursor"] = $cursor;
         }
 
-        $params["on_response"] = fn($response) => $this->cachePagination(
-            $response,
+        // Chained rather than replaced, so a callback the caller passed in
+        // through the params still fires.
+        $on_response = $params["on_response"] ?? null;
+
+        $params["on_response"] = function ($response) use (
             $cursor,
-        );
+            $on_response,
+        ): void {
+            $this->cachePagination($response, $cursor);
+
+            if (is_callable($on_response)) {
+                $on_response($response);
+            }
+        };
 
         $data = $request($params);
 

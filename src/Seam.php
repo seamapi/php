@@ -83,7 +83,7 @@ class Seam
      * @param array<string, mixed> $guzzle_options Options merged into the underlying Guzzle client, e.g. headers or proxy.
      * @param int|null $retries How many times to retry a failed request. Defaults to 2; pass 0 to disable.
      * @param float|null $timeout Request timeout in seconds, covering connecting and reading. Defaults to 30; pass 0 to disable.
-     * @param ClientInterface|null $client A preconfigured Guzzle client, used as is. It carries its own endpoint and authorization, so no other authentication option applies to it.
+     * @param ClientInterface|null $client A preconfigured Guzzle client, used as is. It carries its own endpoint and authorization, so it cannot be combined with any option other than wait_for_action_attempt.
      */
     public function __construct(
         ?string $api_key = null,
@@ -100,8 +100,18 @@ class Seam
             "wait_for_action_attempt" => $wait_for_action_attempt ?? true,
         ];
 
-        // A client carries its own endpoint and authorization, so the
-        // authentication options are only read when one has to be built.
+        // A client carries its own endpoint and authorization, so no option
+        // that would configure one can be combined with it.
+        Options::check_client_options($client, [
+            "api_key" => $api_key,
+            "personal_access_token" => $personal_access_token,
+            "workspace_id" => $workspace_id,
+            "endpoint" => $endpoint,
+            "guzzle_options" => $guzzle_options,
+            "retries" => $retries,
+            "timeout" => $timeout,
+        ]);
+
         $this->client =
             $client ??
             ClientFactory::create(
