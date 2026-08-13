@@ -61,26 +61,26 @@ final class RetryTest extends TestCase
     }
 
     /**
-     * A connection failure never reached the server, so retrying it cannot
-     * duplicate anything.
+     * Non-idempotent methods are never retried, even when the failure is
+     * known to have happened before the request reached the server.
      */
-    public function testRetriesPostOnConnectionFailure(): void
+    public function testDoesNotRetryPostOnConnectionFailure(): void
     {
         $connect_error = new ConnectException(
             "Could not resolve host",
             new Request("POST", "/devices/list"),
         );
 
-        $recorder = new RecordingClient([
-            $connect_error,
-            $connect_error,
-            self::devices(),
-        ]);
+        $recorder = RecordingClient::repeating_throwable($connect_error);
 
-        $devices = $this->seam($recorder)->devices->list();
+        try {
+            $this->seam($recorder)->devices->list();
+            $this->fail("Expected the connection failure to surface");
+        } catch (ConnectException) {
+            // Expected.
+        }
 
-        $this->assertSame([], $devices);
-        $this->assertSame(3, $recorder->attempt_count());
+        $this->assertSame(1, $recorder->attempt_count());
     }
 
     /**
@@ -135,6 +135,8 @@ final class RetryTest extends TestCase
     /**
      * Repeating an idempotent request is safe even when the server may have
      * received it, so a timeout does get retried there.
+     *
+     * TODO: Use the SDK route once generated reads use GET instead of POST.
      */
     public function testRetriesIdempotentRequestsOnTimeout(): void
     {
@@ -156,11 +158,10 @@ final class RetryTest extends TestCase
     }
 
     /**
-     * A connection reset by the peer surfaces as a request exception with
-     * errno 104 rather than a connection exception, but is a transport
-     * failure all the same.
+     * A connection reset is a transport error, but POST is still not safe to
+     * repeat.
      */
-    public function testRetriesPostOnConnectionReset(): void
+    public function testDoesNotRetryPostOnConnectionReset(): void
     {
         $reset = new RequestException(
             "Connection reset by peer",
@@ -170,14 +171,21 @@ final class RetryTest extends TestCase
             ["errno" => 104],
         );
 
-        $recorder = new RecordingClient([$reset, self::devices()]);
+        $recorder = RecordingClient::repeating_throwable($reset);
 
-        $devices = $this->seam($recorder)->devices->list();
+        try {
+            $this->seam($recorder)->devices->list();
+            $this->fail("Expected the connection reset to surface");
+        } catch (RequestException) {
+            // Expected.
+        }
 
-        $this->assertSame([], $devices);
-        $this->assertSame(2, $recorder->attempt_count());
+        $this->assertSame(1, $recorder->attempt_count());
     }
 
+    /**
+     * TODO: Use the SDK route once generated reads use GET instead of POST.
+     */
     public function testStopsRetryingOnceRetriesAreExhausted(): void
     {
         $connect_error = new ConnectException(
@@ -190,12 +198,18 @@ final class RetryTest extends TestCase
         $this->expectException(ConnectException::class);
 
         try {
-            $this->seam($recorder, retries: 1)->devices->list();
+            $this->seam($recorder, retries: 1)->client->request(
+                "GET",
+                "/devices/list",
+            );
         } finally {
             $this->assertSame(2, $recorder->attempt_count());
         }
     }
 
+    /**
+     * TODO: Use the SDK route once generated reads use GET instead of POST.
+     */
     public function testDoesNotRetryWhenRetriesAreDisabled(): void
     {
         $connect_error = new ConnectException(
@@ -206,7 +220,10 @@ final class RetryTest extends TestCase
         $recorder = RecordingClient::repeating_throwable($connect_error);
 
         try {
-            $this->seam($recorder, retries: 0)->devices->list();
+            $this->seam($recorder, retries: 0)->client->request(
+                "GET",
+                "/devices/list",
+            );
             $this->fail("Expected the connection failure to surface");
         } catch (ConnectException) {
             // Expected.
@@ -249,6 +266,8 @@ final class RetryTest extends TestCase
      * Building a client must not mutate a handler stack the caller may
      * reuse: a second client built from the same options would otherwise
      * stack the retry middleware twice and multiply the retries.
+     *
+     * TODO: Use the SDK route once generated reads use GET instead of POST.
      */
     public function testBuildingASecondClientDoesNotStackRetries(): void
     {
@@ -281,6 +300,8 @@ final class RetryTest extends TestCase
     /**
      * The SDK itself only issues POSTs, but a caller reaching for the client
      * directly with an idempotent method does get status based retries.
+     *
+     * TODO: Use the SDK route once generated reads use GET instead of POST.
      */
     public function testRetriesIdempotentRequestsOnServiceUnavailable(): void
     {

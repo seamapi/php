@@ -341,12 +341,14 @@ $seam = new Seam\Seam(timeout: 60.0);
 
 #### Retries
 
-Failed requests are retried twice by default, with exponential backoff.
+By default, the SDK makes up to three attempts: the initial request and two
+retries. Retries are limited to `GET`, `HEAD`, `OPTIONS`, `PUT`, and `DELETE`
+requests that fail because of a transport error, timeout, HTTP 429 response, or
+HTTP 5xx response. `POST` and `PATCH` requests are not retried.
 
-A request that never reached the server, such as a connection failure, is
-always retried, since it cannot have had an effect. A request the server may
-already have processed is retried only when repeating it is safe, so a retry
-never risks duplicating a write.
+Retries use exponential backoff with jitter: approximately 200–240 ms before
+the first retry and 400–480 ms before the second. A longer `Retry-After` header
+is honored. The request timeout is reset for each attempt.
 
 ```php
 // Retry more times
