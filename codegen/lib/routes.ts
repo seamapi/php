@@ -131,7 +131,8 @@ const createClientMethod = (endpoint: Endpoint): PhpClientMethod => {
       name: parameter.name,
       type: getPhpType(parameter),
       description: parameter.description,
-      required: parameter.isRequired,
+      isOptional: !parameter.isRequired,
+      isNullable: parameter.isNullable,
       // The primary identifier of a get endpoint always sorts first in the
       // method signature.
       position:

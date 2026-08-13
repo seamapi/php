@@ -57,19 +57,24 @@ const generateConstructorParam = (
   property: ResourceClassProperty,
 ): ConstructorParamLayoutContext => {
   let declaration: string
+  // Resource decoding remains tolerant of sparse response envelopes. Optional
+  // properties can also be omitted when constructing a resource directly;
+  // nullable properties retain the same null-safe representation.
+  const defaultValue = property.isOptional ? ' = null' : ''
+
   switch (property.kind) {
     case 'objectReference':
-      declaration = `public ${property.referenceName}|null $${property.name},`
+      declaration = `public ${property.referenceName}|null $${property.name}${defaultValue},`
       break
 
     case 'listReference':
-      declaration = `public array $${property.name},`
+      declaration = `public array${property.isOptional ? '|null' : ''} $${property.name}${defaultValue},`
       break
 
     case 'value': {
       const { phpType } = property
       const nullSuffix = phpType === 'mixed' ? '' : '|null'
-      declaration = `public ${phpType}${nullSuffix} $${property.name},`
+      declaration = `public ${phpType}${nullSuffix} $${property.name}${defaultValue},`
       break
     }
   }

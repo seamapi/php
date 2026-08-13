@@ -35,7 +35,7 @@ final class HeadersTest extends TestCase
         $request = $recorder->request();
 
         $this->assertSame("/devices/get", $request->getUri()->getPath());
-        $this->assertEquals((object) ["device_id" => "d1"], $recorder->body());
+        $this->assertSame("device_id=d1", $request->getUri()->getQuery());
 
         $this->assertSame(
             "Bearer seam_apikey_token",

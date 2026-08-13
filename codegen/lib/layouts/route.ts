@@ -26,6 +26,8 @@ export interface MethodLayoutContext {
     type: string
     description: string
     required: boolean
+    isOptional: boolean
+    isNullable: boolean
   }>
   documentedParameters: Array<{
     name: string
@@ -94,7 +96,7 @@ const getMethodLayoutContext = (
   const signatureParams = sortedParameters
     .map(
       (p) =>
-        `${!(p.required ?? false) && p.type !== 'mixed' ? '?' : ''}${p.type} $${p.name}${(p.required ?? false) ? '' : ' = null'}`,
+        `${(p.isNullable || p.isOptional) && p.type !== 'mixed' ? '?' : ''}${p.type} $${p.name}${p.isOptional ? ' = null' : ''}`,
     )
     .concat(
       usesActionAttempt
@@ -105,11 +107,13 @@ const getMethodLayoutContext = (
     .join(', ')
 
   const documentedEndpointParameters = sortedParameters.map(
-    ({ name, type, description, required }) => ({
+    ({ name, type, description, isOptional, isNullable }) => ({
       name,
       type,
       description,
-      required: required ?? false,
+      required: !isOptional,
+      isOptional,
+      isNullable,
     }),
   )
 

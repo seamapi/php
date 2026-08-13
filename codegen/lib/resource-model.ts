@@ -32,6 +32,8 @@ export type ResourceClassProperty =
 interface ResourceClassPropertyMetadata {
   name: string
   description: string
+  isOptional: boolean
+  isNullable: boolean
   isDeprecated: boolean
   deprecationMessage: string
 }
@@ -258,6 +260,8 @@ const buildClass = (
     const metadata = {
       name: property.name,
       description: property.description,
+      isOptional: property.isOptional,
+      isNullable: property.isNullable,
       isDeprecated: property.isDeprecated,
       deprecationMessage: property.deprecationMessage,
     }
