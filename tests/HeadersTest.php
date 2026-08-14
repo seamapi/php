@@ -7,7 +7,7 @@ namespace Tests;
 use PHPUnit\Framework\TestCase;
 use Seam\Http\ClientFactory;
 use Seam\Seam;
-use Seam\Utils\PackageVersion;
+use Seam\Version;
 use Tests\Support\RecordingClient;
 
 /**
@@ -49,7 +49,7 @@ final class HeadersTest extends TestCase
             $request->getHeaderLine("seam-sdk-name"),
         );
         $this->assertSame(
-            PackageVersion::get(),
+            Version::get(),
             $request->getHeaderLine("seam-sdk-version"),
         );
         $this->assertSame(
@@ -57,7 +57,7 @@ final class HeadersTest extends TestCase
             $request->getHeaderLine("seam-lts-version"),
         );
         $this->assertSame(
-            "seam-php/" . PackageVersion::get(),
+            "seam-php/" . Version::get(),
             $request->getHeaderLine("User-Agent"),
         );
     }

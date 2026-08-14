@@ -618,7 +618,7 @@ and dispatches the [Version](.github/workflows/version.yml) workflow.
 Run the [Version](.github/workflows/version.yml) workflow with the
 version to cut.
 It runs `npm version`, which bumps the `version` field in `package.json`,
-injects that version into `Seam\Utils\PackageVersion`, creates a signed `v*`
+injects that version into `Seam\Version`, creates a signed `v*`
 git tag and pushes it.
 Pushing the tag triggers the [Publish](.github/workflows/publish.yml)
 workflow, and [Packagist](https://packagist.org/packages/seamapi/seam)
@@ -629,7 +629,7 @@ picks up the new tag from its GitHub webhook.
 > step in between.
 > This repository therefore keeps the version in `package.json`, which is a
 > development manifest that is not published, and injects it into the
-> `Seam\Utils\PackageVersion::VERSION` constant used for the
+> `Seam\Version::VERSION` constant used for the
 > `seam-sdk-version` header.
 >
 > The injection runs from `version.ts`, wired to the `version` lifecycle

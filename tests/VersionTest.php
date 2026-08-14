@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use Seam\Utils\PackageVersion;
+use Seam\Version;
 
-final class PackageVersionTest extends TestCase
+final class VersionTest extends TestCase
 {
     public function testVersionMatchesPackageJson(): void
     {
@@ -19,8 +19,8 @@ final class PackageVersionTest extends TestCase
 
         $this->assertSame(
             $package["version"],
-            PackageVersion::get(),
-            "Seam\\Utils\\PackageVersion is out of date with package.json. " .
+            Version::get(),
+            "Seam\\Version is out of date with package.json. " .
                 "It is injected by the version lifecycle script when a " .
                 "version is cut and should not be edited by hand.",
         );
@@ -31,6 +31,6 @@ final class PackageVersionTest extends TestCase
         $seam = new \Seam\Seam("seam_apikey1_token");
         $headers = $seam->client->getConfig("headers");
 
-        $this->assertSame(PackageVersion::get(), $headers["seam-sdk-version"]);
+        $this->assertSame(Version::get(), $headers["seam-sdk-version"]);
     }
 }

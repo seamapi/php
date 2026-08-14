@@ -1,8 +1,8 @@
 <?php
 
-namespace Seam\Utils;
+namespace Seam;
 
-class PackageVersion
+class Version
 {
     /**
      * The version of this package.

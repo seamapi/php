@@ -4,7 +4,7 @@ namespace Seam\Http;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
-use Seam\Utils\PackageVersion;
+use Seam\Version;
 
 /**
  * Builds the Guzzle client a Seam client makes its requests with.
@@ -90,7 +90,7 @@ final class ClientFactory
      */
     private static function sdk_headers(): array
     {
-        $version = PackageVersion::get();
+        $version = Version::get();
 
         return [
             "User-Agent" => "seam-php/" . $version,
