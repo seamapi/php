@@ -56,9 +56,33 @@ final class HeadersTest extends TestCase
             ClientFactory::LTS_VERSION,
             $request->getHeaderLine("seam-lts-version"),
         );
-        $this->assertSame(
-            "seam-php/" . Version::get(),
+        // The SDK does not set a User-Agent of its own, so Guzzle's default
+        // applies.
+        $this->assertStringStartsWith(
+            "GuzzleHttp/",
             $request->getHeaderLine("User-Agent"),
+        );
+    }
+
+    public function testSendsTheCallerUserAgentUnchanged(): void
+    {
+        $recorder = new RecordingClient([
+            RecordingClient::json(200, ["device" => ["device_id" => "d1"]]),
+        ]);
+
+        $seam = Seam::from_api_key(
+            "seam_apikey_token",
+            endpoint: "https://example.com",
+            guzzle_options: array_merge($recorder->guzzle_options(), [
+                "headers" => ["User-Agent" => "acme-app/1.0"],
+            ]),
+        );
+
+        $seam->devices->get("d1");
+
+        $this->assertSame(
+            "acme-app/1.0",
+            $recorder->request()->getHeaderLine("User-Agent"),
         );
     }
 

@@ -157,7 +157,7 @@ In v3, every endpoint was called with `POST` and a JSON body. In v4, endpoints u
 - Delete endpoints use `DELETE`.
 - Create and action endpoints (`create`, `lock_door`, etc.) remain `POST`.
 
-Method signatures, arguments, and return values are unchanged — this only matters if something outside your code observes the HTTP traffic: proxy or firewall rules that allowlist methods, request logging, or test mocks registered against `POST` routes. The `User-Agent` header also changes from `Seam PHP Client <version>` to `seam-php/<version>`.
+Method signatures, arguments, and return values are unchanged — this only matters if something outside your code observes the HTTP traffic: proxy or firewall rules that allowlist methods, request logging, or test mocks registered against `POST` routes. The SDK also no longer sets a `User-Agent` of its own (v3 sent `Seam PHP Client <version>`): it identifies itself with the `seam-sdk-name` and `seam-sdk-version` headers, and a `User-Agent` you set through `guzzle_options` is sent unchanged.
 
 If you call the Seam API with your own HTTP client, the serializer is available as `Seam\UrlSearchParamsSerializer::serialize()`.
 
@@ -205,7 +205,7 @@ Tokens are validated on construction: a client session token, JWT, or publishabl
 
 ### Authentication from the environment
 
-`SEAM_API_KEY` was already read in v3. Version 4 also reads `SEAM_PERSONAL_ACCESS_TOKEN` and `SEAM_WORKSPACE_ID` when no explicit credentials are passed, so `new Seam\Seam()` works under either authentication method. Setting both `SEAM_API_KEY` and `SEAM_PERSONAL_ACCESS_TOKEN` is an error. The endpoint may be set with `SEAM_ENDPOINT` (`SEAM_API_URL` is honored but deprecated).
+`SEAM_API_KEY` was already read in v3. Version 4 also reads `SEAM_PERSONAL_ACCESS_TOKEN` and `SEAM_WORKSPACE_ID` when no explicit credentials are passed, so `new Seam\Seam()` works under either authentication method. Setting both `SEAM_API_KEY` and `SEAM_PERSONAL_ACCESS_TOKEN` is an error. The endpoint may be set with `SEAM_ENDPOINT`.
 
 ### Webhook verification
 
