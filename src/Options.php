@@ -18,8 +18,7 @@ final class Options
 
     public static function get_endpoint_from_env(): ?string
     {
-        $seam_endpoint = self::get_env("SEAM_ENDPOINT");
-        return $seam_endpoint
+        return self::get_env("SEAM_ENDPOINT");
     }
 
     public static function is_seam_options_with_api_key(

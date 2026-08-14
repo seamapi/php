@@ -62,11 +62,6 @@ class Seam
     public WorkspacesClient $workspaces;
 
     /**
-     * The long term support version of the Seam API this SDK targets.
-     */
-    public const LTS_VERSION = ClientFactory::LTS_VERSION;
-
-    /**
      * The Guzzle client this instance makes its requests with.
      *
      * Query params given as a map and NullValue::NULL sentinels in JSON

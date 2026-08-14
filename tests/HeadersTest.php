@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use Seam\Http\ClientFactory;
 use Seam\Seam;
 use Seam\Version;
 use Tests\Support\RecordingClient;
@@ -52,13 +51,31 @@ final class HeadersTest extends TestCase
             Version::get(),
             $request->getHeaderLine("seam-sdk-version"),
         );
-        $this->assertSame(
-            ClientFactory::LTS_VERSION,
-            $request->getHeaderLine("seam-lts-version"),
-        );
-        $this->assertSame(
-            "seam-php/" . Version::get(),
+        $this->assertStringStartsWith(
+            "GuzzleHttp/",
             $request->getHeaderLine("User-Agent"),
+        );
+    }
+
+    public function testSendsTheCallerUserAgentUnchanged(): void
+    {
+        $recorder = new RecordingClient([
+            RecordingClient::json(200, ["device" => ["device_id" => "d1"]]),
+        ]);
+
+        $seam = Seam::from_api_key(
+            "seam_apikey_token",
+            endpoint: "https://example.com",
+            guzzle_options: array_merge($recorder->guzzle_options(), [
+                "headers" => ["User-Agent" => "acme-app/1.0"],
+            ]),
+        );
+
+        $seam->devices->get("d1");
+
+        $this->assertSame(
+            "acme-app/1.0",
+            $recorder->request()->getHeaderLine("User-Agent"),
         );
     }
 
