@@ -508,26 +508,6 @@ try {
 A response that is not shaped like a Seam error, such as a gateway returning
 HTML, raises the underlying Guzzle exception instead.
 
-## Upgrading from 3.x
-
-See [MIGRATION.md](./MIGRATION.md) for the full guide, including upgrading from 2.x. In brief:
-
-- PHP 8.2 or later is required. PHP 8.1 reached end of life in December 2025.
-- The client class is `Seam\Seam`, replacing `Seam\SeamClient`.
-- The constructor takes named options, so `$endpoint` is no longer the second
-  positional argument, and `$throw_http_errors` is gone: an API error always
-  raises.
-- The exception classes stay in the `Seam\` namespace and now share a
-  `Seam\SeamException` interface.
-- `$seam->action_attempts->poll_until_ready()` is gone. Use
-  `wait_for_action_attempt`, which also takes a `timeout` and
-  `polling_interval`.
-- `$seam->client` is the Guzzle client, and `$seam->api_key` and the global
-  `LTS_VERSION` constant are gone. Use `Seam\Seam::LTS_VERSION`.
-- A response in the 3xx range is no longer treated as successful.
-- Requests time out after 30 seconds and are retried twice.
-- Pagination metadata is a `Seam\Pagination` rather than a `stdClass`.
-
 ## Development and Testing
 
 ### Quickstart
