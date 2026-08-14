@@ -56,7 +56,6 @@ final class HeadersTest extends TestCase
             ClientFactory::LTS_VERSION,
             $request->getHeaderLine("seam-lts-version"),
         );
-        // The SDK does not set a User-Agent of its own, so Guzzle's default
         // applies.
         $this->assertStringStartsWith(
             "GuzzleHttp/",
