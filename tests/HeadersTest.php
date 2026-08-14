@@ -56,7 +56,6 @@ final class HeadersTest extends TestCase
             ClientFactory::LTS_VERSION,
             $request->getHeaderLine("seam-lts-version"),
         );
-        // applies.
         $this->assertStringStartsWith(
             "GuzzleHttp/",
             $request->getHeaderLine("User-Agent"),
