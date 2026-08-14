@@ -240,9 +240,4 @@ final class ClientTest extends FakeSeamConnectTestCase
 
         $this->assertFalse($seam->defaults["wait_for_action_attempt"]);
     }
-
-    public function testLtsVersionIsExposed(): void
-    {
-        $this->assertSame("1.0.0", Seam::LTS_VERSION);
-    }
 }

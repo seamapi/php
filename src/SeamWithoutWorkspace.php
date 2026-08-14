@@ -18,8 +18,6 @@ use Seam\Routes\WorkspacesClient;
  */
 class SeamWithoutWorkspace
 {
-    public const LTS_VERSION = ClientFactory::LTS_VERSION;
-
     /**
      * The Guzzle client this instance makes its requests with.
      */

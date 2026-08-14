@@ -11,8 +11,6 @@ use Seam\Version;
  */
 final class ClientFactory
 {
-    public const LTS_VERSION = "1.0.0";
-
     /**
      * How many times a failed request is retried unless the caller says
      * otherwise.
@@ -95,7 +93,6 @@ final class ClientFactory
         return [
             "seam-sdk-name" => "seamapi/php",
             "seam-sdk-version" => $version,
-            "seam-lts-version" => self::LTS_VERSION,
         ];
     }
 }

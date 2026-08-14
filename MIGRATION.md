@@ -67,7 +67,7 @@ $res = json_decode(
 The property is typed `GuzzleHttp\ClientInterface` rather than `GuzzleHttp\Client`, so update any type hints. Two other public members are removed with no replacement on the instance:
 
 - `$seam->api_key` is gone.
-- `$seam->ltsVersion` and the global `LTS_VERSION` constant are gone. Use the `Seam\Seam::LTS_VERSION` class constant.
+- `$seam->ltsVersion`, the global `LTS_VERSION` constant, and the `seam-lts-version` request header are gone, with no replacement.
 
 To configure the underlying client, pass `guzzle_options` (merged into the Guzzle client's config), or pass a preconfigured client via the `client` option. A preconfigured client carries its own endpoint and authorization, so combining it with `api_key`, `endpoint`, or any other option that would configure one raises `Seam\InvalidOptionsError` instead of being silently ignored:
 
@@ -237,7 +237,7 @@ The other Seam SDKs spell the sentinel `NULL` and its type `Null`, but both name
 1. Upgrade your runtime to PHP 8.2 or later.
 2. Update the dependency: `composer require "seamapi/seam:^4"`.
 3. Rename `Seam\SeamClient` to `Seam\Seam` and pass constructor options by name; drop `$throw_http_errors`.
-4. Replace `$seam->request()` with `$seam->client->request()`, and `$seam->api_key` / `LTS_VERSION` / `$seam->ltsVersion` with your own configuration or `Seam\Seam::LTS_VERSION`.
+4. Replace `$seam->request()` with `$seam->client->request()`. Remove any use of `$seam->api_key`, `LTS_VERSION`, `$seam->ltsVersion`, or the `seam-lts-version` header — there is no replacement.
 5. Replace `poll_until_ready()` with `wait_for_action_attempt`, and review the new 10 s/1 s defaults.
 6. Review the new retry policy and 30-second timeout; pass `retries: 0` or `timeout: 60.0` to keep v3 behavior.
 7. Update type hints on nested resource classes (`Seam\Resources\DeviceProperties` → `Seam\Resources\Device\Properties`) and on `$seam->client` (`ClientInterface`).

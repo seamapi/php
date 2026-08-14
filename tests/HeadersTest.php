@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use Seam\Http\ClientFactory;
 use Seam\Seam;
 use Seam\Version;
 use Tests\Support\RecordingClient;
@@ -51,10 +50,6 @@ final class HeadersTest extends TestCase
         $this->assertSame(
             Version::get(),
             $request->getHeaderLine("seam-sdk-version"),
-        );
-        $this->assertSame(
-            ClientFactory::LTS_VERSION,
-            $request->getHeaderLine("seam-lts-version"),
         );
         $this->assertStringStartsWith(
             "GuzzleHttp/",
