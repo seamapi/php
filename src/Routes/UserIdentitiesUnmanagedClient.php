@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\UnmanagedUserIdentity;
 
 class UserIdentitiesUnmanagedClient
@@ -50,7 +51,7 @@ class UserIdentitiesUnmanagedClient
      *
      * @param string $created_before Timestamp by which to limit returned unmanaged user identities. Returns user identities created before this timestamp.
      * @param int $limit Maximum number of records to return per page.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned unmanaged user identities to include all records that satisfy a partial match using `full_name`, `phone_number`, `email_address`,  `user_identity_id` or `acs_system_id`.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
@@ -58,7 +59,7 @@ class UserIdentitiesUnmanagedClient
     public function list(
         ?string $created_before = null,
         ?int $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?callable $on_response = null,
     ): array {

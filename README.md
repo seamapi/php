@@ -175,6 +175,39 @@ $seam->locks->unlock_door(
 );
 ```
 
+### Setting a param to null
+
+The Seam API distinguishes three states for an updatable param:
+omitted (leave the stored value unchanged), null (unset the stored value),
+and a value (set it).
+
+PHP's `null` means omitted.
+The SDK removes `null` params from the request entirely,
+so passing `null` never unsets a value.
+To unset a value, pass the `Seam\NullValue::NULL` sentinel,
+which the SDK sends as JSON `null` in request bodies
+and as an empty value in query strings:
+
+```php
+use Seam\NullValue;
+
+// Leaves the name unchanged.
+$seam->devices->update(device_id: $device_id, name: null);
+
+// Unsets the name.
+$seam->devices->update(device_id: $device_id, name: NullValue::NULL);
+```
+
+The other Seam SDKs spell the sentinel `NULL` and its type `Null`,
+but those names are reserved in PHP, so both live on one enum:
+`Seam\NullValue` is the type, and its single case `NullValue::NULL`
+is the value to pass.
+
+Only pass `NullValue::NULL` for params the API documents as nullable.
+Generated methods type nullable params as a union with the sentinel,
+e.g. `string|NullValue|null`, so passing it anywhere else fails with a
+`TypeError`.
+
 ### Pagination
 
 Some Seam API endpoints that return lists of resources support pagination.
@@ -387,6 +420,69 @@ $client = new GuzzleHttp\Client([
 
 $seam = Seam\Seam::from_client($client);
 ```
+
+#### Serializing URL search params
+
+The Seam API parses URL search params as complex types.
+If you call it with your own HTTP client,
+`Seam\StrictUrlSearchParamsSerializer` is exported for that purpose.
+The `_strict=true` param is added to any non-empty query
+so the Seam API uses strict, schema-aware parsing.
+A query with no serializable params remains empty.
+
+```php
+use Seam\StrictUrlSearchParamsSerializer;
+
+$query = StrictUrlSearchParamsSerializer::serialize([
+    "device_ids" => ["device1", "device2"],
+]);
+
+$response = file_get_contents(
+    "https://connect.getseam.com/devices/list?{$query}",
+    context: stream_context_create([
+        "http" => ["header" => "Authorization: Bearer your-api-key"],
+    ]),
+);
+```
+
+The serialization defines the name and value of each search param,
+where every value is a string.
+`Seam\UrlSearchParams` holds those pairs and renders the query string,
+as [URLSearchParams] does for the [reference implementation]:
+
+```php
+use Seam\StrictUrlSearchParamsSerializer;
+use Seam\UrlSearchParams;
+
+$search_params = new UrlSearchParams();
+
+StrictUrlSearchParamsSerializer::update($search_params, [
+    "device_ids" => ["device1", "device2"],
+]);
+
+iterator_to_array($search_params);
+// => [["device_ids", "device1"], ["device_ids", "device2"], ["_strict", "true"]]
+
+(string) $search_params;
+// => 'device_ids=device1&device_ids=device2&_strict=true'
+```
+
+Pass either the query string or the pairs to your HTTP client.
+A client may percent-encode a few characters differently than
+`URLSearchParams` does, e.g. Guzzle escapes `*` and leaves `~` unescaped,
+which the Seam API reads as the same params either way.
+
+A param set to `null` is omitted,
+while a param set to `NullValue::NULL` is serialized to an empty value,
+which the Seam API reads as null,
+as described in [Setting a param to null](#setting-a-param-to-null).
+A param that cannot be represented raises a `Seam\UnserializableParamError`.
+
+The Seam API parses these params with the corresponding [parser].
+
+[URLSearchParams]: https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
+[reference implementation]: https://github.com/seamapi/url-search-params-serializer
+[parser]: https://github.com/seamapi/url-search-params-parser
 
 #### Errors
 

@@ -5,6 +5,7 @@ namespace Seam\Routes;
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
 use Seam\Http\ResolveActionAttempt;
+use Seam\NullValue;
 use Seam\Resources\ActionAttempt;
 
 class ActionAttemptsClient
@@ -60,7 +61,7 @@ class ActionAttemptsClient
      * @param array $action_attempt_ids IDs of the action attempts that you want to retrieve.
      * @param string $device_id ID of the device to filter action attempts by.
      * @param int $limit Maximum number of records to return per page.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
@@ -68,7 +69,7 @@ class ActionAttemptsClient
         ?array $action_attempt_ids = null,
         ?string $device_id = null,
         ?int $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?callable $on_response = null,
     ): array {
         $request_payload = [];

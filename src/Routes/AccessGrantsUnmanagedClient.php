@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\UnmanagedAccessGrant;
 
 class AccessGrantsUnmanagedClient
@@ -51,7 +52,7 @@ class AccessGrantsUnmanagedClient
      * @param string $acs_entrance_id ID of the entrance by which you want to filter the list of unmanaged Access Grants.
      * @param string $acs_system_id ID of the access system by which you want to filter the list of unmanaged Access Grants.
      * @param float $limit Numerical limit on the number of unmanaged access grants to return.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $reservation_key Filter unmanaged Access Grants by reservation_key.
      * @param string $user_identity_id ID of user identity by which you want to filter the list of unmanaged Access Grants.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
@@ -61,7 +62,7 @@ class AccessGrantsUnmanagedClient
         ?string $acs_entrance_id = null,
         ?string $acs_system_id = null,
         ?float $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $reservation_key = null,
         ?string $user_identity_id = null,
         ?callable $on_response = null,

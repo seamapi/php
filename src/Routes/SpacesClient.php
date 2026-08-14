@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\Batch;
 use Seam\Resources\Space;
 
@@ -243,7 +244,7 @@ class SpacesClient
      *
      * @param string $customer_key Customer key for which you want to list spaces.
      * @param float $limit Maximum number of records to return per page.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned spaces to include all records that satisfy a partial match using `name`, `space_key`, or `customer_key`.
      * @param string $space_key Filter spaces by space_key.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
@@ -252,7 +253,7 @@ class SpacesClient
     public function list(
         ?string $customer_key = null,
         ?float $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?string $space_key = null,
         ?callable $on_response = null,

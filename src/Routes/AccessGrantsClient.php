@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\AccessGrant;
 use Seam\Resources\Batch;
 
@@ -36,10 +37,10 @@ class AccessGrantsClient
      * @param array $acs_entrance_ids Set of IDs of the [entrances](https://docs.seam.co/api/acs/systems/list) to which access is being granted.
      * @param string $customization_profile_id ID of the customization profile to apply to the Access Grant and its access methods.
      * @param array $device_ids Set of IDs of the [devices](https://docs.seam.co/api/devices/list) to which access is being granted.
-     * @param string $ends_at Date and time at which the validity of the new grant ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
+     * @param string|NullValue $ends_at Date and time at which the validity of the new grant ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
      * @param mixed $location
      * @param array $location_ids
-     * @param string $name Name for the access grant.
+     * @param string|NullValue $name Name for the access grant.
      * @param string $reservation_key Reservation key for the access grant.
      * @param array $space_ids Set of IDs of existing spaces to which access is being granted.
      * @param array $space_keys Set of keys of existing spaces to which access is being granted.
@@ -54,10 +55,10 @@ class AccessGrantsClient
         ?array $acs_entrance_ids = null,
         ?string $customization_profile_id = null,
         ?array $device_ids = null,
-        ?string $ends_at = null,
+        string|NullValue|null $ends_at = null,
         mixed $location = null,
         ?array $location_ids = null,
-        ?string $name = null,
+        string|NullValue|null $name = null,
         ?string $reservation_key = null,
         ?array $space_ids = null,
         ?array $space_keys = null,
@@ -227,14 +228,14 @@ class AccessGrantsClient
      *
      * @param string $access_code_id ID of the access code by which you want to filter the list of Access Grants.
      * @param array $access_grant_ids IDs of the access grants to retrieve.
-     * @param string $access_grant_key Filter Access Grants by access_grant_key. Use null to filter for Access Grants without an access_grant_key.
+     * @param string|NullValue $access_grant_key Filter Access Grants by access_grant_key. Use null to filter for Access Grants without an access_grant_key.
      * @param string $acs_entrance_id ID of the entrance by which you want to filter the list of Access Grants.
      * @param string $acs_system_id ID of the access system by which you want to filter the list of Access Grants.
      * @param string $customer_key Customer key for which you want to list access grants.
      * @param string $device_id ID of the device by which you want to filter the list of Access Grants.
      * @param float $limit Numerical limit on the number of access grants to return.
      * @param string $location_id
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $reservation_key Filter Access Grants by reservation_key.
      * @param string $space_id ID of the space by which you want to filter the list of Access Grants.
      * @param string $user_identity_id ID of user identity by which you want to filter the list of Access Grants.
@@ -244,14 +245,14 @@ class AccessGrantsClient
     public function list(
         ?string $access_code_id = null,
         ?array $access_grant_ids = null,
-        ?string $access_grant_key = null,
+        string|NullValue|null $access_grant_key = null,
         ?string $acs_entrance_id = null,
         ?string $acs_system_id = null,
         ?string $customer_key = null,
         ?string $device_id = null,
         ?float $limit = null,
         ?string $location_id = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $reservation_key = null,
         ?string $space_id = null,
         ?string $user_identity_id = null,
@@ -349,16 +350,16 @@ class AccessGrantsClient
      *
      * @param string $access_grant_id ID of the Access Grant to update. Provide either `access_grant_id` or `access_grant_key`.
      * @param string $access_grant_key Key of the Access Grant to update. Provide either `access_grant_id` or `access_grant_key`.
-     * @param string $ends_at Date and time at which the validity of the grant ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
-     * @param string $name Display name for the access grant.
+     * @param string|NullValue $ends_at Date and time at which the validity of the grant ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
+     * @param string|NullValue $name Display name for the access grant.
      * @param string $starts_at Date and time at which the validity of the grant starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @return void OK
      */
     public function update(
         ?string $access_grant_id = null,
         ?string $access_grant_key = null,
-        ?string $ends_at = null,
-        ?string $name = null,
+        string|NullValue|null $ends_at = null,
+        string|NullValue|null $name = null,
         ?string $starts_at = null,
     ): void {
         if (

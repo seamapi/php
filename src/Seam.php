@@ -26,6 +26,7 @@ use Seam\Routes\WorkspacesClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Seam\Http\ClientFactory;
+use Seam\Http\SerializingClient;
 
 /**
  * Client for the Seam API.
@@ -67,6 +68,10 @@ class Seam
 
     /**
      * The Guzzle client this instance makes its requests with.
+     *
+     * Query params given as a map and NullValue::NULL sentinels in JSON
+     * bodies are serialized with the Seam standard before the request goes
+     * out; see Seam\Http\SerializingClient.
      */
     public ClientInterface $client;
 
@@ -112,19 +117,20 @@ class Seam
             "timeout" => $timeout,
         ]);
 
-        $this->client =
+        $this->client = SerializingClient::wrap(
             $client ??
-            ClientFactory::create(
-                Options::get_endpoint($endpoint),
-                Auth::get_auth_headers(
-                    $api_key,
-                    $personal_access_token,
-                    $workspace_id,
+                ClientFactory::create(
+                    Options::get_endpoint($endpoint),
+                    Auth::get_auth_headers(
+                        $api_key,
+                        $personal_access_token,
+                        $workspace_id,
+                    ),
+                    $guzzle_options,
+                    $retries,
+                    $timeout,
                 ),
-                $guzzle_options,
-                $retries,
-                $timeout,
-            );
+        );
 
         $this->access_codes = new AccessCodesClient(
             $this->client,

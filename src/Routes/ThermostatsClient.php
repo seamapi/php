@@ -5,6 +5,7 @@ namespace Seam\Routes;
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
 use Seam\Http\ResolveActionAttempt;
+use Seam\NullValue;
 use Seam\Resources\ActionAttempt;
 use Seam\Resources\Device;
 
@@ -125,7 +126,7 @@ class ThermostatsClient
      * @param float $heating_set_point_fahrenheit Temperature to which the thermostat should heat (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
      * @param string $hvac_mode_setting Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
      * @param bool $manual_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings.
-     * @param string $name User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
+     * @param string|NullValue $name User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
      * @return void OK
      */
     public function create_climate_preset(
@@ -140,7 +141,7 @@ class ThermostatsClient
         ?float $heating_set_point_fahrenheit = null,
         ?string $hvac_mode_setting = null,
         ?bool $manual_override_allowed = null,
-        ?string $name = null,
+        string|NullValue|null $name = null,
     ): void {
         $request_payload = [];
 
@@ -517,18 +518,18 @@ class ThermostatsClient
      * Sets a [temperature threshold](https://docs.seam.co/capability-guides/thermostats/setting-and-monitoring-temperature-thresholds) for a specified thermostat. Seam emits a `thermostat.temperature_threshold_exceeded` event and adds a warning on a thermostat if it reports a temperature outside the threshold range.
      *
      * @param string $device_id ID of the thermostat device for which you want to set a temperature threshold.
-     * @param float $lower_limit_celsius Lower temperature limit in in °C. Seam alerts you if the reported temperature is lower than this value. You can specify either `lower_limit` but not both.
-     * @param float $lower_limit_fahrenheit Lower temperature limit in in °F. Seam alerts you if the reported temperature is lower than this value. You can specify either `lower_limit` but not both.
-     * @param float $upper_limit_celsius Upper temperature limit in in °C. Seam alerts you if the reported temperature is higher than this value. You can specify either `upper_limit` but not both.
-     * @param float $upper_limit_fahrenheit Upper temperature limit in in °C. Seam alerts you if the reported temperature is higher than this value. You can specify either `upper_limit` but not both.
+     * @param float|NullValue $lower_limit_celsius Lower temperature limit in in °C. Seam alerts you if the reported temperature is lower than this value. You can specify either `lower_limit` but not both.
+     * @param float|NullValue $lower_limit_fahrenheit Lower temperature limit in in °F. Seam alerts you if the reported temperature is lower than this value. You can specify either `lower_limit` but not both.
+     * @param float|NullValue $upper_limit_celsius Upper temperature limit in in °C. Seam alerts you if the reported temperature is higher than this value. You can specify either `upper_limit` but not both.
+     * @param float|NullValue $upper_limit_fahrenheit Upper temperature limit in in °C. Seam alerts you if the reported temperature is higher than this value. You can specify either `upper_limit` but not both.
      * @return void OK
      */
     public function set_temperature_threshold(
         string $device_id,
-        ?float $lower_limit_celsius = null,
-        ?float $lower_limit_fahrenheit = null,
-        ?float $upper_limit_celsius = null,
-        ?float $upper_limit_fahrenheit = null,
+        float|NullValue|null $lower_limit_celsius = null,
+        float|NullValue|null $lower_limit_fahrenheit = null,
+        float|NullValue|null $upper_limit_celsius = null,
+        float|NullValue|null $upper_limit_fahrenheit = null,
     ): void {
         $request_payload = [];
 
@@ -571,7 +572,7 @@ class ThermostatsClient
      * @param float $heating_set_point_fahrenheit Temperature to which the thermostat should heat (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
      * @param string $hvac_mode_setting Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
      * @param bool $manual_override_allowed Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-     * @param string $name User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
+     * @param string|NullValue $name User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
      * @return void OK
      */
     public function update_climate_preset(
@@ -586,7 +587,7 @@ class ThermostatsClient
         ?float $heating_set_point_fahrenheit = null,
         ?string $hvac_mode_setting = null,
         ?bool $manual_override_allowed = null,
-        ?string $name = null,
+        string|NullValue|null $name = null,
     ): void {
         $request_payload = [];
 
@@ -642,25 +643,25 @@ class ThermostatsClient
      * Updates the thermostat weekly program for a thermostat device. To configure a weekly program, specify the ID of the daily program that you want to use for each day of the week. When you update a weekly program, the set of programs that you specify overwrites any previous weekly program for the thermostat.
      *
      * @param string $device_id ID of the thermostat device for which you want to update the weekly program.
-     * @param string $friday_program_id ID of the thermostat daily program to run on Fridays.
-     * @param string $monday_program_id ID of the thermostat daily program to run on Mondays.
-     * @param string $saturday_program_id ID of the thermostat daily program to run on Saturdays.
-     * @param string $sunday_program_id ID of the thermostat daily program to run on Sundays.
-     * @param string $thursday_program_id ID of the thermostat daily program to run on Thursdays.
-     * @param string $tuesday_program_id ID of the thermostat daily program to run on Tuesdays.
-     * @param string $wednesday_program_id ID of the thermostat daily program to run on Wednesdays.
+     * @param string|NullValue $friday_program_id ID of the thermostat daily program to run on Fridays.
+     * @param string|NullValue $monday_program_id ID of the thermostat daily program to run on Mondays.
+     * @param string|NullValue $saturday_program_id ID of the thermostat daily program to run on Saturdays.
+     * @param string|NullValue $sunday_program_id ID of the thermostat daily program to run on Sundays.
+     * @param string|NullValue $thursday_program_id ID of the thermostat daily program to run on Thursdays.
+     * @param string|NullValue $tuesday_program_id ID of the thermostat daily program to run on Tuesdays.
+     * @param string|NullValue $wednesday_program_id ID of the thermostat daily program to run on Wednesdays.
      * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function update_weekly_program(
         string $device_id,
-        ?string $friday_program_id = null,
-        ?string $monday_program_id = null,
-        ?string $saturday_program_id = null,
-        ?string $sunday_program_id = null,
-        ?string $thursday_program_id = null,
-        ?string $tuesday_program_id = null,
-        ?string $wednesday_program_id = null,
+        string|NullValue|null $friday_program_id = null,
+        string|NullValue|null $monday_program_id = null,
+        string|NullValue|null $saturday_program_id = null,
+        string|NullValue|null $sunday_program_id = null,
+        string|NullValue|null $thursday_program_id = null,
+        string|NullValue|null $tuesday_program_id = null,
+        string|NullValue|null $wednesday_program_id = null,
         bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];

@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\UnmanagedDevice;
 
 class DevicesUnmanagedClient
@@ -77,7 +78,7 @@ class DevicesUnmanagedClient
      * @param array $device_types Array of device types for which you want to list devices.
      * @param float $limit Numerical limit on the number of devices to return.
      * @param string $manufacturer Manufacturer for which you want to list devices.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned devices to include all records that satisfy a partial match using `device_id` (full or partial UUID prefix, minimum 4 characters), `connected_account_id`, `display_name`, `custom_metadata` or `location.location_name`.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
@@ -93,7 +94,7 @@ class DevicesUnmanagedClient
         ?array $device_types = null,
         ?float $limit = null,
         ?string $manufacturer = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?callable $on_response = null,
     ): array {

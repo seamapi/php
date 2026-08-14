@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\ThermostatSchedule;
 
 class ThermostatsSchedulesClient
@@ -32,7 +33,7 @@ class ThermostatsSchedulesClient
      * @param string $ends_at Date and time at which the new thermostat schedule ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @param string $starts_at Date and time at which the new thermostat schedule starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @param bool $is_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings while the new schedule is active. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-     * @param int $max_override_period_minutes Number of minutes for which a person at the thermostat or using the API can change the thermostat's settings after the activation of the scheduled climate preset. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+     * @param int|NullValue $max_override_period_minutes Number of minutes for which a person at the thermostat or using the API can change the thermostat's settings after the activation of the scheduled climate preset. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
      * @param string $name Name of the thermostat schedule.
      * @return ThermostatSchedule OK
      */
@@ -42,7 +43,7 @@ class ThermostatsSchedulesClient
         string $ends_at,
         string $starts_at,
         ?bool $is_override_allowed = null,
-        ?int $max_override_period_minutes = null,
+        int|NullValue|null $max_override_period_minutes = null,
         ?string $name = null,
     ): ThermostatSchedule {
         $request_payload = [];
@@ -147,7 +148,7 @@ class ThermostatsSchedulesClient
      * @param string $climate_preset_key Key of the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) to use for the thermostat schedule.
      * @param string $ends_at Date and time at which the thermostat schedule ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @param bool $is_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings while the schedule is active. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-     * @param int $max_override_period_minutes Number of minutes for which a person at the thermostat or using the API can change the thermostat's settings after the activation of the scheduled climate preset. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+     * @param int|NullValue $max_override_period_minutes Number of minutes for which a person at the thermostat or using the API can change the thermostat's settings after the activation of the scheduled climate preset. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
      * @param string $name Name of the thermostat schedule.
      * @param string $starts_at Date and time at which the thermostat schedule starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @return void OK
@@ -157,7 +158,7 @@ class ThermostatsSchedulesClient
         ?string $climate_preset_key = null,
         ?string $ends_at = null,
         ?bool $is_override_allowed = null,
-        ?int $max_override_period_minutes = null,
+        int|NullValue|null $max_override_period_minutes = null,
         ?string $name = null,
         ?string $starts_at = null,
     ): void {

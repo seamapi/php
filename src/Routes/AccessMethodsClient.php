@@ -5,6 +5,7 @@ namespace Seam\Routes;
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
 use Seam\Http\ResolveActionAttempt;
+use Seam\NullValue;
 use Seam\Resources\AccessMethod;
 use Seam\Resources\ActionAttempt;
 use Seam\Resources\Batch;
@@ -193,7 +194,7 @@ class AccessMethodsClient
      * @param string $acs_entrance_id ID of the entrance for which you want to retrieve all access methods that grant access to it.
      * @param string $device_id ID of the device by which to filter the returned access methods. Must be combined with `access_grant_id`, `access_grant_key`, or `acs_entrance_id`.
      * @param int $limit Maximum number of records to return per page.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $space_id ID of the space by which to filter the returned access methods. Must be combined with `access_grant_id`, `access_grant_key`, or `acs_entrance_id`.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
@@ -205,7 +206,7 @@ class AccessMethodsClient
         ?string $acs_entrance_id = null,
         ?string $device_id = null,
         ?int $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $space_id = null,
         ?callable $on_response = null,
     ): array {

@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\UnmanagedAccessCode;
 
 class AccessCodesUnmanagedClient
@@ -130,7 +131,7 @@ class AccessCodesUnmanagedClient
      *
      * @param string $device_id ID of the device for which you want to list unmanaged access codes.
      * @param float $limit Numerical limit on the number of unmanaged access codes to return.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned access codes to include all records that satisfy a partial match using `name`, `code` or `access_code_id`.
      * @param string $user_identifier_key Your user ID for the user by which to filter unmanaged access codes.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
@@ -139,7 +140,7 @@ class AccessCodesUnmanagedClient
     public function list(
         string $device_id,
         ?float $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?string $user_identifier_key = null,
         ?callable $on_response = null,

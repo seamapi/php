@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\ConnectWebview;
 
 class ConnectWebviewsClient
@@ -153,7 +154,7 @@ class ConnectWebviewsClient
      * @param mixed $custom_metadata_has Custom metadata pairs by which you want to [filter Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/filtering-connect-webviews-by-custom-metadata). Returns Connect Webviews with `custom_metadata` that contains all of the provided key:value pairs.
      * @param string $customer_key Customer key for which you want to list connect webviews.
      * @param float $limit Maximum number of records to return per page.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned Connect Webviews to include all records that satisfy a partial match using `connect_webview_id`, `accepted_providers`, `custom_metadata`, or `customer_key`.
      * @param string $user_identifier_key Your user ID for the user by which you want to filter Connect Webviews.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
@@ -163,7 +164,7 @@ class ConnectWebviewsClient
         mixed $custom_metadata_has = null,
         ?string $customer_key = null,
         ?float $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?string $user_identifier_key = null,
         ?callable $on_response = null,

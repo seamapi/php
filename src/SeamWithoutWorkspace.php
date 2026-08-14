@@ -4,6 +4,7 @@ namespace Seam;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\ClientFactory;
+use Seam\Http\SerializingClient;
 use Seam\Routes\WorkspacesClient;
 
 /**
@@ -47,17 +48,18 @@ class SeamWithoutWorkspace
             "timeout" => $timeout,
         ]);
 
-        $this->client =
+        $this->client = SerializingClient::wrap(
             $client ??
-            ClientFactory::create(
-                Options::get_endpoint($endpoint),
-                Auth::get_auth_headers_without_workspace(
-                    $personal_access_token,
+                ClientFactory::create(
+                    Options::get_endpoint($endpoint),
+                    Auth::get_auth_headers_without_workspace(
+                        $personal_access_token,
+                    ),
+                    $guzzle_options,
+                    $retries,
+                    $timeout,
                 ),
-                $guzzle_options,
-                $retries,
-                $timeout,
-            );
+        );
 
         $this->workspaces = new WorkspacesProxy(
             new WorkspacesClient($this->client, [
