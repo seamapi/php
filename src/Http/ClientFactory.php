@@ -86,10 +86,6 @@ final class ClientFactory
     }
 
     /**
-     * The SDK identifies itself with the seam-sdk-* headers and leaves the
-     * User-Agent alone: a caller's User-Agent is sent unchanged, and without
-     * one the HTTP library's own default applies.
-     *
      * @return array<string, string>
      */
     private static function sdk_headers(): array
