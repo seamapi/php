@@ -17,7 +17,6 @@ final class EnvTest extends FakeSeamConnectTestCase
         "SEAM_PERSONAL_ACCESS_TOKEN",
         "SEAM_WORKSPACE_ID",
         "SEAM_ENDPOINT",
-        "SEAM_API_URL",
     ];
 
     /** @var array<string, string|false> */
@@ -81,48 +80,6 @@ final class EnvTest extends FakeSeamConnectTestCase
             "https://from-the-option.example.com",
             Options::get_endpoint("https://from-the-option.example.com"),
         );
-    }
-
-    public function testSeamEndpointWinsOverTheDeprecatedSeamApiUrl(): void
-    {
-        putenv("SEAM_ENDPOINT=https://endpoint.example.com");
-        putenv("SEAM_API_URL=https://api-url.example.com");
-
-        // Both the deprecation and the precedence notice are raised.
-        $endpoint = @Options::get_endpoint();
-
-        $this->assertSame("https://endpoint.example.com", $endpoint);
-    }
-
-    public function testDeprecatedSeamApiUrlIsStillHonored(): void
-    {
-        putenv("SEAM_API_URL=https://api-url.example.com");
-
-        $this->assertSame(
-            "https://api-url.example.com",
-            @Options::get_endpoint(),
-        );
-    }
-
-    public function testDeprecatedSeamApiUrlWarns(): void
-    {
-        putenv("SEAM_API_URL=https://api-url.example.com");
-
-        set_error_handler(
-            static fn(
-                int $severity,
-                string $message,
-            ) => throw new \ErrorException($message),
-            E_USER_WARNING,
-        );
-
-        try {
-            $this->expectException(\ErrorException::class);
-            $this->expectExceptionMessage("SEAM_API_URL");
-            Options::get_endpoint();
-        } finally {
-            restore_error_handler();
-        }
     }
 
     public function testReadsThePersonalAccessTokenAndWorkspaceIdFromTheEnvironment(): void

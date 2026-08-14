@@ -18,24 +18,8 @@ final class Options
 
     public static function get_endpoint_from_env(): ?string
     {
-        $seam_api_url = self::get_env("SEAM_API_URL");
         $seam_endpoint = self::get_env("SEAM_ENDPOINT");
-
-        if ($seam_api_url !== null) {
-            self::warn(
-                "Using the SEAM_API_URL environment variable is deprecated. " .
-                    "Support will be removed in a later major version. Use SEAM_ENDPOINT instead.",
-            );
-        }
-
-        if ($seam_api_url !== null && $seam_endpoint !== null) {
-            self::warn(
-                "Detected both the SEAM_API_URL and SEAM_ENDPOINT environment variables. " .
-                    "Using SEAM_ENDPOINT.",
-            );
-        }
-
-        return $seam_endpoint ?? $seam_api_url;
+        return $seam_endpoint
     }
 
     public static function is_seam_options_with_api_key(
