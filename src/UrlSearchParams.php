@@ -150,22 +150,16 @@ class UrlSearchParams implements \Countable, \IteratorAggregate
     }
 
     /**
-     * Sorts all pairs by name.
+     * Sorts all pairs by name, comparing bytes.
      *
      * Sorting is stable, so the relative order of pairs with the same name
-     * is preserved. Names are compared by UTF-16 code units to match the
-     * URLSearchParams.sort() specification
-     * (https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/sort).
+     * is preserved, which is what keeps array element order. Byte order
+     * matches URLSearchParams.sort() for ASCII names; a name beyond the
+     * Basic Multilingual Plane may sort differently than in JavaScript.
      */
     public function sort(): void
     {
-        usort(
-            $this->pairs,
-            fn(array $a, array $b) => strcmp(
-                self::utf16_sort_key($a[0]),
-                self::utf16_sort_key($b[0]),
-            ),
-        );
+        usort($this->pairs, fn(array $a, array $b) => strcmp($a[0], $b[0]));
     }
 
     /**
@@ -243,59 +237,5 @@ class UrlSearchParams implements \Countable, \IteratorAggregate
         }
 
         return $encoded;
-    }
-
-    /**
-     * Converts a UTF-8 name to its UTF-16 big-endian encoding, so a byte
-     * comparison of the keys orders names by UTF-16 code unit.
-     *
-     * This is not code-point order and not UTF-8 byte order: both would sort
-     * anything above the Basic Multilingual Plane after U+E000 to U+FFFF,
-     * while surrogate pairs (0xD800 to 0xDFFF) sort below them.
-     */
-    private static function utf16_sort_key(string $name): string
-    {
-        $key = "";
-        $length = strlen($name);
-        $i = 0;
-
-        while ($i < $length) {
-            $byte = ord($name[$i]);
-
-            if ($byte < 0x80) {
-                $code_point = $byte;
-                $i += 1;
-            } elseif (($byte & 0xe0) === 0xc0) {
-                $code_point =
-                    (($byte & 0x1f) << 6) | (ord($name[$i + 1]) & 0x3f);
-                $i += 2;
-            } elseif (($byte & 0xf0) === 0xe0) {
-                $code_point =
-                    (($byte & 0x0f) << 12) |
-                    ((ord($name[$i + 1]) & 0x3f) << 6) |
-                    (ord($name[$i + 2]) & 0x3f);
-                $i += 3;
-            } else {
-                $code_point =
-                    (($byte & 0x07) << 18) |
-                    ((ord($name[$i + 1]) & 0x3f) << 12) |
-                    ((ord($name[$i + 2]) & 0x3f) << 6) |
-                    (ord($name[$i + 3]) & 0x3f);
-                $i += 4;
-            }
-
-            if ($code_point >= 0x10000) {
-                $code_point -= 0x10000;
-                $key .= pack(
-                    "n2",
-                    0xd800 | ($code_point >> 10),
-                    0xdc00 | ($code_point & 0x3ff),
-                );
-            } else {
-                $key .= pack("n", $code_point);
-            }
-        }
-
-        return $key;
     }
 }

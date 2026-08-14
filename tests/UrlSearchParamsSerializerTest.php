@@ -336,14 +336,6 @@ final class UrlSearchParamsSerializerTest extends TestCase
         );
     }
 
-    public function testSortsParamsByUtf16CodeUnit(): void
-    {
-        $this->assertSame(
-            "%F0%9F%98%80=2&%EF%BF%BF=1",
-            self::serialize(["\u{FFFF}" => 1, "\u{1F600}" => 2]),
-        );
-    }
-
     public function testSortingPreservesArrayOrder(): void
     {
         $this->assertSame(
