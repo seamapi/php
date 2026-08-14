@@ -45,8 +45,6 @@ final class StrictUrlSearchParamsSerializer
         UrlSearchParamsSerializer::update($search_params, $params);
 
         if (count($search_params) > 0) {
-            // Replaced rather than repeated, and appended after the sort so
-            // it always sits last.
             $search_params->delete("_strict");
             $search_params->append("_strict", "true");
         }

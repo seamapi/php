@@ -36,7 +36,6 @@ final class UrlSearchParamsSerializerTest extends TestCase
 
     public function testRemovesTheEmptyString(): void
     {
-        // Serializing the empty string would conflict with NullValue::NULL.
         $this->assertSame("", self::serialize(["foo" => ""]));
         $this->assertSame(
             "foo=d",
@@ -75,8 +74,6 @@ final class UrlSearchParamsSerializerTest extends TestCase
 
     public function testSerializesFloatUsingTheEcmascriptNumberFormat(): void
     {
-        // A float is serialized exactly as JavaScript would serialize the
-        // number, which is not always the same as the PHP string cast.
         $this->assertSame("foo=1", self::serialize(["foo" => 1.0]));
         $this->assertSame("foo=0", self::serialize(["foo" => -0.0]));
         $this->assertSame("foo=100", self::serialize(["foo" => 100.0]));
@@ -200,7 +197,6 @@ final class UrlSearchParamsSerializerTest extends TestCase
             "now=2025-02-24T18%3A44%3A39.000Z",
             self::serialize(["now" => $now]),
         );
-        // Converting to UTC must not mutate the caller's value.
         $this->assertSame("2025-02-24T18:44:39+00:00", $now->format("c"));
     }
 
@@ -342,8 +338,6 @@ final class UrlSearchParamsSerializerTest extends TestCase
 
     public function testSortsParamsByUtf16CodeUnit(): void
     {
-        // UTF-8 byte order and code-point order would both put U+FFFF first;
-        // only UTF-16 code-unit order puts the astral emoji first.
         $this->assertSame(
             "%F0%9F%98%80=2&%EF%BF%BF=1",
             self::serialize(["\u{FFFF}" => 1, "\u{1F600}" => 2]),
@@ -407,8 +401,6 @@ final class UrlSearchParamsSerializerTest extends TestCase
 
     public function testCannotSerializeNonStringKeys(): void
     {
-        // PHP casts a numeric-string key to an integer, so both spellings
-        // arrive here as the same unserializable key.
         $this->expectException(UnserializableParamError::class);
 
         self::serialize(["foo" => [1 => "a", "b" => "c"]]);

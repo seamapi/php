@@ -3,10 +3,8 @@
 namespace Seam;
 
 /**
- * Error thrown when a request param could not be serialized.
- *
- * It is thrown before any request is sent, so it never means the API
- * rejected the param, only that this SDK could not represent it.
+ * Error thrown when a request param could not be serialized, before any
+ * request is sent.
  */
 class UnserializableParamError extends \InvalidArgumentException
 {

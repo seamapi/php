@@ -21,8 +21,6 @@ final class StrictUrlSearchParamsSerializerTest extends TestCase
 
     public function testAppendsStrictAfterTheSortedParams(): void
     {
-        // `_strict` would sort between the uppercase and lowercase names;
-        // it is appended after the sort so it always sits last.
         $this->assertSame(
             "B=2&a=1&_strict=true",
             StrictUrlSearchParamsSerializer::serialize(["a" => 1, "B" => 2]),

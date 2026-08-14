@@ -286,9 +286,8 @@ final class UrlSearchParamsSerializer
     private static function shortest_digits(float $value): array
     {
         // At -1, PHP's float-to-string conversion produces the shortest
-        // string that round-trips, which is exactly the digit string the
-        // algorithm needs. The ini setting is restored because it also
-        // affects the caller's own serialize() and json_encode() calls.
+        // string that round-trips. Restored because the setting also affects
+        // the caller's own serialize() and json_encode() calls.
         $precision = ini_set("serialize_precision", "-1");
 
         try {
@@ -306,8 +305,6 @@ final class UrlSearchParamsSerializer
                 $matches,
             ) !== 1
         ) {
-            // Unreachable for a finite positive float, but a silent
-            // mis-parse would serialize a wrong number.
             throw new \RuntimeException(
                 "Could not parse the PHP float representation: {$repr}",
             );

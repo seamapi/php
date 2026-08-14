@@ -10,10 +10,6 @@ use Seam\Seam;
 use Seam\UnserializableParamError;
 use Tests\Support\RecordingClient;
 
-/**
- * Asserts on the raw query string the client puts on the wire, not on a
- * re-parsed version of it, which would hide encoding differences.
- */
 final class SearchParamsTest extends TestCase
 {
     private const DEVICES = ["devices" => []];
@@ -58,12 +54,6 @@ final class SearchParamsTest extends TestCase
         );
     }
 
-    /**
-     * The serializer and Guzzle disagree on exactly two characters: Guzzle
-     * escapes `*` and leaves `~` alone, so a query Guzzle encodes is not the
-     * one the serializer produced. Handing Guzzle the raw string keeps ours,
-     * including through resolution against the client's base URL.
-     */
     public function testClientDoesNotReencodeTheSerializedSearchParams(): void
     {
         $recording = RecordingClient::repeating(
@@ -90,8 +80,6 @@ final class SearchParamsTest extends TestCase
             "query" => ["device_ids" => []],
         ]);
 
-        // Not omitted and not a bare name: the parser reads `device_ids=`
-        // as the empty array, while no param at all means unfiltered.
         $this->assertSame(
             "device_ids=&_strict=true",
             $recording->request()->getUri()->getQuery(),
@@ -175,10 +163,6 @@ final class SearchParamsTest extends TestCase
         }
     }
 
-    /**
-     * A query already given as a string is a representation the caller
-     * chose, so it is forwarded to Guzzle untouched.
-     */
     public function testClientPassesSearchParamsItDidNotSerializeToGuzzle(): void
     {
         $recording = RecordingClient::repeating(
@@ -211,7 +195,6 @@ final class SearchParamsTest extends TestCase
             $this->assertSame("search", $error->getName());
         }
 
-        // The error is raised before any request goes out.
         $this->assertSame(0, $recording->request_count());
     }
 

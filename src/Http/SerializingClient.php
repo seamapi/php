@@ -102,8 +102,6 @@ final class SerializingClient implements ClientInterface
             );
 
             if ($serialized === "") {
-                // Nothing serialized must mean no query at all, not a bare
-                // trailing `?`.
                 unset($options["query"]);
             } else {
                 $options["query"] = $serialized;

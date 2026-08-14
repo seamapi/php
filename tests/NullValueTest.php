@@ -67,7 +67,6 @@ final class NullValueTest extends TestCase
         $this->assertNotSame($payload, $replaced);
         $this->assertNull($replaced->name);
         $this->assertNull($replaced->nested->code);
-        // The caller's payload is untouched.
         $this->assertSame(NullValue::NULL, $payload->name);
         $this->assertSame(NullValue::NULL, $payload->nested->code);
     }

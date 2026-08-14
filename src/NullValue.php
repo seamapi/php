@@ -32,9 +32,6 @@ enum NullValue
 {
     /**
      * Sentinel for a param explicitly set to null.
-     *
-     * An enum case cannot be instantiated or subclassed, so this is the only
-     * value of this type, and `$value instanceof NullValue` detects it.
      */
     case NULL;
 
