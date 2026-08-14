@@ -510,6 +510,8 @@ HTML, raises the underlying Guzzle exception instead.
 
 ## Upgrading from 3.x
 
+See [MIGRATION.md](./MIGRATION.md) for the full guide, including upgrading from 2.x. In brief:
+
 - PHP 8.2 or later is required. PHP 8.1 reached end of life in December 2025.
 - The client class is `Seam\Seam`, replacing `Seam\SeamClient`.
 - The constructor takes named options, so `$endpoint` is no longer the second
