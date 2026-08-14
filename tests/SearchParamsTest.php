@@ -47,7 +47,8 @@ final class SearchParamsTest extends TestCase
                 "&custom_metadata_has.tag=front" .
                 "&device_ids=device1" .
                 "&device_ids=device2" .
-                "&limit=20",
+                "&limit=20" .
+                "&_strict=true",
             $recording->request()->getUri()->getQuery(),
         );
         $this->assertSame("GET", $recording->request()->getMethod());
@@ -74,7 +75,7 @@ final class SearchParamsTest extends TestCase
         ]);
 
         $this->assertSame(
-            "search=a+*%7E+b",
+            "search=a+*%7E+b&_strict=true",
             $recording->request()->getUri()->getQuery(),
         );
     }
@@ -92,7 +93,7 @@ final class SearchParamsTest extends TestCase
         // Not omitted and not a bare name: the parser reads `device_ids=`
         // as the empty array, while no param at all means unfiltered.
         $this->assertSame(
-            "device_ids=",
+            "device_ids=&_strict=true",
             $recording->request()->getUri()->getQuery(),
         );
     }
@@ -108,7 +109,7 @@ final class SearchParamsTest extends TestCase
         ]);
 
         $this->assertSame(
-            "limit=20",
+            "limit=20&_strict=true",
             $recording->request()->getUri()->getQuery(),
         );
     }
@@ -124,7 +125,7 @@ final class SearchParamsTest extends TestCase
         ]);
 
         $this->assertSame(
-            "limit=20&search=",
+            "limit=20&search=&_strict=true",
             $recording->request()->getUri()->getQuery(),
         );
     }
@@ -168,7 +169,7 @@ final class SearchParamsTest extends TestCase
         foreach ($verbs as $index => $verb) {
             $this->assertSame($verb, $recording->request($index)->getMethod());
             $this->assertSame(
-                "sync=true",
+                "sync=true&_strict=true",
                 $recording->request($index)->getUri()->getQuery(),
             );
         }
@@ -276,7 +277,7 @@ final class SearchParamsTest extends TestCase
             $recording->request()->getUri()->getPath(),
         );
         $this->assertSame(
-            "name=Front+Door",
+            "name=Front+Door&_strict=true",
             $recording->request()->getUri()->getQuery(),
         );
     }

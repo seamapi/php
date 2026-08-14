@@ -7,17 +7,18 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Seam\NullValue;
-use Seam\UrlSearchParamsSerializer;
+use Seam\StrictUrlSearchParamsSerializer;
 
 /**
  * Applies the Seam serialization standard to every request the wrapped
  * client sends.
  *
- * Query params given as a map are serialized with UrlSearchParamsSerializer
- * and handed to Guzzle as a raw query string, because Guzzle's own encoder
- * follows different rules: it escapes `*`, leaves `~` alone, and drops an
- * empty array instead of sending `name=`. A query already given as a string
- * is a representation the caller chose, so it passes through untouched.
+ * Query params given as a map are serialized with
+ * StrictUrlSearchParamsSerializer and handed to Guzzle as a raw query
+ * string, because Guzzle's own encoder follows different rules: it escapes
+ * `*`, leaves `~` alone, and drops an empty array instead of sending
+ * `name=`. A query already given as a string is a representation the
+ * caller chose, so it passes through untouched.
  *
  * NullValue::NULL sentinels in a JSON body become JSON null, so the same
  * sentinel works whether a route sends a query string or a body.
@@ -96,7 +97,7 @@ final class SerializingClient implements ClientInterface
             ($options["query"] instanceof \stdClass ||
                 is_array($options["query"]))
         ) {
-            $serialized = UrlSearchParamsSerializer::serialize(
+            $serialized = StrictUrlSearchParamsSerializer::serialize(
                 $options["query"],
             );
 

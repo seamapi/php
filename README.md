@@ -400,17 +400,22 @@ query strings with
 [`@seamapi/url-search-params-parser`](https://github.com/seamapi/url-search-params-parser).
 
 The serializer is exported for callers building requests with their own
-HTTP client:
+HTTP client. Use `StrictUrlSearchParamsSerializer` when calling the Seam
+API: it adds `_strict=true` to any non-empty query, which tells the API to
+use strict, schema-aware parsing, and is what the SDK's own requests use. A
+query with no serializable params remains empty.
+`UrlSearchParamsSerializer` is the same serialization without the flag — a
+pure implementation of the standard.
 
 ```php
-use Seam\UrlSearchParamsSerializer;
+use Seam\StrictUrlSearchParamsSerializer;
 
-$query = UrlSearchParamsSerializer::serialize([
+$query = StrictUrlSearchParamsSerializer::serialize([
     "device_ids" => ["device1", "device2"],
     "custom_metadata_has" => ["tag" => "front"],
     "limit" => 20,
 ]);
-// => 'custom_metadata_has.tag=front&device_ids=device1&device_ids=device2&limit=20'
+// => 'custom_metadata_has.tag=front&device_ids=device1&device_ids=device2&limit=20&_strict=true'
 ```
 
 A param that cannot be represented in the standard, such as `NAN` or a key
