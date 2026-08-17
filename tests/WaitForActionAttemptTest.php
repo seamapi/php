@@ -7,6 +7,7 @@ namespace Tests;
 use Seam\ActionAttemptError;
 use Seam\ActionAttemptFailedError;
 use Seam\ActionAttemptTimeoutError;
+use Seam\InvalidOptionsError;
 use Seam\Resources\ActionAttempt;
 use Seam\Seam;
 use Tests\Support\FakeSeamConnectTestCase;
@@ -274,6 +275,98 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
                 $error->getMessage(),
             );
         }
+    }
+
+    /**
+     * The timeout bounds how long the wait takes, not how many polls it is
+     * allowed: an interval longer than the whole timeout must still produce
+     * one poll, and the wait must be cut short at the deadline rather than
+     * sleeping out the full interval.
+     */
+    public function testPollsOnceWhenTheIntervalOutlastsTheTimeout(): void
+    {
+        $seam = $this->seam(wait_for_action_attempt: false);
+        $action_attempt = $this->pending_action_attempt($seam);
+
+        $started_at = microtime(true);
+
+        try {
+            $seam->action_attempts->get(
+                $action_attempt->action_attempt_id,
+                wait_for_action_attempt: [
+                    "timeout" => 0.3,
+                    "polling_interval" => 30.0,
+                ],
+            );
+            $this->fail("Expected ActionAttemptTimeoutError");
+        } catch (ActionAttemptTimeoutError) {
+            $elapsed = microtime(true) - $started_at;
+
+            // Waited for the timeout rather than giving up instantly, and did
+            // not sleep out the 30s interval.
+            $this->assertGreaterThanOrEqual(0.3, $elapsed);
+            $this->assertLessThan(5.0, $elapsed);
+        }
+    }
+
+    /**
+     * An attempt that finishes within the timeout is resolved even though a
+     * single interval would carry the clock past the deadline.
+     */
+    public function testResolvesWhenTheIntervalOutlastsTheTimeout(): void
+    {
+        $seam = $this->seam(wait_for_action_attempt: false);
+        $action_attempt = $this->pending_action_attempt($seam);
+        $this->set_status($seam, $action_attempt, "success");
+
+        $resolved = $seam->action_attempts->get(
+            $action_attempt->action_attempt_id,
+            wait_for_action_attempt: [
+                "timeout" => 0.3,
+                "polling_interval" => 30.0,
+            ],
+        );
+
+        $this->assertSame("success", $resolved->status);
+    }
+
+    /**
+     * @dataProvider invalidWaitOptions
+     */
+    public function testRejectsInvalidWaitOptions(
+        array $wait_for_action_attempt,
+        string $expected_message,
+    ): void {
+        $seam = $this->seam(wait_for_action_attempt: false);
+        $action_attempt = $this->pending_action_attempt($seam);
+
+        $this->expectException(InvalidOptionsError::class);
+        $this->expectExceptionMessage($expected_message);
+
+        $seam->action_attempts->get(
+            $action_attempt->action_attempt_id,
+            wait_for_action_attempt: $wait_for_action_attempt,
+        );
+    }
+
+    public static function invalidWaitOptions(): array
+    {
+        return [
+            // Would poll without pause; previously an unbounded request storm.
+            "zero polling_interval" => [
+                ["polling_interval" => 0],
+                "polling_interval option must be greater than zero",
+            ],
+            // Previously reached usleep() and raised a bare ValueError.
+            "negative polling_interval" => [
+                ["polling_interval" => -5],
+                "polling_interval option must be greater than zero",
+            ],
+            "negative timeout" => [
+                ["timeout" => -1],
+                "timeout option must not be negative",
+            ],
+        ];
     }
 
     /**

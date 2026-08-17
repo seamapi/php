@@ -5,6 +5,7 @@ namespace Seam\Http;
 use GuzzleHttp\ClientInterface;
 use Seam\ActionAttemptFailedError;
 use Seam\ActionAttemptTimeoutError;
+use Seam\InvalidOptionsError;
 use Seam\Resources\ActionAttempt;
 
 /**
@@ -12,6 +13,10 @@ use Seam\Resources\ActionAttempt;
  *
  * A successful attempt is returned as is, a failed one raises, and a pending
  * one is polled until it finishes or the timeout elapses.
+ *
+ * The timeout is a deadline measured from when the wait begins. A pending
+ * attempt is always polled at least once, however short the timeout, and the
+ * final wait is shortened so the deadline is never overrun by an interval.
  */
 final class ResolveActionAttempt
 {
@@ -21,6 +26,8 @@ final class ResolveActionAttempt
 
     /**
      * @param bool|array{timeout?: float, polling_interval?: float}|null $wait_for_action_attempt
+     *
+     * @throws InvalidOptionsError If timeout is negative or polling_interval is not greater than zero.
      */
     public static function resolve_action_attempt(
         ActionAttempt $action_attempt,
@@ -35,11 +42,30 @@ final class ResolveActionAttempt
             ? $wait_for_action_attempt
             : [];
 
+        $timeout = (float) ($options["timeout"] ?? self::TIMEOUT);
+        $polling_interval =
+            (float) ($options["polling_interval"] ?? self::POLLING_INTERVAL);
+
+        if ($timeout < 0.0) {
+            throw new InvalidOptionsError(
+                "The timeout option must not be negative, got {$timeout}",
+            );
+        }
+
+        // A non-positive interval would poll without pause, so it is rejected
+        // here rather than reaching usleep(), which raises a ValueError of its
+        // own for a negative value.
+        if ($polling_interval <= 0.0) {
+            throw new InvalidOptionsError(
+                "The polling_interval option must be greater than zero, got {$polling_interval}",
+            );
+        }
+
         return self::poll(
             $action_attempt,
             $client,
-            (float) ($options["timeout"] ?? self::TIMEOUT),
-            (float) ($options["polling_interval"] ?? self::POLLING_INTERVAL),
+            $timeout,
+            $polling_interval,
         );
     }
 
@@ -60,11 +86,16 @@ final class ResolveActionAttempt
                 throw new ActionAttemptFailedError($action_attempt);
             }
 
-            if (self::now() + $polling_interval > $deadline) {
+            $remaining = $deadline - self::now();
+
+            if ($remaining <= 0.0) {
                 throw new ActionAttemptTimeoutError($action_attempt, $timeout);
             }
 
-            usleep((int) ($polling_interval * 1000000.0));
+            // Capped at the time left, so an interval longer than the timeout
+            // still yields one poll instead of none, and the wait never
+            // overruns the deadline by up to a full interval.
+            usleep((int) (min($polling_interval, $remaining) * 1000000.0));
 
             $action_attempt = self::get_action_attempt(
                 $client,
