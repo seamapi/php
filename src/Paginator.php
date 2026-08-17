@@ -12,8 +12,7 @@ class Paginator
 {
     private $request;
     private array $params;
-    private array $pagination_cache = [];
-    private const FIRST_PAGE = "FIRST_PAGE";
+    private ?Pagination $pagination = null;
 
     public function __construct(callable $request, array $params = [])
     {
@@ -26,7 +25,7 @@ class Paginator
      */
     public function firstPage(): array
     {
-        return $this->fetchPage(self::FIRST_PAGE);
+        return $this->fetchPage(null);
     }
 
     /**
@@ -44,14 +43,18 @@ class Paginator
     }
 
     /**
+     * Fetches one page. A null cursor is the first page: the distinction is
+     * carried out of band rather than as a reserved cursor value, so no real
+     * cursor can be mistaken for it.
+     *
      * @return array{0: array, 1: Pagination}
      */
-    private function fetchPage(string $cursor): array
+    private function fetchPage(?string $cursor): array
     {
         $request = $this->request;
         $params = $this->params;
 
-        if ($cursor !== self::FIRST_PAGE) {
+        if ($cursor !== null) {
             $params["page_cursor"] = $cursor;
         }
 
@@ -59,11 +62,10 @@ class Paginator
         // through the params still fires.
         $on_response = $params["on_response"] ?? null;
 
-        $params["on_response"] = function ($response) use (
-            $cursor,
-            $on_response,
-        ): void {
-            $this->cachePagination($response, $cursor);
+        $this->pagination = null;
+
+        $params["on_response"] = function ($response) use ($on_response): void {
+            $this->readPagination($response);
 
             if (is_callable($on_response)) {
                 $on_response($response);
@@ -72,16 +74,16 @@ class Paginator
 
         $data = $request($params);
 
-        if (!array_key_exists($cursor, $this->pagination_cache)) {
+        if ($this->pagination === null) {
             throw new \InvalidArgumentException(
                 "Cannot use a paginator with an unpaginated endpoint",
             );
         }
 
-        return [$data, $this->pagination_cache[$cursor]];
+        return [$data, $this->pagination];
     }
 
-    private function cachePagination($response, string $cursor): void
+    private function readPagination($response): void
     {
         if (!is_object($response) || !isset($response->pagination)) {
             throw new \InvalidArgumentException(
@@ -89,22 +91,14 @@ class Paginator
             );
         }
 
-        $this->pagination_cache[$cursor] = Pagination::from_json(
-            $response->pagination,
-        );
+        $this->pagination = Pagination::from_json($response->pagination);
     }
 
     public function flattenToArray(): array
     {
         $items = [];
 
-        [$response, $pagination] = $this->firstPage();
-        $items = array_merge($items, $response);
-
-        while ($pagination->has_next_page) {
-            [$response, $pagination] = $this->nextPage(
-                $pagination->next_page_cursor,
-            );
+        foreach ($this->walk() as [$response]) {
             $items = array_merge($items, $response);
         }
 
@@ -113,20 +107,42 @@ class Paginator
 
     public function flatten()
     {
-        [$current, $pagination] = $this->firstPage();
-
-        foreach ($current as $item) {
-            yield $item;
-        }
-
-        while ($pagination->has_next_page) {
-            [$current, $pagination] = $this->nextPage(
-                $pagination->next_page_cursor,
-            );
-
-            foreach ($current as $item) {
+        foreach ($this->walk() as [$response]) {
+            foreach ($response as $item) {
                 yield $item;
             }
+        }
+    }
+
+    /**
+     * Yields every page in order, stopping at the last one.
+     *
+     * A server that keeps handing back a cursor it has already given out
+     * would otherwise loop forever, refetching the same page while
+     * flattenToArray grew without bound. Repeating a cursor cannot advance
+     * the walk, so it ends it.
+     *
+     * @return \Generator<array{0: array, 1: Pagination}>
+     */
+    private function walk(): \Generator
+    {
+        $page = $this->firstPage();
+        $seen = [];
+
+        yield $page;
+
+        while ($page[1]->has_next_page) {
+            $cursor = $page[1]->next_page_cursor;
+
+            if ($cursor === null || isset($seen[$cursor])) {
+                return;
+            }
+
+            $seen[$cursor] = true;
+
+            $page = $this->nextPage($cursor);
+
+            yield $page;
         }
     }
 }
