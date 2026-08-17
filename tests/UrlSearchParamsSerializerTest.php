@@ -587,6 +587,71 @@ final class UrlSearchParamsSerializerTest extends TestCase
         );
     }
 
+    /**
+     * A name may repeat, which is how the standard represents an array, so
+     * the map form has to expand a list rather than cast it to the string
+     * "Array" behind a warning.
+     */
+    public function testUrlSearchParamsFromMapExpandsAList(): void
+    {
+        $this->assertSame(
+            "device_ids=d1&device_ids=d2",
+            (new UrlSearchParams([
+                "device_ids" => ["d1", "d2"],
+            ]))->to_string(),
+        );
+    }
+
+    /**
+     * The map form and the serializer have to agree on what a value looks
+     * like. A plain PHP cast renders true as "1" and false as "", where the
+     * standard renders "true" and "false".
+     */
+    public function testUrlSearchParamsFromMapRendersValuesLikeTheStandard(): void
+    {
+        $params = ["t" => true, "f" => false, "n" => 42, "u" => null];
+
+        $this->assertSame(
+            "t=true&f=false&n=42&u=",
+            (new UrlSearchParams($params))->to_string(),
+        );
+
+        // Same values through the serializer, modulo its sorting.
+        $this->assertSame(
+            "f=false&n=42&t=true&u=",
+            UrlSearchParamsSerializer::serialize([
+                "t" => true,
+                "f" => false,
+                "n" => 42,
+                "u" => NullValue::NULL,
+            ]),
+        );
+    }
+
+    /**
+     * Rendering these here would need the ECMAScript number formatting and
+     * the exact ISO date shape, both of which live in the serializer. A
+     * plain cast would quietly disagree with it, so they are refused.
+     *
+     * @dataProvider valuesTheMapFormCannotRender
+     */
+    public function testUrlSearchParamsFromMapRejectsWhatItCannotRender(
+        mixed $value,
+    ): void {
+        $this->expectException(UnserializableParamError::class);
+
+        new UrlSearchParams(["a" => $value]);
+    }
+
+    public static function valuesTheMapFormCannotRender(): array
+    {
+        return [
+            "float" => [20.5],
+            "date" => [new \DateTimeImmutable("2024-01-01T00:00:00Z")],
+            "object" => [new \stdClass()],
+        ];
+    }
+
     public function testUrlSearchParamsAppendAndGet(): void
     {
         $search_params = new UrlSearchParams();
