@@ -1,7 +1,6 @@
 # Seam PHP SDK
 
 [![Packagist](https://img.shields.io/packagist/v/seamapi/seam.svg)](https://packagist.org/packages/seamapi/seam)
-[![Seam LTS Version](https://img.shields.io/badge/Seam_LTS-1.0.0-blue)](https://docs.seam.co/lts)
 [![GitHub Actions](https://github.com/seamapi/php/actions/workflows/check.yml/badge.svg)](https://github.com/seamapi/php/actions/workflows/check.yml)
 
 PHP SDK for the Seam API.
