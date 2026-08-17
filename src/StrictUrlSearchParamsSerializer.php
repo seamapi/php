@@ -34,6 +34,10 @@ final class StrictUrlSearchParamsSerializer
      * Updates existing URL search params with serialized params and strict
      * API validation enabled.
      *
+     * The flag follows the query, not this call: params that were already
+     * there count, so a call that contributes nothing still adds the flag
+     * when the query is not empty, and adds nothing when it is.
+     *
      * @param array<string, mixed>|\stdClass $params
      *
      * @throws UnserializableParamError If any param could not be serialized

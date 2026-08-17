@@ -229,6 +229,9 @@ final class UrlSearchParamsSerializer
      * Formats an instant as JavaScript's Date.prototype.toISOString does:
      * always UTC, always exactly three fractional digits, always a literal
      * `Z`. Sub-millisecond precision is truncated, not rounded.
+     *
+     * A year outside 0000-9999 uses the expanded form the format requires,
+     * six digits behind a mandatory sign, e.g. `+012345` or `-000001`.
      */
     private static function format_datetime(\DateTimeInterface $value): string
     {
@@ -238,11 +241,25 @@ final class UrlSearchParamsSerializer
         $milliseconds = intdiv((int) $utc->format("u"), 1000);
 
         return sprintf(
-            "%04d-%s.%03dZ",
-            (int) $utc->format("Y"),
+            "%s-%s.%03dZ",
+            self::format_year((int) $utc->format("Y")),
             $utc->format("m-d\TH:i:s"),
             $milliseconds,
         );
+    }
+
+    /**
+     * Renders the year of a date time string: four digits in the ordinary
+     * range, and otherwise the expanded year, which is always signed and
+     * always six digits.
+     */
+    private static function format_year(int $year): string
+    {
+        if ($year >= 0 && $year <= 9999) {
+            return sprintf("%04d", $year);
+        }
+
+        return sprintf("%s%06d", $year < 0 ? "-" : "+", abs($year));
     }
 
     /**
@@ -285,33 +302,35 @@ final class UrlSearchParamsSerializer
      */
     private static function shortest_digits(float $value): array
     {
-        // At -1, PHP's float-to-string conversion produces the shortest
-        // string that round-trips. Restored because the setting also affects
-        // the caller's own serialize() and json_encode() calls.
-        $precision = ini_set("serialize_precision", "-1");
+        // Widened until the result reads back as the same float, which is
+        // what "shortest that round-trips" means. Done this way rather than
+        // by asking PHP for its own shortest representation, because that
+        // is governed by the process wide serialize_precision ini setting:
+        // reading it is unreliable and setting it would change how
+        // unrelated code elsewhere in the process formats its floats.
+        $repr = sprintf("%.16E", $value);
 
-        try {
-            $repr = var_export($value, true);
-        } finally {
-            if ($precision !== false) {
-                ini_set("serialize_precision", $precision);
+        for ($precision = 0; $precision < 16; $precision++) {
+            $candidate = sprintf("%.{$precision}E", $value);
+
+            if ((float) $candidate === $value) {
+                $repr = $candidate;
+                break;
             }
         }
 
         if (
-            preg_match(
-                '/^(\d+)(?:\.(\d+))?(?:E([+-]?\d+))?$/i',
-                $repr,
-                $matches,
-            ) !== 1
+            preg_match('/^(\d)(?:\.(\d+))?E([+-]\d+)$/i', $repr, $matches) !== 1
         ) {
             throw new \RuntimeException(
                 "Could not parse the PHP float representation: {$repr}",
             );
         }
 
+        // %E normalizes to one digit before the point, so the exponent
+        // places the point directly.
         $digits = $matches[1] . ($matches[2] ?? "");
-        $point = strlen($matches[1]) + (int) ($matches[3] ?? "0");
+        $point = (int) $matches[3] + 1;
 
         $stripped = ltrim($digits, "0");
         $point -= strlen($digits) - strlen($stripped);

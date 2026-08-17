@@ -96,6 +96,51 @@ final class UrlSearchParamsSerializerTest extends TestCase
         );
     }
 
+    /**
+     * Float formatting used to run through a process wide ini setting,
+     * flipped and restored around every value. Anything else formatting a
+     * float in that window saw the altered setting, and a host that pinned
+     * the setting changed what this serializer produced.
+     *
+     * @dataProvider serializePrecisionSettings
+     */
+    public function testSerializesFloatIndependentlyOfSerializePrecision(
+        string $setting,
+    ): void {
+        $original = ini_get("serialize_precision");
+
+        try {
+            ini_set("serialize_precision", $setting);
+
+            $this->assertSame("foo=23.8", self::serialize(["foo" => 23.8]));
+            $this->assertSame(
+                "foo=0.30000000000000004",
+                self::serialize(["foo" => 0.1 + 0.2]),
+            );
+            $this->assertSame(
+                "foo=1.7976931348623157e%2B308",
+                self::serialize(["foo" => PHP_FLOAT_MAX]),
+            );
+
+            // And the serializer leaves the setting as it found it.
+            $this->assertSame($setting, ini_get("serialize_precision"));
+        } finally {
+            if ($original !== false) {
+                ini_set("serialize_precision", $original);
+            }
+        }
+    }
+
+    public static function serializePrecisionSettings(): array
+    {
+        return [
+            "shortest round trip" => ["-1"],
+            "seventeen digits" => ["17"],
+            "php default precision" => ["14"],
+            "very low" => ["3"],
+        ];
+    }
+
     public function testSerializesBool(): void
     {
         $this->assertSame("foo=true", self::serialize(["foo" => true]));
@@ -238,6 +283,39 @@ final class UrlSearchParamsSerializerTest extends TestCase
                 "then" => new \DateTimeImmutable("1969-12-31T23:59:59Z"),
             ]),
         );
+    }
+
+    /**
+     * Outside 0000-9999 the format switches to the expanded year: always
+     * signed, always six digits. %04d rendered year -1 as the three digit
+     * "-001", because the sign counted against the width.
+     *
+     * @dataProvider expandedYears
+     */
+    public function testSerializesTheExpandedYear(
+        int $year,
+        string $expected,
+    ): void {
+        $date = (new \DateTimeImmutable("2000-01-02T03:04:05Z"))->setDate(
+            $year,
+            1,
+            2,
+        );
+
+        $this->assertSame(
+            "then=" . rawurlencode($expected),
+            self::serialize(["then" => $date]),
+        );
+    }
+
+    public static function expandedYears(): array
+    {
+        return [
+            "five digits" => [12345, "+012345-01-02T03:04:05.000Z"],
+            "six digits" => [275760, "+275760-01-02T03:04:05.000Z"],
+            "negative" => [-1, "-000001-01-02T03:04:05.000Z"],
+            "negative four digits" => [-2024, "-002024-01-02T03:04:05.000Z"],
+        ];
     }
 
     public function testZeroPadsTheYearToFourDigits(): void
