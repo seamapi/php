@@ -277,12 +277,6 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
         }
     }
 
-    /**
-     * The timeout bounds how long the wait takes, not how many polls it is
-     * allowed: an interval longer than the whole timeout must still produce
-     * one poll, and the wait must be cut short at the deadline rather than
-     * sleeping out the full interval.
-     */
     public function testPollsOnceWhenTheIntervalOutlastsTheTimeout(): void
     {
         $seam = $this->seam(wait_for_action_attempt: false);
@@ -302,17 +296,11 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
         } catch (ActionAttemptTimeoutError) {
             $elapsed = microtime(true) - $started_at;
 
-            // Waited for the timeout rather than giving up instantly, and did
-            // not sleep out the 30s interval.
             $this->assertGreaterThanOrEqual(0.3, $elapsed);
             $this->assertLessThan(5.0, $elapsed);
         }
     }
 
-    /**
-     * An attempt that finishes within the timeout is resolved even though a
-     * single interval would carry the clock past the deadline.
-     */
     public function testResolvesWhenTheIntervalOutlastsTheTimeout(): void
     {
         $seam = $this->seam(wait_for_action_attempt: false);
@@ -352,12 +340,10 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
     public static function invalidWaitOptions(): array
     {
         return [
-            // Would poll without pause; previously an unbounded request storm.
             "zero polling_interval" => [
                 ["polling_interval" => 0],
                 "polling_interval option must be greater than zero",
             ],
-            // Previously reached usleep() and raised a bare ValueError.
             "negative polling_interval" => [
                 ["polling_interval" => -5],
                 "polling_interval option must be greater than zero",

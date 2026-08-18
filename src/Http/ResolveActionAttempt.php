@@ -13,10 +13,6 @@ use Seam\Resources\ActionAttempt;
  *
  * A successful attempt is returned as is, a failed one raises, and a pending
  * one is polled until it finishes or the timeout elapses.
- *
- * The timeout is a deadline measured from when the wait begins. A pending
- * attempt is always polled at least once, however short the timeout, and the
- * final wait is shortened so the deadline is never overrun by an interval.
  */
 final class ResolveActionAttempt
 {
@@ -52,9 +48,6 @@ final class ResolveActionAttempt
             );
         }
 
-        // A non-positive interval would poll without pause, so it is rejected
-        // here rather than reaching usleep(), which raises a ValueError of its
-        // own for a negative value.
         if ($polling_interval <= 0.0) {
             throw new InvalidOptionsError(
                 "The polling_interval option must be greater than zero, got {$polling_interval}",
@@ -92,9 +85,6 @@ final class ResolveActionAttempt
                 throw new ActionAttemptTimeoutError($action_attempt, $timeout);
             }
 
-            // Capped at the time left, so an interval longer than the timeout
-            // still yields one poll instead of none, and the wait never
-            // overruns the deadline by up to a full interval.
             usleep((int) (min($polling_interval, $remaining) * 1000000.0));
 
             $action_attempt = self::get_action_attempt(
