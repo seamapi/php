@@ -97,11 +97,6 @@ final class UrlSearchParamsSerializerTest extends TestCase
     }
 
     /**
-     * Float formatting used to run through a process wide ini setting,
-     * flipped and restored around every value. Anything else formatting a
-     * float in that window saw the altered setting, and a host that pinned
-     * the setting changed what this serializer produced.
-     *
      * @dataProvider serializePrecisionSettings
      */
     public function testSerializesFloatIndependentlyOfSerializePrecision(
@@ -122,7 +117,6 @@ final class UrlSearchParamsSerializerTest extends TestCase
                 self::serialize(["foo" => PHP_FLOAT_MAX]),
             );
 
-            // And the serializer leaves the setting as it found it.
             $this->assertSame($setting, ini_get("serialize_precision"));
         } finally {
             if ($original !== false) {
@@ -286,10 +280,6 @@ final class UrlSearchParamsSerializerTest extends TestCase
     }
 
     /**
-     * Outside 0000-9999 the format switches to the expanded year: always
-     * signed, always six digits. %04d rendered year -1 as the three digit
-     * "-001", because the sign counted against the width.
-     *
      * @dataProvider expandedYears
      */
     public function testSerializesTheExpandedYear(

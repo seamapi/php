@@ -229,9 +229,6 @@ final class UrlSearchParamsSerializer
      * Formats an instant as JavaScript's Date.prototype.toISOString does:
      * always UTC, always exactly three fractional digits, always a literal
      * `Z`. Sub-millisecond precision is truncated, not rounded.
-     *
-     * A year outside 0000-9999 uses the expanded form the format requires,
-     * six digits behind a mandatory sign, e.g. `+012345` or `-000001`.
      */
     private static function format_datetime(\DateTimeInterface $value): string
     {
@@ -302,12 +299,6 @@ final class UrlSearchParamsSerializer
      */
     private static function shortest_digits(float $value): array
     {
-        // Widened until the result reads back as the same float, which is
-        // what "shortest that round-trips" means. Done this way rather than
-        // by asking PHP for its own shortest representation, because that
-        // is governed by the process wide serialize_precision ini setting:
-        // reading it is unreliable and setting it would change how
-        // unrelated code elsewhere in the process formats its floats.
         $repr = sprintf("%.16E", $value);
 
         for ($precision = 0; $precision < 16; $precision++) {
