@@ -43,10 +43,6 @@ class Paginator
     }
 
     /**
-     * Fetches one page. A null cursor is the first page: the distinction is
-     * carried out of band rather than as a reserved cursor value, so no real
-     * cursor can be mistaken for it.
-     *
      * @return array{0: array, 1: Pagination}
      */
     private function fetchPage(?string $cursor): array
@@ -115,13 +111,6 @@ class Paginator
     }
 
     /**
-     * Yields every page in order, stopping at the last one.
-     *
-     * A server that keeps handing back a cursor it has already given out
-     * would otherwise loop forever, refetching the same page while
-     * flattenToArray grew without bound. Repeating a cursor cannot advance
-     * the walk, so it ends it.
-     *
      * @return \Generator<array{0: array, 1: Pagination}>
      */
     private function walk(): \Generator

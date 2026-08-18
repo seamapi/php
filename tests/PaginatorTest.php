@@ -138,11 +138,6 @@ final class PaginatorTest extends FakeSeamConnectTestCase
             ->firstPage();
     }
 
-    /**
-     * A paginator over a server that keeps handing back a cursor it already
-     * gave out must stop rather than refetch the same page forever. The fake
-     * cannot produce that, so the cursor is pinned with a canned response.
-     */
     private function pinned_cursor_paginator(string $cursor): Paginator
     {
         $recorder = RecordingClient::repeating(
@@ -177,8 +172,6 @@ final class PaginatorTest extends FakeSeamConnectTestCase
     {
         $all = $this->pinned_cursor_paginator("stuck")->flattenToArray();
 
-        // The first page plus the one page the repeated cursor bought, and
-        // then it gives up instead of looping.
         $this->assertCount(4, $all);
     }
 
@@ -194,10 +187,6 @@ final class PaginatorTest extends FakeSeamConnectTestCase
         $this->assertCount(4, $ids);
     }
 
-    /**
-     * The first page used to be signalled by a reserved cursor string, so a
-     * real cursor equal to it silently refetched page 1 forever.
-     */
     public function testACursorNamedFirstPageStillAdvances(): void
     {
         $pages = $this->pinned_cursor_paginator("FIRST_PAGE");
