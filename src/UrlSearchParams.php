@@ -22,11 +22,6 @@ class UrlSearchParams implements \Countable, \IteratorAggregate
      *        A query string, a map of names to values, or a list of
      *        name-value pairs
      *
-     * In the map form a value is a string, int, bool, null, or a list of
-     * those, which becomes one pair per element. Anything the serialization
-     * standard renders specially, such as a float or a date, belongs in
-     * UrlSearchParamsSerializer rather than here.
-     *
      * @throws UnserializableParamError If a map value cannot be rendered
      */
     public function __construct(string|array|null $init = null)
@@ -59,8 +54,6 @@ class UrlSearchParams implements \Countable, \IteratorAggregate
                 continue;
             }
 
-            // A name may repeat, so an array value becomes one pair per
-            // element rather than the string "Array".
             if (is_array($value)) {
                 foreach ($value as $element) {
                     $this->pairs[] = [
@@ -80,12 +73,6 @@ class UrlSearchParams implements \Countable, \IteratorAggregate
 
     /**
      * Renders a map value as a search param value.
-     *
-     * Only the values the standard renders the same way are accepted. A
-     * float needs the ECMAScript number formatting, and a date the exact
-     * ISO shape, both of which live in UrlSearchParamsSerializer; rendering
-     * them here with a plain cast would quietly disagree with it, so they
-     * are rejected and the caller is pointed at the serializer instead.
      *
      * @throws UnserializableParamError If the value has no string form here
      */

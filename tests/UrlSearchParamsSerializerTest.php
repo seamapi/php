@@ -587,11 +587,6 @@ final class UrlSearchParamsSerializerTest extends TestCase
         );
     }
 
-    /**
-     * A name may repeat, which is how the standard represents an array, so
-     * the map form has to expand a list rather than cast it to the string
-     * "Array" behind a warning.
-     */
     public function testUrlSearchParamsFromMapExpandsAList(): void
     {
         $this->assertSame(
@@ -602,11 +597,6 @@ final class UrlSearchParamsSerializerTest extends TestCase
         );
     }
 
-    /**
-     * The map form and the serializer have to agree on what a value looks
-     * like. A plain PHP cast renders true as "1" and false as "", where the
-     * standard renders "true" and "false".
-     */
     public function testUrlSearchParamsFromMapRendersValuesLikeTheStandard(): void
     {
         $params = ["t" => true, "f" => false, "n" => 42, "u" => null];
@@ -616,7 +606,6 @@ final class UrlSearchParamsSerializerTest extends TestCase
             (new UrlSearchParams($params))->to_string(),
         );
 
-        // Same values through the serializer, modulo its sorting.
         $this->assertSame(
             "f=false&n=42&t=true&u=",
             UrlSearchParamsSerializer::serialize([
@@ -629,10 +618,6 @@ final class UrlSearchParamsSerializerTest extends TestCase
     }
 
     /**
-     * Rendering these here would need the ECMAScript number formatting and
-     * the exact ISO date shape, both of which live in the serializer. A
-     * plain cast would quietly disagree with it, so they are refused.
-     *
      * @dataProvider valuesTheMapFormCannotRender
      */
     public function testUrlSearchParamsFromMapRejectsWhatItCannotRender(

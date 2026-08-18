@@ -256,8 +256,6 @@ $stored_data = json_decode(
     false
 );
 
-// Cast because createPaginator takes an array, while $pagination below is
-// read as an object.
 $params = (array) ($stored_data[0] ?? []);
 $pagination =
     $stored_data[1] ??
