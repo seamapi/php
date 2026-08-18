@@ -15,11 +15,16 @@
 import type { Blueprint, Property, Resource } from '@seamapi/blueprint'
 import { pascalCase } from 'change-case'
 
-import { getPhpType } from './map-php-type.js'
+import { getPhpDocType, getPhpType } from './map-php-type.js'
 import { mergeProperties } from './merge-properties.js'
 
 export type ResourceClassProperty =
   | ({ kind: 'value'; phpType: string } & ResourceClassPropertyMetadata)
+  | ({
+      kind: 'record'
+      phpType: string
+      phpDocType: string
+    } & ResourceClassPropertyMetadata)
   | ({
       kind: 'objectReference'
       referenceName: string
@@ -272,7 +277,14 @@ const buildClass = (
     )
 
     if (nestedProperties == null) {
-      return { ...metadata, kind: 'value', phpType: getPhpType(property) }
+      return property.format === 'record' && !('resourceType' in property)
+        ? {
+            ...metadata,
+            kind: 'record',
+            phpType: getPhpType(property),
+            phpDocType: getPhpDocType(property),
+          }
+        : { ...metadata, kind: 'value', phpType: getPhpType(property) }
     }
 
     const nestedClassName = pascalCase(property.name)

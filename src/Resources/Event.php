@@ -246,7 +246,10 @@ namespace Seam\Resources {
             public string|null $climate_preset_key,
             public string|null $code,
             public string|null $connect_webview_id = null,
-            public mixed $connected_account_custom_metadata = null,
+            /**
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $connected_account_custom_metadata = null,
             /**
              * Errors associated with the connected account.
              */
@@ -281,7 +284,10 @@ namespace Seam\Resources {
              * Desired temperature, in °F, defined by the affected thermostat's cooling or heating set point.
              */
             public float|null $desired_temperature_fahrenheit = null,
-            public mixed $device_custom_metadata = null,
+            /**
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $device_custom_metadata = null,
             /**
              * Errors associated with the device.
              */
@@ -356,8 +362,10 @@ namespace Seam\Resources {
             public string|null $method,
             /**
              * Metadata from Minut.
+             *
+             * @var array<string, mixed>|\stdClass|null
              */
-            public mixed $minut_metadata = null,
+            public array|\stdClass|null $minut_metadata = null,
             /**
              * IDs of the devices that did not receive a requested access method. Use these to identify which specific devices failed without having to fetch the Access Grant.
              */
@@ -384,8 +392,10 @@ namespace Seam\Resources {
             public string|null $noise_threshold_name = null,
             /**
              * Metadata from Noiseaware.
+             *
+             * @var array<string, mixed>|\stdClass|null
              */
-            public mixed $noiseaware_metadata = null,
+            public array|\stdClass|null $noiseaware_metadata = null,
             /**
              * Date and time at which the event occurred.
              */
@@ -827,16 +837,20 @@ namespace Seam\Resources\Event {
         public function __construct(
             /**
              * Previous property values before the requested change. Keys depend on the mutation type. Absent for non-property mutations like `deleting`.
+             *
+             * @var array<string, mixed>|\stdClass|null
              */
-            public mixed $from = null,
+            public array|\stdClass|null $from = null,
             /**
              * Code identifying the type of mutation requested, such as `updating_name`, `updating_code`, `updating_time_frame`, or `deleting`.
              */
             public string|null $mutation_code,
             /**
              * New property values after the requested change. Keys depend on the mutation type. Absent for non-property mutations like `deleting`.
+             *
+             * @var array<string, mixed>|\stdClass|null
              */
-            public mixed $to = null,
+            public array|\stdClass|null $to = null,
         ) {}
     }
 

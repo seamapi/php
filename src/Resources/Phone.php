@@ -40,8 +40,10 @@ namespace Seam\Resources {
             public string|null $created_at,
             /**
              * Optional [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) for the phone.
+             *
+             * @var array<string, string|bool>|\stdClass|null
              */
-            public mixed $custom_metadata,
+            public array|\stdClass|null $custom_metadata,
             /**
              * ID of the phone.
              */

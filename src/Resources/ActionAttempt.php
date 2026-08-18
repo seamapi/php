@@ -159,7 +159,10 @@ namespace Seam\Resources\ActionAttempt {
         }
 
         public function __construct(
-            public mixed $access_code,
+            /**
+             * @var array<string, mixed>|\stdClass|null
+             */
+            public array|\stdClass|null $access_code,
             /**
              * Access method for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials). Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
              */
@@ -278,7 +281,10 @@ namespace Seam\Resources\ActionAttempt {
              * Access method mode. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
              */
             public string|null $mode,
-            public mixed $noise_threshold,
+            /**
+             * @var array<string, mixed>|\stdClass|null
+             */
+            public array|\stdClass|null $noise_threshold,
             /**
              * ID of the parent [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */

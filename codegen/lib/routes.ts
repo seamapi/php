@@ -12,7 +12,7 @@ import type { PhpClient, PhpClientMethod } from './class-model.js'
 import { setResourceLayoutContext } from './layouts/resource.js'
 import { setRouteLayoutContext } from './layouts/route.js'
 import { setSeamClientLayoutContext } from './layouts/seam-client.js'
-import { getPhpType } from './map-php-type.js'
+import { getPhpDocType, getPhpType } from './map-php-type.js'
 import { createResourceModel } from './resource-model.js'
 
 interface Metadata {
@@ -135,6 +135,7 @@ const createClientMethod = (endpoint: Endpoint): PhpClientMethod => {
     parameters: endpoint.request.parameters.map((parameter) => ({
       name: parameter.name,
       type: getPhpType(parameter),
+      phpDocType: getPhpDocType(parameter),
       description: parameter.description,
       isOptional: !parameter.isRequired,
       isNullable: parameter.isNullable,

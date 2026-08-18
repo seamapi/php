@@ -4,6 +4,7 @@
 export interface PhpClientMethodParameter {
   name: string
   type: string
+  phpDocType: string
   description: string
   isOptional: boolean
   isNullable: boolean
