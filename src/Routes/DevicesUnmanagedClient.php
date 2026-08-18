@@ -160,13 +160,13 @@ class DevicesUnmanagedClient
      *
      * @param string $device_id ID of the unmanaged device that you want to update.
      * @param mixed $custom_metadata Custom metadata that you want to associate with the device. Supports up to 50 JSON key:value pairs.
-     * @param bool $is_managed Indicates whether the device is managed. Set this parameter to `true` to convert an unmanaged device to managed.
+     * @param true $is_managed Indicates whether the device is managed. Set this parameter to `true` to convert an unmanaged device to managed.
      * @return void OK
      */
     public function update(
         string $device_id,
         mixed $custom_metadata = null,
-        ?bool $is_managed = null,
+        ?true $is_managed = null,
     ): void {
         $request_payload = [];
 

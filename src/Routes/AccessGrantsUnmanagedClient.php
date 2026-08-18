@@ -112,13 +112,13 @@ class AccessGrantsUnmanagedClient
      * When converting an unmanaged access grant to managed, all associated access methods will also be converted to managed.
      *
      * @param string $access_grant_id ID of the unmanaged Access Grant to update.
-     * @param bool $is_managed Must be set to true to convert the unmanaged access grant to managed.
+     * @param true $is_managed Must be set to true to convert the unmanaged access grant to managed.
      * @param string $access_grant_key Unique key for the access grant. If not provided, the existing key will be preserved.
      * @return void OK
      */
     public function update(
         string $access_grant_id,
-        bool $is_managed,
+        true $is_managed,
         ?string $access_grant_key = null,
     ): void {
         $request_payload = [];

@@ -13,8 +13,10 @@ export const getPhpType = (schema: Parameter | Property): string => {
     case 'number':
       return 'float'
 
-    case 'boolean':
-      return 'bool'
+    case 'boolean': {
+      const values = [...new Set(schema.values)]
+      return values.length === 1 ? String(values[0]) : 'bool'
+    }
 
     case 'array':
       return 'array'
