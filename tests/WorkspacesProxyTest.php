@@ -11,11 +11,6 @@ use Seam\SeamWithoutWorkspace;
 use Seam\WorkspacesProxy;
 use Tests\Support\RecordingClient;
 
-/**
- * WorkspacesProxy hand-copies the signatures of the generated workspace
- * routes, and nothing in codegen regenerates it. These tests are the only
- * thing standing between the two copies and silent drift.
- */
 final class WorkspacesProxyTest extends TestCase
 {
     /**
@@ -42,9 +37,6 @@ final class WorkspacesProxyTest extends TestCase
     }
 
     /**
-     * Name, type, and default of every parameter, in order, plus the return
-     * type: everything a caller can trip over.
-     *
      * @return array<string, string>
      */
     private static function describe(\ReflectionMethod $method): array
@@ -64,10 +56,6 @@ final class WorkspacesProxyTest extends TestCase
         return $described;
     }
 
-    /**
-     * The narrowed type made this a TypeError on the proxy while the same
-     * call worked on the workspace scoped client.
-     */
     public function testCreateForwardsTheNullSentinel(): void
     {
         $recorder = new RecordingClient([
@@ -92,8 +80,6 @@ final class WorkspacesProxyTest extends TestCase
 
         $this->assertSame("Sentinel Workspace", $workspace->name);
 
-        // The sentinel has to reach the wire as a JSON null, the way it does
-        // through the generated client.
         $body = $recorder->body();
 
         $this->assertSame("Sentinel Workspace", $body->name);

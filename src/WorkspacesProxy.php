@@ -29,9 +29,6 @@ class WorkspacesProxy
     /**
      * Creates a new [workspace](https://docs.seam.co/core-concepts/workspaces).
      *
-     * Mirrors WorkspacesClient::create, including the types: narrowing a
-     * parameter here would reject a value the generated client accepts.
-     *
      * @param string $name Name of the new workspace.
      * @param string $company_name Company name for the new workspace.
      * @param string|NullValue $connect_partner_name Connect partner name for the new workspace.
