@@ -98,7 +98,7 @@ namespace Seam\Resources {
             /**
              * Indicates whether Seam manages the access group.
              */
-            public bool|null $is_managed,
+            public true|null $is_managed,
             /**
              * Name of the access group.
              */

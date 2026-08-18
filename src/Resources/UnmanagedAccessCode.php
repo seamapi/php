@@ -62,11 +62,11 @@ namespace Seam\Resources {
             /**
              * Indicates that Seam cannot convert this unmanaged access code to a managed access code. Some providers do not support management of unmanaged access codes through API integrations.
              */
-            public bool|null $cannot_be_managed = null,
+            public true|null $cannot_be_managed = null,
             /**
              * Indicates that Seam cannot delete this unmanaged access code through the provider. If this access code needs to be deleted, it will only be possible from the manufacturer app.
              */
-            public bool|null $cannot_delete_unmanaged_access_code = null,
+            public true|null $cannot_delete_unmanaged_access_code = null,
             /**
              * Code used for access. Typically, a numeric or alphanumeric string.
              */
@@ -94,7 +94,7 @@ namespace Seam\Resources {
             /**
              * Indicates that Seam does not manage the access code.
              */
-            public bool|null $is_managed,
+            public false|null $is_managed,
             /**
              * Name of the access code. Enables administrators and users to identify the access code easily, especially when there are numerous access codes. Note that the name provided on Seam is used to identify the code on Seam and is not necessarily the name that will appear in the lock provider's app or on the device. This is because lock providers may have constraints on names, such as length, uniqueness, or characters that can be used. In addition, some lock providers may break down names into components such as `first_name` and `last_name`. To provide a consistent experience, Seam identifies the code on Seam by its name but may modify the name that appears on the lock provider's app or on the device. For example, Seam may add additional characters or truncate the name to meet provider constraints. To help your users identify codes set by Seam, Seam provides the name exactly as it appears on the lock provider's app or on the device as a separate property called `appearance`. This is an object with a `name` property and, optionally, `first_name` and `last_name` properties (for providers that break down a name into components).
              */
@@ -229,7 +229,7 @@ namespace Seam\Resources\UnmanagedAccessCode {
             /**
              * Indicates that this is an access code error.
              */
-            public bool|null $is_access_code_error,
+            public true|null $is_access_code_error,
             /**
              * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
              */

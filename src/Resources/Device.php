@@ -202,7 +202,7 @@ namespace Seam\Resources {
             /**
              * Indicates whether Seam manages the device. See also [Managed and Unmanaged Devices](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices).
              */
-            public bool|null $is_managed,
+            public true|null $is_managed,
             /**
              * Location information for the device.
              */
@@ -3177,7 +3177,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * When `true`, the start and end must fall at the same time of day (the caller picks which). Mutually exclusive with `time_pairs`.
              */
-            public bool|null $matching_start_end_time = null,
+            public true|null $matching_start_end_time = null,
             /**
              * Maximum duration this option covers, as an ISO 8601 duration (for example, `PT672H` or `P367D`). Omitted when there is no maximum.
              */
@@ -3241,7 +3241,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * When `true`, the start and end must fall at the same time of day (the caller picks which). Mutually exclusive with `time_pairs`.
              */
-            public bool|null $matching_start_end_time = null,
+            public true|null $matching_start_end_time = null,
             /**
              * Maximum duration this option covers, as an ISO 8601 duration (for example, `PT672H` or `P367D`). Omitted when there is no maximum.
              */

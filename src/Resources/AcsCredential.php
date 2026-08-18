@@ -151,7 +151,7 @@ namespace Seam\Resources {
             /**
              * Indicates whether Seam manages the credential.
              */
-            public bool|null $is_managed,
+            public true|null $is_managed,
             /**
              * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is a [multi-phone sync credential](https://docs.seam.co/capability-guides/mobile-access/issuing-mobile-credentials-from-an-access-control-system#what-are-multi-phone-sync-credentials).
              */

@@ -114,7 +114,7 @@ namespace Seam\Resources {
             /**
              * Indicates whether Seam manages the access code.
              */
-            public bool|null $is_managed,
+            public true|null $is_managed,
             /**
              * Indicates whether the access code is intended for use in offline scenarios. If `true`, this code can be created on a device without a network connection.
              */
@@ -273,7 +273,7 @@ namespace Seam\Resources\AccessCode {
             /**
              * Indicates that this is an access code error.
              */
-            public bool|null $is_access_code_error,
+            public true|null $is_access_code_error,
             /**
              * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
              */

@@ -179,7 +179,7 @@ namespace Seam\Resources {
             /**
              * Indicates that Seam does not manage the device.
              */
-            public bool|null $is_managed,
+            public false|null $is_managed,
             /**
              * Location information for the device.
              */

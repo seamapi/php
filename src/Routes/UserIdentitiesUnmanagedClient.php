@@ -99,13 +99,13 @@ class UserIdentitiesUnmanagedClient
      *
      * This endpoint can only be used to convert unmanaged user identities to managed ones by setting `is_managed` to `true`. It cannot be used to convert managed user identities back to unmanaged.
      *
-     * @param bool $is_managed Must be set to true to convert the unmanaged user identity to managed.
+     * @param true $is_managed Must be set to true to convert the unmanaged user identity to managed.
      * @param string $user_identity_id ID of the unmanaged user identity that you want to update.
      * @param string $user_identity_key Unique key for the user identity. If not provided, the existing key will be preserved.
      * @return void OK
      */
     public function update(
-        bool $is_managed,
+        true $is_managed,
         string $user_identity_id,
         ?string $user_identity_key = null,
     ): void {

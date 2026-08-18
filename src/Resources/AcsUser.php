@@ -122,7 +122,7 @@ namespace Seam\Resources {
             /**
              * Indicates whether Seam manages the access system user.
              */
-            public bool|null $is_managed,
+            public true|null $is_managed,
             /**
              * Indicates whether the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) is currently [suspended](https://docs.seam.co/low-level-apis/access-systems/user-management/suspending-and-unsuspending-users).
              */
