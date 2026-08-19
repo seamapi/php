@@ -191,8 +191,8 @@ class ConnectWebviewsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/connect_webviews/list", [
-                "json" => (object) $request_payload,
+            $this->client->request("GET", "/connect_webviews/list", [
+                "query" => $request_payload,
             ]),
         );
 

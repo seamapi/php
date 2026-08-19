@@ -208,8 +208,8 @@ class CustomersClient
             $request_payload["user_keys"] = $user_keys;
         }
 
-        $this->client->request("POST", "/customers/delete_data", [
-            "json" => (object) $request_payload,
+        $this->client->request("DELETE", "/customers/delete_data", [
+            "query" => $request_payload,
         ]);
     }
 

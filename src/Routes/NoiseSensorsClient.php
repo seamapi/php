@@ -71,8 +71,8 @@ class NoiseSensorsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/noise_sensors/list", [
-                "json" => (object) $request_payload,
+            $this->client->request("GET", "/noise_sensors/list", [
+                "query" => $request_payload,
             ]),
         );
 

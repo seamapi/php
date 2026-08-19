@@ -355,8 +355,8 @@ class ThermostatsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/thermostats/list", [
-                "json" => (object) $request_payload,
+            $this->client->request("GET", "/thermostats/list", [
+                "query" => $request_payload,
             ]),
         );
 

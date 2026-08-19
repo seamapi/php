@@ -231,8 +231,8 @@ class SpacesClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/spaces/get_related", [
-                "json" => (object) $request_payload,
+            $this->client->request("GET", "/spaces/get_related", [
+                "query" => $request_payload,
             ]),
         );
 
@@ -305,8 +305,8 @@ class SpacesClient
         $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
         $request_payload["space_id"] = $space_id;
 
-        $this->client->request("POST", "/spaces/remove_acs_entrances", [
-            "json" => (object) $request_payload,
+        $this->client->request("DELETE", "/spaces/remove_acs_entrances", [
+            "query" => $request_payload,
         ]);
     }
 
@@ -345,8 +345,8 @@ class SpacesClient
         $request_payload["device_ids"] = $device_ids;
         $request_payload["space_id"] = $space_id;
 
-        $this->client->request("POST", "/spaces/remove_devices", [
-            "json" => (object) $request_payload,
+        $this->client->request("DELETE", "/spaces/remove_devices", [
+            "query" => $request_payload,
         ]);
     }
 

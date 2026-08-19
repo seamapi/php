@@ -145,8 +145,8 @@ class AcsEntrancesClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/acs/entrances/list", [
-                "json" => (object) $request_payload,
+            $this->client->request("GET", "/acs/entrances/list", [
+                "query" => $request_payload,
             ]),
         );
 
@@ -180,9 +180,9 @@ class AcsEntrancesClient
 
         $res = Body::decode(
             $this->client->request(
-                "POST",
+                "GET",
                 "/acs/entrances/list_credentials_with_access",
-                ["json" => (object) $request_payload],
+                ["query" => $request_payload],
             ),
         );
 

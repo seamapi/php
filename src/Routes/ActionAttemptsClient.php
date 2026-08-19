@@ -88,8 +88,8 @@ class ActionAttemptsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/action_attempts/list", [
-                "json" => (object) $request_payload,
+            $this->client->request("GET", "/action_attempts/list", [
+                "query" => $request_payload,
             ]),
         );
 

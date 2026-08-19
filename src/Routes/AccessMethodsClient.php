@@ -177,8 +177,8 @@ class AccessMethodsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_methods/get_related", [
-                "json" => (object) $request_payload,
+            $this->client->request("GET", "/access_methods/get_related", [
+                "query" => $request_payload,
             ]),
         );
 

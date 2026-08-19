@@ -215,8 +215,8 @@ class AccessGrantsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_grants/get_related", [
-                "json" => (object) $request_payload,
+            $this->client->request("GET", "/access_grants/get_related", [
+                "query" => $request_payload,
             ]),
         );
 
@@ -301,8 +301,8 @@ class AccessGrantsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_grants/list", [
-                "json" => (object) $request_payload,
+            $this->client->request("GET", "/access_grants/list", [
+                "query" => $request_payload,
             ]),
         );
 

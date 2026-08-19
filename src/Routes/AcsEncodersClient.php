@@ -126,8 +126,8 @@ class AcsEncodersClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/acs/encoders/list", [
-                "json" => (object) $request_payload,
+            $this->client->request("GET", "/acs/encoders/list", [
+                "query" => $request_payload,
             ]),
         );
 
