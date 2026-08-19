@@ -48,6 +48,22 @@ namespace Seam\Resources {
 
         public function __construct(
             /**
+             * Name of the device provider.
+             */
+            public string|null $device_provider_name,
+            /**
+             * Display name for the device provider.
+             */
+            public string|null $display_name,
+            /**
+             * Image URL for the device provider.
+             */
+            public string|null $image_url,
+            /**
+             * List of provider categories to which the device provider belongs, such as `stable`, `consumer_smartlocks`, `thermostats`, and so on.
+             */
+            public array|null $provider_categories,
+            /**
              * Indicates whether the lock supports configuring automatic locking.
              */
             public bool|null $can_configure_auto_lock = null,
@@ -127,22 +143,6 @@ namespace Seam\Resources {
              * Indicates whether the lock supports unlocking with an access code.
              */
             public bool|null $can_unlock_with_code = null,
-            /**
-             * Name of the device provider.
-             */
-            public string|null $device_provider_name,
-            /**
-             * Display name for the device provider.
-             */
-            public string|null $display_name,
-            /**
-             * Image URL for the device provider.
-             */
-            public string|null $image_url,
-            /**
-             * List of provider categories to which the device provider belongs, such as `stable`, `consumer_smartlocks`, `thermostats`, and so on.
-             */
-            public array|null $provider_categories,
         ) {}
     }
 }

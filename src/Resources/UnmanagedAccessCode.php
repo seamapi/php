@@ -60,14 +60,6 @@ namespace Seam\Resources {
              */
             public string|null $access_code_id,
             /**
-             * Indicates that Seam cannot convert this unmanaged access code to a managed access code. Some providers do not support management of unmanaged access codes through API integrations.
-             */
-            public true|null $cannot_be_managed = null,
-            /**
-             * Indicates that Seam cannot delete this unmanaged access code through the provider. If this access code needs to be deleted, it will only be possible from the manufacturer app.
-             */
-            public true|null $cannot_delete_unmanaged_access_code = null,
-            /**
              * Code used for access. Typically, a numeric or alphanumeric string.
              */
             public string|null $code,
@@ -80,14 +72,6 @@ namespace Seam\Resources {
              */
             public string|null $device_id,
             /**
-             * Metadata for a dormakaba Oracode unmanaged access code. Only present for unmanaged access codes from dormakaba Oracode devices.
-             */
-            public UnmanagedAccessCode\DormakabaOracodeMetadata|null $dormakaba_oracode_metadata = null,
-            /**
-             * Date and time after which the time-bound access code becomes inactive.
-             */
-            public string|null $ends_at = null,
-            /**
              * Errors associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
              */
             public array $errors,
@@ -99,10 +83,6 @@ namespace Seam\Resources {
              * Name of the access code. Enables administrators and users to identify the access code easily, especially when there are numerous access codes. Note that the name provided on Seam is used to identify the code on Seam and is not necessarily the name that will appear in the lock provider's app or on the device. This is because lock providers may have constraints on names, such as length, uniqueness, or characters that can be used. In addition, some lock providers may break down names into components such as `first_name` and `last_name`. To provide a consistent experience, Seam identifies the code on Seam by its name but may modify the name that appears on the lock provider's app or on the device. For example, Seam may add additional characters or truncate the name to meet provider constraints. To help your users identify codes set by Seam, Seam provides the name exactly as it appears on the lock provider's app or on the device as a separate property called `appearance`. This is an object with a `name` property and, optionally, `first_name` and `last_name` properties (for providers that break down a name into components).
              */
             public string|null $name,
-            /**
-             * Date and time at which the time-bound access code becomes active.
-             */
-            public string|null $starts_at = null,
             /**
              * Current status of the access code within the operational lifecycle. `set` indicates that the code is active and operational. `unset` indicates that the code exists on the provider but is not usable on the device.
              */
@@ -119,6 +99,26 @@ namespace Seam\Resources {
              * Unique identifier for the Seam workspace associated with the access code.
              */
             public string|null $workspace_id,
+            /**
+             * Indicates that Seam cannot convert this unmanaged access code to a managed access code. Some providers do not support management of unmanaged access codes through API integrations.
+             */
+            public true|null $cannot_be_managed = null,
+            /**
+             * Indicates that Seam cannot delete this unmanaged access code through the provider. If this access code needs to be deleted, it will only be possible from the manufacturer app.
+             */
+            public true|null $cannot_delete_unmanaged_access_code = null,
+            /**
+             * Metadata for a dormakaba Oracode unmanaged access code. Only present for unmanaged access codes from dormakaba Oracode devices.
+             */
+            public UnmanagedAccessCode\DormakabaOracodeMetadata|null $dormakaba_oracode_metadata = null,
+            /**
+             * Date and time after which the time-bound access code becomes inactive.
+             */
+            public string|null $ends_at = null,
+            /**
+             * Date and time at which the time-bound access code becomes active.
+             */
+            public string|null $starts_at = null,
         ) {}
     }
 }
@@ -215,6 +215,20 @@ namespace Seam\Resources\UnmanagedAccessCode {
 
         public function __construct(
             /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $error_code,
+            /**
+             * Indicates that this is an access code error.
+             */
+            public true|null $is_access_code_error,
+            public bool|null $is_connected_account_error,
+            public bool|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
              * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device.
              */
             public string|null $change_type = null,
@@ -223,27 +237,13 @@ namespace Seam\Resources\UnmanagedAccessCode {
              */
             public string|null $created_at = null,
             /**
-             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
-             */
-            public string|null $error_code,
-            /**
-             * Indicates that this is an access code error.
-             */
-            public true|null $is_access_code_error,
-            /**
              * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
              */
             public bool|null $is_bridge_error = null,
-            public bool|null $is_connected_account_error,
-            public bool|null $is_device_error,
             /**
              * ID of the managed access code that conflicts with this managed access code, when Seam can identify it.
              */
             public string|null $managed_access_code_id = null,
-            /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
-             */
-            public string|null $message,
             /**
              * List of fields that were changed externally, with their previous and new values.
              */
@@ -279,6 +279,14 @@ namespace Seam\Resources\UnmanagedAccessCode {
 
         public function __construct(
             /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $warning_code,
+            /**
              * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device.
              */
             public string|null $change_type = null,
@@ -287,17 +295,9 @@ namespace Seam\Resources\UnmanagedAccessCode {
              */
             public string|null $created_at = null,
             /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            public string|null $message,
-            /**
              * List of fields that were changed externally, with their previous and new values.
              */
             public array|null $modified_fields = null,
-            /**
-             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
-             */
-            public string|null $warning_code,
         ) {}
     }
 }

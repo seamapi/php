@@ -150,10 +150,6 @@ namespace Seam\Resources {
             public array $access_code_errors,
             public string|null $access_code_id,
             /**
-             * Whether the access code is managed by Seam (true) or unmanaged (false). Only present when access_code_id is set.
-             */
-            public bool|null $access_code_is_managed = null,
-            /**
              * Warnings associated with the access code.
              */
             public array $access_code_warnings,
@@ -165,14 +161,6 @@ namespace Seam\Resources {
              * IDs of the access grants associated with this access method.
              */
             public array|null $access_grant_ids,
-            /**
-             * Key of the affected Access Grant (if present).
-             */
-            public string|null $access_grant_key = null,
-            /**
-             * Keys of the access grants associated with this access method (if present).
-             */
-            public array|null $access_grant_keys = null,
             /**
              * ID of the affected access method.
              */
@@ -229,14 +217,6 @@ namespace Seam\Resources {
              */
             public string|null $battery_status,
             /**
-             * Human-readable reason for the change (e.g. `ongoing code auto-renewed`).
-             */
-            public string|null $change_reason = null,
-            /**
-             * List of properties that changed on the access code.
-             */
-            public array|null $changed_properties = null,
-            /**
              * ID of the affected client session.
              */
             public string|null $client_session_id,
@@ -245,11 +225,6 @@ namespace Seam\Resources {
              */
             public string|null $climate_preset_key,
             public string|null $code,
-            public string|null $connect_webview_id = null,
-            /**
-             * @var array<string, string|bool>|\stdClass|null
-             */
-            public array|\stdClass|null $connected_account_custom_metadata = null,
             /**
              * Errors associated with the connected account.
              */
@@ -260,6 +235,120 @@ namespace Seam\Resources {
              */
             public array $connected_account_warnings,
             /**
+             * Date and time at which the event was created.
+             */
+            public string|null $created_at,
+            /**
+             * Human-readable description of the change and its source.
+             */
+            public string|null $description,
+            /**
+             * Errors associated with the device.
+             */
+            public array $device_errors,
+            public string|null $device_id,
+            public array|null $device_ids,
+            /**
+             * Warnings associated with the device.
+             */
+            public array $device_warnings,
+            /**
+             * Error code associated with the disconnection event, if any.
+             */
+            public string|null $error_code,
+            /**
+             * Description of why the access methods could not be created.
+             */
+            public string|null $error_message,
+            /**
+             * ID of the event.
+             */
+            public string|null $event_id,
+            /**
+             * Type of the event.
+             */
+            public string|null $event_type,
+            public Event\From|null $from,
+            /**
+             * Indicates whether the climate preset that was activated is the fallback climate preset for the thermostat.
+             */
+            public bool|null $is_fallback_climate_preset,
+            /**
+             * Lower temperature limit, in °C, defined by the set threshold.
+             */
+            public float|null $lower_limit_celsius,
+            /**
+             * Lower temperature limit, in °F, defined by the set threshold.
+             */
+            public float|null $lower_limit_fahrenheit,
+            public string|null $method,
+            /**
+             * Date and time at which the event occurred.
+             */
+            public string|null $occurred_at,
+            /**
+             * Array of mutations requested on the access code, each containing the mutation type and from/to values.
+             */
+            public array $requested_mutations,
+            /**
+             * ID of the affected space.
+             */
+            public string|null $space_id,
+            /**
+             * Status of the action.
+             */
+            public string|null $status,
+            /**
+             * Temperature, in °C, reported by the affected thermostat.
+             */
+            public float|null $temperature_celsius,
+            /**
+             * Temperature, in °F, reported by the affected thermostat.
+             */
+            public float|null $temperature_fahrenheit,
+            /**
+             * ID of the thermostat schedule that prompted the affected climate preset to be activated.
+             */
+            public string|null $thermostat_schedule_id,
+            public Event\To|null $to,
+            /**
+             * Upper temperature limit, in °C, defined by the set threshold.
+             */
+            public float|null $upper_limit_celsius,
+            /**
+             * Upper temperature limit, in °F, defined by the set threshold.
+             */
+            public float|null $upper_limit_fahrenheit,
+            /**
+             * ID of the workspace associated with the event.
+             */
+            public string|null $workspace_id,
+            /**
+             * Whether the access code is managed by Seam (true) or unmanaged (false). Only present when access_code_id is set.
+             */
+            public bool|null $access_code_is_managed = null,
+            /**
+             * Key of the affected Access Grant (if present).
+             */
+            public string|null $access_grant_key = null,
+            /**
+             * Keys of the access grants associated with this access method (if present).
+             */
+            public array|null $access_grant_keys = null,
+            /**
+             * Human-readable reason for the change (e.g. `ongoing code auto-renewed`).
+             */
+            public string|null $change_reason = null,
+            /**
+             * List of properties that changed on the access code.
+             */
+            public array|null $changed_properties = null,
+            public string|null $connect_webview_id = null,
+            /**
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $connected_account_custom_metadata = null,
+            /**
              * Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
             public float|null $cooling_set_point_celsius = null,
@@ -267,15 +356,7 @@ namespace Seam\Resources {
              * Temperature to which the thermostat should cool (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
             public float|null $cooling_set_point_fahrenheit = null,
-            /**
-             * Date and time at which the event was created.
-             */
-            public string|null $created_at,
             public string|null $customer_key = null,
-            /**
-             * Human-readable description of the change and its source.
-             */
-            public string|null $description,
             /**
              * Desired temperature, in °C, defined by the affected thermostat's cooling or heating set point.
              */
@@ -288,46 +369,19 @@ namespace Seam\Resources {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Errors associated with the device.
-             */
-            public array $device_errors,
-            public string|null $device_id,
-            public array|null $device_ids,
             public string|null $device_name = null,
-            /**
-             * Warnings associated with the device.
-             */
-            public array $device_warnings,
             /**
              * The new end time for the access grant.
              */
             public string|null $ends_at = null,
             /**
-             * Error code associated with the disconnection event, if any.
-             */
-            public string|null $error_code,
-            /**
-             * Description of why the access methods could not be created.
-             */
-            public string|null $error_message,
-            /**
              * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
              */
             public string|null $event_description = null,
             /**
-             * ID of the event.
-             */
-            public string|null $event_id,
-            /**
-             * Type of the event.
-             */
-            public string|null $event_type,
-            /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
              */
             public string|null $fan_mode_setting = null,
-            public Event\From|null $from,
             /**
              * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -345,21 +399,8 @@ namespace Seam\Resources {
              * Indicates whether the code is a backup code (only present when mode is 'code' and a backup code was used).
              */
             public bool|null $is_backup_code = null,
-            /**
-             * Indicates whether the climate preset that was activated is the fallback climate preset for the thermostat.
-             */
-            public bool|null $is_fallback_climate_preset,
             public bool|null $is_via_bluetooth = null,
             public bool|null $is_via_nfc = null,
-            /**
-             * Lower temperature limit, in °C, defined by the set threshold.
-             */
-            public float|null $lower_limit_celsius,
-            /**
-             * Lower temperature limit, in °F, defined by the set threshold.
-             */
-            public float|null $lower_limit_fahrenheit,
-            public string|null $method,
             /**
              * Metadata from Minut.
              *
@@ -397,21 +438,9 @@ namespace Seam\Resources {
              */
             public array|\stdClass|null $noiseaware_metadata = null,
             /**
-             * Date and time at which the event occurred.
-             */
-            public string|null $occurred_at,
-            /**
              * Why access was denied, when the provider reports a determinable cause. Omitted when unknown.
              */
             public Event\Reason|null $reason = null,
-            /**
-             * Array of mutations requested on the access code, each containing the mutation type and from/to values.
-             */
-            public array $requested_mutations,
-            /**
-             * ID of the affected space.
-             */
-            public string|null $space_id,
             /**
              * Unique key for the space within the workspace.
              */
@@ -420,36 +449,7 @@ namespace Seam\Resources {
              * The new start time for the access grant.
              */
             public string|null $starts_at = null,
-            /**
-             * Status of the action.
-             */
-            public string|null $status,
-            /**
-             * Temperature, in °C, reported by the affected thermostat.
-             */
-            public float|null $temperature_celsius,
-            /**
-             * Temperature, in °F, reported by the affected thermostat.
-             */
-            public float|null $temperature_fahrenheit,
-            /**
-             * ID of the thermostat schedule that prompted the affected climate preset to be activated.
-             */
-            public string|null $thermostat_schedule_id,
-            public Event\To|null $to,
-            /**
-             * Upper temperature limit, in °C, defined by the set threshold.
-             */
-            public float|null $upper_limit_celsius,
-            /**
-             * Upper temperature limit, in °F, defined by the set threshold.
-             */
-            public float|null $upper_limit_fahrenheit,
             public string|null $video_url = null,
-            /**
-             * ID of the workspace associated with the event.
-             */
-            public string|null $workspace_id,
         ) {}
     }
 }
@@ -836,15 +836,15 @@ namespace Seam\Resources\Event {
 
         public function __construct(
             /**
+             * Code identifying the type of mutation requested, such as `updating_name`, `updating_code`, `updating_time_frame`, or `deleting`.
+             */
+            public string|null $mutation_code,
+            /**
              * Previous property values before the requested change. Keys depend on the mutation type. Absent for non-property mutations like `deleting`.
              *
              * @var array<string, mixed>|\stdClass|null
              */
             public array|\stdClass|null $from = null,
-            /**
-             * Code identifying the type of mutation requested, such as `updating_name`, `updating_code`, `updating_time_frame`, or `deleting`.
-             */
-            public string|null $mutation_code,
             /**
              * New property values after the requested change. Keys depend on the mutation type. Absent for non-property mutations like `deleting`.
              *

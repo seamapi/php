@@ -61,10 +61,6 @@ namespace Seam\Resources {
              */
             public array $errors,
             /**
-             * Optional nickname to describe the phone, settable through Seam.
-             */
-            public string|null $nickname = null,
-            /**
              * Properties of the phone.
              */
             public Phone\Properties|null $properties,
@@ -76,6 +72,10 @@ namespace Seam\Resources {
              * ID of the workspace that contains the phone.
              */
             public string|null $workspace_id,
+            /**
+             * Optional nickname to describe the phone, settable through Seam.
+             */
+            public string|null $nickname = null,
         ) {}
     }
 }

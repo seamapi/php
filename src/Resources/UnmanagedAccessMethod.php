@@ -48,10 +48,6 @@ namespace Seam\Resources {
              */
             public string|null $access_method_id,
             /**
-             * The actual PIN code for code access methods.
-             */
-            public string|null $code = null,
-            /**
              * Date and time at which the access method was created.
              */
             public string|null $created_at,
@@ -64,25 +60,9 @@ namespace Seam\Resources {
              */
             public array $errors,
             /**
-             * Indicates whether an existing card credential must be assigned to this access method before it can be issued. Only applies to card-mode access methods on systems that support credential assignment.
-             */
-            public bool|null $is_assignment_required = null,
-            /**
-             * Indicates whether encoding with an card encoder is required to issue or reissue the plastic card associated with the access method.
-             */
-            public bool|null $is_encoding_required = null,
-            /**
              * Indicates whether the access method has been issued.
              */
             public bool|null $is_issued,
-            /**
-             * Indicates whether the access method is ready for card assignment. This is true when the access method is in card mode, has not yet been issued, and the system supports credential assignment.
-             */
-            public bool|null $is_ready_for_assignment = null,
-            /**
-             * Indicates whether the access method is ready to be encoded. This is true when the credential has been created and the card has not yet been issued.
-             */
-            public bool|null $is_ready_for_encoding = null,
             /**
              * Date and time at which the access method was issued.
              */
@@ -103,6 +83,26 @@ namespace Seam\Resources {
              * ID of the Seam workspace associated with the access method.
              */
             public string|null $workspace_id,
+            /**
+             * The actual PIN code for code access methods.
+             */
+            public string|null $code = null,
+            /**
+             * Indicates whether an existing card credential must be assigned to this access method before it can be issued. Only applies to card-mode access methods on systems that support credential assignment.
+             */
+            public bool|null $is_assignment_required = null,
+            /**
+             * Indicates whether encoding with an card encoder is required to issue or reissue the plastic card associated with the access method.
+             */
+            public bool|null $is_encoding_required = null,
+            /**
+             * Indicates whether the access method is ready for card assignment. This is true when the access method is in card mode, has not yet been issued, and the system supports credential assignment.
+             */
+            public bool|null $is_ready_for_assignment = null,
+            /**
+             * Indicates whether the access method is ready to be encoded. This is true when the credential has been created and the card has not yet been issued.
+             */
+            public bool|null $is_ready_for_encoding = null,
         ) {}
     }
 }
@@ -208,13 +208,13 @@ namespace Seam\Resources\UnmanagedAccessMethod {
              */
             public string|null $message,
             /**
-             * ID of the original access method from which this backup access method was split, if applicable.
-             */
-            public string|null $original_access_method_id = null,
-            /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
              */
             public string|null $warning_code,
+            /**
+             * ID of the original access method from which this backup access method was split, if applicable.
+             */
+            public string|null $original_access_method_id = null,
         ) {}
     }
 }

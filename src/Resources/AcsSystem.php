@@ -56,17 +56,9 @@ namespace Seam\Resources {
 
         public function __construct(
             /**
-             * Number of access groups in the [access control system](https://docs.seam.co/low-level-apis/access-systems).
-             */
-            public float|null $acs_access_group_count = null,
-            /**
              * ID of the [access control system](https://docs.seam.co/low-level-apis/access-systems).
              */
             public string|null $acs_system_id,
-            /**
-             * Number of users in the [access control system](https://docs.seam.co/low-level-apis/access-systems).
-             */
-            public float|null $acs_user_count = null,
             /**
              * ID of the connected account associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems).
              */
@@ -82,21 +74,9 @@ namespace Seam\Resources {
              */
             public string|null $created_at,
             /**
-             * ID of the default credential manager `acs_system` for this [access control system](https://docs.seam.co/low-level-apis/access-systems).
-             */
-            public string|null $default_credential_manager_acs_system_id = null,
-            /**
              * Errors associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems).
              */
             public array $errors,
-            /**
-             * Brand-specific terminology for the [access control system](https://docs.seam.co/low-level-apis/access-systems) type.
-             */
-            public string|null $external_type = null,
-            /**
-             * Display name that corresponds to the brand-specific terminology for the [access control system](https://docs.seam.co/low-level-apis/access-systems) type.
-             */
-            public string|null $external_type_display_name = null,
             /**
              * Alternative text for the [access control system](https://docs.seam.co/low-level-apis/access-systems) image.
              */
@@ -118,6 +98,34 @@ namespace Seam\Resources {
              */
             public string|null $name,
             /**
+             * Warnings associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             */
+            public array $warnings,
+            /**
+             * ID of the workspace that contains the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             */
+            public string|null $workspace_id,
+            /**
+             * Number of access groups in the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             */
+            public float|null $acs_access_group_count = null,
+            /**
+             * Number of users in the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             */
+            public float|null $acs_user_count = null,
+            /**
+             * ID of the default credential manager `acs_system` for this [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             */
+            public string|null $default_credential_manager_acs_system_id = null,
+            /**
+             * Brand-specific terminology for the [access control system](https://docs.seam.co/low-level-apis/access-systems) type.
+             */
+            public string|null $external_type = null,
+            /**
+             * Display name that corresponds to the brand-specific terminology for the [access control system](https://docs.seam.co/low-level-apis/access-systems) type.
+             */
+            public string|null $external_type_display_name = null,
+            /**
              * @deprecated Use `external_type`.
              */
             public string|null $system_type = null,
@@ -129,14 +137,6 @@ namespace Seam\Resources {
              * Visionline-specific metadata for the [access control system](https://docs.seam.co/low-level-apis/access-systems).
              */
             public AcsSystem\VisionlineMetadata|null $visionline_metadata = null,
-            /**
-             * Warnings associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems).
-             */
-            public array $warnings,
-            /**
-             * ID of the workspace that contains the [access control system](https://docs.seam.co/low-level-apis/access-systems).
-             */
-            public string|null $workspace_id,
         ) {}
     }
 }
@@ -170,13 +170,13 @@ namespace Seam\Resources\AcsSystem {
              */
             public string|null $error_code,
             /**
-             * Indicates whether the error is related to the [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
-             */
-            public bool|null $is_bridge_error = null,
-            /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
             public string|null $message,
+            /**
+             * Indicates whether the error is related to the [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
+             */
+            public bool|null $is_bridge_error = null,
         ) {}
     }
 
@@ -263,13 +263,13 @@ namespace Seam\Resources\AcsSystem {
              */
             public string|null $message,
             /**
-             * @deprecated this field is deprecated.
-             */
-            public array|null $misconfigured_acs_entrance_ids = null,
-            /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
              */
             public string|null $warning_code,
+            /**
+             * @deprecated this field is deprecated.
+             */
+            public array|null $misconfigured_acs_entrance_ids = null,
         ) {}
     }
 }

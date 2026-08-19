@@ -21,14 +21,6 @@ namespace Seam\Resources {
 
         public function __construct(
             /**
-             * Types of events that the [webhook](https://docs.seam.co/developer-tools/webhooks) should receive.
-             */
-            public array|null $event_types = null,
-            /**
-             * Secret associated with the [webhook](https://docs.seam.co/developer-tools/webhooks).
-             */
-            public string|null $secret = null,
-            /**
              * URL for the [webhook](https://docs.seam.co/developer-tools/webhooks).
              */
             public string|null $url,
@@ -36,6 +28,14 @@ namespace Seam\Resources {
              * ID of the webhook.
              */
             public string|null $webhook_id,
+            /**
+             * Types of events that the [webhook](https://docs.seam.co/developer-tools/webhooks) should receive.
+             */
+            public array|null $event_types = null,
+            /**
+             * Secret associated with the [webhook](https://docs.seam.co/developer-tools/webhooks).
+             */
+            public string|null $secret = null,
         ) {}
     }
 }

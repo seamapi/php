@@ -88,21 +88,9 @@ namespace Seam\Resources {
              */
             public string|null $device_id,
             /**
-             * Metadata for a dormakaba Oracode managed access code. Only present for access codes from dormakaba Oracode devices.
-             */
-            public AccessCode\DormakabaOracodeMetadata|null $dormakaba_oracode_metadata = null,
-            /**
-             * Date and time after which the time-bound access code becomes inactive.
-             */
-            public string|null $ends_at = null,
-            /**
              * Errors associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
              */
             public array $errors,
-            /**
-             * Indicates whether the access code is a backup code.
-             */
-            public bool|null $is_backup = null,
             /**
              * Indicates whether a backup access code is available for use if the primary access code is lost or compromised.
              */
@@ -124,14 +112,6 @@ namespace Seam\Resources {
              */
             public bool|null $is_one_time_use,
             /**
-             * Indicates whether the code is set on the device according to a preconfigured schedule.
-             */
-            public bool|null $is_scheduled_on_device = null,
-            /**
-             * Indicates whether the access code is waiting for a code assignment.
-             */
-            public bool|null $is_waiting_for_code_assignment = null,
-            /**
              * Name of the access code. Enables administrators and users to identify the access code easily, especially when there are numerous access codes. Note that the name provided on Seam is used to identify the code on Seam and is not necessarily the name that will appear in the lock provider's app or on the device. This is because lock providers may have constraints on names, such as length, uniqueness, or characters that can be used. In addition, some lock providers may break down names into components such as `first_name` and `last_name`. To provide a consistent experience, Seam identifies the code on Seam by its name but may modify the name that appears on the lock provider's app or on the device. For example, Seam may add additional characters or truncate the name to meet provider constraints. To help your users identify codes set by Seam, Seam provides the name exactly as it appears on the lock provider's app or on the device as a separate property called `appearance`. This is an object with a `name` property and, optionally, `first_name` and `last_name` properties (for providers that break down a name into components).
              */
             public string|null $name,
@@ -139,14 +119,6 @@ namespace Seam\Resources {
              * Collection of pending mutations for the access code. Indicates changes that Seam is in the process of pushing to the device.
              */
             public array $pending_mutations,
-            /**
-             * Identifier of the pulled backup access code. Used to associate the pulled backup access code with the original access code.
-             */
-            public string|null $pulled_backup_access_code_id = null,
-            /**
-             * Date and time at which the time-bound access code becomes active.
-             */
-            public string|null $starts_at = null,
             /**
              * Current status of the access code within the operational lifecycle. Values are `setting`, a transitional phase that indicates that the code is being configured or activated; `set`, which indicates that the code is active and operational; `unset`, which indicates a deactivated or unused state, either before activation or after deliberate deactivation; `removing`, which indicates a transitional period in which the code is being deleted or made inactive; and `unknown`, which indicates an indeterminate state, due to reasons such as system errors or incomplete data, that highlights a potential need for system review or troubleshooting. See also [Lifecycle of Access Codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/lifecycle-of-access-codes).
              */
@@ -163,6 +135,34 @@ namespace Seam\Resources {
              * Unique identifier for the Seam workspace associated with the access code.
              */
             public string|null $workspace_id,
+            /**
+             * Metadata for a dormakaba Oracode managed access code. Only present for access codes from dormakaba Oracode devices.
+             */
+            public AccessCode\DormakabaOracodeMetadata|null $dormakaba_oracode_metadata = null,
+            /**
+             * Date and time after which the time-bound access code becomes inactive.
+             */
+            public string|null $ends_at = null,
+            /**
+             * Indicates whether the access code is a backup code.
+             */
+            public bool|null $is_backup = null,
+            /**
+             * Indicates whether the code is set on the device according to a preconfigured schedule.
+             */
+            public bool|null $is_scheduled_on_device = null,
+            /**
+             * Indicates whether the access code is waiting for a code assignment.
+             */
+            public bool|null $is_waiting_for_code_assignment = null,
+            /**
+             * Identifier of the pulled backup access code. Used to associate the pulled backup access code with the original access code.
+             */
+            public string|null $pulled_backup_access_code_id = null,
+            /**
+             * Date and time at which the time-bound access code becomes active.
+             */
+            public string|null $starts_at = null,
         ) {}
     }
 }
@@ -259,6 +259,20 @@ namespace Seam\Resources\AccessCode {
 
         public function __construct(
             /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $error_code,
+            /**
+             * Indicates that this is an access code error.
+             */
+            public true|null $is_access_code_error,
+            public bool|null $is_connected_account_error,
+            public bool|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
              * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device.
              */
             public string|null $change_type = null,
@@ -267,27 +281,13 @@ namespace Seam\Resources\AccessCode {
              */
             public string|null $created_at = null,
             /**
-             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
-             */
-            public string|null $error_code,
-            /**
-             * Indicates that this is an access code error.
-             */
-            public true|null $is_access_code_error,
-            /**
              * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
              */
             public bool|null $is_bridge_error = null,
-            public bool|null $is_connected_account_error,
-            public bool|null $is_device_error,
             /**
              * ID of the managed access code that conflicts with this managed access code, when Seam can identify it.
              */
             public string|null $managed_access_code_id = null,
-            /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
-             */
-            public string|null $message,
             /**
              * List of fields that were changed externally, with their previous and new values.
              */
@@ -366,6 +366,14 @@ namespace Seam\Resources\AccessCode {
 
         public function __construct(
             /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $warning_code,
+            /**
              * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device.
              */
             public string|null $change_type = null,
@@ -374,17 +382,9 @@ namespace Seam\Resources\AccessCode {
              */
             public string|null $created_at = null,
             /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            public string|null $message,
-            /**
              * List of fields that were changed externally, with their previous and new values.
              */
             public array|null $modified_fields = null,
-            /**
-             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
-             */
-            public string|null $warning_code,
         ) {}
     }
 }

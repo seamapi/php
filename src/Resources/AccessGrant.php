@@ -54,25 +54,13 @@ namespace Seam\Resources {
              */
             public string|null $access_grant_id,
             /**
-             * Unique key for the access grant within the workspace.
-             */
-            public string|null $access_grant_key = null,
-            /**
              * IDs of the access methods created for the Access Grant.
              */
             public array|null $access_method_ids,
             /**
-             * Client Session Token. Only returned if the Access Grant has a mobile_key access method.
-             */
-            public string|null $client_session_token = null,
-            /**
              * Date and time at which the Access Grant was created.
              */
             public string|null $created_at,
-            /**
-             * ID of the customization profile associated with the Access Grant.
-             */
-            public string|null $customization_profile_id = null,
             /**
              * Display name of the Access Grant.
              */
@@ -85,10 +73,6 @@ namespace Seam\Resources {
              * Errors associated with the [access grant](https://docs.seam.co/use-cases/granting-access).
              */
             public array $errors,
-            /**
-             * Instant Key URL. Only returned if the Access Grant has a single mobile_key access_method.
-             */
-            public string|null $instant_key_url = null,
             /**
              * @deprecated Use `space_ids`.
              */
@@ -105,10 +89,6 @@ namespace Seam\Resources {
              * Access methods that the user requested for the Access Grant.
              */
             public array $requested_access_methods,
-            /**
-             * Reservation key for the access grant.
-             */
-            public string|null $reservation_key = null,
             /**
              * IDs of the spaces to which the Access Grant gives access.
              */
@@ -129,6 +109,26 @@ namespace Seam\Resources {
              * ID of the Seam workspace associated with the Access Grant.
              */
             public string|null $workspace_id,
+            /**
+             * Unique key for the access grant within the workspace.
+             */
+            public string|null $access_grant_key = null,
+            /**
+             * Client Session Token. Only returned if the Access Grant has a mobile_key access method.
+             */
+            public string|null $client_session_token = null,
+            /**
+             * ID of the customization profile associated with the Access Grant.
+             */
+            public string|null $customization_profile_id = null,
+            /**
+             * Instant Key URL. Only returned if the Access Grant has a single mobile_key access_method.
+             */
+            public string|null $instant_key_url = null,
+            /**
+             * Reservation key for the access grant.
+             */
+            public string|null $reservation_key = null,
         ) {}
     }
 }
@@ -240,10 +240,6 @@ namespace Seam\Resources\AccessGrant {
 
         public function __construct(
             /**
-             * Specific PIN code to use for this access method. Only applicable when mode is 'code'.
-             */
-            public string|null $code = null,
-            /**
              * IDs of the access methods created for the requested access method.
              */
             public array|null $created_access_method_ids,
@@ -256,13 +252,17 @@ namespace Seam\Resources\AccessGrant {
              */
             public string|null $display_name,
             /**
-             * Maximum number of times the instant key can be used. Only applicable when mode is 'mobile_key'. Defaults to 1 if not specified.
-             */
-            public int|null $instant_key_max_use_count = null,
-            /**
              * Access method mode. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
              */
             public string|null $mode,
+            /**
+             * Specific PIN code to use for this access method. Only applicable when mode is 'code'.
+             */
+            public string|null $code = null,
+            /**
+             * Maximum number of times the instant key can be used. Only applicable when mode is 'mobile_key'. Defaults to 1 if not specified.
+             */
+            public int|null $instant_key_max_use_count = null,
         ) {}
     }
 
@@ -303,10 +303,6 @@ namespace Seam\Resources\AccessGrant {
             public string|null $created_at,
             public string|null $device_id,
             /**
-             * Devices whose access codes could not be revoked during reconciliation. Present when the provider does not support revoking an offline access code (e.g. Dormakaba oracode with exhausted override budget).
-             */
-            public array|null $failed_devices = null,
-            /**
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
             public string|null $message,
@@ -326,6 +322,10 @@ namespace Seam\Resources\AccessGrant {
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
              */
             public string|null $warning_code,
+            /**
+             * Devices whose access codes could not be revoked during reconciliation. Present when the provider does not support revoking an offline access code (e.g. Dormakaba oracode with exhausted override budget).
+             */
+            public array|null $failed_devices = null,
         ) {}
     }
 }
@@ -378,10 +378,6 @@ namespace Seam\Resources\AccessGrant\PendingMutations {
 
         public function __construct(
             /**
-             * Common code key to ensure PIN code reuse across devices.
-             */
-            public string|null $common_code_key = null,
-            /**
              * New device IDs where access codes should be created.
              */
             public array|null $device_ids,
@@ -393,6 +389,10 @@ namespace Seam\Resources\AccessGrant\PendingMutations {
              * New start time for access.
              */
             public string|null $starts_at,
+            /**
+             * Common code key to ensure PIN code reuse across devices.
+             */
+            public string|null $common_code_key = null,
         ) {}
     }
 }

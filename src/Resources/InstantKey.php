@@ -39,14 +39,6 @@ namespace Seam\Resources {
              */
             public string|null $created_at,
             /**
-             * Customization applied to the Instant Key UI.
-             */
-            public InstantKey\Customization|null $customization = null,
-            /**
-             * ID of the customization profile associated with the Instant Key.
-             */
-            public string|null $customization_profile_id = null,
-            /**
              * Date and time at which the Instant Key expires.
              */
             public string|null $expires_at,
@@ -66,6 +58,14 @@ namespace Seam\Resources {
              * ID of the workspace that contains the Instant Key.
              */
             public string|null $workspace_id,
+            /**
+             * Customization applied to the Instant Key UI.
+             */
+            public InstantKey\Customization|null $customization = null,
+            /**
+             * ID of the customization profile associated with the Instant Key.
+             */
+            public string|null $customization_profile_id = null,
         ) {}
     }
 }

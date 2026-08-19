@@ -3,9 +3,10 @@
 // into one braced namespace block per namespace. Each class contributes its
 // from_json body lines and constructor parameter lines.
 //
-// The blueprint does not track which resource properties are required, so
-// every property is optional: from_json falls back to null for missing values
-// and the constructor parameters are nullable.
+// Whether a property is required is carried on isOptional: an optional one
+// gets a null default, a required one does not. Constructor parameters are
+// emitted required first, since PHP deprecates an optional parameter
+// declared before a required one.
 
 import type {
   ResourceClassProperty,
@@ -105,15 +106,24 @@ const getClassLayoutContext = (
     a.name.localeCompare(b.name),
   )
 
+  const parameterOrder = sortRequiredFirst(sorted)
+
   return {
     className: schema.name,
     description: schema.description,
     isDeprecated: schema.isDeprecated,
     deprecationMessage: schema.deprecationMessage,
     fromJsonProps: sorted.map(generateFromJsonProp),
-    constructorParams: sorted.map(generateConstructorParam),
+    constructorParams: parameterOrder.map(generateConstructorParam),
   }
 }
+
+const sortRequiredFirst = (
+  properties: ResourceClassProperty[],
+): ResourceClassProperty[] => [
+  ...properties.filter(({ isOptional }) => !isOptional),
+  ...properties.filter(({ isOptional }) => isOptional),
+]
 
 export const setResourceLayoutContext = (
   resource: ResourceSchema,

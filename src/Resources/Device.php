@@ -80,6 +80,60 @@ namespace Seam\Resources {
 
         public function __construct(
             /**
+             * Collection of capabilities that the device supports when connected to Seam. Values are `access_code`, which indicates that the device can manage and utilize digital PIN codes for secure access; `lock`, which indicates that the device controls a door locking mechanism, enabling the remote opening and closing of doors and other entry points; `noise_detection`, which indicates that the device supports monitoring and responding to ambient noise levels; `thermostat`, which indicates that the device can regulate and adjust indoor temperatures; `battery`, which indicates that the device can manage battery life and health; and `phone`, which indicates that the device is a mobile device, such as a smartphone. **Important:** Superseded by [capability flags](https://docs.seam.co/capability-guides/device-and-system-capabilities#capability-flags).
+             */
+            public array|null $capabilities_supported,
+            /**
+             * Unique identifier for the account associated with the device.
+             */
+            public string|null $connected_account_id,
+            /**
+             * Date and time at which the device object was created.
+             */
+            public string|null $created_at,
+            /**
+             * Set of key:value pairs. Adding custom metadata to a resource, such as a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews/attaching-custom-data-to-the-connect-webview), [connected account](https://docs.seam.co/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account), or [device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device), enables you to store custom information, like customer details or internal IDs from your application.
+             *
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $custom_metadata,
+            /**
+             * ID of the device.
+             */
+            public string|null $device_id,
+            /**
+             * Type of the device.
+             */
+            public string|null $device_type,
+            /**
+             * Display name of the device, defaults to nickname (if it is set) or `properties.appearance.name`, otherwise. Enables administrators and users to identify the device easily, especially when there are numerous devices.
+             */
+            public string|null $display_name,
+            /**
+             * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
+             */
+            public array $errors,
+            /**
+             * Indicates whether Seam manages the device. See also [Managed and Unmanaged Devices](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices).
+             */
+            public true|null $is_managed,
+            /**
+             * Properties of the device.
+             */
+            public Device\Properties|null $properties,
+            /**
+             * IDs of the spaces the device is in.
+             */
+            public array|null $space_ids,
+            /**
+             * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
+             */
+            public array $warnings,
+            /**
+             * Unique identifier for the Seam workspace associated with the device.
+             */
+            public string|null $workspace_id,
+            /**
              * Indicates whether the lock supports configuring automatic locking.
              */
             public bool|null $can_configure_auto_lock = null,
@@ -160,28 +214,6 @@ namespace Seam\Resources {
              */
             public bool|null $can_unlock_with_code = null,
             /**
-             * Collection of capabilities that the device supports when connected to Seam. Values are `access_code`, which indicates that the device can manage and utilize digital PIN codes for secure access; `lock`, which indicates that the device controls a door locking mechanism, enabling the remote opening and closing of doors and other entry points; `noise_detection`, which indicates that the device supports monitoring and responding to ambient noise levels; `thermostat`, which indicates that the device can regulate and adjust indoor temperatures; `battery`, which indicates that the device can manage battery life and health; and `phone`, which indicates that the device is a mobile device, such as a smartphone. **Important:** Superseded by [capability flags](https://docs.seam.co/capability-guides/device-and-system-capabilities#capability-flags).
-             */
-            public array|null $capabilities_supported,
-            /**
-             * Unique identifier for the account associated with the device.
-             */
-            public string|null $connected_account_id,
-            /**
-             * Date and time at which the device object was created.
-             */
-            public string|null $created_at,
-            /**
-             * Set of key:value pairs. Adding custom metadata to a resource, such as a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews/attaching-custom-data-to-the-connect-webview), [connected account](https://docs.seam.co/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account), or [device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device), enables you to store custom information, like customer details or internal IDs from your application.
-             *
-             * @var array<string, string|bool>|\stdClass|null
-             */
-            public array|\stdClass|null $custom_metadata,
-            /**
-             * ID of the device.
-             */
-            public string|null $device_id,
-            /**
              * Manufacturer of the device. Represents the hardware brand, which may differ from the provider.
              */
             public Device\DeviceManufacturer|null $device_manufacturer = null,
@@ -190,22 +222,6 @@ namespace Seam\Resources {
              */
             public Device\DeviceProvider|null $device_provider = null,
             /**
-             * Type of the device.
-             */
-            public string|null $device_type,
-            /**
-             * Display name of the device, defaults to nickname (if it is set) or `properties.appearance.name`, otherwise. Enables administrators and users to identify the device easily, especially when there are numerous devices.
-             */
-            public string|null $display_name,
-            /**
-             * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
-             */
-            public array $errors,
-            /**
-             * Indicates whether Seam manages the device. See also [Managed and Unmanaged Devices](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices).
-             */
-            public true|null $is_managed,
-            /**
              * Location information for the device.
              */
             public Device\Location|null $location = null,
@@ -213,22 +229,6 @@ namespace Seam\Resources {
              * Optional nickname to describe the device, settable through Seam.
              */
             public string|null $nickname = null,
-            /**
-             * Properties of the device.
-             */
-            public Device\Properties|null $properties,
-            /**
-             * IDs of the spaces the device is in.
-             */
-            public array|null $space_ids,
-            /**
-             * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
-             */
-            public array $warnings,
-            /**
-             * Unique identifier for the Seam workspace associated with the device.
-             */
-            public string|null $workspace_id,
         ) {}
     }
 }
@@ -257,13 +257,13 @@ namespace Seam\Resources\Device {
              */
             public string|null $display_name,
             /**
-             * Image URL for the manufacturer logo.
-             */
-            public string|null $image_url = null,
-            /**
              * Manufacturer identifier, such as `august`, `yale`, `salto`, and so on.
              */
             public string|null $manufacturer,
+            /**
+             * Image URL for the manufacturer logo.
+             */
+            public string|null $image_url = null,
         ) {}
     }
 
@@ -295,13 +295,13 @@ namespace Seam\Resources\Device {
              */
             public string|null $display_name,
             /**
-             * Image URL for the device provider.
-             */
-            public string|null $image_url = null,
-            /**
              * Provider category. Indicates the third-party provider type, such as `stable`, for stable integrations, or `internal`, for internal integrations.
              */
             public string|null $provider_category,
+            /**
+             * Image URL for the device provider.
+             */
+            public string|null $image_url = null,
         ) {}
     }
 
@@ -335,16 +335,16 @@ namespace Seam\Resources\Device {
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
              */
             public string|null $error_code,
-            /**
-             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
-             */
-            public bool|null $is_bridge_error = null,
             public bool|null $is_connected_account_error,
             public bool|null $is_device_error,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
             public string|null $message,
+            /**
+             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
+             */
+            public bool|null $is_bridge_error = null,
         ) {}
     }
 
@@ -729,6 +729,24 @@ namespace Seam\Resources\Device {
 
         public function __construct(
             /**
+             * Appearance-related properties, as reported by the device.
+             */
+            public Properties\Appearance|null $appearance,
+            /**
+             * Device model-related properties.
+             */
+            public Properties\Model|null $model,
+            /**
+             * Name of the device.
+             *
+             * @deprecated use device.display_name instead
+             */
+            public string|null $name,
+            /**
+             * Indicates whether the device is online.
+             */
+            public bool|null $online,
+            /**
              * Accessory keypad properties and state.
              */
             public Properties\AccessoryKeypad|null $accessory_keypad = null,
@@ -746,10 +764,6 @@ namespace Seam\Resources\Device {
              * Metadata for an Akiles device.
              */
             public Properties\AkilesMetadata|null $akiles_metadata = null,
-            /**
-             * Appearance-related properties, as reported by the device.
-             */
-            public Properties\Appearance|null $appearance,
             /**
              * Metadata for an Aqara device.
              */
@@ -991,16 +1005,6 @@ namespace Seam\Resources\Device {
              */
             public Properties\MinutMetadata|null $minut_metadata = null,
             /**
-             * Device model-related properties.
-             */
-            public Properties\Model|null $model,
-            /**
-             * Name of the device.
-             *
-             * @deprecated use device.display_name instead
-             */
-            public string|null $name,
-            /**
              * Metadata for a Google Nest device.
              */
             public Properties\NestMetadata|null $nest_metadata = null,
@@ -1030,10 +1034,6 @@ namespace Seam\Resources\Device {
              * Metadata for an Omnitec device.
              */
             public Properties\OmnitecMetadata|null $omnitec_metadata = null,
-            /**
-             * Indicates whether the device is online.
-             */
-            public bool|null $online,
             /**
              * Indicates whether it is currently possible to use online access codes for the device.
              *
@@ -1228,13 +1228,13 @@ namespace Seam\Resources\Device\Properties {
 
         public function __construct(
             /**
-             * Keypad battery properties.
-             */
-            public AccessoryKeypad\Battery|null $battery = null,
-            /**
              * Indicates if an accessory keypad is connected to the device.
              */
             public bool|null $is_connected,
+            /**
+             * Keypad battery properties.
+             */
+            public AccessoryKeypad\Battery|null $battery = null,
         ) {}
     }
 
@@ -1315,6 +1315,14 @@ namespace Seam\Resources\Device\Properties {
 
         public function __construct(
             /**
+             * Display name of the device model.
+             */
+            public string|null $display_name,
+            /**
+             * Display name that corresponds to the manufacturer-specific terminology for the device.
+             */
+            public string|null $manufacturer_display_name,
+            /**
              * @deprecated use device.properties.model.can_connect_accessory_keypad
              */
             public bool|null $accessory_keypad_supported = null,
@@ -1323,17 +1331,9 @@ namespace Seam\Resources\Device\Properties {
              */
             public bool|null $can_connect_accessory_keypad = null,
             /**
-             * Display name of the device model.
-             */
-            public string|null $display_name,
-            /**
              * Indicates whether the device has a built in accessory keypad.
              */
             public bool|null $has_built_in_keypad = null,
-            /**
-             * Display name that corresponds to the manufacturer-specific terminology for the device.
-             */
-            public string|null $manufacturer_display_name,
             /**
              * @deprecated use device.can_program_offline_access_codes.
              */
@@ -3321,14 +3321,6 @@ namespace Seam\Resources\Device\Properties {
              */
             public array $errors,
             /**
-             * Indicates whether a person at the thermostat can change the thermostat's settings after the [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules) starts.
-             */
-            public bool|null $is_override_allowed = null,
-            /**
-             * Number of minutes for which a person at the thermostat can change the thermostat's settings after the activation of the scheduled [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets). See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-             */
-            public int|null $max_override_period_minutes = null,
-            /**
              * User-friendly name to identify the [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
              */
             public string|null $name,
@@ -3344,6 +3336,14 @@ namespace Seam\Resources\Device\Properties {
              * ID of the workspace that contains the thermostat schedule.
              */
             public string|null $workspace_id,
+            /**
+             * Indicates whether a person at the thermostat can change the thermostat's settings after the [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules) starts.
+             */
+            public bool|null $is_override_allowed = null,
+            /**
+             * Number of minutes for which a person at the thermostat can change the thermostat's settings after the activation of the scheduled [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets). See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+             */
+            public int|null $max_override_period_minutes = null,
         ) {}
     }
 
@@ -3404,6 +3404,16 @@ namespace Seam\Resources\Device\Properties {
              */
             public string|null $climate_preset_key,
             /**
+             * Display name for the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
+             */
+            public string|null $display_name,
+            /**
+             * Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+             *
+             * @deprecated Use 'thermostat_schedule.is_override_allowed'
+             */
+            public bool|null $manual_override_allowed,
+            /**
              * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
              */
             public string|null $climate_preset_mode = null,
@@ -3415,10 +3425,6 @@ namespace Seam\Resources\Device\Properties {
              * Temperature to which the thermostat should cool (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
             public float|null $cooling_set_point_fahrenheit = null,
-            /**
-             * Display name for the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
-             */
-            public string|null $display_name,
             /**
              * Metadata specific to the Ecobee climate, if applicable.
              */
@@ -3439,12 +3445,6 @@ namespace Seam\Resources\Device\Properties {
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
              */
             public string|null $hvac_mode_setting = null,
-            /**
-             * Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-             *
-             * @deprecated Use 'thermostat_schedule.is_override_allowed'
-             */
-            public bool|null $manual_override_allowed,
             /**
              * User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
              */
