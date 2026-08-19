@@ -3,7 +3,14 @@
 
 import type { Parameter, Property } from '@seamapi/blueprint'
 
+type RecordValueType = NonNullable<
+  Extract<Parameter, { format: 'record' }>['valueTypes']
+>[number]
+
 export const getPhpType = (schema: Parameter | Property): string => {
+  if (schema.format === 'record' && !('resourceType' in schema)) {
+    return 'array|\\stdClass'
+  }
   if (schema.format === 'number' && schema.isInt) return 'int'
 
   switch (schema.jsonType) {
@@ -23,5 +30,36 @@ export const getPhpType = (schema: Parameter | Property): string => {
 
     default:
       return 'mixed'
+  }
+}
+
+export const getPhpDocType = (schema: Parameter | Property): string => {
+  if (schema.format !== 'record' || 'resourceType' in schema) {
+    return getPhpType(schema)
+  }
+
+  const types =
+    ('valueTypes' in schema ? schema.valueTypes : undefined)?.map(
+      getRecordValuePhpType,
+    ) ?? []
+  return `array<string, ${types.length === 0 ? 'mixed' : types.join('|')}>|\\stdClass`
+}
+
+const getRecordValuePhpType = (type: RecordValueType): string => {
+  switch (type) {
+    case 'string':
+      return 'string'
+    case 'number':
+      return 'float'
+    case 'integer':
+      return 'int'
+    case 'boolean':
+      return 'bool'
+    case 'object':
+      return 'array<string, mixed>|\\stdClass'
+    case 'array':
+      return 'list<mixed>'
+    default:
+      throw new Error(`Unsupported JSON Schema type: ${type}`)
   }
 }

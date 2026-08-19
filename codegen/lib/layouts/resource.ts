@@ -24,6 +24,7 @@ export interface ClassLayoutContext {
 
 export interface ConstructorParamLayoutContext {
   declaration: string
+  phpDocType: string
   description: string
   isDeprecated: boolean
   deprecationMessage: string
@@ -48,6 +49,9 @@ const generateFromJsonProp = (property: ResourceClassProperty): string => {
     case 'listReference':
       return `${name}: array_map(fn ($${name[0]}) => ${property.referenceName}::from_json($${name[0]}), $json->${name} ?? []),`
 
+    case 'record':
+      return `${name}: $json->${name} ?? null,`
+
     case 'value':
       return `${name}: $json->${name} ?? null,`
   }
@@ -57,6 +61,7 @@ const generateConstructorParam = (
   property: ResourceClassProperty,
 ): ConstructorParamLayoutContext => {
   let declaration: string
+  let phpDocType = ''
   // Resource decoding remains tolerant of sparse response envelopes. Optional
   // properties can also be omitted when constructing a resource directly;
   // nullable properties retain the same null-safe representation.
@@ -71,6 +76,11 @@ const generateConstructorParam = (
       declaration = `public array${property.isOptional ? '|null' : ''} $${property.name}${defaultValue},`
       break
 
+    case 'record':
+      phpDocType = `${property.phpDocType}|null`
+      declaration = `public ${property.phpType}|null $${property.name}${defaultValue},`
+      break
+
     case 'value': {
       const { phpType } = property
       const nullSuffix = phpType === 'mixed' ? '' : '|null'
@@ -81,6 +91,7 @@ const generateConstructorParam = (
 
   return {
     declaration,
+    phpDocType,
     description: property.description,
     isDeprecated: property.isDeprecated,
     deprecationMessage: property.deprecationMessage,

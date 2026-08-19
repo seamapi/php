@@ -70,7 +70,7 @@ class DevicesClient
      * @param string $connected_account_id ID of the connected account for which you want to list devices.
      * @param array $connected_account_ids Array of IDs of the connected accounts for which you want to list devices.
      * @param string $created_before Timestamp by which to limit returned devices. Returns devices created before this timestamp.
-     * @param mixed $custom_metadata_has Set of key:value [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) pairs for which you want to list devices.
+     * @param array<string, string|bool>|\stdClass $custom_metadata_has Set of key:value [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) pairs for which you want to list devices.
      * @param string $customer_key Customer key for which you want to list devices.
      * @param array $device_ids Array of device IDs for which you want to list devices.
      * @param string $device_type Device type for which you want to list devices.
@@ -90,7 +90,7 @@ class DevicesClient
         ?string $connected_account_id = null,
         ?array $connected_account_ids = null,
         ?string $created_before = null,
-        mixed $custom_metadata_has = null,
+        array|\stdClass|null $custom_metadata_has = null,
         ?string $customer_key = null,
         ?array $device_ids = null,
         ?string $device_type = null,
@@ -223,7 +223,7 @@ class DevicesClient
      *
      * @param string $device_id ID of the device that you want to update.
      * @param bool $backup_access_code_pool_enabled Indicates whether the device's [backup access code pool](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes) is enabled. Set to `false` to disable the pool: Seam stops refilling it and removes any backup codes that have not yet been pulled into active use.
-     * @param mixed $custom_metadata Custom metadata that you want to associate with the device. Supports up to 50 JSON key:value pairs. [Adding custom metadata to a device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) enables you to store custom information, like customer details or internal IDs from your application. Then, you can [filter devices by the desired metadata](https://docs.seam.co/core-concepts/devices/filtering-devices-by-custom-metadata).
+     * @param array<string, string|bool>|\stdClass $custom_metadata Custom metadata that you want to associate with the device. Supports up to 50 JSON key:value pairs. [Adding custom metadata to a device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) enables you to store custom information, like customer details or internal IDs from your application. Then, you can [filter devices by the desired metadata](https://docs.seam.co/core-concepts/devices/filtering-devices-by-custom-metadata).
      * @param bool $is_managed Indicates whether the device is managed. To unmanage a device, set `is_managed` to `false`.
      * @param string|NullValue $name Name for the device.
      * @param mixed $properties
@@ -232,7 +232,7 @@ class DevicesClient
     public function update(
         string $device_id,
         ?bool $backup_access_code_pool_enabled = null,
-        mixed $custom_metadata = null,
+        array|\stdClass|null $custom_metadata = null,
         ?bool $is_managed = null,
         string|NullValue|null $name = null,
         mixed $properties = null,

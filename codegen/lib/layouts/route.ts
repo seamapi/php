@@ -25,6 +25,7 @@ export interface MethodLayoutContext {
   parameters: Array<{
     name: string
     type: string
+    phpDocType: string
     description: string
     required: boolean
     isOptional: boolean
@@ -87,7 +88,8 @@ const getParameterPhpType = (parameter: {
   const { type, isOptional, isNullable } = parameter
   if (type === 'mixed') return type
   if (isNullable) return `${type}|NullValue${isOptional ? '|null' : ''}`
-  return `${isOptional ? '?' : ''}${type}`
+  if (!isOptional) return type
+  return type.includes('|') ? `${type}|null` : `?${type}`
 }
 
 const getMethodLayoutContext = (
@@ -122,14 +124,23 @@ const getMethodLayoutContext = (
     .concat(usesOnResponse ? ['?callable $on_response = null'] : [])
     .join(', ')
 
-  const documentedEndpointParameters = sortedParameters.map(
-    ({ name, type, description, isOptional, isNullable }) => ({
+  const endpointParameters = sortedParameters.map(
+    ({ name, type, phpDocType, description, isOptional, isNullable }) => ({
       name,
-      type: isNullable && type !== 'mixed' ? `${type}|NullValue` : type,
+      type,
+      phpDocType,
       description,
       required: !isOptional,
       isOptional,
       isNullable,
+    }),
+  )
+  const documentedEndpointParameters = endpointParameters.map(
+    ({ name, type, phpDocType, description, isNullable }) => ({
+      name,
+      type:
+        isNullable && type !== 'mixed' ? `${phpDocType}|NullValue` : phpDocType,
+      description,
     }),
   )
 
@@ -142,7 +153,7 @@ const getMethodLayoutContext = (
     isDeprecated: method.isDeprecated,
     deprecationMessage: method.deprecationMessage,
     // The request payload is built from the endpoint parameters alone.
-    parameters: documentedEndpointParameters,
+    parameters: endpointParameters,
     // The SDK level parameters are documented alongside them so editors
     // surface all of them, but they never reach the payload.
     documentedParameters: [

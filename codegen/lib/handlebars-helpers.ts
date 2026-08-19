@@ -4,6 +4,7 @@ export interface DeprecatedPhpDocContext {
   description: string
   isDeprecated: boolean
   deprecationMessage: string
+  phpDocType?: string
 }
 
 export interface MethodPhpDocContext extends DeprecatedPhpDocContext {
@@ -24,10 +25,21 @@ export const resourcePhpDoc = (context: DeprecatedPhpDocContext): string =>
   createPhpDoc(context.description, deprecatedTag(context), '    ')
 
 export const hasPhpDoc = (context: DeprecatedPhpDocContext): boolean =>
-  context.description.trim() !== '' || context.isDeprecated
+  context.description.trim() !== '' ||
+  context.isDeprecated ||
+  (context.phpDocType != null && context.phpDocType !== '')
 
 export const propertyPhpDoc = (context: DeprecatedPhpDocContext): string =>
-  createPhpDoc(context.description, deprecatedTag(context), '            ')
+  createPhpDoc(
+    context.description,
+    [
+      ...(context.phpDocType == null || context.phpDocType === ''
+        ? []
+        : [`@var ${context.phpDocType}`]),
+      ...deprecatedTag(context),
+    ],
+    '            ',
+  )
 
 export const methodPhpDoc = (context: MethodPhpDocContext): string =>
   createPhpDoc(
