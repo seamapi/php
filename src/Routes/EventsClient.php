@@ -248,8 +248,8 @@ class EventsClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/events/list", [
-                "json" => (object) $request_payload,
+            $this->client->request("GET", "/events/list", [
+                "query" => $request_payload,
             ]),
         );
 

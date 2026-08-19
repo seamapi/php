@@ -265,8 +265,8 @@ class UserIdentitiesClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/user_identities/list", [
-                "json" => (object) $request_payload,
+            $this->client->request("GET", "/user_identities/list", [
+                "query" => $request_payload,
             ]),
         );
 

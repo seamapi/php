@@ -419,8 +419,8 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/access_codes/list", [
-                "json" => (object) $request_payload,
+            $this->client->request("GET", "/access_codes/list", [
+                "query" => $request_payload,
             ]),
         );
 

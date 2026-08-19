@@ -156,8 +156,8 @@ class DevicesClient
         }
 
         $res = Body::decode(
-            $this->client->request("POST", "/devices/list", [
-                "json" => (object) $request_payload,
+            $this->client->request("GET", "/devices/list", [
+                "query" => $request_payload,
             ]),
         );
 
