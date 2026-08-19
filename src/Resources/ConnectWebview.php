@@ -95,10 +95,6 @@ namespace Seam\Resources {
              */
             public string|null $custom_redirect_url,
             /**
-             * The customer key associated with this webview, if any.
-             */
-            public string|null $customer_key = null,
-            /**
              * Device selection mode of the Connect Webview. Supported values: `none`, `single`, `multiple`.
              */
             public string|null $device_selection_mode,
@@ -126,6 +122,10 @@ namespace Seam\Resources {
              * ID of the workspace that contains the Connect Webview.
              */
             public string|null $workspace_id,
+            /**
+             * The customer key associated with this webview, if any.
+             */
+            public string|null $customer_key = null,
         ) {}
     }
 }

@@ -69,6 +69,52 @@ namespace Seam\Resources {
 
         public function __construct(
             /**
+             * Collection of capabilities that the device supports when connected to Seam. Values are `access_code`, which indicates that the device can manage and utilize digital PIN codes for secure access; `lock`, which indicates that the device controls a door locking mechanism, enabling the remote opening and closing of doors and other entry points; `noise_detection`, which indicates that the device supports monitoring and responding to ambient noise levels; `thermostat`, which indicates that the device can regulate and adjust indoor temperatures; `battery`, which indicates that the device can manage battery life and health; and `phone`, which indicates that the device is a mobile device, such as a smartphone. **Important:** Superseded by [capability flags](https://docs.seam.co/capability-guides/device-and-system-capabilities#capability-flags).
+             */
+            public array|null $capabilities_supported,
+            /**
+             * Unique identifier for the account associated with the device.
+             */
+            public string|null $connected_account_id,
+            /**
+             * Date and time at which the device object was created.
+             */
+            public string|null $created_at,
+            /**
+             * Set of key:value pairs. Adding custom metadata to a resource, such as a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews/attaching-custom-data-to-the-connect-webview), [connected account](https://docs.seam.co/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account), or [device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device), enables you to store custom information, like customer details or internal IDs from your application.
+             *
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $custom_metadata,
+            /**
+             * ID of the device.
+             */
+            public string|null $device_id,
+            /**
+             * Type of the device.
+             */
+            public string|null $device_type,
+            /**
+             * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
+             */
+            public array $errors,
+            /**
+             * Indicates that Seam does not manage the device.
+             */
+            public false|null $is_managed,
+            /**
+             * properties of the device.
+             */
+            public UnmanagedDevice\Properties|null $properties,
+            /**
+             * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
+             */
+            public array $warnings,
+            /**
+             * Unique identifier for the Seam workspace associated with the device.
+             */
+            public string|null $workspace_id,
+            /**
              * Indicates whether the lock supports configuring automatic locking.
              */
             public bool|null $can_configure_auto_lock = null,
@@ -149,55 +195,9 @@ namespace Seam\Resources {
              */
             public bool|null $can_unlock_with_code = null,
             /**
-             * Collection of capabilities that the device supports when connected to Seam. Values are `access_code`, which indicates that the device can manage and utilize digital PIN codes for secure access; `lock`, which indicates that the device controls a door locking mechanism, enabling the remote opening and closing of doors and other entry points; `noise_detection`, which indicates that the device supports monitoring and responding to ambient noise levels; `thermostat`, which indicates that the device can regulate and adjust indoor temperatures; `battery`, which indicates that the device can manage battery life and health; and `phone`, which indicates that the device is a mobile device, such as a smartphone. **Important:** Superseded by [capability flags](https://docs.seam.co/capability-guides/device-and-system-capabilities#capability-flags).
-             */
-            public array|null $capabilities_supported,
-            /**
-             * Unique identifier for the account associated with the device.
-             */
-            public string|null $connected_account_id,
-            /**
-             * Date and time at which the device object was created.
-             */
-            public string|null $created_at,
-            /**
-             * Set of key:value pairs. Adding custom metadata to a resource, such as a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews/attaching-custom-data-to-the-connect-webview), [connected account](https://docs.seam.co/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account), or [device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device), enables you to store custom information, like customer details or internal IDs from your application.
-             *
-             * @var array<string, string|bool>|\stdClass|null
-             */
-            public array|\stdClass|null $custom_metadata,
-            /**
-             * ID of the device.
-             */
-            public string|null $device_id,
-            /**
-             * Type of the device.
-             */
-            public string|null $device_type,
-            /**
-             * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
-             */
-            public array $errors,
-            /**
-             * Indicates that Seam does not manage the device.
-             */
-            public false|null $is_managed,
-            /**
              * Location information for the device.
              */
             public UnmanagedDevice\Location|null $location = null,
-            /**
-             * properties of the device.
-             */
-            public UnmanagedDevice\Properties|null $properties,
-            /**
-             * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
-             */
-            public array $warnings,
-            /**
-             * Unique identifier for the Seam workspace associated with the device.
-             */
-            public string|null $workspace_id,
         ) {}
     }
 }
@@ -233,16 +233,16 @@ namespace Seam\Resources\UnmanagedDevice {
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
              */
             public string|null $error_code,
-            /**
-             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
-             */
-            public bool|null $is_bridge_error = null,
             public bool|null $is_connected_account_error,
             public bool|null $is_device_error,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
             public string|null $message,
+            /**
+             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
+             */
+            public bool|null $is_bridge_error = null,
         ) {}
     }
 
@@ -323,6 +323,20 @@ namespace Seam\Resources\UnmanagedDevice {
 
         public function __construct(
             /**
+             * Device model-related properties.
+             */
+            public Properties\Model|null $model,
+            /**
+             * Name of the device.
+             *
+             * @deprecated use device.display_name instead
+             */
+            public string|null $name,
+            /**
+             * Indicates whether the device is online.
+             */
+            public bool|null $online,
+            /**
              * Accessory keypad properties and state.
              */
             public Properties\AccessoryKeypad|null $accessory_keypad = null,
@@ -347,25 +361,11 @@ namespace Seam\Resources\UnmanagedDevice {
              */
             public string|null $manufacturer = null,
             /**
-             * Device model-related properties.
-             */
-            public Properties\Model|null $model,
-            /**
-             * Name of the device.
-             *
-             * @deprecated use device.display_name instead
-             */
-            public string|null $name,
-            /**
              * Indicates whether it is currently possible to use offline access codes for the device.
              *
              * @deprecated use device.can_program_offline_access_codes
              */
             public bool|null $offline_access_codes_enabled = null,
-            /**
-             * Indicates whether the device is online.
-             */
-            public bool|null $online,
             /**
              * Indicates whether it is currently possible to use online access codes for the device.
              *
@@ -442,13 +442,13 @@ namespace Seam\Resources\UnmanagedDevice\Properties {
 
         public function __construct(
             /**
-             * Keypad battery properties.
-             */
-            public AccessoryKeypad\Battery|null $battery = null,
-            /**
              * Indicates if an accessory keypad is connected to the device.
              */
             public bool|null $is_connected,
+            /**
+             * Keypad battery properties.
+             */
+            public AccessoryKeypad\Battery|null $battery = null,
         ) {}
     }
 
@@ -508,6 +508,14 @@ namespace Seam\Resources\UnmanagedDevice\Properties {
 
         public function __construct(
             /**
+             * Display name of the device model.
+             */
+            public string|null $display_name,
+            /**
+             * Display name that corresponds to the manufacturer-specific terminology for the device.
+             */
+            public string|null $manufacturer_display_name,
+            /**
              * @deprecated use device.properties.model.can_connect_accessory_keypad
              */
             public bool|null $accessory_keypad_supported = null,
@@ -516,17 +524,9 @@ namespace Seam\Resources\UnmanagedDevice\Properties {
              */
             public bool|null $can_connect_accessory_keypad = null,
             /**
-             * Display name of the device model.
-             */
-            public string|null $display_name,
-            /**
              * Indicates whether the device has a built in accessory keypad.
              */
             public bool|null $has_built_in_keypad = null,
-            /**
-             * Display name that corresponds to the manufacturer-specific terminology for the device.
-             */
-            public string|null $manufacturer_display_name,
             /**
              * @deprecated use device.can_program_offline_access_codes.
              */

@@ -14,19 +14,20 @@ composer require "seamapi/seam:^4"
 
 ## Summary of breaking changes
 
-| Change                                                                                      | Affects you if...                                                                      |
-| ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| [PHP 8.2+ required](#php-82-or-later-is-required)                                           | You run PHP 8.0 or 8.1                                                                 |
-| [`Seam\Seam` replaces `Seam\SeamClient`](#seamseam-replaces-seamseamclient)                 | You construct the client (everyone)                                                    |
-| [`$seam->client` is the Guzzle client](#seam-client-is-the-guzzle-client)                   | You use `$seam->client`, `$seam->request()`, or the removed public properties          |
-| [Requests are retried and time out sooner](#requests-are-retried-and-time-out-sooner)       | You depend on requests never being retried, or on the 60-second timeout                |
-| [`poll_until_ready` is replaced](#poll_until_ready-is-replaced-by-wait_for_action_attempt)  | You call `$seam->action_attempts->poll_until_ready()` or rely on its 20 s/0.4 s timing |
-| [Nested resource classes are namespaced](#nested-resource-classes-are-namespaced)           | You type-hint nested classes such as `Seam\Resources\DeviceProperties`                 |
-| [Missing required parameters fail locally](#missing-required-parameters-fail-locally)       | You call endpoints with missing parameters and rely on the server's 400 response       |
-| [Preferred HTTP methods and URL search params](#endpoints-use-preferred-http-methods)       | You inspect traffic in a proxy, mock server, or firewall rules                         |
-| [Error handling refinements](#error-handling-refinements)                                   | You compare `getRequestId()` to `""`, or depend on 3xx responses passing through       |
-| [Pagination metadata is a `Seam\Pagination`](#pagination-metadata-is-a-typed-object)        | You treat the paginator's metadata as a `stdClass`                                     |
-| [`Seam\Version` replaces `Seam\Utils\PackageVersion`](#seamversion-replaces-packageversion) | You read the package version programmatically                                          |
+| Change                                                                                                        | Affects you if...                                                                      |
+| ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| [PHP 8.2+ required](#php-82-or-later-is-required)                                                             | You run PHP 8.0 or 8.1                                                                 |
+| [`Seam\Seam` replaces `Seam\SeamClient`](#seamseam-replaces-seamseamclient)                                   | You construct the client (everyone)                                                    |
+| [`$seam->client` is the Guzzle client](#seam-client-is-the-guzzle-client)                                     | You use `$seam->client`, `$seam->request()`, or the removed public properties          |
+| [Requests are retried and time out sooner](#requests-are-retried-and-time-out-sooner)                         | You depend on requests never being retried, or on the 60-second timeout                |
+| [`poll_until_ready` is replaced](#poll_until_ready-is-replaced-by-wait_for_action_attempt)                    | You call `$seam->action_attempts->poll_until_ready()` or rely on its 20 s/0.4 s timing |
+| [Nested resource classes are namespaced](#nested-resource-classes-are-namespaced)                             | You type-hint nested classes such as `Seam\Resources\DeviceProperties`                 |
+| [Resource constructors take required properties first](#resource-constructors-take-required-properties-first) | You construct a resource positionally rather than with named arguments                 |
+| [Missing required parameters fail locally](#missing-required-parameters-fail-locally)                         | You call endpoints with missing parameters and rely on the server's 400 response       |
+| [Preferred HTTP methods and URL search params](#endpoints-use-preferred-http-methods)                         | You inspect traffic in a proxy, mock server, or firewall rules                         |
+| [Error handling refinements](#error-handling-refinements)                                                     | You compare `getRequestId()` to `""`, or depend on 3xx responses passing through       |
+| [Pagination metadata is a `Seam\Pagination`](#pagination-metadata-is-a-typed-object)                          | You treat the paginator's metadata as a `stdClass`                                     |
+| [`Seam\Version` replaces `Seam\Utils\PackageVersion`](#seamversion-replaces-packageversion)                   | You read the package version programmatically                                          |
 
 ## PHP 8.2 or later is required
 
@@ -130,6 +131,20 @@ use Seam\Resources\Device\Properties\Battery;
 This rename also fixes a class of bugs where two nested shapes competed for one name and the loser was silently dropped: for example, `$device->properties->battery->status` did not exist in v3 because the keypad's battery class won the name `DeviceBattery`. In v4 every nested shape has its own class, so fields that were missing on `device.properties.battery`, the climate preset ecobee metadata, and the phone session credential and entrance metadata are now present.
 
 Property reads are unaffected — only explicit references to the nested class names need updating.
+
+## Resource constructors take required properties first
+
+In v3, resource constructor parameters were ordered by property name alone. In v4 required properties come first and optional ones follow, alphabetical within each group.
+
+```php
+// v3
+new Seam\Resources\AcsUser($access_schedule, $acs_system_id, ...);
+
+// v4
+new Seam\Resources\AcsUser($acs_system_id, $acs_user_id, ..., access_schedule: $schedule);
+```
+
+This affects only positional construction. Reading properties and `from_json` are unaffected. Construct resources with [named arguments](https://www.php.net/manual/en/functions.arguments.php#functions.named-arguments).
 
 ## Missing required parameters fail locally
 

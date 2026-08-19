@@ -60,10 +60,6 @@ namespace Seam\Resources {
              */
             public string|null $access_group_type_display_name,
             /**
-             * `starts_at` and `ends_at` timestamps for the access group's access.
-             */
-            public AcsAccessGroup\AccessSchedule|null $access_schedule = null,
-            /**
              * ID of the access group.
              */
             public string|null $acs_access_group_id,
@@ -115,6 +111,10 @@ namespace Seam\Resources {
              * ID of the workspace that contains the access group.
              */
             public string|null $workspace_id,
+            /**
+             * `starts_at` and `ends_at` timestamps for the access group's access.
+             */
+            public AcsAccessGroup\AccessSchedule|null $access_schedule = null,
         ) {}
     }
 }
@@ -294,13 +294,13 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
              */
             public string|null $ends_at,
             /**
-             * Name of the access group.
-             */
-            public string|null $name = null,
-            /**
              * Starting time for the access schedule.
              */
             public string|null $starts_at,
+            /**
+             * Name of the access group.
+             */
+            public string|null $name = null,
         ) {}
     }
 
@@ -334,13 +334,13 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
              */
             public string|null $ends_at,
             /**
-             * Name of the access group.
-             */
-            public string|null $name = null,
-            /**
              * Starting time for the access schedule.
              */
             public string|null $starts_at,
+            /**
+             * Name of the access group.
+             */
+            public string|null $name = null,
         ) {}
     }
 }

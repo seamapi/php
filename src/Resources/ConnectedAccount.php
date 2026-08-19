@@ -51,10 +51,6 @@ namespace Seam\Resources {
              */
             public array|null $accepted_capabilities,
             /**
-             * Type of connected account.
-             */
-            public string|null $account_type = null,
-            /**
              * Display name for the connected account type.
              */
             public string|null $account_type_display_name,
@@ -67,15 +63,31 @@ namespace Seam\Resources {
              */
             public string|null $connected_account_id,
             /**
-             * Date and time at which the connected account was created.
-             */
-            public string|null $created_at = null,
-            /**
              * Set of key:value pairs. Adding custom metadata to a resource, such as a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews/attaching-custom-data-to-the-connect-webview), [connected account](https://docs.seam.co/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account), or [device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device), enables you to store custom information, like customer details or internal IDs from your application.
              *
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $custom_metadata,
+            /**
+             * Display name for the connected account.
+             */
+            public string|null $display_name,
+            /**
+             * Errors associated with the connected account.
+             */
+            public array $errors,
+            /**
+             * Warnings associated with the connected account.
+             */
+            public array $warnings,
+            /**
+             * Type of connected account.
+             */
+            public string|null $account_type = null,
+            /**
+             * Date and time at which the connected account was created.
+             */
+            public string|null $created_at = null,
             /**
              * Your unique key for the customer associated with this connected account.
              */
@@ -88,14 +100,6 @@ namespace Seam\Resources {
              * Default reservation check-out time for this connected account, as `HH:mm` (24-hour). Sourced from the connector configuration.
              */
             public string|null $default_checkout_time = null,
-            /**
-             * Display name for the connected account.
-             */
-            public string|null $display_name,
-            /**
-             * Errors associated with the connected account.
-             */
-            public array $errors,
             /**
              * For iCal connected accounts, the platform that produced the feed (for example, `airbnb`, `vrbo`, or `booking`), or `unknown` when it could not be determined. Intended for rendering the source platform's logo.
              */
@@ -118,10 +122,6 @@ namespace Seam\Resources {
              * @deprecated Use `display_name` instead.
              */
             public ConnectedAccount\UserIdentifier|null $user_identifier = null,
-            /**
-             * Warnings associated with the connected account.
-             */
-            public array $warnings,
         ) {}
     }
 }
@@ -162,14 +162,6 @@ namespace Seam\Resources\ConnectedAccount {
              */
             public string|null $error_code,
             /**
-             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
-             */
-            public bool|null $is_bridge_error = null,
-            /**
-             * Indicates whether the error is related specifically to the connected account.
-             */
-            public bool|null $is_connected_account_error = null,
-            /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
             public string|null $message,
@@ -177,6 +169,14 @@ namespace Seam\Resources\ConnectedAccount {
              * Salto KS metadata associated with the connected account that has an error.
              */
             public Errors\SaltoKsMetadata|null $salto_ks_metadata,
+            /**
+             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
+             */
+            public bool|null $is_bridge_error = null,
+            /**
+             * Indicates whether the error is related specifically to the connected account.
+             */
+            public bool|null $is_connected_account_error = null,
         ) {}
     }
 

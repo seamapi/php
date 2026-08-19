@@ -85,13 +85,41 @@ namespace Seam\Resources {
              */
             public string|null $acs_credential_id,
             /**
-             * ID of the credential pool to which the credential belongs.
-             */
-            public string|null $acs_credential_pool_id = null,
-            /**
              * ID of the [access control system](https://docs.seam.co/low-level-apis/access-systems) that contains the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $acs_system_id,
+            /**
+             * ID of the [connected account](https://docs.seam.co/core-concepts/connected-accounts) to which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
+             */
+            public string|null $connected_account_id,
+            /**
+             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was created.
+             */
+            public string|null $created_at,
+            /**
+             * Display name that corresponds to the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type.
+             */
+            public string|null $display_name,
+            /**
+             * Errors associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             */
+            public array $errors,
+            /**
+             * Indicates whether Seam manages the credential.
+             */
+            public true|null $is_managed,
+            /**
+             * Warnings associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             */
+            public array $warnings,
+            /**
+             * ID of the workspace that contains the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             */
+            public string|null $workspace_id,
+            /**
+             * ID of the credential pool to which the credential belongs.
+             */
+            public string|null $acs_credential_pool_id = null,
             /**
              * ID of the [ACS user](https://docs.seam.co/low-level-apis/access-systems/user-management) to whom the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
              */
@@ -113,25 +141,9 @@ namespace Seam\Resources {
              */
             public string|null $code = null,
             /**
-             * ID of the [connected account](https://docs.seam.co/core-concepts/connected-accounts) to which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
-             */
-            public string|null $connected_account_id,
-            /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was created.
-             */
-            public string|null $created_at,
-            /**
-             * Display name that corresponds to the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type.
-             */
-            public string|null $display_name,
-            /**
              * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) validity ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
              */
             public string|null $ends_at = null,
-            /**
-             * Errors associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
-             */
-            public array $errors,
             /**
              * Brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type. Supported values: `pti_card`, `brivo_credential`, `hid_credential`, `visionline_card`.
              */
@@ -148,10 +160,6 @@ namespace Seam\Resources {
              * Indicates whether the latest state of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) has been synced from Seam to the provider.
              */
             public bool|null $is_latest_desired_state_synced_with_provider = null,
-            /**
-             * Indicates whether Seam manages the credential.
-             */
-            public true|null $is_managed,
             /**
              * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is a [multi-phone sync credential](https://docs.seam.co/capability-guides/mobile-access/issuing-mobile-credentials-from-an-access-control-system#what-are-multi-phone-sync-credentials).
              */
@@ -184,14 +192,6 @@ namespace Seam\Resources {
              * Visionline-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
             public AcsCredential\VisionlineMetadata|null $visionline_metadata = null,
-            /**
-             * Warnings associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
-             */
-            public array $warnings,
-            /**
-             * ID of the workspace that contains the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
-             */
-            public string|null $workspace_id,
         ) {}
     }
 }

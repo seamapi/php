@@ -63,13 +63,13 @@ namespace Seam\Resources {
              */
             public string|null $organization_id,
             /**
-             * Publishable key for the [workspace](https://docs.seam.co/core-concepts/workspaces). This key is used to identify the workspace in client-side applications.
-             */
-            public string|null $publishable_key = null,
-            /**
              * ID of the workspace.
              */
             public string|null $workspace_id,
+            /**
+             * Publishable key for the [workspace](https://docs.seam.co/core-concepts/workspaces). This key is used to identify the workspace in client-side applications.
+             */
+            public string|null $publishable_key = null,
         ) {}
     }
 }

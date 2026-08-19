@@ -6,6 +6,7 @@
   cacheDirectory=".phpunit.cache"
   colors="true"
   beStrictAboutTestsThatDoNotTestAnything="true"
+  failOnDeprecation="true"
   failOnRisky="true"
   failOnWarning="true"
 >

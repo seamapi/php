@@ -40,14 +40,6 @@ namespace Seam\Resources {
              */
             public string|null $created_at,
             /**
-             * Reservation/stay-related defaults for the space. Also carries the provider/PMS-supplied name under a `<connector_type>_name` key (e.g. `guesty_name`), which Seam preserves when you rename the space (read-only — managed by Seam).
-             */
-            public Space\CustomerData|null $customer_data = null,
-            /**
-             * Customer key associated with the space.
-             */
-            public string|null $customer_key = null,
-            /**
              * Number of devices in the space.
              */
             public float|null $device_count,
@@ -55,10 +47,6 @@ namespace Seam\Resources {
              * Display name for the space.
              */
             public string|null $display_name,
-            /**
-             * Geographic coordinates (latitude and longitude) of the space.
-             */
-            public Space\Geolocation|null $geolocation = null,
             /**
              * Name of the space.
              */
@@ -68,13 +56,25 @@ namespace Seam\Resources {
              */
             public string|null $space_id,
             /**
-             * Unique key for the space within the workspace.
-             */
-            public string|null $space_key = null,
-            /**
              * ID of the workspace associated with the space.
              */
             public string|null $workspace_id,
+            /**
+             * Reservation/stay-related defaults for the space. Also carries the provider/PMS-supplied name under a `<connector_type>_name` key (e.g. `guesty_name`), which Seam preserves when you rename the space (read-only — managed by Seam).
+             */
+            public Space\CustomerData|null $customer_data = null,
+            /**
+             * Customer key associated with the space.
+             */
+            public string|null $customer_key = null,
+            /**
+             * Geographic coordinates (latitude and longitude) of the space.
+             */
+            public Space\Geolocation|null $geolocation = null,
+            /**
+             * Unique key for the space within the workspace.
+             */
+            public string|null $space_key = null,
         ) {}
     }
 }

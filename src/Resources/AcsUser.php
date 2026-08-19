@@ -68,10 +68,6 @@ namespace Seam\Resources {
 
         public function __construct(
             /**
-             * `starts_at` and `ends_at` timestamps for the [access system user's](https://docs.seam.co/low-level-apis/access-systems/user-management) access.
-             */
-            public AcsUser\AccessSchedule|null $access_schedule = null,
-            /**
              * ID of the [access system](https://docs.seam.co/low-level-apis/access-systems) that contains the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
              */
             public string|null $acs_system_id,
@@ -92,6 +88,26 @@ namespace Seam\Resources {
              */
             public string|null $display_name,
             /**
+             * Errors associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             */
+            public array $errors,
+            /**
+             * Indicates whether Seam manages the access system user.
+             */
+            public true|null $is_managed,
+            /**
+             * Warnings associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             */
+            public array $warnings,
+            /**
+             * ID of the workspace that contains the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             */
+            public string|null $workspace_id,
+            /**
+             * `starts_at` and `ends_at` timestamps for the [access system user's](https://docs.seam.co/low-level-apis/access-systems/user-management) access.
+             */
+            public AcsUser\AccessSchedule|null $access_schedule = null,
+            /**
              * @deprecated use email_address.
              */
             public string|null $email = null,
@@ -99,10 +115,6 @@ namespace Seam\Resources {
              * Email address of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
              */
             public string|null $email_address = null,
-            /**
-             * Errors associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
-             */
-            public array $errors,
             /**
              * Brand-specific terminology for the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) type.
              */
@@ -119,10 +131,6 @@ namespace Seam\Resources {
              * ID of the HID access control system associated with the user.
              */
             public string|null $hid_acs_system_id = null,
-            /**
-             * Indicates whether Seam manages the access system user.
-             */
-            public true|null $is_managed,
             /**
              * Indicates whether the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) is currently [suspended](https://docs.seam.co/low-level-apis/access-systems/user-management/suspending-and-unsuspending-users).
              */
@@ -159,14 +167,6 @@ namespace Seam\Resources {
              * Phone number of the user identity associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
              */
             public string|null $user_identity_phone_number = null,
-            /**
-             * Warnings associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
-             */
-            public array $warnings,
-            /**
-             * ID of the workspace that contains the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
-             */
-            public string|null $workspace_id,
         ) {}
     }
 }
@@ -271,15 +271,15 @@ namespace Seam\Resources\AcsUser {
              */
             public string|null $message,
             public string|null $mutation_code,
-            /**
-             * Optional: When the user creation is scheduled to occur.
-             */
-            public string|null $scheduled_at = null,
             public PendingMutations\To|null $to,
             /**
              * Whether the user is scheduled to be added to or removed from the access group.
              */
             public string|null $variant,
+            /**
+             * Optional: When the user creation is scheduled to occur.
+             */
+            public string|null $scheduled_at = null,
         ) {}
     }
 
@@ -393,26 +393,26 @@ namespace Seam\Resources\AcsUser\PendingMutations {
              */
             public string|null $acs_credential_id,
             /**
-             * Email address of the access system user.
-             */
-            public string|null $email_address = null,
-            /**
              * Starting time for the access schedule.
              */
             public string|null $ends_at,
-            /**
-             * Full name of the access system user.
-             */
-            public string|null $full_name = null,
             public bool|null $is_suspended,
-            /**
-             * Phone number of the access system user.
-             */
-            public string|null $phone_number = null,
             /**
              * Starting time for the access schedule.
              */
             public string|null $starts_at,
+            /**
+             * Email address of the access system user.
+             */
+            public string|null $email_address = null,
+            /**
+             * Full name of the access system user.
+             */
+            public string|null $full_name = null,
+            /**
+             * Phone number of the access system user.
+             */
+            public string|null $phone_number = null,
         ) {}
     }
 
@@ -445,26 +445,26 @@ namespace Seam\Resources\AcsUser\PendingMutations {
              */
             public string|null $acs_credential_id,
             /**
-             * Email address of the access system user.
-             */
-            public string|null $email_address = null,
-            /**
              * Starting time for the access schedule.
              */
             public string|null $ends_at,
-            /**
-             * Full name of the access system user.
-             */
-            public string|null $full_name = null,
             public bool|null $is_suspended,
-            /**
-             * Phone number of the access system user.
-             */
-            public string|null $phone_number = null,
             /**
              * Starting time for the access schedule.
              */
             public string|null $starts_at,
+            /**
+             * Email address of the access system user.
+             */
+            public string|null $email_address = null,
+            /**
+             * Full name of the access system user.
+             */
+            public string|null $full_name = null,
+            /**
+             * Phone number of the access system user.
+             */
+            public string|null $phone_number = null,
         ) {}
     }
 }

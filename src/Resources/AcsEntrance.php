@@ -111,6 +111,30 @@ namespace Seam\Resources {
              */
             public string|null $acs_system_id,
             /**
+             * ID of the [connected account](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+             */
+            public string|null $connected_account_id,
+            /**
+             * Date and time at which the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) was created.
+             */
+            public string|null $created_at,
+            /**
+             * Display name for the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+             */
+            public string|null $display_name,
+            /**
+             * Errors associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+             */
+            public array $errors,
+            /**
+             * IDs of the spaces that the entrance is in.
+             */
+            public array|null $space_ids,
+            /**
+             * Warnings associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+             */
+            public array $warnings,
+            /**
              * Akiles-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
             public AcsEntrance\AkilesMetadata|null $akiles_metadata = null,
@@ -147,18 +171,6 @@ namespace Seam\Resources {
              */
             public bool|null $can_unlock_with_mobile_key = null,
             /**
-             * ID of the [connected account](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
-             */
-            public string|null $connected_account_id,
-            /**
-             * Date and time at which the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) was created.
-             */
-            public string|null $created_at,
-            /**
-             * Display name for the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
-             */
-            public string|null $display_name,
-            /**
              * dormakaba Ambiance-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
             public AcsEntrance\DormakabaAmbianceMetadata|null $dormakaba_ambiance_metadata = null,
@@ -166,10 +178,6 @@ namespace Seam\Resources {
              * dormakaba Community-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
             public AcsEntrance\DormakabaCommunityMetadata|null $dormakaba_community_metadata = null,
-            /**
-             * Errors associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
-             */
-            public array $errors,
             /**
              * Hotek-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
@@ -191,17 +199,9 @@ namespace Seam\Resources {
              */
             public AcsEntrance\SaltoSpaceMetadata|null $salto_space_metadata = null,
             /**
-             * IDs of the spaces that the entrance is in.
-             */
-            public array|null $space_ids,
-            /**
              * Visionline-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
             public AcsEntrance\VisionlineMetadata|null $visionline_metadata = null,
-            /**
-             * Warnings associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
-             */
-            public array $warnings,
         ) {}
     }
 }
