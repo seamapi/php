@@ -40,6 +40,7 @@ export interface MethodLayoutContext {
   returnType: string
   hasParams: boolean
   requiresAtLeastOneParameter: boolean
+  atLeastOneParameterNames: string[]
   signatureParams: string
   usesActionAttempt: boolean
   usesOnResponse: boolean
@@ -59,6 +60,8 @@ export interface ClientLayoutContext {
 export interface RouteLayoutContext extends ClientLayoutContext {
   useStatements: string[]
 }
+
+const paginationParameters = new Set(['limit', 'page_cursor'])
 
 const waitForActionAttemptParameter = {
   name: 'wait_for_action_attempt',
@@ -124,6 +127,10 @@ const getMethodLayoutContext = (
     .concat(usesOnResponse ? ['?callable $on_response = null'] : [])
     .join(', ')
 
+  const atLeastOneParameterNames = sortedParameters
+    .map(({ name }) => name)
+    .filter((name) => !paginationParameters.has(name))
+
   const endpointParameters = sortedParameters.map(
     ({ name, type, phpDocType, description, isOptional, isNullable }) => ({
       name,
@@ -164,7 +171,9 @@ const getMethodLayoutContext = (
     path,
     returnType,
     hasParams: parameters.length > 0,
-    requiresAtLeastOneParameter: method.requiresAtLeastOneParameter,
+    requiresAtLeastOneParameter:
+      method.requiresAtLeastOneParameter && atLeastOneParameterNames.length > 0,
+    atLeastOneParameterNames,
     signatureParams,
     usesActionAttempt,
     usesOnResponse,
