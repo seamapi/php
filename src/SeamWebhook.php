@@ -3,7 +3,6 @@
 namespace Seam;
 
 use Seam\Resources\Event;
-use Svix\Exception\WebhookVerificationException;
 use Svix\Webhook;
 
 /**
@@ -13,6 +12,8 @@ use Svix\Webhook;
  * resource returned by the API.
  *
  * Verification failures raise Svix\Exception\WebhookVerificationException.
+ * A verified payload that is not a readable event raises
+ * InvalidWebhookPayloadError.
  */
 class SeamWebhook
 {
@@ -30,20 +31,30 @@ class SeamWebhook
      * @param array<string, string> $headers The HTTP request headers.
      *
      * @throws \Svix\Exception\WebhookVerificationException When the signature does not match.
+     * @throws InvalidWebhookPayloadError When the signature matches but the body is not a Seam event.
      */
     public function verify(string $payload, array $headers): Event
     {
         $normalized_headers = [];
         foreach ($headers as $name => $value) {
-            $normalized_headers[strtolower($name)] = $value;
+            $normalized_headers[strtolower((string) $name)] = $value;
         }
 
         $this->webhook->verify($payload, $normalized_headers);
 
-        $event = Event::from_json(json_decode($payload));
+        $decoded = json_decode($payload);
 
-        if ($event === null) {
-            throw new WebhookVerificationException(
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new InvalidWebhookPayloadError(
+                "The verified webhook payload is not valid JSON: " .
+                    json_last_error_msg(),
+            );
+        }
+
+        $event = Event::from_json($decoded);
+
+        if ($event === null || $event->event_id === null) {
+            throw new InvalidWebhookPayloadError(
                 "The verified webhook payload did not contain an event",
             );
         }

@@ -331,7 +331,9 @@ try {
     $event = $webhook->verify($request_body, $request_headers);
     print $event->event_type;
 } catch (Svix\Exception\WebhookVerificationException $error) {
-    http_response_code(400);
+    http_response_code(401);
+} catch (Seam\InvalidWebhookPayloadError $error) {
+    http_response_code(204);
 }
 ```
 
