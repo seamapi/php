@@ -21,6 +21,8 @@ class UrlSearchParams implements \Countable, \IteratorAggregate
      * @param string|array<string, mixed>|list<array{string, string}>|null $init
      *        A query string, a map of names to values, or a list of
      *        name-value pairs
+     *
+     * @throws UnserializableParamError If a map value cannot be rendered
      */
     public function __construct(string|array|null $init = null)
     {
@@ -49,10 +51,55 @@ class UrlSearchParams implements \Countable, \IteratorAggregate
         foreach ($init as $name => $value) {
             if (is_array($value) && is_int($name)) {
                 $this->pairs[] = [(string) $value[0], (string) $value[1]];
-            } else {
-                $this->pairs[] = [(string) $name, (string) $value];
+                continue;
             }
+
+            if (is_array($value)) {
+                foreach ($value as $element) {
+                    $this->pairs[] = [
+                        (string) $name,
+                        self::stringify((string) $name, $element),
+                    ];
+                }
+                continue;
+            }
+
+            $this->pairs[] = [
+                (string) $name,
+                self::stringify((string) $name, $value),
+            ];
         }
+    }
+
+    /**
+     * Renders a map value as a search param value.
+     *
+     * @throws UnserializableParamError If the value has no string form here
+     */
+    private static function stringify(string $name, mixed $value): string
+    {
+        if ($value === null || $value instanceof NullValue) {
+            return "";
+        }
+
+        if (is_string($value)) {
+            return $value;
+        }
+
+        if (is_bool($value)) {
+            return $value ? "true" : "false";
+        }
+
+        if (is_int($value)) {
+            return (string) $value;
+        }
+
+        throw new UnserializableParamError(
+            $name,
+            "is a " .
+                get_debug_type($value) .
+                ", which UrlSearchParams cannot render; serialize it with UrlSearchParamsSerializer first",
+        );
     }
 
     /**

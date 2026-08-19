@@ -256,7 +256,7 @@ $stored_data = json_decode(
     false
 );
 
-$params = $stored_data[0] ?? [];
+$params = (array) ($stored_data[0] ?? []);
 $pagination =
     $stored_data[1] ??
     (object) ["has_next_page" => false, "next_page_cursor" => null];

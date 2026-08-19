@@ -655,6 +655,56 @@ final class UrlSearchParamsSerializerTest extends TestCase
         );
     }
 
+    public function testUrlSearchParamsFromMapExpandsAList(): void
+    {
+        $this->assertSame(
+            "device_ids=d1&device_ids=d2",
+            (new UrlSearchParams([
+                "device_ids" => ["d1", "d2"],
+            ]))->to_string(),
+        );
+    }
+
+    public function testUrlSearchParamsFromMapRendersValuesLikeTheStandard(): void
+    {
+        $params = ["t" => true, "f" => false, "n" => 42, "u" => null];
+
+        $this->assertSame(
+            "t=true&f=false&n=42&u=",
+            (new UrlSearchParams($params))->to_string(),
+        );
+
+        $this->assertSame(
+            "f=false&n=42&t=true&u=",
+            UrlSearchParamsSerializer::serialize([
+                "t" => true,
+                "f" => false,
+                "n" => 42,
+                "u" => NullValue::NULL,
+            ]),
+        );
+    }
+
+    /**
+     * @dataProvider valuesTheMapFormCannotRender
+     */
+    public function testUrlSearchParamsFromMapRejectsWhatItCannotRender(
+        mixed $value,
+    ): void {
+        $this->expectException(UnserializableParamError::class);
+
+        new UrlSearchParams(["a" => $value]);
+    }
+
+    public static function valuesTheMapFormCannotRender(): array
+    {
+        return [
+            "float" => [20.5],
+            "date" => [new \DateTimeImmutable("2024-01-01T00:00:00Z")],
+            "object" => [new \stdClass()],
+        ];
+    }
+
     public function testUrlSearchParamsAppendAndGet(): void
     {
         $search_params = new UrlSearchParams();
