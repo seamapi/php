@@ -390,10 +390,11 @@ $seam = new Seam\Seam(retries: 5);
 $seam = new Seam\Seam(retries: 0);
 ```
 
-#### Using the Guzzle client
+#### Using the underlying client
 
-`$seam->client` is the [Guzzle] client, already carrying the endpoint and
-authorization, so it can be used to reach an endpoint the SDK does not expose.
+`$seam->client` already carries the endpoint, authorization, error mapping,
+and retries, so it can be used to reach an endpoint the SDK does not expose.
+It wraps the [Guzzle] client and implements Guzzle's `ClientInterface`.
 
 [Guzzle]: https://docs.guzzlephp.org/
 
@@ -419,6 +420,40 @@ $client = new GuzzleHttp\Client([
 
 $seam = Seam\Seam::from_client($client);
 ```
+
+The client is used exactly as given. It does not gain the SDK's error mapping
+or retries, so an API error raises Guzzle's exception rather than
+`Seam\HttpApiError`. To opt in, add the middleware yourself.
+
+#### Adding the Seam middleware to your own client
+
+`Seam\Http\ClientFactory::add_middleware` puts the error mapping and retry
+middleware on a handler stack. Build the client with that stack, and with
+`http_errors` disabled so the error middleware raises instead of Guzzle.
+
+```php
+$handler = GuzzleHttp\HandlerStack::create();
+
+Seam\Http\ClientFactory::add_middleware($handler);
+
+$client = new GuzzleHttp\Client([
+    "base_uri" => "https://connect.getseam.com",
+    "headers" => ["authorization" => "Bearer " . $api_key],
+    "handler" => $handler,
+    "http_errors" => false,
+]);
+
+$seam = Seam\Seam::from_client($client);
+```
+
+Pass `retries` to change how many times a failed request is retried, or `0`
+to disable them:
+
+```php
+Seam\Http\ClientFactory::add_middleware($handler, retries: 0);
+```
+
+Add it once per stack: applying it twice stacks two sets of retries.
 
 #### Serializing URL search params
 

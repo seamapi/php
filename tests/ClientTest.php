@@ -65,6 +65,115 @@ final class ClientTest extends FakeSeamConnectTestCase
         );
     }
 
+    private function foreign_client(array $options = []): \GuzzleHttp\Client
+    {
+        return new \GuzzleHttp\Client(
+            array_merge(
+                [
+                    "base_uri" => $this->endpoint,
+                    "headers" => [
+                        "authorization" =>
+                            "Bearer " . $this->seed["seam_apikey1_token"],
+                    ],
+                ],
+                $options,
+            ),
+        );
+    }
+
+    public function testAnInjectedClientIsUsedAsGiven(): void
+    {
+        $seam = Seam::from_client($this->foreign_client());
+
+        $device = $seam->devices->get($this->seed["august_device_1"]);
+        $this->assertSame($this->seed["august_device_1"], $device->device_id);
+
+        $this->expectException(\GuzzleHttp\Exception\ClientException::class);
+
+        $seam->devices->get("nonexistent-device-id");
+    }
+
+    public function testAddMiddlewareGivesAnInjectedClientSeamErrors(): void
+    {
+        $handler = \GuzzleHttp\HandlerStack::create();
+        ClientFactory::add_middleware($handler);
+
+        $seam = Seam::from_client(
+            $this->foreign_client([
+                "handler" => $handler,
+                "http_errors" => false,
+            ]),
+        );
+
+        $this->expectException(HttpApiError::class);
+
+        $seam->devices->get("nonexistent-device-id");
+    }
+
+    public function testAddMiddlewareGivesAnInjectedClientRetries(): void
+    {
+        $recorder = RecordingClient::repeating(
+            RecordingClient::json(503, [
+                "error" => [
+                    "type" => "unavailable",
+                    "message" => "Service Unavailable",
+                ],
+            ]),
+            times: 5,
+        );
+
+        $handler = \GuzzleHttp\HandlerStack::create(
+            $recorder->guzzle_options()["handler"],
+        );
+        ClientFactory::add_middleware($handler);
+
+        $seam = Seam::from_client(
+            $this->foreign_client([
+                "handler" => $handler,
+                "http_errors" => false,
+            ]),
+        );
+
+        try {
+            $seam->devices->get("d1");
+            $this->fail("Expected an HttpApiError");
+        } catch (HttpApiError) {
+            $this->assertSame(3, $recorder->attempt_count());
+        }
+    }
+
+    public function testAddMiddlewareHonoursARetryCount(): void
+    {
+        $recorder = RecordingClient::repeating(
+            RecordingClient::json(503, [
+                "error" => [
+                    "type" => "unavailable",
+                    "message" => "Service Unavailable",
+                ],
+            ]),
+            times: 5,
+        );
+
+        $handler = \GuzzleHttp\HandlerStack::create(
+            $recorder->guzzle_options()["handler"],
+        );
+        ClientFactory::add_middleware($handler, retries: 0);
+
+        $seam = Seam::from_client(
+            $this->foreign_client([
+                "handler" => $handler,
+                "http_errors" => false,
+            ]),
+        );
+
+        try {
+            $seam->devices->get("d1");
+            $this->fail("Expected an HttpApiError");
+        } catch (HttpApiError) {
+            $this->assertSame(1, $recorder->attempt_count());
+        }
+    }
+
     public function testClientOptionReusesAnotherInstancesClient(): void
     {
         $seam = new Seam(client: $this->seam()->client);
