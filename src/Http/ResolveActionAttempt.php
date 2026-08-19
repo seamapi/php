@@ -8,6 +8,7 @@ use Seam\ActionAttemptTimeoutError;
 use Seam\InvalidOptionsError;
 use Seam\InvalidResponseError;
 use Seam\Resources\ActionAttempt;
+use Seam\Resources\ActionAttempt\Status;
 
 /**
  * Waits for an action attempt to reach a terminal state.
@@ -72,11 +73,11 @@ final class ResolveActionAttempt
         $deadline = self::now() + $timeout;
 
         while (true) {
-            if ($action_attempt->status === "success") {
+            if ($action_attempt->status === Status::SUCCESS) {
                 return $action_attempt;
             }
 
-            if ($action_attempt->status === "error") {
+            if ($action_attempt->status === Status::ERROR) {
                 throw new ActionAttemptFailedError($action_attempt);
             }
 

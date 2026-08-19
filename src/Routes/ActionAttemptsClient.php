@@ -60,7 +60,7 @@ class ActionAttemptsClient
     /**
      * Returns a list of the [action attempts](https://docs.seam.co/core-concepts/action-attempts) that you specify as an array of `action_attempt_id`s.
      *
-     * @param array $action_attempt_ids IDs of the action attempts that you want to retrieve.
+     * @param list<string> $action_attempt_ids IDs of the action attempts that you want to retrieve.
      * @param string $device_id ID of the device to filter action attempts by.
      * @param int $limit Maximum number of records to return per page.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.

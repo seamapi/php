@@ -100,8 +100,8 @@ class AcsEncodersClient
      * Returns a list of all [encoders](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
      *
      * @param string $acs_system_id ID of the access system for which you want to retrieve all encoders.
-     * @param array $acs_system_ids IDs of the access systems for which you want to retrieve all encoders.
-     * @param array $acs_encoder_ids IDs of the encoders that you want to retrieve.
+     * @param list<string> $acs_system_ids IDs of the access systems for which you want to retrieve all encoders.
+     * @param list<string> $acs_encoder_ids IDs of the encoders that you want to retrieve.
      * @param float $limit Number of encoders to return.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.

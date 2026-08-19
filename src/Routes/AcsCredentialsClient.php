@@ -60,7 +60,7 @@ class AcsCredentialsClient
      * @param string $access_method Access method for the new credential. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
      * @param string $acs_system_id ID of the access system to which the new credential belongs. You must provide either `acs_user_id` or the combination of `user_identity_id` and `acs_system_id`.
      * @param string $acs_user_id ID of the access system user to whom the new credential belongs. You must provide either `acs_user_id` or the combination of `user_identity_id` and `acs_system_id`.
-     * @param array $allowed_acs_entrance_ids Set of IDs of the [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) for which the new credential grants access.
+     * @param list<string> $allowed_acs_entrance_ids Set of IDs of the [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) for which the new credential grants access.
      * @param mixed $assa_abloy_vostio_metadata Vostio-specific metadata for the new credential.
      * @param string $code Access (PIN) code for the new credential. There may be manufacturer-specific code restrictions. For details, see the applicable [device or system integration guide](https://docs.seam.co/device-and-system-integration-guides).
      * @param string $credential_manager_acs_system_id ACS system ID of the credential manager for the new credential.

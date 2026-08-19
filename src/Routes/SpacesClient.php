@@ -29,7 +29,7 @@ class SpacesClient
     /**
      * Adds [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) to a specific space.
      *
-     * @param array $acs_entrance_ids IDs of the entrances that you want to add to the space.
+     * @param list<string> $acs_entrance_ids IDs of the entrances that you want to add to the space.
      * @param string $space_id ID of the space to which you want to add entrances.
      * @return void OK
      */
@@ -71,7 +71,7 @@ class SpacesClient
     /**
      * Adds devices to a specific space.
      *
-     * @param array $device_ids IDs of the devices that you want to add to the space.
+     * @param list<string> $device_ids IDs of the devices that you want to add to the space.
      * @param string $space_id ID of the space to which you want to add devices.
      * @return void OK
      */
@@ -91,11 +91,11 @@ class SpacesClient
      * Creates a new space.
      *
      * @param string $name Name of the space that you want to create.
-     * @param array $acs_entrance_ids IDs of the entrances that you want to add to the new space.
-     * @param array $connected_account_ids IDs of connected accounts to associate with the new space. Persisted on seam.location_third_party_account so the UI can show which provider account(s) a space came from.
+     * @param list<string> $acs_entrance_ids IDs of the entrances that you want to add to the new space.
+     * @param list<string> $connected_account_ids IDs of connected accounts to associate with the new space. Persisted on seam.location_third_party_account so the UI can show which provider account(s) a space came from.
      * @param mixed $customer_data Reservation/stay-related defaults for the space.
      * @param string $customer_key Customer key for which you want to create the space.
-     * @param array $device_ids IDs of the devices that you want to add to the new space.
+     * @param list<string> $device_ids IDs of the devices that you want to add to the new space.
      * @param string $space_key Unique key for the space within the workspace.
      * @return Space OK
      */
@@ -193,10 +193,10 @@ class SpacesClient
     /**
      * Gets all related resources for one or more Spaces.
      *
-     * @param array $exclude
-     * @param array $include
-     * @param array $space_ids IDs of the spaces that you want to get along with their related resources.
-     * @param array $space_keys Keys of the spaces that you want to get along with their related resources.
+     * @param list<string> $exclude
+     * @param list<string> $include
+     * @param list<string> $space_ids IDs of the spaces that you want to get along with their related resources.
+     * @param list<string> $space_keys Keys of the spaces that you want to get along with their related resources.
      * @return Batch OK
      */
     public function get_related(
@@ -297,7 +297,7 @@ class SpacesClient
     /**
      * Removes [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) from a specific space.
      *
-     * @param array $acs_entrance_ids IDs of the entrances that you want to remove from the space.
+     * @param list<string> $acs_entrance_ids IDs of the entrances that you want to remove from the space.
      * @param string $space_id ID of the space from which you want to remove entrances.
      * @return void OK
      */
@@ -339,7 +339,7 @@ class SpacesClient
     /**
      * Removes devices from a specific space.
      *
-     * @param array $device_ids IDs of the devices that you want to remove from the space.
+     * @param list<string> $device_ids IDs of the devices that you want to remove from the space.
      * @param string $space_id ID of the space from which you want to remove devices.
      * @return void OK
      */
@@ -358,9 +358,9 @@ class SpacesClient
     /**
      * Updates an existing space.
      *
-     * @param array $acs_entrance_ids IDs of the entrances that you want to set for the space. If specified, this will replace all existing entrances.
+     * @param list<string> $acs_entrance_ids IDs of the entrances that you want to set for the space. If specified, this will replace all existing entrances.
      * @param mixed $customer_data Reservation/stay-related defaults for the space. Only the keys you provide are updated; omit a key to leave it unchanged. Pass null on a key to clear it.
-     * @param array $device_ids IDs of the devices that you want to set for the space. If specified, this will replace all existing devices.
+     * @param list<string> $device_ids IDs of the devices that you want to set for the space. If specified, this will replace all existing devices.
      * @param string $name Name of the space.
      * @param string $space_id ID of the space that you want to update.
      * @param string $space_key Unique key of the space that you want to update.

@@ -31,7 +31,7 @@ class ThermostatsDailyProgramsClient
      *
      * @param string $device_id ID of the thermostat device for which you want to create a daily program.
      * @param string $name Name of the thermostat daily program.
-     * @param array $periods Array of thermostat daily program periods.
+     * @param list<array<string, mixed>|\stdClass> $periods Array of thermostat daily program periods.
      * @return ThermostatDailyProgram OK
      */
     public function create(
@@ -85,7 +85,7 @@ class ThermostatsDailyProgramsClient
      * Updates a specified thermostat daily program. The periods that you specify overwrite any existing periods for the daily program.
      *
      * @param string $name Name of the thermostat daily program that you want to update.
-     * @param array $periods Array of thermostat daily program periods. The periods that you specify overwrite any existing periods for the daily program.
+     * @param list<array<string, mixed>|\stdClass> $periods Array of thermostat daily program periods. The periods that you specify overwrite any existing periods for the daily program.
      * @param string $thermostat_daily_program_id ID of the thermostat daily program that you want to update.
      * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK

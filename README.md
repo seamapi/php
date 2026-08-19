@@ -148,7 +148,7 @@ Waiting may be disabled for the whole client:
 $seam = new Seam\Seam(wait_for_action_attempt: false);
 
 $action_attempt = $seam->locks->unlock_door(device_id: $device_id);
-$action_attempt->status; // "pending"
+$action_attempt->status; // Seam\Resources\ActionAttempt\Status::PENDING
 ```
 
 or for a single request:
@@ -329,7 +329,14 @@ $webhook = new Seam\SeamWebhook($webhook_secret);
 
 try {
     $event = $webhook->verify($request_body, $request_headers);
-    print $event->event_type;
+
+    print match (true) {
+        $event instanceof Seam\Resources\Event\AccessCodeCreated
+            => "Created access code {$event->access_code_id}",
+        $event instanceof Seam\Resources\Event\UnknownEvent
+            => "Unknown event type {$event->event_type}",
+        default => "Received {$event->event_type->value}",
+    };
 } catch (Svix\Exception\WebhookVerificationException $error) {
     http_response_code(401);
 } catch (Seam\InvalidWebhookPayloadError $error) {

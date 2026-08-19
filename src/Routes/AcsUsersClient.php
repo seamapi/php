@@ -53,7 +53,7 @@ class AcsUsersClient
      * @param string $acs_system_id ID of the access system to which you want to add the new access system user.
      * @param string $full_name Full name of the new access system user.
      * @param mixed $access_schedule `starts_at` and `ends_at` timestamps for the new access system user's access. If you specify an `access_schedule`, you may include both `starts_at` and `ends_at`. If you omit `starts_at`, it defaults to the current time. `ends_at` is optional and must be a time in the future and after `starts_at`.
-     * @param array $acs_access_group_ids Array of access group IDs to indicate the access groups to which you want to add the new access system user.
+     * @param list<string> $acs_access_group_ids Array of access group IDs to indicate the access groups to which you want to add the new access system user.
      * @param string $email
      * @param string $email_address Email address of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
      * @param string $phone_number Phone number of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).

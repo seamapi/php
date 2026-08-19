@@ -27,7 +27,7 @@ class CustomersClient
     /**
      * Creates a new customer portal magic link with configurable features.
      *
-     * @param array $customer_resources_filters Filter configuration for resources based on their custom_metadata. Each filter specifies a field, operation, and value to match against resource custom_metadata.
+     * @param list<array<string, mixed>|\stdClass> $customer_resources_filters Filter configuration for resources based on their custom_metadata. Each filter specifies a field, operation, and value to match against resource custom_metadata.
      * @param string $customization_profile_id The ID of the customization profile to use for the portal.
      * @param mixed $deep_link Deep link target resource for initial redirect. When set, the portal will navigate directly to the specified resource.
      * @param bool $exclude_locale_picker Whether to exclude the option to select a locale within the portal UI.
@@ -108,25 +108,25 @@ class CustomersClient
      * Deletes customer data including resources like spaces, properties, rooms, users, etc.
      * This will delete the partner resources and any related Seam resources (user identities, access grants, spaces).
      *
-     * @param array $access_grant_keys List of access grant keys to delete.
-     * @param array $booking_keys List of booking keys to delete.
-     * @param array $building_keys List of building keys to delete.
-     * @param array $common_area_keys List of common area keys to delete.
-     * @param array $customer_keys List of customer keys to delete all data for.
-     * @param array $facility_keys List of facility keys to delete.
-     * @param array $guest_keys List of guest keys to delete.
-     * @param array $listing_keys List of listing keys to delete.
-     * @param array $property_keys List of property keys to delete.
-     * @param array $property_listing_keys List of property listing keys to delete.
-     * @param array $reservation_keys List of reservation keys to delete.
-     * @param array $resident_keys List of resident keys to delete.
-     * @param array $room_keys List of room keys to delete.
-     * @param array $space_keys List of space keys to delete.
-     * @param array $staff_member_keys List of staff member keys to delete.
-     * @param array $tenant_keys List of tenant keys to delete.
-     * @param array $unit_keys List of unit keys to delete.
-     * @param array $user_identity_keys List of user identity keys to delete.
-     * @param array $user_keys List of user keys to delete.
+     * @param list<string> $access_grant_keys List of access grant keys to delete.
+     * @param list<string> $booking_keys List of booking keys to delete.
+     * @param list<string> $building_keys List of building keys to delete.
+     * @param list<string> $common_area_keys List of common area keys to delete.
+     * @param list<string> $customer_keys List of customer keys to delete all data for.
+     * @param list<string> $facility_keys List of facility keys to delete.
+     * @param list<string> $guest_keys List of guest keys to delete.
+     * @param list<string> $listing_keys List of listing keys to delete.
+     * @param list<string> $property_keys List of property keys to delete.
+     * @param list<string> $property_listing_keys List of property listing keys to delete.
+     * @param list<string> $reservation_keys List of reservation keys to delete.
+     * @param list<string> $resident_keys List of resident keys to delete.
+     * @param list<string> $room_keys List of room keys to delete.
+     * @param list<string> $space_keys List of space keys to delete.
+     * @param list<string> $staff_member_keys List of staff member keys to delete.
+     * @param list<string> $tenant_keys List of tenant keys to delete.
+     * @param list<string> $unit_keys List of unit keys to delete.
+     * @param list<string> $user_identity_keys List of user identity keys to delete.
+     * @param list<string> $user_keys List of user keys to delete.
      * @return void OK
      */
     public function delete_data(
@@ -219,25 +219,25 @@ class CustomersClient
      * Pushes customer data including resources like spaces, properties, rooms, users, etc.
      *
      * @param string $customer_key Your unique identifier for the customer.
-     * @param array $access_grants List of access grants.
-     * @param array $bookings List of bookings.
-     * @param array $buildings List of buildings.
-     * @param array $common_areas List of shared common areas.
-     * @param array $facilities List of gym or fitness facilities.
-     * @param array $guests List of guests.
-     * @param array $listings List of property listings.
-     * @param array $properties List of short-term rental properties.
-     * @param array $property_listings List of property listings.
-     * @param array $reservations List of reservations.
-     * @param array $residents List of residents.
-     * @param array $rooms List of hotel or hospitality rooms.
-     * @param array $sites List of general sites or areas.
-     * @param array $spaces List of general spaces or areas.
-     * @param array $staff_members List of staff members.
-     * @param array $tenants List of tenants.
-     * @param array $units List of multi-family residential units.
-     * @param array $user_identities List of user identities.
-     * @param array $users List of users.
+     * @param list<array<string, mixed>|\stdClass> $access_grants List of access grants.
+     * @param list<array<string, mixed>|\stdClass> $bookings List of bookings.
+     * @param list<array<string, mixed>|\stdClass> $buildings List of buildings.
+     * @param list<array<string, mixed>|\stdClass> $common_areas List of shared common areas.
+     * @param list<array<string, mixed>|\stdClass> $facilities List of gym or fitness facilities.
+     * @param list<array<string, mixed>|\stdClass> $guests List of guests.
+     * @param list<array<string, mixed>|\stdClass> $listings List of property listings.
+     * @param list<array<string, mixed>|\stdClass> $properties List of short-term rental properties.
+     * @param list<array<string, mixed>|\stdClass> $property_listings List of property listings.
+     * @param list<array<string, mixed>|\stdClass> $reservations List of reservations.
+     * @param list<array<string, mixed>|\stdClass> $residents List of residents.
+     * @param list<array<string, mixed>|\stdClass> $rooms List of hotel or hospitality rooms.
+     * @param list<array<string, mixed>|\stdClass> $sites List of general sites or areas.
+     * @param list<array<string, mixed>|\stdClass> $spaces List of general spaces or areas.
+     * @param list<array<string, mixed>|\stdClass> $staff_members List of staff members.
+     * @param list<array<string, mixed>|\stdClass> $tenants List of tenants.
+     * @param list<array<string, mixed>|\stdClass> $units List of multi-family residential units.
+     * @param list<array<string, mixed>|\stdClass> $user_identities List of user identities.
+     * @param list<array<string, mixed>|\stdClass> $users List of users.
      * @return void OK
      */
     public function push_data(

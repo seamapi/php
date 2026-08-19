@@ -166,9 +166,9 @@ class AccessMethodsClient
     /**
      * Gets all related resources for one or more Access Methods.
      *
-     * @param array $access_method_ids IDs of the access methods that you want to get along with their related resources.
-     * @param array $exclude
-     * @param array $include
+     * @param list<string> $access_method_ids IDs of the access methods that you want to get along with their related resources.
+     * @param list<string> $exclude
+     * @param list<string> $include
      * @return Batch OK
      */
     public function get_related(

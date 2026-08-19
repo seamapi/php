@@ -67,31 +67,31 @@ class EventsClient
      * Returns a list of all events. This endpoint returns the same events that would be sent to a [webhook](https://docs.seam.co/developer-tools/webhooks), but it enables you to filter or see events that already took place.
      *
      * @param string $access_code_id ID of the access code for which you want to list events.
-     * @param array $access_code_ids IDs of the access codes for which you want to list events.
+     * @param list<string> $access_code_ids IDs of the access codes for which you want to list events.
      * @param string $access_grant_id ID of the access grant for which you want to list events.
-     * @param array $access_grant_ids IDs of the access grants for which you want to list events.
+     * @param list<string> $access_grant_ids IDs of the access grants for which you want to list events.
      * @param string $access_method_id ID of the access method for which you want to list events.
-     * @param array $access_method_ids IDs of the access methods for which you want to list events.
+     * @param list<string> $access_method_ids IDs of the access methods for which you want to list events.
      * @param string $acs_access_group_id ID of the ACS access group for which you want to list events.
      * @param string $acs_credential_id ID of the ACS credential for which you want to list events.
      * @param string $acs_encoder_id ID of the ACS encoder for which you want to list events.
      * @param string $acs_entrance_id ID of the ACS entrance for which you want to list events.
      * @param string $acs_system_id ID of the access system for which you want to list events.
-     * @param array $acs_system_ids IDs of the access systems for which you want to list events.
+     * @param list<string> $acs_system_ids IDs of the access systems for which you want to list events.
      * @param string $acs_user_id ID of the ACS user for which you want to list events.
-     * @param array $between Lower and upper timestamps to define an exclusive interval containing the events that you want to list. You must include `since` or `between`.
+     * @param list<string> $between Lower and upper timestamps to define an exclusive interval containing the events that you want to list. You must include `since` or `between`.
      * @param string $connect_webview_id ID of the Connect Webview for which you want to list events.
      * @param string $connected_account_id ID of the connected account for which you want to list events.
      * @param string $customer_key Customer key for which you want to list events.
      * @param string $device_id ID of the device for which you want to list events.
-     * @param array $device_ids IDs of the devices for which you want to list events.
-     * @param array $event_ids IDs of the events that you want to list.
+     * @param list<string> $device_ids IDs of the devices for which you want to list events.
+     * @param list<string> $event_ids IDs of the events that you want to list.
      * @param string $event_type Type of the events that you want to list.
-     * @param array $event_types Types of the events that you want to list.
+     * @param list<string> $event_types Types of the events that you want to list.
      * @param float $limit Numerical limit on the number of events to return.
      * @param string $since Timestamp to indicate the beginning generation time for the events that you want to list. You must include `since` or `between`.
      * @param string $space_id ID of the space for which you want to list events.
-     * @param array $space_ids IDs of the spaces for which you want to list events.
+     * @param list<string> $space_ids IDs of the spaces for which you want to list events.
      * @param float $unstable_offset Offset for the events that you want to list.
      * @param string $user_identity_id ID of the user identity for which you want to list events.
      * @return array OK

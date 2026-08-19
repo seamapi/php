@@ -333,7 +333,7 @@ class ThermostatsClient
      * @param string $connected_account_id ID of the connected account for which you want to list devices.
      * @param string $customer_key Customer key for which you want to list devices.
      * @param string $device_type Device type by which you want to filter thermostat devices.
-     * @param array $device_types Array of device types by which you want to filter thermostat devices.
+     * @param list<string> $device_types Array of device types by which you want to filter thermostat devices.
      * @param string $manufacturer Manufacturer by which you want to filter thermostat devices.
      * @return array OK
      */

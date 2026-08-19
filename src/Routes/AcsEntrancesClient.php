@@ -84,7 +84,7 @@ class AcsEntrancesClient
      *
      * @param string $access_method_id ID of the access method for which you want to retrieve all entrances to which it grants access.
      * @param string $acs_credential_id ID of the credential for which you want to retrieve all entrances.
-     * @param array $acs_entrance_ids IDs of the entrances for which you want to retrieve all entrances.
+     * @param list<string> $acs_entrance_ids IDs of the entrances for which you want to retrieve all entrances.
      * @param string $acs_system_id ID of the access system for which you want to retrieve all entrances.
      * @param string $connected_account_id ID of the connected account for which you want to retrieve all entrances.
      * @param string $customer_key Customer key for which you want to list entrances.
@@ -166,7 +166,7 @@ class AcsEntrancesClient
      * Returns a list of all [credentials](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) with access to a specified [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
      *
      * @param string $acs_entrance_id ID of the entrance for which you want to list all credentials that grant access.
-     * @param array $include_if Conditions that credentials must meet to be included in the returned list.
+     * @param list<string> $include_if Conditions that credentials must meet to be included in the returned list.
      * @return array OK
      */
     public function list_credentials_with_access(

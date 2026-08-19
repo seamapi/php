@@ -24,14 +24,14 @@ namespace Seam\Resources {
                 connect_webview_ids: $json->connect_webview_ids ?? null,
                 connected_account_ids: $json->connected_account_ids ?? null,
                 created_at: $json->created_at ?? null,
-                customer_key: $json->customer_key ?? null,
                 device_count: $json->device_count ?? null,
                 expires_at: $json->expires_at ?? null,
                 token: $json->token ?? null,
                 user_identifier_key: $json->user_identifier_key ?? null,
-                user_identity_id: $json->user_identity_id ?? null,
                 user_identity_ids: $json->user_identity_ids ?? null,
                 workspace_id: $json->workspace_id ?? null,
+                customer_key: $json->customer_key ?? null,
+                user_identity_id: $json->user_identity_id ?? null,
             );
         }
 
@@ -42,10 +42,14 @@ namespace Seam\Resources {
             public string|null $client_session_id,
             /**
              * IDs of the [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) associated with the [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
+             *
+             * @var list<string>|null
              */
             public array|null $connect_webview_ids,
             /**
              * IDs of the [connected accounts](https://docs.seam.co/core-concepts/connected-accounts) associated with the [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
+             *
+             * @var list<string>|null
              */
             public array|null $connected_account_ids,
             /**
@@ -71,6 +75,7 @@ namespace Seam\Resources {
             /**
              * IDs of the [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) associated with the client session.
              *
+             * @var list<string>|null
              * @deprecated Use `user_identity_id` instead.
              */
             public array|null $user_identity_ids,

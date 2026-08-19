@@ -6,6 +6,10 @@ namespace Tests;
 
 use PHPUnit\Framework\TestCase;
 use Seam\Resources\Device;
+use Seam\Resources\Device\Errors\DeviceOffline;
+use Seam\Resources\Device\Errors\ErrorCode;
+use Seam\Resources\Device\Properties\AvailableClimatePresets\EcobeeMetadata\Owner;
+use Seam\Resources\Device\Properties\Battery\Status;
 
 /**
  * The generated resource classes nest a property's class inside the namespace
@@ -73,7 +77,7 @@ final class ResourceTest extends TestCase
         );
 
         $this->assertSame(0.4, $device->properties->battery->level);
-        $this->assertSame("low", $device->properties->battery->status);
+        $this->assertSame(Status::LOW, $device->properties->battery->status);
 
         $this->assertSame(
             0.25,
@@ -97,22 +101,14 @@ final class ResourceTest extends TestCase
         );
     }
 
-    /**
-     * A list of discriminated objects collapses into one class carrying the
-     * union of the variant properties, so a field only some variants declare is
-     * still readable.
-     */
-    public function testDiscriminatedListMergesEveryVariantProperty(): void
+    public function testDiscriminatedListReturnsTheSpecificVariant(): void
     {
-        $device = $this->device();
+        $error = $this->device()->errors[0];
 
-        $error = $device->errors[0];
-
-        $this->assertInstanceOf(Device\Errors::class, $error);
-        $this->assertSame("device_offline", $error->error_code);
+        $this->assertInstanceOf(DeviceOffline::class, $error);
+        $this->assertSame(ErrorCode::DEVICE_OFFLINE, $error->error_code);
         $this->assertTrue($error->is_device_error);
-        $this->assertObjectHasProperty("is_bridge_error", $error);
-        $this->assertNull($error->is_bridge_error);
+        $this->assertObjectNotHasProperty("is_bridge_error", $error);
     }
 
     /**
@@ -156,6 +152,6 @@ final class ResourceTest extends TestCase
         $this->assertNotNull($preset);
         $this->assertSame("sleep", $preset->climate_ref);
         $this->assertTrue($preset->is_optimized);
-        $this->assertSame("user", $preset->owner);
+        $this->assertSame(Owner::USER, $preset->owner);
     }
 }

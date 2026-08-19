@@ -32,7 +32,10 @@ final class LiteralBooleanTypesTest extends TestCase
         );
 
         foreach (
-            [AccessCode\Errors::class, UnmanagedAccessCode\Errors::class]
+            [
+                AccessCode\Errors\ProviderIssue::class,
+                UnmanagedAccessCode\Errors\ProviderIssue::class,
+            ]
             as $class
         ) {
             $this->assertSame(
@@ -42,6 +45,15 @@ final class LiteralBooleanTypesTest extends TestCase
                     "is_access_code_error",
                 ))->getType(),
             );
+        }
+
+        foreach (
+            [
+                AccessCode\Errors\BridgeDisconnected::class,
+                UnmanagedAccessCode\Errors\BridgeDisconnected::class,
+            ]
+            as $class
+        ) {
             $this->assertSame(
                 "?bool",
                 (string) (new ReflectionProperty(
@@ -54,7 +66,7 @@ final class LiteralBooleanTypesTest extends TestCase
         $this->assertSame(
             "?bool",
             (string) (new ReflectionProperty(
-                ActionAttempt\Result::class,
+                ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam::class,
                 "is_managed",
             ))->getType(),
         );

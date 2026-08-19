@@ -15,21 +15,27 @@ namespace Seam\Resources {
                 created_at: $json->created_at ?? null,
                 custom_metadata: $json->custom_metadata ?? null,
                 device_id: $json->device_id ?? null,
-                device_type: $json->device_type ?? null,
+                device_type: is_string($json->device_type ?? null)
+                    ? \Seam\Resources\Phone\DeviceType::tryFrom(
+                        $json->device_type,
+                    )
+                    : null,
                 display_name: $json->display_name ?? null,
                 errors: array_map(
-                    fn($e) => Phone\Errors::from_json($e),
+                    fn($e) => \Seam\Resources\Phone\Errors::from_json($e),
                     $json->errors ?? [],
                 ),
-                nickname: $json->nickname ?? null,
                 properties: isset($json->properties)
-                    ? Phone\Properties::from_json($json->properties)
+                    ? \Seam\Resources\Phone\Properties::from_json(
+                        $json->properties,
+                    )
                     : null,
                 warnings: array_map(
-                    fn($w) => Phone\Warnings::from_json($w),
+                    fn($w) => \Seam\Resources\Phone\Warnings::from_json($w),
                     $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
+                nickname: $json->nickname ?? null,
             );
         }
 
@@ -51,21 +57,25 @@ namespace Seam\Resources {
             /**
              * Type of the phone device, such as `ios_phone` or `android_phone`.
              */
-            public string|null $device_type,
+            public \Seam\Resources\Phone\DeviceType|null $device_type,
             /**
              * Display name of the phone. Defaults to `nickname` (if it is set) or `properties.appearance.name`, otherwise. Enables administrators and users to identify the phone easily, especially when there are numerous phones.
              */
             public string|null $display_name,
             /**
              * Errors associated with the phone.
+             *
+             * @var list<\Seam\Resources\Phone\Errors>
              */
             public array $errors,
             /**
              * Properties of the phone.
              */
-            public Phone\Properties|null $properties,
+            public \Seam\Resources\Phone\Properties|null $properties,
             /**
              * Warnings associated with the phone.
+             *
+             * @var list<\Seam\Resources\Phone\Warnings>
              */
             public array $warnings,
             /**
@@ -128,14 +138,14 @@ namespace Seam\Resources\Phone {
                 assa_abloy_credential_service_metadata: isset(
                     $json->assa_abloy_credential_service_metadata,
                 )
-                    ? Properties\AssaAbloyCredentialServiceMetadata::from_json(
+                    ? \Seam\Resources\Phone\Properties\AssaAbloyCredentialServiceMetadata::from_json(
                         $json->assa_abloy_credential_service_metadata,
                     )
                     : null,
                 salto_space_credential_service_metadata: isset(
                     $json->salto_space_credential_service_metadata,
                 )
-                    ? Properties\SaltoSpaceCredentialServiceMetadata::from_json(
+                    ? \Seam\Resources\Phone\Properties\SaltoSpaceCredentialServiceMetadata::from_json(
                         $json->salto_space_credential_service_metadata,
                     )
                     : null,
@@ -146,11 +156,11 @@ namespace Seam\Resources\Phone {
             /**
              * ASSA ABLOY Credential Service metadata for the phone.
              */
-            public Properties\AssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata = null,
+            public \Seam\Resources\Phone\Properties\AssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata = null,
             /**
              * Salto Space credential service metadata for the phone.
              */
-            public Properties\SaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata = null,
+            public \Seam\Resources\Phone\Properties\SaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata = null,
         ) {}
     }
 
@@ -186,6 +196,12 @@ namespace Seam\Resources\Phone {
             public string|null $warning_code,
         ) {}
     }
+
+    enum DeviceType: string
+    {
+        case IOS_PHONE = "ios_phone";
+        case ANDROID_PHONE = "android_phone";
+    }
 }
 
 namespace Seam\Resources\Phone\Properties {
@@ -204,7 +220,7 @@ namespace Seam\Resources\Phone\Properties {
                 endpoints: array_map(
                     fn(
                         $e,
-                    ) => AssaAbloyCredentialServiceMetadata\Endpoints::from_json(
+                    ) => \Seam\Resources\Phone\Properties\AssaAbloyCredentialServiceMetadata\Endpoints::from_json(
                         $e,
                     ),
                     $json->endpoints ?? [],
@@ -216,6 +232,8 @@ namespace Seam\Resources\Phone\Properties {
         public function __construct(
             /**
              * Endpoints associated with the phone.
+             *
+             * @var list<\Seam\Resources\Phone\Properties\AssaAbloyCredentialServiceMetadata\Endpoints>|null
              */
             public array|null $endpoints = null,
             /**

@@ -16,25 +16,39 @@ namespace Seam\Resources {
             return new self(
                 acs_entrance_id: $json->acs_entrance_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
+                connected_account_id: $json->connected_account_id ?? null,
+                created_at: $json->created_at ?? null,
+                display_name: $json->display_name ?? null,
+                errors: array_map(
+                    fn($e) => \Seam\Resources\AcsEntrance\Errors::from_json($e),
+                    $json->errors ?? [],
+                ),
+                space_ids: $json->space_ids ?? null,
+                warnings: array_map(
+                    fn($w) => \Seam\Resources\AcsEntrance\Warnings::from_json(
+                        $w,
+                    ),
+                    $json->warnings ?? [],
+                ),
                 akiles_metadata: isset($json->akiles_metadata)
-                    ? AcsEntrance\AkilesMetadata::from_json(
+                    ? \Seam\Resources\AcsEntrance\AkilesMetadata::from_json(
                         $json->akiles_metadata,
                     )
                     : null,
                 assa_abloy_vostio_metadata: isset(
                     $json->assa_abloy_vostio_metadata,
                 )
-                    ? AcsEntrance\AssaAbloyVostioMetadata::from_json(
+                    ? \Seam\Resources\AcsEntrance\AssaAbloyVostioMetadata::from_json(
                         $json->assa_abloy_vostio_metadata,
                     )
                     : null,
                 avigilon_alta_metadata: isset($json->avigilon_alta_metadata)
-                    ? AcsEntrance\AvigilonAltaMetadata::from_json(
+                    ? \Seam\Resources\AcsEntrance\AvigilonAltaMetadata::from_json(
                         $json->avigilon_alta_metadata,
                     )
                     : null,
                 brivo_metadata: isset($json->brivo_metadata)
-                    ? AcsEntrance\BrivoMetadata::from_json(
+                    ? \Seam\Resources\AcsEntrance\BrivoMetadata::from_json(
                         $json->brivo_metadata,
                     )
                     : null,
@@ -46,58 +60,46 @@ namespace Seam\Resources {
                 can_unlock_with_code: $json->can_unlock_with_code ?? null,
                 can_unlock_with_mobile_key: $json->can_unlock_with_mobile_key ??
                     null,
-                connected_account_id: $json->connected_account_id ?? null,
-                created_at: $json->created_at ?? null,
-                display_name: $json->display_name ?? null,
                 dormakaba_ambiance_metadata: isset(
                     $json->dormakaba_ambiance_metadata,
                 )
-                    ? AcsEntrance\DormakabaAmbianceMetadata::from_json(
+                    ? \Seam\Resources\AcsEntrance\DormakabaAmbianceMetadata::from_json(
                         $json->dormakaba_ambiance_metadata,
                     )
                     : null,
                 dormakaba_community_metadata: isset(
                     $json->dormakaba_community_metadata,
                 )
-                    ? AcsEntrance\DormakabaCommunityMetadata::from_json(
+                    ? \Seam\Resources\AcsEntrance\DormakabaCommunityMetadata::from_json(
                         $json->dormakaba_community_metadata,
                     )
                     : null,
-                errors: array_map(
-                    fn($e) => AcsEntrance\Errors::from_json($e),
-                    $json->errors ?? [],
-                ),
                 hotek_metadata: isset($json->hotek_metadata)
-                    ? AcsEntrance\HotekMetadata::from_json(
+                    ? \Seam\Resources\AcsEntrance\HotekMetadata::from_json(
                         $json->hotek_metadata,
                     )
                     : null,
                 is_locked: $json->is_locked ?? null,
                 latch_metadata: isset($json->latch_metadata)
-                    ? AcsEntrance\LatchMetadata::from_json(
+                    ? \Seam\Resources\AcsEntrance\LatchMetadata::from_json(
                         $json->latch_metadata,
                     )
                     : null,
                 salto_ks_metadata: isset($json->salto_ks_metadata)
-                    ? AcsEntrance\SaltoKsMetadata::from_json(
+                    ? \Seam\Resources\AcsEntrance\SaltoKsMetadata::from_json(
                         $json->salto_ks_metadata,
                     )
                     : null,
                 salto_space_metadata: isset($json->salto_space_metadata)
-                    ? AcsEntrance\SaltoSpaceMetadata::from_json(
+                    ? \Seam\Resources\AcsEntrance\SaltoSpaceMetadata::from_json(
                         $json->salto_space_metadata,
                     )
                     : null,
-                space_ids: $json->space_ids ?? null,
                 visionline_metadata: isset($json->visionline_metadata)
-                    ? AcsEntrance\VisionlineMetadata::from_json(
+                    ? \Seam\Resources\AcsEntrance\VisionlineMetadata::from_json(
                         $json->visionline_metadata,
                     )
                     : null,
-                warnings: array_map(
-                    fn($w) => AcsEntrance\Warnings::from_json($w),
-                    $json->warnings ?? [],
-                ),
             );
         }
 
@@ -124,32 +126,38 @@ namespace Seam\Resources {
             public string|null $display_name,
             /**
              * Errors associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+             *
+             * @var list<\Seam\Resources\AcsEntrance\Errors>
              */
             public array $errors,
             /**
              * IDs of the spaces that the entrance is in.
+             *
+             * @var list<string>|null
              */
             public array|null $space_ids,
             /**
              * Warnings associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+             *
+             * @var list<\Seam\Resources\AcsEntrance\Warnings>
              */
             public array $warnings,
             /**
              * Akiles-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\AkilesMetadata|null $akiles_metadata = null,
+            public \Seam\Resources\AcsEntrance\AkilesMetadata|null $akiles_metadata = null,
             /**
              * ASSA ABLOY Vostio-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata = null,
+            public \Seam\Resources\AcsEntrance\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata = null,
             /**
              * Avigilon Alta-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\AvigilonAltaMetadata|null $avigilon_alta_metadata = null,
+            public \Seam\Resources\AcsEntrance\AvigilonAltaMetadata|null $avigilon_alta_metadata = null,
             /**
              * Brivo-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\BrivoMetadata|null $brivo_metadata = null,
+            public \Seam\Resources\AcsEntrance\BrivoMetadata|null $brivo_metadata = null,
             /**
              * Indicates whether the ACS entrance can belong to a reservation via an access_grant.reservation_key.
              */
@@ -173,15 +181,15 @@ namespace Seam\Resources {
             /**
              * dormakaba Ambiance-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\DormakabaAmbianceMetadata|null $dormakaba_ambiance_metadata = null,
+            public \Seam\Resources\AcsEntrance\DormakabaAmbianceMetadata|null $dormakaba_ambiance_metadata = null,
             /**
              * dormakaba Community-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\DormakabaCommunityMetadata|null $dormakaba_community_metadata = null,
+            public \Seam\Resources\AcsEntrance\DormakabaCommunityMetadata|null $dormakaba_community_metadata = null,
             /**
              * Hotek-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\HotekMetadata|null $hotek_metadata = null,
+            public \Seam\Resources\AcsEntrance\HotekMetadata|null $hotek_metadata = null,
             /**
              * Indicates whether the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) is currently locked.
              */
@@ -189,19 +197,19 @@ namespace Seam\Resources {
             /**
              * Latch-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\LatchMetadata|null $latch_metadata = null,
+            public \Seam\Resources\AcsEntrance\LatchMetadata|null $latch_metadata = null,
             /**
              * Salto KS-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\SaltoKsMetadata|null $salto_ks_metadata = null,
+            public \Seam\Resources\AcsEntrance\SaltoKsMetadata|null $salto_ks_metadata = null,
             /**
              * Salto Space-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\SaltoSpaceMetadata|null $salto_space_metadata = null,
+            public \Seam\Resources\AcsEntrance\SaltoSpaceMetadata|null $salto_space_metadata = null,
             /**
              * Visionline-specific metadata associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
              */
-            public AcsEntrance\VisionlineMetadata|null $visionline_metadata = null,
+            public \Seam\Resources\AcsEntrance\VisionlineMetadata|null $visionline_metadata = null,
         ) {}
     }
 }
@@ -219,7 +227,11 @@ namespace Seam\Resources\AcsEntrance {
             }
             return new self(
                 actions: array_map(
-                    fn($a) => AkilesMetadata\Actions::from_json($a),
+                    fn(
+                        $a,
+                    ) => \Seam\Resources\AcsEntrance\AkilesMetadata\Actions::from_json(
+                        $a,
+                    ),
                     $json->actions ?? [],
                 ),
                 gadget_id: $json->gadget_id ?? null,
@@ -231,6 +243,8 @@ namespace Seam\Resources\AcsEntrance {
         public function __construct(
             /**
              * Actions the gadget exposes (for example, open).
+             *
+             * @var list<\Seam\Resources\AcsEntrance\AkilesMetadata\Actions>|null
              */
             public array|null $actions = null,
             /**
@@ -262,7 +276,11 @@ namespace Seam\Resources\AcsEntrance {
             return new self(
                 door_name: $json->door_name ?? null,
                 door_number: $json->door_number ?? null,
-                door_type: $json->door_type ?? null,
+                door_type: is_string($json->door_type ?? null)
+                    ? \Seam\Resources\AcsEntrance\AssaAbloyVostioMetadata\DoorType::tryFrom(
+                        $json->door_type,
+                    )
+                    : null,
                 pms_id: $json->pms_id ?? null,
                 stand_open: $json->stand_open ?? null,
             );
@@ -280,7 +298,7 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Type of the door in the Vostio access system.
              */
-            public string|null $door_type = null,
+            public \Seam\Resources\AcsEntrance\AssaAbloyVostioMetadata\DoorType|null $door_type = null,
             /**
              * PMS ID of the door in the Vostio access system.
              */
@@ -648,10 +666,18 @@ namespace Seam\Resources\AcsEntrance {
                 return null;
             }
             return new self(
-                door_category: $json->door_category ?? null,
+                door_category: is_string($json->door_category ?? null)
+                    ? \Seam\Resources\AcsEntrance\VisionlineMetadata\DoorCategory::tryFrom(
+                        $json->door_category,
+                    )
+                    : null,
                 door_name: $json->door_name ?? null,
                 profiles: array_map(
-                    fn($p) => VisionlineMetadata\Profiles::from_json($p),
+                    fn(
+                        $p,
+                    ) => \Seam\Resources\AcsEntrance\VisionlineMetadata\Profiles::from_json(
+                        $p,
+                    ),
                     $json->profiles ?? [],
                 ),
             );
@@ -661,13 +687,15 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Category of the door in the Visionline access system.
              */
-            public string|null $door_category = null,
+            public \Seam\Resources\AcsEntrance\VisionlineMetadata\DoorCategory|null $door_category = null,
             /**
              * Name of the door in the Visionline access system.
              */
             public string|null $door_name = null,
             /**
              * Profile for the door in the Visionline access system.
+             *
+             * @var list<\Seam\Resources\AcsEntrance\VisionlineMetadata\Profiles>|null
              */
             public array|null $profiles = null,
         ) {}
@@ -676,18 +704,45 @@ namespace Seam\Resources\AcsEntrance {
     /**
      * Warnings associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
      */
-    class Warnings
+    abstract class Warnings
     {
         public static function from_json(mixed $json): Warnings|null
         {
             if (!$json) {
                 return null;
             }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                warning_code: $json->warning_code ?? null,
-            );
+            $discriminant = is_string($json->warning_code ?? null)
+                ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
+                    $json->warning_code,
+                )
+                : null;
+
+            return match ($discriminant) {
+                \Seam\Resources\AcsEntrance\Warnings\WarningCode::SALTO_KS_ENTRANCE_ACCESS_CODE_SUPPORT_REMOVED
+                    => \Seam\Resources\AcsEntrance\Warnings\SaltoKsEntranceAccessCodeSupportRemoved::from_json(
+                    $json,
+                ),
+                \Seam\Resources\AcsEntrance\Warnings\WarningCode::ENTRANCE_SHARES_ZONE
+                    => \Seam\Resources\AcsEntrance\Warnings\EntranceSharesZone::from_json(
+                    $json,
+                ),
+                \Seam\Resources\AcsEntrance\Warnings\WarningCode::ENTRANCE_SETUP_REQUIRED
+                    => \Seam\Resources\AcsEntrance\Warnings\EntranceSetupRequired::from_json(
+                    $json,
+                ),
+                \Seam\Resources\AcsEntrance\Warnings\WarningCode::SALTO_KS_PRIVACY_MODE
+                    => \Seam\Resources\AcsEntrance\Warnings\SaltoKsPrivacyMode::from_json(
+                    $json,
+                ),
+                \Seam\Resources\AcsEntrance\Warnings\WarningCode::PRIVACY_MODE
+                    => \Seam\Resources\AcsEntrance\Warnings\PrivacyMode::from_json(
+                    $json,
+                ),
+                default
+                    => \Seam\Resources\AcsEntrance\Warnings\Unknown::from_json(
+                    $json,
+                ),
+            };
         }
 
         public function __construct(
@@ -702,7 +757,7 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
              */
-            public string|null $warning_code,
+            public \Seam\Resources\AcsEntrance\Warnings\WarningCode|string|null $warning_code,
         ) {}
     }
 }
@@ -734,6 +789,16 @@ namespace Seam\Resources\AcsEntrance\AkilesMetadata {
     }
 }
 
+namespace Seam\Resources\AcsEntrance\AssaAbloyVostioMetadata {
+    enum DoorType: string
+    {
+        case COMMON_DOOR = "CommonDoor";
+        case ENTRANCE_DOOR = "EntranceDoor";
+        case GUEST_DOOR = "GuestDoor";
+        case ELEVATOR = "Elevator";
+    }
+}
+
 namespace Seam\Resources\AcsEntrance\VisionlineMetadata {
     /**
      * Profile for the door in the Visionline access system.
@@ -748,8 +813,13 @@ namespace Seam\Resources\AcsEntrance\VisionlineMetadata {
             return new self(
                 visionline_door_profile_id: $json->visionline_door_profile_id ??
                     null,
-                visionline_door_profile_type: $json->visionline_door_profile_type ??
-                    null,
+                visionline_door_profile_type: is_string(
+                    $json->visionline_door_profile_type ?? null,
+                )
+                    ? \Seam\Resources\AcsEntrance\VisionlineMetadata\Profiles\VisionlineDoorProfileType::tryFrom(
+                        $json->visionline_door_profile_type,
+                    )
+                    : null,
             );
         }
 
@@ -761,7 +831,298 @@ namespace Seam\Resources\AcsEntrance\VisionlineMetadata {
             /**
              * Door profile type in the Visionline access system.
              */
-            public string|null $visionline_door_profile_type = null,
+            public \Seam\Resources\AcsEntrance\VisionlineMetadata\Profiles\VisionlineDoorProfileType|null $visionline_door_profile_type = null,
         ) {}
+    }
+
+    enum DoorCategory: string
+    {
+        case ENTRANCE = "entrance";
+        case GUEST = "guest";
+        case ELEVATOR_READER = "elevator reader";
+        case COMMON = "common";
+        case COMMON_PMS = "common (PMS)";
+    }
+}
+
+namespace Seam\Resources\AcsEntrance\VisionlineMetadata\Profiles {
+    enum VisionlineDoorProfileType: string
+    {
+        case BLE = "BLE";
+        case COMMON_DOOR = "commonDoor";
+        case TOUCH = "touch";
+    }
+}
+
+namespace Seam\Resources\AcsEntrance\Warnings {
+    /**
+     * Indicates that a change in the reported device model has been detected for this Salto KS entrance, which may occur after an IQ hub reset. Access code support may be affected. See https://help.getseam.com/articles/5098842588-salto-ks-lock-loses-access-code-support for troubleshooting steps.
+     */
+    final class SaltoKsEntranceAccessCodeSupportRemoved extends
+        \Seam\Resources\AcsEntrance\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): SaltoKsEntranceAccessCodeSupportRemoved|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: is_string($json->warning_code ?? null)
+                    ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
+                            $json->warning_code,
+                        ) ?? $json->warning_code
+                    : null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             */
+            \Seam\Resources\AcsEntrance\Warnings\WarningCode|string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that this entrance shares a zone with other entrances in Avigilon Alta and cannot be added to an access group individually.
+     */
+    final class EntranceSharesZone extends \Seam\Resources\AcsEntrance\Warnings
+    {
+        public static function from_json(mixed $json): EntranceSharesZone|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: is_string($json->warning_code ?? null)
+                    ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
+                            $json->warning_code,
+                        ) ?? $json->warning_code
+                    : null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             */
+            \Seam\Resources\AcsEntrance\Warnings\WarningCode|string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that this entrance requires additional configuration in the access control system before Seam can fully manage it.
+     */
+    final class EntranceSetupRequired extends
+        \Seam\Resources\AcsEntrance\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): EntranceSetupRequired|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: is_string($json->warning_code ?? null)
+                    ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
+                            $json->warning_code,
+                        ) ?? $json->warning_code
+                    : null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             */
+            \Seam\Resources\AcsEntrance\Warnings\WarningCode|string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that this entrance is in privacy mode. When privacy mode is enabled, access codes, mobile keys, and remote unlocks will not work unless the user has admin access.
+     */
+    final class SaltoKsPrivacyMode extends \Seam\Resources\AcsEntrance\Warnings
+    {
+        public static function from_json(mixed $json): SaltoKsPrivacyMode|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: is_string($json->warning_code ?? null)
+                    ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
+                            $json->warning_code,
+                        ) ?? $json->warning_code
+                    : null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             */
+            \Seam\Resources\AcsEntrance\Warnings\WarningCode|string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that this entrance is in privacy mode. When privacy mode is enabled, access codes, mobile keys, and remote unlocks will not work unless the user has admin access.
+     */
+    final class PrivacyMode extends \Seam\Resources\AcsEntrance\Warnings
+    {
+        public static function from_json(mixed $json): PrivacyMode|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: is_string($json->warning_code ?? null)
+                    ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
+                            $json->warning_code,
+                        ) ?? $json->warning_code
+                    : null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             */
+            \Seam\Resources\AcsEntrance\Warnings\WarningCode|string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Fallback for acs_entrance.warnings values introduced after this SDK version.
+     */
+    final class Unknown extends \Seam\Resources\AcsEntrance\Warnings
+    {
+        public static function from_json(mixed $json): Unknown|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: is_string($json->warning_code ?? null)
+                    ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
+                            $json->warning_code,
+                        ) ?? $json->warning_code
+                    : null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             */
+            \Seam\Resources\AcsEntrance\Warnings\WarningCode|string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    enum WarningCode: string
+    {
+        case SALTO_KS_ENTRANCE_ACCESS_CODE_SUPPORT_REMOVED = "salto_ks_entrance_access_code_support_removed";
+        case ENTRANCE_SHARES_ZONE = "entrance_shares_zone";
+        case ENTRANCE_SETUP_REQUIRED = "entrance_setup_required";
+        case SALTO_KS_PRIVACY_MODE = "salto_ks_privacy_mode";
+        case PRIVACY_MODE = "privacy_mode";
     }
 }

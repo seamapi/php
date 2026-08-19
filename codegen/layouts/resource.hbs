@@ -6,18 +6,31 @@ namespace {{namespace}} {
 {{#if (hasPhpDoc this)}}
 {{{resourcePhpDoc this}}}
 {{/if}}
-    class {{className}}
+    {{#if isAbstract}}abstract {{else}}{{#if isFinal}}final {{/if}}{{/if}}class {{className}}{{#if extendsName}} extends {{extendsName}}{{/if}}
     {
         public static function from_json(mixed $json): {{className}}|null
         {
             if (!$json) {
                 return null;
             }
+{{#if factory}}
+            $discriminant = is_string($json->{{factory.discriminant}} ?? null)
+                ? {{factory.enumType}}::tryFrom($json->{{factory.discriminant}})
+                : null;
+
+            return match ($discriminant) {
+{{#each factory.variants}}
+                {{enumCase}} => {{className}}::from_json($json),
+{{/each}}
+                default => {{factory.fallbackClass}}::from_json($json),
+            };
+{{else}}
             return new self(
 {{#each fromJsonProps}}
                 {{{this}}}
 {{/each}}
             );
+{{/if}}
         }
 
         public function __construct(
@@ -28,7 +41,28 @@ namespace {{namespace}} {
             {{{declaration}}}
 {{/each}}
         ) {
+{{#if parentArgs}}
+            parent::__construct(
+{{#each parentArgs}}
+                {{{this}}}
+{{/each}}
+            );
+{{/if}}
         }
+    }
+
+{{/each}}
+{{#each enums}}
+    enum {{enumName}}: string
+    {
+{{#each cases}}
+{{#if description}}
+        /**
+         * {{description}}
+         */
+{{/if}}
+        case {{name}} = {{{value}}};
+{{/each}}
     }
 
 {{/each}}

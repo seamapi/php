@@ -69,7 +69,7 @@ class UserIdentitiesClient
     /**
      * Creates a new [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
-     * @param array $acs_system_ids List of access system IDs to associate with the new user identity through access system users. If there's no user with the same email address or phone number in the specified access systems, a new access system user is created. If there is an existing user with the same email or phone number in the specified access systems, the user is linked to the user identity.
+     * @param list<string> $acs_system_ids List of access system IDs to associate with the new user identity through access system users. If there's no user with the same email address or phone number in the specified access systems, a new access system user is created. If there is an existing user with the same email or phone number in the specified access systems, the user is linked to the user identity.
      * @param string|NullValue $email_address Unique email address for the new user identity.
      * @param string|NullValue $full_name Full name of the user associated with the new user identity.
      * @param string|NullValue $phone_number Unique phone number for the new user identity in E.164 format (for example, +15555550100).
@@ -238,7 +238,7 @@ class UserIdentitiesClient
      * @param int $limit Maximum number of records to return per page.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned user identities to include all records that satisfy a partial match using `full_name`, `phone_number`, `email_address` or `user_identity_id`.
-     * @param array $user_identity_ids Array of user identity IDs by which to filter the list of user identities.
+     * @param list<string> $user_identity_ids Array of user identity IDs by which to filter the list of user identities.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */

@@ -7,7 +7,11 @@ type RecordValueType = NonNullable<
   Extract<Parameter, { format: 'record' }>['valueTypes']
 >[number]
 
-export const getPhpType = (schema: Parameter | Property): string => {
+export const getPhpType = (
+  schema: Parameter | Property,
+  enumType = 'string',
+): string => {
+  if (schema.format === 'enum') return enumType
   if (schema.format === 'record' && !('resourceType' in schema)) {
     return 'array|\\stdClass'
   }
@@ -34,6 +38,10 @@ export const getPhpType = (schema: Parameter | Property): string => {
 }
 
 export const getPhpDocType = (schema: Parameter | Property): string => {
+  if (schema.format === 'list') {
+    return `list<${getListItemPhpType(schema)}>`
+  }
+
   if (schema.format !== 'record' || 'resourceType' in schema) {
     return getPhpType(schema)
   }
@@ -43,6 +51,23 @@ export const getPhpDocType = (schema: Parameter | Property): string => {
       getRecordValuePhpType,
     ) ?? []
   return `array<string, ${types.length === 0 ? 'mixed' : types.join('|')}>|\\stdClass`
+}
+
+const getListItemPhpType = (
+  schema: Extract<Parameter | Property, { format: 'list' }>,
+): string => {
+  switch (schema.itemFormat) {
+    case 'number':
+      return 'isItemInt' in schema && schema.isItemInt ? 'int' : 'float'
+    case 'boolean':
+      return 'bool'
+    case 'object':
+    case 'record':
+    case 'discriminated_object':
+      return 'array<string, mixed>|\\stdClass'
+    default:
+      return 'string'
+  }
 }
 
 const getRecordValuePhpType = (type: RecordValueType): string => {

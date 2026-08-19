@@ -12,10 +12,10 @@ namespace Seam\Resources {
                 return null;
             }
             return new self(
-                event_types: $json->event_types ?? null,
-                secret: $json->secret ?? null,
                 url: $json->url ?? null,
                 webhook_id: $json->webhook_id ?? null,
+                event_types: $json->event_types ?? null,
+                secret: $json->secret ?? null,
             );
         }
 
@@ -30,6 +30,8 @@ namespace Seam\Resources {
             public string|null $webhook_id,
             /**
              * Types of events that the [webhook](https://docs.seam.co/developer-tools/webhooks) should receive.
+             *
+             * @var list<string>|null
              */
             public array|null $event_types = null,
             /**

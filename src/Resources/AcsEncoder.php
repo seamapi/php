@@ -31,7 +31,7 @@ namespace Seam\Resources {
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
                 errors: array_map(
-                    fn($e) => AcsEncoder\Errors::from_json($e),
+                    fn($e) => \Seam\Resources\AcsEncoder\Errors::from_json($e),
                     $json->errors ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
@@ -61,6 +61,8 @@ namespace Seam\Resources {
             public string|null $display_name,
             /**
              * Errors associated with the [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+             *
+             * @var list<\Seam\Resources\AcsEncoder\Errors>
              */
             public array $errors,
             /**
@@ -84,7 +86,11 @@ namespace Seam\Resources\AcsEncoder {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: $json->error_code ?? null,
+                error_code: is_string($json->error_code ?? null)
+                    ? \Seam\Resources\AcsEncoder\Errors\ErrorCode::tryFrom(
+                        $json->error_code,
+                    )
+                    : null,
                 message: $json->message ?? null,
             );
         }
@@ -97,11 +103,18 @@ namespace Seam\Resources\AcsEncoder {
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
              */
-            public string|null $error_code,
+            public \Seam\Resources\AcsEncoder\Errors\ErrorCode|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
             public string|null $message,
         ) {}
+    }
+}
+
+namespace Seam\Resources\AcsEncoder\Errors {
+    enum ErrorCode: string
+    {
+        case ACS_ENCODER_REMOVED = "acs_encoder_removed";
     }
 }
