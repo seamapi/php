@@ -5,6 +5,7 @@ namespace Seam\Http;
 use GuzzleHttp\ClientInterface;
 use Seam\ActionAttemptFailedError;
 use Seam\ActionAttemptTimeoutError;
+use Seam\InvalidOptionsError;
 use Seam\Resources\ActionAttempt;
 
 /**
@@ -21,6 +22,8 @@ final class ResolveActionAttempt
 
     /**
      * @param bool|array{timeout?: float, polling_interval?: float}|null $wait_for_action_attempt
+     *
+     * @throws InvalidOptionsError If timeout is negative or polling_interval is not greater than zero.
      */
     public static function resolve_action_attempt(
         ActionAttempt $action_attempt,
@@ -35,11 +38,27 @@ final class ResolveActionAttempt
             ? $wait_for_action_attempt
             : [];
 
+        $timeout = (float) ($options["timeout"] ?? self::TIMEOUT);
+        $polling_interval =
+            (float) ($options["polling_interval"] ?? self::POLLING_INTERVAL);
+
+        if ($timeout < 0.0) {
+            throw new InvalidOptionsError(
+                "The timeout option must not be negative, got {$timeout}",
+            );
+        }
+
+        if ($polling_interval <= 0.0) {
+            throw new InvalidOptionsError(
+                "The polling_interval option must be greater than zero, got {$polling_interval}",
+            );
+        }
+
         return self::poll(
             $action_attempt,
             $client,
-            (float) ($options["timeout"] ?? self::TIMEOUT),
-            (float) ($options["polling_interval"] ?? self::POLLING_INTERVAL),
+            $timeout,
+            $polling_interval,
         );
     }
 
@@ -60,11 +79,13 @@ final class ResolveActionAttempt
                 throw new ActionAttemptFailedError($action_attempt);
             }
 
-            if (self::now() + $polling_interval > $deadline) {
+            $remaining = $deadline - self::now();
+
+            if ($remaining <= 0.0) {
                 throw new ActionAttemptTimeoutError($action_attempt, $timeout);
             }
 
-            usleep((int) ($polling_interval * 1000000.0));
+            usleep((int) (min($polling_interval, $remaining) * 1000000.0));
 
             $action_attempt = self::get_action_attempt(
                 $client,
