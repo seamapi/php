@@ -51,12 +51,7 @@ final class ClientFactory
             $handler = HandlerStack::create($handler);
         }
 
-        // Unshifted so it sits outside every other middleware and only sees
-        // a response none of them could act on: a redirect is followed
-        // rather than raised, and a retried request is judged by the
-        // response it finally settled on.
-        $handler->unshift(ErrorMiddleware::create(), "seam_error");
-        RetryMiddleware::add($handler, $retries);
+        self::add_middleware($handler, $retries);
 
         $headers = array_merge(
             $auth_headers,
@@ -81,6 +76,26 @@ final class ClientFactory
                 ],
             ),
         );
+    }
+
+    /**
+     * Adds the Seam error mapping and retry middleware to a handler stack.
+     *
+     * Build the client with the stack, and with `http_errors` disabled so
+     * the error middleware raises instead of Guzzle.
+     *
+     * @param int|null $retries Defaults to self::DEFAULT_RETRIES.
+     */
+    public static function add_middleware(
+        HandlerStack $handler,
+        ?int $retries = null,
+    ): void {
+        // Unshifted so it sits outside every other middleware and only sees
+        // a response none of them could act on: a redirect is followed
+        // rather than raised, and a retried request is judged by the
+        // response it finally settled on.
+        $handler->unshift(ErrorMiddleware::create(), "seam_error");
+        RetryMiddleware::add($handler, $retries ?? self::DEFAULT_RETRIES);
     }
 
     /**

@@ -19,7 +19,7 @@ use Seam\Routes\WorkspacesClient;
 class SeamWithoutWorkspace
 {
     /**
-     * The Guzzle client this instance makes its requests with.
+     * The client this instance makes its requests with.
      */
     public ClientInterface $client;
 
