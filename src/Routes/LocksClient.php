@@ -59,7 +59,13 @@ class LocksClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/locks/configure_auto_lock",
+                ),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -96,7 +102,7 @@ class LocksClient
             ]),
         );
 
-        return Device::from_json($res->device);
+        return Device::from_json(Body::read($res, "device", "/locks/get"));
     }
 
     /**
@@ -145,7 +151,10 @@ class LocksClient
             ]),
         );
 
-        return array_map(fn($r) => Device::from_json($r), $res->devices);
+        return array_map(
+            fn($r) => Device::from_json($r),
+            Body::read_list($res, "devices", "/locks/list"),
+        );
     }
 
     /**
@@ -170,7 +179,9 @@ class LocksClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/locks/lock_door"),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -199,7 +210,9 @@ class LocksClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/locks/unlock_door"),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],

@@ -103,7 +103,9 @@ class ConnectWebviewsClient
             ]),
         );
 
-        return ConnectWebview::from_json($res->connect_webview);
+        return ConnectWebview::from_json(
+            Body::read($res, "connect_webview", "/connect_webviews/create"),
+        );
     }
 
     /**
@@ -145,7 +147,9 @@ class ConnectWebviewsClient
             ]),
         );
 
-        return ConnectWebview::from_json($res->connect_webview);
+        return ConnectWebview::from_json(
+            Body::read($res, "connect_webview", "/connect_webviews/get"),
+        );
     }
 
     /**
@@ -202,7 +206,7 @@ class ConnectWebviewsClient
 
         return array_map(
             fn($r) => ConnectWebview::from_json($r),
-            $res->connect_webviews,
+            Body::read_list($res, "connect_webviews", "/connect_webviews/list"),
         );
     }
 }

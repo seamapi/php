@@ -539,8 +539,10 @@ try {
 }
 ```
 
-A response that is not shaped like a Seam error, such as a gateway returning
-HTML, raises the underlying Guzzle exception instead.
+An error response that is not shaped like a Seam error, such as a gateway
+returning HTML, raises the underlying Guzzle exception instead. A successful
+response that does not carry the resource the endpoint returns raises
+`Seam\InvalidResponseError`, with `getPath()` and `getKey()`.
 
 ## Development and Testing
 

@@ -62,7 +62,13 @@ class ThermostatsClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/thermostats/activate_climate_preset",
+                ),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -105,7 +111,9 @@ class ThermostatsClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/thermostats/cool"),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -250,7 +258,9 @@ class ThermostatsClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/thermostats/heat"),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -307,7 +317,9 @@ class ThermostatsClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/thermostats/heat_cool"),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -360,7 +372,10 @@ class ThermostatsClient
             ]),
         );
 
-        return array_map(fn($r) => Device::from_json($r), $res->devices);
+        return array_map(
+            fn($r) => Device::from_json($r),
+            Body::read_list($res, "devices", "/thermostats/list"),
+        );
     }
 
     /**
@@ -385,7 +400,9 @@ class ThermostatsClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/thermostats/off"),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -447,7 +464,9 @@ class ThermostatsClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/thermostats/set_fan_mode"),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -507,7 +526,13 @@ class ThermostatsClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/thermostats/set_hvac_mode",
+                ),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -698,7 +723,13 @@ class ThermostatsClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/thermostats/update_weekly_program",
+                ),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],

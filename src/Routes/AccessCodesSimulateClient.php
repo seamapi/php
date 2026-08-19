@@ -51,6 +51,12 @@ class AccessCodesSimulateClient
             ),
         );
 
-        return UnmanagedAccessCode::from_json($res->access_code);
+        return UnmanagedAccessCode::from_json(
+            Body::read(
+                $res,
+                "access_code",
+                "/access_codes/simulate/create_unmanaged_access_code",
+            ),
+        );
     }
 }

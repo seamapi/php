@@ -52,7 +52,13 @@ class LocksSimulateClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/locks/simulate/keypad_code_entry",
+                ),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -83,7 +89,13 @@ class LocksSimulateClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/locks/simulate/manual_lock_via_keypad",
+                ),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],

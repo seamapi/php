@@ -6,6 +6,7 @@ use GuzzleHttp\ClientInterface;
 use Seam\ActionAttemptFailedError;
 use Seam\ActionAttemptTimeoutError;
 use Seam\InvalidOptionsError;
+use Seam\InvalidResponseError;
 use Seam\Resources\ActionAttempt;
 
 /**
@@ -105,12 +106,14 @@ final class ResolveActionAttempt
         );
 
         $action_attempt = ActionAttempt::from_json(
-            $res->action_attempt ?? null,
+            Body::read($res, "action_attempt", "/action_attempts/get"),
         );
 
         if ($action_attempt === null) {
-            throw new \UnexpectedValueException(
-                "Seam returned no action attempt for {$action_attempt_id}",
+            throw new InvalidResponseError(
+                "/action_attempts/get",
+                "action_attempt",
+                "which was empty for {$action_attempt_id}",
             );
         }
 

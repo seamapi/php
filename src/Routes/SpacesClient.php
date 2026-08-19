@@ -136,7 +136,7 @@ class SpacesClient
             ]),
         );
 
-        return Space::from_json($res->space);
+        return Space::from_json(Body::read($res, "space", "/spaces/create"));
     }
 
     /**
@@ -187,7 +187,7 @@ class SpacesClient
             ]),
         );
 
-        return Space::from_json($res->space);
+        return Space::from_json(Body::read($res, "space", "/spaces/get"));
     }
 
     /**
@@ -236,7 +236,9 @@ class SpacesClient
             ]),
         );
 
-        return Batch::from_json($res->batch);
+        return Batch::from_json(
+            Body::read($res, "batch", "/spaces/get_related"),
+        );
     }
 
     /**
@@ -286,7 +288,10 @@ class SpacesClient
             $on_response($res);
         }
 
-        return array_map(fn($r) => Space::from_json($r), $res->spaces);
+        return array_map(
+            fn($r) => Space::from_json($r),
+            Body::read_list($res, "spaces", "/spaces/list"),
+        );
     }
 
     /**
@@ -396,6 +401,6 @@ class SpacesClient
             ]),
         );
 
-        return Space::from_json($res->space);
+        return Space::from_json(Body::read($res, "space", "/spaces/update"));
     }
 }

@@ -43,7 +43,9 @@ class UserIdentitiesUnmanagedClient
             ]),
         );
 
-        return UnmanagedUserIdentity::from_json($res->user_identity);
+        return UnmanagedUserIdentity::from_json(
+            Body::read($res, "user_identity", "/user_identities/unmanaged/get"),
+        );
     }
 
     /**
@@ -90,7 +92,11 @@ class UserIdentitiesUnmanagedClient
 
         return array_map(
             fn($r) => UnmanagedUserIdentity::from_json($r),
-            $res->user_identities,
+            Body::read_list(
+                $res,
+                "user_identities",
+                "/user_identities/unmanaged/list",
+            ),
         );
     }
 

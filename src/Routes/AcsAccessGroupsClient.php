@@ -89,7 +89,9 @@ class AcsAccessGroupsClient
             ]),
         );
 
-        return AcsAccessGroup::from_json($res->acs_access_group);
+        return AcsAccessGroup::from_json(
+            Body::read($res, "acs_access_group", "/acs/access_groups/get"),
+        );
     }
 
     /**
@@ -130,7 +132,11 @@ class AcsAccessGroupsClient
 
         return array_map(
             fn($r) => AcsAccessGroup::from_json($r),
-            $res->acs_access_groups,
+            Body::read_list(
+                $res,
+                "acs_access_groups",
+                "/acs/access_groups/list",
+            ),
         );
     }
 
@@ -157,7 +163,11 @@ class AcsAccessGroupsClient
 
         return array_map(
             fn($r) => AcsEntrance::from_json($r),
-            $res->acs_entrances,
+            Body::read_list(
+                $res,
+                "acs_entrances",
+                "/acs/access_groups/list_accessible_entrances",
+            ),
         );
     }
 
@@ -179,7 +189,10 @@ class AcsAccessGroupsClient
             ]),
         );
 
-        return array_map(fn($r) => AcsUser::from_json($r), $res->acs_users);
+        return array_map(
+            fn($r) => AcsUser::from_json($r),
+            Body::read_list($res, "acs_users", "/acs/access_groups/list_users"),
+        );
     }
 
     /**

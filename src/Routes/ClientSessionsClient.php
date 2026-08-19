@@ -80,7 +80,9 @@ class ClientSessionsClient
             ]),
         );
 
-        return ClientSession::from_json($res->client_session);
+        return ClientSession::from_json(
+            Body::read($res, "client_session", "/client_sessions/create"),
+        );
     }
 
     /**
@@ -126,7 +128,9 @@ class ClientSessionsClient
             ]),
         );
 
-        return ClientSession::from_json($res->client_session);
+        return ClientSession::from_json(
+            Body::read($res, "client_session", "/client_sessions/get"),
+        );
     }
 
     /**
@@ -175,7 +179,13 @@ class ClientSessionsClient
             ]),
         );
 
-        return ClientSession::from_json($res->client_session);
+        return ClientSession::from_json(
+            Body::read(
+                $res,
+                "client_session",
+                "/client_sessions/get_or_create",
+            ),
+        );
     }
 
     /**
@@ -280,7 +290,7 @@ class ClientSessionsClient
 
         return array_map(
             fn($r) => ClientSession::from_json($r),
-            $res->client_sessions,
+            Body::read_list($res, "client_sessions", "/client_sessions/list"),
         );
     }
 

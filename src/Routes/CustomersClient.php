@@ -99,7 +99,9 @@ class CustomersClient
             ]),
         );
 
-        return CustomerPortal::from_json($res->customer_portal);
+        return CustomerPortal::from_json(
+            Body::read($res, "customer_portal", "/customers/create_portal"),
+        );
     }
 
     /**

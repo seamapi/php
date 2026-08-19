@@ -46,7 +46,9 @@ class WebhooksClient
             ]),
         );
 
-        return Webhook::from_json($res->webhook);
+        return Webhook::from_json(
+            Body::read($res, "webhook", "/webhooks/create"),
+        );
     }
 
     /**
@@ -84,7 +86,7 @@ class WebhooksClient
             ]),
         );
 
-        return Webhook::from_json($res->webhook);
+        return Webhook::from_json(Body::read($res, "webhook", "/webhooks/get"));
     }
 
     /**
@@ -96,7 +98,10 @@ class WebhooksClient
     {
         $res = Body::decode($this->client->request("GET", "/webhooks/list"));
 
-        return array_map(fn($r) => Webhook::from_json($r), $res->webhooks);
+        return array_map(
+            fn($r) => Webhook::from_json($r),
+            Body::read_list($res, "webhooks", "/webhooks/list"),
+        );
     }
 
     /**

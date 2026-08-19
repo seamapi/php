@@ -54,7 +54,11 @@ class ThermostatsDailyProgramsClient
         );
 
         return ThermostatDailyProgram::from_json(
-            $res->thermostat_daily_program,
+            Body::read(
+                $res,
+                "thermostat_daily_program",
+                "/thermostats/daily_programs/create",
+            ),
         );
     }
 
@@ -109,7 +113,13 @@ class ThermostatsDailyProgramsClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/thermostats/daily_programs/update",
+                ),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],

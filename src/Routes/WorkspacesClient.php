@@ -99,7 +99,9 @@ class WorkspacesClient
             ]),
         );
 
-        return Workspace::from_json($res->workspace);
+        return Workspace::from_json(
+            Body::read($res, "workspace", "/workspaces/create"),
+        );
     }
 
     /**
@@ -111,7 +113,9 @@ class WorkspacesClient
     {
         $res = Body::decode($this->client->request("GET", "/workspaces/get"));
 
-        return Workspace::from_json($res->workspace);
+        return Workspace::from_json(
+            Body::read($res, "workspace", "/workspaces/get"),
+        );
     }
 
     /**
@@ -123,7 +127,10 @@ class WorkspacesClient
     {
         $res = Body::decode($this->client->request("GET", "/workspaces/list"));
 
-        return array_map(fn($r) => Workspace::from_json($r), $res->workspaces);
+        return array_map(
+            fn($r) => Workspace::from_json($r),
+            Body::read_list($res, "workspaces", "/workspaces/list"),
+        );
     }
 
     /**
@@ -140,7 +147,9 @@ class WorkspacesClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/workspaces/reset_sandbox"),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],

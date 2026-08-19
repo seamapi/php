@@ -60,7 +60,9 @@ class DevicesUnmanagedClient
             ]),
         );
 
-        return UnmanagedDevice::from_json($res->device);
+        return UnmanagedDevice::from_json(
+            Body::read($res, "device", "/devices/unmanaged/get"),
+        );
     }
 
     /**
@@ -149,7 +151,7 @@ class DevicesUnmanagedClient
 
         return array_map(
             fn($r) => UnmanagedDevice::from_json($r),
-            $res->devices,
+            Body::read_list($res, "devices", "/devices/unmanaged/list"),
         );
     }
 

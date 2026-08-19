@@ -76,6 +76,9 @@ class NoiseSensorsClient
             ]),
         );
 
-        return array_map(fn($r) => Device::from_json($r), $res->devices);
+        return array_map(
+            fn($r) => Device::from_json($r),
+            Body::read_list($res, "devices", "/noise_sensors/list"),
+        );
     }
 }

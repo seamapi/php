@@ -60,7 +60,7 @@ class DevicesClient
             ]),
         );
 
-        return Device::from_json($res->device);
+        return Device::from_json(Body::read($res, "device", "/devices/get"));
     }
 
     /**
@@ -165,7 +165,10 @@ class DevicesClient
             $on_response($res);
         }
 
-        return array_map(fn($r) => Device::from_json($r), $res->devices);
+        return array_map(
+            fn($r) => Device::from_json($r),
+            Body::read_list($res, "devices", "/devices/list"),
+        );
     }
 
     /**
@@ -195,7 +198,11 @@ class DevicesClient
 
         return array_map(
             fn($r) => DeviceProvider::from_json($r),
-            $res->device_providers,
+            Body::read_list(
+                $res,
+                "device_providers",
+                "/devices/list_device_providers",
+            ),
         );
     }
 

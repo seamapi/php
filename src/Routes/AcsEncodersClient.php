@@ -60,7 +60,13 @@ class AcsEncodersClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/acs/encoders/encode_credential",
+                ),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -85,7 +91,9 @@ class AcsEncodersClient
             ]),
         );
 
-        return AcsEncoder::from_json($res->acs_encoder);
+        return AcsEncoder::from_json(
+            Body::read($res, "acs_encoder", "/acs/encoders/get"),
+        );
     }
 
     /**
@@ -137,7 +145,7 @@ class AcsEncodersClient
 
         return array_map(
             fn($r) => AcsEncoder::from_json($r),
-            $res->acs_encoders,
+            Body::read_list($res, "acs_encoders", "/acs/encoders/list"),
         );
     }
 
@@ -168,7 +176,13 @@ class AcsEncodersClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/acs/encoders/scan_credential",
+                ),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -214,7 +228,13 @@ class AcsEncodersClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/acs/encoders/scan_to_assign_credential",
+                ),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],

@@ -72,7 +72,9 @@ class InstantKeysClient
             ]),
         );
 
-        return InstantKey::from_json($res->instant_key);
+        return InstantKey::from_json(
+            Body::read($res, "instant_key", "/instant_keys/get"),
+        );
     }
 
     /**
@@ -97,7 +99,7 @@ class InstantKeysClient
 
         return array_map(
             fn($r) => InstantKey::from_json($r),
-            $res->instant_keys,
+            Body::read_list($res, "instant_keys", "/instant_keys/list"),
         );
     }
 }

@@ -68,7 +68,13 @@ class NoiseSensorsNoiseThresholdsClient
             ),
         );
 
-        return NoiseThreshold::from_json($res->noise_threshold);
+        return NoiseThreshold::from_json(
+            Body::read(
+                $res,
+                "noise_threshold",
+                "/noise_sensors/noise_thresholds/create",
+            ),
+        );
     }
 
     /**
@@ -112,7 +118,13 @@ class NoiseSensorsNoiseThresholdsClient
             ),
         );
 
-        return NoiseThreshold::from_json($res->noise_threshold);
+        return NoiseThreshold::from_json(
+            Body::read(
+                $res,
+                "noise_threshold",
+                "/noise_sensors/noise_thresholds/get",
+            ),
+        );
     }
 
     /**
@@ -137,7 +149,11 @@ class NoiseSensorsNoiseThresholdsClient
 
         return array_map(
             fn($r) => NoiseThreshold::from_json($r),
-            $res->noise_thresholds,
+            Body::read_list(
+                $res,
+                "noise_thresholds",
+                "/noise_sensors/noise_thresholds/list",
+            ),
         );
     }
 

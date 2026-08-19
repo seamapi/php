@@ -60,7 +60,7 @@ class PhonesClient
             ]),
         );
 
-        return Phone::from_json($res->phone);
+        return Phone::from_json(Body::read($res, "phone", "/phones/get"));
     }
 
     /**
@@ -91,6 +91,9 @@ class PhonesClient
             ]),
         );
 
-        return array_map(fn($r) => Phone::from_json($r), $res->phones);
+        return array_map(
+            fn($r) => Phone::from_json($r),
+            Body::read_list($res, "phones", "/phones/list"),
+        );
     }
 }

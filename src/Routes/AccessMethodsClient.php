@@ -54,7 +54,13 @@ class AccessMethodsClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/access_methods/assign_card",
+                ),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -125,7 +131,9 @@ class AccessMethodsClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/access_methods/encode"),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -150,7 +158,9 @@ class AccessMethodsClient
             ]),
         );
 
-        return AccessMethod::from_json($res->access_method);
+        return AccessMethod::from_json(
+            Body::read($res, "access_method", "/access_methods/get"),
+        );
     }
 
     /**
@@ -182,7 +192,9 @@ class AccessMethodsClient
             ]),
         );
 
-        return Batch::from_json($res->batch);
+        return Batch::from_json(
+            Body::read($res, "batch", "/access_methods/get_related"),
+        );
     }
 
     /**
@@ -263,7 +275,7 @@ class AccessMethodsClient
 
         return array_map(
             fn($r) => AccessMethod::from_json($r),
-            $res->access_methods,
+            Body::read_list($res, "access_methods", "/access_methods/list"),
         );
     }
 
@@ -292,7 +304,13 @@ class AccessMethodsClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/access_methods/unlock_door",
+                ),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
