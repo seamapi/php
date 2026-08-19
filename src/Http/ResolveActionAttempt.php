@@ -100,7 +100,7 @@ final class ResolveActionAttempt
     ): ActionAttempt {
         $res = Body::decode(
             $client->request("GET", "/action_attempts/get", [
-                "json" => (object) ["action_attempt_id" => $action_attempt_id],
+                "query" => ["action_attempt_id" => $action_attempt_id],
             ]),
         );
 
