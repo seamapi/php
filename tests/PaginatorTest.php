@@ -6,7 +6,9 @@ namespace Tests;
 
 use Seam\Pagination;
 use Seam\Paginator;
+use Seam\Seam;
 use Tests\Support\FakeSeamConnectTestCase;
+use Tests\Support\RecordingClient;
 
 final class PaginatorTest extends FakeSeamConnectTestCase
 {
@@ -134,5 +136,67 @@ final class PaginatorTest extends FakeSeamConnectTestCase
         $seam
             ->createPaginator(fn($p) => $seam->workspaces->list())
             ->firstPage();
+    }
+
+    private function pinned_cursor_paginator(string $cursor): Paginator
+    {
+        $recorder = RecordingClient::repeating(
+            RecordingClient::json(200, [
+                "connected_accounts" => [
+                    ["connected_account_id" => "ca_1"],
+                    ["connected_account_id" => "ca_2"],
+                ],
+                "pagination" => [
+                    "has_next_page" => true,
+                    "next_page_cursor" => $cursor,
+                ],
+                "ok" => true,
+            ]),
+            times: 200,
+        );
+
+        $seam = Seam::from_api_key(
+            "seam_apikey_token",
+            endpoint: "https://example.com",
+            guzzle_options: $recorder->guzzle_options(),
+            retries: 0,
+        );
+
+        return $seam->createPaginator(
+            fn($p) => $seam->connected_accounts->list(...$p),
+            ["limit" => 2],
+        );
+    }
+
+    public function testFlattenToArrayStopsWhenTheCursorRepeats(): void
+    {
+        $all = $this->pinned_cursor_paginator("stuck")->flattenToArray();
+
+        $this->assertCount(4, $all);
+    }
+
+    public function testFlattenStopsWhenTheCursorRepeats(): void
+    {
+        $ids = [];
+
+        foreach ($this->pinned_cursor_paginator("stuck")->flatten() as $item) {
+            $ids[] = $item->connected_account_id;
+            $this->assertLessThan(10, count($ids), "flatten did not terminate");
+        }
+
+        $this->assertCount(4, $ids);
+    }
+
+    public function testACursorNamedFirstPageStillAdvances(): void
+    {
+        $pages = $this->pinned_cursor_paginator("FIRST_PAGE");
+
+        [, $pagination] = $pages->firstPage();
+        $this->assertSame("FIRST_PAGE", $pagination->next_page_cursor);
+
+        [$second] = $pages->nextPage($pagination->next_page_cursor);
+
+        $this->assertNotEmpty($second);
+        $this->assertCount(4, $pages->flattenToArray());
     }
 }
