@@ -99,7 +99,9 @@ class AcsUsersClient
             ]),
         );
 
-        return AcsUser::from_json($res->acs_user);
+        return AcsUser::from_json(
+            Body::read($res, "acs_user", "/acs/users/create"),
+        );
     }
 
     /**
@@ -181,7 +183,9 @@ class AcsUsersClient
             ]),
         );
 
-        return AcsUser::from_json($res->acs_user);
+        return AcsUser::from_json(
+            Body::read($res, "acs_user", "/acs/users/get"),
+        );
     }
 
     /**
@@ -250,7 +254,10 @@ class AcsUsersClient
             $on_response($res);
         }
 
-        return array_map(fn($r) => AcsUser::from_json($r), $res->acs_users);
+        return array_map(
+            fn($r) => AcsUser::from_json($r),
+            Body::read_list($res, "acs_users", "/acs/users/list"),
+        );
     }
 
     /**
@@ -297,7 +304,11 @@ class AcsUsersClient
 
         return array_map(
             fn($r) => AcsEntrance::from_json($r),
-            $res->acs_entrances,
+            Body::read_list(
+                $res,
+                "acs_entrances",
+                "/acs/users/list_accessible_entrances",
+            ),
         );
     }
 

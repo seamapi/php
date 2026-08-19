@@ -81,7 +81,9 @@ class ConnectedAccountsClient
             ]),
         );
 
-        return ConnectedAccount::from_json($res->connected_account);
+        return ConnectedAccount::from_json(
+            Body::read($res, "connected_account", "/connected_accounts/get"),
+        );
     }
 
     /**
@@ -143,7 +145,11 @@ class ConnectedAccountsClient
 
         return array_map(
             fn($r) => ConnectedAccount::from_json($r),
-            $res->connected_accounts,
+            Body::read_list(
+                $res,
+                "connected_accounts",
+                "/connected_accounts/list",
+            ),
         );
     }
 

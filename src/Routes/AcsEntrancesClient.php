@@ -46,7 +46,9 @@ class AcsEntrancesClient
             ]),
         );
 
-        return AcsEntrance::from_json($res->acs_entrance);
+        return AcsEntrance::from_json(
+            Body::read($res, "acs_entrance", "/acs/entrances/get"),
+        );
     }
 
     /**
@@ -156,7 +158,7 @@ class AcsEntrancesClient
 
         return array_map(
             fn($r) => AcsEntrance::from_json($r),
-            $res->acs_entrances,
+            Body::read_list($res, "acs_entrances", "/acs/entrances/list"),
         );
     }
 
@@ -188,7 +190,11 @@ class AcsEntrancesClient
 
         return array_map(
             fn($r) => AcsCredential::from_json($r),
-            $res->acs_credentials,
+            Body::read_list(
+                $res,
+                "acs_credentials",
+                "/acs/entrances/list_credentials_with_access",
+            ),
         );
     }
 
@@ -217,7 +223,9 @@ class AcsEntrancesClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/acs/entrances/unlock"),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],

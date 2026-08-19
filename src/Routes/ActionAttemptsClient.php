@@ -48,7 +48,9 @@ class ActionAttemptsClient
         );
 
         return ResolveActionAttempt::resolve_action_attempt(
-            ActionAttempt::from_json($res->action_attempt),
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/action_attempts/get"),
+            ),
             $this->client,
             $wait_for_action_attempt ??
                 $this->defaults["wait_for_action_attempt"],
@@ -99,7 +101,7 @@ class ActionAttemptsClient
 
         return array_map(
             fn($r) => ActionAttempt::from_json($r),
-            $res->action_attempts,
+            Body::read_list($res, "action_attempts", "/action_attempts/list"),
         );
     }
 }

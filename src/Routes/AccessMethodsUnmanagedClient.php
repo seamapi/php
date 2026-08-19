@@ -42,7 +42,9 @@ class AccessMethodsUnmanagedClient
             ]),
         );
 
-        return UnmanagedAccessMethod::from_json($res->access_method);
+        return UnmanagedAccessMethod::from_json(
+            Body::read($res, "access_method", "/access_methods/unmanaged/get"),
+        );
     }
 
     /**
@@ -81,7 +83,11 @@ class AccessMethodsUnmanagedClient
 
         return array_map(
             fn($r) => UnmanagedAccessMethod::from_json($r),
-            $res->access_methods,
+            Body::read_list(
+                $res,
+                "access_methods",
+                "/access_methods/unmanaged/list",
+            ),
         );
     }
 }

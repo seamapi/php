@@ -120,7 +120,9 @@ class AccessGrantsClient
             ]),
         );
 
-        return AccessGrant::from_json($res->access_grant);
+        return AccessGrant::from_json(
+            Body::read($res, "access_grant", "/access_grants/create"),
+        );
     }
 
     /**
@@ -171,7 +173,9 @@ class AccessGrantsClient
             ]),
         );
 
-        return AccessGrant::from_json($res->access_grant);
+        return AccessGrant::from_json(
+            Body::read($res, "access_grant", "/access_grants/get"),
+        );
     }
 
     /**
@@ -220,7 +224,9 @@ class AccessGrantsClient
             ]),
         );
 
-        return Batch::from_json($res->batch);
+        return Batch::from_json(
+            Body::read($res, "batch", "/access_grants/get_related"),
+        );
     }
 
     /**
@@ -312,7 +318,7 @@ class AccessGrantsClient
 
         return array_map(
             fn($r) => AccessGrant::from_json($r),
-            $res->access_grants,
+            Body::read_list($res, "access_grants", "/access_grants/list"),
         );
     }
 
@@ -342,7 +348,13 @@ class AccessGrantsClient
             ),
         );
 
-        return AccessGrant::from_json($res->access_grant);
+        return AccessGrant::from_json(
+            Body::read(
+                $res,
+                "access_grant",
+                "/access_grants/request_access_methods",
+            ),
+        );
     }
 
     /**

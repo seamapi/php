@@ -107,7 +107,9 @@ class UserIdentitiesClient
             ]),
         );
 
-        return UserIdentity::from_json($res->user_identity);
+        return UserIdentity::from_json(
+            Body::read($res, "user_identity", "/user_identities/create"),
+        );
     }
 
     /**
@@ -160,7 +162,13 @@ class UserIdentitiesClient
             ),
         );
 
-        return InstantKey::from_json($res->instant_key);
+        return InstantKey::from_json(
+            Body::read(
+                $res,
+                "instant_key",
+                "/user_identities/generate_instant_key",
+            ),
+        );
     }
 
     /**
@@ -194,7 +202,9 @@ class UserIdentitiesClient
             ]),
         );
 
-        return UserIdentity::from_json($res->user_identity);
+        return UserIdentity::from_json(
+            Body::read($res, "user_identity", "/user_identities/get"),
+        );
     }
 
     /**
@@ -276,7 +286,7 @@ class UserIdentitiesClient
 
         return array_map(
             fn($r) => UserIdentity::from_json($r),
-            $res->user_identities,
+            Body::read_list($res, "user_identities", "/user_identities/list"),
         );
     }
 
@@ -300,7 +310,14 @@ class UserIdentitiesClient
             ),
         );
 
-        return array_map(fn($r) => Device::from_json($r), $res->devices);
+        return array_map(
+            fn($r) => Device::from_json($r),
+            Body::read_list(
+                $res,
+                "devices",
+                "/user_identities/list_accessible_devices",
+            ),
+        );
     }
 
     /**
@@ -325,7 +342,11 @@ class UserIdentitiesClient
 
         return array_map(
             fn($r) => AcsEntrance::from_json($r),
-            $res->acs_entrances,
+            Body::read_list(
+                $res,
+                "acs_entrances",
+                "/user_identities/list_accessible_entrances",
+            ),
         );
     }
 
@@ -347,7 +368,14 @@ class UserIdentitiesClient
             ]),
         );
 
-        return array_map(fn($r) => AcsSystem::from_json($r), $res->acs_systems);
+        return array_map(
+            fn($r) => AcsSystem::from_json($r),
+            Body::read_list(
+                $res,
+                "acs_systems",
+                "/user_identities/list_acs_systems",
+            ),
+        );
     }
 
     /**
@@ -368,7 +396,14 @@ class UserIdentitiesClient
             ]),
         );
 
-        return array_map(fn($r) => AcsUser::from_json($r), $res->acs_users);
+        return array_map(
+            fn($r) => AcsUser::from_json($r),
+            Body::read_list(
+                $res,
+                "acs_users",
+                "/user_identities/list_acs_users",
+            ),
+        );
     }
 
     /**

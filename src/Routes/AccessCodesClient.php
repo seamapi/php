@@ -142,7 +142,9 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             ]),
         );
 
-        return AccessCode::from_json($res->access_code);
+        return AccessCode::from_json(
+            Body::read($res, "access_code", "/access_codes/create"),
+        );
     }
 
     /**
@@ -249,7 +251,11 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
 
         return array_map(
             fn($r) => AccessCode::from_json($r),
-            $res->access_codes,
+            Body::read_list(
+                $res,
+                "access_codes",
+                "/access_codes/create_multiple",
+            ),
         );
     }
 
@@ -294,7 +300,9 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             ]),
         );
 
-        return AccessCode::from_json($res->generated_code);
+        return AccessCode::from_json(
+            Body::read($res, "generated_code", "/access_codes/generate_code"),
+        );
     }
 
     /**
@@ -335,7 +343,9 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             ]),
         );
 
-        return AccessCode::from_json($res->access_code);
+        return AccessCode::from_json(
+            Body::read($res, "access_code", "/access_codes/get"),
+        );
     }
 
     /**
@@ -430,7 +440,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
 
         return array_map(
             fn($r) => AccessCode::from_json($r),
-            $res->access_codes,
+            Body::read_list($res, "access_codes", "/access_codes/list"),
         );
     }
 
@@ -462,7 +472,13 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             ),
         );
 
-        return AccessCode::from_json($res->access_code);
+        return AccessCode::from_json(
+            Body::read(
+                $res,
+                "access_code",
+                "/access_codes/pull_backup_access_code",
+            ),
+        );
     }
 
     /**

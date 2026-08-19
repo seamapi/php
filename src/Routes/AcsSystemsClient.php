@@ -42,7 +42,9 @@ class AcsSystemsClient
             ]),
         );
 
-        return AcsSystem::from_json($res->acs_system);
+        return AcsSystem::from_json(
+            Body::read($res, "acs_system", "/acs/systems/get"),
+        );
     }
 
     /**
@@ -78,7 +80,10 @@ class AcsSystemsClient
             ]),
         );
 
-        return array_map(fn($r) => AcsSystem::from_json($r), $res->acs_systems);
+        return array_map(
+            fn($r) => AcsSystem::from_json($r),
+            Body::read_list($res, "acs_systems", "/acs/systems/list"),
+        );
     }
 
     /**
@@ -104,7 +109,14 @@ class AcsSystemsClient
             ),
         );
 
-        return array_map(fn($r) => AcsSystem::from_json($r), $res->acs_systems);
+        return array_map(
+            fn($r) => AcsSystem::from_json($r),
+            Body::read_list(
+                $res,
+                "acs_systems",
+                "/acs/systems/list_compatible_credential_manager_acs_systems",
+            ),
+        );
     }
 
     /**

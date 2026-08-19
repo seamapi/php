@@ -43,7 +43,9 @@ class AccessGrantsUnmanagedClient
             ]),
         );
 
-        return UnmanagedAccessGrant::from_json($res->access_grant);
+        return UnmanagedAccessGrant::from_json(
+            Body::read($res, "access_grant", "/access_grants/unmanaged/get"),
+        );
     }
 
     /**
@@ -100,7 +102,11 @@ class AccessGrantsUnmanagedClient
 
         return array_map(
             fn($r) => UnmanagedAccessGrant::from_json($r),
-            $res->access_grants,
+            Body::read_list(
+                $res,
+                "access_grants",
+                "/access_grants/unmanaged/list",
+            ),
         );
     }
 

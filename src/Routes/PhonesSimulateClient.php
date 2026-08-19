@@ -62,6 +62,8 @@ class PhonesSimulateClient
             ),
         );
 
-        return Phone::from_json($res->phone);
+        return Phone::from_json(
+            Body::read($res, "phone", "/phones/simulate/create_sandbox_phone"),
+        );
     }
 }

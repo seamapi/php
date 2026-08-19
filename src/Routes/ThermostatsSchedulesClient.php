@@ -70,7 +70,13 @@ class ThermostatsSchedulesClient
             ]),
         );
 
-        return ThermostatSchedule::from_json($res->thermostat_schedule);
+        return ThermostatSchedule::from_json(
+            Body::read(
+                $res,
+                "thermostat_schedule",
+                "/thermostats/schedules/create",
+            ),
+        );
     }
 
     /**
@@ -108,7 +114,13 @@ class ThermostatsSchedulesClient
             ]),
         );
 
-        return ThermostatSchedule::from_json($res->thermostat_schedule);
+        return ThermostatSchedule::from_json(
+            Body::read(
+                $res,
+                "thermostat_schedule",
+                "/thermostats/schedules/get",
+            ),
+        );
     }
 
     /**
@@ -137,7 +149,11 @@ class ThermostatsSchedulesClient
 
         return array_map(
             fn($r) => ThermostatSchedule::from_json($r),
-            $res->thermostat_schedules,
+            Body::read_list(
+                $res,
+                "thermostat_schedules",
+                "/thermostats/schedules/list",
+            ),
         );
     }
 

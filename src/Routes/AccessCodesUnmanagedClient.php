@@ -123,7 +123,9 @@ class AccessCodesUnmanagedClient
             ]),
         );
 
-        return UnmanagedAccessCode::from_json($res->access_code);
+        return UnmanagedAccessCode::from_json(
+            Body::read($res, "access_code", "/access_codes/unmanaged/get"),
+        );
     }
 
     /**
@@ -173,7 +175,11 @@ class AccessCodesUnmanagedClient
 
         return array_map(
             fn($r) => UnmanagedAccessCode::from_json($r),
-            $res->access_codes,
+            Body::read_list(
+                $res,
+                "access_codes",
+                "/access_codes/unmanaged/list",
+            ),
         );
     }
 

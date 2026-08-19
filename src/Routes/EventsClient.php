@@ -60,7 +60,7 @@ class EventsClient
             ]),
         );
 
-        return Event::from_json($res->event);
+        return Event::from_json(Body::read($res, "event", "/events/get"));
     }
 
     /**
@@ -253,6 +253,9 @@ class EventsClient
             ]),
         );
 
-        return array_map(fn($r) => Event::from_json($r), $res->events);
+        return array_map(
+            fn($r) => Event::from_json($r),
+            Body::read_list($res, "events", "/events/list"),
+        );
     }
 }

@@ -141,7 +141,9 @@ class AcsCredentialsClient
             ]),
         );
 
-        return AcsCredential::from_json($res->acs_credential);
+        return AcsCredential::from_json(
+            Body::read($res, "acs_credential", "/acs/credentials/create"),
+        );
     }
 
     /**
@@ -179,7 +181,9 @@ class AcsCredentialsClient
             ]),
         );
 
-        return AcsCredential::from_json($res->acs_credential);
+        return AcsCredential::from_json(
+            Body::read($res, "acs_credential", "/acs/credentials/get"),
+        );
     }
 
     /**
@@ -248,7 +252,7 @@ class AcsCredentialsClient
 
         return array_map(
             fn($r) => AcsCredential::from_json($r),
-            $res->acs_credentials,
+            Body::read_list($res, "acs_credentials", "/acs/credentials/list"),
         );
     }
 
@@ -274,7 +278,11 @@ class AcsCredentialsClient
 
         return array_map(
             fn($r) => AcsEntrance::from_json($r),
-            $res->acs_entrances,
+            Body::read_list(
+                $res,
+                "acs_entrances",
+                "/acs/credentials/list_accessible_entrances",
+            ),
         );
     }
 
