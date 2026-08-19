@@ -11,6 +11,7 @@ use Seam\InvalidOptionsError;
 use Seam\Resources\ActionAttempt;
 use Seam\Seam;
 use Tests\Support\FakeSeamConnectTestCase;
+use Tests\Support\RecordingClient;
 
 final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
 {
@@ -360,6 +361,48 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
      * than the route client, so enabling the option on the route that reads
      * action attempts cannot recurse.
      */
+    public function testPollSendsTheIdAsAQueryNotABody(): void
+    {
+        $recorder = new RecordingClient([
+            RecordingClient::json(200, [
+                "action_attempt" => [
+                    "action_attempt_id" => "aa_1",
+                    "status" => "pending",
+                ],
+            ]),
+            RecordingClient::json(200, [
+                "action_attempt" => [
+                    "action_attempt_id" => "aa_1",
+                    "status" => "success",
+                ],
+            ]),
+        ]);
+
+        $seam = Seam::from_api_key(
+            "seam_apikey_token",
+            endpoint: "https://example.com",
+            guzzle_options: $recorder->guzzle_options(),
+            retries: 0,
+        );
+
+        $resolved = $seam->action_attempts->get("aa_1", [
+            "timeout" => 5.0,
+            "polling_interval" => 0.01,
+        ]);
+
+        $this->assertSame("success", $resolved->status);
+
+        $poll = $recorder->request(1);
+
+        $this->assertSame("GET", $poll->getMethod());
+        $this->assertSame("/action_attempts/get", $poll->getUri()->getPath());
+        $this->assertSame(
+            "action_attempt_id=aa_1&_strict=true",
+            $poll->getUri()->getQuery(),
+        );
+        $this->assertSame("", (string) $poll->getBody());
+    }
+
     public function testActionAttemptsGetDoesNotRecurse(): void
     {
         $seam = $this->seam(wait_for_action_attempt: false);
