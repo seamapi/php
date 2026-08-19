@@ -386,8 +386,6 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             $access_method_id === null &&
             $customer_key === null &&
             $device_id === null &&
-            $limit === null &&
-            $page_cursor === null &&
             $search === null &&
             $user_identifier_key === null
         ) {

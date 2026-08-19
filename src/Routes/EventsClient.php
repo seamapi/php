@@ -149,7 +149,6 @@ class EventsClient
             $event_ids === null &&
             $event_type === null &&
             $event_types === null &&
-            $limit === null &&
             $since === null &&
             $space_id === null &&
             $space_ids === null &&

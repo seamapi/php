@@ -1,7 +1,7 @@
 {{{methodPhpDoc this}}}
     public function {{methodName}}({{{signatureParams}}}): {{returnType}} {
 {{#if requiresAtLeastOneParameter}}
-        if ({{#each parameters}}{{#unless @first}} && {{/unless}}${{name}} === null{{/each}}) {
+        if ({{#each atLeastOneParameterNames}}{{#unless @first}} && {{/unless}}${{this}} === null{{/each}}) {
             throw new \InvalidArgumentException("At least one parameter is required for {{path}}");
         }
 {{/if}}

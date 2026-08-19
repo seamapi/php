@@ -228,8 +228,6 @@ class AccessMethodsClient
             $access_grant_key === null &&
             $acs_entrance_id === null &&
             $device_id === null &&
-            $limit === null &&
-            $page_cursor === null &&
             $space_id === null
         ) {
             throw new \InvalidArgumentException(
