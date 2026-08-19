@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
+use Seam\InvalidWebhookPayloadError;
+use Seam\SeamException;
 use Seam\SeamWebhook;
 use Svix\Exception\WebhookVerificationException;
 use Svix\Webhook;
@@ -28,10 +30,10 @@ final class SeamWebhookTest extends TestCase
     /**
      * @return array<string, string>
      */
-    private function signed_headers(string $payload): array
+    private function signed_headers(string $payload, ?int $at = null): array
     {
         $id = "msg_test";
-        $timestamp = (string) time();
+        $timestamp = (string) ($at ?? time());
 
         $signature = (new Webhook(self::SECRET))->sign(
             $id,
@@ -99,5 +101,71 @@ final class SeamWebhookTest extends TestCase
         (new SeamWebhook(
             "whsec_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
         ))->verify($payload, $headers);
+    }
+
+    public function testVerifyRejectsAnExpiredTimestamp(): void
+    {
+        $payload = $this->payload();
+
+        $this->expectException(WebhookVerificationException::class);
+
+        (new SeamWebhook(self::SECRET))->verify(
+            $payload,
+            $this->signed_headers($payload, time() - 3600),
+        );
+    }
+
+    /**
+     * @dataProvider missingHeaders
+     */
+    public function testVerifyRejectsAMissingHeader(string $missing): void
+    {
+        $payload = $this->payload();
+        $headers = $this->signed_headers($payload);
+        unset($headers[$missing]);
+
+        $this->expectException(WebhookVerificationException::class);
+
+        (new SeamWebhook(self::SECRET))->verify($payload, $headers);
+    }
+
+    public static function missingHeaders(): array
+    {
+        return [
+            "svix-id" => ["svix-id"],
+            "svix-timestamp" => ["svix-timestamp"],
+            "svix-signature" => ["svix-signature"],
+        ];
+    }
+
+    /**
+     * @dataProvider unreadablePayloads
+     */
+    public function testVerifyDistinguishesAnUnreadablePayload(
+        string $payload,
+    ): void {
+        $headers = $this->signed_headers($payload);
+
+        try {
+            (new SeamWebhook(self::SECRET))->verify($payload, $headers);
+            $this->fail("Expected InvalidWebhookPayloadError");
+        } catch (InvalidWebhookPayloadError $error) {
+            $this->assertInstanceOf(SeamException::class, $error);
+            $this->assertNotInstanceOf(
+                WebhookVerificationException::class,
+                $error,
+            );
+        }
+    }
+
+    public static function unreadablePayloads(): array
+    {
+        return [
+            "malformed json" => ["{not json"],
+            "json that is not an object" => ["[1, 2]"],
+            "json null" => ["null"],
+            "empty body" => [""],
+            "object that is not an event" => ['{"hello":"world"}'],
+        ];
     }
 }
