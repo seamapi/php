@@ -2,15 +2,24 @@
 
 namespace Seam\Routes;
 
-use Seam\SeamClient;
+use GuzzleHttp\ClientInterface;
 
 class DevicesSimulateClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -23,15 +32,11 @@ class DevicesSimulateClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
-            "POST",
-            "/devices/simulate/connect",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/devices/simulate/connect", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -47,15 +52,11 @@ class DevicesSimulateClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
-            "POST",
-            "/devices/simulate/connect_to_hub",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/devices/simulate/connect_to_hub", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -68,15 +69,11 @@ class DevicesSimulateClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
-            "POST",
-            "/devices/simulate/disconnect",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/devices/simulate/disconnect", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -93,14 +90,12 @@ class DevicesSimulateClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/devices/simulate/disconnect_from_hub",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -117,18 +112,12 @@ class DevicesSimulateClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($is_expired !== null) {
-            $request_payload["is_expired"] = $is_expired;
-        }
+        $request_payload["device_id"] = $device_id;
+        $request_payload["is_expired"] = $is_expired;
 
-        $this->seam->request(
-            "POST",
-            "/devices/simulate/paid_subscription",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/devices/simulate/paid_subscription", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -141,14 +130,10 @@ class DevicesSimulateClient
     {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
-            "POST",
-            "/devices/simulate/remove",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/devices/simulate/remove", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

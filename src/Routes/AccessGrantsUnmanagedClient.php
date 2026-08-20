@@ -2,16 +2,27 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\UnmanagedAccessGrant;
-use Seam\SeamClient;
 
 class AccessGrantsUnmanagedClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -24,17 +35,17 @@ class AccessGrantsUnmanagedClient
     {
         $request_payload = [];
 
-        if ($access_grant_id !== null) {
-            $request_payload["access_grant_id"] = $access_grant_id;
-        }
+        $request_payload["access_grant_id"] = $access_grant_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_grants/unmanaged/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/access_grants/unmanaged/get", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return UnmanagedAccessGrant::from_json($res->access_grant);
+        return UnmanagedAccessGrant::from_json(
+            Body::read($res, "access_grant", "/access_grants/unmanaged/get"),
+        );
     }
 
     /**
@@ -43,16 +54,17 @@ class AccessGrantsUnmanagedClient
      * @param string $acs_entrance_id ID of the entrance by which you want to filter the list of unmanaged Access Grants.
      * @param string $acs_system_id ID of the access system by which you want to filter the list of unmanaged Access Grants.
      * @param float $limit Numerical limit on the number of unmanaged access grants to return.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $reservation_key Filter unmanaged Access Grants by reservation_key.
      * @param string $user_identity_id ID of user identity by which you want to filter the list of unmanaged Access Grants.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
         ?string $acs_entrance_id = null,
         ?string $acs_system_id = null,
         ?float $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $reservation_key = null,
         ?string $user_identity_id = null,
         ?callable $on_response = null,
@@ -78,10 +90,10 @@ class AccessGrantsUnmanagedClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_grants/unmanaged/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/access_grants/unmanaged/list", [
+                "query" => $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -90,7 +102,11 @@ class AccessGrantsUnmanagedClient
 
         return array_map(
             fn($r) => UnmanagedAccessGrant::from_json($r),
-            $res->access_grants,
+            Body::read_list(
+                $res,
+                "access_grants",
+                "/access_grants/unmanaged/list",
+            ),
         );
     }
 
@@ -102,31 +118,25 @@ class AccessGrantsUnmanagedClient
      * When converting an unmanaged access grant to managed, all associated access methods will also be converted to managed.
      *
      * @param string $access_grant_id ID of the unmanaged Access Grant to update.
-     * @param bool $is_managed Must be set to true to convert the unmanaged access grant to managed.
+     * @param true $is_managed Must be set to true to convert the unmanaged access grant to managed.
      * @param string $access_grant_key Unique key for the access grant. If not provided, the existing key will be preserved.
      * @return void OK
      */
     public function update(
         string $access_grant_id,
-        bool $is_managed,
+        true $is_managed,
         ?string $access_grant_key = null,
     ): void {
         $request_payload = [];
 
-        if ($access_grant_id !== null) {
-            $request_payload["access_grant_id"] = $access_grant_id;
-        }
-        if ($is_managed !== null) {
-            $request_payload["is_managed"] = $is_managed;
-        }
+        $request_payload["access_grant_id"] = $access_grant_id;
+        $request_payload["is_managed"] = $is_managed;
         if ($access_grant_key !== null) {
             $request_payload["access_grant_key"] = $access_grant_key;
         }
 
-        $this->seam->request(
-            "POST",
-            "/access_grants/unmanaged/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PATCH", "/access_grants/unmanaged/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

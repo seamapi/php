@@ -1,8 +1,8 @@
 <?php
 
-namespace Seam\Utils;
+namespace Seam;
 
-class PackageVersion
+class Version
 {
     /**
      * The version of this package.
@@ -10,7 +10,7 @@ class PackageVersion
      * Injected from package.json when a version is cut, by the version
      * lifecycle script in package.json. Do not edit by hand.
      */
-    public const VERSION = "3.5.1";
+    public const VERSION = "4.0.0-beta.19";
 
     public static function get(): string
     {

@@ -2,17 +2,28 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\AcsEntrance;
 use Seam\Resources\AcsUser;
-use Seam\SeamClient;
 
 class AcsUsersClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -28,18 +39,12 @@ class AcsUsersClient
     ): void {
         $request_payload = [];
 
-        if ($acs_access_group_id !== null) {
-            $request_payload["acs_access_group_id"] = $acs_access_group_id;
-        }
-        if ($acs_user_id !== null) {
-            $request_payload["acs_user_id"] = $acs_user_id;
-        }
+        $request_payload["acs_access_group_id"] = $acs_access_group_id;
+        $request_payload["acs_user_id"] = $acs_user_id;
 
-        $this->seam->request(
-            "POST",
-            "/acs/users/add_to_access_group",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PUT", "/acs/users/add_to_access_group", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -48,7 +53,7 @@ class AcsUsersClient
      * @param string $acs_system_id ID of the access system to which you want to add the new access system user.
      * @param string $full_name Full name of the new access system user.
      * @param mixed $access_schedule `starts_at` and `ends_at` timestamps for the new access system user's access. If you specify an `access_schedule`, you may include both `starts_at` and `ends_at`. If you omit `starts_at`, it defaults to the current time. `ends_at` is optional and must be a time in the future and after `starts_at`.
-     * @param array $acs_access_group_ids Array of access group IDs to indicate the access groups to which you want to add the new access system user.
+     * @param list<string> $acs_access_group_ids Array of access group IDs to indicate the access groups to which you want to add the new access system user.
      * @param string $email
      * @param string $email_address Email address of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
      * @param string $phone_number Phone number of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
@@ -67,12 +72,8 @@ class AcsUsersClient
     ): AcsUser {
         $request_payload = [];
 
-        if ($acs_system_id !== null) {
-            $request_payload["acs_system_id"] = $acs_system_id;
-        }
-        if ($full_name !== null) {
-            $request_payload["full_name"] = $full_name;
-        }
+        $request_payload["acs_system_id"] = $acs_system_id;
+        $request_payload["full_name"] = $full_name;
         if ($access_schedule !== null) {
             $request_payload["access_schedule"] = $access_schedule;
         }
@@ -92,13 +93,15 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/users/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/users/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        return AcsUser::from_json($res->acs_user);
+        return AcsUser::from_json(
+            Body::read($res, "acs_user", "/acs/users/create"),
+        );
     }
 
     /**
@@ -114,6 +117,15 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
+        if (
+            $acs_system_id === null &&
+            $acs_user_id === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/delete",
+            );
+        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -126,11 +138,9 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
-            "POST",
-            "/acs/users/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("DELETE", "/acs/users/delete", [
+            "query" => $request_payload,
+        ]);
     }
 
     /**
@@ -146,6 +156,15 @@ class AcsUsersClient
         ?string $acs_system_id = null,
         ?string $user_identity_id = null,
     ): AcsUser {
+        if (
+            $acs_user_id === null &&
+            $acs_system_id === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/get",
+            );
+        }
         $request_payload = [];
 
         if ($acs_user_id !== null) {
@@ -158,13 +177,15 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/users/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/acs/users/get", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return AcsUser::from_json($res->acs_user);
+        return AcsUser::from_json(
+            Body::read($res, "acs_user", "/acs/users/get"),
+        );
     }
 
     /**
@@ -173,18 +194,19 @@ class AcsUsersClient
      * @param string $acs_system_id ID of the `acs_system` for which you want to retrieve all access system users.
      * @param string $created_before Timestamp by which to limit returned access system users. Returns users created before this timestamp.
      * @param int $limit Maximum number of records to return per page.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned access system users to include all records that satisfy a partial match using `full_name`, `phone_number`, `email_address`, `acs_user_id`, `user_identity_id`, `user_identity_full_name` or `user_identity_phone_number`.
      * @param string $user_identity_email_address Email address of the user identity for which you want to retrieve all access system users.
      * @param string $user_identity_id ID of the user identity for which you want to retrieve all access system users.
      * @param string $user_identity_phone_number Phone number of the user identity for which you want to retrieve all access system users, in [E.164 format](https://www.itu.int/rec/T-REC-E.164/en) (for example, `+15555550100`).
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
         ?string $acs_system_id = null,
         ?string $created_before = null,
         ?int $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?string $user_identity_email_address = null,
         ?string $user_identity_id = null,
@@ -222,17 +244,20 @@ class AcsUsersClient
             ] = $user_identity_phone_number;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/users/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/acs/users/list", [
+                "query" => $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
             $on_response($res);
         }
 
-        return array_map(fn($r) => AcsUser::from_json($r), $res->acs_users);
+        return array_map(
+            fn($r) => AcsUser::from_json($r),
+            Body::read_list($res, "acs_users", "/acs/users/list"),
+        );
     }
 
     /**
@@ -248,6 +273,15 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): array {
+        if (
+            $acs_system_id === null &&
+            $acs_user_id === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/list_accessible_entrances",
+            );
+        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -260,15 +294,21 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/users/list_accessible_entrances",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "GET",
+                "/acs/users/list_accessible_entrances",
+                ["query" => $request_payload],
+            ),
         );
 
         return array_map(
             fn($r) => AcsEntrance::from_json($r),
-            $res->acs_entrances,
+            Body::read_list(
+                $res,
+                "acs_entrances",
+                "/acs/users/list_accessible_entrances",
+            ),
         );
     }
 
@@ -287,9 +327,7 @@ class AcsUsersClient
     ): void {
         $request_payload = [];
 
-        if ($acs_access_group_id !== null) {
-            $request_payload["acs_access_group_id"] = $acs_access_group_id;
-        }
+        $request_payload["acs_access_group_id"] = $acs_access_group_id;
         if ($acs_user_id !== null) {
             $request_payload["acs_user_id"] = $acs_user_id;
         }
@@ -297,10 +335,10 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
-            "POST",
+        $this->client->request(
+            "DELETE",
             "/acs/users/remove_from_access_group",
-            json: (object) $request_payload,
+            ["query" => $request_payload],
         );
     }
 
@@ -317,6 +355,15 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
+        if (
+            $acs_system_id === null &&
+            $acs_user_id === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/revoke_access_to_all_entrances",
+            );
+        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -329,10 +376,10 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/acs/users/revoke_access_to_all_entrances",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -349,6 +396,15 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
+        if (
+            $acs_system_id === null &&
+            $acs_user_id === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/suspend",
+            );
+        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -361,11 +417,9 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
-            "POST",
-            "/acs/users/suspend",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/users/suspend", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -381,6 +435,15 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
+        if (
+            $acs_system_id === null &&
+            $acs_user_id === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/unsuspend",
+            );
+        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -393,11 +456,9 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
-            "POST",
-            "/acs/users/unsuspend",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/users/unsuspend", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -425,6 +486,21 @@ class AcsUsersClient
         ?string $phone_number = null,
         ?string $user_identity_id = null,
     ): void {
+        if (
+            $access_schedule === null &&
+            $acs_system_id === null &&
+            $acs_user_id === null &&
+            $email === null &&
+            $email_address === null &&
+            $full_name === null &&
+            $hid_acs_system_id === null &&
+            $phone_number === null &&
+            $user_identity_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /acs/users/update",
+            );
+        }
         $request_payload = [];
 
         if ($access_schedule !== null) {
@@ -455,10 +531,8 @@ class AcsUsersClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
-            "POST",
-            "/acs/users/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PATCH", "/acs/users/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

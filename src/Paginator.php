@@ -2,12 +2,17 @@
 
 namespace Seam;
 
+/**
+ * Fetches and walks the pages of a list endpoint.
+ *
+ * Create one with `Seam::createPaginator`, passing a callable that invokes the
+ * list method with a params array.
+ */
 class Paginator
 {
     private $request;
-    private $params;
-    private $pagination_cache = [];
-    private const FIRST_PAGE = "FIRST_PAGE";
+    private array $params;
+    private ?Pagination $pagination = null;
 
     public function __construct(callable $request, array $params = [])
     {
@@ -15,59 +20,81 @@ class Paginator
         $this->params = $params;
     }
 
+    /**
+     * @return array{0: array, 1: Pagination}
+     */
     public function firstPage(): array
     {
-        $request = $this->request;
-        $params = $this->params;
-
-        $params["on_response"] = fn($response) => $this->cachePagination(
-            $response,
-            self::FIRST_PAGE,
-        );
-
-        $data = $request($params);
-
-        return [$data, $this->pagination_cache[self::FIRST_PAGE]];
+        return $this->fetchPage(null);
     }
 
-    public function nextPage(string $next_page_cursor): array
+    /**
+     * @return array{0: array, 1: Pagination}
+     */
+    public function nextPage(?string $next_page_cursor): array
     {
-        if ($next_page_cursor === null) {
+        if ($next_page_cursor === null || $next_page_cursor === "") {
             throw new \InvalidArgumentException(
-                "Cannot get the next page with a null next_page_cursor",
+                "Cannot get the next page without a next_page_cursor",
             );
         }
 
+        return $this->fetchPage($next_page_cursor);
+    }
+
+    /**
+     * @return array{0: array, 1: Pagination}
+     */
+    private function fetchPage(?string $cursor): array
+    {
         $request = $this->request;
         $params = $this->params;
 
-        $params["page_cursor"] = $next_page_cursor;
-        $params["on_response"] = fn($response) => $this->cachePagination(
-            $response,
-            $next_page_cursor,
-        );
+        if ($cursor !== null) {
+            $params["page_cursor"] = $cursor;
+        }
+
+        // Chained rather than replaced, so a callback the caller passed in
+        // through the params still fires.
+        $on_response = $params["on_response"] ?? null;
+
+        $this->pagination = null;
+
+        $params["on_response"] = function ($response) use ($on_response): void {
+            $this->readPagination($response);
+
+            if (is_callable($on_response)) {
+                $on_response($response);
+            }
+        };
 
         $data = $request($params);
 
-        return [$data, $this->pagination_cache[$next_page_cursor]];
+        if ($this->pagination === null) {
+            throw new \InvalidArgumentException(
+                "Cannot use a paginator with an unpaginated endpoint",
+            );
+        }
+
+        return [$data, $this->pagination];
     }
 
-    private function cachePagination($response, $next_page_cursor)
+    private function readPagination($response): void
     {
-        $this->pagination_cache[$next_page_cursor] = $response->pagination;
+        if (!is_object($response) || !isset($response->pagination)) {
+            throw new \InvalidArgumentException(
+                "Cannot use a paginator with an unpaginated endpoint",
+            );
+        }
+
+        $this->pagination = Pagination::from_json($response->pagination);
     }
 
     public function flattenToArray(): array
     {
         $items = [];
 
-        [$response, $pagination] = $this->firstPage();
-        $items = array_merge($items, $response);
-
-        while ($pagination->has_next_page) {
-            [$response, $pagination] = $this->nextPage(
-                $pagination->next_page_cursor,
-            );
+        foreach ($this->walk() as [$response]) {
             $items = array_merge($items, $response);
         }
 
@@ -76,20 +103,35 @@ class Paginator
 
     public function flatten()
     {
-        [$current, $pagination] = $this->firstPage();
-
-        foreach ($current as $item) {
-            yield $item;
-        }
-
-        while ($pagination->has_next_page) {
-            [$current, $pagination] = $this->nextPage(
-                $pagination->next_page_cursor,
-            );
-
-            foreach ($current as $item) {
+        foreach ($this->walk() as [$response]) {
+            foreach ($response as $item) {
                 yield $item;
             }
+        }
+    }
+
+    /**
+     * @return \Generator<array{0: array, 1: Pagination}>
+     */
+    private function walk(): \Generator
+    {
+        $page = $this->firstPage();
+        $seen = [];
+
+        yield $page;
+
+        while ($page[1]->has_next_page) {
+            $cursor = $page[1]->next_page_cursor;
+
+            if ($cursor === null || isset($seen[$cursor])) {
+                return;
+            }
+
+            $seen[$cursor] = true;
+
+            $page = $this->nextPage($cursor);
+
+            yield $page;
         }
     }
 }

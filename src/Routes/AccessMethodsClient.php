@@ -2,19 +2,31 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
+use Seam\Http\ResolveActionAttempt;
+use Seam\NullValue;
 use Seam\Resources\AccessMethod;
 use Seam\Resources\ActionAttempt;
 use Seam\Resources\Batch;
-use Seam\SeamClient;
 
 class AccessMethodsClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
+
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
     public AccessMethodsUnmanagedClient $unmanaged;
-    public function __construct(SeamClient $seam)
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
-        $this->unmanaged = new AccessMethodsUnmanagedClient($seam);
+        $this->client = $client;
+        $this->defaults = $defaults;
+        $this->unmanaged = new AccessMethodsUnmanagedClient($client, $defaults);
     }
 
     /**
@@ -22,37 +34,37 @@ class AccessMethodsClient
      *
      * @param string $access_method_id ID of the `access_method` to assign the credential to.
      * @param string $card_number Card number of the credential to assign.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function assign_card(
         string $access_method_id,
         string $card_number,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($access_method_id !== null) {
-            $request_payload["access_method_id"] = $access_method_id;
-        }
-        if ($card_number !== null) {
-            $request_payload["card_number"] = $card_number;
-        }
+        $request_payload["access_method_id"] = $access_method_id;
+        $request_payload["card_number"] = $card_number;
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_methods/assign_card",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_methods/assign_card", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/access_methods/assign_card",
+                ),
+            ),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 
     /**
@@ -68,6 +80,15 @@ class AccessMethodsClient
         ?string $access_grant_id = null,
         ?string $reservation_key = null,
     ): void {
+        if (
+            $access_method_id === null &&
+            $access_grant_id === null &&
+            $reservation_key === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_methods/delete",
+            );
+        }
         $request_payload = [];
 
         if ($access_method_id !== null) {
@@ -80,11 +101,9 @@ class AccessMethodsClient
             $request_payload["reservation_key"] = $reservation_key;
         }
 
-        $this->seam->request(
-            "POST",
-            "/access_methods/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("DELETE", "/access_methods/delete", [
+            "query" => $request_payload,
+        ]);
     }
 
     /**
@@ -92,37 +111,33 @@ class AccessMethodsClient
      *
      * @param string $access_method_id ID of the `access_method` to encode onto a card.
      * @param string $acs_encoder_id ID of the `acs_encoder` to use to encode the `access_method`.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function encode(
         string $access_method_id,
         string $acs_encoder_id,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($access_method_id !== null) {
-            $request_payload["access_method_id"] = $access_method_id;
-        }
-        if ($acs_encoder_id !== null) {
-            $request_payload["acs_encoder_id"] = $acs_encoder_id;
-        }
+        $request_payload["access_method_id"] = $access_method_id;
+        $request_payload["acs_encoder_id"] = $acs_encoder_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_methods/encode",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_methods/encode", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/access_methods/encode"),
+            ),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 
     /**
@@ -135,25 +150,25 @@ class AccessMethodsClient
     {
         $request_payload = [];
 
-        if ($access_method_id !== null) {
-            $request_payload["access_method_id"] = $access_method_id;
-        }
+        $request_payload["access_method_id"] = $access_method_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_methods/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/access_methods/get", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return AccessMethod::from_json($res->access_method);
+        return AccessMethod::from_json(
+            Body::read($res, "access_method", "/access_methods/get"),
+        );
     }
 
     /**
      * Gets all related resources for one or more Access Methods.
      *
-     * @param array $access_method_ids IDs of the access methods that you want to get along with their related resources.
-     * @param array $exclude
-     * @param array $include
+     * @param list<string> $access_method_ids IDs of the access methods that you want to get along with their related resources.
+     * @param list<string> $exclude
+     * @param list<string> $include
      * @return Batch OK
      */
     public function get_related(
@@ -163,9 +178,7 @@ class AccessMethodsClient
     ): Batch {
         $request_payload = [];
 
-        if ($access_method_ids !== null) {
-            $request_payload["access_method_ids"] = $access_method_ids;
-        }
+        $request_payload["access_method_ids"] = $access_method_ids;
         if ($exclude !== null) {
             $request_payload["exclude"] = $exclude;
         }
@@ -173,13 +186,15 @@ class AccessMethodsClient
             $request_payload["include"] = $include;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_methods/get_related",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/access_methods/get_related", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return Batch::from_json($res->batch);
+        return Batch::from_json(
+            Body::read($res, "batch", "/access_methods/get_related"),
+        );
     }
 
     /**
@@ -191,8 +206,9 @@ class AccessMethodsClient
      * @param string $acs_entrance_id ID of the entrance for which you want to retrieve all access methods that grant access to it.
      * @param string $device_id ID of the device by which to filter the returned access methods. Must be combined with `access_grant_id`, `access_grant_key`, or `acs_entrance_id`.
      * @param int $limit Maximum number of records to return per page.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $space_id ID of the space by which to filter the returned access methods. Must be combined with `access_grant_id`, `access_grant_key`, or `acs_entrance_id`.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -202,10 +218,22 @@ class AccessMethodsClient
         ?string $acs_entrance_id = null,
         ?string $device_id = null,
         ?int $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $space_id = null,
         ?callable $on_response = null,
     ): array {
+        if (
+            $access_code_id === null &&
+            $access_grant_id === null &&
+            $access_grant_key === null &&
+            $acs_entrance_id === null &&
+            $device_id === null &&
+            $space_id === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /access_methods/list",
+            );
+        }
         $request_payload = [];
 
         if ($access_code_id !== null) {
@@ -233,10 +261,10 @@ class AccessMethodsClient
             $request_payload["space_id"] = $space_id;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_methods/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/access_methods/list", [
+                "query" => $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -245,7 +273,7 @@ class AccessMethodsClient
 
         return array_map(
             fn($r) => AccessMethod::from_json($r),
-            $res->access_methods,
+            Body::read_list($res, "access_methods", "/access_methods/list"),
         );
     }
 
@@ -254,36 +282,36 @@ class AccessMethodsClient
      *
      * @param string $access_method_id ID of the cloud_key `access_method` to use for the unlock operation.
      * @param string $acs_entrance_id ID of the entrance to unlock.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function unlock_door(
         string $access_method_id,
         string $acs_entrance_id,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($access_method_id !== null) {
-            $request_payload["access_method_id"] = $access_method_id;
-        }
-        if ($acs_entrance_id !== null) {
-            $request_payload["acs_entrance_id"] = $acs_entrance_id;
-        }
+        $request_payload["access_method_id"] = $access_method_id;
+        $request_payload["acs_entrance_id"] = $acs_entrance_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/access_methods/unlock_door",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/access_methods/unlock_door", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/access_methods/unlock_door",
+                ),
+            ),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 }

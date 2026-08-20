@@ -2,16 +2,27 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\ThermostatSchedule;
-use Seam\SeamClient;
 
 class ThermostatsSchedulesClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -22,7 +33,7 @@ class ThermostatsSchedulesClient
      * @param string $ends_at Date and time at which the new thermostat schedule ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @param string $starts_at Date and time at which the new thermostat schedule starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @param bool $is_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings while the new schedule is active. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-     * @param int $max_override_period_minutes Number of minutes for which a person at the thermostat or using the API can change the thermostat's settings after the activation of the scheduled climate preset. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+     * @param int|NullValue $max_override_period_minutes Number of minutes for which a person at the thermostat or using the API can change the thermostat's settings after the activation of the scheduled climate preset. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
      * @param string $name Name of the thermostat schedule.
      * @return ThermostatSchedule OK
      */
@@ -32,23 +43,15 @@ class ThermostatsSchedulesClient
         string $ends_at,
         string $starts_at,
         ?bool $is_override_allowed = null,
-        ?int $max_override_period_minutes = null,
+        int|NullValue|null $max_override_period_minutes = null,
         ?string $name = null,
     ): ThermostatSchedule {
         $request_payload = [];
 
-        if ($climate_preset_key !== null) {
-            $request_payload["climate_preset_key"] = $climate_preset_key;
-        }
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($ends_at !== null) {
-            $request_payload["ends_at"] = $ends_at;
-        }
-        if ($starts_at !== null) {
-            $request_payload["starts_at"] = $starts_at;
-        }
+        $request_payload["climate_preset_key"] = $climate_preset_key;
+        $request_payload["device_id"] = $device_id;
+        $request_payload["ends_at"] = $ends_at;
+        $request_payload["starts_at"] = $starts_at;
         if ($is_override_allowed !== null) {
             $request_payload["is_override_allowed"] = $is_override_allowed;
         }
@@ -61,13 +64,19 @@ class ThermostatsSchedulesClient
             $request_payload["name"] = $name;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/schedules/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/schedules/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        return ThermostatSchedule::from_json($res->thermostat_schedule);
+        return ThermostatSchedule::from_json(
+            Body::read(
+                $res,
+                "thermostat_schedule",
+                "/thermostats/schedules/create",
+            ),
+        );
     }
 
     /**
@@ -80,17 +89,11 @@ class ThermostatsSchedulesClient
     {
         $request_payload = [];
 
-        if ($thermostat_schedule_id !== null) {
-            $request_payload[
-                "thermostat_schedule_id"
-            ] = $thermostat_schedule_id;
-        }
+        $request_payload["thermostat_schedule_id"] = $thermostat_schedule_id;
 
-        $this->seam->request(
-            "POST",
-            "/thermostats/schedules/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("DELETE", "/thermostats/schedules/delete", [
+            "query" => $request_payload,
+        ]);
     }
 
     /**
@@ -103,19 +106,21 @@ class ThermostatsSchedulesClient
     {
         $request_payload = [];
 
-        if ($thermostat_schedule_id !== null) {
-            $request_payload[
-                "thermostat_schedule_id"
-            ] = $thermostat_schedule_id;
-        }
+        $request_payload["thermostat_schedule_id"] = $thermostat_schedule_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/schedules/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/thermostats/schedules/get", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return ThermostatSchedule::from_json($res->thermostat_schedule);
+        return ThermostatSchedule::from_json(
+            Body::read(
+                $res,
+                "thermostat_schedule",
+                "/thermostats/schedules/get",
+            ),
+        );
     }
 
     /**
@@ -131,22 +136,24 @@ class ThermostatsSchedulesClient
     ): array {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($user_identifier_key !== null) {
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/schedules/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/thermostats/schedules/list", [
+                "query" => $request_payload,
+            ]),
         );
 
         return array_map(
             fn($r) => ThermostatSchedule::from_json($r),
-            $res->thermostat_schedules,
+            Body::read_list(
+                $res,
+                "thermostat_schedules",
+                "/thermostats/schedules/list",
+            ),
         );
     }
 
@@ -157,7 +164,7 @@ class ThermostatsSchedulesClient
      * @param string $climate_preset_key Key of the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) to use for the thermostat schedule.
      * @param string $ends_at Date and time at which the thermostat schedule ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @param bool $is_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings while the schedule is active. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-     * @param int $max_override_period_minutes Number of minutes for which a person at the thermostat or using the API can change the thermostat's settings after the activation of the scheduled climate preset. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+     * @param int|NullValue $max_override_period_minutes Number of minutes for which a person at the thermostat or using the API can change the thermostat's settings after the activation of the scheduled climate preset. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
      * @param string $name Name of the thermostat schedule.
      * @param string $starts_at Date and time at which the thermostat schedule starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @return void OK
@@ -167,17 +174,13 @@ class ThermostatsSchedulesClient
         ?string $climate_preset_key = null,
         ?string $ends_at = null,
         ?bool $is_override_allowed = null,
-        ?int $max_override_period_minutes = null,
+        int|NullValue|null $max_override_period_minutes = null,
         ?string $name = null,
         ?string $starts_at = null,
     ): void {
         $request_payload = [];
 
-        if ($thermostat_schedule_id !== null) {
-            $request_payload[
-                "thermostat_schedule_id"
-            ] = $thermostat_schedule_id;
-        }
+        $request_payload["thermostat_schedule_id"] = $thermostat_schedule_id;
         if ($climate_preset_key !== null) {
             $request_payload["climate_preset_key"] = $climate_preset_key;
         }
@@ -199,10 +202,8 @@ class ThermostatsSchedulesClient
             $request_payload["starts_at"] = $starts_at;
         }
 
-        $this->seam->request(
-            "POST",
-            "/thermostats/schedules/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PATCH", "/thermostats/schedules/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

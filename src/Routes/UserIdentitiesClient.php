@@ -2,22 +2,36 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\AcsEntrance;
 use Seam\Resources\AcsSystem;
 use Seam\Resources\AcsUser;
 use Seam\Resources\Device;
 use Seam\Resources\InstantKey;
 use Seam\Resources\UserIdentity;
-use Seam\SeamClient;
 
 class UserIdentitiesClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
+
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
     public UserIdentitiesUnmanagedClient $unmanaged;
-    public function __construct(SeamClient $seam)
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
-        $this->unmanaged = new UserIdentitiesUnmanagedClient($seam);
+        $this->client = $client;
+        $this->defaults = $defaults;
+        $this->unmanaged = new UserIdentitiesUnmanagedClient(
+            $client,
+            $defaults,
+        );
     }
 
     /**
@@ -39,9 +53,7 @@ class UserIdentitiesClient
     ): void {
         $request_payload = [];
 
-        if ($acs_user_id !== null) {
-            $request_payload["acs_user_id"] = $acs_user_id;
-        }
+        $request_payload["acs_user_id"] = $acs_user_id;
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
         }
@@ -49,29 +61,27 @@ class UserIdentitiesClient
             $request_payload["user_identity_key"] = $user_identity_key;
         }
 
-        $this->seam->request(
-            "POST",
-            "/user_identities/add_acs_user",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PUT", "/user_identities/add_acs_user", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
      * Creates a new [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
-     * @param array $acs_system_ids List of access system IDs to associate with the new user identity through access system users. If there's no user with the same email address or phone number in the specified access systems, a new access system user is created. If there is an existing user with the same email or phone number in the specified access systems, the user is linked to the user identity.
-     * @param string $email_address Unique email address for the new user identity.
-     * @param string $full_name Full name of the user associated with the new user identity.
-     * @param string $phone_number Unique phone number for the new user identity in E.164 format (for example, +15555550100).
-     * @param string $user_identity_key Unique key for the new user identity.
+     * @param list<string> $acs_system_ids List of access system IDs to associate with the new user identity through access system users. If there's no user with the same email address or phone number in the specified access systems, a new access system user is created. If there is an existing user with the same email or phone number in the specified access systems, the user is linked to the user identity.
+     * @param string|NullValue $email_address Unique email address for the new user identity.
+     * @param string|NullValue $full_name Full name of the user associated with the new user identity.
+     * @param string|NullValue $phone_number Unique phone number for the new user identity in E.164 format (for example, +15555550100).
+     * @param string|NullValue $user_identity_key Unique key for the new user identity.
      * @return UserIdentity OK
      */
     public function create(
         ?array $acs_system_ids = null,
-        ?string $email_address = null,
-        ?string $full_name = null,
-        ?string $phone_number = null,
-        ?string $user_identity_key = null,
+        string|NullValue|null $email_address = null,
+        string|NullValue|null $full_name = null,
+        string|NullValue|null $phone_number = null,
+        string|NullValue|null $user_identity_key = null,
     ): UserIdentity {
         $request_payload = [];
 
@@ -91,13 +101,15 @@ class UserIdentitiesClient
             $request_payload["user_identity_key"] = $user_identity_key;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/user_identities/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/user_identities/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        return UserIdentity::from_json($res->user_identity);
+        return UserIdentity::from_json(
+            Body::read($res, "user_identity", "/user_identities/create"),
+        );
     }
 
     /**
@@ -110,15 +122,11 @@ class UserIdentitiesClient
     {
         $request_payload = [];
 
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
+        $request_payload["user_identity_id"] = $user_identity_id;
 
-        $this->seam->request(
-            "POST",
-            "/user_identities/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("DELETE", "/user_identities/delete", [
+            "query" => $request_payload,
+        ]);
     }
 
     /**
@@ -136,9 +144,7 @@ class UserIdentitiesClient
     ): InstantKey {
         $request_payload = [];
 
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
+        $request_payload["user_identity_id"] = $user_identity_id;
         if ($customization_profile_id !== null) {
             $request_payload[
                 "customization_profile_id"
@@ -148,13 +154,21 @@ class UserIdentitiesClient
             $request_payload["max_use_count"] = $max_use_count;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/user_identities/generate_instant_key",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/user_identities/generate_instant_key",
+                ["json" => (object) $request_payload],
+            ),
         );
 
-        return InstantKey::from_json($res->instant_key);
+        return InstantKey::from_json(
+            Body::read(
+                $res,
+                "instant_key",
+                "/user_identities/generate_instant_key",
+            ),
+        );
     }
 
     /**
@@ -168,6 +182,11 @@ class UserIdentitiesClient
         ?string $user_identity_id = null,
         ?string $user_identity_key = null,
     ): UserIdentity {
+        if ($user_identity_id === null && $user_identity_key === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/get",
+            );
+        }
         $request_payload = [];
 
         if ($user_identity_id !== null) {
@@ -177,13 +196,15 @@ class UserIdentitiesClient
             $request_payload["user_identity_key"] = $user_identity_key;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/user_identities/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/user_identities/get", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return UserIdentity::from_json($res->user_identity);
+        return UserIdentity::from_json(
+            Body::read($res, "user_identity", "/user_identities/get"),
+        );
     }
 
     /**
@@ -199,17 +220,13 @@ class UserIdentitiesClient
     ): void {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
+        $request_payload["device_id"] = $device_id;
+        $request_payload["user_identity_id"] = $user_identity_id;
 
-        $this->seam->request(
-            "POST",
+        $this->client->request(
+            "PUT",
             "/user_identities/grant_access_to_device",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -219,16 +236,17 @@ class UserIdentitiesClient
      * @param string $created_before Timestamp by which to limit returned user identities. Returns user identities created before this timestamp.
      * @param string $credential_manager_acs_system_id `acs_system_id` of the credential manager by which you want to filter the list of user identities.
      * @param int $limit Maximum number of records to return per page.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned user identities to include all records that satisfy a partial match using `full_name`, `phone_number`, `email_address` or `user_identity_id`.
-     * @param array $user_identity_ids Array of user identity IDs by which to filter the list of user identities.
+     * @param list<string> $user_identity_ids Array of user identity IDs by which to filter the list of user identities.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
         ?string $created_before = null,
         ?string $credential_manager_acs_system_id = null,
         ?int $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?array $user_identity_ids = null,
         ?callable $on_response = null,
@@ -256,10 +274,10 @@ class UserIdentitiesClient
             $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/user_identities/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/user_identities/list", [
+                "query" => $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -268,7 +286,7 @@ class UserIdentitiesClient
 
         return array_map(
             fn($r) => UserIdentity::from_json($r),
-            $res->user_identities,
+            Body::read_list($res, "user_identities", "/user_identities/list"),
         );
     }
 
@@ -282,17 +300,24 @@ class UserIdentitiesClient
     {
         $request_payload = [];
 
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
+        $request_payload["user_identity_id"] = $user_identity_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/user_identities/list_accessible_devices",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "GET",
+                "/user_identities/list_accessible_devices",
+                ["query" => $request_payload],
+            ),
         );
 
-        return array_map(fn($r) => Device::from_json($r), $res->devices);
+        return array_map(
+            fn($r) => Device::from_json($r),
+            Body::read_list(
+                $res,
+                "devices",
+                "/user_identities/list_accessible_devices",
+            ),
+        );
     }
 
     /**
@@ -305,19 +330,23 @@ class UserIdentitiesClient
     {
         $request_payload = [];
 
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
+        $request_payload["user_identity_id"] = $user_identity_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/user_identities/list_accessible_entrances",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "GET",
+                "/user_identities/list_accessible_entrances",
+                ["query" => $request_payload],
+            ),
         );
 
         return array_map(
             fn($r) => AcsEntrance::from_json($r),
-            $res->acs_entrances,
+            Body::read_list(
+                $res,
+                "acs_entrances",
+                "/user_identities/list_accessible_entrances",
+            ),
         );
     }
 
@@ -331,17 +360,22 @@ class UserIdentitiesClient
     {
         $request_payload = [];
 
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
+        $request_payload["user_identity_id"] = $user_identity_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/user_identities/list_acs_systems",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/user_identities/list_acs_systems", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return array_map(fn($r) => AcsSystem::from_json($r), $res->acs_systems);
+        return array_map(
+            fn($r) => AcsSystem::from_json($r),
+            Body::read_list(
+                $res,
+                "acs_systems",
+                "/user_identities/list_acs_systems",
+            ),
+        );
     }
 
     /**
@@ -354,17 +388,22 @@ class UserIdentitiesClient
     {
         $request_payload = [];
 
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
+        $request_payload["user_identity_id"] = $user_identity_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/user_identities/list_acs_users",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/user_identities/list_acs_users", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return array_map(fn($r) => AcsUser::from_json($r), $res->acs_users);
+        return array_map(
+            fn($r) => AcsUser::from_json($r),
+            Body::read_list(
+                $res,
+                "acs_users",
+                "/user_identities/list_acs_users",
+            ),
+        );
     }
 
     /**
@@ -380,18 +419,12 @@ class UserIdentitiesClient
     ): void {
         $request_payload = [];
 
-        if ($acs_user_id !== null) {
-            $request_payload["acs_user_id"] = $acs_user_id;
-        }
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
+        $request_payload["acs_user_id"] = $acs_user_id;
+        $request_payload["user_identity_id"] = $user_identity_id;
 
-        $this->seam->request(
-            "POST",
-            "/user_identities/remove_acs_user",
-            json: (object) $request_payload,
-        );
+        $this->client->request("DELETE", "/user_identities/remove_acs_user", [
+            "query" => $request_payload,
+        ]);
     }
 
     /**
@@ -407,17 +440,13 @@ class UserIdentitiesClient
     ): void {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
+        $request_payload["device_id"] = $device_id;
+        $request_payload["user_identity_id"] = $user_identity_id;
 
-        $this->seam->request(
-            "POST",
+        $this->client->request(
+            "DELETE",
             "/user_identities/revoke_access_to_device",
-            json: (object) $request_payload,
+            ["query" => $request_payload],
         );
     }
 
@@ -425,24 +454,22 @@ class UserIdentitiesClient
      * Updates a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * @param string $user_identity_id ID of the user identity that you want to update.
-     * @param string $email_address Unique email address for the user identity.
-     * @param string $full_name Full name of the user associated with the user identity.
-     * @param string $phone_number Unique phone number for the user identity.
-     * @param string $user_identity_key Unique key for the user identity.
+     * @param string|NullValue $email_address Unique email address for the user identity.
+     * @param string|NullValue $full_name Full name of the user associated with the user identity.
+     * @param string|NullValue $phone_number Unique phone number for the user identity.
+     * @param string|NullValue $user_identity_key Unique key for the user identity.
      * @return void OK
      */
     public function update(
         string $user_identity_id,
-        ?string $email_address = null,
-        ?string $full_name = null,
-        ?string $phone_number = null,
-        ?string $user_identity_key = null,
+        string|NullValue|null $email_address = null,
+        string|NullValue|null $full_name = null,
+        string|NullValue|null $phone_number = null,
+        string|NullValue|null $user_identity_key = null,
     ): void {
         $request_payload = [];
 
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
+        $request_payload["user_identity_id"] = $user_identity_id;
         if ($email_address !== null) {
             $request_payload["email_address"] = $email_address;
         }
@@ -456,10 +483,8 @@ class UserIdentitiesClient
             $request_payload["user_identity_key"] = $user_identity_key;
         }
 
-        $this->seam->request(
-            "POST",
-            "/user_identities/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PATCH", "/user_identities/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

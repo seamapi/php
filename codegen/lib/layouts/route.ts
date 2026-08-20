@@ -8,25 +8,40 @@ import {
   sortPhpClientMethodParameters,
 } from '../class-model.js'
 
-const seamClientClass = 'Seam\\SeamClient'
+const clientInterfaceClass = 'GuzzleHttp\\ClientInterface'
+const bodyClass = 'Seam\\Http\\Body'
+const nullValueClass = 'Seam\\NullValue'
+const resolveActionAttemptClass = 'Seam\\Http\\ResolveActionAttempt'
 const resourcesNamespace = 'Seam\\Resources'
-const actionAttemptErrorClasses = [
-  'Seam\\ActionAttemptFailedError',
-  'Seam\\ActionAttemptTimeoutError',
-]
 
 export interface MethodLayoutContext {
   methodName: string
+  httpMethod: string
+  usesQueryParams: boolean
   description: string
   responseDescription: string
   isDeprecated: boolean
   deprecationMessage: string
-  parameters: Array<{ name: string; type: string; description: string }>
+  parameters: Array<{
+    name: string
+    type: string
+    phpDocType: string
+    description: string
+    required: boolean
+    isOptional: boolean
+    isNullable: boolean
+  }>
+  documentedParameters: Array<{
+    name: string
+    type: string
+    description: string
+  }>
   path: string
   returnType: string
   hasParams: boolean
+  requiresAtLeastOneParameter: boolean
+  atLeastOneParameterNames: string[]
   signatureParams: string
-  paramNames: string[]
   usesActionAttempt: boolean
   usesOnResponse: boolean
   returnsVoid: boolean
@@ -40,21 +55,55 @@ export interface ClientLayoutContext {
   hasChildClients: boolean
   childClients: Array<{ clientName: string; namespace: string }>
   methods: MethodLayoutContext[]
-  isActionAttempts: boolean
 }
 
 export interface RouteLayoutContext extends ClientLayoutContext {
   useStatements: string[]
 }
 
+const paginationParameters = new Set(['limit', 'page_cursor'])
+
+const waitForActionAttemptParameter = {
+  name: 'wait_for_action_attempt',
+  type: 'bool|array|null',
+  description:
+    'Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.',
+  required: false,
+}
+
+const onResponseParameter = {
+  name: 'on_response',
+  type: 'callable|null',
+  description:
+    'Called with the raw response envelope, used by the paginator to read the pagination metadata.',
+  required: false,
+}
+
+// A nullable param accepts the NullValue::NULL sentinel, which sends an
+// explicit null to unset a value. A merely optional param does not: optional
+// means omit by passing null, and sending null there would unset a value
+// instead. Optionality composes with nullability rather than replacing it.
+const getParameterPhpType = (parameter: {
+  type: string
+  isOptional: boolean
+  isNullable: boolean
+}): string => {
+  const { type, isOptional, isNullable } = parameter
+  if (type === 'mixed') return type
+  if (isNullable) return `${type}|NullValue${isOptional ? '|null' : ''}`
+  if (!isOptional) return type
+  return type.includes('|') ? `${type}|null` : `?${type}`
+}
+
 const getMethodLayoutContext = (
   method: PhpClientMethod,
-  clientName: string,
 ): MethodLayoutContext => {
   const { methodName, path, parameters, returnResource, returnPath } = method
 
+  // A method returning a list of action attempts is an ordinary list
+  // endpoint: only a single returned attempt is resolved.
   const usesActionAttempt =
-    returnResource === 'ActionAttempt' && clientName !== 'ActionAttempts'
+    returnResource === 'ActionAttempt' && !method.isArrayResponse
   const usesOnResponse =
     parameters.some((p) => p.name === 'page_cursor') && methodName === 'list'
   const returnsVoid = returnResource === ''
@@ -65,32 +114,67 @@ const getMethodLayoutContext = (
       : 'void'
 
   const sortedParameters = sortPhpClientMethodParameters(parameters)
-
   const signatureParams = sortedParameters
     .map(
       (p) =>
-        `${!(p.required ?? false) && p.type !== 'mixed' ? '?' : ''}${p.type} $${p.name}${(p.required ?? false) ? '' : ' = null'}`,
+        `${getParameterPhpType(p)} $${p.name}${p.isOptional ? ' = null' : ''}`,
     )
-    .concat(usesActionAttempt ? ['bool $wait_for_action_attempt = true'] : [])
+    .concat(
+      usesActionAttempt
+        ? ['bool|array|null $wait_for_action_attempt = null']
+        : [],
+    )
     .concat(usesOnResponse ? ['?callable $on_response = null'] : [])
     .join(', ')
 
+  const atLeastOneParameterNames = sortedParameters
+    .map(({ name }) => name)
+    .filter((name) => !paginationParameters.has(name))
+
+  const endpointParameters = sortedParameters.map(
+    ({ name, type, phpDocType, description, isOptional, isNullable }) => ({
+      name,
+      type,
+      phpDocType,
+      description,
+      required: !isOptional,
+      isOptional,
+      isNullable,
+    }),
+  )
+  const documentedEndpointParameters = endpointParameters.map(
+    ({ name, type, phpDocType, description, isNullable }) => ({
+      name,
+      type:
+        isNullable && type !== 'mixed' ? `${phpDocType}|NullValue` : phpDocType,
+      description,
+    }),
+  )
+
   return {
     methodName,
+    httpMethod: method.httpMethod,
+    usesQueryParams: ['GET', 'DELETE'].includes(method.httpMethod),
     description: method.description,
     responseDescription: method.responseDescription,
     isDeprecated: method.isDeprecated,
     deprecationMessage: method.deprecationMessage,
-    parameters: sortedParameters.map(({ name, type, description }) => ({
-      name,
-      type,
-      description,
-    })),
+    // The request payload is built from the endpoint parameters alone.
+    parameters: endpointParameters,
+    // The SDK level parameters are documented alongside them so editors
+    // surface all of them, but they never reach the payload.
+    documentedParameters: [
+      ...documentedEndpointParameters,
+      ...(usesActionAttempt ? [waitForActionAttemptParameter] : []),
+      ...(usesOnResponse ? [onResponseParameter] : []),
+    ],
     path,
     returnType,
     hasParams: parameters.length > 0,
+    requiresAtLeastOneParameter:
+      method.requiresAtLeastOneParameter && atLeastOneParameterNames.length > 0,
+    atLeastOneParameterNames,
     signatureParams,
-    paramNames: sortedParameters.map((p) => p.name),
     usesActionAttempt,
     usesOnResponse,
     returnsVoid,
@@ -100,44 +184,47 @@ const getMethodLayoutContext = (
   }
 }
 
-// Child clients live in the same namespace as their parent, so only the
-// SeamClient, the resource classes returned by the methods, and the action
-// attempt errors thrown by poll_until_ready need importing.
-const getUseStatements = (
-  client: PhpClient,
-  isActionAttempts: boolean,
-): string[] => {
+// Child clients live in the same namespace as their parent, so only the HTTP
+// client, the action attempt resolver, and the resource classes returned by
+// the methods need importing.
+const getUseStatements = (client: PhpClient): string[] => {
   const resourceNames = new Set(
     client.methods
       .map((m) => m.returnResource)
       .filter((resourceName) => resourceName !== ''),
   )
 
-  if (isActionAttempts) resourceNames.add('ActionAttempt')
+  const usesActionAttempt = client.methods.some(
+    (m) => m.returnResource === 'ActionAttempt' && !m.isArrayResponse,
+  )
+
+  // Void endpoints never read the response, so they do not decode it.
+  const readsBody = client.methods.some((m) => m.returnResource !== '')
+
+  // Only nullable params reference the null sentinel type; importing it
+  // elsewhere would trip the unused-import lint.
+  const usesNullValue = client.methods.some((m) =>
+    m.parameters.some((p) => p.isNullable && p.type !== 'mixed'),
+  )
 
   return [
-    seamClientClass,
+    clientInterfaceClass,
+    ...(readsBody ? [bodyClass] : []),
+    ...(usesNullValue ? [nullValueClass] : []),
+    ...(usesActionAttempt ? [resolveActionAttemptClass] : []),
     ...[...resourceNames].map((name) => `${resourcesNamespace}\\${name}`),
-    ...(isActionAttempts ? actionAttemptErrorClasses : []),
   ].sort((a, b) => a.localeCompare(b))
 }
 
 export const setRouteLayoutContext = (
   client: PhpClient,
-): RouteLayoutContext => {
-  const isActionAttempts = client.clientName === 'ActionAttempts'
-
-  return {
-    useStatements: getUseStatements(client, isActionAttempts),
-    clientName: client.clientName,
-    hasChildClients: client.childClientIdentifiers.length > 0,
-    childClients: client.childClientIdentifiers.map((i) => ({
-      clientName: i.clientName,
-      namespace: i.namespace,
-    })),
-    methods: client.methods.map((m) =>
-      getMethodLayoutContext(m, client.clientName),
-    ),
-    isActionAttempts,
-  }
-}
+): RouteLayoutContext => ({
+  useStatements: getUseStatements(client),
+  clientName: client.clientName,
+  hasChildClients: client.childClientIdentifiers.length > 0,
+  childClients: client.childClientIdentifiers.map((i) => ({
+    clientName: i.clientName,
+    namespace: i.namespace,
+  })),
+  methods: client.methods.map(getMethodLayoutContext),
+})

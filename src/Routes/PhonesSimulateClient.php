@@ -2,16 +2,26 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\Phone;
-use Seam\SeamClient;
 
 class PhonesSimulateClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -31,9 +41,7 @@ class PhonesSimulateClient
     ): Phone {
         $request_payload = [];
 
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
+        $request_payload["user_identity_id"] = $user_identity_id;
         if ($assa_abloy_metadata !== null) {
             $request_payload["assa_abloy_metadata"] = $assa_abloy_metadata;
         }
@@ -46,12 +54,16 @@ class PhonesSimulateClient
             $request_payload["phone_metadata"] = $phone_metadata;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/phones/simulate/create_sandbox_phone",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/phones/simulate/create_sandbox_phone",
+                ["json" => (object) $request_payload],
+            ),
         );
 
-        return Phone::from_json($res->phone);
+        return Phone::from_json(
+            Body::read($res, "phone", "/phones/simulate/create_sandbox_phone"),
+        );
     }
 }

@@ -4,14 +4,16 @@ namespace Seam;
 
 use Seam\Resources\ActionAttempt;
 
-class ActionAttemptError extends \Exception
+/**
+ * Base class for the errors raised while resolving an action attempt.
+ */
+class ActionAttemptError extends \RuntimeException implements SeamException
 {
     private ActionAttempt $actionAttempt;
 
     public function __construct(string $message, ActionAttempt $actionAttempt)
     {
         parent::__construct($message);
-        $this->name = get_class($this);
         $this->actionAttempt = $actionAttempt;
     }
 

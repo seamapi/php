@@ -2,16 +2,26 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\InstantKey;
-use Seam\SeamClient;
 
 class InstantKeysClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -24,15 +34,11 @@ class InstantKeysClient
     {
         $request_payload = [];
 
-        if ($instant_key_id !== null) {
-            $request_payload["instant_key_id"] = $instant_key_id;
-        }
+        $request_payload["instant_key_id"] = $instant_key_id;
 
-        $this->seam->request(
-            "POST",
-            "/instant_keys/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("DELETE", "/instant_keys/delete", [
+            "query" => $request_payload,
+        ]);
     }
 
     /**
@@ -46,6 +52,11 @@ class InstantKeysClient
         ?string $instant_key_id = null,
         ?string $instant_key_url = null,
     ): InstantKey {
+        if ($instant_key_id === null && $instant_key_url === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /instant_keys/get",
+            );
+        }
         $request_payload = [];
 
         if ($instant_key_id !== null) {
@@ -55,13 +66,15 @@ class InstantKeysClient
             $request_payload["instant_key_url"] = $instant_key_url;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/instant_keys/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/instant_keys/get", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return InstantKey::from_json($res->instant_key);
+        return InstantKey::from_json(
+            Body::read($res, "instant_key", "/instant_keys/get"),
+        );
     }
 
     /**
@@ -78,15 +91,15 @@ class InstantKeysClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/instant_keys/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/instant_keys/list", [
+                "query" => $request_payload,
+            ]),
         );
 
         return array_map(
             fn($r) => InstantKey::from_json($r),
-            $res->instant_keys,
+            Body::read_list($res, "instant_keys", "/instant_keys/list"),
         );
     }
 }

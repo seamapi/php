@@ -13,7 +13,7 @@ vendor
 tmp
 
 # PHPUnit result cache
-.phpunit.result.cache
+.phpunit.cache/
 
 # Build directories
 package

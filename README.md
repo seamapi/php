@@ -1,70 +1,211 @@
 # Seam PHP SDK
 
-Control locks, lights and other internet of things devices with Seam's simple API.
+[![Packagist](https://img.shields.io/packagist/v/seamapi/seam.svg)](https://packagist.org/packages/seamapi/seam)
+[![GitHub Actions](https://github.com/seamapi/php/actions/workflows/check.yml/badge.svg)](https://github.com/seamapi/php/actions/workflows/check.yml)
 
-Check out [the documentation](https://docs.seam.co) or the usage below.
+PHP SDK for the Seam API.
+
+## Description
+
+[Seam] makes it easy to integrate IoT devices with your applications.
+This is an official SDK for the Seam API.
+Please refer to the official [Seam Docs] to get started.
+
+Parts of this SDK are generated from always up-to-date type information
+provided by [@seamapi/types].
+This ensures all API methods, request shapes, and response shapes are
+accurate and fully typed.
+
+The underlying HTTP client is [Guzzle].
+
+[Seam]: https://www.seam.co/
+[Seam Docs]: https://docs.seam.co/latest/
+[@seamapi/types]: https://github.com/seamapi/types/
+[Guzzle]: https://docs.guzzlephp.org/
+
+## Installation
+
+Add this as a dependency to your project using [Composer] with
+
+```
+$ composer require seamapi/seam
+```
+
+[Composer]: https://getcomposer.org/
 
 ## Usage
 
+> [!NOTE]
+> These examples assume `SEAM_API_KEY` is set in your environment.
+
+Endpoint methods take [named arguments], which is the supported way to call
+them. PHP allows the parameters to be passed positionally too, but their order
+is derived from the API definition and can change as endpoints gain parameters,
+so a positional call can start binding a value to the wrong parameter after an
+upgrade. Passing them by name is stable.
+
+[named arguments]: https://www.php.net/manual/en/functions.arguments.php#functions.named-arguments
+
+### Examples
+
+#### List devices
+
 ```php
-$seam = new Seam\SeamClient("YOUR_API_KEY");
+$seam = new Seam\Seam();
 
-# Create a Connect Webview to login to a provider
-$connect_webview = $seam->connect_webviews->create(
-    accepted_providers: ["august"]
-);
-
-print "Please Login at this url: " . $connect_webview->url;
-
-# Poll until connect webview is completed
-while (true) {
-    $connect_webview = $seam->connect_webviews->get(
-        $connect_webview->connect_webview_id
-    );
-    if ($connect_webview->status == "authorized") {
-        break;
-    } else {
-        sleep(1);
-    }
-}
-
-$connected_account = $seam->connected_accounts->get(
-    $connect_webview->connected_account_id
-);
-
-print "Looks like you connected with " .
-    json_encode($connected_account->user_identifier);
-
-$devices = $seam->devices->list(
-    connected_account_id: $connected_account->connected_account_id
-);
-
-print "You have " . count($devices) . " devices";
-
-$device_id = $devices[0]->device_id;
-
-# Lock a Door
-$seam->locks->lock_door($device_id);
-
-$updated_device = $seam->devices->get($device_id);
-$updated_device->properties->locked; // true
-
-# Unlock a Door
-$seam->locks->unlock_door($device_id);
-$updated_device->properties->locked; // false
-
-# Create an access code on a device
-$access_code = $seam->access_codes->create(
-    device_id: $device_id,
-    code: "1234",
-    name: "Test Code"
-);
-
-# Check the status of an access code
-$access_code->status; // 'setting' (it will go to 'set' when active on the device)
-
-$seam->access_codes->delete($access_code->access_code_id);
+$devices = $seam->devices->list();
 ```
+
+#### Unlock a door
+
+```php
+$seam = new Seam\Seam();
+
+$lock = $seam->locks->get(name: "Front Door");
+$seam->locks->unlock_door(device_id: $lock->device_id);
+```
+
+### Authentication Method
+
+The SDK supports two authentication mechanisms.
+Configure either by passing the corresponding options to the `Seam`
+constructor, or with the more ergonomic static factory methods.
+
+#### API Key
+
+An API key is scoped to a single workspace and should only be used on the
+server. Obtain one from the Seam Console.
+
+```php
+// Set the SEAM_API_KEY environment variable
+$seam = new Seam\Seam();
+
+// Pass as an option to the constructor
+$seam = new Seam\Seam(api_key: "your-api-key");
+
+// Use the factory method
+$seam = Seam\Seam::from_api_key("your-api-key");
+```
+
+#### Personal Access Token
+
+A Personal Access Token is scoped to a Seam Console user.
+It must be used with a workspace id.
+
+```php
+// Set the SEAM_PERSONAL_ACCESS_TOKEN and SEAM_WORKSPACE_ID environment variables
+$seam = new Seam\Seam();
+
+// Pass as options to the constructor
+$seam = new Seam\Seam(
+    personal_access_token: "your-personal-access-token",
+    workspace_id: "your-workspace-id"
+);
+
+// Use the factory method
+$seam = Seam\Seam::from_personal_access_token(
+    "your-personal-access-token",
+    "your-workspace-id"
+);
+```
+
+### Action Attempts
+
+Some operations tell a device to do something, and the device may take time
+to report back. Those endpoints return an [action attempt].
+
+By default the SDK waits for the action attempt to finish:
+
+- It polls up to a timeout at a polling interval.
+- It returns a fresh copy of the successful action attempt.
+- It throws `Seam\ActionAttemptFailedError` if the action failed.
+- It throws `Seam\ActionAttemptTimeoutError` if the timeout
+  elapses first.
+
+Both errors extend `Seam\ActionAttemptError` and expose the action
+attempt with `getActionAttempt()`.
+
+[action attempt]: https://docs.seam.co/latest/core-concepts/action-attempts
+
+```php
+use Seam\ActionAttemptFailedError;
+use Seam\ActionAttemptTimeoutError;
+
+try {
+    $seam->locks->unlock_door(device_id: $device_id);
+} catch (ActionAttemptFailedError $error) {
+    print "Could not unlock the door: " . $error->getMessage();
+    print "Error code: " . $error->getErrorCode();
+} catch (ActionAttemptTimeoutError $error) {
+    print "The door did not unlock in time";
+    print "Action attempt: " . $error->getActionAttempt()->action_attempt_id;
+}
+```
+
+Waiting may be disabled for the whole client:
+
+```php
+$seam = new Seam\Seam(wait_for_action_attempt: false);
+
+$action_attempt = $seam->locks->unlock_door(device_id: $device_id);
+$action_attempt->status; // "pending"
+```
+
+or for a single request:
+
+```php
+$action_attempt = $seam->locks->unlock_door(
+    device_id: $device_id,
+    wait_for_action_attempt: false
+);
+```
+
+The timeout and polling interval, both in seconds, may be configured either
+on the client or per request:
+
+```php
+$seam = new Seam\Seam(
+    wait_for_action_attempt: ["timeout" => 30.0, "polling_interval" => 2.0]
+);
+
+$seam->locks->unlock_door(
+    device_id: $device_id,
+    wait_for_action_attempt: ["timeout" => 5.0]
+);
+```
+
+### Setting a param to null
+
+The Seam API distinguishes three states for an updatable param:
+omitted (leave the stored value unchanged), null (unset the stored value),
+and a value (set it).
+
+PHP's `null` means omitted.
+The SDK removes `null` params from the request entirely,
+so passing `null` never unsets a value.
+To unset a value, pass the `Seam\NullValue::NULL` sentinel,
+which the SDK sends as JSON `null` in request bodies
+and as an empty value in query strings:
+
+```php
+use Seam\NullValue;
+
+// Leaves the name unchanged.
+$seam->devices->update(device_id: $device_id, name: null);
+
+// Unsets the name.
+$seam->devices->update(device_id: $device_id, name: NullValue::NULL);
+```
+
+The other Seam SDKs spell the sentinel `NULL` and its type `Null`,
+but those names are reserved in PHP, so both live on one enum:
+`Seam\NullValue` is the type, and its single case `NullValue::NULL`
+is the value to pass.
+
+Only pass `NullValue::NULL` for params the API documents as nullable.
+Generated methods type nullable params as a union with the sentinel,
+e.g. `string|NullValue|null`, so passing it anywhere else fails with a
+`TypeError`.
 
 ### Pagination
 
@@ -115,7 +256,7 @@ $stored_data = json_decode(
     false
 );
 
-$params = $stored_data[0] ?? [];
+$params = (array) ($stored_data[0] ?? []);
 $pagination =
     $stored_data[1] ??
     (object) ["has_next_page" => false, "next_page_cursor" => null];
@@ -153,21 +294,302 @@ $pages = $seam->createPaginator(
 $connectedAccounts = $pages->flattenToArray();
 ```
 
-## Installation
+### Requests without a Workspace in scope
 
-To install the latest version of the automatically generated SDK, run:
+Some endpoints are not scoped to a workspace. Use `SeamWithoutWorkspace` with a
+personal access token to reach them.
 
-`composer require seamapi/seam`
+```php
+// Set the SEAM_PERSONAL_ACCESS_TOKEN environment variable
+$seam = new Seam\SeamWithoutWorkspace();
 
-If you want to install our previous handwritten version, run:
+// Use the factory method
+$seam = Seam\SeamWithoutWorkspace::from_personal_access_token(
+    "your-personal-access-token"
+);
 
-`composer require seamapi/seam:1.1`
+// List workspaces authorized for this Personal Access Token
+$workspaces = $seam->workspaces->list();
+
+$workspace = $seam->workspaces->create(
+    name: "New Workspace",
+    connect_partner_name: "Your Company"
+);
+```
+
+### Webhooks
+
+Seam delivers webhooks with [Svix]. Verify and parse an incoming request with
+`SeamWebhook`, which returns the typed event.
+
+[Svix]: https://www.svix.com/
+
+```php
+$webhook = new Seam\SeamWebhook($webhook_secret);
+
+try {
+    $event = $webhook->verify($request_body, $request_headers);
+
+    print match (true) {
+        $event instanceof Seam\Resources\Event\AccessCodeCreated
+            => "Created access code {$event->access_code_id}",
+        $event::class === Seam\Resources\Event::class
+            => "Unknown event type {$event->event_type}",
+        default => "Received {$event->event_type}",
+    };
+} catch (Svix\Exception\WebhookVerificationException $error) {
+    http_response_code(401);
+} catch (Seam\InvalidWebhookPayloadError $error) {
+    http_response_code(204);
+}
+```
+
+### Advanced Usage
+
+#### Enum values
+
+Enum-valued response properties are strings, so they work with ordinary string
+comparisons and remain forward-compatible when the API adds a value:
+
+```php
+if ($action_attempt->status === "pending") {
+    // The action is still running.
+}
+```
+
+The SDK also generates backed enums for autocomplete, discovery of known
+values, and optional validation. Use the enum's `value` when comparing, or
+`tryFrom()` to convert a response value:
+
+```php
+use Seam\Resources\ActionAttempt\Status;
+use Seam\Resources\Event\EventType;
+
+if ($action_attempt->status === Status::PENDING->value) {
+    // The action is still running.
+}
+
+$status = Status::tryFrom($action_attempt->status);
+$event_type = EventType::tryFrom($event->event_type);
+```
+
+`tryFrom()` returns `null` for a value introduced after the installed SDK was
+released; the original response property still contains the raw string. Enum
+properties also reference their companion enum in PHPDoc for IDE and static
+analysis hints.
+
+#### Setting the endpoint
+
+The endpoint may be set with the `SEAM_ENDPOINT` environment variable, or
+passed directly.
+
+```php
+$seam = new Seam\Seam(endpoint: "https://example.com");
+```
+
+#### Configuring the Guzzle client
+
+Pass any [Guzzle request option] with `guzzle_options`. They are merged into
+the client the SDK builds, so the authorization and SDK headers are kept.
+
+[Guzzle request option]: https://docs.guzzlephp.org/en/stable/request-options.html
+
+```php
+$seam = new Seam\Seam(
+    guzzle_options: [
+        "headers" => ["X-Custom-Header" => "value"],
+        "proxy" => "http://localhost:8125",
+    ]
+);
+```
+
+#### Setting the timeout
+
+Requests time out after 30 seconds by default, covering both connecting and
+reading. Pass `timeout` in seconds to change it, or `0` to disable it.
+
+```php
+$seam = new Seam\Seam(timeout: 60.0);
+```
+
+#### Retries
+
+By default, the SDK makes up to three attempts: the initial request and two
+retries. Retries are limited to `GET`, `HEAD`, `OPTIONS`, `PUT`, and `DELETE`
+requests that fail because of a transport error, timeout, HTTP 429 response, or
+HTTP 5xx response. `POST` and `PATCH` requests are not retried.
+
+Retries use exponential backoff with jitter: approximately 200–240 ms before
+the first retry and 400–480 ms before the second. A longer `Retry-After` header
+is honored. The request timeout is reset for each attempt.
+
+```php
+// Retry more times
+$seam = new Seam\Seam(retries: 5);
+
+// Turn retries off
+$seam = new Seam\Seam(retries: 0);
+```
+
+#### Using the underlying client
+
+`$seam->client` already carries the endpoint, authorization, error mapping,
+and retries, so it can be used to reach an endpoint the SDK does not expose.
+It wraps the [Guzzle] client and implements Guzzle's `ClientInterface`.
+
+[Guzzle]: https://docs.guzzlephp.org/
+
+```php
+$response = $seam->client->request("POST", "/devices/list", [
+    "json" => (object) ["limit" => 10],
+]);
+
+$devices = Seam\Http\Body::decode($response)->devices;
+```
+
+#### Overriding the client
+
+Pass an already configured Guzzle client. It carries its own endpoint and
+authorization, so it cannot be combined with any option other than
+`wait_for_action_attempt`.
+
+```php
+$client = new GuzzleHttp\Client([
+    "base_uri" => "https://connect.getseam.com",
+    "headers" => ["authorization" => "Bearer " . $api_key],
+]);
+
+$seam = Seam\Seam::from_client($client);
+```
+
+The client is used exactly as given. It does not gain the SDK's error mapping
+or retries, so an API error raises Guzzle's exception rather than
+`Seam\HttpApiError`. To opt in, add the middleware yourself.
+
+#### Adding the Seam middleware to your own client
+
+`Seam\Http\ClientFactory::add_middleware` puts the error mapping and retry
+middleware on a handler stack. Build the client with that stack, and with
+`http_errors` disabled so the error middleware raises instead of Guzzle.
+
+```php
+$handler = GuzzleHttp\HandlerStack::create();
+
+Seam\Http\ClientFactory::add_middleware($handler);
+
+$client = new GuzzleHttp\Client([
+    "base_uri" => "https://connect.getseam.com",
+    "headers" => ["authorization" => "Bearer " . $api_key],
+    "handler" => $handler,
+    "http_errors" => false,
+]);
+
+$seam = Seam\Seam::from_client($client);
+```
+
+Pass `retries` to change how many times a failed request is retried, or `0`
+to disable them:
+
+```php
+Seam\Http\ClientFactory::add_middleware($handler, retries: 0);
+```
+
+Add it once per stack: applying it twice stacks two sets of retries.
+
+#### Serializing URL search params
+
+The Seam API parses URL search params as complex types.
+If you call it with your own HTTP client,
+`Seam\StrictUrlSearchParamsSerializer` is exported for that purpose.
+The `_strict=true` param is added to any non-empty query
+so the Seam API uses strict, schema-aware parsing.
+A query with no serializable params remains empty.
+
+```php
+use Seam\StrictUrlSearchParamsSerializer;
+
+$query = StrictUrlSearchParamsSerializer::serialize([
+    "device_ids" => ["device1", "device2"],
+]);
+
+$response = file_get_contents(
+    "https://connect.getseam.com/devices/list?{$query}",
+    context: stream_context_create([
+        "http" => ["header" => "Authorization: Bearer your-api-key"],
+    ]),
+);
+```
+
+The serialization defines the name and value of each search param,
+where every value is a string.
+`Seam\UrlSearchParams` holds those pairs and renders the query string,
+as [URLSearchParams] does for the [reference implementation]:
+
+```php
+use Seam\StrictUrlSearchParamsSerializer;
+use Seam\UrlSearchParams;
+
+$search_params = new UrlSearchParams();
+
+StrictUrlSearchParamsSerializer::update($search_params, [
+    "device_ids" => ["device1", "device2"],
+]);
+
+iterator_to_array($search_params);
+// => [["device_ids", "device1"], ["device_ids", "device2"], ["_strict", "true"]]
+
+(string) $search_params;
+// => 'device_ids=device1&device_ids=device2&_strict=true'
+```
+
+Pass either the query string or the pairs to your HTTP client.
+A client may percent-encode a few characters differently than
+`URLSearchParams` does, e.g. Guzzle escapes `*` and leaves `~` unescaped,
+which the Seam API reads as the same params either way.
+
+A param set to `null` is omitted,
+while a param set to `NullValue::NULL` is serialized to an empty value,
+which the Seam API reads as null,
+as described in [Setting a param to null](#setting-a-param-to-null).
+A param that cannot be represented raises a `Seam\UnserializableParamError`.
+
+The Seam API parses these params with the corresponding [parser].
+
+[URLSearchParams]: https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
+[reference implementation]: https://github.com/seamapi/url-search-params-serializer
+[parser]: https://github.com/seamapi/url-search-params-parser
+
+#### Errors
+
+Every exception the SDK raises implements `Seam\SeamException`, so it can be
+caught as a group. An API error is a `Seam\HttpApiError` carrying
+`getErrorCode()`, `getStatusCode()` and `getRequestId()`, with
+`Seam\HttpUnauthorizedError` and `Seam\HttpInvalidInputError` as the two
+specific cases worth catching on their own.
+
+```php
+use Seam\HttpApiError;
+use Seam\HttpInvalidInputError;
+
+try {
+    $seam->devices->get(device_id: $device_id);
+} catch (HttpInvalidInputError $error) {
+    print_r($error->getValidationErrorMessages("device_id"));
+} catch (HttpApiError $error) {
+    print $error->getErrorCode();
+}
+```
+
+An error response that is not shaped like a Seam error, such as a gateway
+returning HTML, raises the underlying Guzzle exception instead. A successful
+response that does not carry the resource the endpoint returns raises
+`Seam\InvalidResponseError`, with `getPath()` and `getKey()`.
 
 ## Development and Testing
 
 ### Quickstart
 
-Install [PHP](https://www.php.net/) 8.0 or later,
+Install [PHP](https://www.php.net/) 8.2 or later,
 [Composer](https://getcomposer.org/) and [Node.js](https://nodejs.org/),
 then run
 
@@ -186,18 +608,29 @@ View them with
 $ composer run-script --list
 ```
 
-| Task              | Command            |
-| ----------------- | ------------------ |
-| Run the tests     | `composer test`    |
-| Lint              | `composer lint`    |
-| Format            | `npm run format`   |
-| Build the package | `composer build`   |
-| Generate the SDK  | `npm run generate` |
+| Task                   | Command            |
+| ---------------------- | ------------------ |
+| Run the tests          | `composer test`    |
+| Lint and analyze types | `composer lint`    |
+| Format                 | `npm run format`   |
+| Build the package      | `composer build`   |
+| Generate the SDK       | `npm run generate` |
 
 Formatting is handled by [Prettier](https://prettier.io/) via
 [@prettier/plugin-php](https://github.com/prettier/plugin-php),
 so PHP, TypeScript, JSON, YAML and Markdown are all formatted by
 `npm run format`.
+
+### Source code
+
+The [source code] is hosted on GitHub.
+Clone the project with
+
+```
+$ git clone git@github.com:seamapi/php.git
+```
+
+[source code]: https://github.com/seamapi/php
 
 ### Running Tests
 
@@ -215,10 +648,20 @@ $ composer test -- tests/MyTest.php
 
 PHPUnit is configured in `phpunit.xml.dist`.
 
+Static analysis is handled by [Psalm](https://psalm.dev/), configured in
+`psalm.xml` and run as part of `composer lint`. The generated sources under
+`src/Resources` and `src/Routes` are excluded, since analyzing them would only
+create pressure to change the generator.
+
 ### Requirements
 
-This package supports PHP 8.0 and later.
-Continuous integration exercises both ends of that range, PHP 8.0 and 8.5.
+This package supports PHP 8.2 and later.
+Continuous integration exercises every supported version, PHP 8.2 through 8.5.
+
+The test suite runs against [@seamapi/fake-seam-connect], which is started
+automatically for each test, so `npm install` must have been run first.
+
+[@seamapi/fake-seam-connect]: https://github.com/seamapi/fake-seam-connect
 
 ### Publishing
 
@@ -234,7 +677,7 @@ and dispatches the [Version](.github/workflows/version.yml) workflow.
 Run the [Version](.github/workflows/version.yml) workflow with the
 version to cut.
 It runs `npm version`, which bumps the `version` field in `package.json`,
-injects that version into `Seam\Utils\PackageVersion`, creates a signed `v*`
+injects that version into `Seam\Version`, creates a signed `v*`
 git tag and pushes it.
 Pushing the tag triggers the [Publish](.github/workflows/publish.yml)
 workflow, and [Packagist](https://packagist.org/packages/seamapi/seam)
@@ -245,7 +688,7 @@ picks up the new tag from its GitHub webhook.
 > step in between.
 > This repository therefore keeps the version in `package.json`, which is a
 > development manifest that is not published, and injects it into the
-> `Seam\Utils\PackageVersion::VERSION` constant used for the
+> `Seam\Version::VERSION` constant used for the
 > `seam-sdk-version` header.
 >
 > The injection runs from `version.ts`, wired to the `version` lifecycle
@@ -256,3 +699,56 @@ picks up the new tag from its GitHub webhook.
 Development files are kept out of the published package with `export-ignore`
 rules in `.gitattributes`, which `git archive` honours when GitHub builds the
 archives Composer downloads as `dist`.
+
+## GitHub Actions
+
+_GitHub Actions should already be configured: this section is for reference only._
+
+Publishing is handled by [Packagist], which reads new versions from the git
+tags this repository pushes, so no registry token is needed.
+
+[Packagist]: https://packagist.org/packages/seamapi/seam
+
+### Secrets for Optional GitHub Actions
+
+The version, format, generate, and semantic-release GitHub actions
+require a user with write access to the repository.
+Set these additional secrets to enable the action:
+
+- `GH_TOKEN`: A personal access token for the user.
+- `GIT_USER_NAME`: The GitHub user's real name.
+- `GIT_USER_EMAIL`: The GitHub user's email.
+- `GPG_PRIVATE_KEY`: The GitHub user's [GPG private key].
+- `GPG_PASSPHRASE`: The GitHub user's GPG passphrase.
+
+[GPG private key]: https://github.com/marketplace/actions/import-gpg#prerequisites
+
+## Contributing
+
+Please submit and comment on bug reports and feature requests.
+
+To submit a patch:
+
+1. Fork it (https://github.com/seamapi/php/fork).
+2. Create your feature branch (`git checkout -b my-new-feature`).
+3. Make changes.
+4. Commit your changes (`git commit -am 'Add some feature'`).
+5. Push to the branch (`git push origin my-new-feature`).
+6. Create a new Pull Request.
+
+## License
+
+This PHP package is licensed under the MIT license.
+
+## Warranty
+
+This software is provided by the copyright holders and contributors "as is" and
+any express or implied warranties, including, but not limited to, the implied
+warranties of merchantability and fitness for a particular purpose are
+disclaimed. In no event shall the copyright holder or contributors be liable for
+any direct, indirect, incidental, special, exemplary, or consequential damages
+(including, but not limited to, procurement of substitute goods or services;
+loss of use, data, or profits; or business interruption) however caused and on
+any theory of liability, whether in contract, strict liability, or tort
+(including negligence or otherwise) arising in any way out of the use of this
+software, even if advised of the possibility of such damage.

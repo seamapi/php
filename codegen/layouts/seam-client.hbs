@@ -5,96 +5,158 @@ namespace Seam;
 {{#each useStatements}}
 use {{this}};
 {{/each}}
-use Seam\Utils\PackageVersion;
 
-use GuzzleHttp\Client as HTTPClient;
-use \Exception as Exception;
-use Seam\HttpApiError;
-use Seam\HttpUnauthorizedError;
-use Seam\HttpInvalidInputError;
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use Seam\Http\ClientFactory;
+use Seam\Http\SerializingClient;
 
-define('LTS_VERSION', '1.0.0');
-
-class SeamClient
+/**
+ * Client for the Seam API.
+ *
+ * Authenticate with an API key, which is scoped to a single workspace, or with
+ * a personal access token together with the id of the workspace to act on.
+ * When neither is given, the SEAM_API_KEY or SEAM_PERSONAL_ACCESS_TOKEN and
+ * SEAM_WORKSPACE_ID environment variables are used.
+ *
+ * @see https://docs.seam.co/
+ */
+class Seam
 {
 {{#each parentClients}}
   public {{clientName}}Client ${{namespace}};
 {{/each}}
 
-  public string $api_key;
-  public HTTPClient $client;
-  public string $ltsVersion = LTS_VERSION;
+  /**
+   * The client this instance makes its requests with.
+   *
+   * Query params given as a map and NullValue::NULL sentinels in JSON
+   * bodies are serialized with the Seam standard before the request goes
+   * out; see Seam\Http\SerializingClient.
+   */
+  public ClientInterface $client;
 
+  /**
+   * Default request options applied to every call, currently just
+   * wait_for_action_attempt.
+   *
+   * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+   */
+  public array $defaults;
+
+  /**
+   * @param bool|array{timeout?: float, polling_interval?: float}|null $wait_for_action_attempt Whether to wait for action attempts to finish, optionally with timeout and polling_interval in seconds. Defaults to true.
+   * @param array<string, mixed> $guzzle_options Options merged into the underlying Guzzle client, e.g. headers or proxy.
+   * @param int|null $retries How many times to retry a failed request. Defaults to 2; pass 0 to disable.
+   * @param float|null $timeout Request timeout in seconds, covering connecting and reading. Defaults to 30; pass 0 to disable.
+   * @param ClientInterface|null $client A preconfigured Guzzle client, used as is. It carries its own endpoint and authorization, so it cannot be combined with any option other than wait_for_action_attempt.
+   */
   public function __construct(
-    $api_key = null,
-    $endpoint = "https://connect.getseam.com",
-    $throw_http_errors = false
+    ?string $api_key = null,
+    ?string $personal_access_token = null,
+    ?string $workspace_id = null,
+    ?string $endpoint = null,
+    bool|array|null $wait_for_action_attempt = null,
+    array $guzzle_options = [],
+    ?int $retries = null,
+    ?float $timeout = null,
+    ?ClientInterface $client = null
   ) {
-    $this->api_key = $api_key ?: (getenv('SEAM_API_KEY') ?: null);
-    $seam_sdk_version = PackageVersion::get();
-    $this->client = new HTTPClient([
-      "base_uri" => $endpoint,
-      "timeout" => 60.0,
-      "headers" => [
-        "Authorization" => "Bearer " . $this->api_key,
-        "User-Agent" => "Seam PHP Client ". $seam_sdk_version,
-        "seam-sdk-name" => "seamapi/php",
-        "seam-sdk-version" => $seam_sdk_version,
-        "seam-lts-version" => $this->ltsVersion
-      ],
-      "http_errors" => $throw_http_errors,
+    $this->defaults = [
+      "wait_for_action_attempt" => $wait_for_action_attempt ?? true,
+    ];
+
+    // A client carries its own endpoint and authorization, so no option
+    // that would configure one can be combined with it.
+    Options::check_client_options($client, [
+      "api_key" => $api_key,
+      "personal_access_token" => $personal_access_token,
+      "workspace_id" => $workspace_id,
+      "endpoint" => $endpoint,
+      "guzzle_options" => $guzzle_options,
+      "retries" => $retries,
+      "timeout" => $timeout,
     ]);
+
+    $this->client = SerializingClient::wrap($client ?? ClientFactory::create(
+      Options::get_endpoint($endpoint),
+      Auth::get_auth_headers($api_key, $personal_access_token, $workspace_id),
+      $guzzle_options,
+      $retries,
+      $timeout
+    ));
+
 {{#each parentClients}}
-    $this->{{namespace}} = new {{clientName}}Client($this);
+    $this->{{namespace}} = new {{clientName}}Client($this->client, $this->defaults);
 {{/each}}
   }
 
-  public function request(
-    $method,
-    $path,
-    $json = null,
-    $query = null,
-  ) {
-    $options = [
-      "json" => $json,
-      "query" => $query,
-    ];
-    $options = array_filter($options, fn($option) => $option !== null);
-
-    $response = $this->client->request($method, $path, $options);
-    $status_code = $response->getStatusCode();
-    $request_id = $response->getHeaderLine("seam-request-id");
-
-    $res_json = null;
-    try {
-      $res_json = json_decode($response->getBody());
-    } catch (Exception $ignoreError) {
-    }
-
-    if ($status_code >= 400) {
-      if ($status_code === 401) {
-        throw new HttpUnauthorizedError($request_id);
-      }
-
-      if (($res_json->error ?? null) != null) {
-        if ($res_json->error->type === 'invalid_input') {
-          throw new HttpInvalidInputError($res_json->error, $status_code, $request_id);
-        }
-
-        throw new HttpApiError($res_json->error, $status_code, $request_id);
-      }
-
-      throw \GuzzleHttp\Exception\RequestException::create(
-        new \GuzzleHttp\Psr7\Request($method, $path),
-        $response
-      );
-    }
-
-    return $res_json;
+  /**
+   * Creates a client authorized with an API key.
+   */
+  public static function from_api_key(
+    string $api_key,
+    ?string $endpoint = null,
+    bool|array|null $wait_for_action_attempt = null,
+    array $guzzle_options = [],
+    ?int $retries = null,
+    ?float $timeout = null
+  ): static {
+    return new static(
+      api_key: $api_key,
+      endpoint: $endpoint,
+      wait_for_action_attempt: $wait_for_action_attempt,
+      guzzle_options: $guzzle_options,
+      retries: $retries,
+      timeout: $timeout
+    );
   }
 
-  public function createPaginator($request, $params = [])
+  /**
+   * Creates a client authorized with a personal access token, scoped to the
+   * given workspace.
+   */
+  public static function from_personal_access_token(
+    string $personal_access_token,
+    string $workspace_id,
+    ?string $endpoint = null,
+    bool|array|null $wait_for_action_attempt = null,
+    array $guzzle_options = [],
+    ?int $retries = null,
+    ?float $timeout = null
+  ): static {
+    return new static(
+      personal_access_token: $personal_access_token,
+      workspace_id: $workspace_id,
+      endpoint: $endpoint,
+      wait_for_action_attempt: $wait_for_action_attempt,
+      retries: $retries,
+      timeout: $timeout,
+      guzzle_options: $guzzle_options
+    );
+  }
+
+  /**
+   * Creates a client from a preconfigured Guzzle client.
+   */
+  public static function from_client(
+    ClientInterface $client,
+    bool|array|null $wait_for_action_attempt = null
+  ): static {
+    return new static(
+      client: $client,
+      wait_for_action_attempt: $wait_for_action_attempt
+    );
+  }
+
+  /**
+   * Creates a paginator for a list endpoint.
+   *
+   * @param callable $request Invokes the list method with a params array, e.g. fn($params) => $seam->devices->list(...$params)
+   * @param array<string, mixed> $params
+   */
+  public function createPaginator(callable $request, array $params = []): Paginator
   {
-      return new Paginator($request, $params);
+    return new Paginator($request, $params);
   }
 }

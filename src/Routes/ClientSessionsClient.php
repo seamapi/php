@@ -2,29 +2,39 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
 use Seam\Resources\ClientSession;
-use Seam\SeamClient;
 
 class ClientSessionsClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
      * Creates a new [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
      *
-     * @param array $connect_webview_ids IDs of the [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) for which you want to create a client session.
-     * @param array $connected_account_ids IDs of the [connected accounts](https://docs.seam.co/core-concepts/connected-accounts) for which you want to create a client session.
+     * @param list<string> $connect_webview_ids IDs of the [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) for which you want to create a client session.
+     * @param list<string> $connected_account_ids IDs of the [connected accounts](https://docs.seam.co/core-concepts/connected-accounts) for which you want to create a client session.
      * @param string $customer_id Customer ID that you want to associate with the new client session.
      * @param string $customer_key Customer key that you want to associate with the new client session.
      * @param string $expires_at Date and time at which the client session should expire, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @param string $user_identifier_key Your user ID for the user for whom you want to create a client session.
      * @param string $user_identity_id ID of the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) for which you want to create a client session.
-     * @param array $user_identity_ids IDs of the [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
+     * @param list<string> $user_identity_ids IDs of the [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
      * @return ClientSession OK
      */
     public function create(
@@ -64,13 +74,15 @@ class ClientSessionsClient
             $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/client_sessions/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("PUT", "/client_sessions/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        return ClientSession::from_json($res->client_session);
+        return ClientSession::from_json(
+            Body::read($res, "client_session", "/client_sessions/create"),
+        );
     }
 
     /**
@@ -83,15 +95,11 @@ class ClientSessionsClient
     {
         $request_payload = [];
 
-        if ($client_session_id !== null) {
-            $request_payload["client_session_id"] = $client_session_id;
-        }
+        $request_payload["client_session_id"] = $client_session_id;
 
-        $this->seam->request(
-            "POST",
-            "/client_sessions/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("DELETE", "/client_sessions/delete", [
+            "query" => $request_payload,
+        ]);
     }
 
     /**
@@ -114,24 +122,26 @@ class ClientSessionsClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/client_sessions/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/client_sessions/get", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return ClientSession::from_json($res->client_session);
+        return ClientSession::from_json(
+            Body::read($res, "client_session", "/client_sessions/get"),
+        );
     }
 
     /**
      * Returns a [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens) with specific characteristics or creates a new client session with these characteristics if it does not yet exist.
      *
-     * @param array $connect_webview_ids IDs of the [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) that you want to associate with the client session (or that are already associated with the existing client session).
-     * @param array $connected_account_ids IDs of the [connected accounts](https://docs.seam.co/api/connected_accounts) that you want to associate with the client session (or that are already associated with the existing client session).
+     * @param list<string> $connect_webview_ids IDs of the [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) that you want to associate with the client session (or that are already associated with the existing client session).
+     * @param list<string> $connected_account_ids IDs of the [connected accounts](https://docs.seam.co/api/connected_accounts) that you want to associate with the client session (or that are already associated with the existing client session).
      * @param string $expires_at Date and time at which the client session should expire in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. If the client session already exists, this will update the expiration before returning it.
      * @param string $user_identifier_key Your user ID for the user that you want to associate with the client session (or that is already associated with the existing client session).
      * @param string $user_identity_id ID of the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session (or that are already associated with the existing client session).
-     * @param array $user_identity_ids IDs of the [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
+     * @param list<string> $user_identity_ids IDs of the [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
      * @return ClientSession OK
      */
     public function get_or_create(
@@ -163,24 +173,30 @@ class ClientSessionsClient
             $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/client_sessions/get_or_create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/client_sessions/get_or_create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        return ClientSession::from_json($res->client_session);
+        return ClientSession::from_json(
+            Body::read(
+                $res,
+                "client_session",
+                "/client_sessions/get_or_create",
+            ),
+        );
     }
 
     /**
      * Grants a [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens) access to one or more resources, such as [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews), [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity), and so on.
      *
      * @param string $client_session_id ID of the client session to which you want to grant access to resources.
-     * @param array $connect_webview_ids IDs of the [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) that you want to associate with the client session.
-     * @param array $connected_account_ids IDs of the [connected accounts](https://docs.seam.co/core-concepts/connected-accounts) that you want to associate with the client session.
+     * @param list<string> $connect_webview_ids IDs of the [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) that you want to associate with the client session.
+     * @param list<string> $connected_account_ids IDs of the [connected accounts](https://docs.seam.co/core-concepts/connected-accounts) that you want to associate with the client session.
      * @param string $user_identifier_key Your user ID for the user that you want to associate with the client session.
      * @param string $user_identity_id ID of the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
-     * @param array $user_identity_ids IDs of the [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
+     * @param list<string> $user_identity_ids IDs of the [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
      * @return void OK
      */
     public function grant_access(
@@ -191,6 +207,18 @@ class ClientSessionsClient
         ?string $user_identity_id = null,
         ?array $user_identity_ids = null,
     ): void {
+        if (
+            $client_session_id === null &&
+            $connect_webview_ids === null &&
+            $connected_account_ids === null &&
+            $user_identifier_key === null &&
+            $user_identity_id === null &&
+            $user_identity_ids === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /client_sessions/grant_access",
+            );
+        }
         $request_payload = [];
 
         if ($client_session_id !== null) {
@@ -212,11 +240,9 @@ class ClientSessionsClient
             $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
-        $this->seam->request(
-            "POST",
-            "/client_sessions/grant_access",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PATCH", "/client_sessions/grant_access", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -256,15 +282,15 @@ class ClientSessionsClient
             ] = $without_user_identifier_key;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/client_sessions/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/client_sessions/list", [
+                "query" => $request_payload,
+            ]),
         );
 
         return array_map(
             fn($r) => ClientSession::from_json($r),
-            $res->client_sessions,
+            Body::read_list($res, "client_sessions", "/client_sessions/list"),
         );
     }
 
@@ -280,14 +306,10 @@ class ClientSessionsClient
     {
         $request_payload = [];
 
-        if ($client_session_id !== null) {
-            $request_payload["client_session_id"] = $client_session_id;
-        }
+        $request_payload["client_session_id"] = $client_session_id;
 
-        $this->seam->request(
-            "POST",
-            "/client_sessions/revoke",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/client_sessions/revoke", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

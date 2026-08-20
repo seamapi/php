@@ -2,16 +2,27 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\UnmanagedDevice;
-use Seam\SeamClient;
 
 class DevicesUnmanagedClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -29,6 +40,11 @@ class DevicesUnmanagedClient
         ?string $device_id = null,
         ?string $name = null,
     ): UnmanagedDevice {
+        if ($device_id === null && $name === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /devices/unmanaged/get",
+            );
+        }
         $request_payload = [];
 
         if ($device_id !== null) {
@@ -38,13 +54,15 @@ class DevicesUnmanagedClient
             $request_payload["name"] = $name;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/devices/unmanaged/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/devices/unmanaged/get", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return UnmanagedDevice::from_json($res->device);
+        return UnmanagedDevice::from_json(
+            Body::read($res, "device", "/devices/unmanaged/get"),
+        );
     }
 
     /**
@@ -54,20 +72,17 @@ class DevicesUnmanagedClient
      *
      * @param string $connect_webview_id ID of the Connect Webview for which you want to list devices.
      * @param string $connected_account_id ID of the connected account for which you want to list devices.
-     * @param array $connected_account_ids Array of IDs of the connected accounts for which you want to list devices.
+     * @param list<string> $connected_account_ids Array of IDs of the connected accounts for which you want to list devices.
      * @param string $created_before Timestamp by which to limit returned devices. Returns devices created before this timestamp.
-     * @param mixed $custom_metadata_has Set of key:value [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) pairs for which you want to list devices.
      * @param string $customer_key Customer key for which you want to list devices.
-     * @param array $device_ids Array of device IDs for which you want to list devices.
+     * @param list<string> $device_ids Array of device IDs for which you want to list devices.
      * @param string $device_type Device type for which you want to list devices.
-     * @param array $device_types Array of device types for which you want to list devices.
+     * @param list<string> $device_types Array of device types for which you want to list devices.
      * @param float $limit Numerical limit on the number of devices to return.
      * @param string $manufacturer Manufacturer for which you want to list devices.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned devices to include all records that satisfy a partial match using `device_id` (full or partial UUID prefix, minimum 4 characters), `connected_account_id`, `display_name`, `custom_metadata` or `location.location_name`.
-     * @param string $space_id ID of the space for which you want to list devices.
-     * @param string $unstable_location_id
-     * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -75,18 +90,14 @@ class DevicesUnmanagedClient
         ?string $connected_account_id = null,
         ?array $connected_account_ids = null,
         ?string $created_before = null,
-        mixed $custom_metadata_has = null,
         ?string $customer_key = null,
         ?array $device_ids = null,
         ?string $device_type = null,
         ?array $device_types = null,
         ?float $limit = null,
         ?string $manufacturer = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
-        ?string $space_id = null,
-        ?string $unstable_location_id = null,
-        ?string $user_identifier_key = null,
         ?callable $on_response = null,
     ): array {
         $request_payload = [];
@@ -102,9 +113,6 @@ class DevicesUnmanagedClient
         }
         if ($created_before !== null) {
             $request_payload["created_before"] = $created_before;
-        }
-        if ($custom_metadata_has !== null) {
-            $request_payload["custom_metadata_has"] = $custom_metadata_has;
         }
         if ($customer_key !== null) {
             $request_payload["customer_key"] = $customer_key;
@@ -130,20 +138,11 @@ class DevicesUnmanagedClient
         if ($search !== null) {
             $request_payload["search"] = $search;
         }
-        if ($space_id !== null) {
-            $request_payload["space_id"] = $space_id;
-        }
-        if ($unstable_location_id !== null) {
-            $request_payload["unstable_location_id"] = $unstable_location_id;
-        }
-        if ($user_identifier_key !== null) {
-            $request_payload["user_identifier_key"] = $user_identifier_key;
-        }
 
-        $res = $this->seam->request(
-            "POST",
-            "/devices/unmanaged/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/devices/unmanaged/list", [
+                "query" => $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -152,7 +151,7 @@ class DevicesUnmanagedClient
 
         return array_map(
             fn($r) => UnmanagedDevice::from_json($r),
-            $res->devices,
+            Body::read_list($res, "devices", "/devices/unmanaged/list"),
         );
     }
 
@@ -162,20 +161,18 @@ class DevicesUnmanagedClient
      * An unmanaged device has a limited set of visible properties and a subset of supported events. You cannot control an unmanaged device. Any [access codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) on an unmanaged device are unmanaged. To control an unmanaged device with Seam, [convert it to a managed device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices#convert-an-unmanaged-device-to-managed).
      *
      * @param string $device_id ID of the unmanaged device that you want to update.
-     * @param mixed $custom_metadata Custom metadata that you want to associate with the device. Supports up to 50 JSON key:value pairs.
-     * @param bool $is_managed Indicates whether the device is managed. Set this parameter to `true` to convert an unmanaged device to managed.
+     * @param array<string, string|bool>|\stdClass $custom_metadata Custom metadata that you want to associate with the device. Supports up to 50 JSON key:value pairs.
+     * @param true $is_managed Indicates whether the device is managed. Set this parameter to `true` to convert an unmanaged device to managed.
      * @return void OK
      */
     public function update(
         string $device_id,
-        mixed $custom_metadata = null,
-        ?bool $is_managed = null,
+        array|\stdClass|null $custom_metadata = null,
+        ?true $is_managed = null,
     ): void {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($custom_metadata !== null) {
             $request_payload["custom_metadata"] = $custom_metadata;
         }
@@ -183,10 +180,8 @@ class DevicesUnmanagedClient
             $request_payload["is_managed"] = $is_managed;
         }
 
-        $this->seam->request(
-            "POST",
-            "/devices/unmanaged/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PATCH", "/devices/unmanaged/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

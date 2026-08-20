@@ -2,22 +2,37 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
+use Seam\Http\ResolveActionAttempt;
+use Seam\NullValue;
 use Seam\Resources\ActionAttempt;
 use Seam\Resources\Device;
-use Seam\SeamClient;
 
 class ThermostatsClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
+
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
     public ThermostatsDailyProgramsClient $daily_programs;
     public ThermostatsSchedulesClient $schedules;
     public ThermostatsSimulateClient $simulate;
-    public function __construct(SeamClient $seam)
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
-        $this->daily_programs = new ThermostatsDailyProgramsClient($seam);
-        $this->schedules = new ThermostatsSchedulesClient($seam);
-        $this->simulate = new ThermostatsSimulateClient($seam);
+        $this->client = $client;
+        $this->defaults = $defaults;
+        $this->daily_programs = new ThermostatsDailyProgramsClient(
+            $client,
+            $defaults,
+        );
+        $this->schedules = new ThermostatsSchedulesClient($client, $defaults);
+        $this->simulate = new ThermostatsSimulateClient($client, $defaults);
     }
 
     /**
@@ -25,37 +40,39 @@ class ThermostatsClient
      *
      * @param string $climate_preset_key Climate preset key of the climate preset that you want to activate.
      * @param string $device_id ID of the thermostat device for which you want to activate a climate preset.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function activate_climate_preset(
         string $climate_preset_key,
         string $device_id,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($climate_preset_key !== null) {
-            $request_payload["climate_preset_key"] = $climate_preset_key;
-        }
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["climate_preset_key"] = $climate_preset_key;
+        $request_payload["device_id"] = $device_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/activate_climate_preset",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/thermostats/activate_climate_preset",
+                ["json" => (object) $request_payload],
+            ),
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/thermostats/activate_climate_preset",
+                ),
+            ),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 
     /**
@@ -64,19 +81,18 @@ class ThermostatsClient
      * @param string $device_id ID of the thermostat device that you want to set to cool mode.
      * @param float $cooling_set_point_celsius [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
      * @param float $cooling_set_point_fahrenheit [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function cool(
         string $device_id,
         ?float $cooling_set_point_celsius = null,
         ?float $cooling_set_point_fahrenheit = null,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($cooling_set_point_celsius !== null) {
             $request_payload[
                 "cooling_set_point_celsius"
@@ -88,21 +104,20 @@ class ThermostatsClient
             ] = $cooling_set_point_fahrenheit;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/cool",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/cool", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/thermostats/cool"),
+            ),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 
     /**
@@ -119,7 +134,7 @@ class ThermostatsClient
      * @param float $heating_set_point_fahrenheit Temperature to which the thermostat should heat (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
      * @param string $hvac_mode_setting Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
      * @param bool $manual_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings.
-     * @param string $name User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
+     * @param string|NullValue $name User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
      * @return void OK
      */
     public function create_climate_preset(
@@ -134,16 +149,12 @@ class ThermostatsClient
         ?float $heating_set_point_fahrenheit = null,
         ?string $hvac_mode_setting = null,
         ?bool $manual_override_allowed = null,
-        ?string $name = null,
+        string|NullValue|null $name = null,
     ): void {
         $request_payload = [];
 
-        if ($climate_preset_key !== null) {
-            $request_payload["climate_preset_key"] = $climate_preset_key;
-        }
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["climate_preset_key"] = $climate_preset_key;
+        $request_payload["device_id"] = $device_id;
         if ($climate_preset_mode !== null) {
             $request_payload["climate_preset_mode"] = $climate_preset_mode;
         }
@@ -185,11 +196,9 @@ class ThermostatsClient
             $request_payload["name"] = $name;
         }
 
-        $this->seam->request(
-            "POST",
-            "/thermostats/create_climate_preset",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/thermostats/create_climate_preset", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -205,18 +214,12 @@ class ThermostatsClient
     ): void {
         $request_payload = [];
 
-        if ($climate_preset_key !== null) {
-            $request_payload["climate_preset_key"] = $climate_preset_key;
-        }
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["climate_preset_key"] = $climate_preset_key;
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
-            "POST",
-            "/thermostats/delete_climate_preset",
-            json: (object) $request_payload,
-        );
+        $this->client->request("DELETE", "/thermostats/delete_climate_preset", [
+            "query" => $request_payload,
+        ]);
     }
 
     /**
@@ -225,19 +228,18 @@ class ThermostatsClient
      * @param string $device_id ID of the thermostat device that you want to set to heat mode.
      * @param float $heating_set_point_celsius [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
      * @param float $heating_set_point_fahrenheit [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function heat(
         string $device_id,
         ?float $heating_set_point_celsius = null,
         ?float $heating_set_point_fahrenheit = null,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($heating_set_point_celsius !== null) {
             $request_payload[
                 "heating_set_point_celsius"
@@ -249,21 +251,20 @@ class ThermostatsClient
             ] = $heating_set_point_fahrenheit;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/heat",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/heat", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/thermostats/heat"),
+            ),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 
     /**
@@ -274,6 +275,7 @@ class ThermostatsClient
      * @param float $cooling_set_point_fahrenheit [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
      * @param float $heating_set_point_celsius [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
      * @param float $heating_set_point_fahrenheit [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function heat_cool(
@@ -282,13 +284,11 @@ class ThermostatsClient
         ?float $cooling_set_point_fahrenheit = null,
         ?float $heating_set_point_celsius = null,
         ?float $heating_set_point_fahrenheit = null,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($cooling_set_point_celsius !== null) {
             $request_payload[
                 "cooling_set_point_celsius"
@@ -310,21 +310,20 @@ class ThermostatsClient
             ] = $heating_set_point_fahrenheit;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/heat_cool",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/heat_cool", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/thermostats/heat_cool"),
+            ),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 
     /**
@@ -332,40 +331,19 @@ class ThermostatsClient
      *
      * @param string $connect_webview_id ID of the Connect Webview for which you want to list devices.
      * @param string $connected_account_id ID of the connected account for which you want to list devices.
-     * @param array $connected_account_ids Array of IDs of the connected accounts for which you want to list devices.
-     * @param string $created_before Timestamp by which to limit returned devices. Returns devices created before this timestamp.
-     * @param mixed $custom_metadata_has Set of key:value [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) pairs for which you want to list devices.
      * @param string $customer_key Customer key for which you want to list devices.
-     * @param array $device_ids Array of device IDs for which you want to list devices.
      * @param string $device_type Device type by which you want to filter thermostat devices.
-     * @param array $device_types Array of device types by which you want to filter thermostat devices.
-     * @param float $limit Numerical limit on the number of devices to return.
+     * @param list<string> $device_types Array of device types by which you want to filter thermostat devices.
      * @param string $manufacturer Manufacturer by which you want to filter thermostat devices.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
-     * @param string $search String for which to search. Filters returned devices to include all records that satisfy a partial match using `device_id` (full or partial UUID prefix, minimum 4 characters), `connected_account_id`, `display_name`, `custom_metadata` or `location.location_name`.
-     * @param string $space_id ID of the space for which you want to list devices.
-     * @param string $unstable_location_id
-     * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
      * @return array OK
      */
     public function list(
         ?string $connect_webview_id = null,
         ?string $connected_account_id = null,
-        ?array $connected_account_ids = null,
-        ?string $created_before = null,
-        mixed $custom_metadata_has = null,
         ?string $customer_key = null,
-        ?array $device_ids = null,
         ?string $device_type = null,
         ?array $device_types = null,
-        ?float $limit = null,
         ?string $manufacturer = null,
-        ?string $page_cursor = null,
-        ?string $search = null,
-        ?string $space_id = null,
-        ?string $unstable_location_id = null,
-        ?string $user_identifier_key = null,
-        ?callable $on_response = null,
     ): array {
         $request_payload = [];
 
@@ -375,20 +353,8 @@ class ThermostatsClient
         if ($connected_account_id !== null) {
             $request_payload["connected_account_id"] = $connected_account_id;
         }
-        if ($connected_account_ids !== null) {
-            $request_payload["connected_account_ids"] = $connected_account_ids;
-        }
-        if ($created_before !== null) {
-            $request_payload["created_before"] = $created_before;
-        }
-        if ($custom_metadata_has !== null) {
-            $request_payload["custom_metadata_has"] = $custom_metadata_has;
-        }
         if ($customer_key !== null) {
             $request_payload["customer_key"] = $customer_key;
-        }
-        if ($device_ids !== null) {
-            $request_payload["device_ids"] = $device_ids;
         }
         if ($device_type !== null) {
             $request_payload["device_type"] = $device_type;
@@ -396,72 +362,51 @@ class ThermostatsClient
         if ($device_types !== null) {
             $request_payload["device_types"] = $device_types;
         }
-        if ($limit !== null) {
-            $request_payload["limit"] = $limit;
-        }
         if ($manufacturer !== null) {
             $request_payload["manufacturer"] = $manufacturer;
         }
-        if ($page_cursor !== null) {
-            $request_payload["page_cursor"] = $page_cursor;
-        }
-        if ($search !== null) {
-            $request_payload["search"] = $search;
-        }
-        if ($space_id !== null) {
-            $request_payload["space_id"] = $space_id;
-        }
-        if ($unstable_location_id !== null) {
-            $request_payload["unstable_location_id"] = $unstable_location_id;
-        }
-        if ($user_identifier_key !== null) {
-            $request_payload["user_identifier_key"] = $user_identifier_key;
-        }
 
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/thermostats/list", [
+                "query" => $request_payload,
+            ]),
         );
 
-        if ($on_response !== null) {
-            $on_response($res);
-        }
-
-        return array_map(fn($r) => Device::from_json($r), $res->devices);
+        return array_map(
+            fn($r) => Device::from_json($r),
+            Body::read_list($res, "devices", "/thermostats/list"),
+        );
     }
 
     /**
      * Sets a specified [thermostat](https://docs.seam.co/capability-guides/thermostats) to ["off" mode](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings).
      *
      * @param string $device_id ID of the thermostat device that you want to set to off mode.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function off(
         string $device_id,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/off",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/off", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/thermostats/off"),
+            ),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 
     /**
@@ -477,17 +422,13 @@ class ThermostatsClient
     ): void {
         $request_payload = [];
 
-        if ($climate_preset_key !== null) {
-            $request_payload["climate_preset_key"] = $climate_preset_key;
-        }
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["climate_preset_key"] = $climate_preset_key;
+        $request_payload["device_id"] = $device_id;
 
-        $this->seam->request(
+        $this->client->request(
             "POST",
             "/thermostats/set_fallback_climate_preset",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -497,19 +438,18 @@ class ThermostatsClient
      * @param string $device_id ID of the thermostat device for which you want to set the fan mode.
      * @param string $fan_mode Fan mode setting for the thermostat, such as `auto`, `on`, or `circulate`.
      * @param string $fan_mode_setting [Fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings) that you want to set for the thermostat.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function set_fan_mode(
         string $device_id,
         ?string $fan_mode = null,
         ?string $fan_mode_setting = null,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($fan_mode !== null) {
             $request_payload["fan_mode"] = $fan_mode;
         }
@@ -517,21 +457,20 @@ class ThermostatsClient
             $request_payload["fan_mode_setting"] = $fan_mode_setting;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/set_fan_mode",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/set_fan_mode", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/thermostats/set_fan_mode"),
+            ),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 
     /**
@@ -543,6 +482,7 @@ class ThermostatsClient
      * @param float $cooling_set_point_fahrenheit [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
      * @param float $heating_set_point_celsius [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
      * @param float $heating_set_point_fahrenheit [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function set_hvac_mode(
@@ -552,16 +492,12 @@ class ThermostatsClient
         ?float $cooling_set_point_fahrenheit = null,
         ?float $heating_set_point_celsius = null,
         ?float $heating_set_point_fahrenheit = null,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($hvac_mode_setting !== null) {
-            $request_payload["hvac_mode_setting"] = $hvac_mode_setting;
-        }
+        $request_payload["device_id"] = $device_id;
+        $request_payload["hvac_mode_setting"] = $hvac_mode_setting;
         if ($cooling_set_point_celsius !== null) {
             $request_payload[
                 "cooling_set_point_celsius"
@@ -583,45 +519,46 @@ class ThermostatsClient
             ] = $heating_set_point_fahrenheit;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/set_hvac_mode",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/thermostats/set_hvac_mode", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/thermostats/set_hvac_mode",
+                ),
+            ),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 
     /**
      * Sets a [temperature threshold](https://docs.seam.co/capability-guides/thermostats/setting-and-monitoring-temperature-thresholds) for a specified thermostat. Seam emits a `thermostat.temperature_threshold_exceeded` event and adds a warning on a thermostat if it reports a temperature outside the threshold range.
      *
      * @param string $device_id ID of the thermostat device for which you want to set a temperature threshold.
-     * @param float $lower_limit_celsius Lower temperature limit in in °C. Seam alerts you if the reported temperature is lower than this value. You can specify either `lower_limit` but not both.
-     * @param float $lower_limit_fahrenheit Lower temperature limit in in °F. Seam alerts you if the reported temperature is lower than this value. You can specify either `lower_limit` but not both.
-     * @param float $upper_limit_celsius Upper temperature limit in in °C. Seam alerts you if the reported temperature is higher than this value. You can specify either `upper_limit` but not both.
-     * @param float $upper_limit_fahrenheit Upper temperature limit in in °C. Seam alerts you if the reported temperature is higher than this value. You can specify either `upper_limit` but not both.
+     * @param float|NullValue $lower_limit_celsius Lower temperature limit in in °C. Seam alerts you if the reported temperature is lower than this value. You can specify either `lower_limit` but not both.
+     * @param float|NullValue $lower_limit_fahrenheit Lower temperature limit in in °F. Seam alerts you if the reported temperature is lower than this value. You can specify either `lower_limit` but not both.
+     * @param float|NullValue $upper_limit_celsius Upper temperature limit in in °C. Seam alerts you if the reported temperature is higher than this value. You can specify either `upper_limit` but not both.
+     * @param float|NullValue $upper_limit_fahrenheit Upper temperature limit in in °C. Seam alerts you if the reported temperature is higher than this value. You can specify either `upper_limit` but not both.
      * @return void OK
      */
     public function set_temperature_threshold(
         string $device_id,
-        ?float $lower_limit_celsius = null,
-        ?float $lower_limit_fahrenheit = null,
-        ?float $upper_limit_celsius = null,
-        ?float $upper_limit_fahrenheit = null,
+        float|NullValue|null $lower_limit_celsius = null,
+        float|NullValue|null $lower_limit_fahrenheit = null,
+        float|NullValue|null $upper_limit_celsius = null,
+        float|NullValue|null $upper_limit_fahrenheit = null,
     ): void {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($lower_limit_celsius !== null) {
             $request_payload["lower_limit_celsius"] = $lower_limit_celsius;
         }
@@ -639,10 +576,10 @@ class ThermostatsClient
             ] = $upper_limit_fahrenheit;
         }
 
-        $this->seam->request(
-            "POST",
+        $this->client->request(
+            "PATCH",
             "/thermostats/set_temperature_threshold",
-            json: (object) $request_payload,
+            ["json" => (object) $request_payload],
         );
     }
 
@@ -660,7 +597,7 @@ class ThermostatsClient
      * @param float $heating_set_point_fahrenheit Temperature to which the thermostat should heat (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
      * @param string $hvac_mode_setting Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
      * @param bool $manual_override_allowed Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-     * @param string $name User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
+     * @param string|NullValue $name User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
      * @return void OK
      */
     public function update_climate_preset(
@@ -675,16 +612,12 @@ class ThermostatsClient
         ?float $heating_set_point_fahrenheit = null,
         ?string $hvac_mode_setting = null,
         ?bool $manual_override_allowed = null,
-        ?string $name = null,
+        string|NullValue|null $name = null,
     ): void {
         $request_payload = [];
 
-        if ($climate_preset_key !== null) {
-            $request_payload["climate_preset_key"] = $climate_preset_key;
-        }
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["climate_preset_key"] = $climate_preset_key;
+        $request_payload["device_id"] = $device_id;
         if ($climate_preset_mode !== null) {
             $request_payload["climate_preset_mode"] = $climate_preset_mode;
         }
@@ -726,42 +659,39 @@ class ThermostatsClient
             $request_payload["name"] = $name;
         }
 
-        $this->seam->request(
-            "POST",
-            "/thermostats/update_climate_preset",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PATCH", "/thermostats/update_climate_preset", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
      * Updates the thermostat weekly program for a thermostat device. To configure a weekly program, specify the ID of the daily program that you want to use for each day of the week. When you update a weekly program, the set of programs that you specify overwrites any previous weekly program for the thermostat.
      *
      * @param string $device_id ID of the thermostat device for which you want to update the weekly program.
-     * @param string $friday_program_id ID of the thermostat daily program to run on Fridays.
-     * @param string $monday_program_id ID of the thermostat daily program to run on Mondays.
-     * @param string $saturday_program_id ID of the thermostat daily program to run on Saturdays.
-     * @param string $sunday_program_id ID of the thermostat daily program to run on Sundays.
-     * @param string $thursday_program_id ID of the thermostat daily program to run on Thursdays.
-     * @param string $tuesday_program_id ID of the thermostat daily program to run on Tuesdays.
-     * @param string $wednesday_program_id ID of the thermostat daily program to run on Wednesdays.
+     * @param string|NullValue $friday_program_id ID of the thermostat daily program to run on Fridays.
+     * @param string|NullValue $monday_program_id ID of the thermostat daily program to run on Mondays.
+     * @param string|NullValue $saturday_program_id ID of the thermostat daily program to run on Saturdays.
+     * @param string|NullValue $sunday_program_id ID of the thermostat daily program to run on Sundays.
+     * @param string|NullValue $thursday_program_id ID of the thermostat daily program to run on Thursdays.
+     * @param string|NullValue $tuesday_program_id ID of the thermostat daily program to run on Tuesdays.
+     * @param string|NullValue $wednesday_program_id ID of the thermostat daily program to run on Wednesdays.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function update_weekly_program(
         string $device_id,
-        ?string $friday_program_id = null,
-        ?string $monday_program_id = null,
-        ?string $saturday_program_id = null,
-        ?string $sunday_program_id = null,
-        ?string $thursday_program_id = null,
-        ?string $tuesday_program_id = null,
-        ?string $wednesday_program_id = null,
-        bool $wait_for_action_attempt = true,
+        string|NullValue|null $friday_program_id = null,
+        string|NullValue|null $monday_program_id = null,
+        string|NullValue|null $saturday_program_id = null,
+        string|NullValue|null $sunday_program_id = null,
+        string|NullValue|null $thursday_program_id = null,
+        string|NullValue|null $tuesday_program_id = null,
+        string|NullValue|null $wednesday_program_id = null,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($friday_program_id !== null) {
             $request_payload["friday_program_id"] = $friday_program_id;
         }
@@ -784,20 +714,25 @@ class ThermostatsClient
             $request_payload["wednesday_program_id"] = $wednesday_program_id;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/update_weekly_program",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/thermostats/update_weekly_program",
+                ["json" => (object) $request_payload],
+            ),
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/thermostats/update_weekly_program",
+                ),
+            ),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 }

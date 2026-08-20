@@ -2,18 +2,30 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
+use Seam\Http\ResolveActionAttempt;
+use Seam\NullValue;
 use Seam\Resources\AcsCredential;
 use Seam\Resources\AcsEntrance;
 use Seam\Resources\ActionAttempt;
-use Seam\SeamClient;
 
 class AcsEntrancesClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -26,17 +38,17 @@ class AcsEntrancesClient
     {
         $request_payload = [];
 
-        if ($acs_entrance_id !== null) {
-            $request_payload["acs_entrance_id"] = $acs_entrance_id;
-        }
+        $request_payload["acs_entrance_id"] = $acs_entrance_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/entrances/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/acs/entrances/get", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return AcsEntrance::from_json($res->acs_entrance);
+        return AcsEntrance::from_json(
+            Body::read($res, "acs_entrance", "/acs/entrances/get"),
+        );
     }
 
     /**
@@ -54,9 +66,7 @@ class AcsEntrancesClient
     ): void {
         $request_payload = [];
 
-        if ($acs_entrance_id !== null) {
-            $request_payload["acs_entrance_id"] = $acs_entrance_id;
-        }
+        $request_payload["acs_entrance_id"] = $acs_entrance_id;
         if ($acs_user_id !== null) {
             $request_payload["acs_user_id"] = $acs_user_id;
         }
@@ -64,11 +74,9 @@ class AcsEntrancesClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
-            "POST",
-            "/acs/entrances/grant_access",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/acs/entrances/grant_access", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -76,15 +84,16 @@ class AcsEntrancesClient
      *
      * @param string $access_method_id ID of the access method for which you want to retrieve all entrances to which it grants access.
      * @param string $acs_credential_id ID of the credential for which you want to retrieve all entrances.
-     * @param array $acs_entrance_ids IDs of the entrances for which you want to retrieve all entrances.
+     * @param list<string> $acs_entrance_ids IDs of the entrances for which you want to retrieve all entrances.
      * @param string $acs_system_id ID of the access system for which you want to retrieve all entrances.
      * @param string $connected_account_id ID of the connected account for which you want to retrieve all entrances.
      * @param string $customer_key Customer key for which you want to list entrances.
      * @param int $limit Maximum number of records to return per page.
-     * @param string $location_id
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $location_id
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned entrances to include all records that satisfy a partial match using `display_name`.
      * @param string $space_id ID of the space for which you want to list entrances.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -95,8 +104,8 @@ class AcsEntrancesClient
         ?string $connected_account_id = null,
         ?string $customer_key = null,
         ?int $limit = null,
-        ?string $location_id = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $location_id = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?string $space_id = null,
         ?callable $on_response = null,
@@ -137,10 +146,10 @@ class AcsEntrancesClient
             $request_payload["space_id"] = $space_id;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/entrances/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/acs/entrances/list", [
+                "query" => $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -149,7 +158,7 @@ class AcsEntrancesClient
 
         return array_map(
             fn($r) => AcsEntrance::from_json($r),
-            $res->acs_entrances,
+            Body::read_list($res, "acs_entrances", "/acs/entrances/list"),
         );
     }
 
@@ -157,7 +166,7 @@ class AcsEntrancesClient
      * Returns a list of all [credentials](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) with access to a specified [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
      *
      * @param string $acs_entrance_id ID of the entrance for which you want to list all credentials that grant access.
-     * @param array $include_if Conditions that credentials must meet to be included in the returned list.
+     * @param list<string> $include_if Conditions that credentials must meet to be included in the returned list.
      * @return array OK
      */
     public function list_credentials_with_access(
@@ -166,22 +175,26 @@ class AcsEntrancesClient
     ): array {
         $request_payload = [];
 
-        if ($acs_entrance_id !== null) {
-            $request_payload["acs_entrance_id"] = $acs_entrance_id;
-        }
+        $request_payload["acs_entrance_id"] = $acs_entrance_id;
         if ($include_if !== null) {
             $request_payload["include_if"] = $include_if;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/entrances/list_credentials_with_access",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "GET",
+                "/acs/entrances/list_credentials_with_access",
+                ["query" => $request_payload],
+            ),
         );
 
         return array_map(
             fn($r) => AcsCredential::from_json($r),
-            $res->acs_credentials,
+            Body::read_list(
+                $res,
+                "acs_credentials",
+                "/acs/entrances/list_credentials_with_access",
+            ),
         );
     }
 
@@ -190,36 +203,32 @@ class AcsEntrancesClient
      *
      * @param string $acs_credential_id ID of the cloud_key credential to use for the unlock operation.
      * @param string $acs_entrance_id ID of the entrance to unlock.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function unlock(
         string $acs_credential_id,
         string $acs_entrance_id,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($acs_credential_id !== null) {
-            $request_payload["acs_credential_id"] = $acs_credential_id;
-        }
-        if ($acs_entrance_id !== null) {
-            $request_payload["acs_entrance_id"] = $acs_entrance_id;
-        }
+        $request_payload["acs_credential_id"] = $acs_credential_id;
+        $request_payload["acs_entrance_id"] = $acs_entrance_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/entrances/unlock",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/entrances/unlock", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json(
+                Body::read($res, "action_attempt", "/acs/entrances/unlock"),
+            ),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 }

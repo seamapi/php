@@ -2,17 +2,28 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
+use Seam\Http\ResolveActionAttempt;
 use Seam\Resources\ActionAttempt;
 use Seam\Resources\ThermostatDailyProgram;
-use Seam\SeamClient;
 
 class ThermostatsDailyProgramsClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -20,7 +31,7 @@ class ThermostatsDailyProgramsClient
      *
      * @param string $device_id ID of the thermostat device for which you want to create a daily program.
      * @param string $name Name of the thermostat daily program.
-     * @param array $periods Array of thermostat daily program periods.
+     * @param list<array<string, mixed>|\stdClass> $periods Array of thermostat daily program periods.
      * @return ThermostatDailyProgram OK
      */
     public function create(
@@ -30,24 +41,24 @@ class ThermostatsDailyProgramsClient
     ): ThermostatDailyProgram {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
-        if ($name !== null) {
-            $request_payload["name"] = $name;
-        }
-        if ($periods !== null) {
-            $request_payload["periods"] = $periods;
-        }
+        $request_payload["device_id"] = $device_id;
+        $request_payload["name"] = $name;
+        $request_payload["periods"] = $periods;
 
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/daily_programs/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/thermostats/daily_programs/create",
+                ["json" => (object) $request_payload],
+            ),
         );
 
         return ThermostatDailyProgram::from_json(
-            $res->thermostat_daily_program,
+            Body::read(
+                $res,
+                "thermostat_daily_program",
+                "/thermostats/daily_programs/create",
+            ),
         );
     }
 
@@ -61,61 +72,57 @@ class ThermostatsDailyProgramsClient
     {
         $request_payload = [];
 
-        if ($thermostat_daily_program_id !== null) {
-            $request_payload[
-                "thermostat_daily_program_id"
-            ] = $thermostat_daily_program_id;
-        }
+        $request_payload[
+            "thermostat_daily_program_id"
+        ] = $thermostat_daily_program_id;
 
-        $this->seam->request(
-            "POST",
-            "/thermostats/daily_programs/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("DELETE", "/thermostats/daily_programs/delete", [
+            "query" => $request_payload,
+        ]);
     }
 
     /**
      * Updates a specified thermostat daily program. The periods that you specify overwrite any existing periods for the daily program.
      *
      * @param string $name Name of the thermostat daily program that you want to update.
-     * @param array $periods Array of thermostat daily program periods. The periods that you specify overwrite any existing periods for the daily program.
+     * @param list<array<string, mixed>|\stdClass> $periods Array of thermostat daily program periods. The periods that you specify overwrite any existing periods for the daily program.
      * @param string $thermostat_daily_program_id ID of the thermostat daily program that you want to update.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
     public function update(
         string $name,
         array $periods,
         string $thermostat_daily_program_id,
-        bool $wait_for_action_attempt = true,
+        bool|array|null $wait_for_action_attempt = null,
     ): ActionAttempt {
         $request_payload = [];
 
-        if ($name !== null) {
-            $request_payload["name"] = $name;
-        }
-        if ($periods !== null) {
-            $request_payload["periods"] = $periods;
-        }
-        if ($thermostat_daily_program_id !== null) {
-            $request_payload[
-                "thermostat_daily_program_id"
-            ] = $thermostat_daily_program_id;
-        }
+        $request_payload["name"] = $name;
+        $request_payload["periods"] = $periods;
+        $request_payload[
+            "thermostat_daily_program_id"
+        ] = $thermostat_daily_program_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/thermostats/daily_programs/update",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "PATCH",
+                "/thermostats/daily_programs/update",
+                ["json" => (object) $request_payload],
+            ),
         );
 
-        if (!$wait_for_action_attempt) {
-            return ActionAttempt::from_json($res->action_attempt);
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready(
-            $res->action_attempt->action_attempt_id,
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/thermostats/daily_programs/update",
+                ),
+            ),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
         );
-
-        return $action_attempt;
     }
 }

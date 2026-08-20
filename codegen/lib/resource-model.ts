@@ -1,21 +1,30 @@
 // Builds the resource class model for src/Resources from the blueprint.
 //
-// Each blueprint resource becomes a PHP class in its own file. Nested object
-// properties and lists of objects are split into their own classes, named
-// after the base resource and the property, e.g. the device battery property
-// becomes DeviceBattery. Those classes only exist to type a resource
-// property, so they are emitted as local classes in the file of the resource
-// that introduced them. Discriminated unions (events, action attempts, and
-// discriminated object lists) are flattened into a single class with the
-// union of the variant properties.
+// Nested objects are emitted recursively in the namespace of their owner.
+// Discriminated resources and object lists are emitted as an abstract base,
+// one final class per variant, and an unknown-discriminant fallback.
 
-import type { Blueprint, Property } from '@seamapi/blueprint'
-import { pascalCase } from 'change-case'
+import type {
+  Blueprint,
+  EnumProperty,
+  Property,
+  Resource,
+} from '@seamapi/blueprint'
+import { constantCase, pascalCase } from 'change-case'
 
-import { getPhpType } from './map-php-type.js'
+import { getPhpDocType, getPhpType } from './map-php-type.js'
 
 export type ResourceClassProperty =
-  | ({ kind: 'value'; phpType: string } & ResourceClassPropertyMetadata)
+  | ({
+      kind: 'value'
+      phpType: string
+      phpDocType: string
+    } & ResourceClassPropertyMetadata)
+  | ({
+      kind: 'record'
+      phpType: string
+      phpDocType: string
+    } & ResourceClassPropertyMetadata)
   | ({
       kind: 'objectReference'
       referenceName: string
@@ -28,22 +37,49 @@ export type ResourceClassProperty =
 interface ResourceClassPropertyMetadata {
   name: string
   description: string
+  isOptional: boolean
+  isNullable: boolean
   isDeprecated: boolean
   deprecationMessage: string
+}
+
+export interface ResourceFactoryVariant {
+  enumCase: string
+  className: string
+}
+
+export interface ResourceFactory {
+  discriminant: string
+  enumType: string
+  variants: ResourceFactoryVariant[]
 }
 
 export interface ResourceClassSchema {
+  kind: 'class'
   name: string
+  namespace: string
   description: string
   isDeprecated: boolean
   deprecationMessage: string
+  isFinal: boolean
+  extendsName: string
   properties: ResourceClassProperty[]
+  inheritedProperties: ResourceClassProperty[]
+  factory?: ResourceFactory
 }
+
+export interface ResourceEnumSchema {
+  kind: 'enum'
+  name: string
+  namespace: string
+  cases: Array<{ name: string; value: string; description: string }>
+}
+
+export type ResourceDeclaration = ResourceClassSchema | ResourceEnumSchema
 
 export interface ResourceSchema {
   name: string
-  resourceClass: ResourceClassSchema
-  localClasses: ResourceClassSchema[]
+  declarations: ResourceDeclaration[]
 }
 
 export interface ResourceModel {
@@ -51,188 +87,558 @@ export interface ResourceModel {
   resources: ResourceSchema[]
 }
 
+const rootNamespace = 'Seam\\Resources'
+const maxDepth = 16
+
+const reservedClassNames = new Set([
+  'array',
+  'bool',
+  'callable',
+  'enum',
+  'false',
+  'float',
+  'int',
+  'iterable',
+  'mixed',
+  'never',
+  'null',
+  'object',
+  'parent',
+  'self',
+  'static',
+  'string',
+  'true',
+  'void',
+  'abstract',
+  'and',
+  'as',
+  'break',
+  'case',
+  'catch',
+  'class',
+  'clone',
+  'const',
+  'continue',
+  'declare',
+  'default',
+  'die',
+  'do',
+  'echo',
+  'else',
+  'elseif',
+  'empty',
+  'enddeclare',
+  'endfor',
+  'endforeach',
+  'endif',
+  'endswitch',
+  'endwhile',
+  'exit',
+  'extends',
+  'final',
+  'finally',
+  'fn',
+  'for',
+  'foreach',
+  'function',
+  'global',
+  'goto',
+  'if',
+  'implements',
+  'include',
+  'include_once',
+  'instanceof',
+  'insteadof',
+  'interface',
+  'isset',
+  'list',
+  'match',
+  'namespace',
+  'new',
+  'or',
+  'print',
+  'private',
+  'protected',
+  'public',
+  'readonly',
+  'require',
+  'require_once',
+  'return',
+  'switch',
+  'throw',
+  'trait',
+  'try',
+  'unset',
+  'use',
+  'var',
+  'while',
+  'xor',
+  'yield',
+])
+
+interface ClassDocs {
+  description: string
+  isDeprecated: boolean
+  deprecationMessage: string
+}
+
+interface BuiltDeclaration {
+  declaration: ResourceDeclaration
+  nestedDeclarations: BuiltDeclaration[]
+}
+
+interface VariantInput {
+  properties: Property[]
+  description: string
+}
+
 export const createResourceModel = (blueprint: Blueprint): ResourceModel => {
-  const baseResources = new Map<string, Property[]>()
+  const discriminatedTypes = new Set<string>(
+    [...blueprint.events, ...blueprint.actionAttempts].map(
+      ({ resourceType }) => resourceType,
+    ),
+  )
+  const resources = new Map(
+    blueprint.resources
+      .filter(({ resourceType }) => !discriminatedTypes.has(resourceType))
+      .map((resource) => [resource.resourceType, resource] as const),
+  )
 
-  for (const resource of blueprint.resources) {
-    baseResources.set(resource.resourceType, resource.properties)
+  const resourceTypes: string[] = [
+    ...resources.keys(),
+    ...(blueprint.events.length > 0 ? ['event'] : []),
+    ...(blueprint.actionAttempts.length > 0 ? ['action_attempt'] : []),
+  ].sort()
+
+  const schemas = resourceTypes.map((resourceType): ResourceSchema => {
+    const name = pascalCase(resourceType)
+    let built: BuiltDeclaration
+
+    if (resourceType === 'event') {
+      built = buildDiscriminatedClass(
+        name,
+        rootNamespace,
+        blueprint.events,
+        'event_type',
+        resourceType,
+        0,
+        {
+          description: 'Base class for events returned by the Seam API.',
+          isDeprecated: false,
+          deprecationMessage: '',
+        },
+      )
+    } else if (resourceType === 'action_attempt') {
+      built = buildDiscriminatedClass(
+        name,
+        rootNamespace,
+        blueprint.actionAttempts,
+        'action_type',
+        resourceType,
+        0,
+        {
+          description:
+            'Base class for actions whose completion is tracked asynchronously.',
+          isDeprecated: false,
+          deprecationMessage: '',
+        },
+        true,
+      )
+    } else {
+      const resource = resources.get(resourceType)
+      built = buildClass(
+        name,
+        rootNamespace,
+        resource?.properties ?? [],
+        resourceType,
+        0,
+        docsFor(resource),
+      )
+    }
+
+    return { name, declarations: flattenDeclarations(built) }
+  })
+
+  return {
+    resourceNames: schemas.map(({ name }) => name),
+    resources: schemas,
+  }
+}
+
+const docsFor = (resource: Resource | undefined): ClassDocs => ({
+  description: resource?.description ?? '',
+  isDeprecated: resource?.isDeprecated ?? false,
+  deprecationMessage: resource?.deprecationMessage ?? '',
+})
+
+const buildClass = (
+  className: string,
+  namespace: string,
+  classProperties: Property[],
+  path: string,
+  depth: number,
+  docs: ClassDocs,
+  options: {
+    isFinal?: boolean
+    extendsName?: string
+    inheritedProperties?: ResourceClassProperty[]
+    factory?: ResourceFactory
+  } = {},
+): BuiltDeclaration => {
+  assertDepth(path, depth)
+
+  const nestedNamespace = `${namespace}\\${className}`
+  const nestedDeclarations: BuiltDeclaration[] = []
+  const takenNames = new Set<string>()
+
+  const properties = classProperties.map((property): ResourceClassProperty => {
+    const metadata = propertyMetadata(property)
+    const nestedPath = `${path}.${property.name}`
+    const nestedClassName = pascalCase(property.name)
+
+    if (property.format === 'enum') {
+      assertAvailableName(
+        nestedClassName,
+        nestedPath,
+        nestedNamespace,
+        takenNames,
+      )
+      const enumType = `\\${nestedNamespace}\\${nestedClassName}`
+      nestedDeclarations.push(
+        buildEnum(nestedClassName, nestedNamespace, property),
+      )
+      return {
+        ...metadata,
+        kind: 'value',
+        phpType: 'string',
+        phpDocType: `value-of<${enumType}>|string`,
+      }
+    }
+
+    if (
+      property.format === 'list' &&
+      property.itemFormat === 'discriminated_object'
+    ) {
+      assertAvailableName(
+        nestedClassName,
+        nestedPath,
+        nestedNamespace,
+        takenNames,
+      )
+      nestedDeclarations.push(
+        buildDiscriminatedClass(
+          nestedClassName,
+          nestedNamespace,
+          property.variants,
+          property.discriminator,
+          nestedPath,
+          depth + 1,
+          propertyDocs(property),
+        ),
+      )
+      return {
+        ...metadata,
+        kind: 'listReference',
+        referenceName: `\\${nestedNamespace}\\${nestedClassName}`,
+      }
+    }
+
+    const nestedProperties = getNestedProperties(property)
+    if (nestedProperties != null) {
+      assertAvailableName(
+        nestedClassName,
+        nestedPath,
+        nestedNamespace,
+        takenNames,
+      )
+      nestedDeclarations.push(
+        buildClass(
+          nestedClassName,
+          nestedNamespace,
+          nestedProperties,
+          nestedPath,
+          depth + 1,
+          propertyDocs(property),
+        ),
+      )
+      const referenceName = `\\${nestedNamespace}\\${nestedClassName}`
+      return {
+        ...metadata,
+        kind: property.format === 'list' ? 'listReference' : 'objectReference',
+        referenceName,
+      }
+    }
+
+    return property.format === 'record' && !('resourceType' in property)
+      ? {
+          ...metadata,
+          kind: 'record',
+          phpType: getPhpType(property),
+          phpDocType: getPhpDocType(property),
+        }
+      : {
+          ...metadata,
+          kind: 'value',
+          phpType: getPhpType(property),
+          phpDocType: getPhpDocType(property),
+        }
+  })
+
+  return {
+    declaration: {
+      kind: 'class',
+      name: className,
+      namespace,
+      ...docs,
+      isFinal: options.isFinal ?? false,
+      extendsName: options.extendsName ?? '',
+      properties,
+      inheritedProperties: options.inheritedProperties ?? [],
+      ...(options.factory == null ? {} : { factory: options.factory }),
+    },
+    nestedDeclarations,
+  }
+}
+
+const buildDiscriminatedClass = (
+  className: string,
+  namespace: string,
+  variants: VariantInput[],
+  discriminator: string,
+  path: string,
+  depth: number,
+  docs: ClassDocs,
+  actionAttempt = false,
+): BuiltDeclaration => {
+  assertDepth(path, depth)
+  if (variants.length === 0) {
+    return buildClass(className, namespace, [], path, depth, docs)
   }
 
-  // The blueprint models events and action attempts as one resource per
-  // variant. The PHP SDK has a single class for each, so the variants are
-  // merged into one schema.
-  const { events } = blueprint
-  if (events.length > 0) {
-    baseResources.set(
-      'event',
-      mergeProperties(events.map((event) => event.properties)),
+  const variantInfo = variants.map((variant) => {
+    const property = variant.properties.find(
+      ({ name }) => name === discriminator,
     )
+    if (property?.format !== 'enum' || property.values.length !== 1) {
+      throw new Error(
+        `Cannot generate ${path}: ${discriminator} is not a single-value enum`,
+      )
+    }
+    return { variant, value: property.values[0]?.name ?? '' }
+  })
+
+  const commonNames = new Set(
+    variants[0]?.properties
+      .filter((property) =>
+        variants.every((variant) => {
+          const candidate = variant.properties.find(
+            ({ name }) => name === property.name,
+          )
+          return (
+            candidate != null &&
+            (property.name === discriminator ||
+              (actionAttempt && property.name === 'error') ||
+              propertyShape(candidate) === propertyShape(property))
+          )
+        }),
+      )
+      .map(({ name }) => name) ?? [],
+  )
+
+  const commonProperties = (variants[0]?.properties ?? [])
+    .filter(({ name }) => commonNames.has(name))
+    .map((property) => {
+      if (property.format !== 'enum') return property
+      const values = uniqueEnumValues(
+        variants.flatMap(
+          (variant) =>
+            (
+              variant.properties.find(({ name }) => name === property.name) as
+                EnumProperty | undefined
+            )?.values ?? [],
+        ),
+      )
+      return { ...property, values }
+    })
+    .map((property) => {
+      if (!actionAttempt || !['error', 'result'].includes(property.name)) {
+        return property
+      }
+      return {
+        ...property,
+        description: `${property.description}${property.description === '' ? '' : ' '}Null while the action attempt is pending or when this value does not apply.`,
+      }
+    })
+
+  const discriminantProperty = commonProperties.find(
+    ({ name }) => name === discriminator,
+  )
+  if (discriminantProperty?.format !== 'enum') {
+    throw new Error(`Cannot generate ${path}: missing ${discriminator}`)
   }
 
-  const { actionAttempts } = blueprint
-  if (actionAttempts.length > 0) {
-    baseResources.set(
-      'action_attempt',
-      mergeProperties(
-        actionAttempts.map((actionAttempt) => actionAttempt.properties),
+  const enumName = pascalCase(discriminator)
+  const enumType = `\\${namespace}\\${className}\\${enumName}`
+  const factory: ResourceFactory = {
+    discriminant: discriminator,
+    enumType,
+    variants: variantInfo.map(({ value }) => ({
+      enumCase: `${enumType}::${enumCaseName(value)}`,
+      className: `\\${namespace}\\${className}\\${pascalCase(value)}`,
+    })),
+  }
+
+  const built = buildClass(
+    className,
+    namespace,
+    commonProperties,
+    path,
+    depth,
+    {
+      ...docs,
+      description: `${docs.description}${docs.description === '' ? '' : ' '}Known ${discriminator} values use subclasses; unknown values use this base class and retain their raw discriminator.`,
+    },
+    { factory },
+  )
+  const base = built.declaration
+  if (base.kind !== 'class') throw new Error(`Cannot generate ${path}`)
+  const baseName = `\\${namespace}\\${className}`
+  for (const { variant, value } of variantInfo) {
+    const ownProperties = variant.properties
+      .filter(({ name }) => !commonNames.has(name))
+      .map((property) => {
+        if (!actionAttempt || property.name !== 'result') return property
+        return {
+          ...property,
+          description: `${property.description}${property.description === '' ? '' : ' '}Null while the action attempt is pending or when this value does not apply.`,
+        }
+      })
+    built.nestedDeclarations.push(
+      buildClass(
+        pascalCase(value),
+        `${namespace}\\${className}`,
+        ownProperties,
+        `${path}.${value}`,
+        depth + 1,
+        {
+          description: variant.description,
+          isDeprecated: false,
+          deprecationMessage: '',
+        },
+        {
+          isFinal: true,
+          extendsName: baseName,
+          inheritedProperties: base.properties,
+        },
       ),
     )
   }
 
-  const classes = new Map<string, ResourceClassSchema>()
-  const localClassNames = new Map<string, string[]>()
-
-  let currentResourceName = ''
-
-  const addClass = (
-    name: string,
-    properties: Property[],
-    baseName: string,
-    description = '',
-    isDeprecated = false,
-    deprecationMessage = '',
-  ): void => {
-    if (classes.has(name)) return
-    const schema: ResourceClassSchema = {
-      name,
-      description,
-      isDeprecated,
-      deprecationMessage,
-      properties: [],
-    }
-    classes.set(name, schema)
-    if (name !== currentResourceName) {
-      localClassNames.get(currentResourceName)?.push(name)
-    }
-    schema.properties = properties.map((property) =>
-      createResourceClassProperty(property, baseName, addClass),
-    )
-  }
-
-  const baseResourceTypes = [...baseResources.keys()].sort()
-  const resources = baseResourceTypes.map((resourceType) => {
-    const name = pascalCase(resourceType)
-    currentResourceName = name
-    localClassNames.set(name, [])
-    const sourceResource =
-      blueprint.resources.find(
-        (resource) => resource.resourceType === resourceType,
-      ) ??
-      (resourceType === 'event'
-        ? blueprint.events[0]
-        : blueprint.actionAttempts[0])
-    addClass(
-      name,
-      baseResources.get(resourceType) ?? [],
-      resourceType,
-      sourceResource?.description,
-      sourceResource?.isDeprecated,
-      sourceResource?.deprecationMessage,
-    )
-
-    const resourceClass = classes.get(name)
-    if (resourceClass == null) {
-      throw new Error(
-        `Missing class for resource ${resourceType}: ${name} is already used by a property class of another resource`,
-      )
-    }
-
-    return {
-      name,
-      resourceClass,
-      localClasses: (localClassNames.get(name) ?? [])
-        .map((localClassName) => {
-          const localClass = classes.get(localClassName)
-          if (localClass == null) {
-            throw new Error(`Missing local class ${localClassName}`)
-          }
-          return localClass
-        })
-        .sort((a, b) => a.name.localeCompare(b.name)),
-    }
-  })
-
-  return {
-    resourceNames: resources.map((resource) => resource.name),
-    resources,
-  }
+  return built
 }
 
-const createResourceClassProperty = (
+const buildEnum = (
+  name: string,
+  namespace: string,
+  property: EnumProperty,
+): BuiltDeclaration => ({
+  declaration: {
+    kind: 'enum',
+    name,
+    namespace,
+    cases: uniqueEnumValues(property.values).map((value) => ({
+      name: enumCaseName(value.name),
+      value: value.name,
+      description: value.description,
+    })),
+  },
+  nestedDeclarations: [],
+})
+
+const enumCaseName = (value: string): string => {
+  const name = constantCase(value)
+  return /^[A-Z_]/.test(name) && !reservedClassNames.has(name.toLowerCase())
+    ? name
+    : `VALUE_${name}`
+}
+
+const uniqueEnumValues = <T extends { name: string }>(values: T[]): T[] => [
+  ...new Map(values.map((value) => [value.name, value])).values(),
+]
+
+const propertyShape = (property: Property): string =>
+  JSON.stringify(property, (key, value: unknown) =>
+    [
+      'description',
+      'isDeprecated',
+      'deprecationMessage',
+      'isUndocumented',
+      'undocumentedMessage',
+      'isDraft',
+      'draftMessage',
+      'propertyGroupKey',
+    ].includes(key)
+      ? undefined
+      : value,
+  )
+
+const propertyMetadata = (
   property: Property,
-  baseName: string,
-  addClass: (
-    name: string,
-    properties: Property[],
-    baseName: string,
-    description?: string,
-    isDeprecated?: boolean,
-    deprecationMessage?: string,
-  ) => void,
-): ResourceClassProperty => {
-  const referenceName = pascalCase(`${baseName}_${property.name}`)
-  const metadata = {
-    name: property.name,
-    description: property.description,
-    isDeprecated: property.isDeprecated,
-    deprecationMessage: property.deprecationMessage,
-  }
+): ResourceClassPropertyMetadata => ({
+  name: property.name,
+  description: property.description,
+  isOptional: property.isOptional,
+  isNullable: property.isNullable,
+  isDeprecated: property.isDeprecated,
+  deprecationMessage: property.deprecationMessage,
+})
 
+const propertyDocs = (property: Property): ClassDocs => ({
+  description: property.description,
+  isDeprecated: property.isDeprecated,
+  deprecationMessage: property.deprecationMessage,
+})
+
+const getNestedProperties = (property: Property): Property[] | undefined => {
   if (property.format === 'object') {
-    const { properties } = property
-
-    if (properties.length > 0) {
-      addClass(referenceName, properties, baseName, property.description)
-      return { ...metadata, kind: 'objectReference', referenceName }
-    }
+    return property.properties.length > 0 ? property.properties : undefined
   }
-
-  if (property.format === 'list') {
-    const itemProperties =
-      property.itemFormat === 'object'
-        ? property.itemProperties
-        : property.itemFormat === 'discriminated_object'
-          ? mergeProperties(
-              property.variants.map((variant) => variant.properties),
-            )
-          : []
-
-    if (itemProperties.length > 0) {
-      addClass(referenceName, itemProperties, baseName, property.description)
-      return { ...metadata, kind: 'listReference', referenceName }
-    }
+  if (property.format === 'list' && property.itemFormat === 'object') {
+    return property.itemProperties.length > 0
+      ? property.itemProperties
+      : undefined
   }
+  return undefined
+}
 
-  return {
-    ...metadata,
-    kind: 'value',
-    phpType: getPhpType(property),
+const assertDepth = (path: string, depth: number): void => {
+  if (depth > maxDepth) {
+    throw new Error(
+      `Cannot generate ${path}: nesting exceeded a depth of ${maxDepth}, which means the schema is cyclic`,
+    )
   }
 }
 
-const mergeProperties = (propertyLists: Property[][]): Property[] => {
-  const merged = new Map<string, Property>()
-
-  for (const properties of propertyLists) {
-    for (const property of properties) {
-      const existing = merged.get(property.name)
-
-      if (existing == null) {
-        merged.set(property.name, property)
-        continue
-      }
-
-      if (existing.format === 'object' && property.format === 'object') {
-        merged.set(property.name, {
-          ...existing,
-          properties: mergeProperties([
-            existing.properties,
-            property.properties,
-          ]),
-        })
-      }
-    }
+const assertAvailableName = (
+  name: string,
+  path: string,
+  namespace: string,
+  takenNames: Set<string>,
+): void => {
+  if (reservedClassNames.has(name.toLowerCase())) {
+    throw new Error(`Cannot generate ${path}: ${name} is reserved in PHP`)
   }
-
-  return [...merged.values()]
+  if (takenNames.has(name.toLowerCase())) {
+    throw new Error(
+      `Cannot generate ${path}: ${name} is already used in ${namespace}`,
+    )
+  }
+  takenNames.add(name.toLowerCase())
 }
+
+const flattenDeclarations = (
+  built: BuiltDeclaration,
+): ResourceDeclaration[] => [
+  built.declaration,
+  ...built.nestedDeclarations.flatMap(flattenDeclarations),
+]

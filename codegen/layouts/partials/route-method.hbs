@@ -1,31 +1,38 @@
 {{{methodPhpDoc this}}}
     public function {{methodName}}({{{signatureParams}}}): {{returnType}} {
+{{#if requiresAtLeastOneParameter}}
+        if ({{#each atLeastOneParameterNames}}{{#unless @first}} && {{/unless}}${{this}} === null{{/each}}) {
+            throw new \InvalidArgumentException("At least one parameter is required for {{path}}");
+        }
+{{/if}}
 {{#if hasParams}}
         $request_payload = [];
 
-{{#each paramNames}}
-        if (${{this}} !== null) {
-            $request_payload["{{this}}"] = ${{this}};
+{{#each parameters}}
+{{#if required}}
+        $request_payload["{{name}}"] = ${{name}};
+{{else}}
+        if (${{name}} !== null) {
+            $request_payload["{{name}}"] = ${{name}};
         }
+{{/if}}
 {{/each}}
 
 {{/if}}
-        {{#unless returnsVoid}}$res = {{/unless}}$this->seam->request(
-            "POST",
+        {{#unless returnsVoid}}$res = Body::decode({{/unless}}$this->client->request(
+            "{{httpMethod}}",
             "{{path}}",
 {{#if hasParams}}
-            json: (object) $request_payload,
+            ["{{#if usesQueryParams}}query{{else}}json{{/if}}" => {{#unless usesQueryParams}}(object) {{/unless}}$request_payload],
 {{/if}}
-        );
+        ){{#unless returnsVoid}}){{/unless}};
 {{#if usesActionAttempt}}
 
-        if (!$wait_for_action_attempt) {
-            return {{returnResource}}::from_json($res->{{returnPath}});
-        }
-
-        $action_attempt = $this->seam->action_attempts->poll_until_ready($res->action_attempt->action_attempt_id);
-
-        return $action_attempt;
+        return ResolveActionAttempt::resolve_action_attempt(
+            {{returnResource}}::from_json(Body::read($res, "{{returnPath}}", "{{path}}")),
+            $this->client,
+            $wait_for_action_attempt ?? $this->defaults["wait_for_action_attempt"]
+        );
 {{else}}
 {{#if usesOnResponse}}
 
@@ -36,9 +43,9 @@
 {{#unless returnsVoid}}
 
 {{#if isArrayResponse}}
-        return array_map(fn ($r) => {{returnResource}}::from_json($r), $res->{{returnPath}});
+        return array_map(fn ($r) => {{returnResource}}::from_json($r), Body::read_list($res, "{{returnPath}}", "{{path}}"));
 {{else}}
-        return {{returnResource}}::from_json($res->{{returnPath}});
+        return {{returnResource}}::from_json(Body::read($res, "{{returnPath}}", "{{path}}"));
 {{/if}}
 {{/unless}}
 {{/if}}

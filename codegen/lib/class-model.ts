@@ -4,18 +4,22 @@
 export interface PhpClientMethodParameter {
   name: string
   type: string
+  phpDocType: string
   description: string
-  required?: boolean | undefined
+  isOptional: boolean
+  isNullable: boolean
   position?: number | undefined
 }
 
 export interface PhpClientMethod {
   methodName: string
+  httpMethod: string
   path: string
   description: string
   responseDescription: string
   isDeprecated: boolean
   deprecationMessage: string
+  requiresAtLeastOneParameter: boolean
   parameters: PhpClientMethodParameter[]
   returnResource: string
   returnPath: string
@@ -43,4 +47,4 @@ export const sortPhpClientMethodParameters = (
   [...parameters].sort((a, b) => getParameterRank(a) - getParameterRank(b))
 
 const getParameterRank = (parameter: PhpClientMethodParameter): number =>
-  parameter.position ?? ((parameter.required ?? false) ? 1000 : 9999)
+  parameter.position ?? (parameter.isOptional ? 9999 : 1000)

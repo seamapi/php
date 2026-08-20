@@ -2,20 +2,31 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\Device;
 use Seam\Resources\DeviceProvider;
-use Seam\SeamClient;
 
 class DevicesClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
+
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
     public DevicesSimulateClient $simulate;
     public DevicesUnmanagedClient $unmanaged;
-    public function __construct(SeamClient $seam)
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
-        $this->simulate = new DevicesSimulateClient($seam);
-        $this->unmanaged = new DevicesUnmanagedClient($seam);
+        $this->client = $client;
+        $this->defaults = $defaults;
+        $this->simulate = new DevicesSimulateClient($client, $defaults);
+        $this->unmanaged = new DevicesUnmanagedClient($client, $defaults);
     }
 
     /**
@@ -29,6 +40,11 @@ class DevicesClient
      */
     public function get(?string $device_id = null, ?string $name = null): Device
     {
+        if ($device_id === null && $name === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /devices/get",
+            );
+        }
         $request_payload = [];
 
         if ($device_id !== null) {
@@ -38,13 +54,13 @@ class DevicesClient
             $request_payload["name"] = $name;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/devices/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/devices/get", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return Device::from_json($res->device);
+        return Device::from_json(Body::read($res, "device", "/devices/get"));
     }
 
     /**
@@ -52,20 +68,21 @@ class DevicesClient
      *
      * @param string $connect_webview_id ID of the Connect Webview for which you want to list devices.
      * @param string $connected_account_id ID of the connected account for which you want to list devices.
-     * @param array $connected_account_ids Array of IDs of the connected accounts for which you want to list devices.
+     * @param list<string> $connected_account_ids Array of IDs of the connected accounts for which you want to list devices.
      * @param string $created_before Timestamp by which to limit returned devices. Returns devices created before this timestamp.
-     * @param mixed $custom_metadata_has Set of key:value [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) pairs for which you want to list devices.
+     * @param array<string, string|bool>|\stdClass $custom_metadata_has Set of key:value [custom metadata](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) pairs for which you want to list devices.
      * @param string $customer_key Customer key for which you want to list devices.
-     * @param array $device_ids Array of device IDs for which you want to list devices.
+     * @param list<string> $device_ids Array of device IDs for which you want to list devices.
      * @param string $device_type Device type for which you want to list devices.
-     * @param array $device_types Array of device types for which you want to list devices.
+     * @param list<string> $device_types Array of device types for which you want to list devices.
      * @param float $limit Numerical limit on the number of devices to return.
      * @param string $manufacturer Manufacturer for which you want to list devices.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned devices to include all records that satisfy a partial match using `device_id` (full or partial UUID prefix, minimum 4 characters), `connected_account_id`, `display_name`, `custom_metadata` or `location.location_name`.
      * @param string $space_id ID of the space for which you want to list devices.
-     * @param string $unstable_location_id
+     * @param string|NullValue $unstable_location_id
      * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -73,17 +90,17 @@ class DevicesClient
         ?string $connected_account_id = null,
         ?array $connected_account_ids = null,
         ?string $created_before = null,
-        mixed $custom_metadata_has = null,
+        array|\stdClass|null $custom_metadata_has = null,
         ?string $customer_key = null,
         ?array $device_ids = null,
         ?string $device_type = null,
         ?array $device_types = null,
         ?float $limit = null,
         ?string $manufacturer = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?string $space_id = null,
-        ?string $unstable_location_id = null,
+        string|NullValue|null $unstable_location_id = null,
         ?string $user_identifier_key = null,
         ?callable $on_response = null,
     ): array {
@@ -138,17 +155,20 @@ class DevicesClient
             $request_payload["user_identifier_key"] = $user_identifier_key;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/devices/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/devices/list", [
+                "query" => $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
             $on_response($res);
         }
 
-        return array_map(fn($r) => Device::from_json($r), $res->devices);
+        return array_map(
+            fn($r) => Device::from_json($r),
+            Body::read_list($res, "devices", "/devices/list"),
+        );
     }
 
     /**
@@ -170,37 +190,37 @@ class DevicesClient
             $request_payload["provider_category"] = $provider_category;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/devices/list_device_providers",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/devices/list_device_providers", [
+                "query" => $request_payload,
+            ]),
         );
 
         return array_map(
             fn($r) => DeviceProvider::from_json($r),
-            $res->device_providers,
+            Body::read_list(
+                $res,
+                "device_providers",
+                "/devices/list_device_providers",
+            ),
         );
     }
 
     /**
      * Updates provider-specific metadata for devices.
      *
-     * @param array $devices Array of devices with provider metadata to update
+     * @param list<array<string, mixed>|\stdClass> $devices Array of devices with provider metadata to update
      * @return void OK
      */
     public function report_provider_metadata(array $devices): void
     {
         $request_payload = [];
 
-        if ($devices !== null) {
-            $request_payload["devices"] = $devices;
-        }
+        $request_payload["devices"] = $devices;
 
-        $this->seam->request(
-            "POST",
-            "/devices/report_provider_metadata",
-            json: (object) $request_payload,
-        );
+        $this->client->request("POST", "/devices/report_provider_metadata", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -210,25 +230,23 @@ class DevicesClient
      *
      * @param string $device_id ID of the device that you want to update.
      * @param bool $backup_access_code_pool_enabled Indicates whether the device's [backup access code pool](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes) is enabled. Set to `false` to disable the pool: Seam stops refilling it and removes any backup codes that have not yet been pulled into active use.
-     * @param mixed $custom_metadata Custom metadata that you want to associate with the device. Supports up to 50 JSON key:value pairs. [Adding custom metadata to a device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) enables you to store custom information, like customer details or internal IDs from your application. Then, you can [filter devices by the desired metadata](https://docs.seam.co/core-concepts/devices/filtering-devices-by-custom-metadata).
+     * @param array<string, string|bool>|\stdClass $custom_metadata Custom metadata that you want to associate with the device. Supports up to 50 JSON key:value pairs. [Adding custom metadata to a device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device) enables you to store custom information, like customer details or internal IDs from your application. Then, you can [filter devices by the desired metadata](https://docs.seam.co/core-concepts/devices/filtering-devices-by-custom-metadata).
      * @param bool $is_managed Indicates whether the device is managed. To unmanage a device, set `is_managed` to `false`.
-     * @param string $name Name for the device.
+     * @param string|NullValue $name Name for the device.
      * @param mixed $properties
      * @return void OK
      */
     public function update(
         string $device_id,
         ?bool $backup_access_code_pool_enabled = null,
-        mixed $custom_metadata = null,
+        array|\stdClass|null $custom_metadata = null,
         ?bool $is_managed = null,
-        ?string $name = null,
+        string|NullValue|null $name = null,
         mixed $properties = null,
     ): void {
         $request_payload = [];
 
-        if ($device_id !== null) {
-            $request_payload["device_id"] = $device_id;
-        }
+        $request_payload["device_id"] = $device_id;
         if ($backup_access_code_pool_enabled !== null) {
             $request_payload[
                 "backup_access_code_pool_enabled"
@@ -247,10 +265,8 @@ class DevicesClient
             $request_payload["properties"] = $properties;
         }
 
-        $this->seam->request(
-            "POST",
-            "/devices/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PATCH", "/devices/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }

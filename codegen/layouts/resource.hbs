@@ -1,34 +1,75 @@
 <?php
 
-namespace Seam\Resources;
-
+{{#each namespaces}}
+namespace {{namespace}} {
 {{#each classes}}
 {{#if (hasPhpDoc this)}}
 {{{resourcePhpDoc this}}}
 {{/if}}
-class {{className}}
-{
-    public static function from_json(mixed $json): {{className}}|null
+    {{#if isFinal}}final {{/if}}class {{className}}{{#if extendsName}} extends {{extendsName}}{{/if}}
     {
-        if (!$json) {
-            return null;
-        }
-        return new self(
-{{#each fromJsonProps}}
-            {{{this}}}
-{{/each}}
-        );
-    }
+        public static function from_json(mixed $json): {{className}}|null
+        {
+            if (!$json) {
+                return null;
+            }
+{{#if factory}}
+            $discriminant = is_string($json->{{factory.discriminant}} ?? null)
+                ? {{factory.enumType}}::tryFrom($json->{{factory.discriminant}})
+                : null;
 
-    public function __construct(
+            return match ($discriminant) {
+{{#each factory.variants}}
+                {{enumCase}} => {{className}}::from_json($json),
+{{/each}}
+                default => new self(
+{{#each fromJsonProps}}
+                    {{{this}}}
+{{/each}}
+                ),
+            };
+{{else}}
+            return new self(
+{{#each fromJsonProps}}
+                {{{this}}}
+{{/each}}
+            );
+{{/if}}
+        }
+
+        public function __construct(
 {{#each constructorParams}}
 {{#if (hasPhpDoc this)}}
 {{{propertyPhpDoc this}}}
 {{/if}}
-        {{{declaration}}}
+            {{{declaration}}}
 {{/each}}
-    ) {
+        ) {
+{{#if parentArgs}}
+            parent::__construct(
+{{#each parentArgs}}
+                {{{this}}}
+{{/each}}
+            );
+{{/if}}
+        }
     }
+
+{{/each}}
+{{#each enums}}
+    enum {{enumName}}: string
+    {
+{{#each cases}}
+{{#if description}}
+        /**
+         * {{description}}
+         */
+{{/if}}
+        case {{name}} = {{{value}}};
+{{/each}}
+    }
+
+{{/each}}
 }
 
 {{/each}}

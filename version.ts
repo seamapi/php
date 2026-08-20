@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url'
 
 import { $ } from 'execa'
 
-const versionFile = './src/Utils/PackageVersion.php'
+const versionFile = './src/Version.php'
 
 const versionPattern = /public const VERSION = "[^"]*";/
 

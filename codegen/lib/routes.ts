@@ -12,7 +12,7 @@ import type { PhpClient, PhpClientMethod } from './class-model.js'
 import { setResourceLayoutContext } from './layouts/resource.js'
 import { setRouteLayoutContext } from './layouts/route.js'
 import { setSeamClientLayoutContext } from './layouts/seam-client.js'
-import { getPhpType } from './map-php-type.js'
+import { getPhpDocType, getPhpType } from './map-php-type.js'
 import { createResourceModel } from './resource-model.js'
 
 interface Metadata {
@@ -21,7 +21,7 @@ interface Metadata {
 
 const resourcesPath = 'src/Resources'
 const routesPath = 'src/Routes'
-const seamClientPath = 'src/SeamClient.php'
+const seamClientPath = 'src/Seam.php'
 
 export const routes = (
   files: Metalsmith.Files,
@@ -121,16 +121,24 @@ const createClientMethod = (endpoint: Endpoint): PhpClientMethod => {
 
   return {
     methodName: endpoint.name,
+    httpMethod: endpoint.request.preferredMethod,
     path: endpoint.path,
     description: endpoint.description,
     responseDescription: response.description,
     isDeprecated: endpoint.isDeprecated,
     deprecationMessage: endpoint.deprecationMessage,
+    // An endpoint that takes no individually required parameter may still
+    // require one of them, so PHP cannot enforce it through the signature.
+    requiresAtLeastOneParameter:
+      endpoint.request.hasRequiredParameters &&
+      endpoint.request.parameters.every(({ isRequired }) => !isRequired),
     parameters: endpoint.request.parameters.map((parameter) => ({
       name: parameter.name,
       type: getPhpType(parameter),
+      phpDocType: getPhpDocType(parameter),
       description: parameter.description,
-      required: parameter.isRequired,
+      isOptional: !parameter.isRequired,
+      isNullable: parameter.isNullable,
       // The primary identifier of a get endpoint always sorts first in the
       // method signature.
       position:

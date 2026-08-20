@@ -2,23 +2,34 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\Batch;
 use Seam\Resources\Space;
-use Seam\SeamClient;
 
 class SpacesClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
      * Adds [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) to a specific space.
      *
-     * @param array $acs_entrance_ids IDs of the entrances that you want to add to the space.
+     * @param list<string> $acs_entrance_ids IDs of the entrances that you want to add to the space.
      * @param string $space_id ID of the space to which you want to add entrances.
      * @return void OK
      */
@@ -28,18 +39,12 @@ class SpacesClient
     ): void {
         $request_payload = [];
 
-        if ($acs_entrance_ids !== null) {
-            $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
-        }
-        if ($space_id !== null) {
-            $request_payload["space_id"] = $space_id;
-        }
+        $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
+        $request_payload["space_id"] = $space_id;
 
-        $this->seam->request(
-            "POST",
-            "/spaces/add_acs_entrances",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PUT", "/spaces/add_acs_entrances", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -55,24 +60,18 @@ class SpacesClient
     ): void {
         $request_payload = [];
 
-        if ($connected_account_id !== null) {
-            $request_payload["connected_account_id"] = $connected_account_id;
-        }
-        if ($space_id !== null) {
-            $request_payload["space_id"] = $space_id;
-        }
+        $request_payload["connected_account_id"] = $connected_account_id;
+        $request_payload["space_id"] = $space_id;
 
-        $this->seam->request(
-            "POST",
-            "/spaces/add_connected_account",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PUT", "/spaces/add_connected_account", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
      * Adds devices to a specific space.
      *
-     * @param array $device_ids IDs of the devices that you want to add to the space.
+     * @param list<string> $device_ids IDs of the devices that you want to add to the space.
      * @param string $space_id ID of the space to which you want to add devices.
      * @return void OK
      */
@@ -80,29 +79,23 @@ class SpacesClient
     {
         $request_payload = [];
 
-        if ($device_ids !== null) {
-            $request_payload["device_ids"] = $device_ids;
-        }
-        if ($space_id !== null) {
-            $request_payload["space_id"] = $space_id;
-        }
+        $request_payload["device_ids"] = $device_ids;
+        $request_payload["space_id"] = $space_id;
 
-        $this->seam->request(
-            "POST",
-            "/spaces/add_devices",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PUT", "/spaces/add_devices", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
      * Creates a new space.
      *
      * @param string $name Name of the space that you want to create.
-     * @param array $acs_entrance_ids IDs of the entrances that you want to add to the new space.
-     * @param array $connected_account_ids IDs of connected accounts to associate with the new space. Persisted on seam.location_third_party_account so the UI can show which provider account(s) a space came from.
+     * @param list<string> $acs_entrance_ids IDs of the entrances that you want to add to the new space.
+     * @param list<string> $connected_account_ids IDs of connected accounts to associate with the new space. Persisted on seam.location_third_party_account so the UI can show which provider account(s) a space came from.
      * @param mixed $customer_data Reservation/stay-related defaults for the space.
      * @param string $customer_key Customer key for which you want to create the space.
-     * @param array $device_ids IDs of the devices that you want to add to the new space.
+     * @param list<string> $device_ids IDs of the devices that you want to add to the new space.
      * @param string $space_key Unique key for the space within the workspace.
      * @return Space OK
      */
@@ -117,9 +110,7 @@ class SpacesClient
     ): Space {
         $request_payload = [];
 
-        if ($name !== null) {
-            $request_payload["name"] = $name;
-        }
+        $request_payload["name"] = $name;
         if ($acs_entrance_ids !== null) {
             $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
         }
@@ -139,13 +130,13 @@ class SpacesClient
             $request_payload["space_key"] = $space_key;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/spaces/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/spaces/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        return Space::from_json($res->space);
+        return Space::from_json(Body::read($res, "space", "/spaces/create"));
     }
 
     /**
@@ -158,15 +149,11 @@ class SpacesClient
     {
         $request_payload = [];
 
-        if ($space_id !== null) {
-            $request_payload["space_id"] = $space_id;
-        }
+        $request_payload["space_id"] = $space_id;
 
-        $this->seam->request(
-            "POST",
-            "/spaces/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("DELETE", "/spaces/delete", [
+            "query" => $request_payload,
+        ]);
     }
 
     /**
@@ -180,6 +167,11 @@ class SpacesClient
         ?string $space_id = null,
         ?string $space_key = null,
     ): Space {
+        if ($space_id === null && $space_key === null) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /spaces/get",
+            );
+        }
         $request_payload = [];
 
         if ($space_id !== null) {
@@ -189,22 +181,22 @@ class SpacesClient
             $request_payload["space_key"] = $space_key;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/spaces/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/spaces/get", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return Space::from_json($res->space);
+        return Space::from_json(Body::read($res, "space", "/spaces/get"));
     }
 
     /**
      * Gets all related resources for one or more Spaces.
      *
-     * @param array $exclude
-     * @param array $include
-     * @param array $space_ids IDs of the spaces that you want to get along with their related resources.
-     * @param array $space_keys Keys of the spaces that you want to get along with their related resources.
+     * @param list<string> $exclude
+     * @param list<string> $include
+     * @param list<string> $space_ids IDs of the spaces that you want to get along with their related resources.
+     * @param list<string> $space_keys Keys of the spaces that you want to get along with their related resources.
      * @return Batch OK
      */
     public function get_related(
@@ -213,6 +205,16 @@ class SpacesClient
         ?array $space_ids = null,
         ?array $space_keys = null,
     ): Batch {
+        if (
+            $exclude === null &&
+            $include === null &&
+            $space_ids === null &&
+            $space_keys === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /spaces/get_related",
+            );
+        }
         $request_payload = [];
 
         if ($exclude !== null) {
@@ -228,13 +230,15 @@ class SpacesClient
             $request_payload["space_keys"] = $space_keys;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/spaces/get_related",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/spaces/get_related", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return Batch::from_json($res->batch);
+        return Batch::from_json(
+            Body::read($res, "batch", "/spaces/get_related"),
+        );
     }
 
     /**
@@ -242,15 +246,16 @@ class SpacesClient
      *
      * @param string $customer_key Customer key for which you want to list spaces.
      * @param float $limit Maximum number of records to return per page.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned spaces to include all records that satisfy a partial match using `name`, `space_key`, or `customer_key`.
      * @param string $space_key Filter spaces by space_key.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
         ?string $customer_key = null,
         ?float $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?string $space_key = null,
         ?callable $on_response = null,
@@ -273,23 +278,26 @@ class SpacesClient
             $request_payload["space_key"] = $space_key;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/spaces/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/spaces/list", [
+                "query" => $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
             $on_response($res);
         }
 
-        return array_map(fn($r) => Space::from_json($r), $res->spaces);
+        return array_map(
+            fn($r) => Space::from_json($r),
+            Body::read_list($res, "spaces", "/spaces/list"),
+        );
     }
 
     /**
      * Removes [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) from a specific space.
      *
-     * @param array $acs_entrance_ids IDs of the entrances that you want to remove from the space.
+     * @param list<string> $acs_entrance_ids IDs of the entrances that you want to remove from the space.
      * @param string $space_id ID of the space from which you want to remove entrances.
      * @return void OK
      */
@@ -299,18 +307,12 @@ class SpacesClient
     ): void {
         $request_payload = [];
 
-        if ($acs_entrance_ids !== null) {
-            $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
-        }
-        if ($space_id !== null) {
-            $request_payload["space_id"] = $space_id;
-        }
+        $request_payload["acs_entrance_ids"] = $acs_entrance_ids;
+        $request_payload["space_id"] = $space_id;
 
-        $this->seam->request(
-            "POST",
-            "/spaces/remove_acs_entrances",
-            json: (object) $request_payload,
-        );
+        $this->client->request("DELETE", "/spaces/remove_acs_entrances", [
+            "query" => $request_payload,
+        ]);
     }
 
     /**
@@ -326,24 +328,18 @@ class SpacesClient
     ): void {
         $request_payload = [];
 
-        if ($connected_account_id !== null) {
-            $request_payload["connected_account_id"] = $connected_account_id;
-        }
-        if ($space_id !== null) {
-            $request_payload["space_id"] = $space_id;
-        }
+        $request_payload["connected_account_id"] = $connected_account_id;
+        $request_payload["space_id"] = $space_id;
 
-        $this->seam->request(
-            "POST",
-            "/spaces/remove_connected_account",
-            json: (object) $request_payload,
-        );
+        $this->client->request("DELETE", "/spaces/remove_connected_account", [
+            "query" => $request_payload,
+        ]);
     }
 
     /**
      * Removes devices from a specific space.
      *
-     * @param array $device_ids IDs of the devices that you want to remove from the space.
+     * @param list<string> $device_ids IDs of the devices that you want to remove from the space.
      * @param string $space_id ID of the space from which you want to remove devices.
      * @return void OK
      */
@@ -351,26 +347,20 @@ class SpacesClient
     {
         $request_payload = [];
 
-        if ($device_ids !== null) {
-            $request_payload["device_ids"] = $device_ids;
-        }
-        if ($space_id !== null) {
-            $request_payload["space_id"] = $space_id;
-        }
+        $request_payload["device_ids"] = $device_ids;
+        $request_payload["space_id"] = $space_id;
 
-        $this->seam->request(
-            "POST",
-            "/spaces/remove_devices",
-            json: (object) $request_payload,
-        );
+        $this->client->request("DELETE", "/spaces/remove_devices", [
+            "query" => $request_payload,
+        ]);
     }
 
     /**
      * Updates an existing space.
      *
-     * @param array $acs_entrance_ids IDs of the entrances that you want to set for the space. If specified, this will replace all existing entrances.
+     * @param list<string> $acs_entrance_ids IDs of the entrances that you want to set for the space. If specified, this will replace all existing entrances.
      * @param mixed $customer_data Reservation/stay-related defaults for the space. Only the keys you provide are updated; omit a key to leave it unchanged. Pass null on a key to clear it.
-     * @param array $device_ids IDs of the devices that you want to set for the space. If specified, this will replace all existing devices.
+     * @param list<string> $device_ids IDs of the devices that you want to set for the space. If specified, this will replace all existing devices.
      * @param string $name Name of the space.
      * @param string $space_id ID of the space that you want to update.
      * @param string $space_key Unique key of the space that you want to update.
@@ -405,12 +395,12 @@ class SpacesClient
             $request_payload["space_key"] = $space_key;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/spaces/update",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("PATCH", "/spaces/update", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        return Space::from_json($res->space);
+        return Space::from_json(Body::read($res, "space", "/spaces/update"));
     }
 }

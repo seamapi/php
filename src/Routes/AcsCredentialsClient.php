@@ -2,17 +2,28 @@
 
 namespace Seam\Routes;
 
+use GuzzleHttp\ClientInterface;
+use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\AcsCredential;
 use Seam\Resources\AcsEntrance;
-use Seam\SeamClient;
 
 class AcsCredentialsClient
 {
-    private SeamClient $seam;
+    private ClientInterface $client;
 
-    public function __construct(SeamClient $seam)
+    /**
+     * @var array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}}
+     */
+    private array $defaults;
+
+    /**
+     * @param array{wait_for_action_attempt: bool|array{timeout?: float, polling_interval?: float}} $defaults
+     */
+    public function __construct(ClientInterface $client, array $defaults)
     {
-        $this->seam = $seam;
+        $this->client = $client;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -30,9 +41,7 @@ class AcsCredentialsClient
     ): void {
         $request_payload = [];
 
-        if ($acs_credential_id !== null) {
-            $request_payload["acs_credential_id"] = $acs_credential_id;
-        }
+        $request_payload["acs_credential_id"] = $acs_credential_id;
         if ($acs_user_id !== null) {
             $request_payload["acs_user_id"] = $acs_user_id;
         }
@@ -40,11 +49,9 @@ class AcsCredentialsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
-            "POST",
-            "/acs/credentials/assign",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PATCH", "/acs/credentials/assign", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -53,7 +60,7 @@ class AcsCredentialsClient
      * @param string $access_method Access method for the new credential. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
      * @param string $acs_system_id ID of the access system to which the new credential belongs. You must provide either `acs_user_id` or the combination of `user_identity_id` and `acs_system_id`.
      * @param string $acs_user_id ID of the access system user to whom the new credential belongs. You must provide either `acs_user_id` or the combination of `user_identity_id` and `acs_system_id`.
-     * @param array $allowed_acs_entrance_ids Set of IDs of the [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) for which the new credential grants access.
+     * @param list<string> $allowed_acs_entrance_ids Set of IDs of the [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) for which the new credential grants access.
      * @param mixed $assa_abloy_vostio_metadata Vostio-specific metadata for the new credential.
      * @param string $code Access (PIN) code for the new credential. There may be manufacturer-specific code restrictions. For details, see the applicable [device or system integration guide](https://docs.seam.co/device-and-system-integration-guides).
      * @param string $credential_manager_acs_system_id ACS system ID of the credential manager for the new credential.
@@ -82,9 +89,7 @@ class AcsCredentialsClient
     ): AcsCredential {
         $request_payload = [];
 
-        if ($access_method !== null) {
-            $request_payload["access_method"] = $access_method;
-        }
+        $request_payload["access_method"] = $access_method;
         if ($acs_system_id !== null) {
             $request_payload["acs_system_id"] = $acs_system_id;
         }
@@ -130,13 +135,15 @@ class AcsCredentialsClient
             $request_payload["visionline_metadata"] = $visionline_metadata;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/credentials/create",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("POST", "/acs/credentials/create", [
+                "json" => (object) $request_payload,
+            ]),
         );
 
-        return AcsCredential::from_json($res->acs_credential);
+        return AcsCredential::from_json(
+            Body::read($res, "acs_credential", "/acs/credentials/create"),
+        );
     }
 
     /**
@@ -149,15 +156,11 @@ class AcsCredentialsClient
     {
         $request_payload = [];
 
-        if ($acs_credential_id !== null) {
-            $request_payload["acs_credential_id"] = $acs_credential_id;
-        }
+        $request_payload["acs_credential_id"] = $acs_credential_id;
 
-        $this->seam->request(
-            "POST",
-            "/acs/credentials/delete",
-            json: (object) $request_payload,
-        );
+        $this->client->request("DELETE", "/acs/credentials/delete", [
+            "query" => $request_payload,
+        ]);
     }
 
     /**
@@ -170,17 +173,17 @@ class AcsCredentialsClient
     {
         $request_payload = [];
 
-        if ($acs_credential_id !== null) {
-            $request_payload["acs_credential_id"] = $acs_credential_id;
-        }
+        $request_payload["acs_credential_id"] = $acs_credential_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/credentials/get",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/acs/credentials/get", [
+                "query" => $request_payload,
+            ]),
         );
 
-        return AcsCredential::from_json($res->acs_credential);
+        return AcsCredential::from_json(
+            Body::read($res, "acs_credential", "/acs/credentials/get"),
+        );
     }
 
     /**
@@ -192,8 +195,9 @@ class AcsCredentialsClient
      * @param string $created_before Date and time, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format, before which events to return were created.
      * @param bool $is_multi_phone_sync_credential Indicates whether you want to retrieve only multi-phone sync credentials or non-multi-phone sync credentials.
      * @param float $limit Number of credentials to return.
-     * @param string $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned credentials to include all records that satisfy a partial match using `display_name`, `code`, `card_number`, `acs_user_id` or `acs_credential_id`.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
@@ -203,7 +207,7 @@ class AcsCredentialsClient
         ?string $created_before = null,
         ?bool $is_multi_phone_sync_credential = null,
         ?float $limit = null,
-        ?string $page_cursor = null,
+        string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?callable $on_response = null,
     ): array {
@@ -236,10 +240,10 @@ class AcsCredentialsClient
             $request_payload["search"] = $search;
         }
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/credentials/list",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request("GET", "/acs/credentials/list", [
+                "query" => $request_payload,
+            ]),
         );
 
         if ($on_response !== null) {
@@ -248,7 +252,7 @@ class AcsCredentialsClient
 
         return array_map(
             fn($r) => AcsCredential::from_json($r),
-            $res->acs_credentials,
+            Body::read_list($res, "acs_credentials", "/acs/credentials/list"),
         );
     }
 
@@ -262,19 +266,23 @@ class AcsCredentialsClient
     {
         $request_payload = [];
 
-        if ($acs_credential_id !== null) {
-            $request_payload["acs_credential_id"] = $acs_credential_id;
-        }
+        $request_payload["acs_credential_id"] = $acs_credential_id;
 
-        $res = $this->seam->request(
-            "POST",
-            "/acs/credentials/list_accessible_entrances",
-            json: (object) $request_payload,
+        $res = Body::decode(
+            $this->client->request(
+                "GET",
+                "/acs/credentials/list_accessible_entrances",
+                ["query" => $request_payload],
+            ),
         );
 
         return array_map(
             fn($r) => AcsEntrance::from_json($r),
-            $res->acs_entrances,
+            Body::read_list(
+                $res,
+                "acs_entrances",
+                "/acs/credentials/list_accessible_entrances",
+            ),
         );
     }
 
@@ -293,9 +301,7 @@ class AcsCredentialsClient
     ): void {
         $request_payload = [];
 
-        if ($acs_credential_id !== null) {
-            $request_payload["acs_credential_id"] = $acs_credential_id;
-        }
+        $request_payload["acs_credential_id"] = $acs_credential_id;
         if ($acs_user_id !== null) {
             $request_payload["acs_user_id"] = $acs_user_id;
         }
@@ -303,11 +309,9 @@ class AcsCredentialsClient
             $request_payload["user_identity_id"] = $user_identity_id;
         }
 
-        $this->seam->request(
-            "POST",
-            "/acs/credentials/unassign",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PATCH", "/acs/credentials/unassign", [
+            "json" => (object) $request_payload,
+        ]);
     }
 
     /**
@@ -325,9 +329,7 @@ class AcsCredentialsClient
     ): void {
         $request_payload = [];
 
-        if ($acs_credential_id !== null) {
-            $request_payload["acs_credential_id"] = $acs_credential_id;
-        }
+        $request_payload["acs_credential_id"] = $acs_credential_id;
         if ($code !== null) {
             $request_payload["code"] = $code;
         }
@@ -335,10 +337,8 @@ class AcsCredentialsClient
             $request_payload["ends_at"] = $ends_at;
         }
 
-        $this->seam->request(
-            "POST",
-            "/acs/credentials/update",
-            json: (object) $request_payload,
-        );
+        $this->client->request("PATCH", "/acs/credentials/update", [
+            "json" => (object) $request_payload,
+        ]);
     }
 }
