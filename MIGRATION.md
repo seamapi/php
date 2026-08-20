@@ -22,6 +22,7 @@ composer require "seamapi/seam:^4"
 | [Requests are retried and time out sooner](#requests-are-retried-and-time-out-sooner)                         | You depend on requests never being retried, or on the 60-second timeout                |
 | [`poll_until_ready` is replaced](#poll_until_ready-is-replaced-by-wait_for_action_attempt)                    | You call `$seam->action_attempts->poll_until_ready()` or rely on its 20 s/0.4 s timing |
 | [Nested resource classes are namespaced](#nested-resource-classes-are-namespaced)                             | You type-hint nested classes such as `Seam\Resources\DeviceProperties`                 |
+| [Discriminated resources use specific subclasses](#discriminated-resources-use-specific-subclasses)           | You inspect exact classes or construct events, action attempts, errors, or warnings    |
 | [Resource constructors take required properties first](#resource-constructors-take-required-properties-first) | You construct a resource positionally rather than with named arguments                 |
 | [Missing required parameters fail locally](#missing-required-parameters-fail-locally)                         | You call endpoints with missing parameters and rely on the server's 400 response       |
 | [Preferred HTTP methods and URL search params](#endpoints-use-preferred-http-methods)                         | You inspect traffic in a proxy, mock server, or firewall rules                         |
@@ -131,6 +132,45 @@ use Seam\Resources\Device\Properties\Battery;
 This rename also fixes a class of bugs where two nested shapes competed for one name and the loser was silently dropped: for example, `$device->properties->battery->status` did not exist in v3 because the keypad's battery class won the name `DeviceBattery`. In v4 every nested shape has its own class, so fields that were missing on `device.properties.battery`, the climate preset ecobee metadata, and the phone session credential and entrance metadata are now present.
 
 Property reads are unaffected — only explicit references to the nested class names need updating.
+
+## Discriminated resources use specific subclasses
+
+In v3, events and action attempts were returned as base resource classes that
+combined the properties of every possible variant. Errors and warnings were
+similarly represented by one class per containing resource. In v4, known
+discriminator values return subclasses containing only that variant's
+properties:
+
+```php
+use Seam\Resources\Event;
+use Seam\Resources\Event\AccessCodeCreated;
+
+$event = $seam->events->get(event_id: $event_id);
+
+if ($event instanceof AccessCodeCreated) {
+    print $event->access_code_id;
+}
+```
+
+The same pattern applies to action attempts and nested errors and warnings, for
+example `Seam\Resources\ActionAttempt\UnlockDoor` and
+`Seam\Resources\Device\Errors\DeviceOffline`. Base-class type hints and
+`instanceof` checks continue to work because every variant extends its base.
+Code that checks an exact class with `$resource::class`, or constructs these
+resources directly, must use the appropriate variant class instead.
+
+If the API returns an unknown discriminator, the SDK returns the concrete base
+class and preserves the raw value. Discriminants and other enum-valued response
+properties remain strings, so existing string comparisons continue to work.
+Generated backed enums are available as optional companions:
+
+```php
+use Seam\Resources\Event\EventType;
+
+$event->event_type === "access_code.created";
+$event->event_type === EventType::ACCESS_CODE_CREATED->value;
+$event_type = EventType::tryFrom($event->event_type);
+```
 
 ## Resource constructors take required properties first
 
@@ -256,10 +296,11 @@ The other Seam SDKs spell the sentinel `NULL` and its type `Null`, but both name
 5. Replace `poll_until_ready()` with `wait_for_action_attempt`, and review the new 10 s/1 s defaults.
 6. Review the new retry policy and 30-second timeout; pass `retries: 0` or `timeout: 60.0` to keep v3 behavior.
 7. Update type hints on nested resource classes (`Seam\Resources\DeviceProperties` → `Seam\Resources\Device\Properties`) and on `$seam->client` (`ClientInterface`).
-8. Switch endpoint calls to named arguments, and handle `ArgumentCountError`/`InvalidArgumentException` where calls might be missing parameters.
-9. If proxies, firewalls, or test mocks assume all requests are `POST`, update them for `GET`/`PATCH`/`PUT`/`DELETE`.
-10. Rename `Seam\Utils\PackageVersion` to `Seam\Version`.
-11. Optionally, adopt personal access tokens, `SeamWebhook`, and `NullValue::NULL`.
+8. Replace exact base-class checks and direct construction of events, action attempts, errors, and warnings with their discriminated variant classes.
+9. Switch endpoint calls to named arguments, and handle `ArgumentCountError`/`InvalidArgumentException` where calls might be missing parameters.
+10. If proxies, firewalls, or test mocks assume all requests are `POST`, update them for `GET`/`PATCH`/`PUT`/`DELETE`.
+11. Rename `Seam\Utils\PackageVersion` to `Seam\Version`.
+12. Optionally, adopt personal access tokens, `SeamWebhook`, and `NullValue::NULL`.
 
 # Migrating from seamapi/seam v2 to v3
 
