@@ -143,9 +143,9 @@ namespace Seam\Resources {
 
 namespace Seam\Resources\UnmanagedAccessGrant {
     /**
-     * Errors associated with the [access grant](https://docs.seam.co/use-cases/granting-access).
+     * Errors associated with the [access grant](https://docs.seam.co/use-cases/granting-access). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Errors
+    class Errors
     {
         public static function from_json(mixed $json): Errors|null
         {
@@ -163,9 +163,15 @@ namespace Seam\Resources\UnmanagedAccessGrant {
                     => \Seam\Resources\UnmanagedAccessGrant\Errors\CannotCreateRequestedAccessMethods::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\UnmanagedAccessGrant\Errors\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    error_code: is_string($json->error_code ?? null)
+                        ? \Seam\Resources\UnmanagedAccessGrant\Errors\ErrorCode::tryFrom(
+                                $json->error_code,
+                            ) ?? $json->error_code
+                        : null,
+                    message: $json->message ?? null,
+                    missing_device_ids: $json->missing_device_ids ?? null,
                 ),
             };
         }
@@ -193,9 +199,9 @@ namespace Seam\Resources\UnmanagedAccessGrant {
     }
 
     /**
-     * List of pending mutations for the access grant. This shows updates that are in progress.
+     * List of pending mutations for the access grant. This shows updates that are in progress. Known mutation_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class PendingMutations
+    class PendingMutations
     {
         public static function from_json(mixed $json): PendingMutations|null
         {
@@ -217,9 +223,14 @@ namespace Seam\Resources\UnmanagedAccessGrant {
                     => \Seam\Resources\UnmanagedAccessGrant\PendingMutations\UpdatingAccessTimes::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\UnmanagedAccessGrant\PendingMutations\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    mutation_code: is_string($json->mutation_code ?? null)
+                        ? \Seam\Resources\UnmanagedAccessGrant\PendingMutations\MutationCode::tryFrom(
+                                $json->mutation_code,
+                            ) ?? $json->mutation_code
+                        : null,
                 ),
             };
         }
@@ -258,8 +269,8 @@ namespace Seam\Resources\UnmanagedAccessGrant {
                 display_name: $json->display_name ?? null,
                 mode: is_string($json->mode ?? null)
                     ? \Seam\Resources\UnmanagedAccessGrant\RequestedAccessMethods\Mode::tryFrom(
-                        $json->mode,
-                    )
+                            $json->mode,
+                        ) ?? $json->mode
                     : null,
                 code: $json->code ?? null,
                 instant_key_max_use_count: $json->instant_key_max_use_count ??
@@ -285,7 +296,7 @@ namespace Seam\Resources\UnmanagedAccessGrant {
             /**
              * Access method mode. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
              */
-            public \Seam\Resources\UnmanagedAccessGrant\RequestedAccessMethods\Mode|null $mode,
+            public \Seam\Resources\UnmanagedAccessGrant\RequestedAccessMethods\Mode|string|null $mode,
             /**
              * Specific PIN code to use for this access method. Only applicable when mode is 'code'.
              */
@@ -298,9 +309,9 @@ namespace Seam\Resources\UnmanagedAccessGrant {
     }
 
     /**
-     * Warnings associated with the [access grant](https://docs.seam.co/use-cases/granting-access).
+     * Warnings associated with the [access grant](https://docs.seam.co/use-cases/granting-access). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Warnings
+    class Warnings
     {
         public static function from_json(mixed $json): Warnings|null
         {
@@ -342,9 +353,14 @@ namespace Seam\Resources\UnmanagedAccessGrant {
                     => \Seam\Resources\UnmanagedAccessGrant\Warnings\DeviceTimeConstraintsViolated::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\UnmanagedAccessGrant\Warnings\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    warning_code: is_string($json->warning_code ?? null)
+                        ? \Seam\Resources\UnmanagedAccessGrant\Warnings\WarningCode::tryFrom(
+                                $json->warning_code,
+                            ) ?? $json->warning_code
+                        : null,
                 ),
             };
         }
@@ -376,57 +392,6 @@ namespace Seam\Resources\UnmanagedAccessGrant\Errors {
         public static function from_json(
             mixed $json,
         ): CannotCreateRequestedAccessMethods|null {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessGrant\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
-                message: $json->message ?? null,
-                missing_device_ids: $json->missing_device_ids ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the error.
-             */
-            string|null $created_at,
-            /**
-             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\UnmanagedAccessGrant\Errors\ErrorCode|string|null $error_code,
-            /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-            /**
-             * IDs of the devices that did not receive an access code at grant creation. Use these to identify which specific devices failed when the message reports a partial failure.
-             *
-             * @var list<string>|null
-             */
-            array|null $missing_device_ids = null,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                error_code: $error_code,
-                message: $message,
-                missing_device_ids: $missing_device_ids,
-            );
-        }
-    }
-
-    /**
-     * Fallback for unmanaged_access_grant.errors values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\UnmanagedAccessGrant\Errors
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
             if (!$json) {
                 return null;
             }
@@ -600,50 +565,6 @@ namespace Seam\Resources\UnmanagedAccessGrant\PendingMutations {
              * New access time configuration.
              */
             public \Seam\Resources\UnmanagedAccessGrant\PendingMutations\UpdatingAccessTimes\To|null $to,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                mutation_code: $mutation_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for unmanaged_access_grant.pending_mutations values introduced after this SDK version.
-     */
-    final class Unknown extends
-        \Seam\Resources\UnmanagedAccessGrant\PendingMutations
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessGrant\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which the mutation was created.
-             */
-            string|null $created_at,
-            /**
-             * Detailed description of the mutation.
-             */
-            string|null $message,
-            /**
-             * Mutation code to indicate that Seam is in the process of updating the spaces (devices) associated with this access grant.
-             */
-            \Seam\Resources\UnmanagedAccessGrant\PendingMutations\MutationCode|string|null $mutation_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1111,8 +1032,8 @@ namespace Seam\Resources\UnmanagedAccessGrant\Warnings {
                 message: $json->message ?? null,
                 reason: is_string($json->reason ?? null)
                     ? \Seam\Resources\UnmanagedAccessGrant\Warnings\DeviceTimeConstraintsViolated\Reason::tryFrom(
-                        $json->reason,
-                    )
+                            $json->reason,
+                        ) ?? $json->reason
                     : null,
                 warning_code: is_string($json->warning_code ?? null)
                     ? \Seam\Resources\UnmanagedAccessGrant\Warnings\WarningCode::tryFrom(
@@ -1138,50 +1059,7 @@ namespace Seam\Resources\UnmanagedAccessGrant\Warnings {
             /**
              * Specific reason why the grant's times are not programmable on the device.
              */
-            public \Seam\Resources\UnmanagedAccessGrant\Warnings\DeviceTimeConstraintsViolated\Reason|null $reason,
-            /**
-             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\UnmanagedAccessGrant\Warnings\WarningCode|string|null $warning_code,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                warning_code: $warning_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for unmanaged_access_grant.warnings values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\UnmanagedAccessGrant\Warnings
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessGrant\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the warning.
-             */
-            string|null $created_at,
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
+            public \Seam\Resources\UnmanagedAccessGrant\Warnings\DeviceTimeConstraintsViolated\Reason|string|null $reason,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
              */

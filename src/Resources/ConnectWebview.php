@@ -39,15 +39,15 @@ namespace Seam\Resources {
                     $json->device_selection_mode ?? null,
                 )
                     ? \Seam\Resources\ConnectWebview\DeviceSelectionMode::tryFrom(
-                        $json->device_selection_mode,
-                    )
+                            $json->device_selection_mode,
+                        ) ?? $json->device_selection_mode
                     : null,
                 login_successful: $json->login_successful ?? null,
                 selected_provider: $json->selected_provider ?? null,
                 status: is_string($json->status ?? null)
                     ? \Seam\Resources\ConnectWebview\Status::tryFrom(
-                        $json->status,
-                    )
+                            $json->status,
+                        ) ?? $json->status
                     : null,
                 url: $json->url ?? null,
                 wait_for_device_creation: $json->wait_for_device_creation ??
@@ -111,7 +111,7 @@ namespace Seam\Resources {
             /**
              * Device selection mode of the Connect Webview. Supported values: `none`, `single`, `multiple`.
              */
-            public \Seam\Resources\ConnectWebview\DeviceSelectionMode|null $device_selection_mode,
+            public \Seam\Resources\ConnectWebview\DeviceSelectionMode|string|null $device_selection_mode,
             /**
              * Indicates whether the user logged in successfully using the Connect Webview.
              */
@@ -123,7 +123,7 @@ namespace Seam\Resources {
             /**
              * Status of the Connect Webview. `authorized` indicates that the user has successfully logged into their device or system account, thereby completing the Connect Webview.
              */
-            public \Seam\Resources\ConnectWebview\Status|null $status,
+            public \Seam\Resources\ConnectWebview\Status|string|null $status,
             /**
              * URL for the Connect Webview. You use the URL to display the Connect Webview flow to your user.
              */

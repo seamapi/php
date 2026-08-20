@@ -44,15 +44,15 @@ namespace Seam\Resources {
                     null,
                 external_type: is_string($json->external_type ?? null)
                     ? \Seam\Resources\AcsSystem\ExternalType::tryFrom(
-                        $json->external_type,
-                    )
+                            $json->external_type,
+                        ) ?? $json->external_type
                     : null,
                 external_type_display_name: $json->external_type_display_name ??
                     null,
                 system_type: is_string($json->system_type ?? null)
                     ? \Seam\Resources\AcsSystem\SystemType::tryFrom(
-                        $json->system_type,
-                    )
+                            $json->system_type,
+                        ) ?? $json->system_type
                     : null,
                 system_type_display_name: $json->system_type_display_name ??
                     null,
@@ -135,7 +135,7 @@ namespace Seam\Resources {
             /**
              * Brand-specific terminology for the [access control system](https://docs.seam.co/low-level-apis/access-systems) type.
              */
-            public \Seam\Resources\AcsSystem\ExternalType|null $external_type = null,
+            public \Seam\Resources\AcsSystem\ExternalType|string|null $external_type = null,
             /**
              * Display name that corresponds to the brand-specific terminology for the [access control system](https://docs.seam.co/low-level-apis/access-systems) type.
              */
@@ -143,7 +143,7 @@ namespace Seam\Resources {
             /**
              * @deprecated Use `external_type`.
              */
-            public \Seam\Resources\AcsSystem\SystemType|null $system_type = null,
+            public \Seam\Resources\AcsSystem\SystemType|string|null $system_type = null,
             /**
              * @deprecated Use `external_type_display_name`.
              */
@@ -158,9 +158,9 @@ namespace Seam\Resources {
 
 namespace Seam\Resources\AcsSystem {
     /**
-     * Errors associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+     * Errors associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Errors
+    class Errors
     {
         public static function from_json(mixed $json): Errors|null
         {
@@ -210,8 +210,14 @@ namespace Seam\Resources\AcsSystem {
                     => \Seam\Resources\AcsSystem\Errors\ProviderServiceUnavailable::from_json(
                     $json,
                 ),
-                default => \Seam\Resources\AcsSystem\Errors\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    error_code: is_string($json->error_code ?? null)
+                        ? \Seam\Resources\AcsSystem\Errors\ErrorCode::tryFrom(
+                                $json->error_code,
+                            ) ?? $json->error_code
+                        : null,
+                    message: $json->message ?? null,
                 ),
             };
         }
@@ -287,9 +293,9 @@ namespace Seam\Resources\AcsSystem {
     }
 
     /**
-     * Warnings associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+     * Warnings associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Warnings
+    class Warnings
     {
         public static function from_json(mixed $json): Warnings|null
         {
@@ -319,9 +325,14 @@ namespace Seam\Resources\AcsSystem {
                     => \Seam\Resources\AcsSystem\Warnings\UnknownIssueWithAcsSystem::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\AcsSystem\Warnings\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    warning_code: is_string($json->warning_code ?? null)
+                        ? \Seam\Resources\AcsSystem\Warnings\WarningCode::tryFrom(
+                                $json->warning_code,
+                            ) ?? $json->warning_code
+                        : null,
                 ),
             };
         }
@@ -794,49 +805,6 @@ namespace Seam\Resources\AcsSystem\Errors {
         }
     }
 
-    /**
-     * Fallback for acs_system.errors values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AcsSystem\Errors
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
-                message: $json->message ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the error.
-             */
-            string|null $created_at,
-            /**
-             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\AcsSystem\Errors\ErrorCode|string|null $error_code,
-            /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                error_code: $error_code,
-                message: $message,
-            );
-        }
-    }
-
     enum ErrorCode: string
     {
         case SEAM_BRIDGE_DISCONNECTED = "seam_bridge_disconnected";
@@ -1001,49 +969,6 @@ namespace Seam\Resources\AcsSystem\Warnings {
         public static function from_json(
             mixed $json,
         ): UnknownIssueWithAcsSystem|null {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the warning.
-             */
-            string|null $created_at,
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-            /**
-             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\AcsSystem\Warnings\WarningCode|string|null $warning_code,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                warning_code: $warning_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for acs_system.warnings values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AcsSystem\Warnings
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
             if (!$json) {
                 return null;
             }

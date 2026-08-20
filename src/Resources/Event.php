@@ -2,9 +2,9 @@
 
 namespace Seam\Resources {
     /**
-     * Base class for events returned by the Seam API.
+     * Base class for events returned by the Seam API. Known event_type values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Event
+    class Event
     {
         public static function from_json(mixed $json): Event|null
         {
@@ -412,8 +412,17 @@ namespace Seam\Resources {
                     => \Seam\Resources\Event\SpaceCreated::from_json($json),
                 \Seam\Resources\Event\EventType::SPACE_DELETED
                     => \Seam\Resources\Event\SpaceDeleted::from_json($json),
-                default => \Seam\Resources\Event\UnknownEvent::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    event_id: $json->event_id ?? null,
+                    event_type: is_string($json->event_type ?? null)
+                        ? \Seam\Resources\Event\EventType::tryFrom(
+                                $json->event_type,
+                            ) ?? $json->event_type
+                        : null,
+                    occurred_at: $json->occurred_at ?? null,
+                    workspace_id: $json->workspace_id ?? null,
+                    event_description: $json->event_description ?? null,
                 ),
             };
         }
@@ -7081,8 +7090,8 @@ namespace Seam\Resources\Event {
                 ),
                 error_code: is_string($json->error_code ?? null)
                     ? \Seam\Resources\Event\DeviceDisconnected\ErrorCode::tryFrom(
-                        $json->error_code,
-                    )
+                            $json->error_code,
+                        ) ?? $json->error_code
                     : null,
                 event_id: $json->event_id ?? null,
                 event_type: is_string($json->event_type ?? null)
@@ -7140,7 +7149,7 @@ namespace Seam\Resources\Event {
             /**
              * Error code associated with the disconnection event, if any.
              */
-            public \Seam\Resources\Event\DeviceDisconnected\ErrorCode|null $error_code,
+            public \Seam\Resources\Event\DeviceDisconnected\ErrorCode|string|null $error_code,
             /**
              * ID of the event.
              */
@@ -7235,8 +7244,8 @@ namespace Seam\Resources\Event {
                 ),
                 error_code: is_string($json->error_code ?? null)
                     ? \Seam\Resources\Event\DeviceUnmanagedDisconnected\ErrorCode::tryFrom(
-                        $json->error_code,
-                    )
+                            $json->error_code,
+                        ) ?? $json->error_code
                     : null,
                 event_id: $json->event_id ?? null,
                 event_type: is_string($json->event_type ?? null)
@@ -7294,7 +7303,7 @@ namespace Seam\Resources\Event {
             /**
              * Error code associated with the disconnection event, if any.
              */
-            public \Seam\Resources\Event\DeviceUnmanagedDisconnected\ErrorCode|null $error_code,
+            public \Seam\Resources\Event\DeviceUnmanagedDisconnected\ErrorCode|string|null $error_code,
             /**
              * ID of the event.
              */
@@ -7536,8 +7545,8 @@ namespace Seam\Resources\Event {
                 battery_level: $json->battery_level ?? null,
                 battery_status: is_string($json->battery_status ?? null)
                     ? \Seam\Resources\Event\DeviceBatteryStatusChanged\BatteryStatus::tryFrom(
-                        $json->battery_status,
-                    )
+                            $json->battery_status,
+                        ) ?? $json->battery_status
                     : null,
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
@@ -7566,7 +7575,7 @@ namespace Seam\Resources\Event {
             /**
              * Battery status of the affected device, calculated from the numeric `battery_level` value.
              */
-            public \Seam\Resources\Event\DeviceBatteryStatusChanged\BatteryStatus|null $battery_status,
+            public \Seam\Resources\Event\DeviceBatteryStatusChanged\BatteryStatus|string|null $battery_status,
             /**
              * ID of the connected account associated with the event.
              */
@@ -9011,8 +9020,8 @@ namespace Seam\Resources\Event {
                     : null,
                 method: is_string($json->method ?? null)
                     ? \Seam\Resources\Event\LockLocked\Method::tryFrom(
-                        $json->method,
-                    )
+                            $json->method,
+                        ) ?? $json->method
                     : null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
@@ -9051,7 +9060,7 @@ namespace Seam\Resources\Event {
             /**
              * Method by which the lock was locked. `keycode`: an access code was used (see `access_code_id`). `manual`: a physical action such as a thumbturn or button press. `remote`: a remote action via an app, Bluetooth, or the Seam API (see `action_attempt_id` if Seam-initiated; see `is_via_bluetooth` or `is_via_nfc` for the transport). `automatic`: triggered automatically, for example by an auto-relock timer. `unknown`: could not be determined.
              */
-            public \Seam\Resources\Event\LockLocked\Method|null $method,
+            public \Seam\Resources\Event\LockLocked\Method|string|null $method,
             /**
              * Date and time at which the event occurred.
              */
@@ -9137,8 +9146,8 @@ namespace Seam\Resources\Event {
                     : null,
                 method: is_string($json->method ?? null)
                     ? \Seam\Resources\Event\LockUnlocked\Method::tryFrom(
-                        $json->method,
-                    )
+                            $json->method,
+                        ) ?? $json->method
                     : null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
@@ -9174,7 +9183,7 @@ namespace Seam\Resources\Event {
             /**
              * Method by which the lock was unlocked. `keycode`: an [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) was used (see `access_code_id`). `manual`: a physical action such as a thumbturn or handle press. `remote`: a remote action via an app, Bluetooth, or the Seam API (see `action_attempt_id` if Seam-initiated; see `is_via_bluetooth` or `is_via_nfc` for the transport). `automatic`: triggered automatically, for example by a time-based schedule. `unknown`: could not be determined.
              */
-            public \Seam\Resources\Event\LockUnlocked\Method|null $method,
+            public \Seam\Resources\Event\LockUnlocked\Method|string|null $method,
             /**
              * Date and time at which the event occurred.
              */
@@ -9473,8 +9482,8 @@ namespace Seam\Resources\Event {
                     : null,
                 method: is_string($json->method ?? null)
                     ? \Seam\Resources\Event\ThermostatManuallyAdjusted\Method::tryFrom(
-                        $json->method,
-                    )
+                            $json->method,
+                        ) ?? $json->method
                     : null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
@@ -9489,8 +9498,8 @@ namespace Seam\Resources\Event {
                 event_description: $json->event_description ?? null,
                 fan_mode_setting: is_string($json->fan_mode_setting ?? null)
                     ? \Seam\Resources\Event\ThermostatManuallyAdjusted\FanModeSetting::tryFrom(
-                        $json->fan_mode_setting,
-                    )
+                            $json->fan_mode_setting,
+                        ) ?? $json->fan_mode_setting
                     : null,
                 heating_set_point_celsius: $json->heating_set_point_celsius ??
                     null,
@@ -9498,8 +9507,8 @@ namespace Seam\Resources\Event {
                     null,
                 hvac_mode_setting: is_string($json->hvac_mode_setting ?? null)
                     ? \Seam\Resources\Event\ThermostatManuallyAdjusted\HvacModeSetting::tryFrom(
-                        $json->hvac_mode_setting,
-                    )
+                            $json->hvac_mode_setting,
+                        ) ?? $json->hvac_mode_setting
                     : null,
             );
         }
@@ -9525,7 +9534,7 @@ namespace Seam\Resources\Event {
             /**
              * Method used to adjust the affected thermostat manually. `seam` indicates that the Seam API, Seam CLI, or Seam Console was used to adjust the thermostat.
              */
-            public \Seam\Resources\Event\ThermostatManuallyAdjusted\Method|null $method,
+            public \Seam\Resources\Event\ThermostatManuallyAdjusted\Method|string|null $method,
             /**
              * Date and time at which the event occurred.
              */
@@ -9565,7 +9574,7 @@ namespace Seam\Resources\Event {
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
              */
-            public \Seam\Resources\Event\ThermostatManuallyAdjusted\FanModeSetting|null $fan_mode_setting = null,
+            public \Seam\Resources\Event\ThermostatManuallyAdjusted\FanModeSetting|string|null $fan_mode_setting = null,
             /**
              * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -9577,7 +9586,7 @@ namespace Seam\Resources\Event {
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
              */
-            public \Seam\Resources\Event\ThermostatManuallyAdjusted\HvacModeSetting|null $hvac_mode_setting = null,
+            public \Seam\Resources\Event\ThermostatManuallyAdjusted\HvacModeSetting|string|null $hvac_mode_setting = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -10147,8 +10156,8 @@ namespace Seam\Resources\Event {
             return new self(
                 activation_reason: is_string($json->activation_reason ?? null)
                     ? \Seam\Resources\Event\CameraActivated\ActivationReason::tryFrom(
-                        $json->activation_reason,
-                    )
+                            $json->activation_reason,
+                        ) ?? $json->activation_reason
                     : null,
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
@@ -10169,8 +10178,8 @@ namespace Seam\Resources\Event {
                 image_url: $json->image_url ?? null,
                 motion_sub_type: is_string($json->motion_sub_type ?? null)
                     ? \Seam\Resources\Event\CameraActivated\MotionSubType::tryFrom(
-                        $json->motion_sub_type,
-                    )
+                            $json->motion_sub_type,
+                        ) ?? $json->motion_sub_type
                     : null,
                 video_url: $json->video_url ?? null,
             );
@@ -10180,7 +10189,7 @@ namespace Seam\Resources\Event {
             /**
              * The reason the camera was activated.
              */
-            public \Seam\Resources\Event\CameraActivated\ActivationReason|null $activation_reason,
+            public \Seam\Resources\Event\CameraActivated\ActivationReason|string|null $activation_reason,
             /**
              * ID of the connected account associated with the event.
              */
@@ -10233,7 +10242,7 @@ namespace Seam\Resources\Event {
             /**
              * Sub-type of motion detected, if available.
              */
-            public \Seam\Resources\Event\CameraActivated\MotionSubType|null $motion_sub_type = null,
+            public \Seam\Resources\Event\CameraActivated\MotionSubType|string|null $motion_sub_type = null,
             /**
              * URL to a short video clip captured at the time of activation.
              */
@@ -10665,64 +10674,6 @@ namespace Seam\Resources\Event {
         }
     }
 
-    /**
-     * Fallback for event values introduced after this SDK version.
-     */
-    final class UnknownEvent extends \Seam\Resources\Event
-    {
-        public static function from_json(mixed $json): UnknownEvent|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
-                occurred_at: $json->occurred_at ?? null,
-                workspace_id: $json->workspace_id ?? null,
-                event_description: $json->event_description ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which the event was created.
-             */
-            string|null $created_at,
-            /**
-             * ID of the event.
-             */
-            string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
-            /**
-             * Date and time at which the event occurred.
-             */
-            string|null $occurred_at,
-            /**
-             * ID of the workspace associated with the event.
-             */
-            string|null $workspace_id,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                event_description: $event_description,
-                event_id: $event_id,
-                event_type: $event_type,
-                occurred_at: $occurred_at,
-                workspace_id: $workspace_id,
-            );
-        }
-    }
-
     enum EventType: string
     {
         case ACCESS_CODE_CREATED = "access_code.created";
@@ -11031,8 +10982,8 @@ namespace Seam\Resources\Event\AccessCodeMutationsRequested {
             return new self(
                 mutation_code: is_string($json->mutation_code ?? null)
                     ? \Seam\Resources\Event\AccessCodeMutationsRequested\RequestedMutations\MutationCode::tryFrom(
-                        $json->mutation_code,
-                    )
+                            $json->mutation_code,
+                        ) ?? $json->mutation_code
                     : null,
                 from: $json->from ?? null,
                 to: $json->to ?? null,
@@ -11043,7 +10994,7 @@ namespace Seam\Resources\Event\AccessCodeMutationsRequested {
             /**
              * Code identifying the type of mutation requested, such as `updating_name`, `updating_code`, `updating_time_frame`, or `deleting`.
              */
-            public \Seam\Resources\Event\AccessCodeMutationsRequested\RequestedMutations\MutationCode|null $mutation_code,
+            public \Seam\Resources\Event\AccessCodeMutationsRequested\RequestedMutations\MutationCode|string|null $mutation_code,
             /**
              * Previous property values before the requested change. Keys depend on the mutation type. Absent for non-property mutations like `deleting`.
              *
@@ -13101,8 +13052,8 @@ namespace Seam\Resources\Event\LockAccessDenied {
                 message: $json->message ?? null,
                 reason_code: is_string($json->reason_code ?? null)
                     ? \Seam\Resources\Event\LockAccessDenied\Reason\ReasonCode::tryFrom(
-                        $json->reason_code,
-                    )
+                            $json->reason_code,
+                        ) ?? $json->reason_code
                     : null,
             );
         }
@@ -13115,7 +13066,7 @@ namespace Seam\Resources\Event\LockAccessDenied {
             /**
              * Normalized reason a lock denied access. Provider-agnostic; not all providers report every value.
              */
-            public \Seam\Resources\Event\LockAccessDenied\Reason\ReasonCode|null $reason_code,
+            public \Seam\Resources\Event\LockAccessDenied\Reason\ReasonCode|string|null $reason_code,
         ) {}
     }
 }

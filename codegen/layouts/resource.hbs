@@ -6,7 +6,7 @@ namespace {{namespace}} {
 {{#if (hasPhpDoc this)}}
 {{{resourcePhpDoc this}}}
 {{/if}}
-    {{#if isAbstract}}abstract {{else}}{{#if isFinal}}final {{/if}}{{/if}}class {{className}}{{#if extendsName}} extends {{extendsName}}{{/if}}
+    {{#if isFinal}}final {{/if}}class {{className}}{{#if extendsName}} extends {{extendsName}}{{/if}}
     {
         public static function from_json(mixed $json): {{className}}|null
         {
@@ -22,7 +22,11 @@ namespace {{namespace}} {
 {{#each factory.variants}}
                 {{enumCase}} => {{className}}::from_json($json),
 {{/each}}
-                default => {{factory.fallbackClass}}::from_json($json),
+                default => new self(
+{{#each fromJsonProps}}
+                    {{{this}}}
+{{/each}}
+                ),
             };
 {{else}}
             return new self(

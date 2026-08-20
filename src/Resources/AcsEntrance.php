@@ -278,8 +278,8 @@ namespace Seam\Resources\AcsEntrance {
                 door_number: $json->door_number ?? null,
                 door_type: is_string($json->door_type ?? null)
                     ? \Seam\Resources\AcsEntrance\AssaAbloyVostioMetadata\DoorType::tryFrom(
-                        $json->door_type,
-                    )
+                            $json->door_type,
+                        ) ?? $json->door_type
                     : null,
                 pms_id: $json->pms_id ?? null,
                 stand_open: $json->stand_open ?? null,
@@ -298,7 +298,7 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Type of the door in the Vostio access system.
              */
-            public \Seam\Resources\AcsEntrance\AssaAbloyVostioMetadata\DoorType|null $door_type = null,
+            public \Seam\Resources\AcsEntrance\AssaAbloyVostioMetadata\DoorType|string|null $door_type = null,
             /**
              * PMS ID of the door in the Vostio access system.
              */
@@ -668,8 +668,8 @@ namespace Seam\Resources\AcsEntrance {
             return new self(
                 door_category: is_string($json->door_category ?? null)
                     ? \Seam\Resources\AcsEntrance\VisionlineMetadata\DoorCategory::tryFrom(
-                        $json->door_category,
-                    )
+                            $json->door_category,
+                        ) ?? $json->door_category
                     : null,
                 door_name: $json->door_name ?? null,
                 profiles: array_map(
@@ -687,7 +687,7 @@ namespace Seam\Resources\AcsEntrance {
             /**
              * Category of the door in the Visionline access system.
              */
-            public \Seam\Resources\AcsEntrance\VisionlineMetadata\DoorCategory|null $door_category = null,
+            public \Seam\Resources\AcsEntrance\VisionlineMetadata\DoorCategory|string|null $door_category = null,
             /**
              * Name of the door in the Visionline access system.
              */
@@ -702,9 +702,9 @@ namespace Seam\Resources\AcsEntrance {
     }
 
     /**
-     * Warnings associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+     * Warnings associated with the [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Warnings
+    class Warnings
     {
         public static function from_json(mixed $json): Warnings|null
         {
@@ -738,9 +738,14 @@ namespace Seam\Resources\AcsEntrance {
                     => \Seam\Resources\AcsEntrance\Warnings\PrivacyMode::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\AcsEntrance\Warnings\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    warning_code: is_string($json->warning_code ?? null)
+                        ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
+                                $json->warning_code,
+                            ) ?? $json->warning_code
+                        : null,
                 ),
             };
         }
@@ -817,8 +822,8 @@ namespace Seam\Resources\AcsEntrance\VisionlineMetadata {
                     $json->visionline_door_profile_type ?? null,
                 )
                     ? \Seam\Resources\AcsEntrance\VisionlineMetadata\Profiles\VisionlineDoorProfileType::tryFrom(
-                        $json->visionline_door_profile_type,
-                    )
+                            $json->visionline_door_profile_type,
+                        ) ?? $json->visionline_door_profile_type
                     : null,
             );
         }
@@ -831,7 +836,7 @@ namespace Seam\Resources\AcsEntrance\VisionlineMetadata {
             /**
              * Door profile type in the Visionline access system.
              */
-            public \Seam\Resources\AcsEntrance\VisionlineMetadata\Profiles\VisionlineDoorProfileType|null $visionline_door_profile_type = null,
+            public \Seam\Resources\AcsEntrance\VisionlineMetadata\Profiles\VisionlineDoorProfileType|string|null $visionline_door_profile_type = null,
         ) {}
     }
 
@@ -1037,49 +1042,6 @@ namespace Seam\Resources\AcsEntrance\Warnings {
     final class PrivacyMode extends \Seam\Resources\AcsEntrance\Warnings
     {
         public static function from_json(mixed $json): PrivacyMode|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the warning.
-             */
-            string|null $created_at,
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-            /**
-             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\AcsEntrance\Warnings\WarningCode|string|null $warning_code,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                warning_code: $warning_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for acs_entrance.warnings values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AcsEntrance\Warnings
-    {
-        public static function from_json(mixed $json): Unknown|null
         {
             if (!$json) {
                 return null;

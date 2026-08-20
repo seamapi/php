@@ -24,7 +24,8 @@ namespace Seam\Resources {
                 is_issued: $json->is_issued ?? null,
                 issued_at: $json->issued_at ?? null,
                 mode: is_string($json->mode ?? null)
-                    ? \Seam\Resources\AccessMethod\Mode::tryFrom($json->mode)
+                    ? \Seam\Resources\AccessMethod\Mode::tryFrom($json->mode) ??
+                        $json->mode
                     : null,
                 pending_mutations: array_map(
                     fn(
@@ -83,7 +84,7 @@ namespace Seam\Resources {
             /**
              * Access method mode. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
              */
-            public \Seam\Resources\AccessMethod\Mode|null $mode,
+            public \Seam\Resources\AccessMethod\Mode|string|null $mode,
             /**
              * Pending mutations for the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant). Indicates operations that are in progress.
              *
@@ -138,9 +139,9 @@ namespace Seam\Resources {
 
 namespace Seam\Resources\AccessMethod {
     /**
-     * Errors associated with the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant).
+     * Errors associated with the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Errors
+    class Errors
     {
         public static function from_json(mixed $json): Errors|null
         {
@@ -158,9 +159,14 @@ namespace Seam\Resources\AccessMethod {
                     => \Seam\Resources\AccessMethod\Errors\FailedToIssue::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\AccessMethod\Errors\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    error_code: is_string($json->error_code ?? null)
+                        ? \Seam\Resources\AccessMethod\Errors\ErrorCode::tryFrom(
+                                $json->error_code,
+                            ) ?? $json->error_code
+                        : null,
+                    message: $json->message ?? null,
                 ),
             };
         }
@@ -182,9 +188,9 @@ namespace Seam\Resources\AccessMethod {
     }
 
     /**
-     * Pending mutations for the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant). Indicates operations that are in progress.
+     * Pending mutations for the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant). Indicates operations that are in progress. Known mutation_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class PendingMutations
+    class PendingMutations
     {
         public static function from_json(mixed $json): PendingMutations|null
         {
@@ -210,9 +216,14 @@ namespace Seam\Resources\AccessMethod {
                     => \Seam\Resources\AccessMethod\PendingMutations\UpdatingAccessTimes::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\AccessMethod\PendingMutations\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    mutation_code: is_string($json->mutation_code ?? null)
+                        ? \Seam\Resources\AccessMethod\PendingMutations\MutationCode::tryFrom(
+                                $json->mutation_code,
+                            ) ?? $json->mutation_code
+                        : null,
                 ),
             };
         }
@@ -234,9 +245,9 @@ namespace Seam\Resources\AccessMethod {
     }
 
     /**
-     * Warnings associated with the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant).
+     * Warnings associated with the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Warnings
+    class Warnings
     {
         public static function from_json(mixed $json): Warnings|null
         {
@@ -266,9 +277,14 @@ namespace Seam\Resources\AccessMethod {
                     => \Seam\Resources\AccessMethod\Warnings\DelayInIssuing::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\AccessMethod\Warnings\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    warning_code: is_string($json->warning_code ?? null)
+                        ? \Seam\Resources\AccessMethod\Warnings\WarningCode::tryFrom(
+                                $json->warning_code,
+                            ) ?? $json->warning_code
+                        : null,
                 ),
             };
         }
@@ -305,49 +321,6 @@ namespace Seam\Resources\AccessMethod\Errors {
     final class FailedToIssue extends \Seam\Resources\AccessMethod\Errors
     {
         public static function from_json(mixed $json): FailedToIssue|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AccessMethod\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
-                message: $json->message ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the error.
-             */
-            string|null $created_at,
-            /**
-             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\AccessMethod\Errors\ErrorCode|string|null $error_code,
-            /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                error_code: $error_code,
-                message: $message,
-            );
-        }
-    }
-
-    /**
-     * Fallback for access_method.errors values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AccessMethod\Errors
-    {
-        public static function from_json(mixed $json): Unknown|null
         {
             if (!$json) {
                 return null;
@@ -569,49 +542,6 @@ namespace Seam\Resources\AccessMethod\PendingMutations {
              * New access time configuration.
              */
             public \Seam\Resources\AccessMethod\PendingMutations\UpdatingAccessTimes\To|null $to,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                mutation_code: $mutation_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for access_method.pending_mutations values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AccessMethod\PendingMutations
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AccessMethod\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which the mutation was created.
-             */
-            string|null $created_at,
-            /**
-             * Detailed description of the mutation.
-             */
-            string|null $message,
-            /**
-             * Mutation code to indicate that Seam is in the process of provisioning access for this access method on new devices.
-             */
-            \Seam\Resources\AccessMethod\PendingMutations\MutationCode|string|null $mutation_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -928,49 +858,6 @@ namespace Seam\Resources\AccessMethod\Warnings {
     final class DelayInIssuing extends \Seam\Resources\AccessMethod\Warnings
     {
         public static function from_json(mixed $json): DelayInIssuing|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AccessMethod\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the warning.
-             */
-            string|null $created_at,
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-            /**
-             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\AccessMethod\Warnings\WarningCode|string|null $warning_code,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                warning_code: $warning_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for access_method.warnings values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AccessMethod\Warnings
-    {
-        public static function from_json(mixed $json): Unknown|null
         {
             if (!$json) {
                 return null;

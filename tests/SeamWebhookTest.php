@@ -10,7 +10,6 @@ use Seam\Resources\Event;
 use Seam\Resources\Event\AccessCodeCreated;
 use Seam\Resources\Event\DeviceConnected;
 use Seam\Resources\Event\EventType;
-use Seam\Resources\Event\UnknownEvent;
 use Seam\SeamException;
 use Seam\SeamWebhook;
 use Svix\Exception\WebhookVerificationException;
@@ -105,7 +104,7 @@ final class SeamWebhookTest extends TestCase
         $this->assertSame("access_code_1", $event->access_code_id);
     }
 
-    public function testUnknownEventTypeUsesTheFallback(): void
+    public function testUnknownEventTypeUsesTheBaseClass(): void
     {
         $event = Event::from_json(
             (object) [
@@ -114,7 +113,7 @@ final class SeamWebhookTest extends TestCase
             ],
         );
 
-        $this->assertInstanceOf(UnknownEvent::class, $event);
+        $this->assertSame(Event::class, $event::class);
         $this->assertSame("device.future_event", $event->event_type);
     }
 

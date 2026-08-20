@@ -53,7 +53,6 @@ export interface ResourceFactoryVariant {
 export interface ResourceFactory {
   discriminant: string
   enumType: string
-  fallbackClass: string
   variants: ResourceFactoryVariant[]
 }
 
@@ -64,7 +63,6 @@ export interface ResourceClassSchema {
   description: string
   isDeprecated: boolean
   deprecationMessage: string
-  isAbstract: boolean
   isFinal: boolean
   extendsName: string
   properties: ResourceClassProperty[]
@@ -231,7 +229,6 @@ export const createResourceModel = (blueprint: Blueprint): ResourceModel => {
           isDeprecated: false,
           deprecationMessage: '',
         },
-        'UnknownEvent',
       )
     } else if (resourceType === 'action_attempt') {
       built = buildDiscriminatedClass(
@@ -247,7 +244,6 @@ export const createResourceModel = (blueprint: Blueprint): ResourceModel => {
           isDeprecated: false,
           deprecationMessage: '',
         },
-        'UnknownActionAttempt',
         true,
       )
     } else {
@@ -285,12 +281,10 @@ const buildClass = (
   depth: number,
   docs: ClassDocs,
   options: {
-    isAbstract?: boolean
     isFinal?: boolean
     extendsName?: string
     inheritedProperties?: ResourceClassProperty[]
     factory?: ResourceFactory
-    enumOverrides?: Map<string, { type: string; preserveUnknown?: boolean }>
   } = {},
 ): BuiltDeclaration => {
   assertDepth(path, depth)
@@ -305,18 +299,6 @@ const buildClass = (
     const nestedClassName = pascalCase(property.name)
 
     if (property.format === 'enum') {
-      const override = options.enumOverrides?.get(property.name)
-      if (override != null) {
-        return {
-          ...metadata,
-          kind: 'value',
-          phpType: `${override.type}${override.preserveUnknown ? '|string' : ''}`,
-          phpDocType: '',
-          enumType: override.type,
-          ...(override.preserveUnknown ? { preserveUnknownEnum: true } : {}),
-        }
-      }
-
       assertAvailableName(
         nestedClassName,
         nestedPath,
@@ -330,9 +312,10 @@ const buildClass = (
       return {
         ...metadata,
         kind: 'value',
-        phpType: enumType,
+        phpType: `${enumType}|string`,
         phpDocType: '',
         enumType,
+        preserveUnknownEnum: true,
       }
     }
 
@@ -355,7 +338,6 @@ const buildClass = (
           nestedPath,
           depth + 1,
           propertyDocs(property),
-          'Unknown',
         ),
       )
       return {
@@ -412,7 +394,6 @@ const buildClass = (
       name: className,
       namespace,
       ...docs,
-      isAbstract: options.isAbstract ?? false,
       isFinal: options.isFinal ?? false,
       extendsName: options.extendsName ?? '',
       properties,
@@ -431,7 +412,6 @@ const buildDiscriminatedClass = (
   path: string,
   depth: number,
   docs: ClassDocs,
-  fallbackName: string,
   actionAttempt = false,
 ): BuiltDeclaration => {
   assertDepth(path, depth)
@@ -506,7 +486,6 @@ const buildDiscriminatedClass = (
   const factory: ResourceFactory = {
     discriminant: discriminator,
     enumType,
-    fallbackClass: `\\${namespace}\\${className}\\${fallbackName}`,
     variants: variantInfo.map(({ value }) => ({
       enumCase: `${enumType}::${enumCaseName(value)}`,
       className: `\\${namespace}\\${className}\\${pascalCase(value)}`,
@@ -519,19 +498,14 @@ const buildDiscriminatedClass = (
     commonProperties,
     path,
     depth,
-    docs,
-    { isAbstract: true, factory },
+    {
+      ...docs,
+      description: `${docs.description}${docs.description === '' ? '' : ' '}Known ${discriminator} values use subclasses; unknown values use this base class and retain their raw discriminator.`,
+    },
+    { factory },
   )
   const base = built.declaration
   if (base.kind !== 'class') throw new Error(`Cannot generate ${path}`)
-  const discriminant = base.properties.find(
-    ({ name }) => name === discriminator,
-  )
-  if (discriminant?.kind === 'value') {
-    discriminant.phpType = `${discriminant.phpType}|string`
-    discriminant.preserveUnknownEnum = true
-  }
-
   const baseName = `\\${namespace}\\${className}`
   for (const { variant, value } of variantInfo) {
     const ownProperties = variant.properties
@@ -563,26 +537,6 @@ const buildDiscriminatedClass = (
       ),
     )
   }
-
-  built.nestedDeclarations.push(
-    buildClass(
-      fallbackName,
-      `${namespace}\\${className}`,
-      [],
-      `${path}.unknown`,
-      depth + 1,
-      {
-        description: `Fallback for ${path} values introduced after this SDK version.`,
-        isDeprecated: false,
-        deprecationMessage: '',
-      },
-      {
-        isFinal: true,
-        extendsName: baseName,
-        inheritedProperties: base.properties,
-      },
-    ),
-  )
 
   return built
 }

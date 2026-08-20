@@ -13,8 +13,8 @@ namespace Seam\Resources {
                     $json->device_provider_name ?? null,
                 )
                     ? \Seam\Resources\DeviceProvider\DeviceProviderName::tryFrom(
-                        $json->device_provider_name,
-                    )
+                            $json->device_provider_name,
+                        ) ?? $json->device_provider_name
                     : null,
                 display_name: $json->display_name ?? null,
                 image_url: $json->image_url ?? null,
@@ -56,7 +56,7 @@ namespace Seam\Resources {
             /**
              * Name of the device provider.
              */
-            public \Seam\Resources\DeviceProvider\DeviceProviderName|null $device_provider_name,
+            public \Seam\Resources\DeviceProvider\DeviceProviderName|string|null $device_provider_name,
             /**
              * Display name for the device provider.
              */

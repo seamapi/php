@@ -140,9 +140,9 @@ namespace Seam\Resources {
 
 namespace Seam\Resources\ConnectedAccount {
     /**
-     * Errors associated with the connected account.
+     * Errors associated with the connected account. Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Errors
+    class Errors
     {
         public static function from_json(mixed $json): Errors|null
         {
@@ -172,9 +172,17 @@ namespace Seam\Resources\ConnectedAccount {
                     => \Seam\Resources\ConnectedAccount\Errors\DormakabaSitesDisconnected::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\ConnectedAccount\Errors\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    error_code: is_string($json->error_code ?? null)
+                        ? \Seam\Resources\ConnectedAccount\Errors\ErrorCode::tryFrom(
+                                $json->error_code,
+                            ) ?? $json->error_code
+                        : null,
+                    message: $json->message ?? null,
+                    is_bridge_error: $json->is_bridge_error ?? null,
+                    is_connected_account_error: $json->is_connected_account_error ??
+                        null,
                 ),
             };
         }
@@ -249,9 +257,9 @@ namespace Seam\Resources\ConnectedAccount {
     }
 
     /**
-     * Warnings associated with the connected account.
+     * Warnings associated with the connected account. Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Warnings
+    class Warnings
     {
         public static function from_json(mixed $json): Warnings|null
         {
@@ -297,9 +305,14 @@ namespace Seam\Resources\ConnectedAccount {
                     => \Seam\Resources\ConnectedAccount\Warnings\DormakabaSitesUnapproved::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\ConnectedAccount\Warnings\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    warning_code: is_string($json->warning_code ?? null)
+                        ? \Seam\Resources\ConnectedAccount\Warnings\WarningCode::tryFrom(
+                                $json->warning_code,
+                            ) ?? $json->warning_code
+                        : null,
                 ),
             };
         }
@@ -512,62 +525,6 @@ namespace Seam\Resources\ConnectedAccount\Errors {
         public static function from_json(
             mixed $json,
         ): DormakabaSitesDisconnected|null {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\ConnectedAccount\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
-                message: $json->message ?? null,
-                is_bridge_error: $json->is_bridge_error ?? null,
-                is_connected_account_error: $json->is_connected_account_error ??
-                    null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the error.
-             */
-            string|null $created_at,
-            /**
-             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\ConnectedAccount\Errors\ErrorCode|string|null $error_code,
-            /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-            /**
-             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
-             */
-            bool|null $is_bridge_error = null,
-            /**
-             * Indicates whether the error is related specifically to the connected account.
-             */
-            bool|null $is_connected_account_error = null,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                error_code: $error_code,
-                is_bridge_error: $is_bridge_error,
-                is_connected_account_error: $is_connected_account_error,
-                message: $message,
-            );
-        }
-    }
-
-    /**
-     * Fallback for connected_account.errors values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\ConnectedAccount\Errors
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
             if (!$json) {
                 return null;
             }
@@ -1032,49 +989,6 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
         public static function from_json(
             mixed $json,
         ): DormakabaSitesUnapproved|null {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\ConnectedAccount\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the warning.
-             */
-            string|null $created_at,
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-            /**
-             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\ConnectedAccount\Warnings\WarningCode|string|null $warning_code,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                warning_code: $warning_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for connected_account.warnings values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\ConnectedAccount\Warnings
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
             if (!$json) {
                 return null;
             }

@@ -12,7 +12,6 @@ export interface ClassLayoutContext {
   description: string
   isDeprecated: boolean
   deprecationMessage: string
-  isAbstract: boolean
   isFinal: boolean
   extendsName: string
   factory?: FactoryLayoutContext
@@ -24,7 +23,6 @@ export interface ClassLayoutContext {
 export interface FactoryLayoutContext {
   discriminant: string
   enumType: string
-  fallbackClass: string
   variants: Array<{ enumCase: string; className: string }>
 }
 
@@ -131,7 +129,6 @@ const getClassLayoutContext = (
     description: schema.description,
     isDeprecated: schema.isDeprecated,
     deprecationMessage: schema.deprecationMessage,
-    isAbstract: schema.isAbstract,
     isFinal: schema.isFinal,
     extendsName: schema.extendsName,
     ...(schema.factory == null ? {} : { factory: schema.factory }),

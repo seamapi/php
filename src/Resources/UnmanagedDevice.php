@@ -19,8 +19,8 @@ namespace Seam\Resources {
                 device_id: $json->device_id ?? null,
                 device_type: is_string($json->device_type ?? null)
                     ? \Seam\Resources\UnmanagedDevice\DeviceType::tryFrom(
-                        $json->device_type,
-                    )
+                            $json->device_type,
+                        ) ?? $json->device_type
                     : null,
                 errors: array_map(
                     fn($e) => \Seam\Resources\UnmanagedDevice\Errors::from_json(
@@ -109,7 +109,7 @@ namespace Seam\Resources {
             /**
              * Type of the device.
              */
-            public \Seam\Resources\UnmanagedDevice\DeviceType|null $device_type,
+            public \Seam\Resources\UnmanagedDevice\DeviceType|string|null $device_type,
             /**
              * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
              *
@@ -224,9 +224,9 @@ namespace Seam\Resources {
 
 namespace Seam\Resources\UnmanagedDevice {
     /**
-     * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
+     * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it. Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Errors
+    class Errors
     {
         public static function from_json(mixed $json): Errors|null
         {
@@ -296,9 +296,14 @@ namespace Seam\Resources\UnmanagedDevice {
                     => \Seam\Resources\UnmanagedDevice\Errors\BridgeDisconnected::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\UnmanagedDevice\Errors\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    error_code: is_string($json->error_code ?? null)
+                        ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
+                                $json->error_code,
+                            ) ?? $json->error_code
+                        : null,
+                    message: $json->message ?? null,
                 ),
             };
         }
@@ -453,9 +458,9 @@ namespace Seam\Resources\UnmanagedDevice {
     }
 
     /**
-     * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
+     * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it. Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Warnings
+    class Warnings
     {
         public static function from_json(mixed $json): Warnings|null
         {
@@ -577,9 +582,14 @@ namespace Seam\Resources\UnmanagedDevice {
                     => \Seam\Resources\UnmanagedDevice\Warnings\MaxAccessCodesReached::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\UnmanagedDevice\Warnings\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    warning_code: is_string($json->warning_code ?? null)
+                        ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
+                                $json->warning_code,
+                            ) ?? $json->warning_code
+                        : null,
                 ),
             };
         }
@@ -1368,49 +1378,6 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
         }
     }
 
-    /**
-     * Fallback for unmanaged_device.errors values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\UnmanagedDevice\Errors
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
-                message: $json->message ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the error.
-             */
-            string|null $created_at,
-            /**
-             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
-            /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                error_code: $error_code,
-                message: $message,
-            );
-        }
-    }
-
     enum ErrorCode: string
     {
         case ACCOUNT_DISCONNECTED = "account_disconnected";
@@ -1477,8 +1444,8 @@ namespace Seam\Resources\UnmanagedDevice\Properties {
                 level: $json->level ?? null,
                 status: is_string($json->status ?? null)
                     ? \Seam\Resources\UnmanagedDevice\Properties\Battery\Status::tryFrom(
-                        $json->status,
-                    )
+                            $json->status,
+                        ) ?? $json->status
                     : null,
             );
         }
@@ -1491,7 +1458,7 @@ namespace Seam\Resources\UnmanagedDevice\Properties {
             /**
              * Represents the current status of the battery charge level. Values are `critical`, which indicates an extremely low level, suggesting imminent shutdown or an urgent need for charging; `low`, which signifies that the battery is under the preferred threshold and should be charged soon; `good`, which denotes a satisfactory charge level, adequate for normal use without the immediate need for recharging; and `full`, which represents a battery that is fully charged, providing the maximum duration of usage.
              */
-            public \Seam\Resources\UnmanagedDevice\Properties\Battery\Status|null $status,
+            public \Seam\Resources\UnmanagedDevice\Properties\Battery\Status|string|null $status,
         ) {}
     }
 
@@ -2782,49 +2749,6 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
              * Maximum number of active access codes supported by the device.
              */
             public int|null $max_active_access_code_count,
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-            /**
-             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                warning_code: $warning_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for unmanaged_device.warnings values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\UnmanagedDevice\Warnings
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the warning.
-             */
-            string|null $created_at,
             /**
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */

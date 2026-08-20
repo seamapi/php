@@ -93,9 +93,9 @@ namespace Seam\Resources {
 
 namespace Seam\Resources\UnmanagedUserIdentity {
     /**
-     * Array of errors associated with the user identity. Each error object within the array contains fields like "error_code" and "message." "error_code" is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. "message" provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
+     * Array of errors associated with the user identity. Each error object within the array contains fields like "error_code" and "message." "error_code" is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. "message" provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it. Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Errors
+    class Errors
     {
         public static function from_json(mixed $json): Errors|null
         {
@@ -113,9 +113,16 @@ namespace Seam\Resources\UnmanagedUserIdentity {
                     => \Seam\Resources\UnmanagedUserIdentity\Errors\IssueWithAcsUser::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\UnmanagedUserIdentity\Errors\Unknown::from_json(
-                    $json,
+                default => new self(
+                    acs_system_id: $json->acs_system_id ?? null,
+                    acs_user_id: $json->acs_user_id ?? null,
+                    created_at: $json->created_at ?? null,
+                    error_code: is_string($json->error_code ?? null)
+                        ? \Seam\Resources\UnmanagedUserIdentity\Errors\ErrorCode::tryFrom(
+                                $json->error_code,
+                            ) ?? $json->error_code
+                        : null,
+                    message: $json->message ?? null,
                 ),
             };
         }
@@ -145,9 +152,9 @@ namespace Seam\Resources\UnmanagedUserIdentity {
     }
 
     /**
-     * Array of warnings associated with the user identity. Each warning object within the array contains two fields: "warning_code" and "message." "warning_code" is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. "message" provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
+     * Array of warnings associated with the user identity. Each warning object within the array contains two fields: "warning_code" and "message." "warning_code" is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. "message" provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it. Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Warnings
+    class Warnings
     {
         public static function from_json(mixed $json): Warnings|null
         {
@@ -169,9 +176,14 @@ namespace Seam\Resources\UnmanagedUserIdentity {
                     => \Seam\Resources\UnmanagedUserIdentity\Warnings\AcsUserProfileDoesNotMatchUserIdentity::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\UnmanagedUserIdentity\Warnings\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    warning_code: is_string($json->warning_code ?? null)
+                        ? \Seam\Resources\UnmanagedUserIdentity\Warnings\WarningCode::tryFrom(
+                                $json->warning_code,
+                            ) ?? $json->warning_code
+                        : null,
                 ),
             };
         }
@@ -201,61 +213,6 @@ namespace Seam\Resources\UnmanagedUserIdentity\Errors {
         \Seam\Resources\UnmanagedUserIdentity\Errors
     {
         public static function from_json(mixed $json): IssueWithAcsUser|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                acs_system_id: $json->acs_system_id ?? null,
-                acs_user_id: $json->acs_user_id ?? null,
-                created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedUserIdentity\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
-                message: $json->message ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * ID of the access system that the user identity is associated with.
-             */
-            string|null $acs_system_id,
-            /**
-             * ID of the access system user that has an issue.
-             */
-            string|null $acs_user_id,
-            /**
-             * Date and time at which Seam created the error.
-             */
-            string|null $created_at,
-            /**
-             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\UnmanagedUserIdentity\Errors\ErrorCode|string|null $error_code,
-            /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-        ) {
-            parent::__construct(
-                acs_system_id: $acs_system_id,
-                acs_user_id: $acs_user_id,
-                created_at: $created_at,
-                error_code: $error_code,
-                message: $message,
-            );
-        }
-    }
-
-    /**
-     * Fallback for unmanaged_user_identity.errors values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\UnmanagedUserIdentity\Errors
-    {
-        public static function from_json(mixed $json): Unknown|null
         {
             if (!$json) {
                 return null;
@@ -365,49 +322,6 @@ namespace Seam\Resources\UnmanagedUserIdentity\Warnings {
         public static function from_json(
             mixed $json,
         ): AcsUserProfileDoesNotMatchUserIdentity|null {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedUserIdentity\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the warning.
-             */
-            string|null $created_at,
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-            /**
-             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\UnmanagedUserIdentity\Warnings\WarningCode|string|null $warning_code,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                warning_code: $warning_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for unmanaged_user_identity.warnings values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\UnmanagedUserIdentity\Warnings
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
             if (!$json) {
                 return null;
             }

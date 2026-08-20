@@ -40,8 +40,8 @@ namespace Seam\Resources {
                 email_address: $json->email_address ?? null,
                 external_type: is_string($json->external_type ?? null)
                     ? \Seam\Resources\AcsUser\ExternalType::tryFrom(
-                        $json->external_type,
-                    )
+                            $json->external_type,
+                        ) ?? $json->external_type
                     : null,
                 external_type_display_name: $json->external_type_display_name ??
                     null,
@@ -132,7 +132,7 @@ namespace Seam\Resources {
             /**
              * Brand-specific terminology for the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) type.
              */
-            public \Seam\Resources\AcsUser\ExternalType|null $external_type = null,
+            public \Seam\Resources\AcsUser\ExternalType|string|null $external_type = null,
             /**
              * Display name that corresponds to the brand-specific terminology for the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) type.
              */
@@ -217,9 +217,9 @@ namespace Seam\Resources\AcsUser {
     }
 
     /**
-     * Errors associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * Errors associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Errors
+    class Errors
     {
         public static function from_json(mixed $json): Errors|null
         {
@@ -257,8 +257,14 @@ namespace Seam\Resources\AcsUser {
                     => \Seam\Resources\AcsUser\Errors\LatchConflictWithResidentUser::from_json(
                     $json,
                 ),
-                default => \Seam\Resources\AcsUser\Errors\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    error_code: is_string($json->error_code ?? null)
+                        ? \Seam\Resources\AcsUser\Errors\ErrorCode::tryFrom(
+                                $json->error_code,
+                            ) ?? $json->error_code
+                        : null,
+                    message: $json->message ?? null,
                 ),
             };
         }
@@ -277,9 +283,9 @@ namespace Seam\Resources\AcsUser {
     }
 
     /**
-     * Pending mutations associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management). Seam is in the process of pushing these mutations to the integrated access system.
+     * Pending mutations associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management). Seam is in the process of pushing these mutations to the integrated access system. Known mutation_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class PendingMutations
+    class PendingMutations
     {
         public static function from_json(mixed $json): PendingMutations|null
         {
@@ -329,9 +335,14 @@ namespace Seam\Resources\AcsUser {
                     => \Seam\Resources\AcsUser\PendingMutations\UpdatingCredentialAssignment::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\AcsUser\PendingMutations\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    mutation_code: is_string($json->mutation_code ?? null)
+                        ? \Seam\Resources\AcsUser\PendingMutations\MutationCode::tryFrom(
+                                $json->mutation_code,
+                            ) ?? $json->mutation_code
+                        : null,
                 ),
             };
         }
@@ -402,9 +413,9 @@ namespace Seam\Resources\AcsUser {
     }
 
     /**
-     * Warnings associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * Warnings associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Warnings
+    class Warnings
     {
         public static function from_json(mixed $json): Warnings|null
         {
@@ -438,8 +449,14 @@ namespace Seam\Resources\AcsUser {
                     => \Seam\Resources\AcsUser\Warnings\LatchResidentUser::from_json(
                     $json,
                 ),
-                default => \Seam\Resources\AcsUser\Warnings\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    warning_code: is_string($json->warning_code ?? null)
+                        ? \Seam\Resources\AcsUser\Warnings\WarningCode::tryFrom(
+                                $json->warning_code,
+                            ) ?? $json->warning_code
+                        : null,
                 ),
             };
         }
@@ -686,46 +703,6 @@ namespace Seam\Resources\AcsUser\Errors {
         public static function from_json(
             mixed $json,
         ): LatchConflictWithResidentUser|null {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsUser\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
-                message: $json->message ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the error.
-             */
-            string|null $created_at,
-            \Seam\Resources\AcsUser\Errors\ErrorCode|string|null $error_code,
-            /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                error_code: $error_code,
-                message: $message,
-            );
-        }
-    }
-
-    /**
-     * Fallback for acs_user.errors values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AcsUser\Errors
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
             if (!$json) {
                 return null;
             }
@@ -1178,8 +1155,8 @@ namespace Seam\Resources\AcsUser\PendingMutations {
                     : null,
                 variant: is_string($json->variant ?? null)
                     ? \Seam\Resources\AcsUser\PendingMutations\DeferringGroupMembershipUpdate\Variant::tryFrom(
-                        $json->variant,
-                    )
+                            $json->variant,
+                        ) ?? $json->variant
                     : null,
             );
         }
@@ -1204,7 +1181,7 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             /**
              * Whether the user is scheduled to be added to or removed from the access group.
              */
-            public \Seam\Resources\AcsUser\PendingMutations\DeferringGroupMembershipUpdate\Variant|null $variant,
+            public \Seam\Resources\AcsUser\PendingMutations\DeferringGroupMembershipUpdate\Variant|string|null $variant,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1268,49 +1245,6 @@ namespace Seam\Resources\AcsUser\PendingMutations {
              * New credential assignment.
              */
             public \Seam\Resources\AcsUser\PendingMutations\UpdatingCredentialAssignment\To|null $to,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                mutation_code: $mutation_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for acs_user.pending_mutations values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AcsUser\PendingMutations
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsUser\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which the mutation was created.
-             */
-            string|null $created_at,
-            /**
-             * Detailed description of the mutation.
-             */
-            string|null $message,
-            /**
-             * Mutation code to indicate that Seam is in the process of pushing a user creation to the integrated access system.
-             */
-            \Seam\Resources\AcsUser\PendingMutations\MutationCode|string|null $mutation_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1768,46 +1702,6 @@ namespace Seam\Resources\AcsUser\Warnings {
     final class LatchResidentUser extends \Seam\Resources\AcsUser\Warnings
     {
         public static function from_json(mixed $json): LatchResidentUser|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsUser\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the warning.
-             */
-            string|null $created_at,
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-            \Seam\Resources\AcsUser\Warnings\WarningCode|string|null $warning_code,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                warning_code: $warning_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for acs_user.warnings values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AcsUser\Warnings
-    {
-        public static function from_json(mixed $json): Unknown|null
         {
             if (!$json) {
                 return null;

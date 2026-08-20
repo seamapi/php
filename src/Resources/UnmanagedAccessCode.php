@@ -38,13 +38,13 @@ namespace Seam\Resources {
                 name: $json->name ?? null,
                 status: is_string($json->status ?? null)
                     ? \Seam\Resources\UnmanagedAccessCode\Status::tryFrom(
-                        $json->status,
-                    )
+                            $json->status,
+                        ) ?? $json->status
                     : null,
                 type: is_string($json->type ?? null)
                     ? \Seam\Resources\UnmanagedAccessCode\Type::tryFrom(
-                        $json->type,
-                    )
+                            $json->type,
+                        ) ?? $json->type
                     : null,
                 warnings: array_map(
                     fn(
@@ -104,11 +104,11 @@ namespace Seam\Resources {
             /**
              * Current status of the access code within the operational lifecycle. `set` indicates that the code is active and operational. `unset` indicates that the code exists on the provider but is not usable on the device.
              */
-            public \Seam\Resources\UnmanagedAccessCode\Status|null $status,
+            public \Seam\Resources\UnmanagedAccessCode\Status|string|null $status,
             /**
              * Type of the access code. `ongoing` access codes are active continuously until deactivated manually. `time_bound` access codes have a specific duration.
              */
-            public \Seam\Resources\UnmanagedAccessCode\Type|null $type,
+            public \Seam\Resources\UnmanagedAccessCode\Type|string|null $type,
             /**
              * Warnings associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
              *
@@ -204,9 +204,9 @@ namespace Seam\Resources\UnmanagedAccessCode {
     }
 
     /**
-     * Errors associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+     * Errors associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Errors
+    class Errors
     {
         public static function from_json(mixed $json): Errors|null
         {
@@ -304,9 +304,13 @@ namespace Seam\Resources\UnmanagedAccessCode {
                     => \Seam\Resources\UnmanagedAccessCode\Errors\BridgeDisconnected::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\UnmanagedAccessCode\Errors\Unknown::from_json(
-                    $json,
+                default => new self(
+                    error_code: is_string($json->error_code ?? null)
+                        ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
+                                $json->error_code,
+                            ) ?? $json->error_code
+                        : null,
+                    message: $json->message ?? null,
                 ),
             };
         }
@@ -324,9 +328,9 @@ namespace Seam\Resources\UnmanagedAccessCode {
     }
 
     /**
-     * Warnings associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+     * Warnings associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Warnings
+    class Warnings
     {
         public static function from_json(mixed $json): Warnings|null
         {
@@ -384,9 +388,14 @@ namespace Seam\Resources\UnmanagedAccessCode {
                     => \Seam\Resources\UnmanagedAccessCode\Warnings\UnknownIssueWithAccessCode::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\UnmanagedAccessCode\Warnings\Unknown::from_json(
-                    $json,
+                default => new self(
+                    message: $json->message ?? null,
+                    warning_code: is_string($json->warning_code ?? null)
+                        ? \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::tryFrom(
+                                $json->warning_code,
+                            ) ?? $json->warning_code
+                        : null,
+                    created_at: $json->created_at ?? null,
                 ),
             };
         }
@@ -681,8 +690,8 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
                 message: $json->message ?? null,
                 change_type: is_string($json->change_type ?? null)
                     ? \Seam\Resources\UnmanagedAccessCode\Errors\ConflictingExternalModification\ChangeType::tryFrom(
-                        $json->change_type,
-                    )
+                            $json->change_type,
+                        ) ?? $json->change_type
                     : null,
                 created_at: $json->created_at ?? null,
                 modified_fields: array_map(
@@ -712,7 +721,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             /**
              * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device.
              */
-            public \Seam\Resources\UnmanagedAccessCode\Errors\ConflictingExternalModification\ChangeType|null $change_type = null,
+            public \Seam\Resources\UnmanagedAccessCode\Errors\ConflictingExternalModification\ChangeType|string|null $change_type = null,
             /**
              * Date and time at which Seam created the error.
              */
@@ -1437,40 +1446,6 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
         }
     }
 
-    /**
-     * Fallback for unmanaged_access_code.errors values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\UnmanagedAccessCode\Errors
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
-                message: $json->message ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
-            /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-        ) {
-            parent::__construct(error_code: $error_code, message: $message);
-        }
-    }
-
     enum ErrorCode: string
     {
         case PROVIDER_ISSUE = "provider_issue";
@@ -1650,8 +1625,8 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
                     : null,
                 change_type: is_string($json->change_type ?? null)
                     ? \Seam\Resources\UnmanagedAccessCode\Warnings\ExternalModificationInEffect\ChangeType::tryFrom(
-                        $json->change_type,
-                    )
+                            $json->change_type,
+                        ) ?? $json->change_type
                     : null,
                 created_at: $json->created_at ?? null,
                 modified_fields: array_map(
@@ -1677,7 +1652,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             /**
              * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device.
              */
-            public \Seam\Resources\UnmanagedAccessCode\Warnings\ExternalModificationInEffect\ChangeType|null $change_type = null,
+            public \Seam\Resources\UnmanagedAccessCode\Warnings\ExternalModificationInEffect\ChangeType|string|null $change_type = null,
             /**
              * Date and time at which Seam created the warning.
              */
@@ -2020,49 +1995,6 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
         public static function from_json(
             mixed $json,
         ): UnknownIssueWithAccessCode|null {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
-                created_at: $json->created_at ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-            /**
-             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode|string|null $warning_code,
-            /**
-             * Date and time at which Seam created the warning.
-             */
-            string|null $created_at = null,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                warning_code: $warning_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for unmanaged_access_code.warnings values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\UnmanagedAccessCode\Warnings
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
             if (!$json) {
                 return null;
             }

@@ -43,6 +43,36 @@ final class ResourceTest extends TestCase
         return $device;
     }
 
+    public function testUnknownEnumValuesRemainReadable(): void
+    {
+        $device = Device::from_json(
+            (object) [
+                "device_type" => "future_device_type",
+            ],
+        );
+
+        $this->assertSame("future_device_type", $device->device_type);
+    }
+
+    public function testUnknownDiscriminatedValuesUseTheBaseClass(): void
+    {
+        $device = Device::from_json(
+            (object) [
+                "errors" => [
+                    (object) [
+                        "error_code" => "future_error",
+                        "message" => "Future error",
+                    ],
+                ],
+            ],
+        );
+        $error = $device->errors[0];
+
+        $this->assertSame(Device\Errors::class, $error::class);
+        $this->assertSame("future_error", $error->error_code);
+        $this->assertSame("Future error", $error->message);
+    }
+
     public function testNestedPropertyClassesAreNamespacedByTheirOwner(): void
     {
         $device = $this->device();

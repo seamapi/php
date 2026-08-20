@@ -20,8 +20,8 @@ namespace Seam\Resources {
             return new self(
                 access_method: is_string($json->access_method ?? null)
                     ? \Seam\Resources\AcsCredential\AccessMethod::tryFrom(
-                        $json->access_method,
-                    )
+                            $json->access_method,
+                        ) ?? $json->access_method
                     : null,
                 acs_credential_id: $json->acs_credential_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
@@ -61,8 +61,8 @@ namespace Seam\Resources {
                 ends_at: $json->ends_at ?? null,
                 external_type: is_string($json->external_type ?? null)
                     ? \Seam\Resources\AcsCredential\ExternalType::tryFrom(
-                        $json->external_type,
-                    )
+                            $json->external_type,
+                        ) ?? $json->external_type
                     : null,
                 external_type_display_name: $json->external_type_display_name ??
                     null,
@@ -91,7 +91,7 @@ namespace Seam\Resources {
             /**
              * Access method for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials). Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
              */
-            public \Seam\Resources\AcsCredential\AccessMethod|null $access_method,
+            public \Seam\Resources\AcsCredential\AccessMethod|string|null $access_method,
             /**
              * ID of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
@@ -163,7 +163,7 @@ namespace Seam\Resources {
             /**
              * Brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type. Supported values: `pti_card`, `brivo_credential`, `hid_credential`, `visionline_card`.
              */
-            public \Seam\Resources\AcsCredential\ExternalType|null $external_type = null,
+            public \Seam\Resources\AcsCredential\ExternalType|string|null $external_type = null,
             /**
              * Display name that corresponds to the brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type.
              */
@@ -329,8 +329,8 @@ namespace Seam\Resources\AcsCredential {
                 auto_join: $json->auto_join ?? null,
                 card_function_type: is_string($json->card_function_type ?? null)
                     ? \Seam\Resources\AcsCredential\VisionlineMetadata\CardFunctionType::tryFrom(
-                        $json->card_function_type,
-                    )
+                            $json->card_function_type,
+                        ) ?? $json->card_function_type
                     : null,
                 card_id: $json->card_id ?? null,
                 common_acs_entrance_ids: $json->common_acs_entrance_ids ?? null,
@@ -350,7 +350,7 @@ namespace Seam\Resources\AcsCredential {
             /**
              * Card function type in the Visionline access system.
              */
-            public \Seam\Resources\AcsCredential\VisionlineMetadata\CardFunctionType|null $card_function_type = null,
+            public \Seam\Resources\AcsCredential\VisionlineMetadata\CardFunctionType|string|null $card_function_type = null,
             /**
              * ID of the card in the Visionline access system.
              */
@@ -385,9 +385,9 @@ namespace Seam\Resources\AcsCredential {
     }
 
     /**
-     * Warnings associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Warnings associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Warnings
+    class Warnings
     {
         public static function from_json(mixed $json): Warnings|null
         {
@@ -429,9 +429,14 @@ namespace Seam\Resources\AcsCredential {
                     => \Seam\Resources\AcsCredential\Warnings\RequestedCodeUnavailable::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\AcsCredential\Warnings\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    warning_code: is_string($json->warning_code ?? null)
+                        ? \Seam\Resources\AcsCredential\Warnings\WarningCode::tryFrom(
+                                $json->warning_code,
+                            ) ?? $json->warning_code
+                        : null,
                 ),
             };
         }
@@ -792,49 +797,6 @@ namespace Seam\Resources\AcsCredential\Warnings {
              * The originally requested PIN code that could not be used.
              */
             public string|null $original_code,
-            /**
-             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\AcsCredential\Warnings\WarningCode|string|null $warning_code,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                warning_code: $warning_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for acs_credential.warnings values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AcsCredential\Warnings
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsCredential\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the warning.
-             */
-            string|null $created_at,
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
              */

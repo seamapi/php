@@ -19,8 +19,8 @@ namespace Seam\Resources {
                 device_id: $json->device_id ?? null,
                 device_type: is_string($json->device_type ?? null)
                     ? \Seam\Resources\Device\DeviceType::tryFrom(
-                        $json->device_type,
-                    )
+                            $json->device_type,
+                        ) ?? $json->device_type
                     : null,
                 display_name: $json->display_name ?? null,
                 errors: array_map(
@@ -116,7 +116,7 @@ namespace Seam\Resources {
             /**
              * Type of the device.
              */
-            public \Seam\Resources\Device\DeviceType|null $device_type,
+            public \Seam\Resources\Device\DeviceType|string|null $device_type,
             /**
              * Display name of the device, defaults to nickname (if it is set) or `properties.appearance.name`, otherwise. Enables administrators and users to identify the device easily, especially when there are numerous devices.
              */
@@ -324,9 +324,9 @@ namespace Seam\Resources\Device {
     }
 
     /**
-     * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
+     * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it. Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Errors
+    class Errors
     {
         public static function from_json(mixed $json): Errors|null
         {
@@ -396,8 +396,14 @@ namespace Seam\Resources\Device {
                     => \Seam\Resources\Device\Errors\BridgeDisconnected::from_json(
                     $json,
                 ),
-                default => \Seam\Resources\Device\Errors\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    error_code: is_string($json->error_code ?? null)
+                        ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
+                                $json->error_code,
+                            ) ?? $json->error_code
+                        : null,
+                    message: $json->message ?? null,
                 ),
             };
         }
@@ -600,8 +606,8 @@ namespace Seam\Resources\Device {
                     null,
                 fan_mode_setting: is_string($json->fan_mode_setting ?? null)
                     ? \Seam\Resources\Device\Properties\FanModeSetting::tryFrom(
-                        $json->fan_mode_setting,
-                    )
+                            $json->fan_mode_setting,
+                        ) ?? $json->fan_mode_setting
                     : null,
                 four_suites_metadata: isset($json->four_suites_metadata)
                     ? \Seam\Resources\Device\Properties\FourSuitesMetadata::from_json(
@@ -1009,7 +1015,7 @@ namespace Seam\Resources\Device {
             /**
              * @deprecated Use `current_climate_setting.fan_mode_setting` instead.
              */
-            public \Seam\Resources\Device\Properties\FanModeSetting|null $fan_mode_setting = null,
+            public \Seam\Resources\Device\Properties\FanModeSetting|string|null $fan_mode_setting = null,
             /**
              * Metadata for a 4SUITES device.
              */
@@ -1316,9 +1322,9 @@ namespace Seam\Resources\Device {
     }
 
     /**
-     * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
+     * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it. Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Warnings
+    class Warnings
     {
         public static function from_json(mixed $json): Warnings|null
         {
@@ -1440,8 +1446,14 @@ namespace Seam\Resources\Device {
                     => \Seam\Resources\Device\Warnings\MaxAccessCodesReached::from_json(
                     $json,
                 ),
-                default => \Seam\Resources\Device\Warnings\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    warning_code: is_string($json->warning_code ?? null)
+                        ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
+                                $json->warning_code,
+                            ) ?? $json->warning_code
+                        : null,
                 ),
             };
         }
@@ -2220,49 +2232,6 @@ namespace Seam\Resources\Device\Errors {
         }
     }
 
-    /**
-     * Fallback for device.errors values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\Device\Errors
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
-                message: $json->message ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the error.
-             */
-            string|null $created_at,
-            /**
-             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
-            /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                error_code: $error_code,
-                message: $message,
-            );
-        }
-    }
-
     enum ErrorCode: string
     {
         case ACCOUNT_DISCONNECTED = "account_disconnected";
@@ -2350,8 +2319,8 @@ namespace Seam\Resources\Device\Properties {
                 level: $json->level ?? null,
                 status: is_string($json->status ?? null)
                     ? \Seam\Resources\Device\Properties\Battery\Status::tryFrom(
-                        $json->status,
-                    )
+                            $json->status,
+                        ) ?? $json->status
                     : null,
             );
         }
@@ -2364,7 +2333,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Represents the current status of the battery charge level. Values are `critical`, which indicates an extremely low level, suggesting imminent shutdown or an urgent need for charging; `low`, which signifies that the battery is under the preferred threshold and should be charged soon; `good`, which denotes a satisfactory charge level, adequate for normal use without the immediate need for recharging; and `full`, which represents a battery that is fully charged, providing the maximum duration of usage.
              */
-            public \Seam\Resources\Device\Properties\Battery\Status|null $status,
+            public \Seam\Resources\Device\Properties\Battery\Status|string|null $status,
         ) {}
     }
 
@@ -3425,8 +3394,8 @@ namespace Seam\Resources\Device\Properties {
                 device_id: $json->device_id ?? null,
                 device_model: is_string($json->device_model ?? null)
                     ? \Seam\Resources\Device\Properties\NoiseawareMetadata\DeviceModel::tryFrom(
-                        $json->device_model,
-                    )
+                            $json->device_model,
+                        ) ?? $json->device_model
                     : null,
                 device_name: $json->device_name ?? null,
                 noise_level_decibel: $json->noise_level_decibel ?? null,
@@ -3442,7 +3411,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Device model for a NoiseAware device.
              */
-            public \Seam\Resources\Device\Properties\NoiseawareMetadata\DeviceModel|null $device_model = null,
+            public \Seam\Resources\Device\Properties\NoiseawareMetadata\DeviceModel|string|null $device_model = null,
             /**
              * Device name for a NoiseAware device.
              */
@@ -3754,8 +3723,8 @@ namespace Seam\Resources\Device\Properties {
                 name: $json->name ?? null,
                 unlock_method: is_string($json->unlock_method ?? null)
                     ? \Seam\Resources\Device\Properties\SeamBridgeMetadata\UnlockMethod::tryFrom(
-                        $json->unlock_method,
-                    )
+                            $json->unlock_method,
+                        ) ?? $json->unlock_method
                     : null,
             );
         }
@@ -3772,7 +3741,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Unlock method for Seam Bridge.
              */
-            public \Seam\Resources\Device\Properties\SeamBridgeMetadata\UnlockMethod|null $unlock_method = null,
+            public \Seam\Resources\Device\Properties\SeamBridgeMetadata\UnlockMethod|string|null $unlock_method = null,
         ) {}
     }
 
@@ -4204,8 +4173,8 @@ namespace Seam\Resources\Device\Properties {
             return new self(
                 constraint_type: is_string($json->constraint_type ?? null)
                     ? \Seam\Resources\Device\Properties\CodeConstraints\ConstraintType::tryFrom(
-                        $json->constraint_type,
-                    )
+                            $json->constraint_type,
+                        ) ?? $json->constraint_type
                     : null,
                 max_length: $json->max_length ?? null,
                 min_length: $json->min_length ?? null,
@@ -4213,7 +4182,7 @@ namespace Seam\Resources\Device\Properties {
         }
 
         public function __construct(
-            public \Seam\Resources\Device\Properties\CodeConstraints\ConstraintType|null $constraint_type,
+            public \Seam\Resources\Device\Properties\CodeConstraints\ConstraintType|string|null $constraint_type,
             /**
              * Maximum name length constraint for access codes.
              */
@@ -4495,8 +4464,8 @@ namespace Seam\Resources\Device\Properties {
                     $json->climate_preset_mode ?? null,
                 )
                     ? \Seam\Resources\Device\Properties\AvailableClimatePresets\ClimatePresetMode::tryFrom(
-                        $json->climate_preset_mode,
-                    )
+                            $json->climate_preset_mode,
+                        ) ?? $json->climate_preset_mode
                     : null,
                 cooling_set_point_celsius: $json->cooling_set_point_celsius ??
                     null,
@@ -4509,8 +4478,8 @@ namespace Seam\Resources\Device\Properties {
                     : null,
                 fan_mode_setting: is_string($json->fan_mode_setting ?? null)
                     ? \Seam\Resources\Device\Properties\AvailableClimatePresets\FanModeSetting::tryFrom(
-                        $json->fan_mode_setting,
-                    )
+                            $json->fan_mode_setting,
+                        ) ?? $json->fan_mode_setting
                     : null,
                 heating_set_point_celsius: $json->heating_set_point_celsius ??
                     null,
@@ -4518,8 +4487,8 @@ namespace Seam\Resources\Device\Properties {
                     null,
                 hvac_mode_setting: is_string($json->hvac_mode_setting ?? null)
                     ? \Seam\Resources\Device\Properties\AvailableClimatePresets\HvacModeSetting::tryFrom(
-                        $json->hvac_mode_setting,
-                    )
+                            $json->hvac_mode_setting,
+                        ) ?? $json->hvac_mode_setting
                     : null,
                 name: $json->name ?? null,
             );
@@ -4555,7 +4524,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
              */
-            public \Seam\Resources\Device\Properties\AvailableClimatePresets\ClimatePresetMode|null $climate_preset_mode = null,
+            public \Seam\Resources\Device\Properties\AvailableClimatePresets\ClimatePresetMode|string|null $climate_preset_mode = null,
             /**
              * Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -4571,7 +4540,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
              */
-            public \Seam\Resources\Device\Properties\AvailableClimatePresets\FanModeSetting|null $fan_mode_setting = null,
+            public \Seam\Resources\Device\Properties\AvailableClimatePresets\FanModeSetting|string|null $fan_mode_setting = null,
             /**
              * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -4583,7 +4552,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
              */
-            public \Seam\Resources\Device\Properties\AvailableClimatePresets\HvacModeSetting|null $hvac_mode_setting = null,
+            public \Seam\Resources\Device\Properties\AvailableClimatePresets\HvacModeSetting|string|null $hvac_mode_setting = null,
             /**
              * User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
              */
@@ -4612,8 +4581,8 @@ namespace Seam\Resources\Device\Properties {
                     $json->climate_preset_mode ?? null,
                 )
                     ? \Seam\Resources\Device\Properties\CurrentClimateSetting\ClimatePresetMode::tryFrom(
-                        $json->climate_preset_mode,
-                    )
+                            $json->climate_preset_mode,
+                        ) ?? $json->climate_preset_mode
                     : null,
                 cooling_set_point_celsius: $json->cooling_set_point_celsius ??
                     null,
@@ -4627,8 +4596,8 @@ namespace Seam\Resources\Device\Properties {
                     : null,
                 fan_mode_setting: is_string($json->fan_mode_setting ?? null)
                     ? \Seam\Resources\Device\Properties\CurrentClimateSetting\FanModeSetting::tryFrom(
-                        $json->fan_mode_setting,
-                    )
+                            $json->fan_mode_setting,
+                        ) ?? $json->fan_mode_setting
                     : null,
                 heating_set_point_celsius: $json->heating_set_point_celsius ??
                     null,
@@ -4636,8 +4605,8 @@ namespace Seam\Resources\Device\Properties {
                     null,
                 hvac_mode_setting: is_string($json->hvac_mode_setting ?? null)
                     ? \Seam\Resources\Device\Properties\CurrentClimateSetting\HvacModeSetting::tryFrom(
-                        $json->hvac_mode_setting,
-                    )
+                            $json->hvac_mode_setting,
+                        ) ?? $json->hvac_mode_setting
                     : null,
                 manual_override_allowed: $json->manual_override_allowed ?? null,
                 name: $json->name ?? null,
@@ -4664,7 +4633,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
              */
-            public \Seam\Resources\Device\Properties\CurrentClimateSetting\ClimatePresetMode|null $climate_preset_mode = null,
+            public \Seam\Resources\Device\Properties\CurrentClimateSetting\ClimatePresetMode|string|null $climate_preset_mode = null,
             /**
              * Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -4684,7 +4653,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
              */
-            public \Seam\Resources\Device\Properties\CurrentClimateSetting\FanModeSetting|null $fan_mode_setting = null,
+            public \Seam\Resources\Device\Properties\CurrentClimateSetting\FanModeSetting|string|null $fan_mode_setting = null,
             /**
              * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -4696,7 +4665,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
              */
-            public \Seam\Resources\Device\Properties\CurrentClimateSetting\HvacModeSetting|null $hvac_mode_setting = null,
+            public \Seam\Resources\Device\Properties\CurrentClimateSetting\HvacModeSetting|string|null $hvac_mode_setting = null,
             /**
              * Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
              *
@@ -4731,8 +4700,8 @@ namespace Seam\Resources\Device\Properties {
                     $json->climate_preset_mode ?? null,
                 )
                     ? \Seam\Resources\Device\Properties\DefaultClimateSetting\ClimatePresetMode::tryFrom(
-                        $json->climate_preset_mode,
-                    )
+                            $json->climate_preset_mode,
+                        ) ?? $json->climate_preset_mode
                     : null,
                 cooling_set_point_celsius: $json->cooling_set_point_celsius ??
                     null,
@@ -4746,8 +4715,8 @@ namespace Seam\Resources\Device\Properties {
                     : null,
                 fan_mode_setting: is_string($json->fan_mode_setting ?? null)
                     ? \Seam\Resources\Device\Properties\DefaultClimateSetting\FanModeSetting::tryFrom(
-                        $json->fan_mode_setting,
-                    )
+                            $json->fan_mode_setting,
+                        ) ?? $json->fan_mode_setting
                     : null,
                 heating_set_point_celsius: $json->heating_set_point_celsius ??
                     null,
@@ -4755,8 +4724,8 @@ namespace Seam\Resources\Device\Properties {
                     null,
                 hvac_mode_setting: is_string($json->hvac_mode_setting ?? null)
                     ? \Seam\Resources\Device\Properties\DefaultClimateSetting\HvacModeSetting::tryFrom(
-                        $json->hvac_mode_setting,
-                    )
+                            $json->hvac_mode_setting,
+                        ) ?? $json->hvac_mode_setting
                     : null,
                 manual_override_allowed: $json->manual_override_allowed ?? null,
                 name: $json->name ?? null,
@@ -4783,7 +4752,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
              */
-            public \Seam\Resources\Device\Properties\DefaultClimateSetting\ClimatePresetMode|null $climate_preset_mode = null,
+            public \Seam\Resources\Device\Properties\DefaultClimateSetting\ClimatePresetMode|string|null $climate_preset_mode = null,
             /**
              * Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -4803,7 +4772,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
              */
-            public \Seam\Resources\Device\Properties\DefaultClimateSetting\FanModeSetting|null $fan_mode_setting = null,
+            public \Seam\Resources\Device\Properties\DefaultClimateSetting\FanModeSetting|string|null $fan_mode_setting = null,
             /**
              * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -4815,7 +4784,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
              */
-            public \Seam\Resources\Device\Properties\DefaultClimateSetting\HvacModeSetting|null $hvac_mode_setting = null,
+            public \Seam\Resources\Device\Properties\DefaultClimateSetting\HvacModeSetting|string|null $hvac_mode_setting = null,
             /**
              * Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
              *
@@ -5571,8 +5540,8 @@ namespace Seam\Resources\Device\Properties\AvailableClimatePresets {
                 is_optimized: $json->is_optimized ?? null,
                 owner: is_string($json->owner ?? null)
                     ? \Seam\Resources\Device\Properties\AvailableClimatePresets\EcobeeMetadata\Owner::tryFrom(
-                        $json->owner,
-                    )
+                            $json->owner,
+                        ) ?? $json->owner
                     : null,
             );
         }
@@ -5589,7 +5558,7 @@ namespace Seam\Resources\Device\Properties\AvailableClimatePresets {
             /**
              * Indicates whether the climate preset is owned by the user or the system.
              */
-            public \Seam\Resources\Device\Properties\AvailableClimatePresets\EcobeeMetadata\Owner|null $owner = null,
+            public \Seam\Resources\Device\Properties\AvailableClimatePresets\EcobeeMetadata\Owner|string|null $owner = null,
         ) {}
     }
 
@@ -5644,8 +5613,8 @@ namespace Seam\Resources\Device\Properties\CurrentClimateSetting {
                 is_optimized: $json->is_optimized ?? null,
                 owner: is_string($json->owner ?? null)
                     ? \Seam\Resources\Device\Properties\CurrentClimateSetting\EcobeeMetadata\Owner::tryFrom(
-                        $json->owner,
-                    )
+                            $json->owner,
+                        ) ?? $json->owner
                     : null,
             );
         }
@@ -5662,7 +5631,7 @@ namespace Seam\Resources\Device\Properties\CurrentClimateSetting {
             /**
              * Indicates whether the climate preset is owned by the user or the system.
              */
-            public \Seam\Resources\Device\Properties\CurrentClimateSetting\EcobeeMetadata\Owner|null $owner = null,
+            public \Seam\Resources\Device\Properties\CurrentClimateSetting\EcobeeMetadata\Owner|string|null $owner = null,
         ) {}
     }
 
@@ -5717,8 +5686,8 @@ namespace Seam\Resources\Device\Properties\DefaultClimateSetting {
                 is_optimized: $json->is_optimized ?? null,
                 owner: is_string($json->owner ?? null)
                     ? \Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata\Owner::tryFrom(
-                        $json->owner,
-                    )
+                            $json->owner,
+                        ) ?? $json->owner
                     : null,
             );
         }
@@ -5735,7 +5704,7 @@ namespace Seam\Resources\Device\Properties\DefaultClimateSetting {
             /**
              * Indicates whether the climate preset is owned by the user or the system.
              */
-            public \Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata\Owner|null $owner = null,
+            public \Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata\Owner|string|null $owner = null,
         ) {}
     }
 
@@ -6993,49 +6962,6 @@ namespace Seam\Resources\Device\Warnings {
              * Maximum number of active access codes supported by the device.
              */
             public int|null $max_active_access_code_count,
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-            /**
-             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                warning_code: $warning_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for device.warnings values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\Device\Warnings
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the warning.
-             */
-            string|null $created_at,
             /**
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */

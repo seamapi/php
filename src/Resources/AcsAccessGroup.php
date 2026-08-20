@@ -18,8 +18,8 @@ namespace Seam\Resources {
             return new self(
                 access_group_type: is_string($json->access_group_type ?? null)
                     ? \Seam\Resources\AcsAccessGroup\AccessGroupType::tryFrom(
-                        $json->access_group_type,
-                    )
+                            $json->access_group_type,
+                        ) ?? $json->access_group_type
                     : null,
                 access_group_type_display_name: $json->access_group_type_display_name ??
                     null,
@@ -36,8 +36,8 @@ namespace Seam\Resources {
                 ),
                 external_type: is_string($json->external_type ?? null)
                     ? \Seam\Resources\AcsAccessGroup\ExternalType::tryFrom(
-                        $json->external_type,
-                    )
+                            $json->external_type,
+                        ) ?? $json->external_type
                     : null,
                 external_type_display_name: $json->external_type_display_name ??
                     null,
@@ -70,7 +70,7 @@ namespace Seam\Resources {
             /**
              * @deprecated Use `external_type`.
              */
-            public \Seam\Resources\AcsAccessGroup\AccessGroupType|null $access_group_type,
+            public \Seam\Resources\AcsAccessGroup\AccessGroupType|string|null $access_group_type,
             /**
              * @deprecated Use `external_type_display_name`.
              */
@@ -104,7 +104,7 @@ namespace Seam\Resources {
             /**
              * Brand-specific terminology for the access group type.
              */
-            public \Seam\Resources\AcsAccessGroup\ExternalType|null $external_type,
+            public \Seam\Resources\AcsAccessGroup\ExternalType|string|null $external_type,
             /**
              * Display name that corresponds to the brand-specific terminology for the access group type.
              */
@@ -171,9 +171,9 @@ namespace Seam\Resources\AcsAccessGroup {
     }
 
     /**
-     * Errors associated with the `acs_access_group`.
+     * Errors associated with the `acs_access_group`. Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Errors
+    class Errors
     {
         public static function from_json(mixed $json): Errors|null
         {
@@ -191,9 +191,14 @@ namespace Seam\Resources\AcsAccessGroup {
                     => \Seam\Resources\AcsAccessGroup\Errors\FailedToCreateOnAcsSystem::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\AcsAccessGroup\Errors\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    error_code: is_string($json->error_code ?? null)
+                        ? \Seam\Resources\AcsAccessGroup\Errors\ErrorCode::tryFrom(
+                                $json->error_code,
+                            ) ?? $json->error_code
+                        : null,
+                    message: $json->message ?? null,
                 ),
             };
         }
@@ -215,9 +220,9 @@ namespace Seam\Resources\AcsAccessGroup {
     }
 
     /**
-     * Collection of pending mutations for the access group. Represents operations that have been requested but not yet completed on the integrated access system.
+     * Collection of pending mutations for the access group. Represents operations that have been requested but not yet completed on the integrated access system. Known mutation_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class PendingMutations
+    class PendingMutations
     {
         public static function from_json(mixed $json): PendingMutations|null
         {
@@ -263,9 +268,14 @@ namespace Seam\Resources\AcsAccessGroup {
                     => \Seam\Resources\AcsAccessGroup\PendingMutations\DeferringUserMembershipUpdate::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\AcsAccessGroup\PendingMutations\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    mutation_code: is_string($json->mutation_code ?? null)
+                        ? \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode::tryFrom(
+                                $json->mutation_code,
+                            ) ?? $json->mutation_code
+                        : null,
                 ),
             };
         }
@@ -301,8 +311,8 @@ namespace Seam\Resources\AcsAccessGroup {
                 message: $json->message ?? null,
                 warning_code: is_string($json->warning_code ?? null)
                     ? \Seam\Resources\AcsAccessGroup\Warnings\WarningCode::tryFrom(
-                        $json->warning_code,
-                    )
+                            $json->warning_code,
+                        ) ?? $json->warning_code
                     : null,
             );
         }
@@ -319,7 +329,7 @@ namespace Seam\Resources\AcsAccessGroup {
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
              */
-            public \Seam\Resources\AcsAccessGroup\Warnings\WarningCode|null $warning_code,
+            public \Seam\Resources\AcsAccessGroup\Warnings\WarningCode|string|null $warning_code,
         ) {}
     }
 
@@ -362,49 +372,6 @@ namespace Seam\Resources\AcsAccessGroup\Errors {
         public static function from_json(
             mixed $json,
         ): FailedToCreateOnAcsSystem|null {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
-                message: $json->message ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the error.
-             */
-            string|null $created_at,
-            /**
-             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\AcsAccessGroup\Errors\ErrorCode|string|null $error_code,
-            /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                error_code: $error_code,
-                message: $message,
-            );
-        }
-    }
-
-    /**
-     * Fallback for acs_access_group.errors values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AcsAccessGroup\Errors
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
             if (!$json) {
                 return null;
             }
@@ -853,8 +820,8 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
                     : null,
                 variant: is_string($json->variant ?? null)
                     ? \Seam\Resources\AcsAccessGroup\PendingMutations\DeferringUserMembershipUpdate\Variant::tryFrom(
-                        $json->variant,
-                    )
+                            $json->variant,
+                        ) ?? $json->variant
                     : null,
             );
         }
@@ -879,50 +846,7 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
             /**
              * Whether the user is scheduled to be added to or removed from this access group.
              */
-            public \Seam\Resources\AcsAccessGroup\PendingMutations\DeferringUserMembershipUpdate\Variant|null $variant,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                mutation_code: $mutation_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for acs_access_group.pending_mutations values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AcsAccessGroup\PendingMutations
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which the mutation was created.
-             */
-            string|null $created_at,
-            /**
-             * Detailed description of the mutation.
-             */
-            string|null $message,
-            /**
-             * Mutation code to indicate that Seam is in the process of pushing an access group creation to the integrated access system.
-             */
-            \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode|string|null $mutation_code,
+            public \Seam\Resources\AcsAccessGroup\PendingMutations\DeferringUserMembershipUpdate\Variant|string|null $variant,
         ) {
             parent::__construct(
                 created_at: $created_at,

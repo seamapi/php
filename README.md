@@ -333,7 +333,7 @@ try {
     print match (true) {
         $event instanceof Seam\Resources\Event\AccessCodeCreated
             => "Created access code {$event->access_code_id}",
-        $event instanceof Seam\Resources\Event\UnknownEvent
+        $event::class === Seam\Resources\Event::class
             => "Unknown event type {$event->event_type}",
         default => "Received {$event->event_type->value}",
     };

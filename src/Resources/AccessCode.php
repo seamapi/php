@@ -46,10 +46,13 @@ namespace Seam\Resources {
                     $json->pending_mutations ?? [],
                 ),
                 status: is_string($json->status ?? null)
-                    ? \Seam\Resources\AccessCode\Status::tryFrom($json->status)
+                    ? \Seam\Resources\AccessCode\Status::tryFrom(
+                            $json->status,
+                        ) ?? $json->status
                     : null,
                 type: is_string($json->type ?? null)
-                    ? \Seam\Resources\AccessCode\Type::tryFrom($json->type)
+                    ? \Seam\Resources\AccessCode\Type::tryFrom($json->type) ??
+                        $json->type
                     : null,
                 warnings: array_map(
                     fn($w) => \Seam\Resources\AccessCode\Warnings::from_json(
@@ -136,11 +139,11 @@ namespace Seam\Resources {
             /**
              * Current status of the access code within the operational lifecycle. Values are `setting`, a transitional phase that indicates that the code is being configured or activated; `set`, which indicates that the code is active and operational; `unset`, which indicates a deactivated or unused state, either before activation or after deliberate deactivation; `removing`, which indicates a transitional period in which the code is being deleted or made inactive; and `unknown`, which indicates an indeterminate state, due to reasons such as system errors or incomplete data, that highlights a potential need for system review or troubleshooting. See also [Lifecycle of Access Codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/lifecycle-of-access-codes).
              */
-            public \Seam\Resources\AccessCode\Status|null $status,
+            public \Seam\Resources\AccessCode\Status|string|null $status,
             /**
              * Type of the access code. `ongoing` access codes are active continuously until deactivated manually. `time_bound` access codes have a specific duration.
              */
-            public \Seam\Resources\AccessCode\Type|null $type,
+            public \Seam\Resources\AccessCode\Type|string|null $type,
             /**
              * Warnings associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
              *
@@ -244,9 +247,9 @@ namespace Seam\Resources\AccessCode {
     }
 
     /**
-     * Errors associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+     * Errors associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Errors
+    class Errors
     {
         public static function from_json(mixed $json): Errors|null
         {
@@ -344,8 +347,13 @@ namespace Seam\Resources\AccessCode {
                     => \Seam\Resources\AccessCode\Errors\BridgeDisconnected::from_json(
                     $json,
                 ),
-                default => \Seam\Resources\AccessCode\Errors\Unknown::from_json(
-                    $json,
+                default => new self(
+                    error_code: is_string($json->error_code ?? null)
+                        ? \Seam\Resources\AccessCode\Errors\ErrorCode::tryFrom(
+                                $json->error_code,
+                            ) ?? $json->error_code
+                        : null,
+                    message: $json->message ?? null,
                 ),
             };
         }
@@ -363,9 +371,9 @@ namespace Seam\Resources\AccessCode {
     }
 
     /**
-     * Collection of pending mutations for the access code. Indicates changes that Seam is in the process of pushing to the device.
+     * Collection of pending mutations for the access code. Indicates changes that Seam is in the process of pushing to the device. Known mutation_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class PendingMutations
+    class PendingMutations
     {
         public static function from_json(mixed $json): PendingMutations|null
         {
@@ -403,9 +411,14 @@ namespace Seam\Resources\AccessCode {
                     => \Seam\Resources\AccessCode\PendingMutations\UpdatingTimeFrame::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\AccessCode\PendingMutations\Unknown::from_json(
-                    $json,
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    mutation_code: is_string($json->mutation_code ?? null)
+                        ? \Seam\Resources\AccessCode\PendingMutations\MutationCode::tryFrom(
+                                $json->mutation_code,
+                            ) ?? $json->mutation_code
+                        : null,
                 ),
             };
         }
@@ -427,9 +440,9 @@ namespace Seam\Resources\AccessCode {
     }
 
     /**
-     * Warnings associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+     * Warnings associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
-    abstract class Warnings
+    class Warnings
     {
         public static function from_json(mixed $json): Warnings|null
         {
@@ -487,9 +500,14 @@ namespace Seam\Resources\AccessCode {
                     => \Seam\Resources\AccessCode\Warnings\UnknownIssueWithAccessCode::from_json(
                     $json,
                 ),
-                default
-                    => \Seam\Resources\AccessCode\Warnings\Unknown::from_json(
-                    $json,
+                default => new self(
+                    message: $json->message ?? null,
+                    warning_code: is_string($json->warning_code ?? null)
+                        ? \Seam\Resources\AccessCode\Warnings\WarningCode::tryFrom(
+                                $json->warning_code,
+                            ) ?? $json->warning_code
+                        : null,
+                    created_at: $json->created_at ?? null,
                 ),
             };
         }
@@ -785,8 +803,8 @@ namespace Seam\Resources\AccessCode\Errors {
                 message: $json->message ?? null,
                 change_type: is_string($json->change_type ?? null)
                     ? \Seam\Resources\AccessCode\Errors\ConflictingExternalModification\ChangeType::tryFrom(
-                        $json->change_type,
-                    )
+                            $json->change_type,
+                        ) ?? $json->change_type
                     : null,
                 created_at: $json->created_at ?? null,
                 modified_fields: array_map(
@@ -816,7 +834,7 @@ namespace Seam\Resources\AccessCode\Errors {
             /**
              * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device.
              */
-            public \Seam\Resources\AccessCode\Errors\ConflictingExternalModification\ChangeType|null $change_type = null,
+            public \Seam\Resources\AccessCode\Errors\ConflictingExternalModification\ChangeType|string|null $change_type = null,
             /**
              * Date and time at which Seam created the error.
              */
@@ -1534,40 +1552,6 @@ namespace Seam\Resources\AccessCode\Errors {
         }
     }
 
-    /**
-     * Fallback for access_code.errors values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AccessCode\Errors
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
-                message: $json->message ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\AccessCode\Errors\ErrorCode|string|null $error_code,
-            /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-        ) {
-            parent::__construct(error_code: $error_code, message: $message);
-        }
-    }
-
     enum ErrorCode: string
     {
         case PROVIDER_ISSUE = "provider_issue";
@@ -1955,49 +1939,6 @@ namespace Seam\Resources\AccessCode\PendingMutations {
         }
     }
 
-    /**
-     * Fallback for access_code.pending_mutations values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AccessCode\PendingMutations
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AccessCode\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which the mutation was created.
-             */
-            string|null $created_at,
-            /**
-             * Detailed description of the mutation.
-             */
-            string|null $message,
-            /**
-             * Mutation code to indicate that Seam is in the process of setting an access code on the device.
-             */
-            \Seam\Resources\AccessCode\PendingMutations\MutationCode|string|null $mutation_code,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                mutation_code: $mutation_code,
-            );
-        }
-    }
-
     enum MutationCode: string
     {
         case CREATING = "creating";
@@ -2267,8 +2208,8 @@ namespace Seam\Resources\AccessCode\Warnings {
                     : null,
                 change_type: is_string($json->change_type ?? null)
                     ? \Seam\Resources\AccessCode\Warnings\ExternalModificationInEffect\ChangeType::tryFrom(
-                        $json->change_type,
-                    )
+                            $json->change_type,
+                        ) ?? $json->change_type
                     : null,
                 created_at: $json->created_at ?? null,
                 modified_fields: array_map(
@@ -2294,7 +2235,7 @@ namespace Seam\Resources\AccessCode\Warnings {
             /**
              * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device.
              */
-            public \Seam\Resources\AccessCode\Warnings\ExternalModificationInEffect\ChangeType|null $change_type = null,
+            public \Seam\Resources\AccessCode\Warnings\ExternalModificationInEffect\ChangeType|string|null $change_type = null,
             /**
              * Date and time at which Seam created the warning.
              */
@@ -2636,49 +2577,6 @@ namespace Seam\Resources\AccessCode\Warnings {
         public static function from_json(
             mixed $json,
         ): UnknownIssueWithAccessCode|null {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AccessCode\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
-                created_at: $json->created_at ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
-             */
-            string|null $message,
-            /**
-             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
-             */
-            \Seam\Resources\AccessCode\Warnings\WarningCode|string|null $warning_code,
-            /**
-             * Date and time at which Seam created the warning.
-             */
-            string|null $created_at = null,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                message: $message,
-                warning_code: $warning_code,
-            );
-        }
-    }
-
-    /**
-     * Fallback for access_code.warnings values introduced after this SDK version.
-     */
-    final class Unknown extends \Seam\Resources\AccessCode\Warnings
-    {
-        public static function from_json(mixed $json): Unknown|null
-        {
             if (!$json) {
                 return null;
             }
