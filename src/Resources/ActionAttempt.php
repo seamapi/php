@@ -102,21 +102,13 @@ namespace Seam\Resources {
                 ),
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
-                    action_type: is_string($json->action_type ?? null)
-                        ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                                $json->action_type,
-                            ) ?? $json->action_type
-                        : null,
+                    action_type: $json->action_type ?? null,
                     error: isset($json->error)
                         ? \Seam\Resources\ActionAttempt\Error::from_json(
                             $json->error,
                         )
                         : null,
-                    status: is_string($json->status ?? null)
-                        ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                                $json->status,
-                            ) ?? $json->status
-                        : null,
+                    status: $json->status ?? null,
                 ),
             };
         }
@@ -128,13 +120,18 @@ namespace Seam\Resources {
             public string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            public \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            public string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
             public \Seam\Resources\ActionAttempt\Error|null $error,
-            public \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            public string|null $status,
         ) {}
     }
 }
@@ -180,11 +177,7 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
@@ -195,11 +188,7 @@ namespace Seam\Resources\ActionAttempt {
                         $json->result,
                     )
                     : null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -210,8 +199,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -220,7 +211,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public \Seam\Resources\ActionAttempt\LockDoor\Result|null $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -243,11 +237,7 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
@@ -258,11 +248,7 @@ namespace Seam\Resources\ActionAttempt {
                         $json->result,
                     )
                     : null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -273,8 +259,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -283,7 +271,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public \Seam\Resources\ActionAttempt\UnlockDoor\Result|null $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -306,11 +297,7 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
@@ -321,11 +308,7 @@ namespace Seam\Resources\ActionAttempt {
                         $json->result,
                     )
                     : null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -336,8 +319,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -346,7 +331,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of scanning a card. If the attempt was successful, includes a snapshot of credential data read from the physical encoder, the corresponding data stored on Seam and the access system, and any associated warnings. Null while the action attempt is pending or when this value does not apply.
              */
             public \Seam\Resources\ActionAttempt\ScanCredential\Result|null $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -369,11 +357,7 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
@@ -384,11 +368,7 @@ namespace Seam\Resources\ActionAttempt {
                         $json->result,
                     )
                     : null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -399,8 +379,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -409,7 +391,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of an encoding attempt. If the attempt was successful, includes the credential data that was encoded onto the card. Null while the action attempt is pending or when this value does not apply.
              */
             public \Seam\Resources\ActionAttempt\EncodeCredential\Result|null $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -433,11 +418,7 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
@@ -448,11 +429,7 @@ namespace Seam\Resources\ActionAttempt {
                         $json->result,
                     )
                     : null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -463,8 +440,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -473,7 +452,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of a scan to assign attempt. If the attempt was successful, includes the credential data that was scanned and assigned. Null while the action attempt is pending or when this value does not apply.
              */
             public \Seam\Resources\ActionAttempt\ScanToAssignCredential\Result|null $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -496,11 +478,7 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
@@ -511,11 +489,7 @@ namespace Seam\Resources\ActionAttempt {
                         $json->result,
                     )
                     : null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -526,8 +500,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -536,7 +512,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of assigning a credential. If successful, includes the updated access method with the assigned credential. Null while the action attempt is pending or when this value does not apply.
              */
             public \Seam\Resources\ActionAttempt\AssignCredential\Result|null $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -560,22 +539,14 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
                     )
                     : null,
                 result: $json->result ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -586,8 +557,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -596,7 +569,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public mixed $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -619,22 +595,14 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
                     )
                     : null,
                 result: $json->result ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -645,8 +613,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -655,7 +625,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public mixed $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -678,22 +651,14 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
                     )
                     : null,
                 result: $json->result ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -704,8 +669,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -714,7 +681,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public mixed $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -738,22 +708,14 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
                     )
                     : null,
                 result: $json->result ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -764,8 +726,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -774,7 +738,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public mixed $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -798,22 +765,14 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
                     )
                     : null,
                 result: $json->result ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -824,8 +783,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -834,7 +795,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public mixed $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -859,22 +823,14 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
                     )
                     : null,
                 result: $json->result ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -885,8 +841,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -895,7 +853,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public mixed $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -919,22 +880,14 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
                     )
                     : null,
                 result: $json->result ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -945,8 +898,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -955,7 +910,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public mixed $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -978,22 +936,14 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
                     )
                     : null,
                 result: $json->result ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -1004,8 +954,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -1014,7 +966,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public mixed $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -1034,22 +989,14 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
                     )
                     : null,
                 result: $json->result ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -1060,8 +1007,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -1070,7 +1019,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public mixed $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -1090,11 +1042,7 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
@@ -1105,11 +1053,7 @@ namespace Seam\Resources\ActionAttempt {
                         $json->result,
                     )
                     : null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -1120,8 +1064,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -1130,7 +1076,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public \Seam\Resources\ActionAttempt\CreateAccessCode\Result|null $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -1150,22 +1099,14 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
                     )
                     : null,
                 result: $json->result ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -1176,8 +1117,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -1186,7 +1129,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public mixed $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -1206,11 +1152,7 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
@@ -1221,11 +1163,7 @@ namespace Seam\Resources\ActionAttempt {
                         $json->result,
                     )
                     : null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -1236,8 +1174,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -1246,7 +1186,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public \Seam\Resources\ActionAttempt\UpdateAccessCode\Result|null $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -1266,11 +1209,7 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
@@ -1281,11 +1220,7 @@ namespace Seam\Resources\ActionAttempt {
                         $json->result,
                     )
                     : null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -1296,8 +1231,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -1306,7 +1243,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public \Seam\Resources\ActionAttempt\CreateNoiseThreshold\Result|null $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -1326,22 +1266,14 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
                     )
                     : null,
                 result: $json->result ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -1352,8 +1284,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -1362,7 +1296,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public mixed $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -1382,11 +1319,7 @@ namespace Seam\Resources\ActionAttempt {
             }
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
-                action_type: is_string($json->action_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ActionType::tryFrom(
-                            $json->action_type,
-                        ) ?? $json->action_type
-                    : null,
+                action_type: $json->action_type ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\Error::from_json(
                         $json->error,
@@ -1397,11 +1330,7 @@ namespace Seam\Resources\ActionAttempt {
                         $json->result,
                     )
                     : null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ActionAttempt\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -1412,8 +1341,10 @@ namespace Seam\Resources\ActionAttempt {
             string|null $action_attempt_id,
             /**
              * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
-            \Seam\Resources\ActionAttempt\ActionType|string|null $action_type,
+            string|null $action_type,
             /**
              * Error associated with the action. Null while the action attempt is pending or when this value does not apply.
              */
@@ -1422,7 +1353,10 @@ namespace Seam\Resources\ActionAttempt {
              * Result of the action. Null while the action attempt is pending or when this value does not apply.
              */
             public \Seam\Resources\ActionAttempt\UpdateNoiseThreshold\Result|null $result,
-            \Seam\Resources\ActionAttempt\Status|string|null $status,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
         ) {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
@@ -1635,11 +1569,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Result {
                 return null;
             }
             return new self(
-                access_method: is_string($json->access_method ?? null)
-                    ? \Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam\AccessMethod::tryFrom(
-                            $json->access_method,
-                        ) ?? $json->access_method
-                    : null,
+                access_method: $json->access_method ?? null,
                 acs_credential_id: $json->acs_credential_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -1680,11 +1610,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Result {
                 card_number: $json->card_number ?? null,
                 code: $json->code ?? null,
                 ends_at: $json->ends_at ?? null,
-                external_type: is_string($json->external_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam\ExternalType::tryFrom(
-                            $json->external_type,
-                        ) ?? $json->external_type
-                    : null,
+                external_type: $json->external_type ?? null,
                 external_type_display_name: $json->external_type_display_name ??
                     null,
                 is_issued: $json->is_issued ?? null,
@@ -1711,8 +1637,10 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Result {
         public function __construct(
             /**
              * Access method for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials). Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam\AccessMethod>|string|null
              */
-            public \Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam\AccessMethod|string|null $access_method,
+            public string|null $access_method,
             /**
              * ID of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
@@ -1780,8 +1708,10 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Result {
             public string|null $ends_at = null,
             /**
              * Brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type. Supported values: `pti_card`, `brivo_credential`, `hid_credential`, `visionline_card`.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam\ExternalType>|string|null
              */
-            public \Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam\ExternalType|string|null $external_type = null,
+            public string|null $external_type = null,
             /**
              * Display name that corresponds to the brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type.
              */
@@ -1840,11 +1770,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Result {
                 return null;
             }
             return new self(
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\ActionAttempt\ScanCredential\Result\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 warning_message: $json->warning_message ?? null,
             );
         }
@@ -1852,8 +1778,10 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Result {
         public function __construct(
             /**
              * Indicates a warning related to scanning a credential.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ScanCredential\Result\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\ActionAttempt\ScanCredential\Result\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
             /**
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
@@ -1875,11 +1803,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnEnco
             }
             return new self(
                 cancelled: $json->cancelled ?? null,
-                card_format: is_string($json->card_format ?? null)
-                    ? \Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnEncoder\VisionlineMetadata\CardFormat::tryFrom(
-                            $json->card_format,
-                        ) ?? $json->card_format
-                    : null,
+                card_format: $json->card_format ?? null,
                 card_holder: $json->card_holder ?? null,
                 card_id: $json->card_id ?? null,
                 common_acs_entrance_ids: $json->common_acs_entrance_ids ?? null,
@@ -1900,8 +1824,10 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnEnco
             public bool|null $cancelled = null,
             /**
              * Format of the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnEncoder\VisionlineMetadata\CardFormat>|string|null
              */
-            public \Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnEncoder\VisionlineMetadata\CardFormat|string|null $card_format = null,
+            public string|null $card_format = null,
             /**
              * Holder of the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
@@ -2073,11 +1999,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam
             }
             return new self(
                 auto_join: $json->auto_join ?? null,
-                card_function_type: is_string($json->card_function_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam\VisionlineMetadata\CardFunctionType::tryFrom(
-                            $json->card_function_type,
-                        ) ?? $json->card_function_type
-                    : null,
+                card_function_type: $json->card_function_type ?? null,
                 card_id: $json->card_id ?? null,
                 common_acs_entrance_ids: $json->common_acs_entrance_ids ?? null,
                 credential_id: $json->credential_id ?? null,
@@ -2095,8 +2017,10 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam
             public bool|null $auto_join = null,
             /**
              * Card function type in the Visionline access system.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam\VisionlineMetadata\CardFunctionType>|string|null
              */
-            public \Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam\VisionlineMetadata\CardFunctionType|string|null $card_function_type = null,
+            public string|null $card_function_type = null,
             /**
              * ID of the card in the Visionline access system.
              */
@@ -2143,11 +2067,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 new_code: $json->new_code ?? null,
                 original_code: $json->original_code ?? null,
             );
@@ -2164,8 +2084,10 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
             /**
              * The PIN code that was assigned instead.
              */
@@ -2245,11 +2167,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential {
                 return null;
             }
             return new self(
-                access_method: is_string($json->access_method ?? null)
-                    ? \Seam\Resources\ActionAttempt\EncodeCredential\Result\AccessMethod::tryFrom(
-                            $json->access_method,
-                        ) ?? $json->access_method
-                    : null,
+                access_method: $json->access_method ?? null,
                 acs_credential_id: $json->acs_credential_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -2290,11 +2208,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential {
                 card_number: $json->card_number ?? null,
                 code: $json->code ?? null,
                 ends_at: $json->ends_at ?? null,
-                external_type: is_string($json->external_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\EncodeCredential\Result\ExternalType::tryFrom(
-                            $json->external_type,
-                        ) ?? $json->external_type
-                    : null,
+                external_type: $json->external_type ?? null,
                 external_type_display_name: $json->external_type_display_name ??
                     null,
                 is_issued: $json->is_issued ?? null,
@@ -2321,8 +2235,10 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential {
         public function __construct(
             /**
              * Access method for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials). Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\EncodeCredential\Result\AccessMethod>|string|null
              */
-            public \Seam\Resources\ActionAttempt\EncodeCredential\Result\AccessMethod|string|null $access_method,
+            public string|null $access_method,
             /**
              * ID of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
@@ -2390,8 +2306,10 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential {
             public string|null $ends_at = null,
             /**
              * Brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type. Supported values: `pti_card`, `brivo_credential`, `hid_credential`, `visionline_card`.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\EncodeCredential\Result\ExternalType>|string|null
              */
-            public \Seam\Resources\ActionAttempt\EncodeCredential\Result\ExternalType|string|null $external_type = null,
+            public string|null $external_type = null,
             /**
              * Display name that corresponds to the brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type.
              */
@@ -2555,11 +2473,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential\Result {
             }
             return new self(
                 auto_join: $json->auto_join ?? null,
-                card_function_type: is_string($json->card_function_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\EncodeCredential\Result\VisionlineMetadata\CardFunctionType::tryFrom(
-                            $json->card_function_type,
-                        ) ?? $json->card_function_type
-                    : null,
+                card_function_type: $json->card_function_type ?? null,
                 card_id: $json->card_id ?? null,
                 common_acs_entrance_ids: $json->common_acs_entrance_ids ?? null,
                 credential_id: $json->credential_id ?? null,
@@ -2577,8 +2491,10 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential\Result {
             public bool|null $auto_join = null,
             /**
              * Card function type in the Visionline access system.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\EncodeCredential\Result\VisionlineMetadata\CardFunctionType>|string|null
              */
-            public \Seam\Resources\ActionAttempt\EncodeCredential\Result\VisionlineMetadata\CardFunctionType|string|null $card_function_type = null,
+            public string|null $card_function_type = null,
             /**
              * ID of the card in the Visionline access system.
              */
@@ -2625,11 +2541,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential\Result {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\ActionAttempt\EncodeCredential\Result\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 new_code: $json->new_code ?? null,
                 original_code: $json->original_code ?? null,
             );
@@ -2646,8 +2558,10 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential\Result {
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\EncodeCredential\Result\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\ActionAttempt\EncodeCredential\Result\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
             /**
              * The PIN code that was assigned instead.
              */
@@ -2719,11 +2633,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential {
                 return null;
             }
             return new self(
-                access_method: is_string($json->access_method ?? null)
-                    ? \Seam\Resources\ActionAttempt\ScanToAssignCredential\Result\AccessMethod::tryFrom(
-                            $json->access_method,
-                        ) ?? $json->access_method
-                    : null,
+                access_method: $json->access_method ?? null,
                 acs_credential_id: $json->acs_credential_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -2764,11 +2674,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential {
                 card_number: $json->card_number ?? null,
                 code: $json->code ?? null,
                 ends_at: $json->ends_at ?? null,
-                external_type: is_string($json->external_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ScanToAssignCredential\Result\ExternalType::tryFrom(
-                            $json->external_type,
-                        ) ?? $json->external_type
-                    : null,
+                external_type: $json->external_type ?? null,
                 external_type_display_name: $json->external_type_display_name ??
                     null,
                 is_issued: $json->is_issued ?? null,
@@ -2795,8 +2701,10 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential {
         public function __construct(
             /**
              * Access method for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials). Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ScanToAssignCredential\Result\AccessMethod>|string|null
              */
-            public \Seam\Resources\ActionAttempt\ScanToAssignCredential\Result\AccessMethod|string|null $access_method,
+            public string|null $access_method,
             /**
              * ID of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
              */
@@ -2867,8 +2775,10 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential {
             public string|null $ends_at = null,
             /**
              * Brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type. Supported values: `pti_card`, `brivo_credential`, `hid_credential`, `visionline_card`.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ScanToAssignCredential\Result\ExternalType>|string|null
              */
-            public \Seam\Resources\ActionAttempt\ScanToAssignCredential\Result\ExternalType|string|null $external_type = null,
+            public string|null $external_type = null,
             /**
              * Display name that corresponds to the brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type.
              */
@@ -3032,11 +2942,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Result {
             }
             return new self(
                 auto_join: $json->auto_join ?? null,
-                card_function_type: is_string($json->card_function_type ?? null)
-                    ? \Seam\Resources\ActionAttempt\ScanToAssignCredential\Result\VisionlineMetadata\CardFunctionType::tryFrom(
-                            $json->card_function_type,
-                        ) ?? $json->card_function_type
-                    : null,
+                card_function_type: $json->card_function_type ?? null,
                 card_id: $json->card_id ?? null,
                 common_acs_entrance_ids: $json->common_acs_entrance_ids ?? null,
                 credential_id: $json->credential_id ?? null,
@@ -3054,8 +2960,10 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Result {
             public bool|null $auto_join = null,
             /**
              * Card function type in the Visionline access system.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ScanToAssignCredential\Result\VisionlineMetadata\CardFunctionType>|string|null
              */
-            public \Seam\Resources\ActionAttempt\ScanToAssignCredential\Result\VisionlineMetadata\CardFunctionType|string|null $card_function_type = null,
+            public string|null $card_function_type = null,
             /**
              * ID of the card in the Visionline access system.
              */
@@ -3102,11 +3010,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Result {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\ActionAttempt\ScanToAssignCredential\Result\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 new_code: $json->new_code ?? null,
                 original_code: $json->original_code ?? null,
             );
@@ -3123,8 +3027,10 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Result {
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ScanToAssignCredential\Result\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\ActionAttempt\ScanToAssignCredential\Result\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
             /**
              * The PIN code that was assigned instead.
              */
@@ -3209,11 +3115,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential {
                 ),
                 is_issued: $json->is_issued ?? null,
                 issued_at: $json->issued_at ?? null,
-                mode: is_string($json->mode ?? null)
-                    ? \Seam\Resources\ActionAttempt\AssignCredential\Result\Mode::tryFrom(
-                            $json->mode,
-                        ) ?? $json->mode
-                    : null,
+                mode: $json->mode ?? null,
                 pending_mutations: array_map(
                     fn(
                         $p,
@@ -3272,8 +3174,10 @@ namespace Seam\Resources\ActionAttempt\AssignCredential {
             public string|null $issued_at,
             /**
              * Access method mode. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\AssignCredential\Result\Mode>|string|null
              */
-            public \Seam\Resources\ActionAttempt\AssignCredential\Result\Mode|string|null $mode,
+            public string|null $mode,
             /**
              * Pending mutations for the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant). Indicates operations that are in progress.
              *
@@ -3339,11 +3243,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Result {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\ActionAttempt\AssignCredential\Result\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -3355,8 +3255,10 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Result {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\AssignCredential\Result\Errors\ErrorCode>|string|null
              */
-            public \Seam\Resources\ActionAttempt\AssignCredential\Result\Errors\ErrorCode|string|null $error_code,
+            public string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -3382,11 +3284,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Result {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\ActionAttempt\AssignCredential\Result\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\ActionAttempt\AssignCredential\Result\PendingMutations\To::from_json(
                         $json->to,
@@ -3410,8 +3308,10 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Result {
             public string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of updating the access times for this access method.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\AssignCredential\Result\PendingMutations\MutationCode>|string|null
              */
-            public \Seam\Resources\ActionAttempt\AssignCredential\Result\PendingMutations\MutationCode|string|null $mutation_code,
+            public string|null $mutation_code,
             /**
              * New access time configuration.
              */
@@ -3432,11 +3332,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Result {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\ActionAttempt\AssignCredential\Result\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 original_access_method_id: $json->original_access_method_id ??
                     null,
             );
@@ -3453,8 +3349,10 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Result {
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\AssignCredential\Result\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\ActionAttempt\AssignCredential\Result\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
             /**
              * ID of the original access method from which this backup access method was split, if applicable.
              */

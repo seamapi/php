@@ -36,16 +36,8 @@ namespace Seam\Resources {
                 ),
                 is_managed: $json->is_managed ?? null,
                 name: $json->name ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
-                type: is_string($json->type ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Type::tryFrom(
-                            $json->type,
-                        ) ?? $json->type
-                    : null,
+                status: $json->status ?? null,
+                type: $json->type ?? null,
                 warnings: array_map(
                     fn(
                         $w,
@@ -103,12 +95,16 @@ namespace Seam\Resources {
             public string|null $name,
             /**
              * Current status of the access code within the operational lifecycle. `set` indicates that the code is active and operational. `unset` indicates that the code exists on the provider but is not usable on the device.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Status>|string|null
              */
-            public \Seam\Resources\UnmanagedAccessCode\Status|string|null $status,
+            public string|null $status,
             /**
              * Type of the access code. `ongoing` access codes are active continuously until deactivated manually. `time_bound` access codes have a specific duration.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Type>|string|null
              */
-            public \Seam\Resources\UnmanagedAccessCode\Type|string|null $type,
+            public string|null $type,
             /**
              * Warnings associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
              *
@@ -305,11 +301,7 @@ namespace Seam\Resources\UnmanagedAccessCode {
                     $json,
                 ),
                 default => new self(
-                    error_code: is_string($json->error_code ?? null)
-                        ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                                $json->error_code,
-                            ) ?? $json->error_code
-                        : null,
+                    error_code: $json->error_code ?? null,
                     message: $json->message ?? null,
                 ),
             };
@@ -318,8 +310,10 @@ namespace Seam\Resources\UnmanagedAccessCode {
         public function __construct(
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            public \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            public string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -390,11 +384,7 @@ namespace Seam\Resources\UnmanagedAccessCode {
                 ),
                 default => new self(
                     message: $json->message ?? null,
-                    warning_code: is_string($json->warning_code ?? null)
-                        ? \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::tryFrom(
-                                $json->warning_code,
-                            ) ?? $json->warning_code
-                        : null,
+                    warning_code: $json->warning_code ?? null,
                     created_at: $json->created_at ?? null,
                 ),
             };
@@ -407,8 +397,10 @@ namespace Seam\Resources\UnmanagedAccessCode {
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
             /**
              * Date and time at which Seam created the warning.
              */
@@ -441,11 +433,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
                 return null;
             }
             return new self(
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_access_code_error: $json->is_access_code_error ?? null,
                 message: $json->message ?? null,
                 created_at: $json->created_at ?? null,
@@ -455,8 +443,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
         public function __construct(
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that this is an access code error.
              */
@@ -486,11 +476,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
                 return null;
             }
             return new self(
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_access_code_error: $json->is_access_code_error ?? null,
                 message: $json->message ?? null,
                 created_at: $json->created_at ?? null,
@@ -500,8 +486,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
         public function __construct(
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that this is an access code error.
              */
@@ -532,11 +520,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
                 return null;
             }
             return new self(
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_access_code_error: $json->is_access_code_error ?? null,
                 message: $json->message ?? null,
                 created_at: $json->created_at ?? null,
@@ -546,8 +530,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
         public function __construct(
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that this is an access code error.
              */
@@ -578,11 +564,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
                 return null;
             }
             return new self(
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_access_code_error: $json->is_access_code_error ?? null,
                 message: $json->message ?? null,
                 created_at: $json->created_at ?? null,
@@ -595,8 +577,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
         public function __construct(
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that this is an access code error.
              */
@@ -635,11 +619,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
                 return null;
             }
             return new self(
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_access_code_error: $json->is_access_code_error ?? null,
                 message: $json->message ?? null,
                 created_at: $json->created_at ?? null,
@@ -649,8 +629,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
         public function __construct(
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that this is an access code error.
              */
@@ -681,18 +663,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
                 return null;
             }
             return new self(
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_access_code_error: $json->is_access_code_error ?? null,
                 message: $json->message ?? null,
-                change_type: is_string($json->change_type ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ConflictingExternalModification\ChangeType::tryFrom(
-                            $json->change_type,
-                        ) ?? $json->change_type
-                    : null,
+                change_type: $json->change_type ?? null,
                 created_at: $json->created_at ?? null,
                 modified_fields: array_map(
                     fn(
@@ -708,8 +682,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
         public function __construct(
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that this is an access code error.
              */
@@ -720,8 +696,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             string|null $message,
             /**
              * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ConflictingExternalModification\ChangeType>|string|null
              */
-            public \Seam\Resources\UnmanagedAccessCode\Errors\ConflictingExternalModification\ChangeType|string|null $change_type = null,
+            public string|null $change_type = null,
             /**
              * Date and time at which Seam created the error.
              */
@@ -749,11 +727,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
                 return null;
             }
             return new self(
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_access_code_error: $json->is_access_code_error ?? null,
                 message: $json->message ?? null,
                 created_at: $json->created_at ?? null,
@@ -763,8 +737,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
         public function __construct(
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that this is an access code error.
              */
@@ -795,11 +771,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
                     null,
                 is_device_error: $json->is_device_error ?? null,
@@ -814,8 +786,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
              */
@@ -847,11 +821,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
                     null,
                 is_device_error: $json->is_device_error ?? null,
@@ -866,8 +836,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
              */
@@ -899,11 +871,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
                     null,
                 is_device_error: $json->is_device_error ?? null,
@@ -918,8 +886,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
              */
@@ -951,11 +921,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
                     null,
                 is_device_error: $json->is_device_error ?? null,
@@ -970,8 +936,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
              */
@@ -1001,11 +969,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1018,8 +982,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1045,11 +1011,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1062,8 +1024,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1090,11 +1054,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1107,8 +1067,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1135,11 +1097,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1152,8 +1110,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1181,11 +1141,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1198,8 +1154,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1227,11 +1185,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1244,8 +1198,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1273,11 +1229,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1290,8 +1242,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1318,11 +1272,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1335,8 +1285,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1363,11 +1315,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1380,8 +1328,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1408,11 +1358,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
                 is_bridge_error: $json->is_bridge_error ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
@@ -1427,8 +1373,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -1528,11 +1476,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             }
             return new self(
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 created_at: $json->created_at ?? null,
             );
         }
@@ -1544,8 +1488,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
             /**
              * Date and time at which Seam created the warning.
              */
@@ -1573,11 +1519,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             }
             return new self(
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 created_at: $json->created_at ?? null,
             );
         }
@@ -1589,8 +1531,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
             /**
              * Date and time at which Seam created the warning.
              */
@@ -1618,16 +1562,8 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             }
             return new self(
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
-                change_type: is_string($json->change_type ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Warnings\ExternalModificationInEffect\ChangeType::tryFrom(
-                            $json->change_type,
-                        ) ?? $json->change_type
-                    : null,
+                warning_code: $json->warning_code ?? null,
+                change_type: $json->change_type ?? null,
                 created_at: $json->created_at ?? null,
                 modified_fields: array_map(
                     fn(
@@ -1647,12 +1583,16 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
             /**
              * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\ExternalModificationInEffect\ChangeType>|string|null
              */
-            public \Seam\Resources\UnmanagedAccessCode\Warnings\ExternalModificationInEffect\ChangeType|string|null $change_type = null,
+            public string|null $change_type = null,
             /**
              * Date and time at which Seam created the warning.
              */
@@ -1686,11 +1626,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             }
             return new self(
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 created_at: $json->created_at ?? null,
             );
         }
@@ -1702,8 +1638,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
             /**
              * Date and time at which Seam created the warning.
              */
@@ -1731,11 +1669,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             }
             return new self(
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 created_at: $json->created_at ?? null,
             );
         }
@@ -1747,8 +1681,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
             /**
              * Date and time at which Seam created the warning.
              */
@@ -1776,11 +1712,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             }
             return new self(
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 created_at: $json->created_at ?? null,
             );
         }
@@ -1792,8 +1724,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
             /**
              * Date and time at which Seam created the warning.
              */
@@ -1821,11 +1755,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             }
             return new self(
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 created_at: $json->created_at ?? null,
             );
         }
@@ -1837,8 +1767,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
             /**
              * Date and time at which Seam created the warning.
              */
@@ -1866,11 +1798,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             }
             return new self(
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 created_at: $json->created_at ?? null,
             );
         }
@@ -1882,8 +1810,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
             /**
              * Date and time at which Seam created the warning.
              */
@@ -1911,11 +1841,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             }
             return new self(
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 created_at: $json->created_at ?? null,
             );
         }
@@ -1927,8 +1853,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
             /**
              * Date and time at which Seam created the warning.
              */
@@ -1955,11 +1883,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             }
             return new self(
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 created_at: $json->created_at ?? null,
             );
         }
@@ -1971,8 +1895,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
             /**
              * Date and time at which Seam created the warning.
              */
@@ -2000,11 +1926,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             }
             return new self(
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 created_at: $json->created_at ?? null,
             );
         }
@@ -2016,8 +1938,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
             /**
              * Date and time at which Seam created the warning.
              */

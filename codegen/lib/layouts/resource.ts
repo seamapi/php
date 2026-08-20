@@ -63,10 +63,7 @@ const generateFromJsonProp = (property: ResourceClassProperty): string => {
       return `${name}: $json->${name} ?? null,`
 
     case 'value':
-      if (property.enumType == null) {
-        return `${name}: $json->${name} ?? null,`
-      }
-      return `${name}: is_string($json->${name} ?? null) ? ${property.enumType}::tryFrom($json->${name})${property.preserveUnknownEnum ? ` ?? $json->${name}` : ''} : null,`
+      return `${name}: $json->${name} ?? null,`
   }
 }
 

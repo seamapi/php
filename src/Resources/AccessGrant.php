@@ -180,11 +180,7 @@ namespace Seam\Resources\AccessGrant {
                 ),
                 default => new self(
                     created_at: $json->created_at ?? null,
-                    error_code: is_string($json->error_code ?? null)
-                        ? \Seam\Resources\AccessGrant\Errors\ErrorCode::tryFrom(
-                                $json->error_code,
-                            ) ?? $json->error_code
-                        : null,
+                    error_code: $json->error_code ?? null,
                     message: $json->message ?? null,
                     missing_device_ids: $json->missing_device_ids ?? null,
                 ),
@@ -198,8 +194,10 @@ namespace Seam\Resources\AccessGrant {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\Errors\ErrorCode>|string|null
              */
-            public \Seam\Resources\AccessGrant\Errors\ErrorCode|string|null $error_code,
+            public string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -241,11 +239,7 @@ namespace Seam\Resources\AccessGrant {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
-                    mutation_code: is_string($json->mutation_code ?? null)
-                        ? \Seam\Resources\AccessGrant\PendingMutations\MutationCode::tryFrom(
-                                $json->mutation_code,
-                            ) ?? $json->mutation_code
-                        : null,
+                    mutation_code: $json->mutation_code ?? null,
                 ),
             };
         }
@@ -261,8 +255,10 @@ namespace Seam\Resources\AccessGrant {
             public string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of updating the spaces (devices) associated with this access grant.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\PendingMutations\MutationCode>|string|null
              */
-            public \Seam\Resources\AccessGrant\PendingMutations\MutationCode|string|null $mutation_code,
+            public string|null $mutation_code,
         ) {}
     }
 
@@ -282,11 +278,7 @@ namespace Seam\Resources\AccessGrant {
                     null,
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
-                mode: is_string($json->mode ?? null)
-                    ? \Seam\Resources\AccessGrant\RequestedAccessMethods\Mode::tryFrom(
-                            $json->mode,
-                        ) ?? $json->mode
-                    : null,
+                mode: $json->mode ?? null,
                 code: $json->code ?? null,
                 instant_key_max_use_count: $json->instant_key_max_use_count ??
                     null,
@@ -310,8 +302,10 @@ namespace Seam\Resources\AccessGrant {
             public string|null $display_name,
             /**
              * Access method mode. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\RequestedAccessMethods\Mode>|string|null
              */
-            public \Seam\Resources\AccessGrant\RequestedAccessMethods\Mode|string|null $mode,
+            public string|null $mode,
             /**
              * Specific PIN code to use for this access method. Only applicable when mode is 'code'.
              */
@@ -371,11 +365,7 @@ namespace Seam\Resources\AccessGrant {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
-                    warning_code: is_string($json->warning_code ?? null)
-                        ? \Seam\Resources\AccessGrant\Warnings\WarningCode::tryFrom(
-                                $json->warning_code,
-                            ) ?? $json->warning_code
-                        : null,
+                    warning_code: $json->warning_code ?? null,
                 ),
             };
         }
@@ -391,8 +381,10 @@ namespace Seam\Resources\AccessGrant {
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\AccessGrant\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
         ) {}
     }
 }
@@ -412,11 +404,7 @@ namespace Seam\Resources\AccessGrant\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AccessGrant\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
                 missing_device_ids: $json->missing_device_ids ?? null,
             );
@@ -429,8 +417,10 @@ namespace Seam\Resources\AccessGrant\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\AccessGrant\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -477,11 +467,7 @@ namespace Seam\Resources\AccessGrant\PendingMutations {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AccessGrant\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\AccessGrant\PendingMutations\UpdatingSpaces\To::from_json(
                         $json->to,
@@ -505,8 +491,10 @@ namespace Seam\Resources\AccessGrant\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of updating the spaces (devices) associated with this access grant.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AccessGrant\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * New location configuration.
              */
@@ -540,11 +528,7 @@ namespace Seam\Resources\AccessGrant\PendingMutations {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AccessGrant\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\AccessGrant\PendingMutations\UpdatingAccessTimes\To::from_json(
                         $json->to,
@@ -574,8 +558,10 @@ namespace Seam\Resources\AccessGrant\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of updating the spaces (devices) associated with this access grant.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AccessGrant\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * New access time configuration.
              */
@@ -733,11 +719,7 @@ namespace Seam\Resources\AccessGrant\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AccessGrant\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -752,8 +734,10 @@ namespace Seam\Resources\AccessGrant\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AccessGrant\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -778,11 +762,7 @@ namespace Seam\Resources\AccessGrant\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AccessGrant\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -797,8 +777,10 @@ namespace Seam\Resources\AccessGrant\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AccessGrant\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -823,11 +805,7 @@ namespace Seam\Resources\AccessGrant\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AccessGrant\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 failed_devices: array_map(
                     fn(
                         $f,
@@ -850,8 +828,10 @@ namespace Seam\Resources\AccessGrant\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AccessGrant\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
             /**
              * Devices whose access codes could not be revoked during reconciliation. Present when the provider does not support revoking an offline access code (e.g. Dormakaba oracode with exhausted override budget).
              *
@@ -881,11 +861,7 @@ namespace Seam\Resources\AccessGrant\Warnings {
                 access_method_ids: $json->access_method_ids ?? null,
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AccessGrant\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -906,8 +882,10 @@ namespace Seam\Resources\AccessGrant\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AccessGrant\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -935,11 +913,7 @@ namespace Seam\Resources\AccessGrant\Warnings {
                 message: $json->message ?? null,
                 new_code: $json->new_code ?? null,
                 original_code: $json->original_code ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AccessGrant\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -966,8 +940,10 @@ namespace Seam\Resources\AccessGrant\Warnings {
             public string|null $original_code,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AccessGrant\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -993,11 +969,7 @@ namespace Seam\Resources\AccessGrant\Warnings {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AccessGrant\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1016,8 +988,10 @@ namespace Seam\Resources\AccessGrant\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AccessGrant\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1043,16 +1017,8 @@ namespace Seam\Resources\AccessGrant\Warnings {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 message: $json->message ?? null,
-                reason: is_string($json->reason ?? null)
-                    ? \Seam\Resources\AccessGrant\Warnings\DeviceTimeConstraintsViolated\Reason::tryFrom(
-                            $json->reason,
-                        ) ?? $json->reason
-                    : null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AccessGrant\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                reason: $json->reason ?? null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1071,12 +1037,16 @@ namespace Seam\Resources\AccessGrant\Warnings {
             string|null $message,
             /**
              * Specific reason why the grant's times are not programmable on the device.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\Warnings\DeviceTimeConstraintsViolated\Reason>|string|null
              */
-            public \Seam\Resources\AccessGrant\Warnings\DeviceTimeConstraintsViolated\Reason|string|null $reason,
+            public string|null $reason,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AccessGrant\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,

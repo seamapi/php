@@ -39,7 +39,11 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
         );
 
         $this->assertInstanceOf(UnlockDoor::class, $action_attempt);
-        $this->assertSame(Status::PENDING, $action_attempt->status);
+        $this->assertSame("pending", $action_attempt->status);
+        $this->assertSame(
+            Status::PENDING,
+            Status::tryFrom($action_attempt->status),
+        );
         $this->assertNull($action_attempt->error);
         $this->assertNull($action_attempt->result);
 
@@ -67,7 +71,7 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
             $pending->action_attempt_id,
             $attempts[0]->action_attempt_id,
         );
-        $this->assertSame(Status::PENDING, $attempts[0]->status);
+        $this->assertSame("pending", $attempts[0]->status);
     }
 
     private function set_status(
@@ -91,7 +95,7 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
             $this->seed["august_device_1"],
         );
 
-        $this->assertSame(Status::SUCCESS, $action_attempt->status);
+        $this->assertSame("success", $action_attempt->status);
     }
 
     public function testClientDefaultCanDisableWaiting(): void
@@ -102,7 +106,7 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
             $this->seed["august_device_1"],
         );
 
-        $this->assertSame(Status::PENDING, $action_attempt->status);
+        $this->assertSame("pending", $action_attempt->status);
     }
 
     /**
@@ -123,7 +127,7 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
             $this->seed["august_device_1"],
         );
 
-        $this->assertSame(Status::SUCCESS, $action_attempt->status);
+        $this->assertSame("success", $action_attempt->status);
     }
 
     public function testPerCallOptionCanDisableWaiting(): void
@@ -133,7 +137,7 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
             wait_for_action_attempt: false,
         );
 
-        $this->assertSame(Status::PENDING, $action_attempt->status);
+        $this->assertSame("pending", $action_attempt->status);
     }
 
     public function testPerCallOptionCanEnableWaiting(): void
@@ -145,7 +149,7 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
             wait_for_action_attempt: true,
         );
 
-        $this->assertSame(Status::SUCCESS, $action_attempt->status);
+        $this->assertSame("success", $action_attempt->status);
     }
 
     public function testReturnsAnAlreadySuccessfulActionAttempt(): void
@@ -162,7 +166,7 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
             wait_for_action_attempt: true,
         );
 
-        $this->assertSame(Status::SUCCESS, $resolved->status);
+        $this->assertSame("success", $resolved->status);
         $this->assertSame(
             $action_attempt->action_attempt_id,
             $resolved->action_attempt_id,
@@ -193,7 +197,7 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
                 ],
             );
 
-            $this->assertSame(Status::SUCCESS, $resolved->status);
+            $this->assertSame("success", $resolved->status);
         } finally {
             proc_close($resolver);
         }
@@ -263,10 +267,7 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
         } catch (ActionAttemptFailedError $error) {
             $this->assertSame("Failed", $error->getMessage());
             $this->assertSame("foo", $error->getErrorCode());
-            $this->assertSame(
-                Status::ERROR,
-                $error->getActionAttempt()->status,
-            );
+            $this->assertSame("error", $error->getActionAttempt()->status);
             $this->assertSame(
                 $action_attempt->action_attempt_id,
                 $error->getActionAttempt()->action_attempt_id,
@@ -339,7 +340,7 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
             ],
         );
 
-        $this->assertSame(Status::SUCCESS, $resolved->status);
+        $this->assertSame("success", $resolved->status);
     }
 
     /**
@@ -413,7 +414,7 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
             "polling_interval" => 0.01,
         ]);
 
-        $this->assertSame(Status::SUCCESS, $resolved->status);
+        $this->assertSame("success", $resolved->status);
 
         $poll = $recorder->request(1);
 
@@ -443,6 +444,6 @@ final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
             ],
         );
 
-        $this->assertSame(Status::SUCCESS, $resolved->status);
+        $this->assertSame("success", $resolved->status);
     }
 }

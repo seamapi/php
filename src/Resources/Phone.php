@@ -15,11 +15,7 @@ namespace Seam\Resources {
                 created_at: $json->created_at ?? null,
                 custom_metadata: $json->custom_metadata ?? null,
                 device_id: $json->device_id ?? null,
-                device_type: is_string($json->device_type ?? null)
-                    ? \Seam\Resources\Phone\DeviceType::tryFrom(
-                            $json->device_type,
-                        ) ?? $json->device_type
-                    : null,
+                device_type: $json->device_type ?? null,
                 display_name: $json->display_name ?? null,
                 errors: array_map(
                     fn($e) => \Seam\Resources\Phone\Errors::from_json($e),
@@ -56,8 +52,10 @@ namespace Seam\Resources {
             public string|null $device_id,
             /**
              * Type of the phone device, such as `ios_phone` or `android_phone`.
+             *
+             * @var value-of<\Seam\Resources\Phone\DeviceType>|string|null
              */
-            public \Seam\Resources\Phone\DeviceType|string|null $device_type,
+            public string|null $device_type,
             /**
              * Display name of the phone. Defaults to `nickname` (if it is set) or `properties.appearance.name`, otherwise. Enables administrators and users to identify the phone easily, especially when there are numerous phones.
              */

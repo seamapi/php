@@ -17,11 +17,7 @@ namespace Seam\Resources {
                 created_at: $json->created_at ?? null,
                 custom_metadata: $json->custom_metadata ?? null,
                 device_id: $json->device_id ?? null,
-                device_type: is_string($json->device_type ?? null)
-                    ? \Seam\Resources\Device\DeviceType::tryFrom(
-                            $json->device_type,
-                        ) ?? $json->device_type
-                    : null,
+                device_type: $json->device_type ?? null,
                 display_name: $json->display_name ?? null,
                 errors: array_map(
                     fn($e) => \Seam\Resources\Device\Errors::from_json($e),
@@ -115,8 +111,10 @@ namespace Seam\Resources {
             public string|null $device_id,
             /**
              * Type of the device.
+             *
+             * @var value-of<\Seam\Resources\Device\DeviceType>|string|null
              */
-            public \Seam\Resources\Device\DeviceType|string|null $device_type,
+            public string|null $device_type,
             /**
              * Display name of the device, defaults to nickname (if it is set) or `properties.appearance.name`, otherwise. Enables administrators and users to identify the device easily, especially when there are numerous devices.
              */
@@ -398,11 +396,7 @@ namespace Seam\Resources\Device {
                 ),
                 default => new self(
                     created_at: $json->created_at ?? null,
-                    error_code: is_string($json->error_code ?? null)
-                        ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                                $json->error_code,
-                            ) ?? $json->error_code
-                        : null,
+                    error_code: $json->error_code ?? null,
                     message: $json->message ?? null,
                 ),
             };
@@ -415,8 +409,10 @@ namespace Seam\Resources\Device {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            public \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            public string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -604,11 +600,7 @@ namespace Seam\Resources\Device {
                     : null,
                 fallback_climate_preset_key: $json->fallback_climate_preset_key ??
                     null,
-                fan_mode_setting: is_string($json->fan_mode_setting ?? null)
-                    ? \Seam\Resources\Device\Properties\FanModeSetting::tryFrom(
-                            $json->fan_mode_setting,
-                        ) ?? $json->fan_mode_setting
-                    : null,
+                fan_mode_setting: $json->fan_mode_setting ?? null,
                 four_suites_metadata: isset($json->four_suites_metadata)
                     ? \Seam\Resources\Device\Properties\FourSuitesMetadata::from_json(
                         $json->four_suites_metadata,
@@ -1013,9 +1005,10 @@ namespace Seam\Resources\Device {
              */
             public string|null $fallback_climate_preset_key = null,
             /**
+             * @var value-of<\Seam\Resources\Device\Properties\FanModeSetting>|string|null
              * @deprecated Use `current_climate_setting.fan_mode_setting` instead.
              */
-            public \Seam\Resources\Device\Properties\FanModeSetting|string|null $fan_mode_setting = null,
+            public string|null $fan_mode_setting = null,
             /**
              * Metadata for a 4SUITES device.
              */
@@ -1449,11 +1442,7 @@ namespace Seam\Resources\Device {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
-                    warning_code: is_string($json->warning_code ?? null)
-                        ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                                $json->warning_code,
-                            ) ?? $json->warning_code
-                        : null,
+                    warning_code: $json->warning_code ?? null,
                 ),
             };
         }
@@ -1469,8 +1458,10 @@ namespace Seam\Resources\Device {
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
         ) {}
     }
 
@@ -1535,11 +1526,7 @@ namespace Seam\Resources\Device\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
                     null,
                 is_device_error: $json->is_device_error ?? null,
@@ -1554,8 +1541,10 @@ namespace Seam\Resources\Device\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
              */
@@ -1591,11 +1580,7 @@ namespace Seam\Resources\Device\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
                     null,
                 is_device_error: $json->is_device_error ?? null,
@@ -1610,8 +1595,10 @@ namespace Seam\Resources\Device\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
              */
@@ -1646,11 +1633,7 @@ namespace Seam\Resources\Device\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
                     null,
                 is_device_error: $json->is_device_error ?? null,
@@ -1665,8 +1648,10 @@ namespace Seam\Resources\Device\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
              */
@@ -1701,11 +1686,7 @@ namespace Seam\Resources\Device\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
                     null,
                 is_device_error: $json->is_device_error ?? null,
@@ -1720,8 +1701,10 @@ namespace Seam\Resources\Device\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
              */
@@ -1755,11 +1738,7 @@ namespace Seam\Resources\Device\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1772,8 +1751,10 @@ namespace Seam\Resources\Device\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1803,11 +1784,7 @@ namespace Seam\Resources\Device\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1820,8 +1797,10 @@ namespace Seam\Resources\Device\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1851,11 +1830,7 @@ namespace Seam\Resources\Device\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1868,8 +1843,10 @@ namespace Seam\Resources\Device\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1899,11 +1876,7 @@ namespace Seam\Resources\Device\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1916,8 +1889,10 @@ namespace Seam\Resources\Device\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1948,11 +1923,7 @@ namespace Seam\Resources\Device\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1965,8 +1936,10 @@ namespace Seam\Resources\Device\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1997,11 +1970,7 @@ namespace Seam\Resources\Device\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -2014,8 +1983,10 @@ namespace Seam\Resources\Device\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -2046,11 +2017,7 @@ namespace Seam\Resources\Device\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -2063,8 +2030,10 @@ namespace Seam\Resources\Device\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -2094,11 +2063,7 @@ namespace Seam\Resources\Device\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -2111,8 +2076,10 @@ namespace Seam\Resources\Device\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -2142,11 +2109,7 @@ namespace Seam\Resources\Device\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -2159,8 +2122,10 @@ namespace Seam\Resources\Device\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -2190,11 +2155,7 @@ namespace Seam\Resources\Device\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
                 is_bridge_error: $json->is_bridge_error ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
@@ -2209,8 +2170,10 @@ namespace Seam\Resources\Device\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\Device\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -2317,11 +2280,7 @@ namespace Seam\Resources\Device\Properties {
             }
             return new self(
                 level: $json->level ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\Device\Properties\Battery\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -2332,8 +2291,10 @@ namespace Seam\Resources\Device\Properties {
             public float|null $level,
             /**
              * Represents the current status of the battery charge level. Values are `critical`, which indicates an extremely low level, suggesting imminent shutdown or an urgent need for charging; `low`, which signifies that the battery is under the preferred threshold and should be charged soon; `good`, which denotes a satisfactory charge level, adequate for normal use without the immediate need for recharging; and `full`, which represents a battery that is fully charged, providing the maximum duration of usage.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\Battery\Status>|string|null
              */
-            public \Seam\Resources\Device\Properties\Battery\Status|string|null $status,
+            public string|null $status,
         ) {}
     }
 
@@ -3392,11 +3353,7 @@ namespace Seam\Resources\Device\Properties {
             }
             return new self(
                 device_id: $json->device_id ?? null,
-                device_model: is_string($json->device_model ?? null)
-                    ? \Seam\Resources\Device\Properties\NoiseawareMetadata\DeviceModel::tryFrom(
-                            $json->device_model,
-                        ) ?? $json->device_model
-                    : null,
+                device_model: $json->device_model ?? null,
                 device_name: $json->device_name ?? null,
                 noise_level_decibel: $json->noise_level_decibel ?? null,
                 noise_level_nrs: $json->noise_level_nrs ?? null,
@@ -3410,8 +3367,10 @@ namespace Seam\Resources\Device\Properties {
             public string|null $device_id = null,
             /**
              * Device model for a NoiseAware device.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\NoiseawareMetadata\DeviceModel>|string|null
              */
-            public \Seam\Resources\Device\Properties\NoiseawareMetadata\DeviceModel|string|null $device_model = null,
+            public string|null $device_model = null,
             /**
              * Device name for a NoiseAware device.
              */
@@ -3721,11 +3680,7 @@ namespace Seam\Resources\Device\Properties {
             return new self(
                 device_num: $json->device_num ?? null,
                 name: $json->name ?? null,
-                unlock_method: is_string($json->unlock_method ?? null)
-                    ? \Seam\Resources\Device\Properties\SeamBridgeMetadata\UnlockMethod::tryFrom(
-                            $json->unlock_method,
-                        ) ?? $json->unlock_method
-                    : null,
+                unlock_method: $json->unlock_method ?? null,
             );
         }
 
@@ -3740,8 +3695,10 @@ namespace Seam\Resources\Device\Properties {
             public string|null $name = null,
             /**
              * Unlock method for Seam Bridge.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\SeamBridgeMetadata\UnlockMethod>|string|null
              */
-            public \Seam\Resources\Device\Properties\SeamBridgeMetadata\UnlockMethod|string|null $unlock_method = null,
+            public string|null $unlock_method = null,
         ) {}
     }
 
@@ -4171,18 +4128,17 @@ namespace Seam\Resources\Device\Properties {
                 return null;
             }
             return new self(
-                constraint_type: is_string($json->constraint_type ?? null)
-                    ? \Seam\Resources\Device\Properties\CodeConstraints\ConstraintType::tryFrom(
-                            $json->constraint_type,
-                        ) ?? $json->constraint_type
-                    : null,
+                constraint_type: $json->constraint_type ?? null,
                 max_length: $json->max_length ?? null,
                 min_length: $json->min_length ?? null,
             );
         }
 
         public function __construct(
-            public \Seam\Resources\Device\Properties\CodeConstraints\ConstraintType|string|null $constraint_type,
+            /**
+             * @var value-of<\Seam\Resources\Device\Properties\CodeConstraints\ConstraintType>|string|null
+             */
+            public string|null $constraint_type,
             /**
              * Maximum name length constraint for access codes.
              */
@@ -4460,13 +4416,7 @@ namespace Seam\Resources\Device\Properties {
                 climate_preset_key: $json->climate_preset_key ?? null,
                 display_name: $json->display_name ?? null,
                 manual_override_allowed: $json->manual_override_allowed ?? null,
-                climate_preset_mode: is_string(
-                    $json->climate_preset_mode ?? null,
-                )
-                    ? \Seam\Resources\Device\Properties\AvailableClimatePresets\ClimatePresetMode::tryFrom(
-                            $json->climate_preset_mode,
-                        ) ?? $json->climate_preset_mode
-                    : null,
+                climate_preset_mode: $json->climate_preset_mode ?? null,
                 cooling_set_point_celsius: $json->cooling_set_point_celsius ??
                     null,
                 cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
@@ -4476,20 +4426,12 @@ namespace Seam\Resources\Device\Properties {
                         $json->ecobee_metadata,
                     )
                     : null,
-                fan_mode_setting: is_string($json->fan_mode_setting ?? null)
-                    ? \Seam\Resources\Device\Properties\AvailableClimatePresets\FanModeSetting::tryFrom(
-                            $json->fan_mode_setting,
-                        ) ?? $json->fan_mode_setting
-                    : null,
+                fan_mode_setting: $json->fan_mode_setting ?? null,
                 heating_set_point_celsius: $json->heating_set_point_celsius ??
                     null,
                 heating_set_point_fahrenheit: $json->heating_set_point_fahrenheit ??
                     null,
-                hvac_mode_setting: is_string($json->hvac_mode_setting ?? null)
-                    ? \Seam\Resources\Device\Properties\AvailableClimatePresets\HvacModeSetting::tryFrom(
-                            $json->hvac_mode_setting,
-                        ) ?? $json->hvac_mode_setting
-                    : null,
+                hvac_mode_setting: $json->hvac_mode_setting ?? null,
                 name: $json->name ?? null,
             );
         }
@@ -4523,8 +4465,10 @@ namespace Seam\Resources\Device\Properties {
             public bool|null $manual_override_allowed,
             /**
              * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\AvailableClimatePresets\ClimatePresetMode>|string|null
              */
-            public \Seam\Resources\Device\Properties\AvailableClimatePresets\ClimatePresetMode|string|null $climate_preset_mode = null,
+            public string|null $climate_preset_mode = null,
             /**
              * Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -4539,8 +4483,10 @@ namespace Seam\Resources\Device\Properties {
             public \Seam\Resources\Device\Properties\AvailableClimatePresets\EcobeeMetadata|null $ecobee_metadata = null,
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\AvailableClimatePresets\FanModeSetting>|string|null
              */
-            public \Seam\Resources\Device\Properties\AvailableClimatePresets\FanModeSetting|string|null $fan_mode_setting = null,
+            public string|null $fan_mode_setting = null,
             /**
              * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -4551,8 +4497,10 @@ namespace Seam\Resources\Device\Properties {
             public float|null $heating_set_point_fahrenheit = null,
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\AvailableClimatePresets\HvacModeSetting>|string|null
              */
-            public \Seam\Resources\Device\Properties\AvailableClimatePresets\HvacModeSetting|string|null $hvac_mode_setting = null,
+            public string|null $hvac_mode_setting = null,
             /**
              * User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
              */
@@ -4577,13 +4525,7 @@ namespace Seam\Resources\Device\Properties {
                 can_use_with_thermostat_daily_programs: $json->can_use_with_thermostat_daily_programs ??
                     null,
                 climate_preset_key: $json->climate_preset_key ?? null,
-                climate_preset_mode: is_string(
-                    $json->climate_preset_mode ?? null,
-                )
-                    ? \Seam\Resources\Device\Properties\CurrentClimateSetting\ClimatePresetMode::tryFrom(
-                            $json->climate_preset_mode,
-                        ) ?? $json->climate_preset_mode
-                    : null,
+                climate_preset_mode: $json->climate_preset_mode ?? null,
                 cooling_set_point_celsius: $json->cooling_set_point_celsius ??
                     null,
                 cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
@@ -4594,20 +4536,12 @@ namespace Seam\Resources\Device\Properties {
                         $json->ecobee_metadata,
                     )
                     : null,
-                fan_mode_setting: is_string($json->fan_mode_setting ?? null)
-                    ? \Seam\Resources\Device\Properties\CurrentClimateSetting\FanModeSetting::tryFrom(
-                            $json->fan_mode_setting,
-                        ) ?? $json->fan_mode_setting
-                    : null,
+                fan_mode_setting: $json->fan_mode_setting ?? null,
                 heating_set_point_celsius: $json->heating_set_point_celsius ??
                     null,
                 heating_set_point_fahrenheit: $json->heating_set_point_fahrenheit ??
                     null,
-                hvac_mode_setting: is_string($json->hvac_mode_setting ?? null)
-                    ? \Seam\Resources\Device\Properties\CurrentClimateSetting\HvacModeSetting::tryFrom(
-                            $json->hvac_mode_setting,
-                        ) ?? $json->hvac_mode_setting
-                    : null,
+                hvac_mode_setting: $json->hvac_mode_setting ?? null,
                 manual_override_allowed: $json->manual_override_allowed ?? null,
                 name: $json->name ?? null,
             );
@@ -4632,8 +4566,10 @@ namespace Seam\Resources\Device\Properties {
             public string|null $climate_preset_key = null,
             /**
              * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\CurrentClimateSetting\ClimatePresetMode>|string|null
              */
-            public \Seam\Resources\Device\Properties\CurrentClimateSetting\ClimatePresetMode|string|null $climate_preset_mode = null,
+            public string|null $climate_preset_mode = null,
             /**
              * Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -4652,8 +4588,10 @@ namespace Seam\Resources\Device\Properties {
             public \Seam\Resources\Device\Properties\CurrentClimateSetting\EcobeeMetadata|null $ecobee_metadata = null,
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\CurrentClimateSetting\FanModeSetting>|string|null
              */
-            public \Seam\Resources\Device\Properties\CurrentClimateSetting\FanModeSetting|string|null $fan_mode_setting = null,
+            public string|null $fan_mode_setting = null,
             /**
              * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -4664,8 +4602,10 @@ namespace Seam\Resources\Device\Properties {
             public float|null $heating_set_point_fahrenheit = null,
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\CurrentClimateSetting\HvacModeSetting>|string|null
              */
-            public \Seam\Resources\Device\Properties\CurrentClimateSetting\HvacModeSetting|string|null $hvac_mode_setting = null,
+            public string|null $hvac_mode_setting = null,
             /**
              * Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
              *
@@ -4696,13 +4636,7 @@ namespace Seam\Resources\Device\Properties {
                 can_use_with_thermostat_daily_programs: $json->can_use_with_thermostat_daily_programs ??
                     null,
                 climate_preset_key: $json->climate_preset_key ?? null,
-                climate_preset_mode: is_string(
-                    $json->climate_preset_mode ?? null,
-                )
-                    ? \Seam\Resources\Device\Properties\DefaultClimateSetting\ClimatePresetMode::tryFrom(
-                            $json->climate_preset_mode,
-                        ) ?? $json->climate_preset_mode
-                    : null,
+                climate_preset_mode: $json->climate_preset_mode ?? null,
                 cooling_set_point_celsius: $json->cooling_set_point_celsius ??
                     null,
                 cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
@@ -4713,20 +4647,12 @@ namespace Seam\Resources\Device\Properties {
                         $json->ecobee_metadata,
                     )
                     : null,
-                fan_mode_setting: is_string($json->fan_mode_setting ?? null)
-                    ? \Seam\Resources\Device\Properties\DefaultClimateSetting\FanModeSetting::tryFrom(
-                            $json->fan_mode_setting,
-                        ) ?? $json->fan_mode_setting
-                    : null,
+                fan_mode_setting: $json->fan_mode_setting ?? null,
                 heating_set_point_celsius: $json->heating_set_point_celsius ??
                     null,
                 heating_set_point_fahrenheit: $json->heating_set_point_fahrenheit ??
                     null,
-                hvac_mode_setting: is_string($json->hvac_mode_setting ?? null)
-                    ? \Seam\Resources\Device\Properties\DefaultClimateSetting\HvacModeSetting::tryFrom(
-                            $json->hvac_mode_setting,
-                        ) ?? $json->hvac_mode_setting
-                    : null,
+                hvac_mode_setting: $json->hvac_mode_setting ?? null,
                 manual_override_allowed: $json->manual_override_allowed ?? null,
                 name: $json->name ?? null,
             );
@@ -4751,8 +4677,10 @@ namespace Seam\Resources\Device\Properties {
             public string|null $climate_preset_key = null,
             /**
              * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\DefaultClimateSetting\ClimatePresetMode>|string|null
              */
-            public \Seam\Resources\Device\Properties\DefaultClimateSetting\ClimatePresetMode|string|null $climate_preset_mode = null,
+            public string|null $climate_preset_mode = null,
             /**
              * Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -4771,8 +4699,10 @@ namespace Seam\Resources\Device\Properties {
             public \Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata|null $ecobee_metadata = null,
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\DefaultClimateSetting\FanModeSetting>|string|null
              */
-            public \Seam\Resources\Device\Properties\DefaultClimateSetting\FanModeSetting|string|null $fan_mode_setting = null,
+            public string|null $fan_mode_setting = null,
             /**
              * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -4783,8 +4713,10 @@ namespace Seam\Resources\Device\Properties {
             public float|null $heating_set_point_fahrenheit = null,
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\DefaultClimateSetting\HvacModeSetting>|string|null
              */
-            public \Seam\Resources\Device\Properties\DefaultClimateSetting\HvacModeSetting|string|null $hvac_mode_setting = null,
+            public string|null $hvac_mode_setting = null,
             /**
              * Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
              *
@@ -5538,11 +5470,7 @@ namespace Seam\Resources\Device\Properties\AvailableClimatePresets {
             return new self(
                 climate_ref: $json->climate_ref ?? null,
                 is_optimized: $json->is_optimized ?? null,
-                owner: is_string($json->owner ?? null)
-                    ? \Seam\Resources\Device\Properties\AvailableClimatePresets\EcobeeMetadata\Owner::tryFrom(
-                            $json->owner,
-                        ) ?? $json->owner
-                    : null,
+                owner: $json->owner ?? null,
             );
         }
 
@@ -5557,8 +5485,10 @@ namespace Seam\Resources\Device\Properties\AvailableClimatePresets {
             public bool|null $is_optimized = null,
             /**
              * Indicates whether the climate preset is owned by the user or the system.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\AvailableClimatePresets\EcobeeMetadata\Owner>|string|null
              */
-            public \Seam\Resources\Device\Properties\AvailableClimatePresets\EcobeeMetadata\Owner|string|null $owner = null,
+            public string|null $owner = null,
         ) {}
     }
 
@@ -5611,11 +5541,7 @@ namespace Seam\Resources\Device\Properties\CurrentClimateSetting {
             return new self(
                 climate_ref: $json->climate_ref ?? null,
                 is_optimized: $json->is_optimized ?? null,
-                owner: is_string($json->owner ?? null)
-                    ? \Seam\Resources\Device\Properties\CurrentClimateSetting\EcobeeMetadata\Owner::tryFrom(
-                            $json->owner,
-                        ) ?? $json->owner
-                    : null,
+                owner: $json->owner ?? null,
             );
         }
 
@@ -5630,8 +5556,10 @@ namespace Seam\Resources\Device\Properties\CurrentClimateSetting {
             public bool|null $is_optimized = null,
             /**
              * Indicates whether the climate preset is owned by the user or the system.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\CurrentClimateSetting\EcobeeMetadata\Owner>|string|null
              */
-            public \Seam\Resources\Device\Properties\CurrentClimateSetting\EcobeeMetadata\Owner|string|null $owner = null,
+            public string|null $owner = null,
         ) {}
     }
 
@@ -5684,11 +5612,7 @@ namespace Seam\Resources\Device\Properties\DefaultClimateSetting {
             return new self(
                 climate_ref: $json->climate_ref ?? null,
                 is_optimized: $json->is_optimized ?? null,
-                owner: is_string($json->owner ?? null)
-                    ? \Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata\Owner::tryFrom(
-                            $json->owner,
-                        ) ?? $json->owner
-                    : null,
+                owner: $json->owner ?? null,
             );
         }
 
@@ -5703,8 +5627,10 @@ namespace Seam\Resources\Device\Properties\DefaultClimateSetting {
             public bool|null $is_optimized = null,
             /**
              * Indicates whether the climate preset is owned by the user or the system.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata\Owner>|string|null
              */
-            public \Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata\Owner|string|null $owner = null,
+            public string|null $owner = null,
         ) {}
     }
 
@@ -5789,11 +5715,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -5808,8 +5730,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5833,11 +5757,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -5852,8 +5772,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5878,11 +5800,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -5897,8 +5815,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5923,11 +5843,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -5942,8 +5858,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5967,11 +5885,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -5986,8 +5900,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6010,11 +5926,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6029,8 +5941,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6055,11 +5969,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6074,8 +5984,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6100,11 +6012,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6119,8 +6027,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6145,11 +6055,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6164,8 +6070,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6189,11 +6097,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6208,8 +6112,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6232,11 +6138,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6251,8 +6153,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6275,11 +6179,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6294,8 +6194,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6318,11 +6220,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6337,8 +6235,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6363,11 +6263,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6382,8 +6278,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6408,11 +6306,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6427,8 +6321,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6452,11 +6348,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6471,8 +6363,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6497,11 +6391,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6516,8 +6406,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6541,11 +6433,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6560,8 +6448,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6584,11 +6474,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6603,8 +6489,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6627,11 +6515,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6646,8 +6530,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6672,11 +6558,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6691,8 +6573,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6717,11 +6601,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6736,8 +6616,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6760,11 +6642,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6779,8 +6657,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6804,11 +6684,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6823,8 +6699,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6849,11 +6727,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6868,8 +6742,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6893,11 +6769,7 @@ namespace Seam\Resources\Device\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6912,8 +6784,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6941,11 +6815,7 @@ namespace Seam\Resources\Device\Warnings {
                 max_active_access_code_count: $json->max_active_access_code_count ??
                     null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -6968,8 +6838,10 @@ namespace Seam\Resources\Device\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\Device\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,

@@ -174,11 +174,7 @@ namespace Seam\Resources\ConnectedAccount {
                 ),
                 default => new self(
                     created_at: $json->created_at ?? null,
-                    error_code: is_string($json->error_code ?? null)
-                        ? \Seam\Resources\ConnectedAccount\Errors\ErrorCode::tryFrom(
-                                $json->error_code,
-                            ) ?? $json->error_code
-                        : null,
+                    error_code: $json->error_code ?? null,
                     message: $json->message ?? null,
                     is_bridge_error: $json->is_bridge_error ?? null,
                     is_connected_account_error: $json->is_connected_account_error ??
@@ -194,8 +190,10 @@ namespace Seam\Resources\ConnectedAccount {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ConnectedAccount\Errors\ErrorCode>|string|null
              */
-            public \Seam\Resources\ConnectedAccount\Errors\ErrorCode|string|null $error_code,
+            public string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -308,11 +306,7 @@ namespace Seam\Resources\ConnectedAccount {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
-                    warning_code: is_string($json->warning_code ?? null)
-                        ? \Seam\Resources\ConnectedAccount\Warnings\WarningCode::tryFrom(
-                                $json->warning_code,
-                            ) ?? $json->warning_code
-                        : null,
+                    warning_code: $json->warning_code ?? null,
                 ),
             };
         }
@@ -328,8 +322,10 @@ namespace Seam\Resources\ConnectedAccount {
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ConnectedAccount\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\ConnectedAccount\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
         ) {}
     }
 }
@@ -348,11 +344,7 @@ namespace Seam\Resources\ConnectedAccount\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\ConnectedAccount\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
                 is_bridge_error: $json->is_bridge_error ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
@@ -367,8 +359,10 @@ namespace Seam\Resources\ConnectedAccount\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ConnectedAccount\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\ConnectedAccount\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -405,11 +399,7 @@ namespace Seam\Resources\ConnectedAccount\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\ConnectedAccount\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
                 is_bridge_error: $json->is_bridge_error ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
@@ -424,8 +414,10 @@ namespace Seam\Resources\ConnectedAccount\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ConnectedAccount\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\ConnectedAccount\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -463,11 +455,7 @@ namespace Seam\Resources\ConnectedAccount\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\ConnectedAccount\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
                 salto_ks_metadata: isset($json->salto_ks_metadata)
                     ? \Seam\Resources\ConnectedAccount\Errors\SaltoKsSubscriptionLimitExceeded\SaltoKsMetadata::from_json(
@@ -487,8 +475,10 @@ namespace Seam\Resources\ConnectedAccount\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ConnectedAccount\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\ConnectedAccount\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -530,11 +520,7 @@ namespace Seam\Resources\ConnectedAccount\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\ConnectedAccount\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
                 is_bridge_error: $json->is_bridge_error ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
@@ -549,8 +535,10 @@ namespace Seam\Resources\ConnectedAccount\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ConnectedAccount\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\ConnectedAccount\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -675,11 +663,7 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\ConnectedAccount\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -694,8 +678,10 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ConnectedAccount\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\ConnectedAccount\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -720,11 +706,7 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\ConnectedAccount\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -739,8 +721,10 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ConnectedAccount\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\ConnectedAccount\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -770,11 +754,7 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
                         $json->salto_ks_metadata,
                     )
                     : null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\ConnectedAccount\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -793,8 +773,10 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             public \Seam\Resources\ConnectedAccount\Warnings\SaltoKsSubscriptionLimitAlmostReached\SaltoKsMetadata|null $salto_ks_metadata,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ConnectedAccount\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\ConnectedAccount\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -819,11 +801,7 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\ConnectedAccount\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -838,8 +816,10 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ConnectedAccount\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\ConnectedAccount\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -862,11 +842,7 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\ConnectedAccount\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -881,8 +857,10 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ConnectedAccount\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\ConnectedAccount\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -907,11 +885,7 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\ConnectedAccount\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -926,8 +900,10 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ConnectedAccount\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\ConnectedAccount\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -950,11 +926,7 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\ConnectedAccount\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -969,8 +941,10 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ConnectedAccount\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\ConnectedAccount\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -995,11 +969,7 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\ConnectedAccount\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1014,8 +984,10 @@ namespace Seam\Resources\ConnectedAccount\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\ConnectedAccount\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\ConnectedAccount\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,

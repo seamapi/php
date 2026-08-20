@@ -85,11 +85,7 @@ namespace Seam\Resources\Workspace {
             }
             return new self(
                 inviter_logo_url: $json->inviter_logo_url ?? null,
-                logo_shape: is_string($json->logo_shape ?? null)
-                    ? \Seam\Resources\Workspace\ConnectWebviewCustomization\LogoShape::tryFrom(
-                            $json->logo_shape,
-                        ) ?? $json->logo_shape
-                    : null,
+                logo_shape: $json->logo_shape ?? null,
                 primary_button_color: $json->primary_button_color ?? null,
                 primary_button_text_color: $json->primary_button_text_color ??
                     null,
@@ -104,8 +100,10 @@ namespace Seam\Resources\Workspace {
             public string|null $inviter_logo_url = null,
             /**
              * Logo shape for [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) in the workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
+             *
+             * @var value-of<\Seam\Resources\Workspace\ConnectWebviewCustomization\LogoShape>|string|null
              */
-            public \Seam\Resources\Workspace\ConnectWebviewCustomization\LogoShape|string|null $logo_shape = null,
+            public string|null $logo_shape = null,
             /**
              * Primary button color for [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) in the workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
              */

@@ -9,13 +9,7 @@ namespace Seam\Resources {
                 return null;
             }
             return new self(
-                device_provider_name: is_string(
-                    $json->device_provider_name ?? null,
-                )
-                    ? \Seam\Resources\DeviceProvider\DeviceProviderName::tryFrom(
-                            $json->device_provider_name,
-                        ) ?? $json->device_provider_name
-                    : null,
+                device_provider_name: $json->device_provider_name ?? null,
                 display_name: $json->display_name ?? null,
                 image_url: $json->image_url ?? null,
                 provider_categories: $json->provider_categories ?? null,
@@ -55,8 +49,10 @@ namespace Seam\Resources {
         public function __construct(
             /**
              * Name of the device provider.
+             *
+             * @var value-of<\Seam\Resources\DeviceProvider\DeviceProviderName>|string|null
              */
-            public \Seam\Resources\DeviceProvider\DeviceProviderName|string|null $device_provider_name,
+            public string|null $device_provider_name,
             /**
              * Display name for the device provider.
              */

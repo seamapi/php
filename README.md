@@ -148,7 +148,17 @@ Waiting may be disabled for the whole client:
 $seam = new Seam\Seam(wait_for_action_attempt: false);
 
 $action_attempt = $seam->locks->unlock_door(device_id: $device_id);
-$action_attempt->status; // Seam\Resources\ActionAttempt\Status::PENDING
+$action_attempt->status; // "pending"
+```
+
+Response enum values stay strings for straightforward comparisons. Generated
+backed enums provide autocomplete and optional validation:
+
+```php
+use Seam\Resources\ActionAttempt\Status;
+
+$action_attempt->status === Status::PENDING->value;
+$status = Status::tryFrom($action_attempt->status);
 ```
 
 or for a single request:
@@ -335,7 +345,7 @@ try {
             => "Created access code {$event->access_code_id}",
         $event::class === Seam\Resources\Event::class
             => "Unknown event type {$event->event_type}",
-        default => "Received {$event->event_type->value}",
+        default => "Received {$event->event_type}",
     };
 } catch (Svix\Exception\WebhookVerificationException $error) {
     http_response_code(401);

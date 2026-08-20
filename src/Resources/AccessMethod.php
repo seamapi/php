@@ -23,10 +23,7 @@ namespace Seam\Resources {
                 ),
                 is_issued: $json->is_issued ?? null,
                 issued_at: $json->issued_at ?? null,
-                mode: is_string($json->mode ?? null)
-                    ? \Seam\Resources\AccessMethod\Mode::tryFrom($json->mode) ??
-                        $json->mode
-                    : null,
+                mode: $json->mode ?? null,
                 pending_mutations: array_map(
                     fn(
                         $p,
@@ -83,8 +80,10 @@ namespace Seam\Resources {
             public string|null $issued_at,
             /**
              * Access method mode. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\Mode>|string|null
              */
-            public \Seam\Resources\AccessMethod\Mode|string|null $mode,
+            public string|null $mode,
             /**
              * Pending mutations for the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant). Indicates operations that are in progress.
              *
@@ -161,11 +160,7 @@ namespace Seam\Resources\AccessMethod {
                 ),
                 default => new self(
                     created_at: $json->created_at ?? null,
-                    error_code: is_string($json->error_code ?? null)
-                        ? \Seam\Resources\AccessMethod\Errors\ErrorCode::tryFrom(
-                                $json->error_code,
-                            ) ?? $json->error_code
-                        : null,
+                    error_code: $json->error_code ?? null,
                     message: $json->message ?? null,
                 ),
             };
@@ -178,8 +173,10 @@ namespace Seam\Resources\AccessMethod {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\Errors\ErrorCode>|string|null
              */
-            public \Seam\Resources\AccessMethod\Errors\ErrorCode|string|null $error_code,
+            public string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -219,11 +216,7 @@ namespace Seam\Resources\AccessMethod {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
-                    mutation_code: is_string($json->mutation_code ?? null)
-                        ? \Seam\Resources\AccessMethod\PendingMutations\MutationCode::tryFrom(
-                                $json->mutation_code,
-                            ) ?? $json->mutation_code
-                        : null,
+                    mutation_code: $json->mutation_code ?? null,
                 ),
             };
         }
@@ -239,8 +232,10 @@ namespace Seam\Resources\AccessMethod {
             public string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of provisioning access for this access method on new devices.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\PendingMutations\MutationCode>|string|null
              */
-            public \Seam\Resources\AccessMethod\PendingMutations\MutationCode|string|null $mutation_code,
+            public string|null $mutation_code,
         ) {}
     }
 
@@ -280,11 +275,7 @@ namespace Seam\Resources\AccessMethod {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
-                    warning_code: is_string($json->warning_code ?? null)
-                        ? \Seam\Resources\AccessMethod\Warnings\WarningCode::tryFrom(
-                                $json->warning_code,
-                            ) ?? $json->warning_code
-                        : null,
+                    warning_code: $json->warning_code ?? null,
                 ),
             };
         }
@@ -300,8 +291,10 @@ namespace Seam\Resources\AccessMethod {
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\AccessMethod\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
         ) {}
     }
 
@@ -327,11 +320,7 @@ namespace Seam\Resources\AccessMethod\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AccessMethod\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -343,8 +332,10 @@ namespace Seam\Resources\AccessMethod\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\AccessMethod\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -384,11 +375,7 @@ namespace Seam\Resources\AccessMethod\PendingMutations {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AccessMethod\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\AccessMethod\PendingMutations\ProvisioningAccess\To::from_json(
                         $json->to,
@@ -412,8 +399,10 @@ namespace Seam\Resources\AccessMethod\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of provisioning access for this access method on new devices.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AccessMethod\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * New device configuration.
              */
@@ -446,11 +435,7 @@ namespace Seam\Resources\AccessMethod\PendingMutations {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AccessMethod\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\AccessMethod\PendingMutations\RevokingAccess\To::from_json(
                         $json->to,
@@ -474,8 +459,10 @@ namespace Seam\Resources\AccessMethod\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of provisioning access for this access method on new devices.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AccessMethod\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * New device configuration.
              */
@@ -508,11 +495,7 @@ namespace Seam\Resources\AccessMethod\PendingMutations {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AccessMethod\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\AccessMethod\PendingMutations\UpdatingAccessTimes\To::from_json(
                         $json->to,
@@ -536,8 +519,10 @@ namespace Seam\Resources\AccessMethod\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of provisioning access for this access method on new devices.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AccessMethod\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * New access time configuration.
              */
@@ -727,11 +712,7 @@ namespace Seam\Resources\AccessMethod\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AccessMethod\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -746,8 +727,10 @@ namespace Seam\Resources\AccessMethod\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AccessMethod\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -771,11 +754,7 @@ namespace Seam\Resources\AccessMethod\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AccessMethod\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -790,8 +769,10 @@ namespace Seam\Resources\AccessMethod\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AccessMethod\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -816,11 +797,7 @@ namespace Seam\Resources\AccessMethod\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AccessMethod\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 original_access_method_id: $json->original_access_method_id ??
                     null,
             );
@@ -837,8 +814,10 @@ namespace Seam\Resources\AccessMethod\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AccessMethod\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
             /**
              * ID of the original access method from which this backup access method was split, if applicable.
              */
@@ -865,11 +844,7 @@ namespace Seam\Resources\AccessMethod\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AccessMethod\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -884,8 +859,10 @@ namespace Seam\Resources\AccessMethod\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AccessMethod\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,

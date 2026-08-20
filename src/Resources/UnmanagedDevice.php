@@ -17,11 +17,7 @@ namespace Seam\Resources {
                 created_at: $json->created_at ?? null,
                 custom_metadata: $json->custom_metadata ?? null,
                 device_id: $json->device_id ?? null,
-                device_type: is_string($json->device_type ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\DeviceType::tryFrom(
-                            $json->device_type,
-                        ) ?? $json->device_type
-                    : null,
+                device_type: $json->device_type ?? null,
                 errors: array_map(
                     fn($e) => \Seam\Resources\UnmanagedDevice\Errors::from_json(
                         $e,
@@ -108,8 +104,10 @@ namespace Seam\Resources {
             public string|null $device_id,
             /**
              * Type of the device.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\DeviceType>|string|null
              */
-            public \Seam\Resources\UnmanagedDevice\DeviceType|string|null $device_type,
+            public string|null $device_type,
             /**
              * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
              *
@@ -298,11 +296,7 @@ namespace Seam\Resources\UnmanagedDevice {
                 ),
                 default => new self(
                     created_at: $json->created_at ?? null,
-                    error_code: is_string($json->error_code ?? null)
-                        ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                                $json->error_code,
-                            ) ?? $json->error_code
-                        : null,
+                    error_code: $json->error_code ?? null,
                     message: $json->message ?? null,
                 ),
             };
@@ -315,8 +309,10 @@ namespace Seam\Resources\UnmanagedDevice {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            public \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            public string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -585,11 +581,7 @@ namespace Seam\Resources\UnmanagedDevice {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
-                    warning_code: is_string($json->warning_code ?? null)
-                        ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                                $json->warning_code,
-                            ) ?? $json->warning_code
-                        : null,
+                    warning_code: $json->warning_code ?? null,
                 ),
             };
         }
@@ -605,8 +597,10 @@ namespace Seam\Resources\UnmanagedDevice {
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
         ) {}
     }
 
@@ -672,11 +666,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
                     null,
                 is_device_error: $json->is_device_error ?? null,
@@ -691,8 +681,10 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
              */
@@ -728,11 +720,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
                     null,
                 is_device_error: $json->is_device_error ?? null,
@@ -747,8 +735,10 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
              */
@@ -784,11 +774,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
                     null,
                 is_device_error: $json->is_device_error ?? null,
@@ -803,8 +789,10 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
              */
@@ -840,11 +828,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
                     null,
                 is_device_error: $json->is_device_error ?? null,
@@ -859,8 +843,10 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
              */
@@ -894,11 +880,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -911,8 +893,10 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -942,11 +926,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -959,8 +939,10 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -990,11 +972,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1007,8 +985,10 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1039,11 +1019,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1056,8 +1032,10 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1089,11 +1067,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1106,8 +1080,10 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1139,11 +1115,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1156,8 +1128,10 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1189,11 +1163,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1206,8 +1176,10 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1238,11 +1210,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1255,8 +1223,10 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1287,11 +1257,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 is_device_error: $json->is_device_error ?? null,
                 message: $json->message ?? null,
             );
@@ -1304,8 +1270,10 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Indicates that the error is a device error.
              */
@@ -1336,11 +1304,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
                 is_bridge_error: $json->is_bridge_error ?? null,
                 is_connected_account_error: $json->is_connected_account_error ??
@@ -1355,8 +1319,10 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -1442,11 +1408,7 @@ namespace Seam\Resources\UnmanagedDevice\Properties {
             }
             return new self(
                 level: $json->level ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Properties\Battery\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
             );
         }
 
@@ -1457,8 +1419,10 @@ namespace Seam\Resources\UnmanagedDevice\Properties {
             public float|null $level,
             /**
              * Represents the current status of the battery charge level. Values are `critical`, which indicates an extremely low level, suggesting imminent shutdown or an urgent need for charging; `low`, which signifies that the battery is under the preferred threshold and should be charged soon; `good`, which denotes a satisfactory charge level, adequate for normal use without the immediate need for recharging; and `full`, which represents a battery that is fully charged, providing the maximum duration of usage.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Properties\Battery\Status>|string|null
              */
-            public \Seam\Resources\UnmanagedDevice\Properties\Battery\Status|string|null $status,
+            public string|null $status,
         ) {}
     }
 
@@ -1565,11 +1529,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1584,8 +1544,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1610,11 +1572,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1629,8 +1587,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1655,11 +1615,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1674,8 +1630,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1700,11 +1658,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1719,8 +1673,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1745,11 +1701,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1764,8 +1716,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1788,11 +1742,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1807,8 +1757,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1833,11 +1785,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1852,8 +1800,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1878,11 +1828,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1897,8 +1843,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1923,11 +1871,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1942,8 +1886,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1968,11 +1914,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1987,8 +1929,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2012,11 +1956,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2031,8 +1971,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2056,11 +1998,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2075,8 +2013,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2099,11 +2039,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2118,8 +2054,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2144,11 +2082,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2163,8 +2097,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2189,11 +2125,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2208,8 +2140,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2234,11 +2168,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2253,8 +2183,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2279,11 +2211,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2298,8 +2226,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2324,11 +2254,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2343,8 +2269,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2367,11 +2295,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2386,8 +2310,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2411,11 +2337,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2430,8 +2352,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2456,11 +2380,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2475,8 +2395,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2501,11 +2423,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2520,8 +2438,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2544,11 +2464,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2563,8 +2479,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2589,11 +2507,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2608,8 +2522,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2634,11 +2550,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2653,8 +2565,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2679,11 +2593,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2698,8 +2608,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2728,11 +2640,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
                 max_active_access_code_count: $json->max_active_access_code_count ??
                     null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -2755,8 +2663,10 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedDevice\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,

@@ -86,11 +86,7 @@ namespace Seam\Resources\AcsEncoder {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsEncoder\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -102,8 +98,10 @@ namespace Seam\Resources\AcsEncoder {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsEncoder\Errors\ErrorCode>|string|null
              */
-            public \Seam\Resources\AcsEncoder\Errors\ErrorCode|string|null $error_code,
+            public string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */

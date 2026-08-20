@@ -117,11 +117,7 @@ namespace Seam\Resources\UserIdentity {
                     acs_system_id: $json->acs_system_id ?? null,
                     acs_user_id: $json->acs_user_id ?? null,
                     created_at: $json->created_at ?? null,
-                    error_code: is_string($json->error_code ?? null)
-                        ? \Seam\Resources\UserIdentity\Errors\ErrorCode::tryFrom(
-                                $json->error_code,
-                            ) ?? $json->error_code
-                        : null,
+                    error_code: $json->error_code ?? null,
                     message: $json->message ?? null,
                 ),
             };
@@ -142,8 +138,10 @@ namespace Seam\Resources\UserIdentity {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UserIdentity\Errors\ErrorCode>|string|null
              */
-            public \Seam\Resources\UserIdentity\Errors\ErrorCode|string|null $error_code,
+            public string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -179,11 +177,7 @@ namespace Seam\Resources\UserIdentity {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
-                    warning_code: is_string($json->warning_code ?? null)
-                        ? \Seam\Resources\UserIdentity\Warnings\WarningCode::tryFrom(
-                                $json->warning_code,
-                            ) ?? $json->warning_code
-                        : null,
+                    warning_code: $json->warning_code ?? null,
                 ),
             };
         }
@@ -199,8 +193,10 @@ namespace Seam\Resources\UserIdentity {
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UserIdentity\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\UserIdentity\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
         ) {}
     }
 }
@@ -220,11 +216,7 @@ namespace Seam\Resources\UserIdentity\Errors {
                 acs_system_id: $json->acs_system_id ?? null,
                 acs_user_id: $json->acs_user_id ?? null,
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UserIdentity\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -244,8 +236,10 @@ namespace Seam\Resources\UserIdentity\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UserIdentity\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UserIdentity\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -281,11 +275,7 @@ namespace Seam\Resources\UserIdentity\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UserIdentity\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -300,8 +290,10 @@ namespace Seam\Resources\UserIdentity\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UserIdentity\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UserIdentity\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -326,11 +318,7 @@ namespace Seam\Resources\UserIdentity\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UserIdentity\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -345,8 +333,10 @@ namespace Seam\Resources\UserIdentity\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UserIdentity\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UserIdentity\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,

@@ -276,11 +276,7 @@ namespace Seam\Resources\AcsEntrance {
             return new self(
                 door_name: $json->door_name ?? null,
                 door_number: $json->door_number ?? null,
-                door_type: is_string($json->door_type ?? null)
-                    ? \Seam\Resources\AcsEntrance\AssaAbloyVostioMetadata\DoorType::tryFrom(
-                            $json->door_type,
-                        ) ?? $json->door_type
-                    : null,
+                door_type: $json->door_type ?? null,
                 pms_id: $json->pms_id ?? null,
                 stand_open: $json->stand_open ?? null,
             );
@@ -297,8 +293,10 @@ namespace Seam\Resources\AcsEntrance {
             public float|null $door_number = null,
             /**
              * Type of the door in the Vostio access system.
+             *
+             * @var value-of<\Seam\Resources\AcsEntrance\AssaAbloyVostioMetadata\DoorType>|string|null
              */
-            public \Seam\Resources\AcsEntrance\AssaAbloyVostioMetadata\DoorType|string|null $door_type = null,
+            public string|null $door_type = null,
             /**
              * PMS ID of the door in the Vostio access system.
              */
@@ -666,11 +664,7 @@ namespace Seam\Resources\AcsEntrance {
                 return null;
             }
             return new self(
-                door_category: is_string($json->door_category ?? null)
-                    ? \Seam\Resources\AcsEntrance\VisionlineMetadata\DoorCategory::tryFrom(
-                            $json->door_category,
-                        ) ?? $json->door_category
-                    : null,
+                door_category: $json->door_category ?? null,
                 door_name: $json->door_name ?? null,
                 profiles: array_map(
                     fn(
@@ -686,8 +680,10 @@ namespace Seam\Resources\AcsEntrance {
         public function __construct(
             /**
              * Category of the door in the Visionline access system.
+             *
+             * @var value-of<\Seam\Resources\AcsEntrance\VisionlineMetadata\DoorCategory>|string|null
              */
-            public \Seam\Resources\AcsEntrance\VisionlineMetadata\DoorCategory|string|null $door_category = null,
+            public string|null $door_category = null,
             /**
              * Name of the door in the Visionline access system.
              */
@@ -741,11 +737,7 @@ namespace Seam\Resources\AcsEntrance {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
-                    warning_code: is_string($json->warning_code ?? null)
-                        ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
-                                $json->warning_code,
-                            ) ?? $json->warning_code
-                        : null,
+                    warning_code: $json->warning_code ?? null,
                 ),
             };
         }
@@ -761,8 +753,10 @@ namespace Seam\Resources\AcsEntrance {
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsEntrance\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\AcsEntrance\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
         ) {}
     }
 }
@@ -818,13 +812,8 @@ namespace Seam\Resources\AcsEntrance\VisionlineMetadata {
             return new self(
                 visionline_door_profile_id: $json->visionline_door_profile_id ??
                     null,
-                visionline_door_profile_type: is_string(
-                    $json->visionline_door_profile_type ?? null,
-                )
-                    ? \Seam\Resources\AcsEntrance\VisionlineMetadata\Profiles\VisionlineDoorProfileType::tryFrom(
-                            $json->visionline_door_profile_type,
-                        ) ?? $json->visionline_door_profile_type
-                    : null,
+                visionline_door_profile_type: $json->visionline_door_profile_type ??
+                    null,
             );
         }
 
@@ -835,8 +824,10 @@ namespace Seam\Resources\AcsEntrance\VisionlineMetadata {
             public string|null $visionline_door_profile_id = null,
             /**
              * Door profile type in the Visionline access system.
+             *
+             * @var value-of<\Seam\Resources\AcsEntrance\VisionlineMetadata\Profiles\VisionlineDoorProfileType>|string|null
              */
-            public \Seam\Resources\AcsEntrance\VisionlineMetadata\Profiles\VisionlineDoorProfileType|string|null $visionline_door_profile_type = null,
+            public string|null $visionline_door_profile_type = null,
         ) {}
     }
 
@@ -875,11 +866,7 @@ namespace Seam\Resources\AcsEntrance\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -894,8 +881,10 @@ namespace Seam\Resources\AcsEntrance\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsEntrance\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AcsEntrance\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -918,11 +907,7 @@ namespace Seam\Resources\AcsEntrance\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -937,8 +922,10 @@ namespace Seam\Resources\AcsEntrance\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsEntrance\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AcsEntrance\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -963,11 +950,7 @@ namespace Seam\Resources\AcsEntrance\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -982,8 +965,10 @@ namespace Seam\Resources\AcsEntrance\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsEntrance\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AcsEntrance\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1006,11 +991,7 @@ namespace Seam\Resources\AcsEntrance\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1025,8 +1006,10 @@ namespace Seam\Resources\AcsEntrance\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsEntrance\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AcsEntrance\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1049,11 +1032,7 @@ namespace Seam\Resources\AcsEntrance\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsEntrance\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1068,8 +1047,10 @@ namespace Seam\Resources\AcsEntrance\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsEntrance\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AcsEntrance\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,

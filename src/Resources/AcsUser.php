@@ -38,11 +38,7 @@ namespace Seam\Resources {
                     : null,
                 email: $json->email ?? null,
                 email_address: $json->email_address ?? null,
-                external_type: is_string($json->external_type ?? null)
-                    ? \Seam\Resources\AcsUser\ExternalType::tryFrom(
-                            $json->external_type,
-                        ) ?? $json->external_type
-                    : null,
+                external_type: $json->external_type ?? null,
                 external_type_display_name: $json->external_type_display_name ??
                     null,
                 full_name: $json->full_name ?? null,
@@ -131,8 +127,10 @@ namespace Seam\Resources {
             public string|null $email_address = null,
             /**
              * Brand-specific terminology for the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) type.
+             *
+             * @var value-of<\Seam\Resources\AcsUser\ExternalType>|string|null
              */
-            public \Seam\Resources\AcsUser\ExternalType|string|null $external_type = null,
+            public string|null $external_type = null,
             /**
              * Display name that corresponds to the brand-specific terminology for the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) type.
              */
@@ -259,11 +257,7 @@ namespace Seam\Resources\AcsUser {
                 ),
                 default => new self(
                     created_at: $json->created_at ?? null,
-                    error_code: is_string($json->error_code ?? null)
-                        ? \Seam\Resources\AcsUser\Errors\ErrorCode::tryFrom(
-                                $json->error_code,
-                            ) ?? $json->error_code
-                        : null,
+                    error_code: $json->error_code ?? null,
                     message: $json->message ?? null,
                 ),
             };
@@ -274,7 +268,10 @@ namespace Seam\Resources\AcsUser {
              * Date and time at which Seam created the error.
              */
             public string|null $created_at,
-            public \Seam\Resources\AcsUser\Errors\ErrorCode|string|null $error_code,
+            /**
+             * @var value-of<\Seam\Resources\AcsUser\Errors\ErrorCode>|string|null
+             */
+            public string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -338,11 +335,7 @@ namespace Seam\Resources\AcsUser {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
-                    mutation_code: is_string($json->mutation_code ?? null)
-                        ? \Seam\Resources\AcsUser\PendingMutations\MutationCode::tryFrom(
-                                $json->mutation_code,
-                            ) ?? $json->mutation_code
-                        : null,
+                    mutation_code: $json->mutation_code ?? null,
                 ),
             };
         }
@@ -358,8 +351,10 @@ namespace Seam\Resources\AcsUser {
             public string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing a user creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsUser\PendingMutations\MutationCode>|string|null
              */
-            public \Seam\Resources\AcsUser\PendingMutations\MutationCode|string|null $mutation_code,
+            public string|null $mutation_code,
         ) {}
     }
 
@@ -452,11 +447,7 @@ namespace Seam\Resources\AcsUser {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
-                    warning_code: is_string($json->warning_code ?? null)
-                        ? \Seam\Resources\AcsUser\Warnings\WarningCode::tryFrom(
-                                $json->warning_code,
-                            ) ?? $json->warning_code
-                        : null,
+                    warning_code: $json->warning_code ?? null,
                 ),
             };
         }
@@ -470,7 +461,10 @@ namespace Seam\Resources\AcsUser {
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
             public string|null $message,
-            public \Seam\Resources\AcsUser\Warnings\WarningCode|string|null $warning_code,
+            /**
+             * @var value-of<\Seam\Resources\AcsUser\Warnings\WarningCode>|string|null
+             */
+            public string|null $warning_code,
         ) {}
     }
 
@@ -501,11 +495,7 @@ namespace Seam\Resources\AcsUser\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsUser\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -515,7 +505,10 @@ namespace Seam\Resources\AcsUser\Errors {
              * Date and time at which Seam created the error.
              */
             string|null $created_at,
-            \Seam\Resources\AcsUser\Errors\ErrorCode|string|null $error_code,
+            /**
+             * @var value-of<\Seam\Resources\AcsUser\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -543,11 +536,7 @@ namespace Seam\Resources\AcsUser\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsUser\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -557,7 +546,10 @@ namespace Seam\Resources\AcsUser\Errors {
              * Date and time at which Seam created the error.
              */
             string|null $created_at,
-            \Seam\Resources\AcsUser\Errors\ErrorCode|string|null $error_code,
+            /**
+             * @var value-of<\Seam\Resources\AcsUser\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -584,11 +576,7 @@ namespace Seam\Resources\AcsUser\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsUser\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -598,7 +586,10 @@ namespace Seam\Resources\AcsUser\Errors {
              * Date and time at which Seam created the error.
              */
             string|null $created_at,
-            \Seam\Resources\AcsUser\Errors\ErrorCode|string|null $error_code,
+            /**
+             * @var value-of<\Seam\Resources\AcsUser\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -625,11 +616,7 @@ namespace Seam\Resources\AcsUser\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsUser\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -639,7 +626,10 @@ namespace Seam\Resources\AcsUser\Errors {
              * Date and time at which Seam created the error.
              */
             string|null $created_at,
-            \Seam\Resources\AcsUser\Errors\ErrorCode|string|null $error_code,
+            /**
+             * @var value-of<\Seam\Resources\AcsUser\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -666,11 +656,7 @@ namespace Seam\Resources\AcsUser\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsUser\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -680,7 +666,10 @@ namespace Seam\Resources\AcsUser\Errors {
              * Date and time at which Seam created the error.
              */
             string|null $created_at,
-            \Seam\Resources\AcsUser\Errors\ErrorCode|string|null $error_code,
+            /**
+             * @var value-of<\Seam\Resources\AcsUser\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -708,11 +697,7 @@ namespace Seam\Resources\AcsUser\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsUser\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -722,7 +707,10 @@ namespace Seam\Resources\AcsUser\Errors {
              * Date and time at which Seam created the error.
              */
             string|null $created_at,
-            \Seam\Resources\AcsUser\Errors\ErrorCode|string|null $error_code,
+            /**
+             * @var value-of<\Seam\Resources\AcsUser\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -761,11 +749,7 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsUser\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
             );
         }
 
@@ -780,8 +764,10 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing a user creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsUser\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsUser\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -804,11 +790,7 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsUser\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
             );
         }
 
@@ -823,8 +805,10 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing a user creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsUser\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsUser\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -848,11 +832,7 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsUser\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 scheduled_at: $json->scheduled_at ?? null,
             );
         }
@@ -868,8 +848,10 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing a user creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsUser\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsUser\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * Optional: When the user creation is scheduled to occur.
              */
@@ -900,11 +882,7 @@ namespace Seam\Resources\AcsUser\PendingMutations {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsUser\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\AcsUser\PendingMutations\UpdatingUserInformation\To::from_json(
                         $json->to,
@@ -928,8 +906,10 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing a user creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsUser\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsUser\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * New access system user information.
              */
@@ -963,11 +943,7 @@ namespace Seam\Resources\AcsUser\PendingMutations {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsUser\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\AcsUser\PendingMutations\UpdatingAccessSchedule\To::from_json(
                         $json->to,
@@ -991,8 +967,10 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing a user creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsUser\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsUser\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * New access schedule information.
              */
@@ -1026,11 +1004,7 @@ namespace Seam\Resources\AcsUser\PendingMutations {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsUser\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\AcsUser\PendingMutations\UpdatingSuspensionState\To::from_json(
                         $json->to,
@@ -1054,8 +1028,10 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing a user creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsUser\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsUser\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * New user suspension state information.
              */
@@ -1089,11 +1065,7 @@ namespace Seam\Resources\AcsUser\PendingMutations {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsUser\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\AcsUser\PendingMutations\UpdatingGroupMembership\To::from_json(
                         $json->to,
@@ -1117,8 +1089,10 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing a user creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsUser\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsUser\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * New access group membership.
              */
@@ -1148,16 +1122,8 @@ namespace Seam\Resources\AcsUser\PendingMutations {
                 acs_access_group_id: $json->acs_access_group_id ?? null,
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsUser\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
-                variant: is_string($json->variant ?? null)
-                    ? \Seam\Resources\AcsUser\PendingMutations\DeferringGroupMembershipUpdate\Variant::tryFrom(
-                            $json->variant,
-                        ) ?? $json->variant
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
+                variant: $json->variant ?? null,
             );
         }
 
@@ -1176,12 +1142,16 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing a user creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsUser\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsUser\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * Whether the user is scheduled to be added to or removed from the access group.
+             *
+             * @var value-of<\Seam\Resources\AcsUser\PendingMutations\DeferringGroupMembershipUpdate\Variant>|string|null
              */
-            public \Seam\Resources\AcsUser\PendingMutations\DeferringGroupMembershipUpdate\Variant|string|null $variant,
+            public string|null $variant,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1211,11 +1181,7 @@ namespace Seam\Resources\AcsUser\PendingMutations {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsUser\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\AcsUser\PendingMutations\UpdatingCredentialAssignment\To::from_json(
                         $json->to,
@@ -1239,8 +1205,10 @@ namespace Seam\Resources\AcsUser\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing a user creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsUser\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsUser\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * New credential assignment.
              */
@@ -1546,11 +1514,7 @@ namespace Seam\Resources\AcsUser\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsUser\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1563,7 +1527,10 @@ namespace Seam\Resources\AcsUser\Warnings {
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
             string|null $message,
-            \Seam\Resources\AcsUser\Warnings\WarningCode|string|null $warning_code,
+            /**
+             * @var value-of<\Seam\Resources\AcsUser\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1588,11 +1555,7 @@ namespace Seam\Resources\AcsUser\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsUser\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1605,7 +1568,10 @@ namespace Seam\Resources\AcsUser\Warnings {
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
             string|null $message,
-            \Seam\Resources\AcsUser\Warnings\WarningCode|string|null $warning_code,
+            /**
+             * @var value-of<\Seam\Resources\AcsUser\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1628,11 +1594,7 @@ namespace Seam\Resources\AcsUser\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsUser\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1645,7 +1607,10 @@ namespace Seam\Resources\AcsUser\Warnings {
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
             string|null $message,
-            \Seam\Resources\AcsUser\Warnings\WarningCode|string|null $warning_code,
+            /**
+             * @var value-of<\Seam\Resources\AcsUser\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1669,11 +1634,7 @@ namespace Seam\Resources\AcsUser\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsUser\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1686,7 +1647,10 @@ namespace Seam\Resources\AcsUser\Warnings {
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
             string|null $message,
-            \Seam\Resources\AcsUser\Warnings\WarningCode|string|null $warning_code,
+            /**
+             * @var value-of<\Seam\Resources\AcsUser\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1709,11 +1673,7 @@ namespace Seam\Resources\AcsUser\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsUser\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -1726,7 +1686,10 @@ namespace Seam\Resources\AcsUser\Warnings {
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
             string|null $message,
-            \Seam\Resources\AcsUser\Warnings\WarningCode|string|null $warning_code,
+            /**
+             * @var value-of<\Seam\Resources\AcsUser\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,

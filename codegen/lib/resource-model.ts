@@ -19,8 +19,6 @@ export type ResourceClassProperty =
       kind: 'value'
       phpType: string
       phpDocType: string
-      enumType?: string
-      preserveUnknownEnum?: boolean
     } & ResourceClassPropertyMetadata)
   | ({
       kind: 'record'
@@ -312,10 +310,8 @@ const buildClass = (
       return {
         ...metadata,
         kind: 'value',
-        phpType: `${enumType}|string`,
-        phpDocType: '',
-        enumType,
-        preserveUnknownEnum: true,
+        phpType: 'string',
+        phpDocType: `value-of<${enumType}>|string`,
       }
     }
 

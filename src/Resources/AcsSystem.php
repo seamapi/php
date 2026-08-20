@@ -42,18 +42,10 @@ namespace Seam\Resources {
                 acs_user_count: $json->acs_user_count ?? null,
                 default_credential_manager_acs_system_id: $json->default_credential_manager_acs_system_id ??
                     null,
-                external_type: is_string($json->external_type ?? null)
-                    ? \Seam\Resources\AcsSystem\ExternalType::tryFrom(
-                            $json->external_type,
-                        ) ?? $json->external_type
-                    : null,
+                external_type: $json->external_type ?? null,
                 external_type_display_name: $json->external_type_display_name ??
                     null,
-                system_type: is_string($json->system_type ?? null)
-                    ? \Seam\Resources\AcsSystem\SystemType::tryFrom(
-                            $json->system_type,
-                        ) ?? $json->system_type
-                    : null,
+                system_type: $json->system_type ?? null,
                 system_type_display_name: $json->system_type_display_name ??
                     null,
                 visionline_metadata: isset($json->visionline_metadata)
@@ -134,16 +126,19 @@ namespace Seam\Resources {
             public string|null $default_credential_manager_acs_system_id = null,
             /**
              * Brand-specific terminology for the [access control system](https://docs.seam.co/low-level-apis/access-systems) type.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\ExternalType>|string|null
              */
-            public \Seam\Resources\AcsSystem\ExternalType|string|null $external_type = null,
+            public string|null $external_type = null,
             /**
              * Display name that corresponds to the brand-specific terminology for the [access control system](https://docs.seam.co/low-level-apis/access-systems) type.
              */
             public string|null $external_type_display_name = null,
             /**
+             * @var value-of<\Seam\Resources\AcsSystem\SystemType>|string|null
              * @deprecated Use `external_type`.
              */
-            public \Seam\Resources\AcsSystem\SystemType|string|null $system_type = null,
+            public string|null $system_type = null,
             /**
              * @deprecated Use `external_type_display_name`.
              */
@@ -212,11 +207,7 @@ namespace Seam\Resources\AcsSystem {
                 ),
                 default => new self(
                     created_at: $json->created_at ?? null,
-                    error_code: is_string($json->error_code ?? null)
-                        ? \Seam\Resources\AcsSystem\Errors\ErrorCode::tryFrom(
-                                $json->error_code,
-                            ) ?? $json->error_code
-                        : null,
+                    error_code: $json->error_code ?? null,
                     message: $json->message ?? null,
                 ),
             };
@@ -229,8 +220,10 @@ namespace Seam\Resources\AcsSystem {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Errors\ErrorCode>|string|null
              */
-            public \Seam\Resources\AcsSystem\Errors\ErrorCode|string|null $error_code,
+            public string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -328,11 +321,7 @@ namespace Seam\Resources\AcsSystem {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
-                    warning_code: is_string($json->warning_code ?? null)
-                        ? \Seam\Resources\AcsSystem\Warnings\WarningCode::tryFrom(
-                                $json->warning_code,
-                            ) ?? $json->warning_code
-                        : null,
+                    warning_code: $json->warning_code ?? null,
                 ),
             };
         }
@@ -348,8 +337,10 @@ namespace Seam\Resources\AcsSystem {
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\AcsSystem\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
         ) {}
     }
 
@@ -412,11 +403,7 @@ namespace Seam\Resources\AcsSystem\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -428,8 +415,10 @@ namespace Seam\Resources\AcsSystem\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\AcsSystem\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -456,11 +445,7 @@ namespace Seam\Resources\AcsSystem\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
                 is_bridge_error: $json->is_bridge_error ?? null,
             );
@@ -473,8 +458,10 @@ namespace Seam\Resources\AcsSystem\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\AcsSystem\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -508,11 +495,7 @@ namespace Seam\Resources\AcsSystem\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -524,8 +507,10 @@ namespace Seam\Resources\AcsSystem\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\AcsSystem\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -553,11 +538,7 @@ namespace Seam\Resources\AcsSystem\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -569,8 +550,10 @@ namespace Seam\Resources\AcsSystem\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\AcsSystem\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -597,11 +580,7 @@ namespace Seam\Resources\AcsSystem\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -613,8 +592,10 @@ namespace Seam\Resources\AcsSystem\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\AcsSystem\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -641,11 +622,7 @@ namespace Seam\Resources\AcsSystem\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -657,8 +634,10 @@ namespace Seam\Resources\AcsSystem\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\AcsSystem\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -684,11 +663,7 @@ namespace Seam\Resources\AcsSystem\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -700,8 +675,10 @@ namespace Seam\Resources\AcsSystem\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\AcsSystem\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -729,11 +706,7 @@ namespace Seam\Resources\AcsSystem\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -745,8 +718,10 @@ namespace Seam\Resources\AcsSystem\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\AcsSystem\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -774,11 +749,7 @@ namespace Seam\Resources\AcsSystem\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -790,8 +761,10 @@ namespace Seam\Resources\AcsSystem\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\AcsSystem\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -835,11 +808,7 @@ namespace Seam\Resources\AcsSystem\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -854,8 +823,10 @@ namespace Seam\Resources\AcsSystem\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AcsSystem\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -880,11 +851,7 @@ namespace Seam\Resources\AcsSystem\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
                 misconfigured_acs_entrance_ids: $json->misconfigured_acs_entrance_ids ??
                     null,
             );
@@ -901,8 +868,10 @@ namespace Seam\Resources\AcsSystem\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AcsSystem\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
             /**
              * @var list<string>|null
              * @deprecated this field is deprecated.
@@ -930,11 +899,7 @@ namespace Seam\Resources\AcsSystem\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -949,8 +914,10 @@ namespace Seam\Resources\AcsSystem\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AcsSystem\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -975,11 +942,7 @@ namespace Seam\Resources\AcsSystem\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsSystem\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -994,8 +957,10 @@ namespace Seam\Resources\AcsSystem\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\AcsSystem\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,

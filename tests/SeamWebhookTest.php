@@ -62,7 +62,11 @@ final class SeamWebhookTest extends TestCase
         );
 
         $this->assertInstanceOf(DeviceConnected::class, $event);
-        $this->assertSame(EventType::DEVICE_CONNECTED, $event->event_type);
+        $this->assertSame("device.connected", $event->event_type);
+        $this->assertSame(
+            "device.connected",
+            EventType::DEVICE_CONNECTED->value,
+        );
         $this->assertSame(
             "8d7e0b26-5e6c-4a1f-9b3d-1b0f0e5a9c11",
             $event->event_id,
@@ -80,7 +84,7 @@ final class SeamWebhookTest extends TestCase
 
         $event = (new SeamWebhook(self::SECRET))->verify($payload, $headers);
 
-        $this->assertSame(EventType::DEVICE_CONNECTED, $event->event_type);
+        $this->assertSame("device.connected", $event->event_type);
     }
 
     public function testDecodesAnAccessCodeEventIntoItsSpecificClass(): void

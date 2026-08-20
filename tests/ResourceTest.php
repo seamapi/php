@@ -107,7 +107,8 @@ final class ResourceTest extends TestCase
         );
 
         $this->assertSame(0.4, $device->properties->battery->level);
-        $this->assertSame(Status::LOW, $device->properties->battery->status);
+        $this->assertSame("low", $device->properties->battery->status);
+        $this->assertSame("low", Status::LOW->value);
 
         $this->assertSame(
             0.25,
@@ -136,7 +137,8 @@ final class ResourceTest extends TestCase
         $error = $this->device()->errors[0];
 
         $this->assertInstanceOf(DeviceOffline::class, $error);
-        $this->assertSame(ErrorCode::DEVICE_OFFLINE, $error->error_code);
+        $this->assertSame("device_offline", $error->error_code);
+        $this->assertSame("device_offline", ErrorCode::DEVICE_OFFLINE->value);
         $this->assertTrue($error->is_device_error);
         $this->assertObjectNotHasProperty("is_bridge_error", $error);
     }
@@ -182,6 +184,7 @@ final class ResourceTest extends TestCase
         $this->assertNotNull($preset);
         $this->assertSame("sleep", $preset->climate_ref);
         $this->assertTrue($preset->is_optimized);
-        $this->assertSame(Owner::USER, $preset->owner);
+        $this->assertSame("user", $preset->owner);
+        $this->assertSame("user", Owner::USER->value);
     }
 }

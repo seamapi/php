@@ -415,11 +415,7 @@ namespace Seam\Resources {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     event_id: $json->event_id ?? null,
-                    event_type: is_string($json->event_type ?? null)
-                        ? \Seam\Resources\Event\EventType::tryFrom(
-                                $json->event_type,
-                            ) ?? $json->event_type
-                        : null,
+                    event_type: $json->event_type ?? null,
                     occurred_at: $json->occurred_at ?? null,
                     workspace_id: $json->workspace_id ?? null,
                     event_description: $json->event_description ?? null,
@@ -436,7 +432,10 @@ namespace Seam\Resources {
              * ID of the event.
              */
             public string|null $event_id,
-            public \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            public string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -470,11 +469,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -505,7 +500,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -558,11 +556,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 change_reason: $json->change_reason ?? null,
@@ -602,7 +596,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -667,11 +664,7 @@ namespace Seam\Resources\Event {
                 description: $json->description ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 from: isset($json->from)
                     ? \Seam\Resources\Event\AccessCodeNameChanged\From::from_json(
                         $json->from,
@@ -716,7 +709,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Previous access code name configuration.
              */
@@ -779,11 +775,7 @@ namespace Seam\Resources\Event {
                 description: $json->description ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 from: isset($json->from)
                     ? \Seam\Resources\Event\AccessCodeCodeChanged\From::from_json(
                         $json->from,
@@ -828,7 +820,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Previous pin code configuration.
              */
@@ -891,11 +886,7 @@ namespace Seam\Resources\Event {
                 description: $json->description ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 from: isset($json->from)
                     ? \Seam\Resources\Event\AccessCodeTimeFrameChanged\From::from_json(
                         $json->from,
@@ -940,7 +931,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Previous time frame configuration.
              */
@@ -1002,11 +996,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 requested_mutations: array_map(
                     fn(
@@ -1045,7 +1035,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -1106,11 +1099,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -1145,7 +1134,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -1200,11 +1192,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -1239,7 +1227,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -1293,11 +1284,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -1328,7 +1315,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -1430,11 +1420,7 @@ namespace Seam\Resources\Event {
                     $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -1501,7 +1487,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -1603,11 +1592,7 @@ namespace Seam\Resources\Event {
                     $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -1674,7 +1659,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -1728,11 +1716,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -1767,7 +1751,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -1870,11 +1857,7 @@ namespace Seam\Resources\Event {
                     $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -1941,7 +1924,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -2043,11 +2029,7 @@ namespace Seam\Resources\Event {
                     $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -2114,7 +2096,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -2168,11 +2153,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -2203,7 +2184,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -2257,11 +2241,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -2292,7 +2272,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -2347,11 +2330,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -2386,7 +2365,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -2441,11 +2423,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -2476,7 +2454,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -2579,11 +2560,7 @@ namespace Seam\Resources\Event {
                     $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -2650,7 +2627,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -2704,11 +2684,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -2739,7 +2715,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -2793,11 +2772,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -2828,7 +2803,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -2879,11 +2857,7 @@ namespace Seam\Resources\Event {
                 access_grant_id: $json->access_grant_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 event_description: $json->event_description ?? null,
@@ -2903,7 +2877,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -2942,11 +2919,7 @@ namespace Seam\Resources\Event {
                 access_grant_id: $json->access_grant_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 event_description: $json->event_description ?? null,
@@ -2966,7 +2939,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -3006,11 +2982,7 @@ namespace Seam\Resources\Event {
                 access_grant_id: $json->access_grant_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 event_description: $json->event_description ?? null,
@@ -3030,7 +3002,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -3071,11 +3046,7 @@ namespace Seam\Resources\Event {
                 acs_entrance_id: $json->acs_entrance_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 event_description: $json->event_description ?? null,
@@ -3099,7 +3070,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -3140,11 +3114,7 @@ namespace Seam\Resources\Event {
                 acs_entrance_id: $json->acs_entrance_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 event_description: $json->event_description ?? null,
@@ -3168,7 +3138,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -3208,11 +3181,7 @@ namespace Seam\Resources\Event {
                 access_grant_id: $json->access_grant_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_key: $json->access_grant_key ?? null,
@@ -3235,7 +3204,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -3289,11 +3261,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 error_message: $json->error_message ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 event_description: $json->event_description ?? null,
@@ -3318,7 +3286,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -3364,11 +3335,7 @@ namespace Seam\Resources\Event {
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
@@ -3397,7 +3364,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -3451,11 +3421,7 @@ namespace Seam\Resources\Event {
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
@@ -3482,7 +3448,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -3529,11 +3498,7 @@ namespace Seam\Resources\Event {
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
@@ -3560,7 +3525,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -3606,11 +3574,7 @@ namespace Seam\Resources\Event {
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
@@ -3637,7 +3601,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -3683,11 +3650,7 @@ namespace Seam\Resources\Event {
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
@@ -3716,7 +3679,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -3770,11 +3736,7 @@ namespace Seam\Resources\Event {
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
@@ -3801,7 +3763,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -3848,11 +3813,7 @@ namespace Seam\Resources\Event {
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
@@ -3879,7 +3840,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -3926,11 +3890,7 @@ namespace Seam\Resources\Event {
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
@@ -3957,7 +3917,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -4002,11 +3965,7 @@ namespace Seam\Resources\Event {
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -4027,7 +3986,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -4070,11 +4032,7 @@ namespace Seam\Resources\Event {
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -4095,7 +4053,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -4171,11 +4132,7 @@ namespace Seam\Resources\Event {
                 ),
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -4220,7 +4177,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -4264,11 +4224,7 @@ namespace Seam\Resources\Event {
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -4293,7 +4249,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -4337,11 +4296,7 @@ namespace Seam\Resources\Event {
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -4366,7 +4321,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -4411,11 +4369,7 @@ namespace Seam\Resources\Event {
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -4440,7 +4394,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -4485,11 +4442,7 @@ namespace Seam\Resources\Event {
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -4514,7 +4467,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -4558,11 +4514,7 @@ namespace Seam\Resources\Event {
                 acs_user_id: $json->acs_user_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -4587,7 +4539,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -4631,11 +4586,7 @@ namespace Seam\Resources\Event {
                 acs_user_id: $json->acs_user_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -4660,7 +4611,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -4704,11 +4658,7 @@ namespace Seam\Resources\Event {
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -4733,7 +4683,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -4777,11 +4730,7 @@ namespace Seam\Resources\Event {
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -4806,7 +4755,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -4851,11 +4803,7 @@ namespace Seam\Resources\Event {
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -4880,7 +4828,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -4924,11 +4875,7 @@ namespace Seam\Resources\Event {
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -4953,7 +4900,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -4997,11 +4947,7 @@ namespace Seam\Resources\Event {
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -5026,7 +4972,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -5069,11 +5018,7 @@ namespace Seam\Resources\Event {
                 client_session_id: $json->client_session_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 event_description: $json->event_description ?? null,
@@ -5093,7 +5038,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -5133,11 +5081,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connect_webview_id: $json->connect_webview_id ?? null,
@@ -5161,7 +5105,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -5216,11 +5163,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -5246,7 +5189,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -5293,11 +5239,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -5323,7 +5265,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -5385,11 +5330,7 @@ namespace Seam\Resources\Event {
                 ),
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -5423,7 +5364,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -5469,11 +5413,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -5495,7 +5435,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -5541,11 +5484,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -5568,7 +5507,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -5619,11 +5561,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -5645,7 +5583,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -5708,11 +5649,7 @@ namespace Seam\Resources\Event {
                 ),
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -5746,7 +5683,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -5793,11 +5733,7 @@ namespace Seam\Resources\Event {
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 status: $json->status ?? null,
                 workspace_id: $json->workspace_id ?? null,
@@ -5824,7 +5760,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -5877,11 +5816,7 @@ namespace Seam\Resources\Event {
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 status: $json->status ?? null,
                 workspace_id: $json->workspace_id ?? null,
@@ -5908,7 +5843,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -5961,11 +5899,7 @@ namespace Seam\Resources\Event {
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 status: $json->status ?? null,
                 workspace_id: $json->workspace_id ?? null,
@@ -5992,7 +5926,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -6045,11 +5982,7 @@ namespace Seam\Resources\Event {
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 status: $json->status ?? null,
                 workspace_id: $json->workspace_id ?? null,
@@ -6076,7 +6009,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -6130,11 +6066,7 @@ namespace Seam\Resources\Event {
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 status: $json->status ?? null,
                 workspace_id: $json->workspace_id ?? null,
@@ -6161,7 +6093,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -6215,11 +6150,7 @@ namespace Seam\Resources\Event {
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 status: $json->status ?? null,
                 workspace_id: $json->workspace_id ?? null,
@@ -6246,7 +6177,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -6300,11 +6234,7 @@ namespace Seam\Resources\Event {
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 status: $json->status ?? null,
                 workspace_id: $json->workspace_id ?? null,
@@ -6331,7 +6261,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -6385,11 +6318,7 @@ namespace Seam\Resources\Event {
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 status: $json->status ?? null,
                 workspace_id: $json->workspace_id ?? null,
@@ -6416,7 +6345,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -6469,11 +6401,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -6500,7 +6428,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -6550,11 +6481,7 @@ namespace Seam\Resources\Event {
                 connect_webview_id: $json->connect_webview_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 event_description: $json->event_description ?? null,
@@ -6574,7 +6501,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -6614,11 +6544,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -6646,7 +6572,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -6702,11 +6631,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -6734,7 +6659,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -6791,11 +6719,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -6823,7 +6747,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -6880,11 +6807,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -6912,7 +6835,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -6969,11 +6895,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -7001,7 +6923,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -7088,17 +7013,9 @@ namespace Seam\Resources\Event {
                     ),
                     $json->device_warnings ?? [],
                 ),
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Event\DeviceDisconnected\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -7148,13 +7065,18 @@ namespace Seam\Resources\Event {
             public array $device_warnings,
             /**
              * Error code associated with the disconnection event, if any.
+             *
+             * @var value-of<\Seam\Resources\Event\DeviceDisconnected\ErrorCode>|string|null
              */
-            public \Seam\Resources\Event\DeviceDisconnected\ErrorCode|string|null $error_code,
+            public string|null $error_code,
             /**
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -7242,17 +7164,9 @@ namespace Seam\Resources\Event {
                     ),
                     $json->device_warnings ?? [],
                 ),
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\Event\DeviceUnmanagedDisconnected\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -7302,13 +7216,18 @@ namespace Seam\Resources\Event {
             public array $device_warnings,
             /**
              * Error code associated with the disconnection event, if any.
+             *
+             * @var value-of<\Seam\Resources\Event\DeviceUnmanagedDisconnected\ErrorCode>|string|null
              */
-            public \Seam\Resources\Event\DeviceUnmanagedDisconnected\ErrorCode|string|null $error_code,
+            public string|null $error_code,
             /**
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -7364,11 +7283,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -7396,7 +7311,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -7453,11 +7371,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -7489,7 +7403,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -7543,20 +7460,12 @@ namespace Seam\Resources\Event {
             }
             return new self(
                 battery_level: $json->battery_level ?? null,
-                battery_status: is_string($json->battery_status ?? null)
-                    ? \Seam\Resources\Event\DeviceBatteryStatusChanged\BatteryStatus::tryFrom(
-                            $json->battery_status,
-                        ) ?? $json->battery_status
-                    : null,
+                battery_status: $json->battery_status ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -7574,8 +7483,10 @@ namespace Seam\Resources\Event {
             public float|null $battery_level,
             /**
              * Battery status of the affected device, calculated from the numeric `battery_level` value.
+             *
+             * @var value-of<\Seam\Resources\Event\DeviceBatteryStatusChanged\BatteryStatus>|string|null
              */
-            public \Seam\Resources\Event\DeviceBatteryStatusChanged\BatteryStatus|string|null $battery_status,
+            public string|null $battery_status,
             /**
              * ID of the connected account associated with the event.
              */
@@ -7592,7 +7503,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -7648,11 +7562,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -7680,7 +7590,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -7736,11 +7649,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -7769,7 +7678,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -7831,11 +7743,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -7863,7 +7771,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -7921,11 +7832,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -7953,7 +7860,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -8010,11 +7920,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -8042,7 +7948,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -8099,11 +8008,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -8131,7 +8036,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -8220,11 +8128,7 @@ namespace Seam\Resources\Event {
                     $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -8276,7 +8180,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -8333,11 +8240,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -8365,7 +8268,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -8454,11 +8360,7 @@ namespace Seam\Resources\Event {
                     $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -8510,7 +8412,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -8568,11 +8473,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -8600,7 +8501,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -8657,11 +8561,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -8689,7 +8589,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -8778,11 +8681,7 @@ namespace Seam\Resources\Event {
                     $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -8834,7 +8733,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -8891,11 +8793,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -8929,7 +8827,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -9013,16 +8914,8 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
-                method: is_string($json->method ?? null)
-                    ? \Seam\Resources\Event\LockLocked\Method::tryFrom(
-                            $json->method,
-                        ) ?? $json->method
-                    : null,
+                event_type: $json->event_type ?? null,
+                method: $json->method ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_code_id: $json->access_code_id ?? null,
@@ -9056,11 +8949,16 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Method by which the lock was locked. `keycode`: an access code was used (see `access_code_id`). `manual`: a physical action such as a thumbturn or button press. `remote`: a remote action via an app, Bluetooth, or the Seam API (see `action_attempt_id` if Seam-initiated; see `is_via_bluetooth` or `is_via_nfc` for the transport). `automatic`: triggered automatically, for example by an auto-relock timer. `unknown`: could not be determined.
+             *
+             * @var value-of<\Seam\Resources\Event\LockLocked\Method>|string|null
              */
-            public \Seam\Resources\Event\LockLocked\Method|string|null $method,
+            public string|null $method,
             /**
              * Date and time at which the event occurred.
              */
@@ -9139,16 +9037,8 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
-                method: is_string($json->method ?? null)
-                    ? \Seam\Resources\Event\LockUnlocked\Method::tryFrom(
-                            $json->method,
-                        ) ?? $json->method
-                    : null,
+                event_type: $json->event_type ?? null,
+                method: $json->method ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_code_id: $json->access_code_id ?? null,
@@ -9179,11 +9069,16 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Method by which the lock was unlocked. `keycode`: an [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) was used (see `access_code_id`). `manual`: a physical action such as a thumbturn or handle press. `remote`: a remote action via an app, Bluetooth, or the Seam API (see `action_attempt_id` if Seam-initiated; see `is_via_bluetooth` or `is_via_nfc` for the transport). `automatic`: triggered automatically, for example by a time-based schedule. `unknown`: could not be determined.
+             *
+             * @var value-of<\Seam\Resources\Event\LockUnlocked\Method>|string|null
              */
-            public \Seam\Resources\Event\LockUnlocked\Method|string|null $method,
+            public string|null $method,
             /**
              * Date and time at which the event occurred.
              */
@@ -9266,11 +9161,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_code_id: $json->access_code_id ?? null,
@@ -9301,7 +9192,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -9371,11 +9265,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 is_fallback_climate_preset: $json->is_fallback_climate_preset ??
                     null,
                 occurred_at: $json->occurred_at ?? null,
@@ -9410,7 +9300,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Indicates whether the climate preset that was activated is the fallback climate preset for the thermostat.
              */
@@ -9475,16 +9368,8 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
-                method: is_string($json->method ?? null)
-                    ? \Seam\Resources\Event\ThermostatManuallyAdjusted\Method::tryFrom(
-                            $json->method,
-                        ) ?? $json->method
-                    : null,
+                event_type: $json->event_type ?? null,
+                method: $json->method ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -9496,20 +9381,12 @@ namespace Seam\Resources\Event {
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
                 event_description: $json->event_description ?? null,
-                fan_mode_setting: is_string($json->fan_mode_setting ?? null)
-                    ? \Seam\Resources\Event\ThermostatManuallyAdjusted\FanModeSetting::tryFrom(
-                            $json->fan_mode_setting,
-                        ) ?? $json->fan_mode_setting
-                    : null,
+                fan_mode_setting: $json->fan_mode_setting ?? null,
                 heating_set_point_celsius: $json->heating_set_point_celsius ??
                     null,
                 heating_set_point_fahrenheit: $json->heating_set_point_fahrenheit ??
                     null,
-                hvac_mode_setting: is_string($json->hvac_mode_setting ?? null)
-                    ? \Seam\Resources\Event\ThermostatManuallyAdjusted\HvacModeSetting::tryFrom(
-                            $json->hvac_mode_setting,
-                        ) ?? $json->hvac_mode_setting
-                    : null,
+                hvac_mode_setting: $json->hvac_mode_setting ?? null,
             );
         }
 
@@ -9530,11 +9407,16 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Method used to adjust the affected thermostat manually. `seam` indicates that the Seam API, Seam CLI, or Seam Console was used to adjust the thermostat.
+             *
+             * @var value-of<\Seam\Resources\Event\ThermostatManuallyAdjusted\Method>|string|null
              */
-            public \Seam\Resources\Event\ThermostatManuallyAdjusted\Method|string|null $method,
+            public string|null $method,
             /**
              * Date and time at which the event occurred.
              */
@@ -9573,8 +9455,10 @@ namespace Seam\Resources\Event {
             string|null $event_description = null,
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
+             *
+             * @var value-of<\Seam\Resources\Event\ThermostatManuallyAdjusted\FanModeSetting>|string|null
              */
-            public \Seam\Resources\Event\ThermostatManuallyAdjusted\FanModeSetting|string|null $fan_mode_setting = null,
+            public string|null $fan_mode_setting = null,
             /**
              * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
@@ -9585,8 +9469,10 @@ namespace Seam\Resources\Event {
             public float|null $heating_set_point_fahrenheit = null,
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
+             *
+             * @var value-of<\Seam\Resources\Event\ThermostatManuallyAdjusted\HvacModeSetting>|string|null
              */
-            public \Seam\Resources\Event\ThermostatManuallyAdjusted\HvacModeSetting|string|null $hvac_mode_setting = null,
+            public string|null $hvac_mode_setting = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -9616,11 +9502,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 lower_limit_celsius: $json->lower_limit_celsius ?? null,
                 lower_limit_fahrenheit: $json->lower_limit_fahrenheit ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -9654,7 +9536,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Lower temperature limit, in °C, defined by the set threshold.
              */
@@ -9736,11 +9621,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 lower_limit_celsius: $json->lower_limit_celsius ?? null,
                 lower_limit_fahrenheit: $json->lower_limit_fahrenheit ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -9774,7 +9655,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Lower temperature limit, in °C, defined by the set threshold.
              */
@@ -9856,11 +9740,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 temperature_celsius: $json->temperature_celsius ?? null,
                 temperature_fahrenheit: $json->temperature_fahrenheit ?? null,
@@ -9894,7 +9774,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -9967,11 +9850,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 temperature_celsius: $json->temperature_celsius ?? null,
                 temperature_fahrenheit: $json->temperature_fahrenheit ?? null,
@@ -10001,7 +9880,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -10066,11 +9948,7 @@ namespace Seam\Resources\Event {
                 device_id: $json->device_id ?? null,
                 device_name: $json->device_name ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -10102,7 +9980,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -10154,20 +10035,12 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                activation_reason: is_string($json->activation_reason ?? null)
-                    ? \Seam\Resources\Event\CameraActivated\ActivationReason::tryFrom(
-                            $json->activation_reason,
-                        ) ?? $json->activation_reason
-                    : null,
+                activation_reason: $json->activation_reason ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -10176,11 +10049,7 @@ namespace Seam\Resources\Event {
                 device_custom_metadata: $json->device_custom_metadata ?? null,
                 event_description: $json->event_description ?? null,
                 image_url: $json->image_url ?? null,
-                motion_sub_type: is_string($json->motion_sub_type ?? null)
-                    ? \Seam\Resources\Event\CameraActivated\MotionSubType::tryFrom(
-                            $json->motion_sub_type,
-                        ) ?? $json->motion_sub_type
-                    : null,
+                motion_sub_type: $json->motion_sub_type ?? null,
                 video_url: $json->video_url ?? null,
             );
         }
@@ -10188,8 +10057,10 @@ namespace Seam\Resources\Event {
         public function __construct(
             /**
              * The reason the camera was activated.
+             *
+             * @var value-of<\Seam\Resources\Event\CameraActivated\ActivationReason>|string|null
              */
-            public \Seam\Resources\Event\CameraActivated\ActivationReason|string|null $activation_reason,
+            public string|null $activation_reason,
             /**
              * ID of the connected account associated with the event.
              */
@@ -10206,7 +10077,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -10241,8 +10115,10 @@ namespace Seam\Resources\Event {
             public string|null $image_url = null,
             /**
              * Sub-type of motion detected, if available.
+             *
+             * @var value-of<\Seam\Resources\Event\CameraActivated\MotionSubType>|string|null
              */
-            public \Seam\Resources\Event\CameraActivated\MotionSubType|string|null $motion_sub_type = null,
+            public string|null $motion_sub_type = null,
             /**
              * URL to a short video clip captured at the time of activation.
              */
@@ -10274,11 +10150,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -10308,7 +10180,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -10371,11 +10246,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
@@ -10396,7 +10267,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -10443,11 +10317,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_ids: $json->device_ids ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 space_id: $json->space_id ?? null,
                 workspace_id: $json->workspace_id ?? null,
@@ -10477,7 +10347,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -10525,11 +10398,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_ids: $json->device_ids ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 space_id: $json->space_id ?? null,
                 workspace_id: $json->workspace_id ?? null,
@@ -10559,7 +10428,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -10607,11 +10479,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_ids: $json->device_ids ?? null,
                 event_id: $json->event_id ?? null,
-                event_type: is_string($json->event_type ?? null)
-                    ? \Seam\Resources\Event\EventType::tryFrom(
-                            $json->event_type,
-                        ) ?? $json->event_type
-                    : null,
+                event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 space_id: $json->space_id ?? null,
                 workspace_id: $json->workspace_id ?? null,
@@ -10641,7 +10509,10 @@ namespace Seam\Resources\Event {
              * ID of the event.
              */
             string|null $event_id,
-            \Seam\Resources\Event\EventType|string|null $event_type,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
             /**
              * Date and time at which the event occurred.
              */
@@ -10980,11 +10851,7 @@ namespace Seam\Resources\Event\AccessCodeMutationsRequested {
                 return null;
             }
             return new self(
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\Event\AccessCodeMutationsRequested\RequestedMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 from: $json->from ?? null,
                 to: $json->to ?? null,
             );
@@ -10993,8 +10860,10 @@ namespace Seam\Resources\Event\AccessCodeMutationsRequested {
         public function __construct(
             /**
              * Code identifying the type of mutation requested, such as `updating_name`, `updating_code`, `updating_time_frame`, or `deleting`.
+             *
+             * @var value-of<\Seam\Resources\Event\AccessCodeMutationsRequested\RequestedMutations\MutationCode>|string|null
              */
-            public \Seam\Resources\Event\AccessCodeMutationsRequested\RequestedMutations\MutationCode|string|null $mutation_code,
+            public string|null $mutation_code,
             /**
              * Previous property values before the requested change. Keys depend on the mutation type. Absent for non-property mutations like `deleting`.
              *
@@ -13050,11 +12919,7 @@ namespace Seam\Resources\Event\LockAccessDenied {
             }
             return new self(
                 message: $json->message ?? null,
-                reason_code: is_string($json->reason_code ?? null)
-                    ? \Seam\Resources\Event\LockAccessDenied\Reason\ReasonCode::tryFrom(
-                            $json->reason_code,
-                        ) ?? $json->reason_code
-                    : null,
+                reason_code: $json->reason_code ?? null,
             );
         }
 
@@ -13065,8 +12930,10 @@ namespace Seam\Resources\Event\LockAccessDenied {
             public string|null $message,
             /**
              * Normalized reason a lock denied access. Provider-agnostic; not all providers report every value.
+             *
+             * @var value-of<\Seam\Resources\Event\LockAccessDenied\Reason\ReasonCode>|string|null
              */
-            public \Seam\Resources\Event\LockAccessDenied\Reason\ReasonCode|string|null $reason_code,
+            public string|null $reason_code,
         ) {}
     }
 }

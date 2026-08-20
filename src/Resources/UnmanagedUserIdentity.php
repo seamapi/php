@@ -117,11 +117,7 @@ namespace Seam\Resources\UnmanagedUserIdentity {
                     acs_system_id: $json->acs_system_id ?? null,
                     acs_user_id: $json->acs_user_id ?? null,
                     created_at: $json->created_at ?? null,
-                    error_code: is_string($json->error_code ?? null)
-                        ? \Seam\Resources\UnmanagedUserIdentity\Errors\ErrorCode::tryFrom(
-                                $json->error_code,
-                            ) ?? $json->error_code
-                        : null,
+                    error_code: $json->error_code ?? null,
                     message: $json->message ?? null,
                 ),
             };
@@ -142,8 +138,10 @@ namespace Seam\Resources\UnmanagedUserIdentity {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedUserIdentity\Errors\ErrorCode>|string|null
              */
-            public \Seam\Resources\UnmanagedUserIdentity\Errors\ErrorCode|string|null $error_code,
+            public string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -179,11 +177,7 @@ namespace Seam\Resources\UnmanagedUserIdentity {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
-                    warning_code: is_string($json->warning_code ?? null)
-                        ? \Seam\Resources\UnmanagedUserIdentity\Warnings\WarningCode::tryFrom(
-                                $json->warning_code,
-                            ) ?? $json->warning_code
-                        : null,
+                    warning_code: $json->warning_code ?? null,
                 ),
             };
         }
@@ -199,8 +193,10 @@ namespace Seam\Resources\UnmanagedUserIdentity {
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedUserIdentity\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\UnmanagedUserIdentity\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
         ) {}
     }
 }
@@ -221,11 +217,7 @@ namespace Seam\Resources\UnmanagedUserIdentity\Errors {
                 acs_system_id: $json->acs_system_id ?? null,
                 acs_user_id: $json->acs_user_id ?? null,
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\UnmanagedUserIdentity\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -245,8 +237,10 @@ namespace Seam\Resources\UnmanagedUserIdentity\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedUserIdentity\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\UnmanagedUserIdentity\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -283,11 +277,7 @@ namespace Seam\Resources\UnmanagedUserIdentity\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedUserIdentity\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -302,8 +292,10 @@ namespace Seam\Resources\UnmanagedUserIdentity\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedUserIdentity\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedUserIdentity\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -328,11 +320,7 @@ namespace Seam\Resources\UnmanagedUserIdentity\Warnings {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\UnmanagedUserIdentity\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -347,8 +335,10 @@ namespace Seam\Resources\UnmanagedUserIdentity\Warnings {
             string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedUserIdentity\Warnings\WarningCode>|string|null
              */
-            \Seam\Resources\UnmanagedUserIdentity\Warnings\WarningCode|string|null $warning_code,
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,

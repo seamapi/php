@@ -16,11 +16,7 @@ namespace Seam\Resources {
                 return null;
             }
             return new self(
-                access_group_type: is_string($json->access_group_type ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\AccessGroupType::tryFrom(
-                            $json->access_group_type,
-                        ) ?? $json->access_group_type
-                    : null,
+                access_group_type: $json->access_group_type ?? null,
                 access_group_type_display_name: $json->access_group_type_display_name ??
                     null,
                 acs_access_group_id: $json->acs_access_group_id ?? null,
@@ -34,11 +30,7 @@ namespace Seam\Resources {
                     ),
                     $json->errors ?? [],
                 ),
-                external_type: is_string($json->external_type ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\ExternalType::tryFrom(
-                            $json->external_type,
-                        ) ?? $json->external_type
-                    : null,
+                external_type: $json->external_type ?? null,
                 external_type_display_name: $json->external_type_display_name ??
                     null,
                 is_managed: $json->is_managed ?? null,
@@ -68,9 +60,10 @@ namespace Seam\Resources {
 
         public function __construct(
             /**
+             * @var value-of<\Seam\Resources\AcsAccessGroup\AccessGroupType>|string|null
              * @deprecated Use `external_type`.
              */
-            public \Seam\Resources\AcsAccessGroup\AccessGroupType|string|null $access_group_type,
+            public string|null $access_group_type,
             /**
              * @deprecated Use `external_type_display_name`.
              */
@@ -103,8 +96,10 @@ namespace Seam\Resources {
             public array $errors,
             /**
              * Brand-specific terminology for the access group type.
+             *
+             * @var value-of<\Seam\Resources\AcsAccessGroup\ExternalType>|string|null
              */
-            public \Seam\Resources\AcsAccessGroup\ExternalType|string|null $external_type,
+            public string|null $external_type,
             /**
              * Display name that corresponds to the brand-specific terminology for the access group type.
              */
@@ -193,11 +188,7 @@ namespace Seam\Resources\AcsAccessGroup {
                 ),
                 default => new self(
                     created_at: $json->created_at ?? null,
-                    error_code: is_string($json->error_code ?? null)
-                        ? \Seam\Resources\AcsAccessGroup\Errors\ErrorCode::tryFrom(
-                                $json->error_code,
-                            ) ?? $json->error_code
-                        : null,
+                    error_code: $json->error_code ?? null,
                     message: $json->message ?? null,
                 ),
             };
@@ -210,8 +201,10 @@ namespace Seam\Resources\AcsAccessGroup {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsAccessGroup\Errors\ErrorCode>|string|null
              */
-            public \Seam\Resources\AcsAccessGroup\Errors\ErrorCode|string|null $error_code,
+            public string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -271,11 +264,7 @@ namespace Seam\Resources\AcsAccessGroup {
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
-                    mutation_code: is_string($json->mutation_code ?? null)
-                        ? \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode::tryFrom(
-                                $json->mutation_code,
-                            ) ?? $json->mutation_code
-                        : null,
+                    mutation_code: $json->mutation_code ?? null,
                 ),
             };
         }
@@ -291,8 +280,10 @@ namespace Seam\Resources\AcsAccessGroup {
             public string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing an access group creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode>|string|null
              */
-            public \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode|string|null $mutation_code,
+            public string|null $mutation_code,
         ) {}
     }
 
@@ -309,11 +300,7 @@ namespace Seam\Resources\AcsAccessGroup {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                warning_code: is_string($json->warning_code ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\Warnings\WarningCode::tryFrom(
-                            $json->warning_code,
-                        ) ?? $json->warning_code
-                    : null,
+                warning_code: $json->warning_code ?? null,
             );
         }
 
@@ -328,8 +315,10 @@ namespace Seam\Resources\AcsAccessGroup {
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsAccessGroup\Warnings\WarningCode>|string|null
              */
-            public \Seam\Resources\AcsAccessGroup\Warnings\WarningCode|string|null $warning_code,
+            public string|null $warning_code,
         ) {}
     }
 
@@ -377,11 +366,7 @@ namespace Seam\Resources\AcsAccessGroup\Errors {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                error_code: is_string($json->error_code ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\Errors\ErrorCode::tryFrom(
-                            $json->error_code,
-                        ) ?? $json->error_code
-                    : null,
+                error_code: $json->error_code ?? null,
                 message: $json->message ?? null,
             );
         }
@@ -393,8 +378,10 @@ namespace Seam\Resources\AcsAccessGroup\Errors {
             string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsAccessGroup\Errors\ErrorCode>|string|null
              */
-            \Seam\Resources\AcsAccessGroup\Errors\ErrorCode|string|null $error_code,
+            string|null $error_code,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
@@ -428,11 +415,7 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
             );
         }
 
@@ -447,8 +430,10 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing an access group creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -471,11 +456,7 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
             );
         }
 
@@ -490,8 +471,10 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing an access group creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -515,11 +498,7 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
             return new self(
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
             );
         }
 
@@ -534,8 +513,10 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing an access group creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -565,11 +546,7 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\AcsAccessGroup\PendingMutations\UpdatingGroupInformation\To::from_json(
                         $json->to,
@@ -593,8 +570,10 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing an access group creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * New access group information.
              */
@@ -628,11 +607,7 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\AcsAccessGroup\PendingMutations\UpdatingAccessSchedule\To::from_json(
                         $json->to,
@@ -656,8 +631,10 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing an access group creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * New access schedule information.
              */
@@ -691,11 +668,7 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\AcsAccessGroup\PendingMutations\UpdatingUserMembership\To::from_json(
                         $json->to,
@@ -719,8 +692,10 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing an access group creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * New user membership.
              */
@@ -754,11 +729,7 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
                     )
                     : null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\AcsAccessGroup\PendingMutations\UpdatingEntranceMembership\To::from_json(
                         $json->to,
@@ -782,8 +753,10 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing an access group creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * New entrance membership.
              */
@@ -813,16 +786,8 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
                 acs_user_id: $json->acs_user_id ?? null,
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
-                mutation_code: is_string($json->mutation_code ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode::tryFrom(
-                            $json->mutation_code,
-                        ) ?? $json->mutation_code
-                    : null,
-                variant: is_string($json->variant ?? null)
-                    ? \Seam\Resources\AcsAccessGroup\PendingMutations\DeferringUserMembershipUpdate\Variant::tryFrom(
-                            $json->variant,
-                        ) ?? $json->variant
-                    : null,
+                mutation_code: $json->mutation_code ?? null,
+                variant: $json->variant ?? null,
             );
         }
 
@@ -841,12 +806,16 @@ namespace Seam\Resources\AcsAccessGroup\PendingMutations {
             string|null $message,
             /**
              * Mutation code to indicate that Seam is in the process of pushing an access group creation to the integrated access system.
+             *
+             * @var value-of<\Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode>|string|null
              */
-            \Seam\Resources\AcsAccessGroup\PendingMutations\MutationCode|string|null $mutation_code,
+            string|null $mutation_code,
             /**
              * Whether the user is scheduled to be added to or removed from this access group.
+             *
+             * @var value-of<\Seam\Resources\AcsAccessGroup\PendingMutations\DeferringUserMembershipUpdate\Variant>|string|null
              */
-            public \Seam\Resources\AcsAccessGroup\PendingMutations\DeferringUserMembershipUpdate\Variant|string|null $variant,
+            public string|null $variant,
         ) {
             parent::__construct(
                 created_at: $created_at,

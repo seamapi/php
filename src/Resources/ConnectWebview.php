@@ -35,20 +35,10 @@ namespace Seam\Resources {
                 custom_redirect_failure_url: $json->custom_redirect_failure_url ??
                     null,
                 custom_redirect_url: $json->custom_redirect_url ?? null,
-                device_selection_mode: is_string(
-                    $json->device_selection_mode ?? null,
-                )
-                    ? \Seam\Resources\ConnectWebview\DeviceSelectionMode::tryFrom(
-                            $json->device_selection_mode,
-                        ) ?? $json->device_selection_mode
-                    : null,
+                device_selection_mode: $json->device_selection_mode ?? null,
                 login_successful: $json->login_successful ?? null,
                 selected_provider: $json->selected_provider ?? null,
-                status: is_string($json->status ?? null)
-                    ? \Seam\Resources\ConnectWebview\Status::tryFrom(
-                            $json->status,
-                        ) ?? $json->status
-                    : null,
+                status: $json->status ?? null,
                 url: $json->url ?? null,
                 wait_for_device_creation: $json->wait_for_device_creation ??
                     null,
@@ -110,8 +100,10 @@ namespace Seam\Resources {
             public string|null $custom_redirect_url,
             /**
              * Device selection mode of the Connect Webview. Supported values: `none`, `single`, `multiple`.
+             *
+             * @var value-of<\Seam\Resources\ConnectWebview\DeviceSelectionMode>|string|null
              */
-            public \Seam\Resources\ConnectWebview\DeviceSelectionMode|string|null $device_selection_mode,
+            public string|null $device_selection_mode,
             /**
              * Indicates whether the user logged in successfully using the Connect Webview.
              */
@@ -122,8 +114,10 @@ namespace Seam\Resources {
             public string|null $selected_provider,
             /**
              * Status of the Connect Webview. `authorized` indicates that the user has successfully logged into their device or system account, thereby completing the Connect Webview.
+             *
+             * @var value-of<\Seam\Resources\ConnectWebview\Status>|string|null
              */
-            public \Seam\Resources\ConnectWebview\Status|string|null $status,
+            public string|null $status,
             /**
              * URL for the Connect Webview. You use the URL to display the Connect Webview flow to your user.
              */
