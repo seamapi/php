@@ -151,16 +151,6 @@ $action_attempt = $seam->locks->unlock_door(device_id: $device_id);
 $action_attempt->status; // "pending"
 ```
 
-Response enum values stay strings for straightforward comparisons. Generated
-backed enums provide autocomplete and optional validation:
-
-```php
-use Seam\Resources\ActionAttempt\Status;
-
-$action_attempt->status === Status::PENDING->value;
-$status = Status::tryFrom($action_attempt->status);
-```
-
 or for a single request:
 
 ```php
@@ -355,6 +345,38 @@ try {
 ```
 
 ### Advanced Usage
+
+#### Enum values
+
+Enum-valued response properties are strings, so they work with ordinary string
+comparisons and remain forward-compatible when the API adds a value:
+
+```php
+if ($action_attempt->status === "pending") {
+    // The action is still running.
+}
+```
+
+The SDK also generates backed enums for autocomplete, discovery of known
+values, and optional validation. Use the enum's `value` when comparing, or
+`tryFrom()` to convert a response value:
+
+```php
+use Seam\Resources\ActionAttempt\Status;
+use Seam\Resources\Event\EventType;
+
+if ($action_attempt->status === Status::PENDING->value) {
+    // The action is still running.
+}
+
+$status = Status::tryFrom($action_attempt->status);
+$event_type = EventType::tryFrom($event->event_type);
+```
+
+`tryFrom()` returns `null` for a value introduced after the installed SDK was
+released; the original response property still contains the raw string. Enum
+properties also reference their companion enum in PHPDoc for IDE and static
+analysis hints.
 
 #### Setting the endpoint
 
