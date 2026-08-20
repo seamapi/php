@@ -123,8 +123,8 @@ class AcsSystemsClient
      * Reports ACS system device status including encoders and entrances.
      *
      * @param string $acs_system_id ID of the ACS system to report resources for
-     * @param array $acs_encoders Array of ACS encoders to report
-     * @param array $acs_entrances Array of ACS entrances to report
+     * @param list<array<string, mixed>|\stdClass> $acs_encoders Array of ACS encoders to report
+     * @param list<array<string, mixed>|\stdClass> $acs_entrances Array of ACS entrances to report
      * @return void OK
      */
     public function report_devices(

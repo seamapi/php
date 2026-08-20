@@ -14,19 +14,23 @@ namespace Seam\Resources {
             return new self(
                 acs_entrance_count: $json->acs_entrance_count ?? null,
                 created_at: $json->created_at ?? null,
-                customer_data: isset($json->customer_data)
-                    ? Space\CustomerData::from_json($json->customer_data)
-                    : null,
-                customer_key: $json->customer_key ?? null,
                 device_count: $json->device_count ?? null,
                 display_name: $json->display_name ?? null,
-                geolocation: isset($json->geolocation)
-                    ? Space\Geolocation::from_json($json->geolocation)
-                    : null,
                 name: $json->name ?? null,
                 space_id: $json->space_id ?? null,
-                space_key: $json->space_key ?? null,
                 workspace_id: $json->workspace_id ?? null,
+                customer_data: isset($json->customer_data)
+                    ? \Seam\Resources\Space\CustomerData::from_json(
+                        $json->customer_data,
+                    )
+                    : null,
+                customer_key: $json->customer_key ?? null,
+                geolocation: isset($json->geolocation)
+                    ? \Seam\Resources\Space\Geolocation::from_json(
+                        $json->geolocation,
+                    )
+                    : null,
+                space_key: $json->space_key ?? null,
             );
         }
 
@@ -62,7 +66,7 @@ namespace Seam\Resources {
             /**
              * Reservation/stay-related defaults for the space. Also carries the provider/PMS-supplied name under a `<connector_type>_name` key (e.g. `guesty_name`), which Seam preserves when you rename the space (read-only — managed by Seam).
              */
-            public Space\CustomerData|null $customer_data = null,
+            public \Seam\Resources\Space\CustomerData|null $customer_data = null,
             /**
              * Customer key associated with the space.
              */
@@ -70,7 +74,7 @@ namespace Seam\Resources {
             /**
              * Geographic coordinates (latitude and longitude) of the space.
              */
-            public Space\Geolocation|null $geolocation = null,
+            public \Seam\Resources\Space\Geolocation|null $geolocation = null,
             /**
              * Unique key for the space within the workspace.
              */

@@ -329,7 +329,14 @@ $webhook = new Seam\SeamWebhook($webhook_secret);
 
 try {
     $event = $webhook->verify($request_body, $request_headers);
-    print $event->event_type;
+
+    print match (true) {
+        $event instanceof Seam\Resources\Event\AccessCodeCreated
+            => "Created access code {$event->access_code_id}",
+        $event::class === Seam\Resources\Event::class
+            => "Unknown event type {$event->event_type}",
+        default => "Received {$event->event_type}",
+    };
 } catch (Svix\Exception\WebhookVerificationException $error) {
     http_response_code(401);
 } catch (Seam\InvalidWebhookPayloadError $error) {
@@ -338,6 +345,38 @@ try {
 ```
 
 ### Advanced Usage
+
+#### Enum values
+
+Enum-valued response properties are strings, so they work with ordinary string
+comparisons and remain forward-compatible when the API adds a value:
+
+```php
+if ($action_attempt->status === "pending") {
+    // The action is still running.
+}
+```
+
+The SDK also generates backed enums for autocomplete, discovery of known
+values, and optional validation. Use the enum's `value` when comparing, or
+`tryFrom()` to convert a response value:
+
+```php
+use Seam\Resources\ActionAttempt\Status;
+use Seam\Resources\Event\EventType;
+
+if ($action_attempt->status === Status::PENDING->value) {
+    // The action is still running.
+}
+
+$status = Status::tryFrom($action_attempt->status);
+$event_type = EventType::tryFrom($event->event_type);
+```
+
+`tryFrom()` returns `null` for a value introduced after the installed SDK was
+released; the original response property still contains the raw string. Enum
+properties also reference their companion enum in PHPDoc for IDE and static
+analysis hints.
 
 #### Setting the endpoint
 

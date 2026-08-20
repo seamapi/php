@@ -6,6 +6,10 @@ namespace Tests;
 
 use PHPUnit\Framework\TestCase;
 use Seam\InvalidWebhookPayloadError;
+use Seam\Resources\Event;
+use Seam\Resources\Event\AccessCodeCreated;
+use Seam\Resources\Event\DeviceConnected;
+use Seam\Resources\Event\EventType;
 use Seam\SeamException;
 use Seam\SeamWebhook;
 use Svix\Exception\WebhookVerificationException;
@@ -57,7 +61,12 @@ final class SeamWebhookTest extends TestCase
             $this->signed_headers($payload),
         );
 
+        $this->assertInstanceOf(DeviceConnected::class, $event);
         $this->assertSame("device.connected", $event->event_type);
+        $this->assertSame(
+            "device.connected",
+            EventType::DEVICE_CONNECTED->value,
+        );
         $this->assertSame(
             "8d7e0b26-5e6c-4a1f-9b3d-1b0f0e5a9c11",
             $event->event_id,
@@ -76,6 +85,40 @@ final class SeamWebhookTest extends TestCase
         $event = (new SeamWebhook(self::SECRET))->verify($payload, $headers);
 
         $this->assertSame("device.connected", $event->event_type);
+    }
+
+    public function testDecodesAnAccessCodeEventIntoItsSpecificClass(): void
+    {
+        $event = Event::from_json(
+            json_decode(
+                json_encode([
+                    "event_id" => "event_1",
+                    "event_type" => "access_code.created",
+                    "workspace_id" => "workspace_1",
+                    "access_code_id" => "access_code_1",
+                    "connected_account_id" => "connected_account_1",
+                    "device_id" => "device_1",
+                    "created_at" => "2024-01-01T00:00:00.000Z",
+                    "occurred_at" => "2024-01-01T00:00:00.000Z",
+                ]),
+            ),
+        );
+
+        $this->assertInstanceOf(AccessCodeCreated::class, $event);
+        $this->assertSame("access_code_1", $event->access_code_id);
+    }
+
+    public function testUnknownEventTypeUsesTheBaseClass(): void
+    {
+        $event = Event::from_json(
+            (object) [
+                "event_id" => "event_1",
+                "event_type" => "device.future_event",
+            ],
+        );
+
+        $this->assertSame(Event::class, $event::class);
+        $this->assertSame("device.future_event", $event->event_type);
     }
 
     public function testVerifyRejectsATamperedPayload(): void

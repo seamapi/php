@@ -37,7 +37,7 @@ class NoiseSensorsClient
      * @param string $connected_account_id ID of the connected account for which you want to list devices.
      * @param string $customer_key Customer key for which you want to list devices.
      * @param string $device_type Device type of the noise sensors that you want to list.
-     * @param array $device_types Device types of the noise sensors that you want to list.
+     * @param list<string> $device_types Device types of the noise sensors that you want to list.
      * @param string $manufacturer Manufacturers of the noise sensors that you want to list.
      * @return array OK
      */

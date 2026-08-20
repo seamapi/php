@@ -17,16 +17,20 @@ namespace Seam\Resources {
                 device_id: $json->device_id ?? null,
                 ends_at: $json->ends_at ?? null,
                 errors: array_map(
-                    fn($e) => ThermostatSchedule\Errors::from_json($e),
+                    fn(
+                        $e,
+                    ) => \Seam\Resources\ThermostatSchedule\Errors::from_json(
+                        $e,
+                    ),
                     $json->errors ?? [],
                 ),
-                is_override_allowed: $json->is_override_allowed ?? null,
-                max_override_period_minutes: $json->max_override_period_minutes ??
-                    null,
                 name: $json->name ?? null,
                 starts_at: $json->starts_at ?? null,
                 thermostat_schedule_id: $json->thermostat_schedule_id ?? null,
                 workspace_id: $json->workspace_id ?? null,
+                is_override_allowed: $json->is_override_allowed ?? null,
+                max_override_period_minutes: $json->max_override_period_minutes ??
+                    null,
             );
         }
 
@@ -49,6 +53,8 @@ namespace Seam\Resources {
             public string|null $ends_at,
             /**
              * Errors associated with the [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
+             *
+             * @var list<\Seam\Resources\ThermostatSchedule\Errors>
              */
             public array $errors,
             /**

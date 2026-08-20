@@ -17,7 +17,7 @@ namespace Seam\Resources {
                 connect_webview_customization: isset(
                     $json->connect_webview_customization,
                 )
-                    ? Workspace\ConnectWebviewCustomization::from_json(
+                    ? \Seam\Resources\Workspace\ConnectWebviewCustomization::from_json(
                         $json->connect_webview_customization,
                     )
                     : null,
@@ -27,8 +27,8 @@ namespace Seam\Resources {
                 is_suspended: $json->is_suspended ?? null,
                 name: $json->name ?? null,
                 organization_id: $json->organization_id ?? null,
-                publishable_key: $json->publishable_key ?? null,
                 workspace_id: $json->workspace_id ?? null,
+                publishable_key: $json->publishable_key ?? null,
             );
         }
 
@@ -41,7 +41,7 @@ namespace Seam\Resources {
              * @deprecated Use `company_name` instead.
              */
             public string|null $connect_partner_name,
-            public Workspace\ConnectWebviewCustomization|null $connect_webview_customization,
+            public \Seam\Resources\Workspace\ConnectWebviewCustomization|null $connect_webview_customization,
             /**
              * Indicates whether publishable key authentication is enabled for this workspace.
              */
@@ -100,6 +100,8 @@ namespace Seam\Resources\Workspace {
             public string|null $inviter_logo_url = null,
             /**
              * Logo shape for [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) in the workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
+             *
+             * @var value-of<\Seam\Resources\Workspace\ConnectWebviewCustomization\LogoShape>|string|null
              */
             public string|null $logo_shape = null,
             /**
@@ -115,5 +117,13 @@ namespace Seam\Resources\Workspace {
              */
             public string|null $success_message = null,
         ) {}
+    }
+}
+
+namespace Seam\Resources\Workspace\ConnectWebviewCustomization {
+    enum LogoShape: string
+    {
+        case CIRCLE = "circle";
+        case SQUARE = "square";
     }
 }

@@ -1,16 +1,9 @@
-// Builds the template context for resource files (src/Resources/{Name}.php):
-// the resource class and the nested classes for its object properties, grouped
-// into one braced namespace block per namespace. Each class contributes its
-// from_json body lines and constructor parameter lines.
-//
-// Whether a property is required is carried on isOptional: an optional one
-// gets a null default, a required one does not. Constructor parameters are
-// emitted required first, since PHP deprecates an optional parameter
-// declared before a required one.
+// Builds the template context for generated resource files.
 
 import type {
   ResourceClassProperty,
   ResourceClassSchema,
+  ResourceEnumSchema,
   ResourceSchema,
 } from '../resource-model.js'
 
@@ -19,8 +12,18 @@ export interface ClassLayoutContext {
   description: string
   isDeprecated: boolean
   deprecationMessage: string
+  isFinal: boolean
+  extendsName: string
+  factory?: FactoryLayoutContext
   fromJsonProps: string[]
   constructorParams: ConstructorParamLayoutContext[]
+  parentArgs: string[]
+}
+
+export interface FactoryLayoutContext {
+  discriminant: string
+  enumType: string
+  variants: Array<{ enumCase: string; className: string }>
 }
 
 export interface ConstructorParamLayoutContext {
@@ -31,9 +34,15 @@ export interface ConstructorParamLayoutContext {
   deprecationMessage: string
 }
 
+export interface EnumLayoutContext {
+  enumName: string
+  cases: Array<{ name: string; value: string; description: string }>
+}
+
 export interface NamespaceLayoutContext {
   namespace: string
   classes: ClassLayoutContext[]
+  enums: EnumLayoutContext[]
 }
 
 export interface ResourceLayoutContext {
@@ -60,38 +69,40 @@ const generateFromJsonProp = (property: ResourceClassProperty): string => {
 
 const generateConstructorParam = (
   property: ResourceClassProperty,
+  promote: boolean,
 ): ConstructorParamLayoutContext => {
-  let declaration: string
+  let type: string
   let phpDocType = ''
-  // Resource decoding remains tolerant of sparse response envelopes. Optional
-  // properties can also be omitted when constructing a resource directly;
-  // nullable properties retain the same null-safe representation.
   const defaultValue = property.isOptional ? ' = null' : ''
 
   switch (property.kind) {
     case 'objectReference':
-      declaration = `public ${property.referenceName}|null $${property.name}${defaultValue},`
+      type = `${property.referenceName}|null`
       break
 
     case 'listReference':
-      declaration = `public array${property.isOptional ? '|null' : ''} $${property.name}${defaultValue},`
+      type = `array${property.isOptional ? '|null' : ''}`
+      phpDocType = `list<${property.referenceName}>${property.isOptional ? '|null' : ''}`
       break
 
     case 'record':
+      type = `${property.phpType}|null`
       phpDocType = `${property.phpDocType}|null`
-      declaration = `public ${property.phpType}|null $${property.name}${defaultValue},`
       break
 
     case 'value': {
-      const { phpType } = property
-      const nullSuffix = phpType === 'mixed' ? '' : '|null'
-      declaration = `public ${phpType}${nullSuffix} $${property.name}${defaultValue},`
+      const nullSuffix = property.phpType === 'mixed' ? '' : '|null'
+      type = `${property.phpType}${nullSuffix}`
+      phpDocType =
+        property.phpDocType === '' || property.phpDocType === property.phpType
+          ? ''
+          : `${property.phpDocType}|null`
       break
     }
   }
 
   return {
-    declaration,
+    declaration: `${promote ? 'public ' : ''}${type} $${property.name}${defaultValue},`,
     phpDocType,
     description: property.description,
     isDeprecated: property.isDeprecated,
@@ -102,52 +113,69 @@ const generateConstructorParam = (
 const getClassLayoutContext = (
   schema: ResourceClassSchema,
 ): ClassLayoutContext => {
-  const sorted = [...schema.properties].sort((a, b) =>
-    a.name.localeCompare(b.name),
+  const inheritedNames = new Set(
+    schema.inheritedProperties.map(({ name }) => name),
   )
-
-  const parameterOrder = sortRequiredFirst(sorted)
+  const properties = sortRequiredFirst([
+    ...schema.inheritedProperties,
+    ...schema.properties,
+  ])
 
   return {
     className: schema.name,
     description: schema.description,
     isDeprecated: schema.isDeprecated,
     deprecationMessage: schema.deprecationMessage,
-    fromJsonProps: sorted.map(generateFromJsonProp),
-    constructorParams: parameterOrder.map(generateConstructorParam),
+    isFinal: schema.isFinal,
+    extendsName: schema.extendsName,
+    ...(schema.factory == null ? {} : { factory: schema.factory }),
+    fromJsonProps: properties.map(generateFromJsonProp),
+    constructorParams: properties.map((property) =>
+      generateConstructorParam(property, !inheritedNames.has(property.name)),
+    ),
+    parentArgs: schema.inheritedProperties.map(
+      ({ name }) => `${name}: $${name},`,
+    ),
   }
 }
 
+const getEnumLayoutContext = (
+  schema: ResourceEnumSchema,
+): EnumLayoutContext => ({
+  enumName: schema.name,
+  cases: schema.cases.map((enumCase) => ({
+    ...enumCase,
+    value: JSON.stringify(enumCase.value),
+  })),
+})
+
 const sortRequiredFirst = (
   properties: ResourceClassProperty[],
-): ResourceClassProperty[] => [
-  ...properties.filter(({ isOptional }) => !isOptional),
-  ...properties.filter(({ isOptional }) => isOptional),
-]
+): ResourceClassProperty[] =>
+  [...properties].sort(
+    (a, b) =>
+      Number(a.isOptional) - Number(b.isOptional) ||
+      a.name.localeCompare(b.name),
+  )
 
 export const setResourceLayoutContext = (
   resource: ResourceSchema,
 ): ResourceLayoutContext => {
-  // First appearance order, so the resource class leads the file and every
-  // owning namespace precedes the namespaces nested inside it.
-  const namespaces = new Map<string, ClassLayoutContext[]>()
+  const namespaces = new Map<string, NamespaceLayoutContext>()
 
-  for (const schema of resource.classes) {
-    const classes = namespaces.get(schema.namespace)
-    const context = getClassLayoutContext(schema)
-
-    if (classes == null) {
-      namespaces.set(schema.namespace, [context])
-      continue
+  for (const declaration of resource.declarations) {
+    let context = namespaces.get(declaration.namespace)
+    if (context == null) {
+      context = { namespace: declaration.namespace, classes: [], enums: [] }
+      namespaces.set(declaration.namespace, context)
     }
 
-    classes.push(context)
+    if (declaration.kind === 'class') {
+      context.classes.push(getClassLayoutContext(declaration))
+    } else {
+      context.enums.push(getEnumLayoutContext(declaration))
+    }
   }
 
-  return {
-    namespaces: [...namespaces.entries()].map(([namespace, classes]) => ({
-      namespace,
-      classes,
-    })),
-  }
+  return { namespaces: [...namespaces.values()] }
 }

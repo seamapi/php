@@ -28,7 +28,7 @@ class WebhooksClient
      * Creates a new [webhook](https://docs.seam.co/developer-tools/webhooks).
      *
      * @param string $url URL for the new webhook.
-     * @param array $event_types Types of events that you want the new webhook to receive.
+     * @param list<string> $event_types Types of events that you want the new webhook to receive.
      * @return Webhook OK
      */
     public function create(string $url, ?array $event_types = null): Webhook
@@ -107,7 +107,7 @@ class WebhooksClient
     /**
      * Updates a specified [webhook](https://docs.seam.co/developer-tools/webhooks).
      *
-     * @param array $event_types Types of events that you want the webhook to receive.
+     * @param list<string> $event_types Types of events that you want the webhook to receive.
      * @param string $webhook_id ID of the webhook that you want to update.
      * @return void OK
      */

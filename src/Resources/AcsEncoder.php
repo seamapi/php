@@ -31,7 +31,7 @@ namespace Seam\Resources {
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
                 errors: array_map(
-                    fn($e) => AcsEncoder\Errors::from_json($e),
+                    fn($e) => \Seam\Resources\AcsEncoder\Errors::from_json($e),
                     $json->errors ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
@@ -61,6 +61,8 @@ namespace Seam\Resources {
             public string|null $display_name,
             /**
              * Errors associated with the [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+             *
+             * @var list<\Seam\Resources\AcsEncoder\Errors>
              */
             public array $errors,
             /**
@@ -96,6 +98,8 @@ namespace Seam\Resources\AcsEncoder {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsEncoder\Errors\ErrorCode>|string|null
              */
             public string|null $error_code,
             /**
@@ -103,5 +107,12 @@ namespace Seam\Resources\AcsEncoder {
              */
             public string|null $message,
         ) {}
+    }
+}
+
+namespace Seam\Resources\AcsEncoder\Errors {
+    enum ErrorCode: string
+    {
+        case ACS_ENCODER_REMOVED = "acs_encoder_removed";
     }
 }

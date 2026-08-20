@@ -30,20 +30,20 @@ class AccessGrantsClient
     /**
      * Creates a new [Access Grant](https://docs.seam.co/use-cases/granting-access/access-grants). Access Grants are the default and recommended way to grant a user access to any physical space, irrespective of the locking hardware. They work with both standalone smart locks (using `device_ids`) and access control systems (using `acs_entrance_ids` or `space_ids`), and can issue PIN codes, key cards, and mobile keys through a single request.
      *
-     * @param array $requested_access_methods
+     * @param list<array<string, mixed>|\stdClass> $requested_access_methods
      * @param string $user_identity_id ID of user identity for whom access is being granted.
      * @param mixed $user_identity When used, creates a new user identity with the given details, and grants them access.
      * @param string $access_grant_key Unique key for the access grant within the workspace.
-     * @param array $acs_entrance_ids Set of IDs of the [entrances](https://docs.seam.co/api/acs/systems/list) to which access is being granted.
+     * @param list<string> $acs_entrance_ids Set of IDs of the [entrances](https://docs.seam.co/api/acs/systems/list) to which access is being granted.
      * @param string $customization_profile_id ID of the customization profile to apply to the Access Grant and its access methods.
-     * @param array $device_ids Set of IDs of the [devices](https://docs.seam.co/api/devices/list) to which access is being granted.
+     * @param list<string> $device_ids Set of IDs of the [devices](https://docs.seam.co/api/devices/list) to which access is being granted.
      * @param string|NullValue $ends_at Date and time at which the validity of the new grant ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
      * @param mixed $location
-     * @param array $location_ids
+     * @param list<string> $location_ids
      * @param string|NullValue $name Name for the access grant.
      * @param string $reservation_key Reservation key for the access grant.
-     * @param array $space_ids Set of IDs of existing spaces to which access is being granted.
-     * @param array $space_keys Set of keys of existing spaces to which access is being granted.
+     * @param list<string> $space_ids Set of IDs of existing spaces to which access is being granted.
+     * @param list<string> $space_keys Set of keys of existing spaces to which access is being granted.
      * @param string $starts_at Date and time at which the validity of the new grant starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @return AccessGrant OK
      */
@@ -181,10 +181,10 @@ class AccessGrantsClient
     /**
      * Gets all related resources for one or more Access Grants.
      *
-     * @param array $access_grant_ids IDs of the access grants that you want to get along with their related resources.
-     * @param array $access_grant_keys Keys of the access grants that you want to get along with their related resources.
-     * @param array $exclude
-     * @param array $include
+     * @param list<string> $access_grant_ids IDs of the access grants that you want to get along with their related resources.
+     * @param list<string> $access_grant_keys Keys of the access grants that you want to get along with their related resources.
+     * @param list<string> $exclude
+     * @param list<string> $include
      * @return Batch OK
      */
     public function get_related(
@@ -233,7 +233,7 @@ class AccessGrantsClient
      * Gets an Access Grant.
      *
      * @param string $access_code_id ID of the access code by which you want to filter the list of Access Grants.
-     * @param array $access_grant_ids IDs of the access grants to retrieve.
+     * @param list<string> $access_grant_ids IDs of the access grants to retrieve.
      * @param string|NullValue $access_grant_key Filter Access Grants by access_grant_key. Use null to filter for Access Grants without an access_grant_key.
      * @param string $acs_entrance_id ID of the entrance by which you want to filter the list of Access Grants.
      * @param string $acs_system_id ID of the access system by which you want to filter the list of Access Grants.
@@ -326,7 +326,7 @@ class AccessGrantsClient
      * Adds additional requested access methods to an existing Access Grant.
      *
      * @param string $access_grant_id ID of the Access Grant to add access methods to.
-     * @param array $requested_access_methods Array of requested access methods to add to the access grant.
+     * @param list<array<string, mixed>|\stdClass> $requested_access_methods Array of requested access methods to add to the access grant.
      * @return AccessGrant OK
      */
     public function request_access_methods(

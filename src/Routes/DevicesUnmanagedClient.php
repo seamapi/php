@@ -72,12 +72,12 @@ class DevicesUnmanagedClient
      *
      * @param string $connect_webview_id ID of the Connect Webview for which you want to list devices.
      * @param string $connected_account_id ID of the connected account for which you want to list devices.
-     * @param array $connected_account_ids Array of IDs of the connected accounts for which you want to list devices.
+     * @param list<string> $connected_account_ids Array of IDs of the connected accounts for which you want to list devices.
      * @param string $created_before Timestamp by which to limit returned devices. Returns devices created before this timestamp.
      * @param string $customer_key Customer key for which you want to list devices.
-     * @param array $device_ids Array of device IDs for which you want to list devices.
+     * @param list<string> $device_ids Array of device IDs for which you want to list devices.
      * @param string $device_type Device type for which you want to list devices.
-     * @param array $device_types Array of device types for which you want to list devices.
+     * @param list<string> $device_types Array of device types for which you want to list devices.
      * @param float $limit Numerical limit on the number of devices to return.
      * @param string $manufacturer Manufacturer for which you want to list devices.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.

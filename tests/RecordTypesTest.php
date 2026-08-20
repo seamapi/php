@@ -8,7 +8,8 @@ use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use ReflectionProperty;
 use Seam\Resources\Device;
-use Seam\Resources\Event;
+use Seam\Resources\Event\AccessCodeCreated;
+use Seam\Resources\Event\NoiseSensorNoiseThresholdTriggered;
 use Seam\Routes\DevicesClient;
 
 final class RecordTypesTest extends TestCase
@@ -32,14 +33,14 @@ final class RecordTypesTest extends TestCase
         $this->assertStringContainsString(
             "@var array<string, string|bool>|\\stdClass|null",
             (string) (new ReflectionProperty(
-                Event::class,
+                AccessCodeCreated::class,
                 "connected_account_custom_metadata",
             ))->getDocComment(),
         );
         $this->assertStringContainsString(
             "@var array<string, mixed>|\\stdClass|null",
             (string) (new ReflectionProperty(
-                Event::class,
+                NoiseSensorNoiseThresholdTriggered::class,
                 "minut_metadata",
             ))->getDocComment(),
         );

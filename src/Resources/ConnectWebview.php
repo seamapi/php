@@ -35,7 +35,6 @@ namespace Seam\Resources {
                 custom_redirect_failure_url: $json->custom_redirect_failure_url ??
                     null,
                 custom_redirect_url: $json->custom_redirect_url ?? null,
-                customer_key: $json->customer_key ?? null,
                 device_selection_mode: $json->device_selection_mode ?? null,
                 login_successful: $json->login_successful ?? null,
                 selected_provider: $json->selected_provider ?? null,
@@ -44,16 +43,21 @@ namespace Seam\Resources {
                 wait_for_device_creation: $json->wait_for_device_creation ??
                     null,
                 workspace_id: $json->workspace_id ?? null,
+                customer_key: $json->customer_key ?? null,
             );
         }
 
         public function __construct(
             /**
              * High-level device capabilities that the Connect Webview can accept. When creating a Connect Webview, you can specify the types of devices that it can connect to Seam. If you do not set custom `accepted_capabilities`, Seam uses a default set of `accepted_capabilities` for each provider. For example, if you create a Connect Webview that accepts SmartThing devices, without specifying `accepted_capabilities`, Seam accepts only SmartThings locks. To connect SmartThings thermostats and locks to Seam, create a Connect Webview and include both `thermostat` and `lock` in the `accepted_capabilities`.
+             *
+             * @var list<string>|null
              */
             public array|null $accepted_capabilities,
             /**
              * List of accepted [provider keys](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-brands-to-display-in-your-connect-webviews).
+             *
+             * @var list<string>|null
              */
             public array|null $accepted_providers,
             /**
@@ -96,6 +100,8 @@ namespace Seam\Resources {
             public string|null $custom_redirect_url,
             /**
              * Device selection mode of the Connect Webview. Supported values: `none`, `single`, `multiple`.
+             *
+             * @var value-of<\Seam\Resources\ConnectWebview\DeviceSelectionMode>|string|null
              */
             public string|null $device_selection_mode,
             /**
@@ -108,6 +114,8 @@ namespace Seam\Resources {
             public string|null $selected_provider,
             /**
              * Status of the Connect Webview. `authorized` indicates that the user has successfully logged into their device or system account, thereby completing the Connect Webview.
+             *
+             * @var value-of<\Seam\Resources\ConnectWebview\Status>|string|null
              */
             public string|null $status,
             /**
@@ -127,5 +135,21 @@ namespace Seam\Resources {
              */
             public string|null $customer_key = null,
         ) {}
+    }
+}
+
+namespace Seam\Resources\ConnectWebview {
+    enum DeviceSelectionMode: string
+    {
+        case NONE = "none";
+        case SINGLE = "single";
+        case MULTIPLE = "multiple";
+    }
+
+    enum Status: string
+    {
+        case PENDING = "pending";
+        case FAILED = "failed";
+        case AUTHORIZED = "authorized";
     }
 }

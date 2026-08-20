@@ -160,7 +160,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      *
      * For granting a person access to a space, [Access Grants](https://docs.seam.co/use-cases/granting-access) are the default and recommended approach and work across both standalone smart locks and access systems. Use the lower-level Access Codes API directly only when you specifically need to manage individual PIN codes.
      *
-     * @param array $device_ids IDs of the devices for which you want to create the new access codes.
+     * @param list<string> $device_ids IDs of the devices for which you want to create the new access codes.
      * @param bool $allow_external_modification Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the code is allowed. Default: `false`.
      * @param bool $attempt_for_offline_device
      * @param string $behavior_when_code_cannot_be_shared Desired behavior if any device cannot share a code. If `throw` (default), no access codes will be created if any device cannot share a code. If `create_random_code`, a random code will be created on devices that cannot share a code.
@@ -353,7 +353,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      *
      * Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
      *
-     * @param array $access_code_ids IDs of the access codes that you want to retrieve. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
+     * @param list<string> $access_code_ids IDs of the access codes that you want to retrieve. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
      * @param string $access_grant_id ID of the access grant for which you want to list access codes. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
      * @param string $access_grant_key Key of the access grant for which you want to list access codes. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
      * @param string $access_method_id ID of the access method for which you want to list access codes. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
@@ -487,7 +487,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      * @param string $device_id ID of the device for which you want to report constraints.
      * @param int $max_code_length Maximum supported code length as an integer between 4 and 20, inclusive. You can specify either `min_code_length`/`max_code_length` or `supported_code_lengths`.
      * @param int $min_code_length Minimum supported code length as an integer between 4 and 20, inclusive. You can specify either `min_code_length`/`max_code_length` or `supported_code_lengths`.
-     * @param array $supported_code_lengths Array of supported code lengths as integers between 4 and 20, inclusive. You can specify either `supported_code_lengths` or `min_code_length`/`max_code_length`.
+     * @param list<int> $supported_code_lengths Array of supported code lengths as integers between 4 and 20, inclusive. You can specify either `supported_code_lengths` or `min_code_length`/`max_code_length`.
      * @return void OK
      */
     public function report_device_constraints(

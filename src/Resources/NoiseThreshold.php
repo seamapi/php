@@ -18,8 +18,8 @@ namespace Seam\Resources {
                 noise_threshold_decibels: $json->noise_threshold_decibels ??
                     null,
                 noise_threshold_id: $json->noise_threshold_id ?? null,
-                noise_threshold_nrs: $json->noise_threshold_nrs ?? null,
                 starts_daily_at: $json->starts_daily_at ?? null,
+                noise_threshold_nrs: $json->noise_threshold_nrs ?? null,
             );
         }
 

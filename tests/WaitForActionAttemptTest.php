@@ -9,19 +9,43 @@ use Seam\ActionAttemptFailedError;
 use Seam\ActionAttemptTimeoutError;
 use Seam\InvalidOptionsError;
 use Seam\Resources\ActionAttempt;
+use Seam\Resources\ActionAttempt\Status;
+use Seam\Resources\ActionAttempt\UnlockDoor;
 use Seam\Seam;
 use Tests\Support\FakeSeamConnectTestCase;
 use Tests\Support\RecordingClient;
 
 final class WaitForActionAttemptTest extends FakeSeamConnectTestCase
 {
+    public function testUnknownValuesUseTheBaseTypeAndRemainReadable(): void
+    {
+        $attempt = ActionAttempt::from_json(
+            (object) [
+                "action_attempt_id" => "attempt_1",
+                "action_type" => "FUTURE_ACTION",
+                "status" => "future_status",
+            ],
+        );
+
+        $this->assertSame(ActionAttempt::class, $attempt::class);
+        $this->assertSame("FUTURE_ACTION", $attempt->action_type);
+        $this->assertSame("future_status", $attempt->status);
+    }
+
     private function pending_action_attempt(Seam $seam): ActionAttempt
     {
         $action_attempt = $seam->locks->unlock_door(
             $this->seed["august_device_1"],
         );
 
+        $this->assertInstanceOf(UnlockDoor::class, $action_attempt);
         $this->assertSame("pending", $action_attempt->status);
+        $this->assertSame(
+            Status::PENDING,
+            Status::tryFrom($action_attempt->status),
+        );
+        $this->assertNull($action_attempt->error);
+        $this->assertNull($action_attempt->result);
 
         $this->set_status($seam, $action_attempt, "pending");
 

@@ -26,6 +26,16 @@ class SeamWebhook
 
     /**
      * Verifies an incoming webhook request and returns the event it carries.
+     * Known event types are returned as concrete Event subclasses for
+     * instanceof or match-based dispatch; newer types use Event itself.
+     *
+     * ```php
+     * match (true) {
+     *     $event instanceof Event\AccessCodeCreated => $event->access_code_id,
+     *     $event::class === Event::class => $event->event_type,
+     *     default => null,
+     * };
+     * ```
      *
      * @param string $payload The raw HTTP request body.
      * @param array<string, string> $headers The HTTP request headers.

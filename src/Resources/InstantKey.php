@@ -16,16 +16,18 @@ namespace Seam\Resources {
             return new self(
                 client_session_id: $json->client_session_id ?? null,
                 created_at: $json->created_at ?? null,
-                customization: isset($json->customization)
-                    ? InstantKey\Customization::from_json($json->customization)
-                    : null,
-                customization_profile_id: $json->customization_profile_id ??
-                    null,
                 expires_at: $json->expires_at ?? null,
                 instant_key_id: $json->instant_key_id ?? null,
                 instant_key_url: $json->instant_key_url ?? null,
                 user_identity_id: $json->user_identity_id ?? null,
                 workspace_id: $json->workspace_id ?? null,
+                customization: isset($json->customization)
+                    ? \Seam\Resources\InstantKey\Customization::from_json(
+                        $json->customization,
+                    )
+                    : null,
+                customization_profile_id: $json->customization_profile_id ??
+                    null,
             );
         }
 
@@ -61,7 +63,7 @@ namespace Seam\Resources {
             /**
              * Customization applied to the Instant Key UI.
              */
-            public InstantKey\Customization|null $customization = null,
+            public \Seam\Resources\InstantKey\Customization|null $customization = null,
             /**
              * ID of the customization profile associated with the Instant Key.
              */

@@ -12,6 +12,29 @@ namespace Seam\Resources {
                 return null;
             }
             return new self(
+                capabilities_supported: $json->capabilities_supported ?? null,
+                connected_account_id: $json->connected_account_id ?? null,
+                created_at: $json->created_at ?? null,
+                custom_metadata: $json->custom_metadata ?? null,
+                device_id: $json->device_id ?? null,
+                device_type: $json->device_type ?? null,
+                display_name: $json->display_name ?? null,
+                errors: array_map(
+                    fn($e) => \Seam\Resources\Device\Errors::from_json($e),
+                    $json->errors ?? [],
+                ),
+                is_managed: $json->is_managed ?? null,
+                properties: isset($json->properties)
+                    ? \Seam\Resources\Device\Properties::from_json(
+                        $json->properties,
+                    )
+                    : null,
+                space_ids: $json->space_ids ?? null,
+                warnings: array_map(
+                    fn($w) => \Seam\Resources\Device\Warnings::from_json($w),
+                    $json->warnings ?? [],
+                ),
+                workspace_id: $json->workspace_id ?? null,
                 can_configure_auto_lock: $json->can_configure_auto_lock ?? null,
                 can_hvac_cool: $json->can_hvac_cool ?? null,
                 can_hvac_heat: $json->can_hvac_heat ?? null,
@@ -42,45 +65,30 @@ namespace Seam\Resources {
                 can_simulate_removal: $json->can_simulate_removal ?? null,
                 can_turn_off_hvac: $json->can_turn_off_hvac ?? null,
                 can_unlock_with_code: $json->can_unlock_with_code ?? null,
-                capabilities_supported: $json->capabilities_supported ?? null,
-                connected_account_id: $json->connected_account_id ?? null,
-                created_at: $json->created_at ?? null,
-                custom_metadata: $json->custom_metadata ?? null,
-                device_id: $json->device_id ?? null,
                 device_manufacturer: isset($json->device_manufacturer)
-                    ? Device\DeviceManufacturer::from_json(
+                    ? \Seam\Resources\Device\DeviceManufacturer::from_json(
                         $json->device_manufacturer,
                     )
                     : null,
                 device_provider: isset($json->device_provider)
-                    ? Device\DeviceProvider::from_json($json->device_provider)
+                    ? \Seam\Resources\Device\DeviceProvider::from_json(
+                        $json->device_provider,
+                    )
                     : null,
-                device_type: $json->device_type ?? null,
-                display_name: $json->display_name ?? null,
-                errors: array_map(
-                    fn($e) => Device\Errors::from_json($e),
-                    $json->errors ?? [],
-                ),
-                is_managed: $json->is_managed ?? null,
                 location: isset($json->location)
-                    ? Device\Location::from_json($json->location)
+                    ? \Seam\Resources\Device\Location::from_json(
+                        $json->location,
+                    )
                     : null,
                 nickname: $json->nickname ?? null,
-                properties: isset($json->properties)
-                    ? Device\Properties::from_json($json->properties)
-                    : null,
-                space_ids: $json->space_ids ?? null,
-                warnings: array_map(
-                    fn($w) => Device\Warnings::from_json($w),
-                    $json->warnings ?? [],
-                ),
-                workspace_id: $json->workspace_id ?? null,
             );
         }
 
         public function __construct(
             /**
              * Collection of capabilities that the device supports when connected to Seam. Values are `access_code`, which indicates that the device can manage and utilize digital PIN codes for secure access; `lock`, which indicates that the device controls a door locking mechanism, enabling the remote opening and closing of doors and other entry points; `noise_detection`, which indicates that the device supports monitoring and responding to ambient noise levels; `thermostat`, which indicates that the device can regulate and adjust indoor temperatures; `battery`, which indicates that the device can manage battery life and health; and `phone`, which indicates that the device is a mobile device, such as a smartphone. **Important:** Superseded by [capability flags](https://docs.seam.co/capability-guides/device-and-system-capabilities#capability-flags).
+             *
+             * @var list<string>|null
              */
             public array|null $capabilities_supported,
             /**
@@ -103,6 +111,8 @@ namespace Seam\Resources {
             public string|null $device_id,
             /**
              * Type of the device.
+             *
+             * @var value-of<\Seam\Resources\Device\DeviceType>|string|null
              */
             public string|null $device_type,
             /**
@@ -111,6 +121,8 @@ namespace Seam\Resources {
             public string|null $display_name,
             /**
              * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
+             *
+             * @var list<\Seam\Resources\Device\Errors>
              */
             public array $errors,
             /**
@@ -120,13 +132,17 @@ namespace Seam\Resources {
             /**
              * Properties of the device.
              */
-            public Device\Properties|null $properties,
+            public \Seam\Resources\Device\Properties|null $properties,
             /**
              * IDs of the spaces the device is in.
+             *
+             * @var list<string>|null
              */
             public array|null $space_ids,
             /**
              * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
+             *
+             * @var list<\Seam\Resources\Device\Warnings>
              */
             public array $warnings,
             /**
@@ -216,15 +232,15 @@ namespace Seam\Resources {
             /**
              * Manufacturer of the device. Represents the hardware brand, which may differ from the provider.
              */
-            public Device\DeviceManufacturer|null $device_manufacturer = null,
+            public \Seam\Resources\Device\DeviceManufacturer|null $device_manufacturer = null,
             /**
              * Provider of the device. Represents the third-party service through which the device is controlled.
              */
-            public Device\DeviceProvider|null $device_provider = null,
+            public \Seam\Resources\Device\DeviceProvider|null $device_provider = null,
             /**
              * Location information for the device.
              */
-            public Device\Location|null $location = null,
+            public \Seam\Resources\Device\Location|null $location = null,
             /**
              * Optional nickname to describe the device, settable through Seam.
              */
@@ -246,8 +262,8 @@ namespace Seam\Resources\Device {
             }
             return new self(
                 display_name: $json->display_name ?? null,
-                image_url: $json->image_url ?? null,
                 manufacturer: $json->manufacturer ?? null,
+                image_url: $json->image_url ?? null,
             );
         }
 
@@ -280,8 +296,8 @@ namespace Seam\Resources\Device {
             return new self(
                 device_provider_name: $json->device_provider_name ?? null,
                 display_name: $json->display_name ?? null,
-                image_url: $json->image_url ?? null,
                 provider_category: $json->provider_category ?? null,
+                image_url: $json->image_url ?? null,
             );
         }
 
@@ -306,7 +322,7 @@ namespace Seam\Resources\Device {
     }
 
     /**
-     * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
+     * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it. Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class Errors
     {
@@ -315,15 +331,75 @@ namespace Seam\Resources\Device {
             if (!$json) {
                 return null;
             }
-            return new self(
-                created_at: $json->created_at ?? null,
-                error_code: $json->error_code ?? null,
-                is_bridge_error: $json->is_bridge_error ?? null,
-                is_connected_account_error: $json->is_connected_account_error ??
-                    null,
-                is_device_error: $json->is_device_error ?? null,
-                message: $json->message ?? null,
-            );
+            $discriminant = is_string($json->error_code ?? null)
+                ? \Seam\Resources\Device\Errors\ErrorCode::tryFrom(
+                    $json->error_code,
+                )
+                : null;
+
+            return match ($discriminant) {
+                \Seam\Resources\Device\Errors\ErrorCode::ACCOUNT_DISCONNECTED
+                    => \Seam\Resources\Device\Errors\AccountDisconnected::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Errors\ErrorCode::SALTO_KS_SUBSCRIPTION_LIMIT_EXCEEDED
+                    => \Seam\Resources\Device\Errors\SaltoKsSubscriptionLimitExceeded::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Errors\ErrorCode::INSUFFICIENT_PERMISSIONS
+                    => \Seam\Resources\Device\Errors\InsufficientPermissions::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Errors\ErrorCode::DORMAKABA_SITES_DISCONNECTED
+                    => \Seam\Resources\Device\Errors\DormakabaSitesDisconnected::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Errors\ErrorCode::DEVICE_OFFLINE
+                    => \Seam\Resources\Device\Errors\DeviceOffline::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Errors\ErrorCode::DEVICE_REMOVED
+                    => \Seam\Resources\Device\Errors\DeviceRemoved::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Errors\ErrorCode::HUB_DISCONNECTED
+                    => \Seam\Resources\Device\Errors\HubDisconnected::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Errors\ErrorCode::DEVICE_DISCONNECTED
+                    => \Seam\Resources\Device\Errors\DeviceDisconnected::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Errors\ErrorCode::EMPTY_BACKUP_ACCESS_CODE_POOL
+                    => \Seam\Resources\Device\Errors\EmptyBackupAccessCodePool::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Errors\ErrorCode::AUGUST_LOCK_NOT_AUTHORIZED
+                    => \Seam\Resources\Device\Errors\AugustLockNotAuthorized::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Errors\ErrorCode::MISSING_DEVICE_CREDENTIALS
+                    => \Seam\Resources\Device\Errors\MissingDeviceCredentials::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Errors\ErrorCode::AUXILIARY_HEAT_RUNNING
+                    => \Seam\Resources\Device\Errors\AuxiliaryHeatRunning::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Errors\ErrorCode::SUBSCRIPTION_REQUIRED
+                    => \Seam\Resources\Device\Errors\SubscriptionRequired::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Errors\ErrorCode::BRIDGE_DISCONNECTED
+                    => \Seam\Resources\Device\Errors\BridgeDisconnected::from_json(
+                    $json,
+                ),
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    error_code: $json->error_code ?? null,
+                    message: $json->message ?? null,
+                ),
+            };
         }
 
         public function __construct(
@@ -333,18 +409,14 @@ namespace Seam\Resources\Device {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
              */
             public string|null $error_code,
-            public bool|null $is_connected_account_error,
-            public bool|null $is_device_error,
             /**
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
             public string|null $message,
-            /**
-             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
-             */
-            public bool|null $is_bridge_error = null,
         ) {}
     }
 
@@ -399,47 +471,58 @@ namespace Seam\Resources\Device {
                 return null;
             }
             return new self(
+                appearance: isset($json->appearance)
+                    ? \Seam\Resources\Device\Properties\Appearance::from_json(
+                        $json->appearance,
+                    )
+                    : null,
+                model: isset($json->model)
+                    ? \Seam\Resources\Device\Properties\Model::from_json(
+                        $json->model,
+                    )
+                    : null,
+                name: $json->name ?? null,
+                online: $json->online ?? null,
                 accessory_keypad: isset($json->accessory_keypad)
-                    ? Properties\AccessoryKeypad::from_json(
+                    ? \Seam\Resources\Device\Properties\AccessoryKeypad::from_json(
                         $json->accessory_keypad,
                     )
                     : null,
                 active_thermostat_schedule: isset(
                     $json->active_thermostat_schedule,
                 )
-                    ? Properties\ActiveThermostatSchedule::from_json(
+                    ? \Seam\Resources\Device\Properties\ActiveThermostatSchedule::from_json(
                         $json->active_thermostat_schedule,
                     )
                     : null,
                 active_thermostat_schedule_id: $json->active_thermostat_schedule_id ??
                     null,
                 akiles_metadata: isset($json->akiles_metadata)
-                    ? Properties\AkilesMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\AkilesMetadata::from_json(
                         $json->akiles_metadata,
                     )
                     : null,
-                appearance: isset($json->appearance)
-                    ? Properties\Appearance::from_json($json->appearance)
-                    : null,
                 aqara_metadata: isset($json->aqara_metadata)
-                    ? Properties\AqaraMetadata::from_json($json->aqara_metadata)
+                    ? \Seam\Resources\Device\Properties\AqaraMetadata::from_json(
+                        $json->aqara_metadata,
+                    )
                     : null,
                 assa_abloy_credential_service_metadata: isset(
                     $json->assa_abloy_credential_service_metadata,
                 )
-                    ? Properties\AssaAbloyCredentialServiceMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\AssaAbloyCredentialServiceMetadata::from_json(
                         $json->assa_abloy_credential_service_metadata,
                     )
                     : null,
                 assa_abloy_vostio_metadata: isset(
                     $json->assa_abloy_vostio_metadata,
                 )
-                    ? Properties\AssaAbloyVostioMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\AssaAbloyVostioMetadata::from_json(
                         $json->assa_abloy_vostio_metadata,
                     )
                     : null,
                 august_metadata: isset($json->august_metadata)
-                    ? Properties\AugustMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\AugustMetadata::from_json(
                         $json->august_metadata,
                     )
                     : null,
@@ -448,7 +531,11 @@ namespace Seam\Resources\Device {
                 available_climate_preset_modes: $json->available_climate_preset_modes ??
                     null,
                 available_climate_presets: array_map(
-                    fn($a) => Properties\AvailableClimatePresets::from_json($a),
+                    fn(
+                        $a,
+                    ) => \Seam\Resources\Device\Properties\AvailableClimatePresets::from_json(
+                        $a,
+                    ),
                     $json->available_climate_presets ?? [],
                 ),
                 available_fan_mode_settings: $json->available_fan_mode_settings ??
@@ -456,37 +543,45 @@ namespace Seam\Resources\Device {
                 available_hvac_mode_settings: $json->available_hvac_mode_settings ??
                     null,
                 avigilon_alta_metadata: isset($json->avigilon_alta_metadata)
-                    ? Properties\AvigilonAltaMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\AvigilonAltaMetadata::from_json(
                         $json->avigilon_alta_metadata,
                     )
                     : null,
                 backup_access_code_pool_enabled: $json->backup_access_code_pool_enabled ??
                     null,
                 battery: isset($json->battery)
-                    ? Properties\Battery::from_json($json->battery)
+                    ? \Seam\Resources\Device\Properties\Battery::from_json(
+                        $json->battery,
+                    )
                     : null,
                 battery_level: $json->battery_level ?? null,
                 brivo_metadata: isset($json->brivo_metadata)
-                    ? Properties\BrivoMetadata::from_json($json->brivo_metadata)
+                    ? \Seam\Resources\Device\Properties\BrivoMetadata::from_json(
+                        $json->brivo_metadata,
+                    )
                     : null,
                 code_constraints: array_map(
-                    fn($c) => Properties\CodeConstraints::from_json($c),
+                    fn(
+                        $c,
+                    ) => \Seam\Resources\Device\Properties\CodeConstraints::from_json(
+                        $c,
+                    ),
                     $json->code_constraints ?? [],
                 ),
                 controlbyweb_metadata: isset($json->controlbyweb_metadata)
-                    ? Properties\ControlbywebMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\ControlbywebMetadata::from_json(
                         $json->controlbyweb_metadata,
                     )
                     : null,
                 current_climate_setting: isset($json->current_climate_setting)
-                    ? Properties\CurrentClimateSetting::from_json(
+                    ? \Seam\Resources\Device\Properties\CurrentClimateSetting::from_json(
                         $json->current_climate_setting,
                     )
                     : null,
                 currently_triggering_noise_threshold_ids: $json->currently_triggering_noise_threshold_ids ??
                     null,
                 default_climate_setting: isset($json->default_climate_setting)
-                    ? Properties\DefaultClimateSetting::from_json(
+                    ? \Seam\Resources\Device\Properties\DefaultClimateSetting::from_json(
                         $json->default_climate_setting,
                     )
                     : null,
@@ -494,12 +589,12 @@ namespace Seam\Resources\Device {
                 dormakaba_oracode_metadata: isset(
                     $json->dormakaba_oracode_metadata,
                 )
-                    ? Properties\DormakabaOracodeMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\DormakabaOracodeMetadata::from_json(
                         $json->dormakaba_oracode_metadata,
                     )
                     : null,
                 ecobee_metadata: isset($json->ecobee_metadata)
-                    ? Properties\EcobeeMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\EcobeeMetadata::from_json(
                         $json->ecobee_metadata,
                     )
                     : null,
@@ -507,27 +602,31 @@ namespace Seam\Resources\Device {
                     null,
                 fan_mode_setting: $json->fan_mode_setting ?? null,
                 four_suites_metadata: isset($json->four_suites_metadata)
-                    ? Properties\FourSuitesMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\FourSuitesMetadata::from_json(
                         $json->four_suites_metadata,
                     )
                     : null,
                 genie_metadata: isset($json->genie_metadata)
-                    ? Properties\GenieMetadata::from_json($json->genie_metadata)
+                    ? \Seam\Resources\Device\Properties\GenieMetadata::from_json(
+                        $json->genie_metadata,
+                    )
                     : null,
                 has_direct_power: $json->has_direct_power ?? null,
                 has_native_entry_events: $json->has_native_entry_events ?? null,
                 honeywell_resideo_metadata: isset(
                     $json->honeywell_resideo_metadata,
                 )
-                    ? Properties\HoneywellResideoMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\HoneywellResideoMetadata::from_json(
                         $json->honeywell_resideo_metadata,
                     )
                     : null,
                 igloo_metadata: isset($json->igloo_metadata)
-                    ? Properties\IglooMetadata::from_json($json->igloo_metadata)
+                    ? \Seam\Resources\Device\Properties\IglooMetadata::from_json(
+                        $json->igloo_metadata,
+                    )
                     : null,
                 igloohome_metadata: isset($json->igloohome_metadata)
-                    ? Properties\IgloohomeMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\IgloohomeMetadata::from_json(
                         $json->igloohome_metadata,
                     )
                     : null,
@@ -539,29 +638,33 @@ namespace Seam\Resources\Device {
                 is_temporary_manual_override_active: $json->is_temporary_manual_override_active ??
                     null,
                 keynest_metadata: isset($json->keynest_metadata)
-                    ? Properties\KeynestMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\KeynestMetadata::from_json(
                         $json->keynest_metadata,
                     )
                     : null,
                 keypad_battery: isset($json->keypad_battery)
-                    ? Properties\KeypadBattery::from_json($json->keypad_battery)
+                    ? \Seam\Resources\Device\Properties\KeypadBattery::from_json(
+                        $json->keypad_battery,
+                    )
                     : null,
                 kisi_metadata: isset($json->kisi_metadata)
-                    ? Properties\KisiMetadata::from_json($json->kisi_metadata)
+                    ? \Seam\Resources\Device\Properties\KisiMetadata::from_json(
+                        $json->kisi_metadata,
+                    )
                     : null,
                 korelock_metadata: isset($json->korelock_metadata)
-                    ? Properties\KorelockMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\KorelockMetadata::from_json(
                         $json->korelock_metadata,
                     )
                     : null,
                 kwikset_metadata: isset($json->kwikset_metadata)
-                    ? Properties\KwiksetMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\KwiksetMetadata::from_json(
                         $json->kwikset_metadata,
                     )
                     : null,
                 locked: $json->locked ?? null,
                 lockly_metadata: isset($json->lockly_metadata)
-                    ? Properties\LocklyMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\LocklyMetadata::from_json(
                         $json->lockly_metadata,
                     )
                     : null,
@@ -593,77 +696,92 @@ namespace Seam\Resources\Device {
                 min_heating_set_point_fahrenheit: $json->min_heating_set_point_fahrenheit ??
                     null,
                 minut_metadata: isset($json->minut_metadata)
-                    ? Properties\MinutMetadata::from_json($json->minut_metadata)
+                    ? \Seam\Resources\Device\Properties\MinutMetadata::from_json(
+                        $json->minut_metadata,
+                    )
                     : null,
-                model: isset($json->model)
-                    ? Properties\Model::from_json($json->model)
-                    : null,
-                name: $json->name ?? null,
                 nest_metadata: isset($json->nest_metadata)
-                    ? Properties\NestMetadata::from_json($json->nest_metadata)
+                    ? \Seam\Resources\Device\Properties\NestMetadata::from_json(
+                        $json->nest_metadata,
+                    )
                     : null,
                 noise_level_decibels: $json->noise_level_decibels ?? null,
                 noiseaware_metadata: isset($json->noiseaware_metadata)
-                    ? Properties\NoiseawareMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\NoiseawareMetadata::from_json(
                         $json->noiseaware_metadata,
                     )
                     : null,
                 nuki_metadata: isset($json->nuki_metadata)
-                    ? Properties\NukiMetadata::from_json($json->nuki_metadata)
+                    ? \Seam\Resources\Device\Properties\NukiMetadata::from_json(
+                        $json->nuki_metadata,
+                    )
                     : null,
                 offline_access_codes_enabled: $json->offline_access_codes_enabled ??
                     null,
                 offline_time_frame_options: array_map(
-                    fn($o) => Properties\OfflineTimeFrameOptions::from_json($o),
+                    fn(
+                        $o,
+                    ) => \Seam\Resources\Device\Properties\OfflineTimeFrameOptions::from_json(
+                        $o,
+                    ),
                     $json->offline_time_frame_options ?? [],
                 ),
                 omnitec_metadata: isset($json->omnitec_metadata)
-                    ? Properties\OmnitecMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\OmnitecMetadata::from_json(
                         $json->omnitec_metadata,
                     )
                     : null,
-                online: $json->online ?? null,
                 online_access_codes_enabled: $json->online_access_codes_enabled ??
                     null,
                 online_time_frame_options: array_map(
-                    fn($o) => Properties\OnlineTimeFrameOptions::from_json($o),
+                    fn(
+                        $o,
+                    ) => \Seam\Resources\Device\Properties\OnlineTimeFrameOptions::from_json(
+                        $o,
+                    ),
                     $json->online_time_frame_options ?? [],
                 ),
                 relative_humidity: $json->relative_humidity ?? null,
                 ring_metadata: isset($json->ring_metadata)
-                    ? Properties\RingMetadata::from_json($json->ring_metadata)
+                    ? \Seam\Resources\Device\Properties\RingMetadata::from_json(
+                        $json->ring_metadata,
+                    )
                     : null,
                 salto_ks_metadata: isset($json->salto_ks_metadata)
-                    ? Properties\SaltoKsMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\SaltoKsMetadata::from_json(
                         $json->salto_ks_metadata,
                     )
                     : null,
                 salto_metadata: isset($json->salto_metadata)
-                    ? Properties\SaltoMetadata::from_json($json->salto_metadata)
+                    ? \Seam\Resources\Device\Properties\SaltoMetadata::from_json(
+                        $json->salto_metadata,
+                    )
                     : null,
                 salto_space_credential_service_metadata: isset(
                     $json->salto_space_credential_service_metadata,
                 )
-                    ? Properties\SaltoSpaceCredentialServiceMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\SaltoSpaceCredentialServiceMetadata::from_json(
                         $json->salto_space_credential_service_metadata,
                     )
                     : null,
                 schlage_metadata: isset($json->schlage_metadata)
-                    ? Properties\SchlageMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\SchlageMetadata::from_json(
                         $json->schlage_metadata,
                     )
                     : null,
                 seam_bridge_metadata: isset($json->seam_bridge_metadata)
-                    ? Properties\SeamBridgeMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\SeamBridgeMetadata::from_json(
                         $json->seam_bridge_metadata,
                     )
                     : null,
                 sensi_metadata: isset($json->sensi_metadata)
-                    ? Properties\SensiMetadata::from_json($json->sensi_metadata)
+                    ? \Seam\Resources\Device\Properties\SensiMetadata::from_json(
+                        $json->sensi_metadata,
+                    )
                     : null,
                 serial_number: $json->serial_number ?? null,
                 smartthings_metadata: isset($json->smartthings_metadata)
-                    ? Properties\SmartthingsMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\SmartthingsMetadata::from_json(
                         $json->smartthings_metadata,
                     )
                     : null,
@@ -675,54 +793,68 @@ namespace Seam\Resources\Device {
                 supports_offline_access_codes: $json->supports_offline_access_codes ??
                     null,
                 tado_metadata: isset($json->tado_metadata)
-                    ? Properties\TadoMetadata::from_json($json->tado_metadata)
+                    ? \Seam\Resources\Device\Properties\TadoMetadata::from_json(
+                        $json->tado_metadata,
+                    )
                     : null,
                 tedee_metadata: isset($json->tedee_metadata)
-                    ? Properties\TedeeMetadata::from_json($json->tedee_metadata)
+                    ? \Seam\Resources\Device\Properties\TedeeMetadata::from_json(
+                        $json->tedee_metadata,
+                    )
                     : null,
                 temperature_celsius: $json->temperature_celsius ?? null,
                 temperature_fahrenheit: $json->temperature_fahrenheit ?? null,
                 temperature_threshold: isset($json->temperature_threshold)
-                    ? Properties\TemperatureThreshold::from_json(
+                    ? \Seam\Resources\Device\Properties\TemperatureThreshold::from_json(
                         $json->temperature_threshold,
                     )
                     : null,
                 thermostat_daily_program_period_precision_minutes: $json->thermostat_daily_program_period_precision_minutes ??
                     null,
                 thermostat_daily_programs: array_map(
-                    fn($t) => Properties\ThermostatDailyPrograms::from_json($t),
+                    fn(
+                        $t,
+                    ) => \Seam\Resources\Device\Properties\ThermostatDailyPrograms::from_json(
+                        $t,
+                    ),
                     $json->thermostat_daily_programs ?? [],
                 ),
                 thermostat_weekly_program: isset(
                     $json->thermostat_weekly_program,
                 )
-                    ? Properties\ThermostatWeeklyProgram::from_json(
+                    ? \Seam\Resources\Device\Properties\ThermostatWeeklyProgram::from_json(
                         $json->thermostat_weekly_program,
                     )
                     : null,
                 ttlock_metadata: isset($json->ttlock_metadata)
-                    ? Properties\TtlockMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\TtlockMetadata::from_json(
                         $json->ttlock_metadata,
                     )
                     : null,
                 two_n_metadata: isset($json->two_n_metadata)
-                    ? Properties\TwoNMetadata::from_json($json->two_n_metadata)
+                    ? \Seam\Resources\Device\Properties\TwoNMetadata::from_json(
+                        $json->two_n_metadata,
+                    )
                     : null,
                 ultraloq_metadata: isset($json->ultraloq_metadata)
-                    ? Properties\UltraloqMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\UltraloqMetadata::from_json(
                         $json->ultraloq_metadata,
                     )
                     : null,
                 visionline_metadata: isset($json->visionline_metadata)
-                    ? Properties\VisionlineMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\VisionlineMetadata::from_json(
                         $json->visionline_metadata,
                     )
                     : null,
                 wyze_metadata: isset($json->wyze_metadata)
-                    ? Properties\WyzeMetadata::from_json($json->wyze_metadata)
+                    ? \Seam\Resources\Device\Properties\WyzeMetadata::from_json(
+                        $json->wyze_metadata,
+                    )
                     : null,
                 yacan_metadata: isset($json->yacan_metadata)
-                    ? Properties\YacanMetadata::from_json($json->yacan_metadata)
+                    ? \Seam\Resources\Device\Properties\YacanMetadata::from_json(
+                        $json->yacan_metadata,
+                    )
                     : null,
             );
         }
@@ -731,11 +863,11 @@ namespace Seam\Resources\Device {
             /**
              * Appearance-related properties, as reported by the device.
              */
-            public Properties\Appearance|null $appearance,
+            public \Seam\Resources\Device\Properties\Appearance|null $appearance,
             /**
              * Device model-related properties.
              */
-            public Properties\Model|null $model,
+            public \Seam\Resources\Device\Properties\Model|null $model,
             /**
              * Name of the device.
              *
@@ -749,13 +881,13 @@ namespace Seam\Resources\Device {
             /**
              * Accessory keypad properties and state.
              */
-            public Properties\AccessoryKeypad|null $accessory_keypad = null,
+            public \Seam\Resources\Device\Properties\AccessoryKeypad|null $accessory_keypad = null,
             /**
              * Active [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
              *
              * @deprecated Use `active_thermostat_schedule_id` with `/thermostats/schedules/get` instead.
              */
-            public Properties\ActiveThermostatSchedule|null $active_thermostat_schedule = null,
+            public \Seam\Resources\Device\Properties\ActiveThermostatSchedule|null $active_thermostat_schedule = null,
             /**
              * ID of the active [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
              */
@@ -763,23 +895,23 @@ namespace Seam\Resources\Device {
             /**
              * Metadata for an Akiles device.
              */
-            public Properties\AkilesMetadata|null $akiles_metadata = null,
+            public \Seam\Resources\Device\Properties\AkilesMetadata|null $akiles_metadata = null,
             /**
              * Metadata for an Aqara device.
              */
-            public Properties\AqaraMetadata|null $aqara_metadata = null,
+            public \Seam\Resources\Device\Properties\AqaraMetadata|null $aqara_metadata = null,
             /**
              * ASSA ABLOY Credential Service metadata for the phone.
              */
-            public Properties\AssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata = null,
+            public \Seam\Resources\Device\Properties\AssaAbloyCredentialServiceMetadata|null $assa_abloy_credential_service_metadata = null,
             /**
              * Metadata for an ASSA ABLOY Vostio system.
              */
-            public Properties\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata = null,
+            public \Seam\Resources\Device\Properties\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata = null,
             /**
              * Metadata for an August device.
              */
-            public Properties\AugustMetadata|null $august_metadata = null,
+            public \Seam\Resources\Device\Properties\AugustMetadata|null $august_metadata = null,
             /**
              * The delay in seconds before the lock automatically locks after being unlocked.
              */
@@ -790,24 +922,32 @@ namespace Seam\Resources\Device {
             public bool|null $auto_lock_enabled = null,
             /**
              * Climate preset modes that the thermostat supports, such as "home", "away", "wake", "sleep", "occupied", and "unoccupied".
+             *
+             * @var list<string>|null
              */
             public array|null $available_climate_preset_modes = null,
             /**
              * Available [climate presets](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) for the thermostat.
+             *
+             * @var list<\Seam\Resources\Device\Properties\AvailableClimatePresets>|null
              */
             public array|null $available_climate_presets = null,
             /**
              * Fan mode settings that the thermostat supports.
+             *
+             * @var list<string>|null
              */
             public array|null $available_fan_mode_settings = null,
             /**
              * HVAC mode settings that the thermostat supports.
+             *
+             * @var list<string>|null
              */
             public array|null $available_hvac_mode_settings = null,
             /**
              * Metadata for an Avigilon Alta system.
              */
-            public Properties\AvigilonAltaMetadata|null $avigilon_alta_metadata = null,
+            public \Seam\Resources\Device\Properties\AvigilonAltaMetadata|null $avigilon_alta_metadata = null,
             /**
              * Indicates whether the [backup access code pool](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes) is currently enabled for the device. To disable it, set this to `false` using [/devices/update](https://docs.seam.co/api/devices/update).
              */
@@ -815,7 +955,7 @@ namespace Seam\Resources\Device {
             /**
              * Represents the current status of the battery charge level.
              */
-            public Properties\Battery|null $battery = null,
+            public \Seam\Resources\Device\Properties\Battery|null $battery = null,
             /**
              * Indicates the battery level of the device as a decimal value between 0 and 1, inclusive.
              */
@@ -823,27 +963,31 @@ namespace Seam\Resources\Device {
             /**
              * Metadata for a Brivo device.
              */
-            public Properties\BrivoMetadata|null $brivo_metadata = null,
+            public \Seam\Resources\Device\Properties\BrivoMetadata|null $brivo_metadata = null,
             /**
              * Constraints on access codes for the device. Seam represents each constraint as an object with a `constraint_type` property. Depending on the constraint type, there may also be additional properties. Note that some constraints are manufacturer- or device-specific.
+             *
+             * @var list<\Seam\Resources\Device\Properties\CodeConstraints>|null
              */
             public array|null $code_constraints = null,
             /**
              * Metadata for a ControlByWeb device.
              */
-            public Properties\ControlbywebMetadata|null $controlbyweb_metadata = null,
+            public \Seam\Resources\Device\Properties\ControlbywebMetadata|null $controlbyweb_metadata = null,
             /**
              * Current climate setting.
              */
-            public Properties\CurrentClimateSetting|null $current_climate_setting = null,
+            public \Seam\Resources\Device\Properties\CurrentClimateSetting|null $current_climate_setting = null,
             /**
              * Array of noise threshold IDs that are currently triggering.
+             *
+             * @var list<string>|null
              */
             public array|null $currently_triggering_noise_threshold_ids = null,
             /**
              * @deprecated use fallback_climate_preset_key to specify a fallback climate preset instead.
              */
-            public Properties\DefaultClimateSetting|null $default_climate_setting = null,
+            public \Seam\Resources\Device\Properties\DefaultClimateSetting|null $default_climate_setting = null,
             /**
              * Indicates whether the door is open.
              */
@@ -851,27 +995,28 @@ namespace Seam\Resources\Device {
             /**
              * Metadata for a dormakaba Oracode device.
              */
-            public Properties\DormakabaOracodeMetadata|null $dormakaba_oracode_metadata = null,
+            public \Seam\Resources\Device\Properties\DormakabaOracodeMetadata|null $dormakaba_oracode_metadata = null,
             /**
              * Metadata for an ecobee device.
              */
-            public Properties\EcobeeMetadata|null $ecobee_metadata = null,
+            public \Seam\Resources\Device\Properties\EcobeeMetadata|null $ecobee_metadata = null,
             /**
              * Key of the [fallback climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets/setting-the-fallback-climate-preset) for the thermostat.
              */
             public string|null $fallback_climate_preset_key = null,
             /**
+             * @var value-of<\Seam\Resources\Device\Properties\FanModeSetting>|string|null
              * @deprecated Use `current_climate_setting.fan_mode_setting` instead.
              */
             public string|null $fan_mode_setting = null,
             /**
              * Metadata for a 4SUITES device.
              */
-            public Properties\FourSuitesMetadata|null $four_suites_metadata = null,
+            public \Seam\Resources\Device\Properties\FourSuitesMetadata|null $four_suites_metadata = null,
             /**
              * Metadata for a Genie device.
              */
-            public Properties\GenieMetadata|null $genie_metadata = null,
+            public \Seam\Resources\Device\Properties\GenieMetadata|null $genie_metadata = null,
             /**
              * Indicates whether the device has direct power.
              */
@@ -883,15 +1028,15 @@ namespace Seam\Resources\Device {
             /**
              * Metadata for a Honeywell Resideo device.
              */
-            public Properties\HoneywellResideoMetadata|null $honeywell_resideo_metadata = null,
+            public \Seam\Resources\Device\Properties\HoneywellResideoMetadata|null $honeywell_resideo_metadata = null,
             /**
              * Metadata for an igloo device.
              */
-            public Properties\IglooMetadata|null $igloo_metadata = null,
+            public \Seam\Resources\Device\Properties\IglooMetadata|null $igloo_metadata = null,
             /**
              * Metadata for an igloohome device.
              */
-            public Properties\IgloohomeMetadata|null $igloohome_metadata = null,
+            public \Seam\Resources\Device\Properties\IgloohomeMetadata|null $igloohome_metadata = null,
             /**
              * Alt text for the device image.
              */
@@ -919,23 +1064,23 @@ namespace Seam\Resources\Device {
             /**
              * Metadata for a KeyNest device.
              */
-            public Properties\KeynestMetadata|null $keynest_metadata = null,
+            public \Seam\Resources\Device\Properties\KeynestMetadata|null $keynest_metadata = null,
             /**
              * Keypad battery status.
              */
-            public Properties\KeypadBattery|null $keypad_battery = null,
+            public \Seam\Resources\Device\Properties\KeypadBattery|null $keypad_battery = null,
             /**
              * Metadata for a Kisi device.
              */
-            public Properties\KisiMetadata|null $kisi_metadata = null,
+            public \Seam\Resources\Device\Properties\KisiMetadata|null $kisi_metadata = null,
             /**
              * Metadata for a Korelock device.
              */
-            public Properties\KorelockMetadata|null $korelock_metadata = null,
+            public \Seam\Resources\Device\Properties\KorelockMetadata|null $korelock_metadata = null,
             /**
              * Metadata for a Kwikset device.
              */
-            public Properties\KwiksetMetadata|null $kwikset_metadata = null,
+            public \Seam\Resources\Device\Properties\KwiksetMetadata|null $kwikset_metadata = null,
             /**
              * Indicates whether the lock is locked.
              */
@@ -943,7 +1088,7 @@ namespace Seam\Resources\Device {
             /**
              * Metadata for a Lockly device.
              */
-            public Properties\LocklyMetadata|null $lockly_metadata = null,
+            public \Seam\Resources\Device\Properties\LocklyMetadata|null $lockly_metadata = null,
             /**
              * Manufacturer of the device. When a device, such as a smart lock, is connected through a smart hub, the manufacturer of the device might be different from that of the smart hub.
              */
@@ -1003,11 +1148,11 @@ namespace Seam\Resources\Device {
             /**
              * Metadata for a Minut device.
              */
-            public Properties\MinutMetadata|null $minut_metadata = null,
+            public \Seam\Resources\Device\Properties\MinutMetadata|null $minut_metadata = null,
             /**
              * Metadata for a Google Nest device.
              */
-            public Properties\NestMetadata|null $nest_metadata = null,
+            public \Seam\Resources\Device\Properties\NestMetadata|null $nest_metadata = null,
             /**
              * Indicates current noise level in decibels, if the device supports noise detection.
              */
@@ -1015,11 +1160,11 @@ namespace Seam\Resources\Device {
             /**
              * Metadata for a NoiseAware device.
              */
-            public Properties\NoiseawareMetadata|null $noiseaware_metadata = null,
+            public \Seam\Resources\Device\Properties\NoiseawareMetadata|null $noiseaware_metadata = null,
             /**
              * Metadata for a Nuki device.
              */
-            public Properties\NukiMetadata|null $nuki_metadata = null,
+            public \Seam\Resources\Device\Properties\NukiMetadata|null $nuki_metadata = null,
             /**
              * Indicates whether it is currently possible to use offline access codes for the device.
              *
@@ -1028,12 +1173,14 @@ namespace Seam\Resources\Device {
             public bool|null $offline_access_codes_enabled = null,
             /**
              * Time frames that may be requested when creating an offline access code, expressed as a list of options. The caller picks one option (by matching the requested duration when the options' duration ranges do not overlap, or by `display_name` when they do) and satisfies that one option's rules. When `undefined`, any time frame works.
+             *
+             * @var list<\Seam\Resources\Device\Properties\OfflineTimeFrameOptions>|null
              */
             public array|null $offline_time_frame_options = null,
             /**
              * Metadata for an Omnitec device.
              */
-            public Properties\OmnitecMetadata|null $omnitec_metadata = null,
+            public \Seam\Resources\Device\Properties\OmnitecMetadata|null $omnitec_metadata = null,
             /**
              * Indicates whether it is currently possible to use online access codes for the device.
              *
@@ -1042,6 +1189,8 @@ namespace Seam\Resources\Device {
             public bool|null $online_access_codes_enabled = null,
             /**
              * Time frames that may be requested when creating an online access code, expressed as a list of options. The caller picks one option (by matching the requested duration when the options' duration ranges do not overlap, or by `display_name` when they do) and satisfies that one option's rules. When `undefined`, any time frame works.
+             *
+             * @var list<\Seam\Resources\Device\Properties\OnlineTimeFrameOptions>|null
              */
             public array|null $online_time_frame_options = null,
             /**
@@ -1051,33 +1200,33 @@ namespace Seam\Resources\Device {
             /**
              * Metadata for a Ring device.
              */
-            public Properties\RingMetadata|null $ring_metadata = null,
+            public \Seam\Resources\Device\Properties\RingMetadata|null $ring_metadata = null,
             /**
              * Metadata for a Salto KS device.
              */
-            public Properties\SaltoKsMetadata|null $salto_ks_metadata = null,
+            public \Seam\Resources\Device\Properties\SaltoKsMetadata|null $salto_ks_metadata = null,
             /**
              * Metada for a Salto device.
              *
              * @deprecated Use `salto_ks_metadata` instead.
              */
-            public Properties\SaltoMetadata|null $salto_metadata = null,
+            public \Seam\Resources\Device\Properties\SaltoMetadata|null $salto_metadata = null,
             /**
              * Salto Space credential service metadata for the phone.
              */
-            public Properties\SaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata = null,
+            public \Seam\Resources\Device\Properties\SaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata = null,
             /**
              * Metadata for a Schlage device.
              */
-            public Properties\SchlageMetadata|null $schlage_metadata = null,
+            public \Seam\Resources\Device\Properties\SchlageMetadata|null $schlage_metadata = null,
             /**
              * Metadata for Seam Bridge.
              */
-            public Properties\SeamBridgeMetadata|null $seam_bridge_metadata = null,
+            public \Seam\Resources\Device\Properties\SeamBridgeMetadata|null $seam_bridge_metadata = null,
             /**
              * Metadata for a Sensi device.
              */
-            public Properties\SensiMetadata|null $sensi_metadata = null,
+            public \Seam\Resources\Device\Properties\SensiMetadata|null $sensi_metadata = null,
             /**
              * Serial number of the device.
              */
@@ -1085,9 +1234,11 @@ namespace Seam\Resources\Device {
             /**
              * Metadata for a SmartThings device.
              */
-            public Properties\SmartthingsMetadata|null $smartthings_metadata = null,
+            public \Seam\Resources\Device\Properties\SmartthingsMetadata|null $smartthings_metadata = null,
             /**
              * Supported code lengths for access codes.
+             *
+             * @var list<float>|null
              */
             public array|null $supported_code_lengths = null,
             /**
@@ -1105,11 +1256,11 @@ namespace Seam\Resources\Device {
             /**
              * Metadata for a tado° device.
              */
-            public Properties\TadoMetadata|null $tado_metadata = null,
+            public \Seam\Resources\Device\Properties\TadoMetadata|null $tado_metadata = null,
             /**
              * Metadata for a Tedee device.
              */
-            public Properties\TedeeMetadata|null $tedee_metadata = null,
+            public \Seam\Resources\Device\Properties\TedeeMetadata|null $tedee_metadata = null,
             /**
              * Reported temperature in °C.
              */
@@ -1121,48 +1272,50 @@ namespace Seam\Resources\Device {
             /**
              * Current [temperature threshold](https://docs.seam.co/capability-guides/thermostats/setting-and-monitoring-temperature-thresholds) set for the thermostat.
              */
-            public Properties\TemperatureThreshold|null $temperature_threshold = null,
+            public \Seam\Resources\Device\Properties\TemperatureThreshold|null $temperature_threshold = null,
             /**
              * Precision of the thermostat's period in minutes. For example, if the thermostat supports 15-minute periods, this value is 15. All values are relative to the top of the hour, so for 15 minutes, the periods would be 0, 15, 30, and 45 minutes past the hour.
              */
             public float|null $thermostat_daily_program_period_precision_minutes = null,
             /**
              * Configured [daily programs](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-programs) for the thermostat.
+             *
+             * @var list<\Seam\Resources\Device\Properties\ThermostatDailyPrograms>|null
              */
             public array|null $thermostat_daily_programs = null,
             /**
              * Current [weekly program](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-programs) for the thermostat.
              */
-            public Properties\ThermostatWeeklyProgram|null $thermostat_weekly_program = null,
+            public \Seam\Resources\Device\Properties\ThermostatWeeklyProgram|null $thermostat_weekly_program = null,
             /**
              * Metadata for a TTLock device.
              */
-            public Properties\TtlockMetadata|null $ttlock_metadata = null,
+            public \Seam\Resources\Device\Properties\TtlockMetadata|null $ttlock_metadata = null,
             /**
              * Metadata for a 2N device.
              */
-            public Properties\TwoNMetadata|null $two_n_metadata = null,
+            public \Seam\Resources\Device\Properties\TwoNMetadata|null $two_n_metadata = null,
             /**
              * Metadata for an Ultraloq device.
              */
-            public Properties\UltraloqMetadata|null $ultraloq_metadata = null,
+            public \Seam\Resources\Device\Properties\UltraloqMetadata|null $ultraloq_metadata = null,
             /**
              * Metadata for an ASSA ABLOY Visionline system.
              */
-            public Properties\VisionlineMetadata|null $visionline_metadata = null,
+            public \Seam\Resources\Device\Properties\VisionlineMetadata|null $visionline_metadata = null,
             /**
              * Metadata for a Wyze device.
              */
-            public Properties\WyzeMetadata|null $wyze_metadata = null,
+            public \Seam\Resources\Device\Properties\WyzeMetadata|null $wyze_metadata = null,
             /**
              * Metadata for a Yacan device.
              */
-            public Properties\YacanMetadata|null $yacan_metadata = null,
+            public \Seam\Resources\Device\Properties\YacanMetadata|null $yacan_metadata = null,
         ) {}
     }
 
     /**
-     * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
+     * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it. Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class Warnings
     {
@@ -1171,39 +1324,893 @@ namespace Seam\Resources\Device {
             if (!$json) {
                 return null;
             }
-            return new self(
-                active_access_code_count: $json->active_access_code_count ??
-                    null,
-                created_at: $json->created_at ?? null,
-                max_active_access_code_count: $json->max_active_access_code_count ??
-                    null,
-                message: $json->message ?? null,
-                warning_code: $json->warning_code ?? null,
-            );
+            $discriminant = is_string($json->warning_code ?? null)
+                ? \Seam\Resources\Device\Warnings\WarningCode::tryFrom(
+                    $json->warning_code,
+                )
+                : null;
+
+            return match ($discriminant) {
+                \Seam\Resources\Device\Warnings\WarningCode::PARTIAL_BACKUP_ACCESS_CODE_POOL
+                    => \Seam\Resources\Device\Warnings\PartialBackupAccessCodePool::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::MANY_ACTIVE_BACKUP_CODES
+                    => \Seam\Resources\Device\Warnings\ManyActiveBackupCodes::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::THIRD_PARTY_INTEGRATION_DETECTED
+                    => \Seam\Resources\Device\Warnings\ThirdPartyIntegrationDetected::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::TTLOCK_LOCK_GATEWAY_UNLOCKING_NOT_ENABLED
+                    => \Seam\Resources\Device\Warnings\TtlockLockGatewayUnlockingNotEnabled::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::TTLOCK_WEAK_GATEWAY_SIGNAL
+                    => \Seam\Resources\Device\Warnings\TtlockWeakGatewaySignal::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::POWER_SAVING_MODE
+                    => \Seam\Resources\Device\Warnings\PowerSavingMode::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::TEMPERATURE_THRESHOLD_EXCEEDED
+                    => \Seam\Resources\Device\Warnings\TemperatureThresholdExceeded::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::DEVICE_COMMUNICATION_DEGRADED
+                    => \Seam\Resources\Device\Warnings\DeviceCommunicationDegraded::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::SCHEDULED_MAINTENANCE_WINDOW
+                    => \Seam\Resources\Device\Warnings\ScheduledMaintenanceWindow::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::DEVICE_HAS_FLAKY_CONNECTION
+                    => \Seam\Resources\Device\Warnings\DeviceHasFlakyConnection::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::SALTO_KS_OFFICE_MODE
+                    => \Seam\Resources\Device\Warnings\SaltoKsOfficeMode::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::SALTO_KS_PRIVACY_MODE
+                    => \Seam\Resources\Device\Warnings\SaltoKsPrivacyMode::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::PRIVACY_MODE
+                    => \Seam\Resources\Device\Warnings\PrivacyMode::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::SALTO_KS_SUBSCRIPTION_LIMIT_ALMOST_REACHED
+                    => \Seam\Resources\Device\Warnings\SaltoKsSubscriptionLimitAlmostReached::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::SALTO_KS_LOCK_ACCESS_CODE_SUPPORT_REMOVED
+                    => \Seam\Resources\Device\Warnings\SaltoKsLockAccessCodeSupportRemoved::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::UNKNOWN_ISSUE_WITH_PHONE
+                    => \Seam\Resources\Device\Warnings\UnknownIssueWithPhone::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::LOCKLY_TIME_ZONE_NOT_CONFIGURED
+                    => \Seam\Resources\Device\Warnings\LocklyTimeZoneNotConfigured::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::ULTRALOQ_TIME_ZONE_UNKNOWN
+                    => \Seam\Resources\Device\Warnings\UltraloqTimeZoneUnknown::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::TIME_ZONE_UNKNOWN
+                    => \Seam\Resources\Device\Warnings\TimeZoneUnknown::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::TIME_ZONE_MISMATCH
+                    => \Seam\Resources\Device\Warnings\TimeZoneMismatch::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::TWO_N_DEVICE_MISSING_TIMEZONE
+                    => \Seam\Resources\Device\Warnings\TwoNDeviceMissingTimezone::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::HUB_REQUIRED_FOR_ADDITIONAL_CAPABILITIES
+                    => \Seam\Resources\Device\Warnings\HubRequiredForAdditionalCapabilities::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::PROVIDER_ISSUE
+                    => \Seam\Resources\Device\Warnings\ProviderIssue::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::KEYNEST_UNSUPPORTED_LOCKER
+                    => \Seam\Resources\Device\Warnings\KeynestUnsupportedLocker::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::ACCESSORY_KEYPAD_SETUP_REQUIRED
+                    => \Seam\Resources\Device\Warnings\AccessoryKeypadSetupRequired::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::UNRELIABLE_ONLINE_STATUS
+                    => \Seam\Resources\Device\Warnings\UnreliableOnlineStatus::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::MAX_ACCESS_CODES_REACHED
+                    => \Seam\Resources\Device\Warnings\MaxAccessCodesReached::from_json(
+                    $json,
+                ),
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    message: $json->message ?? null,
+                    warning_code: $json->warning_code ?? null,
+                ),
+            };
         }
 
         public function __construct(
             /**
-             * Number of active access codes on the device when the warning was set.
-             */
-            public int|null $active_access_code_count,
-            /**
              * Date and time at which Seam created the warning.
              */
             public string|null $created_at,
-            /**
-             * Maximum number of active access codes supported by the device.
-             */
-            public int|null $max_active_access_code_count,
             /**
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
             public string|null $message,
             /**
              * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
              */
             public string|null $warning_code,
         ) {}
+    }
+
+    enum DeviceType: string
+    {
+        case AKUVOX_LOCK = "akuvox_lock";
+        case AUGUST_LOCK = "august_lock";
+        case BRIVO_ACCESS_POINT = "brivo_access_point";
+        case BUTTERFLYMX_PANEL = "butterflymx_panel";
+        case AVIGILON_ALTA_ENTRY = "avigilon_alta_entry";
+        case DOORKING_LOCK = "doorking_lock";
+        case GENIE_DOOR = "genie_door";
+        case IGLOO_LOCK = "igloo_lock";
+        case LINEAR_LOCK = "linear_lock";
+        case LOCKLY_LOCK = "lockly_lock";
+        case KWIKSET_LOCK = "kwikset_lock";
+        case NUKI_LOCK = "nuki_lock";
+        case SALTO_LOCK = "salto_lock";
+        case SCHLAGE_LOCK = "schlage_lock";
+        case SMARTTHINGS_LOCK = "smartthings_lock";
+        case WYZE_LOCK = "wyze_lock";
+        case YALE_LOCK = "yale_lock";
+        case TWO_N_INTERCOM = "two_n_intercom";
+        case CONTROLBYWEB_DEVICE = "controlbyweb_device";
+        case TTLOCK_LOCK = "ttlock_lock";
+        case IGLOOHOME_LOCK = "igloohome_lock";
+        case FOUR_SUITES_DOOR = "four_suites_door";
+        case DORMAKABA_ORACODE_DOOR = "dormakaba_oracode_door";
+        case TEDEE_LOCK = "tedee_lock";
+        case AKILES_LOCK = "akiles_lock";
+        case ULTRALOQ_LOCK = "ultraloq_lock";
+        case YACAN_LOCK = "yacan_lock";
+        case KEYINCODE_LOCK = "keyincode_lock";
+        case OMNITEC_LOCK = "omnitec_lock";
+        case KISI_LOCK = "kisi_lock";
+        case AQARA_LOCK = "aqara_lock";
+        case KEYNEST_KEY = "keynest_key";
+        case NOISEAWARE_ACTIVITY_ZONE = "noiseaware_activity_zone";
+        case MINUT_SENSOR = "minut_sensor";
+        case ECOBEE_THERMOSTAT = "ecobee_thermostat";
+        case NEST_THERMOSTAT = "nest_thermostat";
+        case HONEYWELL_RESIDEO_THERMOSTAT = "honeywell_resideo_thermostat";
+        case TADO_THERMOSTAT = "tado_thermostat";
+        case SENSI_THERMOSTAT = "sensi_thermostat";
+        case SMARTTHINGS_THERMOSTAT = "smartthings_thermostat";
+        case IOS_PHONE = "ios_phone";
+        case ANDROID_PHONE = "android_phone";
+        case RING_CAMERA = "ring_camera";
+    }
+}
+
+namespace Seam\Resources\Device\Errors {
+    /**
+     * Indicates that the account is disconnected.
+     */
+    final class AccountDisconnected extends \Seam\Resources\Device\Errors
+    {
+        public static function from_json(mixed $json): AccountDisconnected|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_connected_account_error: $json->is_connected_account_error ??
+                    null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
+             */
+            public true|null $is_connected_account_error,
+            /**
+             * Indicates that the error is not a device error.
+             */
+            public false|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the Salto site user limit has been reached.
+     */
+    final class SaltoKsSubscriptionLimitExceeded extends
+        \Seam\Resources\Device\Errors
+    {
+        public static function from_json(
+            mixed $json,
+        ): SaltoKsSubscriptionLimitExceeded|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_connected_account_error: $json->is_connected_account_error ??
+                    null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
+             */
+            public true|null $is_connected_account_error,
+            /**
+             * Indicates that the error is not a device error.
+             */
+            public false|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
+     * Indicates that Seam's integration user does not have sufficient permissions on the provider's system to which this device belongs, so Seam cannot manage access codes or unlock the device. See the error message for specifics, then either reauthorize the connected account in Seam or grant the integration user the required permissions in the provider's system.
+     */
+    final class InsufficientPermissions extends \Seam\Resources\Device\Errors
+    {
+        public static function from_json(
+            mixed $json,
+        ): InsufficientPermissions|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_connected_account_error: $json->is_connected_account_error ??
+                    null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
+             */
+            public true|null $is_connected_account_error,
+            /**
+             * Indicates that the error is not a device error.
+             */
+            public false|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
+     * Indicates that one or more dormakaba sites associated with the connected account could not be connected. Contact dormakaba support.
+     */
+    final class DormakabaSitesDisconnected extends \Seam\Resources\Device\Errors
+    {
+        public static function from_json(
+            mixed $json,
+        ): DormakabaSitesDisconnected|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_connected_account_error: $json->is_connected_account_error ??
+                    null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
+             */
+            public true|null $is_connected_account_error,
+            /**
+             * Indicates that the error is not a device error.
+             */
+            public false|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the device is offline.
+     */
+    final class DeviceOffline extends \Seam\Resources\Device\Errors
+    {
+        public static function from_json(mixed $json): DeviceOffline|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a device error.
+             */
+            public true|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the device has been removed.
+     */
+    final class DeviceRemoved extends \Seam\Resources\Device\Errors
+    {
+        public static function from_json(mixed $json): DeviceRemoved|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a device error.
+             */
+            public true|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the hub is disconnected.
+     */
+    final class HubDisconnected extends \Seam\Resources\Device\Errors
+    {
+        public static function from_json(mixed $json): HubDisconnected|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a device error.
+             */
+            public true|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the device is disconnected.
+     */
+    final class DeviceDisconnected extends \Seam\Resources\Device\Errors
+    {
+        public static function from_json(mixed $json): DeviceDisconnected|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a device error.
+             */
+            public true|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the [backup access code pool](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes) is empty.
+     */
+    final class EmptyBackupAccessCodePool extends \Seam\Resources\Device\Errors
+    {
+        public static function from_json(
+            mixed $json,
+        ): EmptyBackupAccessCodePool|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a device error.
+             */
+            public true|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the user is not authorized to use the August lock.
+     */
+    final class AugustLockNotAuthorized extends \Seam\Resources\Device\Errors
+    {
+        public static function from_json(
+            mixed $json,
+        ): AugustLockNotAuthorized|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a device error.
+             */
+            public true|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
+     * Indicates that device credentials are missing.
+     */
+    final class MissingDeviceCredentials extends \Seam\Resources\Device\Errors
+    {
+        public static function from_json(
+            mixed $json,
+        ): MissingDeviceCredentials|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a device error.
+             */
+            public true|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the auxiliary heat is running.
+     */
+    final class AuxiliaryHeatRunning extends \Seam\Resources\Device\Errors
+    {
+        public static function from_json(mixed $json): AuxiliaryHeatRunning|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a device error.
+             */
+            public true|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
+     * Indicates that a subscription is required to connect.
+     */
+    final class SubscriptionRequired extends \Seam\Resources\Device\Errors
+    {
+        public static function from_json(mixed $json): SubscriptionRequired|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a device error.
+             */
+            public true|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the Seam API cannot communicate with [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge), for example, if the Seam Bridge executable has stopped or if the computer running the Seam Bridge executable is offline. See also [Troubleshooting Your Access Control System](https://docs.seam.co/low-level-apis/access-systems/troubleshooting-your-access-control-system#acs_system-errors-seam_bridge_disconnected).
+     */
+    final class BridgeDisconnected extends \Seam\Resources\Device\Errors
+    {
+        public static function from_json(mixed $json): BridgeDisconnected|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                message: $json->message ?? null,
+                is_bridge_error: $json->is_bridge_error ?? null,
+                is_connected_account_error: $json->is_connected_account_error ??
+                    null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
+             */
+            public bool|null $is_bridge_error = null,
+            /**
+             * Indicates whether the error is related specifically to the connected account.
+             */
+            public bool|null $is_connected_account_error = null,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    enum ErrorCode: string
+    {
+        case ACCOUNT_DISCONNECTED = "account_disconnected";
+        case SALTO_KS_SUBSCRIPTION_LIMIT_EXCEEDED = "salto_ks_subscription_limit_exceeded";
+        case INSUFFICIENT_PERMISSIONS = "insufficient_permissions";
+        case DORMAKABA_SITES_DISCONNECTED = "dormakaba_sites_disconnected";
+        case DEVICE_OFFLINE = "device_offline";
+        case DEVICE_REMOVED = "device_removed";
+        case HUB_DISCONNECTED = "hub_disconnected";
+        case DEVICE_DISCONNECTED = "device_disconnected";
+        case EMPTY_BACKUP_ACCESS_CODE_POOL = "empty_backup_access_code_pool";
+        case AUGUST_LOCK_NOT_AUTHORIZED = "august_lock_not_authorized";
+        case MISSING_DEVICE_CREDENTIALS = "missing_device_credentials";
+        case AUXILIARY_HEAT_RUNNING = "auxiliary_heat_running";
+        case SUBSCRIPTION_REQUIRED = "subscription_required";
+        case BRIDGE_DISCONNECTED = "bridge_disconnected";
     }
 }
 
@@ -1219,10 +2226,12 @@ namespace Seam\Resources\Device\Properties {
                 return null;
             }
             return new self(
-                battery: isset($json->battery)
-                    ? AccessoryKeypad\Battery::from_json($json->battery)
-                    : null,
                 is_connected: $json->is_connected ?? null,
+                battery: isset($json->battery)
+                    ? \Seam\Resources\Device\Properties\AccessoryKeypad\Battery::from_json(
+                        $json->battery,
+                    )
+                    : null,
             );
         }
 
@@ -1234,7 +2243,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Keypad battery properties.
              */
-            public AccessoryKeypad\Battery|null $battery = null,
+            public \Seam\Resources\Device\Properties\AccessoryKeypad\Battery|null $battery = null,
         ) {}
     }
 
@@ -1282,6 +2291,8 @@ namespace Seam\Resources\Device\Properties {
             public float|null $level,
             /**
              * Represents the current status of the battery charge level. Values are `critical`, which indicates an extremely low level, suggesting imminent shutdown or an urgent need for charging; `low`, which signifies that the battery is under the preferred threshold and should be charged soon; `good`, which denotes a satisfactory charge level, adequate for normal use without the immediate need for recharging; and `full`, which represents a battery that is fully charged, providing the maximum duration of usage.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\Battery\Status>|string|null
              */
             public string|null $status,
         ) {}
@@ -1298,14 +2309,14 @@ namespace Seam\Resources\Device\Properties {
                 return null;
             }
             return new self(
+                display_name: $json->display_name ?? null,
+                manufacturer_display_name: $json->manufacturer_display_name ??
+                    null,
                 accessory_keypad_supported: $json->accessory_keypad_supported ??
                     null,
                 can_connect_accessory_keypad: $json->can_connect_accessory_keypad ??
                     null,
-                display_name: $json->display_name ?? null,
                 has_built_in_keypad: $json->has_built_in_keypad ?? null,
-                manufacturer_display_name: $json->manufacturer_display_name ??
-                    null,
                 offline_access_codes_supported: $json->offline_access_codes_supported ??
                     null,
                 online_access_codes_supported: $json->online_access_codes_supported ??
@@ -1360,7 +2371,7 @@ namespace Seam\Resources\Device\Properties {
                 endpoints: array_map(
                     fn(
                         $e,
-                    ) => AssaAbloyCredentialServiceMetadata\Endpoints::from_json(
+                    ) => \Seam\Resources\Device\Properties\AssaAbloyCredentialServiceMetadata\Endpoints::from_json(
                         $e,
                     ),
                     $json->endpoints ?? [],
@@ -1372,6 +2383,8 @@ namespace Seam\Resources\Device\Properties {
         public function __construct(
             /**
              * Endpoints associated with the phone.
+             *
+             * @var list<\Seam\Resources\Device\Properties\AssaAbloyCredentialServiceMetadata\Endpoints>|null
              */
             public array|null $endpoints = null,
             /**
@@ -1709,7 +2722,7 @@ namespace Seam\Resources\Device\Properties {
                 predefined_time_slots: array_map(
                     fn(
                         $p,
-                    ) => DormakabaOracodeMetadata\PredefinedTimeSlots::from_json(
+                    ) => \Seam\Resources\Device\Properties\DormakabaOracodeMetadata\PredefinedTimeSlots::from_json(
                         $p,
                     ),
                     $json->predefined_time_slots ?? [],
@@ -1742,6 +2755,8 @@ namespace Seam\Resources\Device\Properties {
             public string|null $iana_timezone = null,
             /**
              * Predefined time slots for a dormakaba Oracode device.
+             *
+             * @var list<\Seam\Resources\Device\Properties\DormakabaOracodeMetadata\PredefinedTimeSlots>|null
              */
             public array|null $predefined_time_slots = null,
             /**
@@ -2255,7 +3270,7 @@ namespace Seam\Resources\Device\Properties {
                 device_id: $json->device_id ?? null,
                 device_name: $json->device_name ?? null,
                 latest_sensor_values: isset($json->latest_sensor_values)
-                    ? MinutMetadata\LatestSensorValues::from_json(
+                    ? \Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues::from_json(
                         $json->latest_sensor_values,
                     )
                     : null,
@@ -2274,7 +3289,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Latest sensor values for a Minut device.
              */
-            public MinutMetadata\LatestSensorValues|null $latest_sensor_values = null,
+            public \Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues|null $latest_sensor_values = null,
         ) {}
     }
 
@@ -2352,6 +3367,8 @@ namespace Seam\Resources\Device\Properties {
             public string|null $device_id = null,
             /**
              * Device model for a NoiseAware device.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\NoiseawareMetadata\DeviceModel>|string|null
              */
             public string|null $device_model = null,
             /**
@@ -2678,6 +3695,8 @@ namespace Seam\Resources\Device\Properties {
             public string|null $name = null,
             /**
              * Unlock method for Seam Bridge.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\SeamBridgeMetadata\UnlockMethod>|string|null
              */
             public string|null $unlock_method = null,
         ) {}
@@ -2719,6 +3738,8 @@ namespace Seam\Resources\Device\Properties {
             public bool|null $dual_setpoints_not_supported = null,
             /**
              * Enforced setpoint range in Celsius for a Sensi device, derived from an OutOfRange API error.
+             *
+             * @var list<float>|null
              */
             public array|null $enforced_setpoint_range_celsius = null,
             /**
@@ -2860,14 +3881,20 @@ namespace Seam\Resources\Device\Properties {
             return new self(
                 feature_value: $json->feature_value ?? null,
                 features: isset($json->features)
-                    ? TtlockMetadata\Features::from_json($json->features)
+                    ? \Seam\Resources\Device\Properties\TtlockMetadata\Features::from_json(
+                        $json->features,
+                    )
                     : null,
                 has_gateway: $json->has_gateway ?? null,
                 lock_alias: $json->lock_alias ?? null,
                 lock_id: $json->lock_id ?? null,
                 timezone_raw_offset_ms: $json->timezone_raw_offset_ms ?? null,
                 wireless_keypads: array_map(
-                    fn($w) => TtlockMetadata\WirelessKeypads::from_json($w),
+                    fn(
+                        $w,
+                    ) => \Seam\Resources\Device\Properties\TtlockMetadata\WirelessKeypads::from_json(
+                        $w,
+                    ),
                     $json->wireless_keypads ?? [],
                 ),
             );
@@ -2881,7 +3908,7 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Features for a TTLock device.
              */
-            public TtlockMetadata\Features|null $features = null,
+            public \Seam\Resources\Device\Properties\TtlockMetadata\Features|null $features = null,
             /**
              * Indicates whether a TTLock device has a gateway.
              */
@@ -2900,6 +3927,8 @@ namespace Seam\Resources\Device\Properties {
             public float|null $timezone_raw_offset_ms = null,
             /**
              * Wireless keypads for a TTLock device.
+             *
+             * @var list<\Seam\Resources\Device\Properties\TtlockMetadata\WirelessKeypads>|null
              */
             public array|null $wireless_keypads = null,
         ) {}
@@ -3106,6 +4135,9 @@ namespace Seam\Resources\Device\Properties {
         }
 
         public function __construct(
+            /**
+             * @var value-of<\Seam\Resources\Device\Properties\CodeConstraints\ConstraintType>|string|null
+             */
             public string|null $constraint_type,
             /**
              * Maximum name length constraint for access codes.
@@ -3160,7 +4192,11 @@ namespace Seam\Resources\Device\Properties {
                 start_date_recurrence_rule: $json->start_date_recurrence_rule ??
                     null,
                 time_pairs: array_map(
-                    fn($t) => OfflineTimeFrameOptions\TimePairs::from_json($t),
+                    fn(
+                        $t,
+                    ) => \Seam\Resources\Device\Properties\OfflineTimeFrameOptions\TimePairs::from_json(
+                        $t,
+                    ),
                     $json->time_pairs ?? [],
                 ),
                 time_zone: $json->time_zone ?? null,
@@ -3194,6 +4230,8 @@ namespace Seam\Resources\Device\Properties {
             public string|null $start_date_recurrence_rule = null,
             /**
              * Fixed start/end time pairings the caller chooses from. Mutually exclusive with `matching_start_end_time`.
+             *
+             * @var list<\Seam\Resources\Device\Properties\OfflineTimeFrameOptions\TimePairs>|null
              */
             public array|null $time_pairs = null,
             /**
@@ -3224,7 +4262,11 @@ namespace Seam\Resources\Device\Properties {
                 start_date_recurrence_rule: $json->start_date_recurrence_rule ??
                     null,
                 time_pairs: array_map(
-                    fn($t) => OnlineTimeFrameOptions\TimePairs::from_json($t),
+                    fn(
+                        $t,
+                    ) => \Seam\Resources\Device\Properties\OnlineTimeFrameOptions\TimePairs::from_json(
+                        $t,
+                    ),
                     $json->time_pairs ?? [],
                 ),
                 time_zone: $json->time_zone ?? null,
@@ -3258,6 +4300,8 @@ namespace Seam\Resources\Device\Properties {
             public string|null $start_date_recurrence_rule = null,
             /**
              * Fixed start/end time pairings the caller chooses from. Mutually exclusive with `matching_start_end_time`.
+             *
+             * @var list<\Seam\Resources\Device\Properties\OnlineTimeFrameOptions\TimePairs>|null
              */
             public array|null $time_pairs = null,
             /**
@@ -3286,16 +4330,20 @@ namespace Seam\Resources\Device\Properties {
                 device_id: $json->device_id ?? null,
                 ends_at: $json->ends_at ?? null,
                 errors: array_map(
-                    fn($e) => ActiveThermostatSchedule\Errors::from_json($e),
+                    fn(
+                        $e,
+                    ) => \Seam\Resources\Device\Properties\ActiveThermostatSchedule\Errors::from_json(
+                        $e,
+                    ),
                     $json->errors ?? [],
                 ),
-                is_override_allowed: $json->is_override_allowed ?? null,
-                max_override_period_minutes: $json->max_override_period_minutes ??
-                    null,
                 name: $json->name ?? null,
                 starts_at: $json->starts_at ?? null,
                 thermostat_schedule_id: $json->thermostat_schedule_id ?? null,
                 workspace_id: $json->workspace_id ?? null,
+                is_override_allowed: $json->is_override_allowed ?? null,
+                max_override_period_minutes: $json->max_override_period_minutes ??
+                    null,
             );
         }
 
@@ -3318,6 +4366,8 @@ namespace Seam\Resources\Device\Properties {
             public string|null $ends_at,
             /**
              * Errors associated with the [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
+             *
+             * @var list<\Seam\Resources\Device\Properties\ActiveThermostatSchedule\Errors>
              */
             public array $errors,
             /**
@@ -3364,14 +4414,15 @@ namespace Seam\Resources\Device\Properties {
                 can_use_with_thermostat_daily_programs: $json->can_use_with_thermostat_daily_programs ??
                     null,
                 climate_preset_key: $json->climate_preset_key ?? null,
+                display_name: $json->display_name ?? null,
+                manual_override_allowed: $json->manual_override_allowed ?? null,
                 climate_preset_mode: $json->climate_preset_mode ?? null,
                 cooling_set_point_celsius: $json->cooling_set_point_celsius ??
                     null,
                 cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
                     null,
-                display_name: $json->display_name ?? null,
                 ecobee_metadata: isset($json->ecobee_metadata)
-                    ? AvailableClimatePresets\EcobeeMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\AvailableClimatePresets\EcobeeMetadata::from_json(
                         $json->ecobee_metadata,
                     )
                     : null,
@@ -3381,7 +4432,6 @@ namespace Seam\Resources\Device\Properties {
                 heating_set_point_fahrenheit: $json->heating_set_point_fahrenheit ??
                     null,
                 hvac_mode_setting: $json->hvac_mode_setting ?? null,
-                manual_override_allowed: $json->manual_override_allowed ?? null,
                 name: $json->name ?? null,
             );
         }
@@ -3415,6 +4465,8 @@ namespace Seam\Resources\Device\Properties {
             public bool|null $manual_override_allowed,
             /**
              * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\AvailableClimatePresets\ClimatePresetMode>|string|null
              */
             public string|null $climate_preset_mode = null,
             /**
@@ -3428,9 +4480,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Metadata specific to the Ecobee climate, if applicable.
              */
-            public AvailableClimatePresets\EcobeeMetadata|null $ecobee_metadata = null,
+            public \Seam\Resources\Device\Properties\AvailableClimatePresets\EcobeeMetadata|null $ecobee_metadata = null,
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\AvailableClimatePresets\FanModeSetting>|string|null
              */
             public string|null $fan_mode_setting = null,
             /**
@@ -3443,6 +4497,8 @@ namespace Seam\Resources\Device\Properties {
             public float|null $heating_set_point_fahrenheit = null,
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\AvailableClimatePresets\HvacModeSetting>|string|null
              */
             public string|null $hvac_mode_setting = null,
             /**
@@ -3476,7 +4532,7 @@ namespace Seam\Resources\Device\Properties {
                     null,
                 display_name: $json->display_name ?? null,
                 ecobee_metadata: isset($json->ecobee_metadata)
-                    ? CurrentClimateSetting\EcobeeMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\CurrentClimateSetting\EcobeeMetadata::from_json(
                         $json->ecobee_metadata,
                     )
                     : null,
@@ -3510,6 +4566,8 @@ namespace Seam\Resources\Device\Properties {
             public string|null $climate_preset_key = null,
             /**
              * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\CurrentClimateSetting\ClimatePresetMode>|string|null
              */
             public string|null $climate_preset_mode = null,
             /**
@@ -3527,9 +4585,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Metadata specific to the Ecobee climate, if applicable.
              */
-            public CurrentClimateSetting\EcobeeMetadata|null $ecobee_metadata = null,
+            public \Seam\Resources\Device\Properties\CurrentClimateSetting\EcobeeMetadata|null $ecobee_metadata = null,
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\CurrentClimateSetting\FanModeSetting>|string|null
              */
             public string|null $fan_mode_setting = null,
             /**
@@ -3542,6 +4602,8 @@ namespace Seam\Resources\Device\Properties {
             public float|null $heating_set_point_fahrenheit = null,
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\CurrentClimateSetting\HvacModeSetting>|string|null
              */
             public string|null $hvac_mode_setting = null,
             /**
@@ -3581,7 +4643,7 @@ namespace Seam\Resources\Device\Properties {
                     null,
                 display_name: $json->display_name ?? null,
                 ecobee_metadata: isset($json->ecobee_metadata)
-                    ? DefaultClimateSetting\EcobeeMetadata::from_json(
+                    ? \Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata::from_json(
                         $json->ecobee_metadata,
                     )
                     : null,
@@ -3615,6 +4677,8 @@ namespace Seam\Resources\Device\Properties {
             public string|null $climate_preset_key = null,
             /**
              * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\DefaultClimateSetting\ClimatePresetMode>|string|null
              */
             public string|null $climate_preset_mode = null,
             /**
@@ -3632,9 +4696,11 @@ namespace Seam\Resources\Device\Properties {
             /**
              * Metadata specific to the Ecobee climate, if applicable.
              */
-            public DefaultClimateSetting\EcobeeMetadata|null $ecobee_metadata = null,
+            public \Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata|null $ecobee_metadata = null,
             /**
              * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\DefaultClimateSetting\FanModeSetting>|string|null
              */
             public string|null $fan_mode_setting = null,
             /**
@@ -3647,6 +4713,8 @@ namespace Seam\Resources\Device\Properties {
             public float|null $heating_set_point_fahrenheit = null,
             /**
              * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\DefaultClimateSetting\HvacModeSetting>|string|null
              */
             public string|null $hvac_mode_setting = null,
             /**
@@ -3716,7 +4784,11 @@ namespace Seam\Resources\Device\Properties {
                 device_id: $json->device_id ?? null,
                 name: $json->name ?? null,
                 periods: array_map(
-                    fn($p) => ThermostatDailyPrograms\Periods::from_json($p),
+                    fn(
+                        $p,
+                    ) => \Seam\Resources\Device\Properties\ThermostatDailyPrograms\Periods::from_json(
+                        $p,
+                    ),
                     $json->periods ?? [],
                 ),
                 thermostat_daily_program_id: $json->thermostat_daily_program_id ??
@@ -3740,6 +4812,8 @@ namespace Seam\Resources\Device\Properties {
             public string|null $name,
             /**
              * Array of thermostat daily program periods.
+             *
+             * @var list<\Seam\Resources\Device\Properties\ThermostatDailyPrograms\Periods>
              */
             public array $periods,
             /**
@@ -3811,6 +4885,13 @@ namespace Seam\Resources\Device\Properties {
             public string|null $wednesday_program_id,
         ) {}
     }
+
+    enum FanModeSetting: string
+    {
+        case AUTO = "auto";
+        case ON = "on";
+        case CIRCULATE = "circulate";
+    }
 }
 
 namespace Seam\Resources\Device\Properties\AccessoryKeypad {
@@ -3828,6 +4909,16 @@ namespace Seam\Resources\Device\Properties\AccessoryKeypad {
         }
 
         public function __construct(public float|null $level) {}
+    }
+}
+
+namespace Seam\Resources\Device\Properties\Battery {
+    enum Status: string
+    {
+        case CRITICAL = "critical";
+        case LOW = "low";
+        case GOOD = "good";
+        case FULL = "full";
     }
 }
 
@@ -3946,21 +5037,27 @@ namespace Seam\Resources\Device\Properties\MinutMetadata {
             }
             return new self(
                 accelerometer_z: isset($json->accelerometer_z)
-                    ? LatestSensorValues\AccelerometerZ::from_json(
+                    ? \Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues\AccelerometerZ::from_json(
                         $json->accelerometer_z,
                     )
                     : null,
                 humidity: isset($json->humidity)
-                    ? LatestSensorValues\Humidity::from_json($json->humidity)
+                    ? \Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues\Humidity::from_json(
+                        $json->humidity,
+                    )
                     : null,
                 pressure: isset($json->pressure)
-                    ? LatestSensorValues\Pressure::from_json($json->pressure)
+                    ? \Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues\Pressure::from_json(
+                        $json->pressure,
+                    )
                     : null,
                 sound: isset($json->sound)
-                    ? LatestSensorValues\Sound::from_json($json->sound)
+                    ? \Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues\Sound::from_json(
+                        $json->sound,
+                    )
                     : null,
                 temperature: isset($json->temperature)
-                    ? LatestSensorValues\Temperature::from_json(
+                    ? \Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues\Temperature::from_json(
                         $json->temperature,
                     )
                     : null,
@@ -3971,23 +5068,23 @@ namespace Seam\Resources\Device\Properties\MinutMetadata {
             /**
              * Latest accelerometer Z-axis reading for a Minut device.
              */
-            public LatestSensorValues\AccelerometerZ|null $accelerometer_z = null,
+            public \Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues\AccelerometerZ|null $accelerometer_z = null,
             /**
              * Latest humidity reading for a Minut device.
              */
-            public LatestSensorValues\Humidity|null $humidity = null,
+            public \Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues\Humidity|null $humidity = null,
             /**
              * Latest pressure reading for a Minut device.
              */
-            public LatestSensorValues\Pressure|null $pressure = null,
+            public \Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues\Pressure|null $pressure = null,
             /**
              * Latest sound reading for a Minut device.
              */
-            public LatestSensorValues\Sound|null $sound = null,
+            public \Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues\Sound|null $sound = null,
             /**
              * Latest temperature reading for a Minut device.
              */
-            public LatestSensorValues\Temperature|null $temperature = null,
+            public \Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues\Temperature|null $temperature = null,
         ) {}
     }
 }
@@ -4134,6 +5231,22 @@ namespace Seam\Resources\Device\Properties\MinutMetadata\LatestSensorValues {
     }
 }
 
+namespace Seam\Resources\Device\Properties\NoiseawareMetadata {
+    enum DeviceModel: string
+    {
+        case INDOOR = "indoor";
+        case OUTDOOR = "outdoor";
+    }
+}
+
+namespace Seam\Resources\Device\Properties\SeamBridgeMetadata {
+    enum UnlockMethod: string
+    {
+        case BRIDGE = "bridge";
+        case DOORKING = "doorking";
+    }
+}
+
 namespace Seam\Resources\Device\Properties\TtlockMetadata {
     /**
      * Features for a TTLock device.
@@ -4215,6 +5328,26 @@ namespace Seam\Resources\Device\Properties\TtlockMetadata {
              */
             public string|null $wireless_keypad_name = null,
         ) {}
+    }
+}
+
+namespace Seam\Resources\Device\Properties\CodeConstraints {
+    enum ConstraintType: string
+    {
+        case NO_ZEROS = "no_zeros";
+        case CANNOT_START_WITH_12 = "cannot_start_with_12";
+        case NO_TRIPLE_CONSECUTIVE_INTS = "no_triple_consecutive_ints";
+        case CANNOT_SPECIFY_PIN_CODE = "cannot_specify_pin_code";
+        case PIN_CODE_MATCHES_EXISTING_SET = "pin_code_matches_existing_set";
+        case START_DATE_IN_FUTURE = "start_date_in_future";
+        case NO_ASCENDING_OR_DESCENDING_SEQUENCE = "no_ascending_or_descending_sequence";
+        case AT_LEAST_THREE_UNIQUE_DIGITS = "at_least_three_unique_digits";
+        case CANNOT_CONTAIN_089 = "cannot_contain_089";
+        case CANNOT_CONTAIN_0789 = "cannot_contain_0789";
+        case UNIQUE_FIRST_FOUR_DIGITS = "unique_first_four_digits";
+        case NO_ALL_SAME_DIGITS = "no_all_same_digits";
+        case NAME_LENGTH = "name_length";
+        case NAME_MUST_BE_UNIQUE = "name_must_be_unique";
     }
 }
 
@@ -4352,9 +5485,45 @@ namespace Seam\Resources\Device\Properties\AvailableClimatePresets {
             public bool|null $is_optimized = null,
             /**
              * Indicates whether the climate preset is owned by the user or the system.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\AvailableClimatePresets\EcobeeMetadata\Owner>|string|null
              */
             public string|null $owner = null,
         ) {}
+    }
+
+    enum ClimatePresetMode: string
+    {
+        case HOME = "home";
+        case AWAY = "away";
+        case WAKE = "wake";
+        case SLEEP = "sleep";
+        case OCCUPIED = "occupied";
+        case UNOCCUPIED = "unoccupied";
+    }
+
+    enum FanModeSetting: string
+    {
+        case AUTO = "auto";
+        case ON = "on";
+        case CIRCULATE = "circulate";
+    }
+
+    enum HvacModeSetting: string
+    {
+        case OFF = "off";
+        case HEAT = "heat";
+        case COOL = "cool";
+        case HEAT_COOL = "heat_cool";
+        case ECO = "eco";
+    }
+}
+
+namespace Seam\Resources\Device\Properties\AvailableClimatePresets\EcobeeMetadata {
+    enum Owner: string
+    {
+        case USER = "user";
+        case SYSTEM = "system";
     }
 }
 
@@ -4387,9 +5556,45 @@ namespace Seam\Resources\Device\Properties\CurrentClimateSetting {
             public bool|null $is_optimized = null,
             /**
              * Indicates whether the climate preset is owned by the user or the system.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\CurrentClimateSetting\EcobeeMetadata\Owner>|string|null
              */
             public string|null $owner = null,
         ) {}
+    }
+
+    enum ClimatePresetMode: string
+    {
+        case HOME = "home";
+        case AWAY = "away";
+        case WAKE = "wake";
+        case SLEEP = "sleep";
+        case OCCUPIED = "occupied";
+        case UNOCCUPIED = "unoccupied";
+    }
+
+    enum FanModeSetting: string
+    {
+        case AUTO = "auto";
+        case ON = "on";
+        case CIRCULATE = "circulate";
+    }
+
+    enum HvacModeSetting: string
+    {
+        case OFF = "off";
+        case HEAT = "heat";
+        case COOL = "cool";
+        case HEAT_COOL = "heat_cool";
+        case ECO = "eco";
+    }
+}
+
+namespace Seam\Resources\Device\Properties\CurrentClimateSetting\EcobeeMetadata {
+    enum Owner: string
+    {
+        case USER = "user";
+        case SYSTEM = "system";
     }
 }
 
@@ -4422,9 +5627,45 @@ namespace Seam\Resources\Device\Properties\DefaultClimateSetting {
             public bool|null $is_optimized = null,
             /**
              * Indicates whether the climate preset is owned by the user or the system.
+             *
+             * @var value-of<\Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata\Owner>|string|null
              */
             public string|null $owner = null,
         ) {}
+    }
+
+    enum ClimatePresetMode: string
+    {
+        case HOME = "home";
+        case AWAY = "away";
+        case WAKE = "wake";
+        case SLEEP = "sleep";
+        case OCCUPIED = "occupied";
+        case UNOCCUPIED = "unoccupied";
+    }
+
+    enum FanModeSetting: string
+    {
+        case AUTO = "auto";
+        case ON = "on";
+        case CIRCULATE = "circulate";
+    }
+
+    enum HvacModeSetting: string
+    {
+        case OFF = "off";
+        case HEAT = "heat";
+        case COOL = "cool";
+        case HEAT_COOL = "heat_cool";
+        case ECO = "eco";
+    }
+}
+
+namespace Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata {
+    enum Owner: string
+    {
+        case USER = "user";
+        case SYSTEM = "system";
     }
 }
 
@@ -4455,5 +5696,1189 @@ namespace Seam\Resources\Device\Properties\ThermostatDailyPrograms {
              */
             public string|null $starts_at_time,
         ) {}
+    }
+}
+
+namespace Seam\Resources\Device\Warnings {
+    /**
+     * Indicates that the backup access code is unhealthy.
+     */
+    final class PartialBackupAccessCodePool extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): PartialBackupAccessCodePool|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that there are too many backup codes.
+     */
+    final class ManyActiveBackupCodes extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): ManyActiveBackupCodes|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that a third-party integration has been detected.
+     */
+    final class ThirdPartyIntegrationDetected extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): ThirdPartyIntegrationDetected|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the Remote Unlock feature is not enabled in the settings."
+     */
+    final class TtlockLockGatewayUnlockingNotEnabled extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): TtlockLockGatewayUnlockingNotEnabled|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the gateway signal is weak.
+     */
+    final class TtlockWeakGatewaySignal extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): TtlockWeakGatewaySignal|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the device is in power saving mode and may have limited functionality.
+     */
+    final class PowerSavingMode extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(mixed $json): PowerSavingMode|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the temperature threshold has been exceeded.
+     */
+    final class TemperatureThresholdExceeded extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): TemperatureThresholdExceeded|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the device appears to be unresponsive.
+     */
+    final class DeviceCommunicationDegraded extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): DeviceCommunicationDegraded|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that a scheduled maintenance window has been detected.
+     */
+    final class ScheduledMaintenanceWindow extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): ScheduledMaintenanceWindow|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the device has a flaky connection.
+     */
+    final class DeviceHasFlakyConnection extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): DeviceHasFlakyConnection|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the Salto KS lock is in Office Mode. Access Codes will not unlock doors.
+     */
+    final class SaltoKsOfficeMode extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(mixed $json): SaltoKsOfficeMode|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the Salto KS lock is in Privacy Mode. Access Codes will not unlock doors.
+     */
+    final class SaltoKsPrivacyMode extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(mixed $json): SaltoKsPrivacyMode|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the lock is in Privacy Mode. Access codes and remote unlock are blocked until Privacy Mode is disabled.
+     */
+    final class PrivacyMode extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(mixed $json): PrivacyMode|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the Salto KS site has exceeded 80% of the maximum number of allowed users. Increase your subscription limit or delete some users from your site.
+     */
+    final class SaltoKsSubscriptionLimitAlmostReached extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): SaltoKsSubscriptionLimitAlmostReached|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that a change in the reported device model has been detected for this Salto KS lock, which may occur after an IQ hub reset. Access code support may be affected. See https://help.getseam.com/articles/5098842588-salto-ks-lock-loses-access-code-support for troubleshooting steps.
+     */
+    final class SaltoKsLockAccessCodeSupportRemoved extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): SaltoKsLockAccessCodeSupportRemoved|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that an unknown issue occurred while syncing the state of the phone with the provider. This issue may affect the proper functioning of the phone.
+     */
+    final class UnknownIssueWithPhone extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): UnknownIssueWithPhone|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that Seam detected that the Lockly device does not have a time zone configured. Time-bound codes may not work as expected.
+     */
+    final class LocklyTimeZoneNotConfigured extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): LocklyTimeZoneNotConfigured|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that Seam does not know the time zone of the Ultraloq device. Set a time zone to enable time-bound access codes.
+     */
+    final class UltraloqTimeZoneUnknown extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): UltraloqTimeZoneUnknown|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that Seam does not know the device's time zone. Set a time zone to enable time-bound access codes.
+     */
+    final class TimeZoneUnknown extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(mixed $json): TimeZoneUnknown|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the device's configured time zone does not match its hardware UTC offset. Time-bound access codes may activate at the wrong local time.
+     */
+    final class TimeZoneMismatch extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(mixed $json): TimeZoneMismatch|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the 2N device does not have a time zone configured. Configure a time zone on the device to enable access codes.
+     */
+    final class TwoNDeviceMissingTimezone extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): TwoNDeviceMissingTimezone|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that a hub or relay must be connected to unlock additional capabilities such as remote unlock.
+     */
+    final class HubRequiredForAdditionalCapabilities extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): HubRequiredForAdditionalCapabilities|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates a provider-specific issue that may affect device functionality.
+     */
+    final class ProviderIssue extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(mixed $json): ProviderIssue|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the key is in a locker that does not support the access codes API.
+     */
+    final class KeynestUnsupportedLocker extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): KeynestUnsupportedLocker|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the accessory keypad exists, but is not linked to the Igloohome Bridge. Online access code programming will fail until the keypad is linked to the Igloohome Bridge in the Igloohome app.
+     */
+    final class AccessoryKeypadSetupRequired extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): AccessoryKeypadSetupRequired|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the device may optimistically be reported as online because the provider does not reliably report its online status.
+     */
+    final class UnreliableOnlineStatus extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): UnreliableOnlineStatus|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the device has reached its maximum number of active access codes. Delete existing codes before creating new ones.
+     */
+    final class MaxAccessCodesReached extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): MaxAccessCodesReached|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                active_access_code_count: $json->active_access_code_count ??
+                    null,
+                created_at: $json->created_at ?? null,
+                max_active_access_code_count: $json->max_active_access_code_count ??
+                    null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Number of active access codes on the device when the warning was set.
+             */
+            public int|null $active_access_code_count,
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Maximum number of active access codes supported by the device.
+             */
+            public int|null $max_active_access_code_count,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    enum WarningCode: string
+    {
+        case PARTIAL_BACKUP_ACCESS_CODE_POOL = "partial_backup_access_code_pool";
+        case MANY_ACTIVE_BACKUP_CODES = "many_active_backup_codes";
+        case THIRD_PARTY_INTEGRATION_DETECTED = "third_party_integration_detected";
+        case TTLOCK_LOCK_GATEWAY_UNLOCKING_NOT_ENABLED = "ttlock_lock_gateway_unlocking_not_enabled";
+        case TTLOCK_WEAK_GATEWAY_SIGNAL = "ttlock_weak_gateway_signal";
+        case POWER_SAVING_MODE = "power_saving_mode";
+        case TEMPERATURE_THRESHOLD_EXCEEDED = "temperature_threshold_exceeded";
+        case DEVICE_COMMUNICATION_DEGRADED = "device_communication_degraded";
+        case SCHEDULED_MAINTENANCE_WINDOW = "scheduled_maintenance_window";
+        case DEVICE_HAS_FLAKY_CONNECTION = "device_has_flaky_connection";
+        case SALTO_KS_OFFICE_MODE = "salto_ks_office_mode";
+        case SALTO_KS_PRIVACY_MODE = "salto_ks_privacy_mode";
+        case PRIVACY_MODE = "privacy_mode";
+        case SALTO_KS_SUBSCRIPTION_LIMIT_ALMOST_REACHED = "salto_ks_subscription_limit_almost_reached";
+        case SALTO_KS_LOCK_ACCESS_CODE_SUPPORT_REMOVED = "salto_ks_lock_access_code_support_removed";
+        case UNKNOWN_ISSUE_WITH_PHONE = "unknown_issue_with_phone";
+        case LOCKLY_TIME_ZONE_NOT_CONFIGURED = "lockly_time_zone_not_configured";
+        case ULTRALOQ_TIME_ZONE_UNKNOWN = "ultraloq_time_zone_unknown";
+        case TIME_ZONE_UNKNOWN = "time_zone_unknown";
+        case TIME_ZONE_MISMATCH = "time_zone_mismatch";
+        case TWO_N_DEVICE_MISSING_TIMEZONE = "two_n_device_missing_timezone";
+        case HUB_REQUIRED_FOR_ADDITIONAL_CAPABILITIES = "hub_required_for_additional_capabilities";
+        case PROVIDER_ISSUE = "provider_issue";
+        case KEYNEST_UNSUPPORTED_LOCKER = "keynest_unsupported_locker";
+        case ACCESSORY_KEYPAD_SETUP_REQUIRED = "accessory_keypad_setup_required";
+        case UNRELIABLE_ONLINE_STATUS = "unreliable_online_status";
+        case MAX_ACCESS_CODES_REACHED = "max_access_codes_reached";
     }
 }

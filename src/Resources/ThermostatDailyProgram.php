@@ -17,7 +17,11 @@ namespace Seam\Resources {
                 device_id: $json->device_id ?? null,
                 name: $json->name ?? null,
                 periods: array_map(
-                    fn($p) => ThermostatDailyProgram\Periods::from_json($p),
+                    fn(
+                        $p,
+                    ) => \Seam\Resources\ThermostatDailyProgram\Periods::from_json(
+                        $p,
+                    ),
                     $json->periods ?? [],
                 ),
                 thermostat_daily_program_id: $json->thermostat_daily_program_id ??
@@ -41,6 +45,8 @@ namespace Seam\Resources {
             public string|null $name,
             /**
              * Array of thermostat daily program periods.
+             *
+             * @var list<\Seam\Resources\ThermostatDailyProgram\Periods>
              */
             public array $periods,
             /**
