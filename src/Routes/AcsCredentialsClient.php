@@ -189,38 +189,35 @@ class AcsCredentialsClient
     /**
      * Returns a list of all [credentials](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
      *
-     * @param string $acs_user_id ID of the access system user for which you want to retrieve all credentials.
      * @param string $acs_system_id ID of the access system for which you want to retrieve all credentials.
-     * @param string $user_identity_id ID of the user identity for which you want to retrieve all credentials.
+     * @param string $acs_user_id ID of the access system user for which you want to retrieve all credentials.
      * @param string $created_before Date and time, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format, before which events to return were created.
      * @param bool $is_multi_phone_sync_credential Indicates whether you want to retrieve only multi-phone sync credentials or non-multi-phone sync credentials.
      * @param float $limit Number of credentials to return.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned credentials to include all records that satisfy a partial match using `display_name`, `code`, `card_number`, `acs_user_id` or `acs_credential_id`.
+     * @param string $user_identity_id ID of the user identity for which you want to retrieve all credentials.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
-        ?string $acs_user_id = null,
         ?string $acs_system_id = null,
-        ?string $user_identity_id = null,
+        ?string $acs_user_id = null,
         ?string $created_before = null,
         ?bool $is_multi_phone_sync_credential = null,
         ?float $limit = null,
         string|NullValue|null $page_cursor = null,
         ?string $search = null,
+        ?string $user_identity_id = null,
         ?callable $on_response = null,
     ): array {
         $request_payload = [];
 
-        if ($acs_user_id !== null) {
-            $request_payload["acs_user_id"] = $acs_user_id;
-        }
         if ($acs_system_id !== null) {
             $request_payload["acs_system_id"] = $acs_system_id;
         }
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
+        if ($acs_user_id !== null) {
+            $request_payload["acs_user_id"] = $acs_user_id;
         }
         if ($created_before !== null) {
             $request_payload["created_before"] = $created_before;
@@ -238,6 +235,9 @@ class AcsCredentialsClient
         }
         if ($search !== null) {
             $request_payload["search"] = $search;
+        }
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
         }
 
         $res = Body::decode(

@@ -407,6 +407,61 @@ class UserIdentitiesClient
     }
 
     /**
+     * Merges one or more [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) into a primary user identity, for when the same person ended up with more than one user identity.
+     *
+     * The primary user identity takes on any email address or phone number it was missing from the user identities merged into it, and the merged user identities are then deleted. Their IDs and keys keep working: looking one up returns the primary user identity, and they are listed on it as `merged_user_identity_ids` and `merged_user_identity_keys`.
+     *
+     * Access grants, access system users, client sessions and other resources belonging to the merged user identities are moved to the primary user identity.
+     *
+     * Identify the user identities either by ID or by key, but not both in the same request. Repeating a merge that has already been applied makes no further changes.
+     *
+     * @param list<string> $merged_user_identity_ids IDs of the user identities to merge into the primary user identity. These user identities are deleted.
+     * @param string $user_identity_id ID of the primary user identity to keep.
+     * @param list<string> $merged_user_identity_keys Keys of the user identities to merge into the primary user identity. These user identities are deleted.
+     * @param string $user_identity_key Key of the primary user identity to keep.
+     * @return void OK
+     */
+    public function merge(
+        ?array $merged_user_identity_ids = null,
+        ?string $user_identity_id = null,
+        ?array $merged_user_identity_keys = null,
+        ?string $user_identity_key = null,
+    ): void {
+        if (
+            $merged_user_identity_ids === null &&
+            $user_identity_id === null &&
+            $merged_user_identity_keys === null &&
+            $user_identity_key === null
+        ) {
+            throw new \InvalidArgumentException(
+                "At least one parameter is required for /user_identities/merge",
+            );
+        }
+        $request_payload = [];
+
+        if ($merged_user_identity_ids !== null) {
+            $request_payload[
+                "merged_user_identity_ids"
+            ] = $merged_user_identity_ids;
+        }
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
+        }
+        if ($merged_user_identity_keys !== null) {
+            $request_payload[
+                "merged_user_identity_keys"
+            ] = $merged_user_identity_keys;
+        }
+        if ($user_identity_key !== null) {
+            $request_payload["user_identity_key"] = $user_identity_key;
+        }
+
+        $this->client->request("POST", "/user_identities/merge", [
+            "json" => (object) $request_payload,
+        ]);
+    }
+
+    /**
      * Removes a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) from a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * @param string $acs_user_id ID of the access system user that you want to remove from the user identity..
