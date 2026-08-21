@@ -99,32 +99,32 @@ class AcsEncodersClient
     /**
      * Returns a list of all [encoders](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
      *
+     * @param list<string> $acs_encoder_ids IDs of the encoders that you want to retrieve.
      * @param string $acs_system_id ID of the access system for which you want to retrieve all encoders.
      * @param list<string> $acs_system_ids IDs of the access systems for which you want to retrieve all encoders.
-     * @param list<string> $acs_encoder_ids IDs of the encoders that you want to retrieve.
      * @param float $limit Number of encoders to return.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
+        ?array $acs_encoder_ids = null,
         ?string $acs_system_id = null,
         ?array $acs_system_ids = null,
-        ?array $acs_encoder_ids = null,
         ?float $limit = null,
         string|NullValue|null $page_cursor = null,
         ?callable $on_response = null,
     ): array {
         $request_payload = [];
 
+        if ($acs_encoder_ids !== null) {
+            $request_payload["acs_encoder_ids"] = $acs_encoder_ids;
+        }
         if ($acs_system_id !== null) {
             $request_payload["acs_system_id"] = $acs_system_id;
         }
         if ($acs_system_ids !== null) {
             $request_payload["acs_system_ids"] = $acs_system_ids;
-        }
-        if ($acs_encoder_ids !== null) {
-            $request_payload["acs_encoder_ids"] = $acs_encoder_ids;
         }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;

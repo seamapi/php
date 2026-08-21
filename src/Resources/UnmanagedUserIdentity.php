@@ -26,6 +26,10 @@ namespace Seam\Resources {
                     $json->errors ?? [],
                 ),
                 full_name: $json->full_name ?? null,
+                merged_user_identity_ids: $json->merged_user_identity_ids ??
+                    null,
+                merged_user_identity_keys: $json->merged_user_identity_keys ??
+                    null,
                 phone_number: $json->phone_number ?? null,
                 user_identity_id: $json->user_identity_id ?? null,
                 warnings: array_map(
@@ -69,6 +73,18 @@ namespace Seam\Resources {
              * Full name of the user associated with the user identity.
              */
             public string|null $full_name,
+            /**
+             * IDs that other user identities used to have before they were merged into this user identity. Looking up any of them returns this user identity.
+             *
+             * @var list<string>|null
+             */
+            public array|null $merged_user_identity_ids,
+            /**
+             * Keys that other user identities used to have before they were merged into this user identity. Looking up any of them returns this user identity.
+             *
+             * @var list<string>|null
+             */
+            public array|null $merged_user_identity_keys,
             /**
              * Unique phone number for the user identity in [E.164 format](https://www.itu.int/rec/T-REC-E.164/en) (for example, +15555550100).
              */

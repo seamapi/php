@@ -16,6 +16,7 @@ namespace Seam\Resources {
                 access_method_ids: $json->access_method_ids ?? null,
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
+                display_status: $json->display_status ?? null,
                 ends_at: $json->ends_at ?? null,
                 errors: array_map(
                     fn($e) => \Seam\Resources\AccessGrant\Errors::from_json($e),
@@ -77,6 +78,10 @@ namespace Seam\Resources {
              * Display name of the Access Grant.
              */
             public string|null $display_name,
+            /**
+             * Human-readable sentence answering whether the user can currently get in, for example `Awaiting encoding` on an access method or `Upcoming` here. For display only. The wording is not stable and is not an enumeration — it may change at any time, so never compare against or branch on it. To make decisions, read `starts_at`, `ends_at`, `errors`, and the access methods' own fields.
+             */
+            public string|null $display_status,
             /**
              * Date and time at which the Access Grant ends.
              */

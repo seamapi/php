@@ -244,6 +244,10 @@ namespace Seam\Resources\UnmanagedAccessCode {
                     => \Seam\Resources\UnmanagedAccessCode\Errors\AccessCodeInactive::from_json(
                     $json,
                 ),
+                \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::CODE_CONSTRAINTS_VIOLATED
+                    => \Seam\Resources\UnmanagedAccessCode\Errors\CodeConstraintsViolated::from_json(
+                    $json,
+                ),
                 \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::ACCOUNT_DISCONNECTED
                     => \Seam\Resources\UnmanagedAccessCode\Errors\AccountDisconnected::from_json(
                     $json,
@@ -723,6 +727,50 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
     {
         public static function from_json(mixed $json): AccessCodeInactive|null
         {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                error_code: $json->error_code ?? null,
+                is_access_code_error: $json->is_access_code_error ?? null,
+                message: $json->message ?? null,
+                created_at: $json->created_at ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that this is an access code error.
+             */
+            public true|null $is_access_code_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Date and time at which Seam created the error.
+             */
+            public string|null $created_at = null,
+        ) {
+            parent::__construct(error_code: $error_code, message: $message);
+        }
+    }
+
+    /**
+     * The code cannot be set on the device because it violates the device's code constraints (for example, its length, digits, or a too-simple value). The code will not be retried until you change it. See the device's `code_constraints` and `supported_code_lengths`.
+     */
+    final class CodeConstraintsViolated extends
+        \Seam\Resources\UnmanagedAccessCode\Errors
+    {
+        public static function from_json(
+            mixed $json,
+        ): CodeConstraintsViolated|null {
             if (!$json) {
                 return null;
             }
@@ -1403,6 +1451,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
         case NO_SPACE_FOR_ACCESS_CODE_ON_DEVICE = "no_space_for_access_code_on_device";
         case CONFLICTING_EXTERNAL_MODIFICATION = "conflicting_external_modification";
         case ACCESS_CODE_INACTIVE = "access_code_inactive";
+        case CODE_CONSTRAINTS_VIOLATED = "code_constraints_violated";
         case ACCOUNT_DISCONNECTED = "account_disconnected";
         case SALTO_KS_SUBSCRIPTION_LIMIT_EXCEEDED = "salto_ks_subscription_limit_exceeded";
         case INSUFFICIENT_PERMISSIONS = "insufficient_permissions";

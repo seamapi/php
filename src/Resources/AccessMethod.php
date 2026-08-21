@@ -15,6 +15,7 @@ namespace Seam\Resources {
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
+                display_status: $json->display_status ?? null,
                 errors: array_map(
                     fn($e) => \Seam\Resources\AccessMethod\Errors::from_json(
                         $e,
@@ -64,6 +65,10 @@ namespace Seam\Resources {
              * Display name of the access method.
              */
             public string|null $display_name,
+            /**
+             * Human-readable sentence describing where the access method sits in its relationship with the device or access system, for example `Awaiting encoding`. For display only. The wording is not stable and is not an enumeration — it may change at any time, so never compare against or branch on it. To make decisions, read `is_issued`, `errors`, and `pending_mutations`.
+             */
+            public string|null $display_status,
             /**
              * Errors associated with the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant).
              *
