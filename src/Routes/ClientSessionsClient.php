@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\ClientSession;
 
 class ClientSessionsClient
@@ -249,17 +250,17 @@ class ClientSessionsClient
      * Returns a list of all [client sessions](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
      *
      * @param string $client_session_id ID of the client session that you want to retrieve.
-     * @param string $connect_webview_id ID of the [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews) for which you want to retrieve client sessions.
+     * @param string|NullValue $connect_webview_id ID of the [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews) for which you want to retrieve client sessions. Specify `null` to retrieve client sessions that are not associated with a Connect Webview.
      * @param string $user_identifier_key Your user ID for the user by which you want to filter client sessions.
-     * @param string $user_identity_id ID of the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) for which you want to retrieve client sessions.
+     * @param string|NullValue $user_identity_id ID of the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) for which you want to retrieve client sessions. Specify `null` to retrieve client sessions that are not associated with a user identity.
      * @param bool $without_user_identifier_key Indicates whether to retrieve only client sessions without associated user identifier keys.
      * @return array OK
      */
     public function list(
         ?string $client_session_id = null,
-        ?string $connect_webview_id = null,
+        string|NullValue|null $connect_webview_id = null,
         ?string $user_identifier_key = null,
-        ?string $user_identity_id = null,
+        string|NullValue|null $user_identity_id = null,
         ?bool $without_user_identifier_key = null,
     ): array {
         $request_payload = [];

@@ -35,10 +35,12 @@ namespace Seam\Resources {
         public function __construct(
             /**
              * Company name associated with the [workspace](https://docs.seam.co/core-concepts/workspaces).
+             *
+             * @deprecated Use `connect_partner_name` instead.
              */
             public string|null $company_name,
             /**
-             * @deprecated Use `company_name` instead.
+             * Seam Connect partner name associated with the [workspace](https://docs.seam.co/core-concepts/workspaces).
              */
             public string|null $connect_partner_name,
             public \Seam\Resources\Workspace\ConnectWebviewCustomization|null $connect_webview_customization,

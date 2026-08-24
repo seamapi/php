@@ -18,6 +18,7 @@ namespace Seam\Resources {
                 custom_metadata: $json->custom_metadata ?? null,
                 device_id: $json->device_id ?? null,
                 device_type: $json->device_type ?? null,
+                display_name: $json->display_name ?? null,
                 errors: array_map(
                     fn($e) => \Seam\Resources\UnmanagedDevice\Errors::from_json(
                         $e,
@@ -93,7 +94,7 @@ namespace Seam\Resources {
              */
             public string|null $created_at,
             /**
-             * Set of key:value pairs. Adding custom metadata to a resource, such as a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews/attaching-custom-data-to-the-connect-webview), [connected account](https://docs.seam.co/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account), or [device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device), enables you to store custom information, like customer details or internal IDs from your application.
+             * Set of key:value pairs. Adding custom metadata to a resource, such as a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews/attaching-custom-data-to-the-connect-webview), [connected account](https://docs.seam.co/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account), or [device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device), enables you to store custom information, like customer details or internal IDs from your application. Keys set to `null` or to an empty string are omitted.
              *
              * @var array<string, string|bool>|\stdClass|null
              */
@@ -108,6 +109,10 @@ namespace Seam\Resources {
              * @var value-of<\Seam\Resources\UnmanagedDevice\DeviceType>|string|null
              */
             public string|null $device_type,
+            /**
+             * Display name of the device, defaults to nickname (if it is set) or `properties.appearance.name`, otherwise. Enables administrators and users to identify the device easily, especially when there are numerous devices.
+             */
+            public string|null $display_name,
             /**
              * Array of errors associated with the device. Each error object within the array contains two fields: `error_code` and `message`. `error_code` is a string that uniquely identifies the type of error, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the error, offering insights into the issue and potentially how to rectify it.
              *
@@ -568,6 +573,10 @@ namespace Seam\Resources\UnmanagedDevice {
                 ),
                 \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::ACCESSORY_KEYPAD_SETUP_REQUIRED
                     => \Seam\Resources\UnmanagedDevice\Warnings\AccessoryKeypadSetupRequired::from_json(
+                    $json,
+                ),
+                \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::ACCESSORY_KEYPAD_LOW_BATTERY
+                    => \Seam\Resources\UnmanagedDevice\Warnings\AccessoryKeypadLowBattery::from_json(
                     $json,
                 ),
                 \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::UNRELIABLE_ONLINE_STATUS
@@ -2579,6 +2588,49 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
     }
 
     /**
+     * Indicates that the accessory keypad paired with this lock has a low or critically low battery. Replace its batteries so guests can keep entering their access codes.
+     */
+    final class AccessoryKeypadLowBattery extends
+        \Seam\Resources\UnmanagedDevice\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): AccessoryKeypadLowBattery|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
      * Indicates that the device may optimistically be reported as online because the provider does not reliably report its online status.
      */
     final class UnreliableOnlineStatus extends
@@ -2703,6 +2755,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
         case PROVIDER_ISSUE = "provider_issue";
         case KEYNEST_UNSUPPORTED_LOCKER = "keynest_unsupported_locker";
         case ACCESSORY_KEYPAD_SETUP_REQUIRED = "accessory_keypad_setup_required";
+        case ACCESSORY_KEYPAD_LOW_BATTERY = "accessory_keypad_low_battery";
         case UNRELIABLE_ONLINE_STATUS = "unreliable_online_status";
         case MAX_ACCESS_CODES_REACHED = "max_access_codes_reached";
     }

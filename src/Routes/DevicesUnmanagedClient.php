@@ -161,7 +161,7 @@ class DevicesUnmanagedClient
      * An unmanaged device has a limited set of visible properties and a subset of supported events. You cannot control an unmanaged device. Any [access codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) on an unmanaged device are unmanaged. To control an unmanaged device with Seam, [convert it to a managed device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices#convert-an-unmanaged-device-to-managed).
      *
      * @param string $device_id ID of the unmanaged device that you want to update.
-     * @param array<string, string|bool>|\stdClass $custom_metadata Custom metadata that you want to associate with the device. Supports up to 50 JSON key:value pairs.
+     * @param array<string, string|bool>|\stdClass $custom_metadata Custom metadata that you want to associate with the device. Supports up to 50 JSON key:value pairs, with key names up to 40 characters long that cannot contain a period (.). Set a key to `null` or to an empty string to remove that key from the custom metadata.
      * @param true $is_managed Indicates whether the device is managed. Set this parameter to `true` to convert an unmanaged device to managed.
      * @return void OK
      */

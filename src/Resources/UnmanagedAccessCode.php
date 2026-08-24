@@ -248,6 +248,18 @@ namespace Seam\Resources\UnmanagedAccessCode {
                     => \Seam\Resources\UnmanagedAccessCode\Errors\CodeConstraintsViolated::from_json(
                     $json,
                 ),
+                \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::FAILED_TO_ISSUE
+                    => \Seam\Resources\UnmanagedAccessCode\Errors\FailedToIssue::from_json(
+                    $json,
+                ),
+                \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::FAILED_TO_UPDATE
+                    => \Seam\Resources\UnmanagedAccessCode\Errors\FailedToUpdate::from_json(
+                    $json,
+                ),
+                \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::FAILED_TO_EXPIRE
+                    => \Seam\Resources\UnmanagedAccessCode\Errors\FailedToExpire::from_json(
+                    $json,
+                ),
                 \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::ACCOUNT_DISCONNECTED
                     => \Seam\Resources\UnmanagedAccessCode\Errors\AccountDisconnected::from_json(
                     $json,
@@ -360,6 +372,10 @@ namespace Seam\Resources\UnmanagedAccessCode {
                 ),
                 \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::DELAY_IN_REMOVING_FROM_DEVICE
                     => \Seam\Resources\UnmanagedAccessCode\Warnings\DelayInRemovingFromDevice::from_json(
+                    $json,
+                ),
+                \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::DELAY_IN_ISSUING
+                    => \Seam\Resources\UnmanagedAccessCode\Warnings\DelayInIssuing::from_json(
                     $json,
                 ),
                 \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::THIRD_PARTY_INTEGRATION_DETECTED
@@ -771,6 +787,134 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
         public static function from_json(
             mixed $json,
         ): CodeConstraintsViolated|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                error_code: $json->error_code ?? null,
+                is_access_code_error: $json->is_access_code_error ?? null,
+                message: $json->message ?? null,
+                created_at: $json->created_at ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that this is an access code error.
+             */
+            public true|null $is_access_code_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Date and time at which Seam created the error.
+             */
+            public string|null $created_at = null,
+        ) {
+            parent::__construct(error_code: $error_code, message: $message);
+        }
+    }
+
+    /**
+     * Seam was unable to issue this access code before its start time, so the recipient may be unable to unlock the device. This usually points to a problem that needs attention, such as an offline or disconnected device. Seam keeps retrying, and this error clears automatically if the access code is eventually issued.
+     */
+    final class FailedToIssue extends \Seam\Resources\UnmanagedAccessCode\Errors
+    {
+        public static function from_json(mixed $json): FailedToIssue|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                error_code: $json->error_code ?? null,
+                is_access_code_error: $json->is_access_code_error ?? null,
+                message: $json->message ?? null,
+                created_at: $json->created_at ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that this is an access code error.
+             */
+            public true|null $is_access_code_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Date and time at which Seam created the error.
+             */
+            public string|null $created_at = null,
+        ) {
+            parent::__construct(error_code: $error_code, message: $message);
+        }
+    }
+
+    /**
+     * Seam was unable to apply this access code's requested update to the device, so the code on the device does not match its requested state. Seam keeps retrying, and this error clears automatically once the update is applied.
+     */
+    final class FailedToUpdate extends
+        \Seam\Resources\UnmanagedAccessCode\Errors
+    {
+        public static function from_json(mixed $json): FailedToUpdate|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                error_code: $json->error_code ?? null,
+                is_access_code_error: $json->is_access_code_error ?? null,
+                message: $json->message ?? null,
+                created_at: $json->created_at ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that this is an access code error.
+             */
+            public true|null $is_access_code_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Date and time at which Seam created the error.
+             */
+            public string|null $created_at = null,
+        ) {
+            parent::__construct(error_code: $error_code, message: $message);
+        }
+    }
+
+    /**
+     * This access code is still active on the device even though its `ends_at` has passed, so the recipient may still be able to unlock the device after their access window ended. Seam is attempting to remove it, and this error clears automatically once the access code is no longer active.
+     */
+    final class FailedToExpire extends
+        \Seam\Resources\UnmanagedAccessCode\Errors
+    {
+        public static function from_json(mixed $json): FailedToExpire|null
+        {
             if (!$json) {
                 return null;
             }
@@ -1452,6 +1596,9 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
         case CONFLICTING_EXTERNAL_MODIFICATION = "conflicting_external_modification";
         case ACCESS_CODE_INACTIVE = "access_code_inactive";
         case CODE_CONSTRAINTS_VIOLATED = "code_constraints_violated";
+        case FAILED_TO_ISSUE = "failed_to_issue";
+        case FAILED_TO_UPDATE = "failed_to_update";
+        case FAILED_TO_EXPIRE = "failed_to_expire";
         case ACCOUNT_DISCONNECTED = "account_disconnected";
         case SALTO_KS_SUBSCRIPTION_LIMIT_EXCEEDED = "salto_ks_subscription_limit_exceeded";
         case INSUFFICIENT_PERMISSIONS = "insufficient_permissions";
@@ -1713,6 +1860,48 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
         public static function from_json(
             mixed $json,
         ): DelayInRemovingFromDevice|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+                created_at: $json->created_at ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at = null,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Seam has not yet issued this access code, even though its start time is approaching, so access may not be ready when the recipient arrives. Seam is still attempting to issue it, and this warning clears automatically once issuance succeeds.
+     */
+    final class DelayInIssuing extends
+        \Seam\Resources\UnmanagedAccessCode\Warnings
+    {
+        public static function from_json(mixed $json): DelayInIssuing|null
+        {
             if (!$json) {
                 return null;
             }
@@ -2011,6 +2200,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
         case EXTERNAL_MODIFICATION_IN_EFFECT = "external_modification_in_effect";
         case DELAY_IN_SETTING_ON_DEVICE = "delay_in_setting_on_device";
         case DELAY_IN_REMOVING_FROM_DEVICE = "delay_in_removing_from_device";
+        case DELAY_IN_ISSUING = "delay_in_issuing";
         case THIRD_PARTY_INTEGRATION_DETECTED = "third_party_integration_detected";
         case IGLOO_ALGOPIN_MUST_BE_USED_WITHIN_24_HOURS = "igloo_algopin_must_be_used_within_24_hours";
         case MANAGEMENT_TRANSFERRED = "management_transferred";

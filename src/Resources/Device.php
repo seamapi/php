@@ -100,7 +100,7 @@ namespace Seam\Resources {
              */
             public string|null $created_at,
             /**
-             * Set of key:value pairs. Adding custom metadata to a resource, such as a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews/attaching-custom-data-to-the-connect-webview), [connected account](https://docs.seam.co/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account), or [device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device), enables you to store custom information, like customer details or internal IDs from your application.
+             * Set of key:value pairs. Adding custom metadata to a resource, such as a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews/attaching-custom-data-to-the-connect-webview), [connected account](https://docs.seam.co/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account), or [device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device), enables you to store custom information, like customer details or internal IDs from your application. Keys set to `null` or to an empty string are omitted.
              *
              * @var array<string, string|bool>|\stdClass|null
              */
@@ -1429,6 +1429,10 @@ namespace Seam\Resources\Device {
                 ),
                 \Seam\Resources\Device\Warnings\WarningCode::ACCESSORY_KEYPAD_SETUP_REQUIRED
                     => \Seam\Resources\Device\Warnings\AccessoryKeypadSetupRequired::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::ACCESSORY_KEYPAD_LOW_BATTERY
+                    => \Seam\Resources\Device\Warnings\AccessoryKeypadLowBattery::from_json(
                     $json,
                 ),
                 \Seam\Resources\Device\Warnings\WarningCode::UNRELIABLE_ONLINE_STATUS
@@ -3717,8 +3721,6 @@ namespace Seam\Resources\Device\Properties {
                 device_name: $json->device_name ?? null,
                 dual_setpoints_not_supported: $json->dual_setpoints_not_supported ??
                     null,
-                enforced_setpoint_range_celsius: $json->enforced_setpoint_range_celsius ??
-                    null,
                 product_type: $json->product_type ?? null,
             );
         }
@@ -3736,12 +3738,6 @@ namespace Seam\Resources\Device\Properties {
              * Set to true when the device does not support the /dual-setpoints API endpoint.
              */
             public bool|null $dual_setpoints_not_supported = null,
-            /**
-             * Enforced setpoint range in Celsius for a Sensi device, derived from an OutOfRange API error.
-             *
-             * @var list<float>|null
-             */
-            public array|null $enforced_setpoint_range_celsius = null,
             /**
              * Product type for a Sensi device.
              */
@@ -6756,6 +6752,49 @@ namespace Seam\Resources\Device\Warnings {
     }
 
     /**
+     * Indicates that the accessory keypad paired with this lock has a low or critically low battery. Replace its batteries so guests can keep entering their access codes.
+     */
+    final class AccessoryKeypadLowBattery extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): AccessoryKeypadLowBattery|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
      * Indicates that the device may optimistically be reported as online because the provider does not reliably report its online status.
      */
     final class UnreliableOnlineStatus extends \Seam\Resources\Device\Warnings
@@ -6878,6 +6917,7 @@ namespace Seam\Resources\Device\Warnings {
         case PROVIDER_ISSUE = "provider_issue";
         case KEYNEST_UNSUPPORTED_LOCKER = "keynest_unsupported_locker";
         case ACCESSORY_KEYPAD_SETUP_REQUIRED = "accessory_keypad_setup_required";
+        case ACCESSORY_KEYPAD_LOW_BATTERY = "accessory_keypad_low_battery";
         case UNRELIABLE_ONLINE_STATUS = "unreliable_online_status";
         case MAX_ACCESS_CODES_REACHED = "max_access_codes_reached";
     }

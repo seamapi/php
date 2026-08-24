@@ -196,9 +196,9 @@ class AcsUsersClient
      * @param int $limit Maximum number of records to return per page.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned access system users to include all records that satisfy a partial match using `full_name`, `phone_number`, `email_address`, `acs_user_id`, `user_identity_id`, `user_identity_full_name` or `user_identity_phone_number`.
-     * @param string $user_identity_email_address Email address of the user identity for which you want to retrieve all access system users.
+     * @param string|NullValue $user_identity_email_address Email address of the user identity for which you want to retrieve all access system users. Specify `null` to retrieve access system users whose user identity has no email address.
      * @param string $user_identity_id ID of the user identity for which you want to retrieve all access system users.
-     * @param string $user_identity_phone_number Phone number of the user identity for which you want to retrieve all access system users, in [E.164 format](https://www.itu.int/rec/T-REC-E.164/en) (for example, `+15555550100`).
+     * @param string|NullValue $user_identity_phone_number Phone number of the user identity for which you want to retrieve all access system users, in [E.164 format](https://www.itu.int/rec/T-REC-E.164/en) (for example, `+15555550100`). Specify `null` to retrieve access system users whose user identity has no phone number.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
@@ -208,9 +208,9 @@ class AcsUsersClient
         ?int $limit = null,
         string|NullValue|null $page_cursor = null,
         ?string $search = null,
-        ?string $user_identity_email_address = null,
+        string|NullValue|null $user_identity_email_address = null,
         ?string $user_identity_id = null,
-        ?string $user_identity_phone_number = null,
+        string|NullValue|null $user_identity_phone_number = null,
         ?callable $on_response = null,
     ): array {
         $request_payload = [];
