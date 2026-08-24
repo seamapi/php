@@ -7374,6 +7374,7 @@ namespace Seam\Resources\Event {
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
+                battery_source: $json->battery_source ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 customer_key: $json->customer_key ?? null,
@@ -7415,6 +7416,12 @@ namespace Seam\Resources\Event {
              * ID of the workspace associated with the event.
              */
             string|null $workspace_id,
+            /**
+             * Battery that dropped below the low threshold. `lock`: the lock's own battery. `accessory_keypad`: a paired accessory keypad's battery. Omitted for events emitted before this field existed, which always refer to the lock's own battery.
+             *
+             * @var value-of<\Seam\Resources\Event\DeviceLowBattery\BatterySource>|string|null
+             */
+            public string|null $battery_source = null,
             /**
              * Custom metadata of the connected account, present when connected_account_id is provided.
              *
@@ -12461,6 +12468,14 @@ namespace Seam\Resources\Event\DeviceUnmanagedDisconnected {
         case ACCOUNT_DISCONNECTED = "account_disconnected";
         case HUB_DISCONNECTED = "hub_disconnected";
         case DEVICE_DISCONNECTED = "device_disconnected";
+    }
+}
+
+namespace Seam\Resources\Event\DeviceLowBattery {
+    enum BatterySource: string
+    {
+        case LOCK = "lock";
+        case ACCESSORY_KEYPAD = "accessory_keypad";
     }
 }
 
