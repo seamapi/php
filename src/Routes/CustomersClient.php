@@ -27,6 +27,7 @@ class CustomersClient
     /**
      * Creates a new customer portal magic link with configurable features.
      *
+     * @param mixed $customer_data
      * @param list<array<string, mixed>|\stdClass> $customer_resources_filters Filter configuration for resources based on their custom_metadata. Each filter specifies a field, operation, and value to match against resource custom_metadata.
      * @param string $customization_profile_id The ID of the customization profile to use for the portal.
      * @param mixed $deep_link Deep link target resource for initial redirect. When set, the portal will navigate directly to the specified resource.
@@ -37,10 +38,10 @@ class CustomersClient
      * @param string $locale The locale to use for the portal.
      * @param string $navigation_mode Navigation mode for the portal. 'restricted' tells frontend to hide navigation UI, typically used for embedded deep links.
      * @param bool $read_only Whether the portal is read-only. When true, the customer can browse the portal but cannot perform any mutating action; write requests made with the portal's client session are rejected.
-     * @param mixed $customer_data
      * @return CustomerPortal OK
      */
     public function create_portal(
+        mixed $customer_data = null,
         ?array $customer_resources_filters = null,
         ?string $customization_profile_id = null,
         mixed $deep_link = null,
@@ -51,10 +52,12 @@ class CustomersClient
         ?string $locale = null,
         ?string $navigation_mode = null,
         ?bool $read_only = null,
-        mixed $customer_data = null,
     ): CustomerPortal {
         $request_payload = [];
 
+        if ($customer_data !== null) {
+            $request_payload["customer_data"] = $customer_data;
+        }
         if ($customer_resources_filters !== null) {
             $request_payload[
                 "customer_resources_filters"
@@ -88,9 +91,6 @@ class CustomersClient
         }
         if ($read_only !== null) {
             $request_payload["read_only"] = $read_only;
-        }
-        if ($customer_data !== null) {
-            $request_payload["customer_data"] = $customer_data;
         }
 
         $res = Body::decode(

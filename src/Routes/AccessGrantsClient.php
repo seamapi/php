@@ -31,8 +31,6 @@ class AccessGrantsClient
      * Creates a new [Access Grant](https://docs.seam.co/use-cases/granting-access/access-grants). Access Grants are the default and recommended way to grant a user access to any physical space, irrespective of the locking hardware. They work with both standalone smart locks (using `device_ids`) and access control systems (using `acs_entrance_ids` or `space_ids`), and can issue PIN codes, key cards, and mobile keys through a single request.
      *
      * @param list<array<string, mixed>|\stdClass> $requested_access_methods
-     * @param string $user_identity_id ID of user identity for whom access is being granted.
-     * @param mixed $user_identity When used, creates a new user identity with the given details, and grants them access.
      * @param string $access_grant_key Unique key for the access grant within the workspace.
      * @param list<string> $acs_entrance_ids Set of IDs of the [entrances](https://docs.seam.co/api/acs/systems/list) to which access is being granted.
      * @param string $customization_profile_id ID of the customization profile to apply to the Access Grant and its access methods.
@@ -45,12 +43,12 @@ class AccessGrantsClient
      * @param list<string> $space_ids Set of IDs of existing spaces to which access is being granted.
      * @param list<string> $space_keys Set of keys of existing spaces to which access is being granted.
      * @param string $starts_at Date and time at which the validity of the new grant starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+     * @param mixed $user_identity When used, creates a new user identity with the given details, and grants them access.
+     * @param string $user_identity_id ID of user identity for whom access is being granted.
      * @return AccessGrant OK
      */
     public function create(
         array $requested_access_methods,
-        ?string $user_identity_id = null,
-        mixed $user_identity = null,
         ?string $access_grant_key = null,
         ?array $acs_entrance_ids = null,
         ?string $customization_profile_id = null,
@@ -63,18 +61,14 @@ class AccessGrantsClient
         ?array $space_ids = null,
         ?array $space_keys = null,
         ?string $starts_at = null,
+        mixed $user_identity = null,
+        ?string $user_identity_id = null,
     ): AccessGrant {
         $request_payload = [];
 
         $request_payload[
             "requested_access_methods"
         ] = $requested_access_methods;
-        if ($user_identity_id !== null) {
-            $request_payload["user_identity_id"] = $user_identity_id;
-        }
-        if ($user_identity !== null) {
-            $request_payload["user_identity"] = $user_identity;
-        }
         if ($access_grant_key !== null) {
             $request_payload["access_grant_key"] = $access_grant_key;
         }
@@ -112,6 +106,12 @@ class AccessGrantsClient
         }
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;
+        }
+        if ($user_identity !== null) {
+            $request_payload["user_identity"] = $user_identity;
+        }
+        if ($user_identity_id !== null) {
+            $request_payload["user_identity_id"] = $user_identity_id;
         }
 
         $res = Body::decode(

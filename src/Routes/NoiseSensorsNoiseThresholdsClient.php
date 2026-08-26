@@ -201,7 +201,7 @@ class NoiseSensorsNoiseThresholdsClient
         }
 
         $this->client->request(
-            "PUT",
+            "PATCH",
             "/noise_sensors/noise_thresholds/update",
             ["json" => (object) $request_payload],
         );

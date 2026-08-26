@@ -35,7 +35,7 @@ class WorkspacesClient
      * @param string|NullValue $connect_partner_name Connect partner name for the new workspace.
      * @param mixed $connect_webview_customization [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews) customizations for the new workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
      * @param bool $is_sandbox Indicates whether the new workspace is a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
-     * @param string $organization_id ID of the organization to associate with the new workspace.
+     * @param string $organization_id ID of the organization to associate with the new workspace. If omitted, the new workspace is associated with the organization that you administer, if you administer exactly one.
      * @param string $webview_logo_shape
      * @param string $webview_primary_button_color
      * @param string $webview_primary_button_text_color
