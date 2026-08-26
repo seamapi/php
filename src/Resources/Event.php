@@ -7374,10 +7374,12 @@ namespace Seam\Resources\Event {
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
-                battery_source: $json->battery_source ?? null,
+                accessory_keypad_battery_level: $json->accessory_keypad_battery_level ??
+                    null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 customer_key: $json->customer_key ?? null,
+                device_battery_level: $json->device_battery_level ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
                 event_description: $json->event_description ?? null,
             );
@@ -7385,7 +7387,9 @@ namespace Seam\Resources\Event {
 
         public function __construct(
             /**
-             * Number in the range 0 to 1.0 indicating the amount of battery in the affected device, as reported by the device.
+             * Number in the range 0 to 1.0 indicating the level of the battery whose drop triggered this event.
+             *
+             * @deprecated Use device_battery_level and accessory_keypad_battery_level, which distinguish the device's own battery from a paired accessory keypad's battery.
              */
             public float|null $battery_level,
             /**
@@ -7417,11 +7421,9 @@ namespace Seam\Resources\Event {
              */
             string|null $workspace_id,
             /**
-             * Battery that dropped below the low threshold. `lock`: the lock's own battery. `accessory_keypad`: a paired accessory keypad's battery. Omitted for events emitted before this field existed, which always refer to the lock's own battery.
-             *
-             * @var value-of<\Seam\Resources\Event\DeviceLowBattery\BatterySource>|string|null
+             * Number in the range 0 to 1.0 indicating the battery level of the affected device's paired accessory keypad, when the device has one and its level is known.
              */
-            public string|null $battery_source = null,
+            public float|null $accessory_keypad_battery_level = null,
             /**
              * Custom metadata of the connected account, present when connected_account_id is provided.
              *
@@ -7432,6 +7434,10 @@ namespace Seam\Resources\Event {
              * The customer key associated with the device, if any.
              */
             public string|null $customer_key = null,
+            /**
+             * Number in the range 0 to 1.0 indicating the affected device's own battery level, when known.
+             */
+            public float|null $device_battery_level = null,
             /**
              * Custom metadata of the device, present when device_id is provided.
              *
@@ -12468,14 +12474,6 @@ namespace Seam\Resources\Event\DeviceUnmanagedDisconnected {
         case ACCOUNT_DISCONNECTED = "account_disconnected";
         case HUB_DISCONNECTED = "hub_disconnected";
         case DEVICE_DISCONNECTED = "device_disconnected";
-    }
-}
-
-namespace Seam\Resources\Event\DeviceLowBattery {
-    enum BatterySource: string
-    {
-        case LOCK = "lock";
-        case ACCESSORY_KEYPAD = "accessory_keypad";
     }
 }
 

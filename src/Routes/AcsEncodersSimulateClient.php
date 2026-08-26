@@ -26,23 +26,23 @@ class AcsEncodersSimulateClient
      * Simulates that the next attempt to encode a [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) using the specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners) will fail. You can only perform this action within a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
      *
      * @param string $acs_encoder_id ID of the `acs_encoder` that will be used in the next request to encode the `acs_credential`.
-     * @param string $error_code Code of the error to simulate.
      * @param string $acs_credential_id ID of the `acs_credential` that will fail to be encoded onto a card in the next request.
+     * @param string $error_code Code of the error to simulate.
      * @return void OK
      */
     public function next_credential_encode_will_fail(
         string $acs_encoder_id,
-        ?string $error_code = null,
         ?string $acs_credential_id = null,
+        ?string $error_code = null,
     ): void {
         $request_payload = [];
 
         $request_payload["acs_encoder_id"] = $acs_encoder_id;
-        if ($error_code !== null) {
-            $request_payload["error_code"] = $error_code;
-        }
         if ($acs_credential_id !== null) {
             $request_payload["acs_credential_id"] = $acs_credential_id;
+        }
+        if ($error_code !== null) {
+            $request_payload["error_code"] = $error_code;
         }
 
         $this->client->request(
@@ -81,25 +81,25 @@ class AcsEncodersSimulateClient
      * Simulates that the next attempt to scan a [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) using the specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners) will fail. You can only perform this action within a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
      *
      * @param string $acs_encoder_id ID of the `acs_encoder` that will fail to scan the `acs_credential` in the next request.
-     * @param string $error_code
      * @param string $acs_credential_id_on_seam
+     * @param string $error_code
      * @return void OK
      */
     public function next_credential_scan_will_fail(
         string $acs_encoder_id,
-        ?string $error_code = null,
         ?string $acs_credential_id_on_seam = null,
+        ?string $error_code = null,
     ): void {
         $request_payload = [];
 
         $request_payload["acs_encoder_id"] = $acs_encoder_id;
-        if ($error_code !== null) {
-            $request_payload["error_code"] = $error_code;
-        }
         if ($acs_credential_id_on_seam !== null) {
             $request_payload[
                 "acs_credential_id_on_seam"
             ] = $acs_credential_id_on_seam;
+        }
+        if ($error_code !== null) {
+            $request_payload["error_code"] = $error_code;
         }
 
         $this->client->request(

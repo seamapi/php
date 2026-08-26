@@ -595,7 +595,7 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             $request_payload["type"] = $type;
         }
 
-        $this->client->request("PUT", "/access_codes/update", [
+        $this->client->request("PATCH", "/access_codes/update", [
             "json" => (object) $request_payload,
         ]);
     }
