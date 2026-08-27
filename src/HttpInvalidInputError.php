@@ -7,7 +7,14 @@ namespace Seam;
  */
 class HttpInvalidInputError extends HttpApiError
 {
-    private object $validationErrors;
+    private object $rawValidationErrors;
+
+    /**
+     * Validation errors, one entry per failed request parameter.
+     *
+     * @var list<ValidationError>
+     */
+    public readonly array $validation_errors;
 
     public function __construct(
         object $error,
@@ -16,7 +23,21 @@ class HttpInvalidInputError extends HttpApiError
     ) {
         parent::__construct($error, $statusCode, $requestId);
         $this->errorCode = "invalid_input";
-        $this->validationErrors = $error->validation_errors ?? (object) [];
+        $this->rawValidationErrors = $error->validation_errors ?? (object) [];
+
+        $validationErrors = [];
+        foreach (
+            get_object_vars($this->rawValidationErrors)
+            as $paramName => $_
+        ) {
+            if ($paramName !== "_errors") {
+                $validationErrors[] = new ValidationError(
+                    $paramName,
+                    $this->getValidationErrorMessages($paramName),
+                );
+            }
+        }
+        $this->validation_errors = $validationErrors;
     }
 
     /**
@@ -27,6 +48,6 @@ class HttpInvalidInputError extends HttpApiError
      */
     public function getValidationErrorMessages(string $paramName): array
     {
-        return $this->validationErrors->{$paramName}->_errors ?? [];
+        return $this->rawValidationErrors->{$paramName}->_errors ?? [];
     }
 }

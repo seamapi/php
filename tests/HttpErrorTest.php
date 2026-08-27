@@ -8,6 +8,7 @@ use Seam\HttpApiError;
 use Seam\HttpInvalidInputError;
 use Seam\HttpUnauthorizedError;
 use Seam\Seam;
+use Seam\ValidationError;
 use Tests\Support\FakeSeamConnectTestCase;
 
 final class HttpErrorTest extends FakeSeamConnectTestCase
@@ -65,7 +66,36 @@ final class HttpErrorTest extends FakeSeamConnectTestCase
                 ["Expected array, received number"],
                 $error->getValidationErrorMessages("device_ids"),
             );
+            $this->assertEquals(
+                [
+                    new ValidationError("device_ids", [
+                        "Expected array, received number",
+                    ]),
+                ],
+                $error->validation_errors,
+            );
         }
+    }
+
+    public function testValidationErrorsExcludeRequestWideErrors(): void
+    {
+        $error = new HttpInvalidInputError(
+            (object) [
+                "validation_errors" => (object) [
+                    "_errors" => ["Request is invalid"],
+                    "device_ids" => (object) [
+                        "_errors" => ["Invalid device IDs"],
+                    ],
+                ],
+            ],
+            400,
+            null,
+        );
+
+        $this->assertEquals(
+            [new ValidationError("device_ids", ["Invalid device IDs"])],
+            $error->validation_errors,
+        );
     }
 
     public function testValidationMessagesAreEmptyForAnUnknownParam(): void
