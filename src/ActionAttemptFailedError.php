@@ -13,9 +13,6 @@ class ActionAttemptFailedError extends ActionAttemptError
 
     public function __construct(ActionAttempt $actionAttempt)
     {
-        // The error property only exists on the generated status subclasses,
-        // so an attempt with an unknown action_type or status does not have
-        // one. Its shape also varies by action type, hence the runtime reads.
         $error = get_object_vars($actionAttempt)["error"] ?? null;
         $message = null;
         $type = null;

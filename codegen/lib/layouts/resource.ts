@@ -64,8 +64,6 @@ const generateFromJsonProp = (property: ResourceClassProperty): string => {
 
     case 'value':
       return `${name}: $json->${name} ?? null,`
-
-    // The property does not apply to this action attempt status.
     case 'null':
       return `${name}: null,`
   }
@@ -103,8 +101,6 @@ const generateConstructorParam = (
           : `${property.phpDocType}|null`
       break
     }
-
-    // The property does not apply to this action attempt status.
     case 'null':
       type = 'null'
       break

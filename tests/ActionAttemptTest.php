@@ -12,14 +12,6 @@ use Seam\Resources\ActionAttempt;
 use Seam\Resources\ActionAttempt\LockDoor;
 use TypeError;
 
-/**
- * Action attempts are discriminated twice: by action_type into one subclass
- * per action, and by status into one subclass per status under each action.
- * A property that only applies to some statuses keeps its real type on the
- * subclasses for those statuses and has the null type everywhere else, so
- * result and error cannot be dereferenced without narrowing to the matching
- * status subclass first.
- */
 final class ActionAttemptTest extends TestCase
 {
     private function attempt(array $payload): ActionAttempt
@@ -86,10 +78,6 @@ final class ActionAttemptTest extends TestCase
         $this->assertNull($attempt->error);
     }
 
-    /**
-     * The annotation drives the shape, not the payload: a result sent while
-     * the action attempt is pending never reaches the resource.
-     */
     public function testResultSentWhilePendingIsStillNull(): void
     {
         $attempt = $this->attempt([
@@ -103,11 +91,6 @@ final class ActionAttemptTest extends TestCase
         $this->assertNull($attempt->error);
     }
 
-    /**
-     * Dereferencing result or error without narrowing to the status subclass
-     * is caught by the declared types: statuses a property does not apply to
-     * declare it with the null type rather than a nullable object type.
-     */
     public function testInapplicablePropertiesAreDeclaredWithTheNullType(): void
     {
         foreach (
@@ -195,10 +178,6 @@ final class ActionAttemptTest extends TestCase
         $this->assertSame($attempt, $error->getActionAttempt());
     }
 
-    /**
-     * A failed attempt with an unknown action_type has no error property at
-     * all, so the error falls back to its defaults instead of raising.
-     */
     public function testFailedErrorFallsBackWithoutAnErrorProperty(): void
     {
         $attempt = $this->attempt([

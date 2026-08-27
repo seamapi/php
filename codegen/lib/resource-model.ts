@@ -22,8 +22,6 @@ export type ResourceClassProperty =
       phpDocType: string
     } & ResourceClassPropertyMetadata)
   | ({
-      // The property does not apply to this action attempt status, so it is
-      // rendered as the null type.
       kind: 'null'
     } & ResourceClassPropertyMetadata)
   | ({
@@ -411,13 +409,9 @@ const buildClass = (
 }
 
 interface DiscriminatedClassOptions {
-  // An action attempt variant is further discriminated by status, so each
-  // action type gets one subclass per status from its status enum property.
   isActionAttempt?: boolean
   extendsName?: string
   inheritedProperties?: ResourceClassProperty[]
-  // A fully qualified enum already declared by an ancestor class to use for
-  // the discriminant instead of declaring a new one.
   discriminantEnumType?: string
 }
 
@@ -456,8 +450,6 @@ const buildDiscriminatedClass = (
             ({ name }) => name === property.name,
           )
           if (candidate == null) return false
-          // A property that varies by action attempt status is rendered per
-          // status subclass, so it cannot be shared by the base class.
           if (
             (options.isActionAttempt ?? false) &&
             property.actionAttemptStatuses != null
@@ -600,10 +592,6 @@ const buildDiscriminatedClass = (
 
 const actionAttemptStatusName = 'status'
 
-// Expand an action attempt variant into one variant per status from its
-// status enum property. In each expanded variant, the status enum is narrowed
-// to the single status, and any property annotated with actionAttemptStatuses
-// is rendered as null for the statuses it does not list.
 const expandActionAttemptByStatus = (
   variant: VariantInput,
 ): VariantInput[] | undefined => {
