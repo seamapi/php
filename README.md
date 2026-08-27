@@ -581,7 +581,7 @@ The Seam API parses these params with the corresponding [parser].
 [reference implementation]: https://github.com/seamapi/url-search-params-serializer
 [parser]: https://github.com/seamapi/url-search-params-parser
 
-#### Errors
+### Error Handling
 
 Every exception the SDK raises implements `Seam\SeamException`, so it can be
 caught as a group. An API error is a `Seam\HttpApiError` carrying
@@ -589,16 +589,31 @@ caught as a group. An API error is a `Seam\HttpApiError` carrying
 `Seam\HttpUnauthorizedError` and `Seam\HttpInvalidInputError` as the two
 specific cases worth catching on their own.
 
+#### Validation errors
+
+When the API rejects a request because a parameter is invalid, it throws an
+`HttpInvalidInputError`. Look up messages for a parameter you are already
+rendering, for example a field in a form:
+
 ```php
-use Seam\HttpApiError;
 use Seam\HttpInvalidInputError;
 
 try {
-    $seam->devices->get(device_id: $device_id);
+    $seam->devices->list(device_ids: ["not-a-uuid"]);
 } catch (HttpInvalidInputError $error) {
-    print_r($error->getValidationErrorMessages("device_id"));
-} catch (HttpApiError $error) {
-    print $error->getErrorCode();
+    print_r($error->getValidationErrorMessages("device_ids"));
+}
+```
+
+Or read every parameter that failed validation to summarize the request:
+
+```php
+foreach ($error->validation_errors as $validation_error) {
+    printf(
+        "%s: %s\n",
+        $validation_error->parameter_name,
+        implode(", ", $validation_error->error_messages),
+    );
 }
 ```
 
