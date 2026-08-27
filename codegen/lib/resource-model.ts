@@ -5,6 +5,7 @@
 // one final class per variant, and an unknown-discriminant fallback.
 
 import type {
+  ActionAttemptStatus,
   Blueprint,
   EnumProperty,
   Property,
@@ -19,6 +20,9 @@ export type ResourceClassProperty =
       kind: 'value'
       phpType: string
       phpDocType: string
+    } & ResourceClassPropertyMetadata)
+  | ({
+      kind: 'null'
     } & ResourceClassPropertyMetadata)
   | ({
       kind: 'record'
@@ -242,7 +246,7 @@ export const createResourceModel = (blueprint: Blueprint): ResourceModel => {
           isDeprecated: false,
           deprecationMessage: '',
         },
-        true,
+        { isActionAttempt: true },
       )
     } else {
       const resource = resources.get(resourceType)
@@ -295,6 +299,10 @@ const buildClass = (
     const metadata = propertyMetadata(property)
     const nestedPath = `${path}.${property.name}`
     const nestedClassName = pascalCase(property.name)
+
+    if (isRenderedAsNull(property)) {
+      return { ...metadata, kind: 'null' }
+    }
 
     if (property.format === 'enum') {
       assertAvailableName(
@@ -400,6 +408,13 @@ const buildClass = (
   }
 }
 
+interface DiscriminatedClassOptions {
+  isActionAttempt?: boolean
+  extendsName?: string
+  inheritedProperties?: ResourceClassProperty[]
+  discriminantEnumType?: string
+}
+
 const buildDiscriminatedClass = (
   className: string,
   namespace: string,
@@ -408,7 +423,7 @@ const buildDiscriminatedClass = (
   path: string,
   depth: number,
   docs: ClassDocs,
-  actionAttempt = false,
+  options: DiscriminatedClassOptions = {},
 ): BuiltDeclaration => {
   assertDepth(path, depth)
   if (variants.length === 0) {
@@ -434,11 +449,16 @@ const buildDiscriminatedClass = (
           const candidate = variant.properties.find(
             ({ name }) => name === property.name,
           )
+          if (candidate == null) return false
+          if (
+            (options.isActionAttempt ?? false) &&
+            property.actionAttemptStatuses != null
+          ) {
+            return false
+          }
           return (
-            candidate != null &&
-            (property.name === discriminator ||
-              (actionAttempt && property.name === 'error') ||
-              propertyShape(candidate) === propertyShape(property))
+            property.name === discriminator ||
+            propertyShape(candidate) === propertyShape(property)
           )
         }),
       )
@@ -460,15 +480,6 @@ const buildDiscriminatedClass = (
       )
       return { ...property, values }
     })
-    .map((property) => {
-      if (!actionAttempt || !['error', 'result'].includes(property.name)) {
-        return property
-      }
-      return {
-        ...property,
-        description: `${property.description}${property.description === '' ? '' : ' '}Null while the action attempt is pending or when this value does not apply.`,
-      }
-    })
 
   const discriminantProperty = commonProperties.find(
     ({ name }) => name === discriminator,
@@ -477,8 +488,16 @@ const buildDiscriminatedClass = (
     throw new Error(`Cannot generate ${path}: missing ${discriminator}`)
   }
 
-  const enumName = pascalCase(discriminator)
-  const enumType = `\\${namespace}\\${className}\\${enumName}`
+  const inheritedNames = new Set(
+    (options.inheritedProperties ?? []).map(({ name }) => name),
+  )
+  const ownCommonProperties = commonProperties.filter(
+    ({ name }) => !inheritedNames.has(name),
+  )
+
+  const enumType =
+    options.discriminantEnumType ??
+    `\\${namespace}\\${className}\\${pascalCase(discriminator)}`
   const factory: ResourceFactory = {
     discriminant: discriminator,
     enumType,
@@ -491,28 +510,66 @@ const buildDiscriminatedClass = (
   const built = buildClass(
     className,
     namespace,
-    commonProperties,
+    ownCommonProperties,
     path,
     depth,
     {
       ...docs,
       description: `${docs.description}${docs.description === '' ? '' : ' '}Known ${discriminator} values use subclasses; unknown values use this base class and retain their raw discriminator.`,
     },
-    { factory },
+    {
+      factory,
+      ...(options.extendsName == null
+        ? {}
+        : { extendsName: options.extendsName }),
+      ...(options.inheritedProperties == null
+        ? {}
+        : { inheritedProperties: options.inheritedProperties }),
+    },
   )
   const base = built.declaration
   if (base.kind !== 'class') throw new Error(`Cannot generate ${path}`)
   const baseName = `\\${namespace}\\${className}`
+  const variantInheritedProperties = [
+    ...(options.inheritedProperties ?? []),
+    ...base.properties,
+  ]
   for (const { variant, value } of variantInfo) {
-    const ownProperties = variant.properties
-      .filter(({ name }) => !commonNames.has(name))
-      .map((property) => {
-        if (!actionAttempt || property.name !== 'result') return property
-        return {
-          ...property,
-          description: `${property.description}${property.description === '' ? '' : ' '}Null while the action attempt is pending or when this value does not apply.`,
-        }
-      })
+    const variantDocs = {
+      description: variant.description,
+      isDeprecated: false,
+      deprecationMessage: '',
+    }
+    const statusVariants =
+      (options.isActionAttempt ?? false)
+        ? expandActionAttemptByStatus(variant)
+        : undefined
+    if (statusVariants != null) {
+      built.nestedDeclarations.push(
+        buildDiscriminatedClass(
+          pascalCase(value),
+          `${namespace}\\${className}`,
+          statusVariants,
+          actionAttemptStatusName,
+          `${path}.${value}`,
+          depth + 1,
+          variantDocs,
+          {
+            extendsName: baseName,
+            inheritedProperties: variantInheritedProperties,
+            ...(commonNames.has(actionAttemptStatusName)
+              ? {
+                  discriminantEnumType: `\\${namespace}\\${className}\\${pascalCase(actionAttemptStatusName)}`,
+                }
+              : {}),
+          },
+        ),
+      )
+      continue
+    }
+    const ownProperties = variant.properties.filter(
+      ({ name }) => !commonNames.has(name),
+    )
     built.nestedDeclarations.push(
       buildClass(
         pascalCase(value),
@@ -520,15 +577,11 @@ const buildDiscriminatedClass = (
         ownProperties,
         `${path}.${value}`,
         depth + 1,
-        {
-          description: variant.description,
-          isDeprecated: false,
-          deprecationMessage: '',
-        },
+        variantDocs,
         {
           isFinal: true,
           extendsName: baseName,
-          inheritedProperties: base.properties,
+          inheritedProperties: variantInheritedProperties,
         },
       ),
     )
@@ -536,6 +589,49 @@ const buildDiscriminatedClass = (
 
   return built
 }
+
+const actionAttemptStatusName = 'status'
+
+const expandActionAttemptByStatus = (
+  variant: VariantInput,
+): VariantInput[] | undefined => {
+  const statusProperty = variant.properties.find(
+    (property): property is EnumProperty =>
+      property.name === actionAttemptStatusName && property.format === 'enum',
+  )
+  if (statusProperty == null) return undefined
+
+  return statusProperty.values.map(({ name }) => {
+    const status = name as ActionAttemptStatus
+    return {
+      description: variant.description,
+      properties: variant.properties.map((property): Property => {
+        if (property === statusProperty) {
+          return {
+            ...statusProperty,
+            values: statusProperty.values.filter(
+              (value) => value.name === status,
+            ),
+          }
+        }
+        const { actionAttemptStatuses } = property
+        if (actionAttemptStatuses == null) return property
+        if (actionAttemptStatuses.includes(status)) return property
+        const nullRenderedProperty: NullRenderedProperty = {
+          ...property,
+          isNullable: false,
+          renderAsNull: true,
+        }
+        return nullRenderedProperty
+      }),
+    }
+  })
+}
+
+type NullRenderedProperty = Property & { renderAsNull: true }
+
+const isRenderedAsNull = (property: Property): boolean =>
+  (property as Partial<NullRenderedProperty>).renderAsNull === true
 
 const buildEnum = (
   name: string,

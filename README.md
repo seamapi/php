@@ -142,6 +142,28 @@ try {
 }
 ```
 
+Each action attempt deserializes to a class for its `action_type` and `status`
+pair, e.g., `Seam\Resources\ActionAttempt\UnlockDoor\Success`. The `error` and
+`result` properties have the `null` type except on the status class that
+populates them, so narrow with `instanceof` before reading them:
+
+```php
+use Seam\Resources\ActionAttempt\UnlockDoor;
+
+$action_attempt = $seam->locks->unlock_door(
+    device_id: $device_id,
+    wait_for_action_attempt: false
+);
+
+if ($action_attempt instanceof UnlockDoor\Success) {
+    var_dump($action_attempt->result); // The result is populated here.
+}
+
+if ($action_attempt instanceof UnlockDoor\Error) {
+    print $action_attempt->error->message; // The error is populated here.
+}
+```
+
 Waiting may be disabled for the whole client:
 
 ```php
