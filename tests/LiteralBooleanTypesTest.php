@@ -66,7 +66,7 @@ final class LiteralBooleanTypesTest extends TestCase
         $this->assertSame(
             "?bool",
             (string) (new ReflectionProperty(
-                ActionAttempt\ScanCredential\Result\AcsCredentialOnSeam::class,
+                ActionAttempt\ScanCredential\Success\Result\AcsCredentialOnSeam::class,
                 "is_managed",
             ))->getType(),
         );
