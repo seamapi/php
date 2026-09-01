@@ -586,6 +586,13 @@ namespace Seam\Resources\Device {
                     )
                     : null,
                 door_open: $json->door_open ?? null,
+                dormakaba_oracode_iho_metadata: isset(
+                    $json->dormakaba_oracode_iho_metadata,
+                )
+                    ? \Seam\Resources\Device\Properties\DormakabaOracodeIhoMetadata::from_json(
+                        $json->dormakaba_oracode_iho_metadata,
+                    )
+                    : null,
                 dormakaba_oracode_metadata: isset(
                     $json->dormakaba_oracode_metadata,
                 )
@@ -992,6 +999,10 @@ namespace Seam\Resources\Device {
              * Indicates whether the door is open.
              */
             public bool|null $door_open = null,
+            /**
+             * Metadata for a dormakaba Oracode Homeowner's Portal device.
+             */
+            public \Seam\Resources\Device\Properties\DormakabaOracodeIhoMetadata|null $dormakaba_oracode_iho_metadata = null,
             /**
              * Metadata for a dormakaba Oracode device.
              */
@@ -2703,6 +2714,49 @@ namespace Seam\Resources\Device\Properties {
              * Relay name for a ControlByWeb device.
              */
             public string|null $relay_name = null,
+        ) {}
+    }
+
+    /**
+     * Metadata for a dormakaba Oracode Homeowner's Portal device.
+     */
+    class DormakabaOracodeIhoMetadata
+    {
+        public static function from_json(
+            mixed $json,
+        ): DormakabaOracodeIhoMetadata|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                door_id: $json->door_id ?? null,
+                door_name: $json->door_name ?? null,
+                user_levels: array_map(
+                    fn(
+                        $u,
+                    ) => \Seam\Resources\Device\Properties\DormakabaOracodeIhoMetadata\UserLevels::from_json(
+                        $u,
+                    ),
+                    $json->user_levels ?? [],
+                ),
+            );
+        }
+
+        public function __construct(
+            /**
+             * Door ID for a dormakaba Oracode Homeowner's Portal device.
+             */
+            public float|null $door_id = null,
+            /**
+             * Name of the door for a dormakaba Oracode Homeowner's Portal device.
+             */
+            public string|null $door_name = null,
+            /**
+             * User levels for a dormakaba Oracode Homeowner's Portal device.
+             *
+             * @var list<\Seam\Resources\Device\Properties\DormakabaOracodeIhoMetadata\UserLevels>|null
+             */
+            public array|null $user_levels = null,
         ) {}
     }
 
@@ -4944,6 +4998,36 @@ namespace Seam\Resources\Device\Properties\AssaAbloyCredentialServiceMetadata {
              * Indicated whether the endpoint is active.
              */
             public bool|null $is_active = null,
+        ) {}
+    }
+}
+
+namespace Seam\Resources\Device\Properties\DormakabaOracodeIhoMetadata {
+    /**
+     * User levels for a dormakaba Oracode Homeowner's Portal device.
+     */
+    class UserLevels
+    {
+        public static function from_json(mixed $json): UserLevels|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                checkInTime: $json->checkInTime ?? null,
+                checkOutTime: $json->checkOutTime ?? null,
+                userLevel: $json->userLevel ?? null,
+                userLevelName: $json->userLevelName ?? null,
+                userLevelType: $json->userLevelType ?? null,
+            );
+        }
+
+        public function __construct(
+            public string|null $checkInTime = null,
+            public string|null $checkOutTime = null,
+            public float|null $userLevel = null,
+            public string|null $userLevelName = null,
+            public string|null $userLevelType = null,
         ) {}
     }
 }
