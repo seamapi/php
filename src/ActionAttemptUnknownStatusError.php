@@ -7,10 +7,7 @@ use Seam\Resources\ActionAttempt;
 /**
  * Raised when an action attempt reports a status this SDK version does not know.
  *
- * Waiting promises to return a succeeded attempt or raise, and an unrecognized
- * status supports neither conclusion: reporting success would claim the action
- * completed when the SDK cannot tell, and polling on would block until the
- * timeout and then report a timeout that misdescribes what happened. Read the
+ * Waiting can neither return it as a success nor call it a failure. Read the
  * action attempt to inspect the status directly.
  */
 class ActionAttemptUnknownStatusError extends ActionAttemptError

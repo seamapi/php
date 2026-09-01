@@ -81,9 +81,6 @@ final class ResolveActionAttempt
                 throw new ActionAttemptFailedError($action_attempt);
             }
 
-            // Neither pending, success, nor error: a status added after this
-            // release. Polling on would block until the timeout and then report
-            // a timeout that misdescribes what happened.
             if ($action_attempt->status !== "pending") {
                 throw new ActionAttemptUnknownStatusError(
                     $action_attempt,

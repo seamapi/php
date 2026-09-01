@@ -12,16 +12,12 @@ use Seam\Resources\Device;
 use Seam\Resources\Event;
 
 /**
- * Seam adds event types, action types, and error codes between SDK releases, so
- * a payload this version does not recognize has to stay readable rather than
- * cost the caller the whole response. Each test pins one shape that used to
- * raise, or that would raise without the guard.
+ * Reading a response must not fail on the shape of the payload.
  */
 final class TotalParsingTest extends TestCase
 {
     public function testAListPropertySentAsAScalarReadsAsEmpty(): void
     {
-        // array_map raises a TypeError when handed a scalar.
         $device = Device::from_json(
             json_decode('{"device_id":"device_1","errors":"oops"}'),
         );
@@ -81,7 +77,6 @@ final class TotalParsingTest extends TestCase
 
         $error = new ActionAttemptUnknownStatusError($attempt, "cancelled");
 
-        // Subclassing the base keeps existing handlers for it working.
         $this->assertInstanceOf(ActionAttemptError::class, $error);
         $this->assertSame("cancelled", $error->getStatus());
         $this->assertStringContainsString("cancelled", $error->getMessage());
