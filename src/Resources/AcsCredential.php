@@ -24,18 +24,18 @@ namespace Seam\Resources {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
-                errors: array_map(
+                errors: \Seam\Parse::to_list(
+                    $json->errors ?? null,
                     fn($e) => \Seam\Resources\AcsCredential\Errors::from_json(
                         $e,
                     ),
-                    $json->errors ?? [],
                 ),
                 is_managed: $json->is_managed ?? null,
-                warnings: array_map(
+                warnings: \Seam\Parse::to_list(
+                    $json->warnings ?? null,
                     fn($w) => \Seam\Resources\AcsCredential\Warnings::from_json(
                         $w,
                     ),
-                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 acs_credential_pool_id: $json->acs_credential_pool_id ?? null,

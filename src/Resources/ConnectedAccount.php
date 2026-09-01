@@ -20,19 +20,19 @@ namespace Seam\Resources {
                 connected_account_id: $json->connected_account_id ?? null,
                 custom_metadata: $json->custom_metadata ?? null,
                 display_name: $json->display_name ?? null,
-                errors: array_map(
+                errors: \Seam\Parse::to_list(
+                    $json->errors ?? null,
                     fn(
                         $e,
                     ) => \Seam\Resources\ConnectedAccount\Errors::from_json($e),
-                    $json->errors ?? [],
                 ),
-                warnings: array_map(
+                warnings: \Seam\Parse::to_list(
+                    $json->warnings ?? null,
                     fn(
                         $w,
                     ) => \Seam\Resources\ConnectedAccount\Warnings::from_json(
                         $w,
                     ),
-                    $json->warnings ?? [],
                 ),
                 account_type: $json->account_type ?? null,
                 created_at: $json->created_at ?? null,
@@ -583,13 +583,13 @@ namespace Seam\Resources\ConnectedAccount\Errors\SaltoKsSubscriptionLimitExceede
                 return null;
             }
             return new self(
-                sites: array_map(
+                sites: \Seam\Parse::to_list(
+                    $json->sites ?? null,
                     fn(
                         $s,
                     ) => \Seam\Resources\ConnectedAccount\Errors\SaltoKsSubscriptionLimitExceeded\SaltoKsMetadata\Sites::from_json(
                         $s,
                     ),
-                    $json->sites ?? [],
                 ),
             );
         }
@@ -1022,13 +1022,13 @@ namespace Seam\Resources\ConnectedAccount\Warnings\SaltoKsSubscriptionLimitAlmos
                 return null;
             }
             return new self(
-                sites: array_map(
+                sites: \Seam\Parse::to_list(
+                    $json->sites ?? null,
                     fn(
                         $s,
                     ) => \Seam\Resources\ConnectedAccount\Warnings\SaltoKsSubscriptionLimitAlmostReached\SaltoKsMetadata\Sites::from_json(
                         $s,
                     ),
-                    $json->sites ?? [],
                 ),
             );
         }

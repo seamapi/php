@@ -20,9 +20,9 @@ namespace Seam\Resources {
                 connected_account_id: $json->connected_account_id ?? null,
                 connected_account_ids: $json->connected_account_ids ?? null,
                 created_at: $json->created_at ?? null,
-                errors: array_map(
+                errors: \Seam\Parse::to_list(
+                    $json->errors ?? null,
                     fn($e) => \Seam\Resources\AcsSystem\Errors::from_json($e),
-                    $json->errors ?? [],
                 ),
                 image_alt_text: $json->image_alt_text ?? null,
                 image_url: $json->image_url ?? null,
@@ -33,9 +33,9 @@ namespace Seam\Resources {
                     )
                     : null,
                 name: $json->name ?? null,
-                warnings: array_map(
+                warnings: \Seam\Parse::to_list(
+                    $json->warnings ?? null,
                     fn($w) => \Seam\Resources\AcsSystem\Warnings::from_json($w),
-                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 acs_access_group_count: $json->acs_access_group_count ?? null,

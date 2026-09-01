@@ -16,13 +16,13 @@ namespace Seam\Resources {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 name: $json->name ?? null,
-                periods: array_map(
+                periods: \Seam\Parse::to_list(
+                    $json->periods ?? null,
                     fn(
                         $p,
                     ) => \Seam\Resources\ThermostatDailyProgram\Periods::from_json(
                         $p,
                     ),
-                    $json->periods ?? [],
                 ),
                 thermostat_daily_program_id: $json->thermostat_daily_program_id ??
                     null,

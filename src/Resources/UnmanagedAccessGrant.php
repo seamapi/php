@@ -17,41 +17,41 @@ namespace Seam\Resources {
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
                 ends_at: $json->ends_at ?? null,
-                errors: array_map(
+                errors: \Seam\Parse::to_list(
+                    $json->errors ?? null,
                     fn(
                         $e,
                     ) => \Seam\Resources\UnmanagedAccessGrant\Errors::from_json(
                         $e,
                     ),
-                    $json->errors ?? [],
                 ),
                 location_ids: $json->location_ids ?? null,
                 name: $json->name ?? null,
-                pending_mutations: array_map(
+                pending_mutations: \Seam\Parse::to_list(
+                    $json->pending_mutations ?? null,
                     fn(
                         $p,
                     ) => \Seam\Resources\UnmanagedAccessGrant\PendingMutations::from_json(
                         $p,
                     ),
-                    $json->pending_mutations ?? [],
                 ),
-                requested_access_methods: array_map(
+                requested_access_methods: \Seam\Parse::to_list(
+                    $json->requested_access_methods ?? null,
                     fn(
                         $r,
                     ) => \Seam\Resources\UnmanagedAccessGrant\RequestedAccessMethods::from_json(
                         $r,
                     ),
-                    $json->requested_access_methods ?? [],
                 ),
                 space_ids: $json->space_ids ?? null,
                 starts_at: $json->starts_at ?? null,
-                warnings: array_map(
+                warnings: \Seam\Parse::to_list(
+                    $json->warnings ?? null,
                     fn(
                         $w,
                     ) => \Seam\Resources\UnmanagedAccessGrant\Warnings::from_json(
                         $w,
                     ),
-                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 reservation_key: $json->reservation_key ?? null,
@@ -792,13 +792,13 @@ namespace Seam\Resources\UnmanagedAccessGrant\Warnings {
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
                 warning_code: $json->warning_code ?? null,
-                failed_devices: array_map(
+                failed_devices: \Seam\Parse::to_list(
+                    $json->failed_devices ?? null,
                     fn(
                         $f,
                     ) => \Seam\Resources\UnmanagedAccessGrant\Warnings\OverprovisionedAccess\FailedDevices::from_json(
                         $f,
                     ),
-                    $json->failed_devices ?? [],
                 ),
             );
         }

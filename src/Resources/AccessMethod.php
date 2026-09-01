@@ -16,28 +16,28 @@ namespace Seam\Resources {
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
                 display_status: $json->display_status ?? null,
-                errors: array_map(
+                errors: \Seam\Parse::to_list(
+                    $json->errors ?? null,
                     fn($e) => \Seam\Resources\AccessMethod\Errors::from_json(
                         $e,
                     ),
-                    $json->errors ?? [],
                 ),
                 is_issued: $json->is_issued ?? null,
                 issued_at: $json->issued_at ?? null,
                 mode: $json->mode ?? null,
-                pending_mutations: array_map(
+                pending_mutations: \Seam\Parse::to_list(
+                    $json->pending_mutations ?? null,
                     fn(
                         $p,
                     ) => \Seam\Resources\AccessMethod\PendingMutations::from_json(
                         $p,
                     ),
-                    $json->pending_mutations ?? [],
                 ),
-                warnings: array_map(
+                warnings: \Seam\Parse::to_list(
+                    $json->warnings ?? null,
                     fn($w) => \Seam\Resources\AccessMethod\Warnings::from_json(
                         $w,
                     ),
-                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 client_session_token: $json->client_session_token ?? null,

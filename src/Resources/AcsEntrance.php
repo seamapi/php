@@ -19,16 +19,16 @@ namespace Seam\Resources {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
-                errors: array_map(
+                errors: \Seam\Parse::to_list(
+                    $json->errors ?? null,
                     fn($e) => \Seam\Resources\AcsEntrance\Errors::from_json($e),
-                    $json->errors ?? [],
                 ),
                 space_ids: $json->space_ids ?? null,
-                warnings: array_map(
+                warnings: \Seam\Parse::to_list(
+                    $json->warnings ?? null,
                     fn($w) => \Seam\Resources\AcsEntrance\Warnings::from_json(
                         $w,
                     ),
-                    $json->warnings ?? [],
                 ),
                 akiles_metadata: isset($json->akiles_metadata)
                     ? \Seam\Resources\AcsEntrance\AkilesMetadata::from_json(
@@ -226,13 +226,13 @@ namespace Seam\Resources\AcsEntrance {
                 return null;
             }
             return new self(
-                actions: array_map(
+                actions: \Seam\Parse::to_list(
+                    $json->actions ?? null,
                     fn(
                         $a,
                     ) => \Seam\Resources\AcsEntrance\AkilesMetadata\Actions::from_json(
                         $a,
                     ),
-                    $json->actions ?? [],
                 ),
                 gadget_id: $json->gadget_id ?? null,
                 site_id: $json->site_id ?? null,
@@ -666,13 +666,13 @@ namespace Seam\Resources\AcsEntrance {
             return new self(
                 door_category: $json->door_category ?? null,
                 door_name: $json->door_name ?? null,
-                profiles: array_map(
+                profiles: \Seam\Parse::to_list(
+                    $json->profiles ?? null,
                     fn(
                         $p,
                     ) => \Seam\Resources\AcsEntrance\VisionlineMetadata\Profiles::from_json(
                         $p,
                     ),
-                    $json->profiles ?? [],
                 ),
             );
         }

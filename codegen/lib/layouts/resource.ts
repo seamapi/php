@@ -57,7 +57,9 @@ const generateFromJsonProp = (property: ResourceClassProperty): string => {
       return `${name}: isset($json->${name}) ? ${property.referenceName}::from_json($json->${name}) : null,`
 
     case 'listReference':
-      return `${name}: array_map(fn ($${name[0]}) => ${property.referenceName}::from_json($${name[0]}), $json->${name} ?? []),`
+      // Via the helper, not array_map directly: a list property the API sends as
+      // a scalar would otherwise raise a TypeError and fail the whole response.
+      return `${name}: \\Seam\\Parse::to_list($json->${name} ?? null, fn ($${name[0]}) => ${property.referenceName}::from_json($${name[0]})),`
 
     case 'record':
       return `${name}: $json->${name} ?? null,`

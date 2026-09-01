@@ -19,11 +19,11 @@ namespace Seam\Resources {
                 device_id: $json->device_id ?? null,
                 device_type: $json->device_type ?? null,
                 display_name: $json->display_name ?? null,
-                errors: array_map(
+                errors: \Seam\Parse::to_list(
+                    $json->errors ?? null,
                     fn($e) => \Seam\Resources\UnmanagedDevice\Errors::from_json(
                         $e,
                     ),
-                    $json->errors ?? [],
                 ),
                 is_managed: $json->is_managed ?? null,
                 properties: isset($json->properties)
@@ -31,13 +31,13 @@ namespace Seam\Resources {
                         $json->properties,
                     )
                     : null,
-                warnings: array_map(
+                warnings: \Seam\Parse::to_list(
+                    $json->warnings ?? null,
                     fn(
                         $w,
                     ) => \Seam\Resources\UnmanagedDevice\Warnings::from_json(
                         $w,
                     ),
-                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 can_configure_auto_lock: $json->can_configure_auto_lock ?? null,

@@ -30,9 +30,9 @@ namespace Seam\Resources {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
-                errors: array_map(
+                errors: \Seam\Parse::to_list(
+                    $json->errors ?? null,
                     fn($e) => \Seam\Resources\AcsEncoder\Errors::from_json($e),
-                    $json->errors ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
             );

@@ -26,25 +26,25 @@ namespace Seam\Resources {
                 code: $json->code ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
-                errors: array_map(
+                errors: \Seam\Parse::to_list(
+                    $json->errors ?? null,
                     fn(
                         $e,
                     ) => \Seam\Resources\UnmanagedAccessCode\Errors::from_json(
                         $e,
                     ),
-                    $json->errors ?? [],
                 ),
                 is_managed: $json->is_managed ?? null,
                 name: $json->name ?? null,
                 status: $json->status ?? null,
                 type: $json->type ?? null,
-                warnings: array_map(
+                warnings: \Seam\Parse::to_list(
+                    $json->warnings ?? null,
                     fn(
                         $w,
                     ) => \Seam\Resources\UnmanagedAccessCode\Warnings::from_json(
                         $w,
                     ),
-                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 cannot_be_managed: $json->cannot_be_managed ?? null,
@@ -688,13 +688,13 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
                 message: $json->message ?? null,
                 change_type: $json->change_type ?? null,
                 created_at: $json->created_at ?? null,
-                modified_fields: array_map(
+                modified_fields: \Seam\Parse::to_list(
+                    $json->modified_fields ?? null,
                     fn(
                         $m,
                     ) => \Seam\Resources\UnmanagedAccessCode\Errors\ConflictingExternalModification\ModifiedFields::from_json(
                         $m,
                     ),
-                    $json->modified_fields ?? [],
                 ),
             );
         }
@@ -1761,13 +1761,13 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
                 warning_code: $json->warning_code ?? null,
                 change_type: $json->change_type ?? null,
                 created_at: $json->created_at ?? null,
-                modified_fields: array_map(
+                modified_fields: \Seam\Parse::to_list(
+                    $json->modified_fields ?? null,
                     fn(
                         $m,
                     ) => \Seam\Resources\UnmanagedAccessCode\Warnings\ExternalModificationInEffect\ModifiedFields::from_json(
                         $m,
                     ),
-                    $json->modified_fields ?? [],
                 ),
             );
         }

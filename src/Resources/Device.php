@@ -19,9 +19,9 @@ namespace Seam\Resources {
                 device_id: $json->device_id ?? null,
                 device_type: $json->device_type ?? null,
                 display_name: $json->display_name ?? null,
-                errors: array_map(
+                errors: \Seam\Parse::to_list(
+                    $json->errors ?? null,
                     fn($e) => \Seam\Resources\Device\Errors::from_json($e),
-                    $json->errors ?? [],
                 ),
                 is_managed: $json->is_managed ?? null,
                 properties: isset($json->properties)
@@ -30,9 +30,9 @@ namespace Seam\Resources {
                     )
                     : null,
                 space_ids: $json->space_ids ?? null,
-                warnings: array_map(
+                warnings: \Seam\Parse::to_list(
+                    $json->warnings ?? null,
                     fn($w) => \Seam\Resources\Device\Warnings::from_json($w),
-                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 can_configure_auto_lock: $json->can_configure_auto_lock ?? null,
@@ -530,13 +530,13 @@ namespace Seam\Resources\Device {
                 auto_lock_enabled: $json->auto_lock_enabled ?? null,
                 available_climate_preset_modes: $json->available_climate_preset_modes ??
                     null,
-                available_climate_presets: array_map(
+                available_climate_presets: \Seam\Parse::to_list(
+                    $json->available_climate_presets ?? null,
                     fn(
                         $a,
                     ) => \Seam\Resources\Device\Properties\AvailableClimatePresets::from_json(
                         $a,
                     ),
-                    $json->available_climate_presets ?? [],
                 ),
                 available_fan_mode_settings: $json->available_fan_mode_settings ??
                     null,
@@ -560,13 +560,13 @@ namespace Seam\Resources\Device {
                         $json->brivo_metadata,
                     )
                     : null,
-                code_constraints: array_map(
+                code_constraints: \Seam\Parse::to_list(
+                    $json->code_constraints ?? null,
                     fn(
                         $c,
                     ) => \Seam\Resources\Device\Properties\CodeConstraints::from_json(
                         $c,
                     ),
-                    $json->code_constraints ?? [],
                 ),
                 controlbyweb_metadata: isset($json->controlbyweb_metadata)
                     ? \Seam\Resources\Device\Properties\ControlbywebMetadata::from_json(
@@ -718,13 +718,13 @@ namespace Seam\Resources\Device {
                     : null,
                 offline_access_codes_enabled: $json->offline_access_codes_enabled ??
                     null,
-                offline_time_frame_options: array_map(
+                offline_time_frame_options: \Seam\Parse::to_list(
+                    $json->offline_time_frame_options ?? null,
                     fn(
                         $o,
                     ) => \Seam\Resources\Device\Properties\OfflineTimeFrameOptions::from_json(
                         $o,
                     ),
-                    $json->offline_time_frame_options ?? [],
                 ),
                 omnitec_metadata: isset($json->omnitec_metadata)
                     ? \Seam\Resources\Device\Properties\OmnitecMetadata::from_json(
@@ -733,13 +733,13 @@ namespace Seam\Resources\Device {
                     : null,
                 online_access_codes_enabled: $json->online_access_codes_enabled ??
                     null,
-                online_time_frame_options: array_map(
+                online_time_frame_options: \Seam\Parse::to_list(
+                    $json->online_time_frame_options ?? null,
                     fn(
                         $o,
                     ) => \Seam\Resources\Device\Properties\OnlineTimeFrameOptions::from_json(
                         $o,
                     ),
-                    $json->online_time_frame_options ?? [],
                 ),
                 relative_humidity: $json->relative_humidity ?? null,
                 ring_metadata: isset($json->ring_metadata)
@@ -811,13 +811,13 @@ namespace Seam\Resources\Device {
                     : null,
                 thermostat_daily_program_period_precision_minutes: $json->thermostat_daily_program_period_precision_minutes ??
                     null,
-                thermostat_daily_programs: array_map(
+                thermostat_daily_programs: \Seam\Parse::to_list(
+                    $json->thermostat_daily_programs ?? null,
                     fn(
                         $t,
                     ) => \Seam\Resources\Device\Properties\ThermostatDailyPrograms::from_json(
                         $t,
                     ),
-                    $json->thermostat_daily_programs ?? [],
                 ),
                 thermostat_weekly_program: isset(
                     $json->thermostat_weekly_program,
@@ -2372,13 +2372,13 @@ namespace Seam\Resources\Device\Properties {
                 return null;
             }
             return new self(
-                endpoints: array_map(
+                endpoints: \Seam\Parse::to_list(
+                    $json->endpoints ?? null,
                     fn(
                         $e,
                     ) => \Seam\Resources\Device\Properties\AssaAbloyCredentialServiceMetadata\Endpoints::from_json(
                         $e,
                     ),
-                    $json->endpoints ?? [],
                 ),
                 has_active_endpoint: $json->has_active_endpoint ?? null,
             );
@@ -2723,13 +2723,13 @@ namespace Seam\Resources\Device\Properties {
                 door_is_wireless: $json->door_is_wireless ?? null,
                 door_name: $json->door_name ?? null,
                 iana_timezone: $json->iana_timezone ?? null,
-                predefined_time_slots: array_map(
+                predefined_time_slots: \Seam\Parse::to_list(
+                    $json->predefined_time_slots ?? null,
                     fn(
                         $p,
                     ) => \Seam\Resources\Device\Properties\DormakabaOracodeMetadata\PredefinedTimeSlots::from_json(
                         $p,
                     ),
-                    $json->predefined_time_slots ?? [],
                 ),
                 site_id: $json->site_id ?? null,
                 site_name: $json->site_name ?? null,
@@ -3885,13 +3885,13 @@ namespace Seam\Resources\Device\Properties {
                 lock_alias: $json->lock_alias ?? null,
                 lock_id: $json->lock_id ?? null,
                 timezone_raw_offset_ms: $json->timezone_raw_offset_ms ?? null,
-                wireless_keypads: array_map(
+                wireless_keypads: \Seam\Parse::to_list(
+                    $json->wireless_keypads ?? null,
                     fn(
                         $w,
                     ) => \Seam\Resources\Device\Properties\TtlockMetadata\WirelessKeypads::from_json(
                         $w,
                     ),
-                    $json->wireless_keypads ?? [],
                 ),
             );
         }
@@ -4187,13 +4187,13 @@ namespace Seam\Resources\Device\Properties {
                 min_duration: $json->min_duration ?? null,
                 start_date_recurrence_rule: $json->start_date_recurrence_rule ??
                     null,
-                time_pairs: array_map(
+                time_pairs: \Seam\Parse::to_list(
+                    $json->time_pairs ?? null,
                     fn(
                         $t,
                     ) => \Seam\Resources\Device\Properties\OfflineTimeFrameOptions\TimePairs::from_json(
                         $t,
                     ),
-                    $json->time_pairs ?? [],
                 ),
                 time_zone: $json->time_zone ?? null,
             );
@@ -4257,13 +4257,13 @@ namespace Seam\Resources\Device\Properties {
                 min_duration: $json->min_duration ?? null,
                 start_date_recurrence_rule: $json->start_date_recurrence_rule ??
                     null,
-                time_pairs: array_map(
+                time_pairs: \Seam\Parse::to_list(
+                    $json->time_pairs ?? null,
                     fn(
                         $t,
                     ) => \Seam\Resources\Device\Properties\OnlineTimeFrameOptions\TimePairs::from_json(
                         $t,
                     ),
-                    $json->time_pairs ?? [],
                 ),
                 time_zone: $json->time_zone ?? null,
             );
@@ -4325,13 +4325,13 @@ namespace Seam\Resources\Device\Properties {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 ends_at: $json->ends_at ?? null,
-                errors: array_map(
+                errors: \Seam\Parse::to_list(
+                    $json->errors ?? null,
                     fn(
                         $e,
                     ) => \Seam\Resources\Device\Properties\ActiveThermostatSchedule\Errors::from_json(
                         $e,
                     ),
-                    $json->errors ?? [],
                 ),
                 name: $json->name ?? null,
                 starts_at: $json->starts_at ?? null,
@@ -4779,13 +4779,13 @@ namespace Seam\Resources\Device\Properties {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 name: $json->name ?? null,
-                periods: array_map(
+                periods: \Seam\Parse::to_list(
+                    $json->periods ?? null,
                     fn(
                         $p,
                     ) => \Seam\Resources\Device\Properties\ThermostatDailyPrograms\Periods::from_json(
                         $p,
                     ),
-                    $json->periods ?? [],
                 ),
                 thermostat_daily_program_id: $json->thermostat_daily_program_id ??
                     null,

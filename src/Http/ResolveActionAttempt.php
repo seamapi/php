@@ -4,6 +4,7 @@ namespace Seam\Http;
 
 use GuzzleHttp\ClientInterface;
 use Seam\ActionAttemptFailedError;
+use Seam\ActionAttemptUnknownStatusError;
 use Seam\ActionAttemptTimeoutError;
 use Seam\InvalidOptionsError;
 use Seam\InvalidResponseError;
@@ -78,6 +79,16 @@ final class ResolveActionAttempt
 
             if ($action_attempt->status === "error") {
                 throw new ActionAttemptFailedError($action_attempt);
+            }
+
+            // Neither pending, success, nor error: a status added after this
+            // release. Polling on would block until the timeout and then report
+            // a timeout that misdescribes what happened.
+            if ($action_attempt->status !== "pending") {
+                throw new ActionAttemptUnknownStatusError(
+                    $action_attempt,
+                    (string) $action_attempt->status,
+                );
             }
 
             $remaining = $deadline - self::now();
