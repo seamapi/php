@@ -185,6 +185,7 @@ namespace Seam\Resources\DeviceProvider {
         case ECOBEE = "ecobee";
         case FOUR_SUITES = "four_suites";
         case DORMAKABA_ORACODE = "dormakaba_oracode";
+        case DORMAKABA_ORACODE_IHO = "dormakaba_oracode_iho";
         case PTI = "pti";
         case WYZE = "wyze";
         case SEAM_PASSPORT = "seam_passport";
