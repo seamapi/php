@@ -18,7 +18,7 @@ namespace {{namespace}} {
                 ? {{factory.enumType}}::tryFrom($json->{{factory.discriminant}})
                 : null;
 
-            return match ($discriminant) {
+            {{#if hasRawJson}}$resource = {{else}}return {{/if}}match ($discriminant) {
 {{#each factory.variants}}
                 {{enumCase}} => {{className}}::from_json($json),
 {{/each}}
@@ -28,6 +28,12 @@ namespace {{namespace}} {
 {{/each}}
                 ),
             };
+{{#if hasRawJson}}
+
+            $resource->raw_json_source = $json;
+
+            return $resource;
+{{/if}}
 {{else}}
             return new self(
 {{#each fromJsonProps}}
@@ -37,6 +43,19 @@ namespace {{namespace}} {
 {{/if}}
         }
 
+{{#if hasRawJson}}
+        private mixed $raw_json_source = null;
+
+        /**
+         * The payload this event was parsed from, as JSON. Reaches fields the
+         * generated properties do not cover, such as one added after this release.
+         */
+        public function raw_json(): string
+        {
+            return json_encode($this->raw_json_source);
+        }
+
+{{/if}}
         public function __construct(
 {{#each constructorParams}}
 {{#if (hasPhpDoc this)}}

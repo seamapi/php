@@ -9,6 +9,7 @@ import type {
 
 export interface ClassLayoutContext {
   className: string
+  hasRawJson: boolean
   description: string
   isDeprecated: boolean
   deprecationMessage: string
@@ -129,6 +130,9 @@ const getClassLayoutContext = (
 
   return {
     className: schema.name,
+    // raw_json exists for the webhook verify return, so the base Event carries
+    // it and nothing else does. The variants inherit it.
+    hasRawJson: schema.name === 'Event' && schema.extendsName === '',
     description: schema.description,
     isDeprecated: schema.isDeprecated,
     deprecationMessage: schema.deprecationMessage,

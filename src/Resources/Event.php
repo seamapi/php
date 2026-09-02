@@ -15,7 +15,7 @@ namespace Seam\Resources {
                 ? \Seam\Resources\Event\EventType::tryFrom($json->event_type)
                 : null;
 
-            return match ($discriminant) {
+            $resource = match ($discriminant) {
                 \Seam\Resources\Event\EventType::ACCESS_CODE_CREATED
                     => \Seam\Resources\Event\AccessCodeCreated::from_json(
                     $json,
@@ -421,6 +421,21 @@ namespace Seam\Resources {
                     event_description: $json->event_description ?? null,
                 ),
             };
+
+            $resource->raw_json_source = $json;
+
+            return $resource;
+        }
+
+        private mixed $raw_json_source = null;
+
+        /**
+         * The payload this event was parsed from, as JSON. Reaches fields the
+         * generated properties do not cover, such as one added after this release.
+         */
+        public function raw_json(): string
+        {
+            return json_encode($this->raw_json_source);
         }
 
         public function __construct(

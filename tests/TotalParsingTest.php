@@ -67,6 +67,40 @@ final class TotalParsingTest extends TestCase
         $this->assertSame("future.thing", $event->event_type);
     }
 
+    public function testRawJsonRecoversAFieldTheGeneratedShapeDrops(): void
+    {
+        $json =
+            '{"event_id":"event_1","event_type":"access_code.created","brand_new_field":"kept"}';
+
+        $event = Event::from_json(json_decode($json));
+
+        $this->assertFalse(property_exists($event, "brand_new_field"));
+        $this->assertEquals(
+            json_decode($json),
+            json_decode($event->raw_json()),
+        );
+    }
+
+    public function testRawJsonRoundTripsAnUnrecognizedEvent(): void
+    {
+        $json = '{"event_id":"event_1","event_type":"future.thing","x":1}';
+
+        $event = Event::from_json(json_decode($json));
+
+        $this->assertSame(Event::class, $event::class);
+        $this->assertEquals(
+            json_decode($json),
+            json_decode($event->raw_json()),
+        );
+    }
+
+    public function testRawJsonIsScopedToEvents(): void
+    {
+        $device = Device::from_json(json_decode('{"device_id":"device_1"}'));
+
+        $this->assertFalse(method_exists($device, "raw_json"));
+    }
+
     public function testWaitingOnAnUnknownStatusRaisesRatherThanClaimingSuccess(): void
     {
         $attempt = ActionAttempt::from_json(
