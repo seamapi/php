@@ -11,11 +11,6 @@ use Seam\Resources\ActionAttempt;
 use Seam\Resources\Device;
 use Seam\Resources\Event;
 
-/**
- * Seam adds event types, action types, and enum values between SDK releases.
- * Reading them must not raise; writing logic against them is what an upgrade is
- * for. The webhook event additionally carries the payload it was parsed from.
- */
 final class ForwardCompatibilityTest extends TestCase
 {
     public function testAnUnknownEnumValueReadsAsItself(): void
@@ -60,10 +55,6 @@ final class ForwardCompatibilityTest extends TestCase
         $this->assertSame("cancelled", $attempt->status);
     }
 
-    /**
-     * Waiting promises a succeeded attempt or a raise, so an unrecognized status
-     * is the one place the SDK must not stay quiet.
-     */
     public function testTheUnknownStatusErrorSubclassesTheBase(): void
     {
         $attempt = ActionAttempt::from_json(
