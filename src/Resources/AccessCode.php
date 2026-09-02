@@ -25,9 +25,9 @@ namespace Seam\Resources {
                 common_code_key: $json->common_code_key ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
-                errors: \Seam\Parse::to_list(
-                    $json->errors ?? null,
+                errors: array_map(
                     fn($e) => \Seam\Resources\AccessCode\Errors::from_json($e),
+                    $json->errors ?? [],
                 ),
                 is_backup_access_code_available: $json->is_backup_access_code_available ??
                     null,
@@ -37,21 +37,21 @@ namespace Seam\Resources {
                 is_offline_access_code: $json->is_offline_access_code ?? null,
                 is_one_time_use: $json->is_one_time_use ?? null,
                 name: $json->name ?? null,
-                pending_mutations: \Seam\Parse::to_list(
-                    $json->pending_mutations ?? null,
+                pending_mutations: array_map(
                     fn(
                         $p,
                     ) => \Seam\Resources\AccessCode\PendingMutations::from_json(
                         $p,
                     ),
+                    $json->pending_mutations ?? [],
                 ),
                 status: $json->status ?? null,
                 type: $json->type ?? null,
-                warnings: \Seam\Parse::to_list(
-                    $json->warnings ?? null,
+                warnings: array_map(
                     fn($w) => \Seam\Resources\AccessCode\Warnings::from_json(
                         $w,
                     ),
+                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 dormakaba_oracode_metadata: isset(
@@ -800,13 +800,13 @@ namespace Seam\Resources\AccessCode\Errors {
                 message: $json->message ?? null,
                 change_type: $json->change_type ?? null,
                 created_at: $json->created_at ?? null,
-                modified_fields: \Seam\Parse::to_list(
-                    $json->modified_fields ?? null,
+                modified_fields: array_map(
                     fn(
                         $m,
                     ) => \Seam\Resources\AccessCode\Errors\ConflictingExternalModification\ModifiedFields::from_json(
                         $m,
                     ),
+                    $json->modified_fields ?? [],
                 ),
             );
         }
@@ -2329,13 +2329,13 @@ namespace Seam\Resources\AccessCode\Warnings {
                 warning_code: $json->warning_code ?? null,
                 change_type: $json->change_type ?? null,
                 created_at: $json->created_at ?? null,
-                modified_fields: \Seam\Parse::to_list(
-                    $json->modified_fields ?? null,
+                modified_fields: array_map(
                     fn(
                         $m,
                     ) => \Seam\Resources\AccessCode\Warnings\ExternalModificationInEffect\ModifiedFields::from_json(
                         $m,
                     ),
+                    $json->modified_fields ?? [],
                 ),
             );
         }

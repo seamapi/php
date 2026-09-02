@@ -18,36 +18,36 @@ namespace Seam\Resources {
                 display_name: $json->display_name ?? null,
                 display_status: $json->display_status ?? null,
                 ends_at: $json->ends_at ?? null,
-                errors: \Seam\Parse::to_list(
-                    $json->errors ?? null,
+                errors: array_map(
                     fn($e) => \Seam\Resources\AccessGrant\Errors::from_json($e),
+                    $json->errors ?? [],
                 ),
                 location_ids: $json->location_ids ?? null,
                 name: $json->name ?? null,
-                pending_mutations: \Seam\Parse::to_list(
-                    $json->pending_mutations ?? null,
+                pending_mutations: array_map(
                     fn(
                         $p,
                     ) => \Seam\Resources\AccessGrant\PendingMutations::from_json(
                         $p,
                     ),
+                    $json->pending_mutations ?? [],
                 ),
-                requested_access_methods: \Seam\Parse::to_list(
-                    $json->requested_access_methods ?? null,
+                requested_access_methods: array_map(
                     fn(
                         $r,
                     ) => \Seam\Resources\AccessGrant\RequestedAccessMethods::from_json(
                         $r,
                     ),
+                    $json->requested_access_methods ?? [],
                 ),
                 space_ids: $json->space_ids ?? null,
                 starts_at: $json->starts_at ?? null,
                 user_identity_id: $json->user_identity_id ?? null,
-                warnings: \Seam\Parse::to_list(
-                    $json->warnings ?? null,
+                warnings: array_map(
                     fn($w) => \Seam\Resources\AccessGrant\Warnings::from_json(
                         $w,
                     ),
+                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_key: $json->access_grant_key ?? null,
@@ -811,13 +811,13 @@ namespace Seam\Resources\AccessGrant\Warnings {
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
                 warning_code: $json->warning_code ?? null,
-                failed_devices: \Seam\Parse::to_list(
-                    $json->failed_devices ?? null,
+                failed_devices: array_map(
                     fn(
                         $f,
                     ) => \Seam\Resources\AccessGrant\Warnings\OverprovisionedAccess\FailedDevices::from_json(
                         $f,
                     ),
+                    $json->failed_devices ?? [],
                 ),
             );
         }

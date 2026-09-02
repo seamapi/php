@@ -24,30 +24,30 @@ namespace Seam\Resources {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
-                errors: \Seam\Parse::to_list(
-                    $json->errors ?? null,
+                errors: array_map(
                     fn($e) => \Seam\Resources\AcsAccessGroup\Errors::from_json(
                         $e,
                     ),
+                    $json->errors ?? [],
                 ),
                 external_type: $json->external_type ?? null,
                 external_type_display_name: $json->external_type_display_name ??
                     null,
                 is_managed: $json->is_managed ?? null,
                 name: $json->name ?? null,
-                pending_mutations: \Seam\Parse::to_list(
-                    $json->pending_mutations ?? null,
+                pending_mutations: array_map(
                     fn(
                         $p,
                     ) => \Seam\Resources\AcsAccessGroup\PendingMutations::from_json(
                         $p,
                     ),
+                    $json->pending_mutations ?? [],
                 ),
-                warnings: \Seam\Parse::to_list(
-                    $json->warnings ?? null,
+                warnings: array_map(
                     fn(
                         $w,
                     ) => \Seam\Resources\AcsAccessGroup\Warnings::from_json($w),
+                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 access_schedule: isset($json->access_schedule)

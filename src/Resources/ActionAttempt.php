@@ -2020,13 +2020,13 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Success {
                         $json->acs_credential_on_seam,
                     )
                     : null,
-                warnings: \Seam\Parse::to_list(
-                    $json->warnings ?? null,
+                warnings: array_map(
                     fn(
                         $w,
                     ) => \Seam\Resources\ActionAttempt\ScanCredential\Success\Result\Warnings::from_json(
                         $w,
                     ),
+                    $json->warnings ?? [],
                 ),
             );
         }
@@ -2121,22 +2121,22 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
-                errors: \Seam\Parse::to_list(
-                    $json->errors ?? null,
+                errors: array_map(
                     fn(
                         $e,
                     ) => \Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredentialOnSeam\Errors::from_json(
                         $e,
                     ),
+                    $json->errors ?? [],
                 ),
                 is_managed: $json->is_managed ?? null,
-                warnings: \Seam\Parse::to_list(
-                    $json->warnings ?? null,
+                warnings: array_map(
                     fn(
                         $w,
                     ) => \Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredentialOnSeam\Warnings::from_json(
                         $w,
                     ),
+                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 acs_credential_pool_id: $json->acs_credential_pool_id ?? null,
@@ -2914,22 +2914,22 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential\Success {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
-                errors: \Seam\Parse::to_list(
-                    $json->errors ?? null,
+                errors: array_map(
                     fn(
                         $e,
                     ) => \Seam\Resources\ActionAttempt\EncodeCredential\Success\Result\Errors::from_json(
                         $e,
                     ),
+                    $json->errors ?? [],
                 ),
                 is_managed: $json->is_managed ?? null,
-                warnings: \Seam\Parse::to_list(
-                    $json->warnings ?? null,
+                warnings: array_map(
                     fn(
                         $w,
                     ) => \Seam\Resources\ActionAttempt\EncodeCredential\Success\Result\Warnings::from_json(
                         $w,
                     ),
+                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 acs_credential_pool_id: $json->acs_credential_pool_id ?? null,
@@ -3582,22 +3582,22 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Success {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
-                errors: \Seam\Parse::to_list(
-                    $json->errors ?? null,
+                errors: array_map(
                     fn(
                         $e,
                     ) => \Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result\Errors::from_json(
                         $e,
                     ),
+                    $json->errors ?? [],
                 ),
                 is_managed: $json->is_managed ?? null,
-                warnings: \Seam\Parse::to_list(
-                    $json->warnings ?? null,
+                warnings: array_map(
                     fn(
                         $w,
                     ) => \Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result\Warnings::from_json(
                         $w,
                     ),
+                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 acs_credential_pool_id: $json->acs_credential_pool_id ?? null,
@@ -4241,32 +4241,32 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success {
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
                 display_status: $json->display_status ?? null,
-                errors: \Seam\Parse::to_list(
-                    $json->errors ?? null,
+                errors: array_map(
                     fn(
                         $e,
                     ) => \Seam\Resources\ActionAttempt\AssignCredential\Success\Result\Errors::from_json(
                         $e,
                     ),
+                    $json->errors ?? [],
                 ),
                 is_issued: $json->is_issued ?? null,
                 issued_at: $json->issued_at ?? null,
                 mode: $json->mode ?? null,
-                pending_mutations: \Seam\Parse::to_list(
-                    $json->pending_mutations ?? null,
+                pending_mutations: array_map(
                     fn(
                         $p,
                     ) => \Seam\Resources\ActionAttempt\AssignCredential\Success\Result\PendingMutations::from_json(
                         $p,
                     ),
+                    $json->pending_mutations ?? [],
                 ),
-                warnings: \Seam\Parse::to_list(
-                    $json->warnings ?? null,
+                warnings: array_map(
                     fn(
                         $w,
                     ) => \Seam\Resources\ActionAttempt\AssignCredential\Success\Result\Warnings::from_json(
                         $w,
                     ),
+                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 client_session_token: $json->client_session_token ?? null,

@@ -17,18 +17,18 @@ namespace Seam\Resources {
                 device_id: $json->device_id ?? null,
                 device_type: $json->device_type ?? null,
                 display_name: $json->display_name ?? null,
-                errors: \Seam\Parse::to_list(
-                    $json->errors ?? null,
+                errors: array_map(
                     fn($e) => \Seam\Resources\Phone\Errors::from_json($e),
+                    $json->errors ?? [],
                 ),
                 properties: isset($json->properties)
                     ? \Seam\Resources\Phone\Properties::from_json(
                         $json->properties,
                     )
                     : null,
-                warnings: \Seam\Parse::to_list(
-                    $json->warnings ?? null,
+                warnings: array_map(
                     fn($w) => \Seam\Resources\Phone\Warnings::from_json($w),
+                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 nickname: $json->nickname ?? null,
@@ -215,13 +215,13 @@ namespace Seam\Resources\Phone\Properties {
                 return null;
             }
             return new self(
-                endpoints: \Seam\Parse::to_list(
-                    $json->endpoints ?? null,
+                endpoints: array_map(
                     fn(
                         $e,
                     ) => \Seam\Resources\Phone\Properties\AssaAbloyCredentialServiceMetadata\Endpoints::from_json(
                         $e,
                     ),
+                    $json->endpoints ?? [],
                 ),
                 has_active_endpoint: $json->has_active_endpoint ?? null,
             );

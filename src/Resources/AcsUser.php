@@ -21,14 +21,14 @@ namespace Seam\Resources {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
-                errors: \Seam\Parse::to_list(
-                    $json->errors ?? null,
+                errors: array_map(
                     fn($e) => \Seam\Resources\AcsUser\Errors::from_json($e),
+                    $json->errors ?? [],
                 ),
                 is_managed: $json->is_managed ?? null,
-                warnings: \Seam\Parse::to_list(
-                    $json->warnings ?? null,
+                warnings: array_map(
                     fn($w) => \Seam\Resources\AcsUser\Warnings::from_json($w),
+                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 access_schedule: isset($json->access_schedule)
@@ -44,13 +44,13 @@ namespace Seam\Resources {
                 full_name: $json->full_name ?? null,
                 hid_acs_system_id: $json->hid_acs_system_id ?? null,
                 is_suspended: $json->is_suspended ?? null,
-                pending_mutations: \Seam\Parse::to_list(
-                    $json->pending_mutations ?? null,
+                pending_mutations: array_map(
                     fn(
                         $p,
                     ) => \Seam\Resources\AcsUser\PendingMutations::from_json(
                         $p,
                     ),
+                    $json->pending_mutations ?? [],
                 ),
                 phone_number: $json->phone_number ?? null,
                 salto_ks_metadata: isset($json->salto_ks_metadata)

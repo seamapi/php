@@ -575,13 +575,13 @@ namespace Seam\Resources\Event {
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 change_reason: $json->change_reason ?? null,
-                changed_properties: \Seam\Parse::to_list(
-                    $json->changed_properties ?? null,
+                changed_properties: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\AccessCodeChanged\ChangedProperties::from_json(
                         $c,
                     ),
+                    $json->changed_properties ?? [],
                 ),
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
@@ -1013,13 +1013,13 @@ namespace Seam\Resources\Event {
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
-                requested_mutations: \Seam\Parse::to_list(
-                    $json->requested_mutations ?? null,
+                requested_mutations: array_map(
                     fn(
                         $r,
                     ) => \Seam\Resources\Event\AccessCodeMutationsRequested\RequestedMutations::from_json(
                         $r,
                     ),
+                    $json->requested_mutations ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
@@ -1382,57 +1382,57 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                access_code_errors: \Seam\Parse::to_list(
-                    $json->access_code_errors ?? null,
+                access_code_errors: array_map(
                     fn(
                         $a,
                     ) => \Seam\Resources\Event\AccessCodeDelayInSettingOnDevice\AccessCodeErrors::from_json(
                         $a,
                     ),
+                    $json->access_code_errors ?? [],
                 ),
                 access_code_id: $json->access_code_id ?? null,
-                access_code_warnings: \Seam\Parse::to_list(
-                    $json->access_code_warnings ?? null,
+                access_code_warnings: array_map(
                     fn(
                         $a,
                     ) => \Seam\Resources\Event\AccessCodeDelayInSettingOnDevice\AccessCodeWarnings::from_json(
                         $a,
                     ),
+                    $json->access_code_warnings ?? [],
                 ),
-                connected_account_errors: \Seam\Parse::to_list(
-                    $json->connected_account_errors ?? null,
+                connected_account_errors: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\AccessCodeDelayInSettingOnDevice\ConnectedAccountErrors::from_json(
                         $c,
                     ),
+                    $json->connected_account_errors ?? [],
                 ),
                 connected_account_id: $json->connected_account_id ?? null,
-                connected_account_warnings: \Seam\Parse::to_list(
-                    $json->connected_account_warnings ?? null,
+                connected_account_warnings: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\AccessCodeDelayInSettingOnDevice\ConnectedAccountWarnings::from_json(
                         $c,
                     ),
+                    $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
-                device_errors: \Seam\Parse::to_list(
-                    $json->device_errors ?? null,
+                device_errors: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\AccessCodeDelayInSettingOnDevice\DeviceErrors::from_json(
                         $d,
                     ),
+                    $json->device_errors ?? [],
                 ),
                 device_id: $json->device_id ?? null,
-                device_warnings: \Seam\Parse::to_list(
-                    $json->device_warnings ?? null,
+                device_warnings: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\AccessCodeDelayInSettingOnDevice\DeviceWarnings::from_json(
                         $d,
                     ),
+                    $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
@@ -1554,57 +1554,57 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                access_code_errors: \Seam\Parse::to_list(
-                    $json->access_code_errors ?? null,
+                access_code_errors: array_map(
                     fn(
                         $a,
                     ) => \Seam\Resources\Event\AccessCodeFailedToSetOnDevice\AccessCodeErrors::from_json(
                         $a,
                     ),
+                    $json->access_code_errors ?? [],
                 ),
                 access_code_id: $json->access_code_id ?? null,
-                access_code_warnings: \Seam\Parse::to_list(
-                    $json->access_code_warnings ?? null,
+                access_code_warnings: array_map(
                     fn(
                         $a,
                     ) => \Seam\Resources\Event\AccessCodeFailedToSetOnDevice\AccessCodeWarnings::from_json(
                         $a,
                     ),
+                    $json->access_code_warnings ?? [],
                 ),
-                connected_account_errors: \Seam\Parse::to_list(
-                    $json->connected_account_errors ?? null,
+                connected_account_errors: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\AccessCodeFailedToSetOnDevice\ConnectedAccountErrors::from_json(
                         $c,
                     ),
+                    $json->connected_account_errors ?? [],
                 ),
                 connected_account_id: $json->connected_account_id ?? null,
-                connected_account_warnings: \Seam\Parse::to_list(
-                    $json->connected_account_warnings ?? null,
+                connected_account_warnings: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\AccessCodeFailedToSetOnDevice\ConnectedAccountWarnings::from_json(
                         $c,
                     ),
+                    $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
-                device_errors: \Seam\Parse::to_list(
-                    $json->device_errors ?? null,
+                device_errors: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\AccessCodeFailedToSetOnDevice\DeviceErrors::from_json(
                         $d,
                     ),
+                    $json->device_errors ?? [],
                 ),
                 device_id: $json->device_id ?? null,
-                device_warnings: \Seam\Parse::to_list(
-                    $json->device_warnings ?? null,
+                device_warnings: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\AccessCodeFailedToSetOnDevice\DeviceWarnings::from_json(
                         $d,
                     ),
+                    $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
@@ -1819,57 +1819,57 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                access_code_errors: \Seam\Parse::to_list(
-                    $json->access_code_errors ?? null,
+                access_code_errors: array_map(
                     fn(
                         $a,
                     ) => \Seam\Resources\Event\AccessCodeDelayInRemovingFromDevice\AccessCodeErrors::from_json(
                         $a,
                     ),
+                    $json->access_code_errors ?? [],
                 ),
                 access_code_id: $json->access_code_id ?? null,
-                access_code_warnings: \Seam\Parse::to_list(
-                    $json->access_code_warnings ?? null,
+                access_code_warnings: array_map(
                     fn(
                         $a,
                     ) => \Seam\Resources\Event\AccessCodeDelayInRemovingFromDevice\AccessCodeWarnings::from_json(
                         $a,
                     ),
+                    $json->access_code_warnings ?? [],
                 ),
-                connected_account_errors: \Seam\Parse::to_list(
-                    $json->connected_account_errors ?? null,
+                connected_account_errors: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\AccessCodeDelayInRemovingFromDevice\ConnectedAccountErrors::from_json(
                         $c,
                     ),
+                    $json->connected_account_errors ?? [],
                 ),
                 connected_account_id: $json->connected_account_id ?? null,
-                connected_account_warnings: \Seam\Parse::to_list(
-                    $json->connected_account_warnings ?? null,
+                connected_account_warnings: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\AccessCodeDelayInRemovingFromDevice\ConnectedAccountWarnings::from_json(
                         $c,
                     ),
+                    $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
-                device_errors: \Seam\Parse::to_list(
-                    $json->device_errors ?? null,
+                device_errors: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\AccessCodeDelayInRemovingFromDevice\DeviceErrors::from_json(
                         $d,
                     ),
+                    $json->device_errors ?? [],
                 ),
                 device_id: $json->device_id ?? null,
-                device_warnings: \Seam\Parse::to_list(
-                    $json->device_warnings ?? null,
+                device_warnings: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\AccessCodeDelayInRemovingFromDevice\DeviceWarnings::from_json(
                         $d,
                     ),
+                    $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
@@ -1991,57 +1991,57 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                access_code_errors: \Seam\Parse::to_list(
-                    $json->access_code_errors ?? null,
+                access_code_errors: array_map(
                     fn(
                         $a,
                     ) => \Seam\Resources\Event\AccessCodeFailedToRemoveFromDevice\AccessCodeErrors::from_json(
                         $a,
                     ),
+                    $json->access_code_errors ?? [],
                 ),
                 access_code_id: $json->access_code_id ?? null,
-                access_code_warnings: \Seam\Parse::to_list(
-                    $json->access_code_warnings ?? null,
+                access_code_warnings: array_map(
                     fn(
                         $a,
                     ) => \Seam\Resources\Event\AccessCodeFailedToRemoveFromDevice\AccessCodeWarnings::from_json(
                         $a,
                     ),
+                    $json->access_code_warnings ?? [],
                 ),
-                connected_account_errors: \Seam\Parse::to_list(
-                    $json->connected_account_errors ?? null,
+                connected_account_errors: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\AccessCodeFailedToRemoveFromDevice\ConnectedAccountErrors::from_json(
                         $c,
                     ),
+                    $json->connected_account_errors ?? [],
                 ),
                 connected_account_id: $json->connected_account_id ?? null,
-                connected_account_warnings: \Seam\Parse::to_list(
-                    $json->connected_account_warnings ?? null,
+                connected_account_warnings: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\AccessCodeFailedToRemoveFromDevice\ConnectedAccountWarnings::from_json(
                         $c,
                     ),
+                    $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
-                device_errors: \Seam\Parse::to_list(
-                    $json->device_errors ?? null,
+                device_errors: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\AccessCodeFailedToRemoveFromDevice\DeviceErrors::from_json(
                         $d,
                     ),
+                    $json->device_errors ?? [],
                 ),
                 device_id: $json->device_id ?? null,
-                device_warnings: \Seam\Parse::to_list(
-                    $json->device_warnings ?? null,
+                device_warnings: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\AccessCodeFailedToRemoveFromDevice\DeviceWarnings::from_json(
                         $d,
                     ),
+                    $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
@@ -2522,57 +2522,57 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                access_code_errors: \Seam\Parse::to_list(
-                    $json->access_code_errors ?? null,
+                access_code_errors: array_map(
                     fn(
                         $a,
                     ) => \Seam\Resources\Event\AccessCodeUnmanagedFailedToConvertToManaged\AccessCodeErrors::from_json(
                         $a,
                     ),
+                    $json->access_code_errors ?? [],
                 ),
                 access_code_id: $json->access_code_id ?? null,
-                access_code_warnings: \Seam\Parse::to_list(
-                    $json->access_code_warnings ?? null,
+                access_code_warnings: array_map(
                     fn(
                         $a,
                     ) => \Seam\Resources\Event\AccessCodeUnmanagedFailedToConvertToManaged\AccessCodeWarnings::from_json(
                         $a,
                     ),
+                    $json->access_code_warnings ?? [],
                 ),
-                connected_account_errors: \Seam\Parse::to_list(
-                    $json->connected_account_errors ?? null,
+                connected_account_errors: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\AccessCodeUnmanagedFailedToConvertToManaged\ConnectedAccountErrors::from_json(
                         $c,
                     ),
+                    $json->connected_account_errors ?? [],
                 ),
                 connected_account_id: $json->connected_account_id ?? null,
-                connected_account_warnings: \Seam\Parse::to_list(
-                    $json->connected_account_warnings ?? null,
+                connected_account_warnings: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\AccessCodeUnmanagedFailedToConvertToManaged\ConnectedAccountWarnings::from_json(
                         $c,
                     ),
+                    $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
-                device_errors: \Seam\Parse::to_list(
-                    $json->device_errors ?? null,
+                device_errors: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\AccessCodeUnmanagedFailedToConvertToManaged\DeviceErrors::from_json(
                         $d,
                     ),
+                    $json->device_errors ?? [],
                 ),
                 device_id: $json->device_id ?? null,
-                device_warnings: \Seam\Parse::to_list(
-                    $json->device_warnings ?? null,
+                device_warnings: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\AccessCodeUnmanagedFailedToConvertToManaged\DeviceWarnings::from_json(
                         $d,
                     ),
+                    $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
@@ -4112,38 +4112,38 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                acs_system_errors: \Seam\Parse::to_list(
-                    $json->acs_system_errors ?? null,
+                acs_system_errors: array_map(
                     fn(
                         $a,
                     ) => \Seam\Resources\Event\AcsSystemDisconnected\AcsSystemErrors::from_json(
                         $a,
                     ),
+                    $json->acs_system_errors ?? [],
                 ),
                 acs_system_id: $json->acs_system_id ?? null,
-                acs_system_warnings: \Seam\Parse::to_list(
-                    $json->acs_system_warnings ?? null,
+                acs_system_warnings: array_map(
                     fn(
                         $a,
                     ) => \Seam\Resources\Event\AcsSystemDisconnected\AcsSystemWarnings::from_json(
                         $a,
                     ),
+                    $json->acs_system_warnings ?? [],
                 ),
-                connected_account_errors: \Seam\Parse::to_list(
-                    $json->connected_account_errors ?? null,
+                connected_account_errors: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\AcsSystemDisconnected\ConnectedAccountErrors::from_json(
                         $c,
                     ),
+                    $json->connected_account_errors ?? [],
                 ),
-                connected_account_warnings: \Seam\Parse::to_list(
-                    $json->connected_account_warnings ?? null,
+                connected_account_warnings: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\AcsSystemDisconnected\ConnectedAccountWarnings::from_json(
                         $c,
                     ),
+                    $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
@@ -5326,22 +5326,22 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                connected_account_errors: \Seam\Parse::to_list(
-                    $json->connected_account_errors ?? null,
+                connected_account_errors: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\ConnectedAccountDisconnected\ConnectedAccountErrors::from_json(
                         $c,
                     ),
+                    $json->connected_account_errors ?? [],
                 ),
                 connected_account_id: $json->connected_account_id ?? null,
-                connected_account_warnings: \Seam\Parse::to_list(
-                    $json->connected_account_warnings ?? null,
+                connected_account_warnings: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\ConnectedAccountDisconnected\ConnectedAccountWarnings::from_json(
                         $c,
                     ),
+                    $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
@@ -5645,22 +5645,22 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                connected_account_errors: \Seam\Parse::to_list(
-                    $json->connected_account_errors ?? null,
+                connected_account_errors: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\ConnectedAccountReauthorizationRequested\ConnectedAccountErrors::from_json(
                         $c,
                     ),
+                    $json->connected_account_errors ?? [],
                 ),
                 connected_account_id: $json->connected_account_id ?? null,
-                connected_account_warnings: \Seam\Parse::to_list(
-                    $json->connected_account_warnings ?? null,
+                connected_account_warnings: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\ConnectedAccountReauthorizationRequested\ConnectedAccountWarnings::from_json(
                         $c,
                     ),
+                    $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
                 event_id: $json->event_id ?? null,
@@ -6993,40 +6993,40 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                connected_account_errors: \Seam\Parse::to_list(
-                    $json->connected_account_errors ?? null,
+                connected_account_errors: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\DeviceDisconnected\ConnectedAccountErrors::from_json(
                         $c,
                     ),
+                    $json->connected_account_errors ?? [],
                 ),
                 connected_account_id: $json->connected_account_id ?? null,
-                connected_account_warnings: \Seam\Parse::to_list(
-                    $json->connected_account_warnings ?? null,
+                connected_account_warnings: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\DeviceDisconnected\ConnectedAccountWarnings::from_json(
                         $c,
                     ),
+                    $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
-                device_errors: \Seam\Parse::to_list(
-                    $json->device_errors ?? null,
+                device_errors: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\DeviceDisconnected\DeviceErrors::from_json(
                         $d,
                     ),
+                    $json->device_errors ?? [],
                 ),
                 device_id: $json->device_id ?? null,
-                device_warnings: \Seam\Parse::to_list(
-                    $json->device_warnings ?? null,
+                device_warnings: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\DeviceDisconnected\DeviceWarnings::from_json(
                         $d,
                     ),
+                    $json->device_warnings ?? [],
                 ),
                 error_code: $json->error_code ?? null,
                 event_id: $json->event_id ?? null,
@@ -7144,40 +7144,40 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                connected_account_errors: \Seam\Parse::to_list(
-                    $json->connected_account_errors ?? null,
+                connected_account_errors: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\DeviceUnmanagedDisconnected\ConnectedAccountErrors::from_json(
                         $c,
                     ),
+                    $json->connected_account_errors ?? [],
                 ),
                 connected_account_id: $json->connected_account_id ?? null,
-                connected_account_warnings: \Seam\Parse::to_list(
-                    $json->connected_account_warnings ?? null,
+                connected_account_warnings: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\DeviceUnmanagedDisconnected\ConnectedAccountWarnings::from_json(
                         $c,
                     ),
+                    $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
-                device_errors: \Seam\Parse::to_list(
-                    $json->device_errors ?? null,
+                device_errors: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\DeviceUnmanagedDisconnected\DeviceErrors::from_json(
                         $d,
                     ),
+                    $json->device_errors ?? [],
                 ),
                 device_id: $json->device_id ?? null,
-                device_warnings: \Seam\Parse::to_list(
-                    $json->device_warnings ?? null,
+                device_warnings: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\DeviceUnmanagedDisconnected\DeviceWarnings::from_json(
                         $d,
                     ),
+                    $json->device_warnings ?? [],
                 ),
                 error_code: $json->error_code ?? null,
                 event_id: $json->event_id ?? null,
@@ -8120,40 +8120,40 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                connected_account_errors: \Seam\Parse::to_list(
-                    $json->connected_account_errors ?? null,
+                connected_account_errors: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\DeviceConnectionBecameFlaky\ConnectedAccountErrors::from_json(
                         $c,
                     ),
+                    $json->connected_account_errors ?? [],
                 ),
                 connected_account_id: $json->connected_account_id ?? null,
-                connected_account_warnings: \Seam\Parse::to_list(
-                    $json->connected_account_warnings ?? null,
+                connected_account_warnings: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\DeviceConnectionBecameFlaky\ConnectedAccountWarnings::from_json(
                         $c,
                     ),
+                    $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
-                device_errors: \Seam\Parse::to_list(
-                    $json->device_errors ?? null,
+                device_errors: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\DeviceConnectionBecameFlaky\DeviceErrors::from_json(
                         $d,
                     ),
+                    $json->device_errors ?? [],
                 ),
                 device_id: $json->device_id ?? null,
-                device_warnings: \Seam\Parse::to_list(
-                    $json->device_warnings ?? null,
+                device_warnings: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\DeviceConnectionBecameFlaky\DeviceWarnings::from_json(
                         $d,
                     ),
+                    $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
@@ -8352,40 +8352,40 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                connected_account_errors: \Seam\Parse::to_list(
-                    $json->connected_account_errors ?? null,
+                connected_account_errors: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\DeviceErrorSubscriptionRequired\ConnectedAccountErrors::from_json(
                         $c,
                     ),
+                    $json->connected_account_errors ?? [],
                 ),
                 connected_account_id: $json->connected_account_id ?? null,
-                connected_account_warnings: \Seam\Parse::to_list(
-                    $json->connected_account_warnings ?? null,
+                connected_account_warnings: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\DeviceErrorSubscriptionRequired\ConnectedAccountWarnings::from_json(
                         $c,
                     ),
+                    $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
-                device_errors: \Seam\Parse::to_list(
-                    $json->device_errors ?? null,
+                device_errors: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\DeviceErrorSubscriptionRequired\DeviceErrors::from_json(
                         $d,
                     ),
+                    $json->device_errors ?? [],
                 ),
                 device_id: $json->device_id ?? null,
-                device_warnings: \Seam\Parse::to_list(
-                    $json->device_warnings ?? null,
+                device_warnings: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\DeviceErrorSubscriptionRequired\DeviceWarnings::from_json(
                         $d,
                     ),
+                    $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
@@ -8673,40 +8673,40 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                connected_account_errors: \Seam\Parse::to_list(
-                    $json->connected_account_errors ?? null,
+                connected_account_errors: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\DeviceAccessoryKeypadDisconnected\ConnectedAccountErrors::from_json(
                         $c,
                     ),
+                    $json->connected_account_errors ?? [],
                 ),
                 connected_account_id: $json->connected_account_id ?? null,
-                connected_account_warnings: \Seam\Parse::to_list(
-                    $json->connected_account_warnings ?? null,
+                connected_account_warnings: array_map(
                     fn(
                         $c,
                     ) => \Seam\Resources\Event\DeviceAccessoryKeypadDisconnected\ConnectedAccountWarnings::from_json(
                         $c,
                     ),
+                    $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
-                device_errors: \Seam\Parse::to_list(
-                    $json->device_errors ?? null,
+                device_errors: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\DeviceAccessoryKeypadDisconnected\DeviceErrors::from_json(
                         $d,
                     ),
+                    $json->device_errors ?? [],
                 ),
                 device_id: $json->device_id ?? null,
-                device_warnings: \Seam\Parse::to_list(
-                    $json->device_warnings ?? null,
+                device_warnings: array_map(
                     fn(
                         $d,
                     ) => \Seam\Resources\Event\DeviceAccessoryKeypadDisconnected\DeviceWarnings::from_json(
                         $d,
                     ),
+                    $json->device_warnings ?? [],
                 ),
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,

@@ -16,13 +16,13 @@ namespace Seam\Resources {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 ends_at: $json->ends_at ?? null,
-                errors: \Seam\Parse::to_list(
-                    $json->errors ?? null,
+                errors: array_map(
                     fn(
                         $e,
                     ) => \Seam\Resources\ThermostatSchedule\Errors::from_json(
                         $e,
                     ),
+                    $json->errors ?? [],
                 ),
                 name: $json->name ?? null,
                 starts_at: $json->starts_at ?? null,

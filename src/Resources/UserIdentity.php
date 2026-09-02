@@ -16,11 +16,11 @@ namespace Seam\Resources {
                 created_at: $json->created_at ?? null,
                 display_name: $json->display_name ?? null,
                 email_address: $json->email_address ?? null,
-                errors: \Seam\Parse::to_list(
-                    $json->errors ?? null,
+                errors: array_map(
                     fn($e) => \Seam\Resources\UserIdentity\Errors::from_json(
                         $e,
                     ),
+                    $json->errors ?? [],
                 ),
                 full_name: $json->full_name ?? null,
                 merged_user_identity_ids: $json->merged_user_identity_ids ??
@@ -30,11 +30,11 @@ namespace Seam\Resources {
                 phone_number: $json->phone_number ?? null,
                 user_identity_id: $json->user_identity_id ?? null,
                 user_identity_key: $json->user_identity_key ?? null,
-                warnings: \Seam\Parse::to_list(
-                    $json->warnings ?? null,
+                warnings: array_map(
                     fn($w) => \Seam\Resources\UserIdentity\Warnings::from_json(
                         $w,
                     ),
+                    $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
             );
