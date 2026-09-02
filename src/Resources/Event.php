@@ -429,10 +429,7 @@ namespace Seam\Resources {
 
         private mixed $raw_json_source = null;
 
-        /**
-         * The payload this event was parsed from, as JSON. Reaches fields the
-         * generated properties do not cover, such as one added after this release.
-         */
+        /** The payload this event was parsed from, as JSON. */
         public function raw_json(): string
         {
             return json_encode($this->raw_json_source);
