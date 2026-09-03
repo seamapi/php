@@ -2731,6 +2731,7 @@ namespace Seam\Resources\Device\Properties {
             return new self(
                 door_id: $json->door_id ?? null,
                 door_name: $json->door_name ?? null,
+                iana_timezone: $json->iana_timezone ?? null,
                 user_levels: array_map(
                     fn(
                         $u,
@@ -2751,6 +2752,10 @@ namespace Seam\Resources\Device\Properties {
              * Name of the door for a dormakaba Oracode Homeowner's Portal device.
              */
             public string|null $door_name = null,
+            /**
+             * IANA time zone for a dormakaba Oracode Homeowner's Portal device.
+             */
+            public string|null $iana_timezone = null,
             /**
              * User levels for a dormakaba Oracode Homeowner's Portal device.
              *
