@@ -5019,18 +5019,18 @@ namespace Seam\Resources\Device\Properties\DormakabaOracodeIhoMetadata {
                 return null;
             }
             return new self(
-                checkInTime: $json->checkInTime ?? null,
-                checkOutTime: $json->checkOutTime ?? null,
                 userLevel: $json->userLevel ?? null,
+                userLevelCheckInTime: $json->userLevelCheckInTime ?? null,
+                userLevelCheckOutTime: $json->userLevelCheckOutTime ?? null,
                 userLevelName: $json->userLevelName ?? null,
                 userLevelType: $json->userLevelType ?? null,
             );
         }
 
         public function __construct(
-            public string|null $checkInTime = null,
-            public string|null $checkOutTime = null,
             public float|null $userLevel = null,
+            public string|null $userLevelCheckInTime = null,
+            public string|null $userLevelCheckOutTime = null,
             public string|null $userLevelName = null,
             public string|null $userLevelType = null,
         ) {}
