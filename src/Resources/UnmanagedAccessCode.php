@@ -26,6 +26,7 @@ namespace Seam\Resources {
                 code: $json->code ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                display_status: $json->display_status ?? null,
                 errors: array_map(
                     fn(
                         $e,
@@ -80,6 +81,10 @@ namespace Seam\Resources {
              */
             public string|null $device_id,
             /**
+             * Human-readable label for the code's state: `Active` or `Not active`, based on whether the code is set on the device. For display only. The wording is not stable and is not an enumeration — never compare against or branch on it.
+             */
+            public string|null $display_status,
+            /**
              * Errors associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
              *
              * @var list<\Seam\Resources\UnmanagedAccessCode\Errors>
@@ -97,6 +102,7 @@ namespace Seam\Resources {
              * Current status of the access code within the operational lifecycle. `set` indicates that the code is active and operational. `unset` indicates that the code exists on the provider but is not usable on the device.
              *
              * @var value-of<\Seam\Resources\UnmanagedAccessCode\Status>|string|null
+             * @deprecated Use `display_status` to show a person the code's state.
              */
             public string|null $status,
             /**
