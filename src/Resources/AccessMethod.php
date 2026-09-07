@@ -277,6 +277,14 @@ namespace Seam\Resources\AccessMethod {
                     => \Seam\Resources\AccessMethod\Warnings\DelayInIssuing::from_json(
                     $json,
                 ),
+                \Seam\Resources\AccessMethod\Warnings\WarningCode::USER_IDENTITY_MISSING_EMAIL_ADDRESS
+                    => \Seam\Resources\AccessMethod\Warnings\UserIdentityMissingEmailAddress::from_json(
+                    $json,
+                ),
+                \Seam\Resources\AccessMethod\Warnings\WarningCode::USER_IDENTITY_MISSING_PHONE_NUMBER
+                    => \Seam\Resources\AccessMethod\Warnings\UserIdentityMissingPhoneNumber::from_json(
+                    $json,
+                ),
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
@@ -877,11 +885,99 @@ namespace Seam\Resources\AccessMethod\Warnings {
         }
     }
 
+    /**
+     * Indicates that the access system delivers this mobile key through an app invitation sent to the recipient's email address, but the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities) for this [access grant](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant) has no email address, so the mobile key cannot be delivered. Set an email address on the user identity when you create the access grant.
+     */
+    final class UserIdentityMissingEmailAddress extends
+        \Seam\Resources\AccessMethod\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): UserIdentityMissingEmailAddress|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the access system delivers this mobile key to the recipient's phone number, but the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities) for this [access grant](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant) has no phone number, so the mobile key cannot be delivered. Set a phone number on the user identity when you create the access grant.
+     */
+    final class UserIdentityMissingPhoneNumber extends
+        \Seam\Resources\AccessMethod\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): UserIdentityMissingPhoneNumber|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
     enum WarningCode: string
     {
         case BEING_DELETED = "being_deleted";
         case UPDATING_ACCESS_TIMES = "updating_access_times";
         case PULLED_BACKUP_ACCESS_CODE = "pulled_backup_access_code";
         case DELAY_IN_ISSUING = "delay_in_issuing";
+        case USER_IDENTITY_MISSING_EMAIL_ADDRESS = "user_identity_missing_email_address";
+        case USER_IDENTITY_MISSING_PHONE_NUMBER = "user_identity_missing_phone_number";
     }
 }

@@ -4588,6 +4588,8 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success\Result\Warnings 
         case UPDATING_ACCESS_TIMES = "updating_access_times";
         case PULLED_BACKUP_ACCESS_CODE = "pulled_backup_access_code";
         case DELAY_IN_ISSUING = "delay_in_issuing";
+        case USER_IDENTITY_MISSING_EMAIL_ADDRESS = "user_identity_missing_email_address";
+        case USER_IDENTITY_MISSING_PHONE_NUMBER = "user_identity_missing_phone_number";
     }
 }
 

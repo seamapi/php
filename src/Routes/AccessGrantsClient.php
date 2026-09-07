@@ -243,6 +243,7 @@ class AccessGrantsClient
      * @param string $location_id
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $reservation_key Filter Access Grants by reservation_key.
+     * @param string $search String for which to search. Filters returned Access Grants to include all records that satisfy a partial match using `name`, `access_grant_key`, `reservation_key`, `access_grant_id`, `user_identity_id`, `user_identity_full_name`, `user_identity_email_address` or `user_identity_phone_number`.
      * @param string $space_id ID of the space by which you want to filter the list of Access Grants.
      * @param string $user_identity_id ID of user identity by which you want to filter the list of Access Grants.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
@@ -260,6 +261,7 @@ class AccessGrantsClient
         ?string $location_id = null,
         string|NullValue|null $page_cursor = null,
         ?string $reservation_key = null,
+        ?string $search = null,
         ?string $space_id = null,
         ?string $user_identity_id = null,
         ?callable $on_response = null,
@@ -298,6 +300,9 @@ class AccessGrantsClient
         }
         if ($reservation_key !== null) {
             $request_payload["reservation_key"] = $reservation_key;
+        }
+        if ($search !== null) {
+            $request_payload["search"] = $search;
         }
         if ($space_id !== null) {
             $request_payload["space_id"] = $space_id;

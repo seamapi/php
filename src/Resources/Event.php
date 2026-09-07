@@ -12904,6 +12904,7 @@ namespace Seam\Resources\Event\LockLocked {
         case UNKNOWN = "unknown";
         case REMOTE = "remote";
         case CARD = "card";
+        case MOBILE_KEY = "mobile_key";
     }
 }
 
@@ -12916,6 +12917,7 @@ namespace Seam\Resources\Event\LockUnlocked {
         case UNKNOWN = "unknown";
         case REMOTE = "remote";
         case CARD = "card";
+        case MOBILE_KEY = "mobile_key";
     }
 }
 
