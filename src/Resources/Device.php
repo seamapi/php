@@ -2442,7 +2442,6 @@ namespace Seam\Resources\Device\Properties {
                 return null;
             }
             return new self(
-                _member_group_id: $json->_member_group_id ?? null,
                 gadget_id: $json->gadget_id ?? null,
                 gadget_name: $json->gadget_name ?? null,
                 product_name: $json->product_name ?? null,
@@ -2450,10 +2449,6 @@ namespace Seam\Resources\Device\Properties {
         }
 
         public function __construct(
-            /**
-             * Group ID to which to add users for an Akiles device.
-             */
-            public string|null $_member_group_id = null,
             /**
              * Gadget ID for an Akiles device.
              */
