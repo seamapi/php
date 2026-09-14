@@ -3381,7 +3381,7 @@ namespace Seam\Resources\Device\Properties {
              */
             public string|null $device_name = null,
             /**
-             * Display name for a Google Nest device.
+             * Name of the Google Home room containing the device. The device owner sets this value.
              */
             public string|null $display_name = null,
             /**
