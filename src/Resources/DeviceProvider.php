@@ -211,6 +211,7 @@ namespace Seam\Resources\DeviceProvider {
         case SIFELY = "sifely";
         case THIRTY_THREE_LOCK = "thirty_three_lock";
         case RING = "ring";
+        case TAPO = "tapo";
         case ICAL = "ical";
         case LODGIFY = "lodgify";
         case HOSTAWAY = "hostaway";

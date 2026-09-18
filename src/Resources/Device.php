@@ -804,6 +804,11 @@ namespace Seam\Resources\Device {
                         $json->tado_metadata,
                     )
                     : null,
+                tapo_metadata: isset($json->tapo_metadata)
+                    ? \Seam\Resources\Device\Properties\TapoMetadata::from_json(
+                        $json->tapo_metadata,
+                    )
+                    : null,
                 tedee_metadata: isset($json->tedee_metadata)
                     ? \Seam\Resources\Device\Properties\TedeeMetadata::from_json(
                         $json->tedee_metadata,
@@ -1269,6 +1274,10 @@ namespace Seam\Resources\Device {
              */
             public \Seam\Resources\Device\Properties\TadoMetadata|null $tado_metadata = null,
             /**
+             * Metadata for a Tapo camera.
+             */
+            public \Seam\Resources\Device\Properties\TapoMetadata|null $tapo_metadata = null,
+            /**
              * Metadata for a Tedee device.
              */
             public \Seam\Resources\Device\Properties\TedeeMetadata|null $tedee_metadata = null,
@@ -1525,6 +1534,7 @@ namespace Seam\Resources\Device {
         case IOS_PHONE = "ios_phone";
         case ANDROID_PHONE = "android_phone";
         case RING_CAMERA = "ring_camera";
+        case TAPO_CAMERA = "tapo_camera";
     }
 }
 
@@ -3862,6 +3872,39 @@ namespace Seam\Resources\Device\Properties {
              * Serial number for a tado° device.
              */
             public string|null $serial_no = null,
+        ) {}
+    }
+
+    /**
+     * Metadata for a Tapo camera.
+     */
+    class TapoMetadata
+    {
+        public static function from_json(mixed $json): TapoMetadata|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                firmware_version: $json->firmware_version ?? null,
+                hardware_version: $json->hardware_version ?? null,
+                model: $json->model ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Firmware version reported by the camera.
+             */
+            public string|null $firmware_version = null,
+            /**
+             * Hardware version reported by the camera.
+             */
+            public string|null $hardware_version = null,
+            /**
+             * Model reported by the Tapo camera.
+             */
+            public string|null $model = null,
         ) {}
     }
 
