@@ -27,7 +27,7 @@ class ActionAttemptsClient
     }
 
     /**
-     * Returns a specified [action attempt](https://docs.seam.co/core-concepts/action-attempts).
+     * Returns a specified [action attempt](https://www.seam.co/docs/core-concepts/action-attempts).
      *
      * @param string $action_attempt_id ID of the action attempt that you want to get.
      * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
@@ -58,7 +58,7 @@ class ActionAttemptsClient
     }
 
     /**
-     * Returns a list of the [action attempts](https://docs.seam.co/core-concepts/action-attempts) that you specify as an array of `action_attempt_id`s.
+     * Returns a list of the [action attempts](https://www.seam.co/docs/core-concepts/action-attempts) that you specify as an array of `action_attempt_id`s.
      *
      * @param list<string> $action_attempt_ids IDs of the action attempts that you want to retrieve.
      * @param string $device_id ID of the device to filter action attempts by.

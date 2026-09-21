@@ -107,7 +107,7 @@ class AccessMethodsClient
     }
 
     /**
-     * Encodes an existing access method onto a plastic card placed on the specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+     * Encodes an existing access method onto a plastic card placed on the specified [encoder](https://www.seam.co/docs/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
      *
      * @param string $access_method_id ID of the `access_method` to encode onto a card.
      * @param string $acs_encoder_id ID of the `acs_encoder` to use to encode the `access_method`.
@@ -278,7 +278,7 @@ class AccessMethodsClient
     }
 
     /**
-     * Remotely unlocks a specified [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) using the cloud key credential associated with an access method. Returns an action attempt that tracks the progress of the unlock operation.
+     * Remotely unlocks a specified [entrance](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details) using the cloud key credential associated with an access method. Returns an action attempt that tracks the progress of the unlock operation.
      *
      * @param string $access_method_id ID of the cloud_key `access_method` to use for the unlock operation.
      * @param string $acs_entrance_id ID of the entrance to unlock.

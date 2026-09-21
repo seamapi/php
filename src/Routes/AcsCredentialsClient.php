@@ -27,7 +27,7 @@ class AcsCredentialsClient
     }
 
     /**
-     * Assigns a specified [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) to a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * Assigns a specified [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) to a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
      *
      * @param string $acs_credential_id ID of the credential that you want to assign to an access system user.
      * @param string $acs_user_id ID of the access system user to whom you want to assign a credential. You can only provide one of acs_user_id or user_identity_id.
@@ -55,17 +55,17 @@ class AcsCredentialsClient
     }
 
     /**
-     * Creates a new [credential](https://docs.seam.co/low-level-apis/managing-credentials) for a specified [ACS user](https://docs.seam.co/low-level-apis/access-systems/user-management). For granting access, we recommend [Access Grants](https://docs.seam.co/use-cases/granting-access) instead: they create and manage the underlying credentials for you, across access systems and standalone smart locks alike. Use this low-level endpoint only when you need direct control over an individual ACS credential.
+     * Creates a new [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) for a specified [ACS user](https://www.seam.co/docs/low-level-apis/access-systems/user-management). For granting access, we recommend [Access Grants](https://www.seam.co/docs/use-cases/granting-access) instead: they create and manage the underlying credentials for you, across access systems and standalone smart locks alike. Use this low-level endpoint only when you need direct control over an individual ACS credential.
      *
      * @param string $access_method Access method for the new credential. Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
      * @param string $acs_system_id ID of the access system to which the new credential belongs. You must provide either `acs_user_id` or the combination of `user_identity_id` and `acs_system_id`.
      * @param string $acs_user_id ID of the access system user to whom the new credential belongs. You must provide either `acs_user_id` or the combination of `user_identity_id` and `acs_system_id`.
-     * @param list<string> $allowed_acs_entrance_ids Set of IDs of the [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) for which the new credential grants access.
+     * @param list<string> $allowed_acs_entrance_ids Set of IDs of the [entrances](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details) for which the new credential grants access.
      * @param mixed $assa_abloy_vostio_metadata Vostio-specific metadata for the new credential.
-     * @param string $code Access (PIN) code for the new credential. There may be manufacturer-specific code restrictions. For details, see the applicable [device or system integration guide](https://docs.seam.co/device-and-system-integration-guides).
+     * @param string $code Access (PIN) code for the new credential. There may be manufacturer-specific code restrictions. For details, see the applicable [device or system integration guide](https://www.seam.co/docs/device-and-system-integration-guides).
      * @param string $credential_manager_acs_system_id ACS system ID of the credential manager for the new credential.
      * @param string $ends_at Date and time at which the validity of the new credential ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
-     * @param bool $is_multi_phone_sync_credential Indicates whether the new credential is a [multi-phone sync credential](https://docs.seam.co/capability-guides/mobile-access/issuing-mobile-credentials-from-an-access-control-system#what-are-multi-phone-sync-credentials).
+     * @param bool $is_multi_phone_sync_credential Indicates whether the new credential is a [multi-phone sync credential](https://www.seam.co/docs/capability-guides/mobile-access/issuing-mobile-credentials-from-an-access-control-system#what-are-multi-phone-sync-credentials).
      * @param mixed $salto_space_metadata Salto Space-specific metadata for the new credential.
      * @param string $starts_at Date and time at which the validity of the new credential starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @param string $user_identity_id ID of the user identity to whom the new credential belongs. You must provide either `acs_user_id` or the combination of `user_identity_id` and `acs_system_id`. If the access system contains a user with the same `email_address` or `phone_number` as the user identity that you specify, they are linked, and the credential belongs to the access system user. If the access system does not have a corresponding user, one is created.
@@ -147,7 +147,7 @@ class AcsCredentialsClient
     }
 
     /**
-     * Deletes a specified [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Deletes a specified [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      *
      * @param string $acs_credential_id ID of the credential that you want to delete.
      * @return void OK
@@ -164,7 +164,7 @@ class AcsCredentialsClient
     }
 
     /**
-     * Returns a specified [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Returns a specified [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      *
      * @param string $acs_credential_id ID of the credential that you want to get.
      * @return AcsCredential OK
@@ -187,7 +187,7 @@ class AcsCredentialsClient
     }
 
     /**
-     * Returns a list of all [credentials](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Returns a list of all [credentials](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      *
      * @param string $acs_system_id ID of the access system for which you want to retrieve all credentials.
      * @param string $acs_user_id ID of the access system user for which you want to retrieve all credentials.
@@ -257,7 +257,7 @@ class AcsCredentialsClient
     }
 
     /**
-     * Returns a list of all [entrances](https://docs.seam.co/api/acs/entrances) to which a [credential](https://docs.seam.co/api/acs/credentials) grants access.
+     * Returns a list of all [entrances](https://www.seam.co/docs/api/acs/entrances/object) to which a [credential](https://www.seam.co/docs/api/acs/credentials/object) grants access.
      *
      * @param string $acs_credential_id ID of the credential for which you want to retrieve all entrances to which the credential grants access.
      * @return array OK
@@ -287,7 +287,7 @@ class AcsCredentialsClient
     }
 
     /**
-     * Unassigns a specified [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) from a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * Unassigns a specified [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) from a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
      *
      * @param string $acs_credential_id ID of the credential that you want to unassign from an access system user.
      * @param string $acs_user_id ID of the access system user from which you want to unassign a credential. You can only provide one of acs_user_id or user_identity_id.
@@ -315,7 +315,7 @@ class AcsCredentialsClient
     }
 
     /**
-     * Updates the code and ends at date and time for a specified [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Updates the code and ends at date and time for a specified [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      *
      * @param string $acs_credential_id ID of the credential that you want to update.
      * @param string $code Replacement access (PIN) code for the credential that you want to update.

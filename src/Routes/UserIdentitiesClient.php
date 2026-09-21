@@ -35,7 +35,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Adds a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) to a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     * Adds a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) to a specified [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * You must specify either `user_identity_id` or `user_identity_key` to identify the user identity.
      *
@@ -67,7 +67,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Creates a new [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     * Creates a new [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * @param list<string> $acs_system_ids List of access system IDs to associate with the new user identity through access system users. If there's no user with the same email address or phone number in the specified access systems, a new access system user is created. If there is an existing user with the same email or phone number in the specified access systems, the user is linked to the user identity.
      * @param string|NullValue $email_address Unique email address for the new user identity.
@@ -113,7 +113,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Deletes a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity). This deletes the user identity and all associated resources, including any [credentials](https://docs.seam.co/api/acs/credentials), [acs users](https://docs.seam.co/api/acs/users) and [client sessions](https://docs.seam.co/api/client_sessions).
+     * Deletes a specified [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity). This deletes the user identity and all associated resources, including any [credentials](https://www.seam.co/docs/api/acs/credentials/object), [acs users](https://www.seam.co/docs/api/acs/users/object) and [client sessions](https://www.seam.co/docs/api/client_sessions/object).
      *
      * @param string $user_identity_id ID of the user identity that you want to delete.
      * @return void OK
@@ -130,7 +130,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Generates a new [instant key](https://docs.seam.co/capability-guides/instant-keys) for a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     * Generates a new [instant key](https://www.seam.co/docs/use-cases/granting-access/using-instant-keys) for a specified [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * @param string $user_identity_id ID of the user identity for which you want to generate an instant key.
      * @param string $customization_profile_id
@@ -172,7 +172,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Returns a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     * Returns a specified [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * @param string $user_identity_id ID of the user identity that you want to get.
      * @param string $user_identity_key
@@ -208,7 +208,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Grants a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) access to a specified [device](https://docs.seam.co/core-concepts/devices/).
+     * Grants a specified [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) access to a specified [device](https://www.seam.co/docs/core-concepts/devices).
      *
      * @param string $device_id ID of the managed device to which you want to grant access to the user identity.
      * @param string $user_identity_id ID of the user identity that you want to grant access to a device.
@@ -231,7 +231,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Returns a list of all [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     * Returns a list of all [user identities](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * @param string $created_before Timestamp by which to limit returned user identities. Returns user identities created before this timestamp.
      * @param string $credential_manager_acs_system_id `acs_system_id` of the credential manager by which you want to filter the list of user identities.
@@ -291,7 +291,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Returns a list of all [devices](https://docs.seam.co/core-concepts/devices) associated with a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity). This includes devices derived from the access grants assigned to the user identity and devices directly linked to the user identity.
+     * Returns a list of all [devices](https://www.seam.co/docs/core-concepts/devices) associated with a specified [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity). This includes devices derived from the access grants assigned to the user identity and devices directly linked to the user identity.
      *
      * @param string $user_identity_id ID of the user identity for which you want to retrieve all accessible devices.
      * @return array OK
@@ -321,7 +321,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Returns a list of all [ACS entrances](https://docs.seam.co/api/acs/entrances) accessible to a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity). This includes entrances derived from the access grants assigned to the user identity and entrances accessible through ACS users linked to the user identity.
+     * Returns a list of all [ACS entrances](https://www.seam.co/docs/api/acs/entrances/object) accessible to a specified [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity). This includes entrances derived from the access grants assigned to the user identity and entrances accessible through ACS users linked to the user identity.
      *
      * @param string $user_identity_id ID of the user identity for which you want to retrieve all accessible entrances.
      * @return array OK
@@ -351,7 +351,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Returns a list of all [access systems](https://docs.seam.co/low-level-apis/access-systems) associated with a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     * Returns a list of all [access systems](https://www.seam.co/docs/low-level-apis/access-systems) associated with a specified [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * @param string $user_identity_id ID of the user identity for which you want to retrieve all access systems.
      * @return array OK
@@ -379,7 +379,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Returns a list of all [access system users](https://docs.seam.co/low-level-apis/access-systems/user-management) assigned to a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     * Returns a list of all [access system users](https://www.seam.co/docs/low-level-apis/access-systems/user-management) assigned to a specified [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * @param string $user_identity_id ID of the user identity for which you want to retrieve all access system users.
      * @return array OK
@@ -407,7 +407,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Merges one or more [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) into a primary user identity, for when the same person ended up with more than one user identity.
+     * Merges one or more [user identities](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) into a primary user identity, for when the same person ended up with more than one user identity.
      *
      * The primary user identity takes on any email address or phone number it was missing from the user identities merged into it, and the merged user identities are then deleted. Their IDs and keys keep working: looking one up returns the primary user identity, and they are listed on it as `merged_user_identity_ids` and `merged_user_identity_keys`.
      *
@@ -462,7 +462,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Removes a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) from a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     * Removes a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) from a specified [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * @param string $acs_user_id ID of the access system user that you want to remove from the user identity..
      * @param string $user_identity_id ID of the user identity from which you want to remove an access system user.
@@ -483,7 +483,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Revokes access to a specified [device](https://docs.seam.co/core-concepts/devices/) from a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     * Revokes access to a specified [device](https://www.seam.co/docs/core-concepts/devices) from a specified [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * @param string $device_id ID of the managed device to which you want to revoke access from the user identity.
      * @param string $user_identity_id ID of the user identity from which you want to revoke access to a device.
@@ -506,7 +506,7 @@ class UserIdentitiesClient
     }
 
     /**
-     * Updates a specified [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
+     * Updates a specified [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * @param string $user_identity_id ID of the user identity that you want to update.
      * @param string|NullValue $email_address Unique email address for the user identity.

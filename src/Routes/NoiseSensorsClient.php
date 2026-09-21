@@ -31,7 +31,7 @@ class NoiseSensorsClient
     }
 
     /**
-     * Returns a list of all [noise sensors](https://docs.seam.co/capability-guides/noise-sensors).
+     * Returns a list of all [noise sensors](https://www.seam.co/docs/capability-guides/noise-sensors).
      *
      * @param string $connect_webview_id ID of the Connect Webview for which you want to list devices.
      * @param string $connected_account_id ID of the connected account for which you want to list devices.

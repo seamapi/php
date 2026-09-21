@@ -28,7 +28,7 @@ class LocksClient
     }
 
     /**
-     * Configures the auto-lock setting for a specified [lock](https://docs.seam.co/low-level-apis/smart-locks).
+     * Configures the auto-lock setting for a specified [lock](https://www.seam.co/docs/low-level-apis/smart-locks).
      *
      * @param bool $auto_lock_enabled Whether to enable or disable auto-lock.
      * @param string $device_id ID of the lock for which you want to configure the auto-lock.
@@ -73,7 +73,7 @@ class LocksClient
     }
 
     /**
-     * Returns a specified [lock](https://docs.seam.co/low-level-apis/smart-locks).
+     * Returns a specified [lock](https://www.seam.co/docs/low-level-apis/smart-locks).
      *
      * @param string $device_id ID of the lock that you want to get.
      * @param string $name Name of the lock that you want to get.
@@ -106,7 +106,7 @@ class LocksClient
     }
 
     /**
-     * Returns a list of all [locks](https://docs.seam.co/low-level-apis/smart-locks).
+     * Returns a list of all [locks](https://www.seam.co/docs/low-level-apis/smart-locks).
      *
      * @param string $connect_webview_id ID of the Connect Webview for which you want to list devices.
      * @param string $connected_account_id ID of the connected account for which you want to list devices.
@@ -158,7 +158,7 @@ class LocksClient
     }
 
     /**
-     * Locks a [lock](https://docs.seam.co/low-level-apis/smart-locks). See also [Locking and Unlocking Smart Locks](https://docs.seam.co/low-level-apis/smart-locks/lock-and-unlock).
+     * Locks a [lock](https://www.seam.co/docs/low-level-apis/smart-locks). See also [Locking and Unlocking Smart Locks](https://www.seam.co/docs/low-level-apis/smart-locks/lock-and-unlock).
      *
      * @param string $device_id ID of the lock that you want to lock.
      * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
@@ -189,7 +189,7 @@ class LocksClient
     }
 
     /**
-     * Unlocks a [lock](https://docs.seam.co/low-level-apis/smart-locks). See also [Locking and Unlocking Smart Locks](https://docs.seam.co/low-level-apis/smart-locks/lock-and-unlock).
+     * Unlocks a [lock](https://www.seam.co/docs/low-level-apis/smart-locks). See also [Locking and Unlocking Smart Locks](https://www.seam.co/docs/low-level-apis/smart-locks/lock-and-unlock).
      *
      * @param string $device_id ID of the lock that you want to unlock.
      * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.

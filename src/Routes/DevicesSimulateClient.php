@@ -23,7 +23,7 @@ class DevicesSimulateClient
     }
 
     /**
-     * Simulates connecting a device to Seam. Only applicable for [sandbox devices](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces). See also [Testing Your App Against Device Disconnection and Removal](https://docs.seam.co/core-concepts/devices/testing-your-app-against-device-disconnection-and-removal).
+     * Simulates connecting a device to Seam. Only applicable for [sandbox devices](https://www.seam.co/docs/core-concepts/workspaces#sandbox-workspaces). See also [Testing Your App Against Device Disconnection and Removal](https://www.seam.co/docs/core-concepts/devices/testing-your-app-against-device-disconnection-and-removal).
      *
      * @param string $device_id ID of the device that you want to simulate connecting to Seam.
      * @return void OK
@@ -60,7 +60,7 @@ class DevicesSimulateClient
     }
 
     /**
-     * Simulates disconnecting a device from Seam. Only applicable for [sandbox devices](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces). See also [Testing Your App Against Device Disconnection and Removal](https://docs.seam.co/core-concepts/devices/testing-your-app-against-device-disconnection-and-removal).
+     * Simulates disconnecting a device from Seam. Only applicable for [sandbox devices](https://www.seam.co/docs/core-concepts/workspaces#sandbox-workspaces). See also [Testing Your App Against Device Disconnection and Removal](https://www.seam.co/docs/core-concepts/devices/testing-your-app-against-device-disconnection-and-removal).
      *
      * @param string $device_id ID of the device that you want to simulate disconnecting from Seam.
      * @return void OK
@@ -121,7 +121,7 @@ class DevicesSimulateClient
     }
 
     /**
-     * Simulates removing a device from Seam. Only applicable for [sandbox devices](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces). See also [Testing Your App Against Device Disconnection and Removal](https://docs.seam.co/core-concepts/devices/testing-your-app-against-device-disconnection-and-removal).
+     * Simulates removing a device from Seam. Only applicable for [sandbox devices](https://www.seam.co/docs/core-concepts/workspaces#sandbox-workspaces). See also [Testing Your App Against Device Disconnection and Removal](https://www.seam.co/docs/core-concepts/devices/testing-your-app-against-device-disconnection-and-removal).
      *
      * @param string $device_id ID of the device that you want to simulate removing from Seam.
      * @return void OK

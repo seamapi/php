@@ -454,7 +454,7 @@ namespace Seam\Resources {
 
 namespace Seam\Resources\Event {
     /**
-     * An [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) was created.
+     * An [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) was created.
      */
     final class AccessCodeCreated extends \Seam\Resources\Event
     {
@@ -541,7 +541,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) was changed.
+     * An [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) was changed.
      */
     final class AccessCodeChanged extends \Seam\Resources\Event
     {
@@ -647,7 +647,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * The name of an [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) was changed on the device.
+     * The name of an [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) was changed on the device.
      */
     final class AccessCodeNameChanged extends \Seam\Resources\Event
     {
@@ -758,7 +758,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * The pin code of an [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) was changed on the device.
+     * The pin code of an [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) was changed on the device.
      */
     final class AccessCodeCodeChanged extends \Seam\Resources\Event
     {
@@ -869,7 +869,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * The time frame of an [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) was changed on the device.
+     * The time frame of an [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) was changed on the device.
      */
     final class AccessCodeTimeFrameChanged extends \Seam\Resources\Event
     {
@@ -980,7 +980,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * Mutations were requested on an [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes). This event fires at request time, before the change is confirmed on the device.
+     * Mutations were requested on an [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes). This event fires at request time, before the change is confirmed on the device.
      */
     final class AccessCodeMutationsRequested extends \Seam\Resources\Event
     {
@@ -1082,7 +1082,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) was [scheduled natively](https://docs.seam.co/low-level-apis/smart-locks/access-codes#native-scheduling) on a device.
+     * An [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) was [scheduled natively](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes#native-scheduling) on a device.
      */
     final class AccessCodeScheduledOnDevice extends \Seam\Resources\Event
     {
@@ -1175,7 +1175,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) was set on a device.
+     * An [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) was set on a device.
      */
     final class AccessCodeSetOnDevice extends \Seam\Resources\Event
     {
@@ -1268,7 +1268,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) was removed from a device.
+     * An [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) was removed from a device.
      */
     final class AccessCodeRemovedFromDevice extends \Seam\Resources\Event
     {
@@ -1356,7 +1356,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * There was an unusually long delay in setting an [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) on a device.
+     * There was an unusually long delay in setting an [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) on a device.
      */
     final class AccessCodeDelayInSettingOnDevice extends \Seam\Resources\Event
     {
@@ -1528,7 +1528,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) failed to be set on a device.
+     * An [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) failed to be set on a device.
      */
     final class AccessCodeFailedToSetOnDevice extends \Seam\Resources\Event
     {
@@ -1700,7 +1700,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) was deleted.
+     * An [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) was deleted.
      */
     final class AccessCodeDeleted extends \Seam\Resources\Event
     {
@@ -1792,7 +1792,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * There was an unusually long delay in removing an [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) from a device.
+     * There was an unusually long delay in removing an [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) from a device.
      */
     final class AccessCodeDelayInRemovingFromDevice extends
         \Seam\Resources\Event
@@ -1965,7 +1965,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) failed to be removed from a device.
+     * An [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) failed to be removed from a device.
      */
     final class AccessCodeFailedToRemoveFromDevice extends \Seam\Resources\Event
     {
@@ -2137,7 +2137,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) was modified outside of Seam.
+     * An [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) was modified outside of Seam.
      */
     final class AccessCodeModifiedExternalToSeam extends \Seam\Resources\Event
     {
@@ -2225,7 +2225,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) was deleted outside of Seam.
+     * An [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) was deleted outside of Seam.
      */
     final class AccessCodeDeletedExternalToSeam extends \Seam\Resources\Event
     {
@@ -2313,7 +2313,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A [backup access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes) was pulled from the backup access code pool and set on a device.
+     * A [backup access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/backup-access-codes) was pulled from the backup access code pool and set on a device.
      */
     final class AccessCodeBackupAccessCodePulled extends \Seam\Resources\Event
     {
@@ -2406,7 +2406,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [unmanaged access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) was converted successfully to a managed access code.
+     * An [unmanaged access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) was converted successfully to a managed access code.
      */
     final class AccessCodeUnmanagedConvertedToManaged extends
         \Seam\Resources\Event
@@ -2495,7 +2495,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [unmanaged access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) failed to be converted to a managed access code.
+     * An [unmanaged access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) failed to be converted to a managed access code.
      */
     final class AccessCodeUnmanagedFailedToConvertToManaged extends
         \Seam\Resources\Event
@@ -2668,7 +2668,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [unmanaged access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) was created on a device.
+     * An [unmanaged access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) was created on a device.
      */
     final class AccessCodeUnmanagedCreated extends \Seam\Resources\Event
     {
@@ -2756,7 +2756,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [unmanaged access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) was removed from a device.
+     * An [unmanaged access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) was removed from a device.
      */
     final class AccessCodeUnmanagedRemoved extends \Seam\Resources\Event
     {
@@ -3059,7 +3059,7 @@ namespace Seam\Resources\Event {
              */
             public string|null $access_grant_id,
             /**
-             * ID of the affected [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+             * ID of the affected [entrance](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details).
              */
             public string|null $acs_entrance_id,
             /**
@@ -3127,7 +3127,7 @@ namespace Seam\Resources\Event {
              */
             public string|null $access_grant_id,
             /**
-             * ID of the affected [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+             * ID of the affected [entrance](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details).
              */
             public string|null $acs_entrance_id,
             /**
@@ -3952,7 +3952,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access system](https://docs.seam.co/low-level-apis/access-systems) was connected.
+     * An [access system](https://www.seam.co/docs/low-level-apis/access-systems) was connected.
      */
     final class AcsSystemConnected extends \Seam\Resources\Event
     {
@@ -4019,7 +4019,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access system](https://docs.seam.co/low-level-apis/access-systems) was added.
+     * An [access system](https://www.seam.co/docs/low-level-apis/access-systems) was added.
      */
     final class AcsSystemAdded extends \Seam\Resources\Event
     {
@@ -4086,7 +4086,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access system](https://docs.seam.co/low-level-apis/access-systems) was disconnected.
+     * An [access system](https://www.seam.co/docs/low-level-apis/access-systems) was disconnected.
      */
     final class AcsSystemDisconnected extends \Seam\Resources\Event
     {
@@ -4210,7 +4210,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access system credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was deleted.
+     * An [access system credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) was deleted.
      */
     final class AcsCredentialDeleted extends \Seam\Resources\Event
     {
@@ -4282,7 +4282,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access system credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was issued.
+     * An [access system credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) was issued.
      */
     final class AcsCredentialIssued extends \Seam\Resources\Event
     {
@@ -4354,7 +4354,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access system credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was reissued.
+     * An [access system credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) was reissued.
      */
     final class AcsCredentialReissued extends \Seam\Resources\Event
     {
@@ -4427,7 +4427,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access system credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was invalidated. That is, the credential cannot be used anymore.
+     * An [access system credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) was invalidated. That is, the credential cannot be used anymore.
      */
     final class AcsCredentialInvalidated extends \Seam\Resources\Event
     {
@@ -4500,7 +4500,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) was created.
+     * An [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) was created.
      */
     final class AcsUserCreated extends \Seam\Resources\Event
     {
@@ -4572,7 +4572,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) was deleted.
+     * An [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) was deleted.
      */
     final class AcsUserDeleted extends \Seam\Resources\Event
     {
@@ -4644,7 +4644,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access system encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners) was added.
+     * An [access system encoder](https://www.seam.co/docs/low-level-apis/access-systems/working-with-card-encoders-and-scanners) was added.
      */
     final class AcsEncoderAdded extends \Seam\Resources\Event
     {
@@ -4716,7 +4716,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access system encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners) was removed.
+     * An [access system encoder](https://www.seam.co/docs/low-level-apis/access-systems/working-with-card-encoders-and-scanners) was removed.
      */
     final class AcsEncoderRemoved extends \Seam\Resources\Event
     {
@@ -4861,7 +4861,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access system entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) was added.
+     * An [access system entrance](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details) was added.
      */
     final class AcsEntranceAdded extends \Seam\Resources\Event
     {
@@ -4933,7 +4933,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [access system entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) was removed.
+     * An [access system entrance](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details) was removed.
      */
     final class AcsEntranceRemoved extends \Seam\Resources\Event
     {
@@ -6704,7 +6704,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A managed device was successfully converted to an [unmanaged device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices).
+     * A managed device was successfully converted to an [unmanaged device](https://www.seam.co/docs/core-concepts/devices/managed-and-unmanaged-devices).
      */
     final class DeviceConvertedToUnmanaged extends \Seam\Resources\Event
     {
@@ -6792,7 +6792,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * An [unmanaged device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices) was successfully converted to a managed device.
+     * An [unmanaged device](https://www.seam.co/docs/core-concepts/devices/managed-and-unmanaged-devices) was successfully converted to a managed device.
      */
     final class DeviceUnmanagedConvertedToManaged extends \Seam\Resources\Event
     {
@@ -6880,7 +6880,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * The status of an [unmanaged device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices) changed from offline to online. That is, the `device.properties.online` property changed from `false` to `true`.
+     * The status of an [unmanaged device](https://www.seam.co/docs/core-concepts/devices/managed-and-unmanaged-devices) changed from offline to online. That is, the `device.properties.online` property changed from `false` to `true`.
      */
     final class DeviceUnmanagedConnected extends \Seam\Resources\Event
     {
@@ -7118,7 +7118,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * The status of an [unmanaged device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices) changed from online to offline. That is, the `device.properties.online` property changed from `true` to `false`.
+     * The status of an [unmanaged device](https://www.seam.co/docs/core-concepts/devices/managed-and-unmanaged-devices) changed from online to offline. That is, the `device.properties.online` property changed from `true` to `false`.
      */
     final class DeviceUnmanagedDisconnected extends \Seam\Resources\Event
     {
@@ -7918,7 +7918,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A [Salto device](https://docs.seam.co/device-and-system-integration-guides/salto-locks) activated privacy mode.
+     * A [Salto device](https://www.seam.co/docs/device-and-system-integration-guides/salto-locks) activated privacy mode.
      */
     final class DeviceSaltoPrivacyModeActivated extends \Seam\Resources\Event
     {
@@ -8006,7 +8006,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A [Salto device](https://docs.seam.co/device-and-system-integration-guides/salto-locks) deactivated privacy mode.
+     * A [Salto device](https://www.seam.co/docs/device-and-system-integration-guides/salto-locks) deactivated privacy mode.
      */
     final class DeviceSaltoPrivacyModeDeactivated extends \Seam\Resources\Event
     {
@@ -8791,7 +8791,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * Extended periods of noise or noise exceeding a [threshold](https://docs.seam.co/capability-guides/noise-sensors#what-is-a-threshold) were detected.
+     * Extended periods of noise or noise exceeding a [threshold](https://www.seam.co/docs/capability-guides/noise-sensors#what-is-a-threshold) were detected.
      */
     final class NoiseSensorNoiseThresholdTriggered extends \Seam\Resources\Event
     {
@@ -8913,7 +8913,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A [lock](https://docs.seam.co/low-level-apis/smart-locks) was locked.
+     * A [lock](https://www.seam.co/docs/low-level-apis/smart-locks) was locked.
      */
     final class LockLocked extends \Seam\Resources\Event
     {
@@ -9037,7 +9037,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A [lock](https://docs.seam.co/low-level-apis/smart-locks) was unlocked.
+     * A [lock](https://www.seam.co/docs/low-level-apis/smart-locks) was unlocked.
      */
     final class LockUnlocked extends \Seam\Resources\Event
     {
@@ -9087,7 +9087,7 @@ namespace Seam\Resources\Event {
              */
             string|null $event_type,
             /**
-             * Method by which the lock was unlocked. `keycode`: an [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes) was used (see `access_code_id`). `manual`: a physical action such as a thumbturn or handle press. `remote`: a remote action via an app, Bluetooth, or the Seam API (see `action_attempt_id` if Seam-initiated; see `is_via_bluetooth` or `is_via_nfc` for the transport). `automatic`: triggered automatically, for example by a time-based schedule. `unknown`: could not be determined.
+             * Method by which the lock was unlocked. `keycode`: an [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) was used (see `access_code_id`). `manual`: a physical action such as a thumbturn or handle press. `remote`: a remote action via an app, Bluetooth, or the Seam API (see `action_attempt_id` if Seam-initiated; see `is_via_bluetooth` or `is_via_nfc` for the transport). `automatic`: triggered automatically, for example by a time-based schedule. `unknown`: could not be determined.
              *
              * @var value-of<\Seam\Resources\Event\LockUnlocked\Method>|string|null
              */
@@ -9161,7 +9161,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * The [lock](https://docs.seam.co/low-level-apis/smart-locks) denied access to a user after one or more consecutive invalid attempts to unlock the device.
+     * The [lock](https://www.seam.co/docs/low-level-apis/smart-locks) denied access to a user after one or more consecutive invalid attempts to unlock the device.
      */
     final class LockAccessDenied extends \Seam\Resources\Event
     {
@@ -9262,7 +9262,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A thermostat [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) was activated.
+     * A thermostat [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) was activated.
      */
     final class ThermostatClimatePresetActivated extends \Seam\Resources\Event
     {
@@ -9366,7 +9366,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A [thermostat](https://docs.seam.co/capability-guides/thermostats) was adjusted manually.
+     * A [thermostat](https://www.seam.co/docs/capability-guides/thermostats) was adjusted manually.
      */
     final class ThermostatManuallyAdjusted extends \Seam\Resources\Event
     {
@@ -9445,11 +9445,11 @@ namespace Seam\Resources\Event {
              */
             public array|\stdClass|null $connected_account_custom_metadata = null,
             /**
-             * Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+             * Temperature to which the thermostat should cool (in °C). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
             public float|null $cooling_set_point_celsius = null,
             /**
-             * Temperature to which the thermostat should cool (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+             * Temperature to which the thermostat should cool (in °F). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
             public float|null $cooling_set_point_fahrenheit = null,
             /**
@@ -9467,21 +9467,21 @@ namespace Seam\Resources\Event {
              */
             string|null $event_description = null,
             /**
-             * Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
+             * Desired [fan mode setting](https://www.seam.co/docs/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
              *
              * @var value-of<\Seam\Resources\Event\ThermostatManuallyAdjusted\FanModeSetting>|string|null
              */
             public string|null $fan_mode_setting = null,
             /**
-             * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+             * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
             public float|null $heating_set_point_celsius = null,
             /**
-             * Temperature to which the thermostat should heat (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+             * Temperature to which the thermostat should heat (in °F). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
              */
             public float|null $heating_set_point_fahrenheit = null,
             /**
-             * Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
+             * Desired [HVAC mode](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
              *
              * @var value-of<\Seam\Resources\Event\ThermostatManuallyAdjusted\HvacModeSetting>|string|null
              */
@@ -9499,7 +9499,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A [thermostat's](https://docs.seam.co/capability-guides/thermostats) temperature reading exceeded the set [threshold](https://docs.seam.co/capability-guides/thermostats/setting-and-monitoring-temperature-thresholds).
+     * A [thermostat's](https://www.seam.co/docs/capability-guides/thermostats) temperature reading exceeded the set [threshold](https://www.seam.co/docs/capability-guides/thermostats/setting-and-monitoring-temperature-thresholds).
      */
     final class ThermostatTemperatureThresholdExceeded extends
         \Seam\Resources\Event
@@ -9618,7 +9618,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A [thermostat's](https://docs.seam.co/capability-guides/thermostats) temperature reading no longer exceeds the set [threshold](https://docs.seam.co/capability-guides/thermostats/setting-and-monitoring-temperature-thresholds).
+     * A [thermostat's](https://www.seam.co/docs/capability-guides/thermostats) temperature reading no longer exceeds the set [threshold](https://www.seam.co/docs/capability-guides/thermostats/setting-and-monitoring-temperature-thresholds).
      */
     final class ThermostatTemperatureThresholdNoLongerExceeded extends
         \Seam\Resources\Event
@@ -9737,7 +9737,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A [thermostat's](https://docs.seam.co/capability-guides/thermostats) temperature reading is within 1 °C of the configured cooling or heating [set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * A [thermostat's](https://www.seam.co/docs/capability-guides/thermostats) temperature reading is within 1 °C of the configured cooling or heating [set point](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
      */
     final class ThermostatTemperatureReachedSetPoint extends
         \Seam\Resources\Event
@@ -9848,7 +9848,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A [thermostat's](https://docs.seam.co/capability-guides/thermostats) reported temperature changed by at least 1 °C.
+     * A [thermostat's](https://www.seam.co/docs/capability-guides/thermostats) reported temperature changed by at least 1 °C.
      */
     final class ThermostatTemperatureChanged extends \Seam\Resources\Event
     {

@@ -26,7 +26,7 @@ class LocksSimulateClient
     }
 
     /**
-     * Simulates the entry of a code on a keypad. You can only perform this action for [August](https://docs.seam.co/device-and-system-integration-guides/august-locks) devices within [sandbox workspaces](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     * Simulates the entry of a code on a keypad. You can only perform this action for [August](https://www.seam.co/docs/device-and-system-integration-guides/august-locks) devices within [sandbox workspaces](https://www.seam.co/docs/core-concepts/workspaces#sandbox-workspaces).
      *
      * @param string $code Code that you want to simulate entering on a keypad.
      * @param string $device_id ID of the device for which you want to simulate a keypad code entry.
@@ -66,7 +66,7 @@ class LocksSimulateClient
     }
 
     /**
-     * Simulates a manual lock action using a keypad. You can only perform this action for [August](https://docs.seam.co/device-and-system-integration-guides/august-locks) devices within [sandbox workspaces](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     * Simulates a manual lock action using a keypad. You can only perform this action for [August](https://www.seam.co/docs/device-and-system-integration-guides/august-locks) devices within [sandbox workspaces](https://www.seam.co/docs/core-concepts/workspaces#sandbox-workspaces).
      *
      * @param string $device_id ID of the device for which you want to simulate a manual lock action using a keypad.
      * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.

@@ -2,11 +2,11 @@
 
 namespace Seam\Resources {
     /**
-     * Represents a [user](https://docs.seam.co/low-level-apis/access-systems/user-management) in an [access system](https://docs.seam.co/low-level-apis/access-systems).
+     * Represents a [user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) in an [access system](https://www.seam.co/docs/low-level-apis/access-systems).
      *
      * An access system user typically refers to an individual who requires access, like an employee or resident. Each user can possess multiple credentials that serve as their keys or identifiers for access. The type of credential can vary widely. For example, in the Salto system, a user can have a PIN code, a mobile app account, and a fob. In other platforms, it is not uncommon for a user to have more than one of the same credential type, such as multiple key cards. Additionally, these credentials can have a schedule or validity period.
      *
-     * For details about how to configure users in your access system, see the corresponding [system integration guide](https://docs.seam.co/device-and-system-integration-guides#access-control-systems).
+     * For details about how to configure users in your access system, see the corresponding [system integration guide](https://www.seam.co/docs/device-and-system-integration-guides#access-control-systems).
      */
     class AcsUser
     {
@@ -74,27 +74,27 @@ namespace Seam\Resources {
 
         public function __construct(
             /**
-             * ID of the [access system](https://docs.seam.co/low-level-apis/access-systems) that contains the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             * ID of the [access system](https://www.seam.co/docs/low-level-apis/access-systems) that contains the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              */
             public string|null $acs_system_id,
             /**
-             * ID of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             * ID of the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              */
             public string|null $acs_user_id,
             /**
-             * The ID of the connected account that is associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             * The ID of the connected account that is associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              */
             public string|null $connected_account_id,
             /**
-             * Date and time at which the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) was created.
+             * Date and time at which the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) was created.
              */
             public string|null $created_at,
             /**
-             * Display name for the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             * Display name for the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              */
             public string|null $display_name,
             /**
-             * Errors associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             * Errors associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              *
              * @var list<\Seam\Resources\AcsUser\Errors>
              */
@@ -104,17 +104,17 @@ namespace Seam\Resources {
              */
             public true|null $is_managed,
             /**
-             * Warnings associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             * Warnings associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              *
              * @var list<\Seam\Resources\AcsUser\Warnings>
              */
             public array $warnings,
             /**
-             * ID of the workspace that contains the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             * ID of the workspace that contains the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              */
             public string|null $workspace_id,
             /**
-             * `starts_at` and `ends_at` timestamps for the [access system user's](https://docs.seam.co/low-level-apis/access-systems/user-management) access.
+             * `starts_at` and `ends_at` timestamps for the [access system user's](https://www.seam.co/docs/low-level-apis/access-systems/user-management) access.
              */
             public \Seam\Resources\AcsUser\AccessSchedule|null $access_schedule = null,
             /**
@@ -122,21 +122,21 @@ namespace Seam\Resources {
              */
             public string|null $email = null,
             /**
-             * Email address of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             * Email address of the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              */
             public string|null $email_address = null,
             /**
-             * Brand-specific terminology for the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) type.
+             * Brand-specific terminology for the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) type.
              *
              * @var value-of<\Seam\Resources\AcsUser\ExternalType>|string|null
              */
             public string|null $external_type = null,
             /**
-             * Display name that corresponds to the brand-specific terminology for the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) type.
+             * Display name that corresponds to the brand-specific terminology for the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) type.
              */
             public string|null $external_type_display_name = null,
             /**
-             * Full name of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             * Full name of the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              */
             public string|null $full_name = null,
             /**
@@ -144,41 +144,41 @@ namespace Seam\Resources {
              */
             public string|null $hid_acs_system_id = null,
             /**
-             * Indicates whether the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) is currently [suspended](https://docs.seam.co/low-level-apis/access-systems/user-management/suspending-and-unsuspending-users).
+             * Indicates whether the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) is currently [suspended](https://www.seam.co/docs/low-level-apis/access-systems/user-management/suspending-and-unsuspending-users).
              */
             public bool|null $is_suspended = null,
             /**
-             * Pending mutations associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management). Seam is in the process of pushing these mutations to the integrated access system.
+             * Pending mutations associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management). Seam is in the process of pushing these mutations to the integrated access system.
              *
              * @var list<\Seam\Resources\AcsUser\PendingMutations>|null
              */
             public array|null $pending_mutations = null,
             /**
-             * Phone number of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
+             * Phone number of the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
              */
             public string|null $phone_number = null,
             /**
-             * Salto KS-specific metadata associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             * Salto KS-specific metadata associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              */
             public \Seam\Resources\AcsUser\SaltoKsMetadata|null $salto_ks_metadata = null,
             /**
-             * Salto Space-specific metadata associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             * Salto Space-specific metadata associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              */
             public \Seam\Resources\AcsUser\SaltoSpaceMetadata|null $salto_space_metadata = null,
             /**
-             * Email address of the user identity associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             * Email address of the user identity associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              */
             public string|null $user_identity_email_address = null,
             /**
-             * Full name of the user identity associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             * Full name of the user identity associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              */
             public string|null $user_identity_full_name = null,
             /**
-             * ID of the user identity associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+             * ID of the user identity associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              */
             public string|null $user_identity_id = null,
             /**
-             * Phone number of the user identity associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
+             * Phone number of the user identity associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
              */
             public string|null $user_identity_phone_number = null,
         ) {}
@@ -187,7 +187,7 @@ namespace Seam\Resources {
 
 namespace Seam\Resources\AcsUser {
     /**
-     * `starts_at` and `ends_at` timestamps for the [access system user's](https://docs.seam.co/low-level-apis/access-systems/user-management) access.
+     * `starts_at` and `ends_at` timestamps for the [access system user's](https://www.seam.co/docs/low-level-apis/access-systems/user-management) access.
      */
     class AccessSchedule
     {
@@ -215,7 +215,7 @@ namespace Seam\Resources\AcsUser {
     }
 
     /**
-     * Errors associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
+     * Errors associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class Errors
     {
@@ -280,7 +280,7 @@ namespace Seam\Resources\AcsUser {
     }
 
     /**
-     * Pending mutations associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management). Seam is in the process of pushing these mutations to the integrated access system. Known mutation_code values use subclasses; unknown values use this base class and retain their raw discriminator.
+     * Pending mutations associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management). Seam is in the process of pushing these mutations to the integrated access system. Known mutation_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class PendingMutations
     {
@@ -359,7 +359,7 @@ namespace Seam\Resources\AcsUser {
     }
 
     /**
-     * Salto KS-specific metadata associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * Salto KS-specific metadata associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
      */
     class SaltoKsMetadata
     {
@@ -380,7 +380,7 @@ namespace Seam\Resources\AcsUser {
     }
 
     /**
-     * Salto Space-specific metadata associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * Salto Space-specific metadata associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
      */
     class SaltoSpaceMetadata
     {
@@ -408,7 +408,7 @@ namespace Seam\Resources\AcsUser {
     }
 
     /**
-     * Warnings associated with the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
+     * Warnings associated with the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class Warnings
     {
@@ -484,7 +484,7 @@ namespace Seam\Resources\AcsUser {
 
 namespace Seam\Resources\AcsUser\Errors {
     /**
-     * Indicates that the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) was deleted from the [access system](https://docs.seam.co/low-level-apis/access-systems) outside of Seam.
+     * Indicates that the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) was deleted from the [access system](https://www.seam.co/docs/low-level-apis/access-systems) outside of Seam.
      */
     final class DeletedExternally extends \Seam\Resources\AcsUser\Errors
     {
@@ -523,7 +523,7 @@ namespace Seam\Resources\AcsUser\Errors {
     }
 
     /**
-     * Indicates that the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) could not be subscribed on Salto KS because the subscription limit has been exceeded.
+     * Indicates that the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) could not be subscribed on Salto KS because the subscription limit has been exceeded.
      */
     final class SaltoKsSubscriptionLimitExceeded extends
         \Seam\Resources\AcsUser\Errors
@@ -564,7 +564,7 @@ namespace Seam\Resources\AcsUser\Errors {
     }
 
     /**
-     * Indicates that the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) was not created on the [access system](https://docs.seam.co/low-level-apis/access-systems). This is likely due to an internal unexpected error. Contact Seam [support](mailto:support@seam.co).
+     * Indicates that the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) was not created on the [access system](https://www.seam.co/docs/low-level-apis/access-systems). This is likely due to an internal unexpected error. Contact Seam [support](mailto:support@seam.co).
      */
     final class FailedToCreateOnAcsSystem extends \Seam\Resources\AcsUser\Errors
     {
@@ -604,7 +604,7 @@ namespace Seam\Resources\AcsUser\Errors {
     }
 
     /**
-     * Indicates that the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) was not updated on the [access system](https://docs.seam.co/low-level-apis/access-systems). This is likely due to an internal unexpected error. Contact Seam [support](mailto:support@seam.co).
+     * Indicates that the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) was not updated on the [access system](https://www.seam.co/docs/low-level-apis/access-systems). This is likely due to an internal unexpected error. Contact Seam [support](mailto:support@seam.co).
      */
     final class FailedToUpdateOnAcsSystem extends \Seam\Resources\AcsUser\Errors
     {
@@ -644,7 +644,7 @@ namespace Seam\Resources\AcsUser\Errors {
     }
 
     /**
-     * Indicates that the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) was not deleted on the [access system](https://docs.seam.co/low-level-apis/access-systems). This is likely due to an internal unexpected error. Contact Seam [support](mailto:support@seam.co).
+     * Indicates that the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) was not deleted on the [access system](https://www.seam.co/docs/low-level-apis/access-systems). This is likely due to an internal unexpected error. Contact Seam [support](mailto:support@seam.co).
      */
     final class FailedToDeleteOnAcsSystem extends \Seam\Resources\AcsUser\Errors
     {
@@ -684,7 +684,7 @@ namespace Seam\Resources\AcsUser\Errors {
     }
 
     /**
-     * Indicates that the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) was created from the Seam API but also exists on Mission Control. This is unsupported. Contact Seam [support](mailto:support@seam.co).
+     * Indicates that the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) was created from the Seam API but also exists on Mission Control. This is unsupported. Contact Seam [support](mailto:support@seam.co).
      */
     final class LatchConflictWithResidentUser extends
         \Seam\Resources\AcsUser\Errors
@@ -1502,7 +1502,7 @@ namespace Seam\Resources\AcsUser\PendingMutations\UpdatingCredentialAssignment {
 
 namespace Seam\Resources\AcsUser\Warnings {
     /**
-     * Indicates that the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) is being deleted from the [access system](https://docs.seam.co/low-level-apis/access-systems). This is a temporary state, and the access system user will be deleted shortly.
+     * Indicates that the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) is being deleted from the [access system](https://www.seam.co/docs/low-level-apis/access-systems). This is a temporary state, and the access system user will be deleted shortly.
      */
     final class BeingDeleted extends \Seam\Resources\AcsUser\Warnings
     {
@@ -1541,7 +1541,7 @@ namespace Seam\Resources\AcsUser\Warnings {
     }
 
     /**
-     * Indicates that the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) is not subscribed on Salto KS, so they cannot unlock doors or perform any actions. This occurs when the their access schedule hasn’t started yet, if their access schedule has ended, if the site has reached its limit for active users (subscription slots), or if they have been manually unsubscribed.
+     * Indicates that the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) is not subscribed on Salto KS, so they cannot unlock doors or perform any actions. This occurs when the their access schedule hasn’t started yet, if their access schedule has ended, if the site has reached its limit for active users (subscription slots), or if they have been manually unsubscribed.
      */
     final class SaltoKsUserNotSubscribed extends
         \Seam\Resources\AcsUser\Warnings
@@ -1582,7 +1582,7 @@ namespace Seam\Resources\AcsUser\Warnings {
     }
 
     /**
-     * Indicates that the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) exists but is not currently able to gain access—for example, because their access schedule has not started yet or has ended, the access system has reached its limit for active users, or they have been unsubscribed or deactivated. Refer to the warning message for the provider-specific reason. This is distinct from `is_suspended`, which indicates the user has been explicitly blocked.
+     * Indicates that the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) exists but is not currently able to gain access—for example, because their access schedule has not started yet or has ended, the access system has reached its limit for active users, or they have been unsubscribed or deactivated. Refer to the warning message for the provider-specific reason. This is distinct from `is_suspended`, which indicates the user has been explicitly blocked.
      */
     final class AcsUserInactive extends \Seam\Resources\AcsUser\Warnings
     {
@@ -1621,7 +1621,7 @@ namespace Seam\Resources\AcsUser\Warnings {
     }
 
     /**
-     * An unknown issue occurred while syncing the state of this [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) with the provider. This issue may affect the proper functioning of this user.
+     * An unknown issue occurred while syncing the state of this [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) with the provider. This issue may affect the proper functioning of this user.
      */
     final class UnknownIssueWithAcsUser extends \Seam\Resources\AcsUser\Warnings
     {
@@ -1661,7 +1661,7 @@ namespace Seam\Resources\AcsUser\Warnings {
     }
 
     /**
-     * Indicates that the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) was created on Latch Mission Control. Please use the Latch Mission Control to manage this user.
+     * Indicates that the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) was created on Latch Mission Control. Please use the Latch Mission Control to manage this user.
      */
     final class LatchResidentUser extends \Seam\Resources\AcsUser\Warnings
     {

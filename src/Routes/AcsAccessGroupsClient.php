@@ -27,7 +27,7 @@ class AcsAccessGroupsClient
     }
 
     /**
-     * Adds a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) to a specified [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     * Adds a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) to a specified [access group](https://www.seam.co/docs/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
      *
      * @param string $acs_access_group_id ID of the access group to which you want to add an access system user.
      * @param string $acs_user_id ID of the access system user that you want to add to an access group. You can only provide one of acs_user_id or user_identity_id.
@@ -55,7 +55,7 @@ class AcsAccessGroupsClient
     }
 
     /**
-     * Deletes a specified [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     * Deletes a specified [access group](https://www.seam.co/docs/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
      *
      * @param string $acs_access_group_id ID of the access group that you want to delete.
      * @return void OK
@@ -72,7 +72,7 @@ class AcsAccessGroupsClient
     }
 
     /**
-     * Returns a specified [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     * Returns a specified [access group](https://www.seam.co/docs/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
      *
      * @param string $acs_access_group_id ID of the access group that you want to get.
      * @return AcsAccessGroup OK
@@ -95,7 +95,7 @@ class AcsAccessGroupsClient
     }
 
     /**
-     * Returns a list of all [access groups](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     * Returns a list of all [access groups](https://www.seam.co/docs/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
      *
      * @param string $acs_system_id ID of the access system for which you want to retrieve all access groups.
      * @param string $acs_user_id ID of the access system user for which you want to retrieve all access groups.
@@ -141,7 +141,7 @@ class AcsAccessGroupsClient
     }
 
     /**
-     * Returns a list of all accessible entrances for a specified [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     * Returns a list of all accessible entrances for a specified [access group](https://www.seam.co/docs/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
      *
      * @param string $acs_access_group_id ID of the access group for which you want to retrieve all accessible entrances.
      * @return array OK
@@ -172,7 +172,7 @@ class AcsAccessGroupsClient
     }
 
     /**
-     * Returns a list of all [access system users](https://docs.seam.co/low-level-apis/access-systems/user-management) in an [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     * Returns a list of all [access system users](https://www.seam.co/docs/low-level-apis/access-systems/user-management) in an [access group](https://www.seam.co/docs/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
      *
      * @param string $acs_access_group_id ID of the access group for which you want to retrieve all access system users.
      * @return array OK
@@ -196,7 +196,7 @@ class AcsAccessGroupsClient
     }
 
     /**
-     * Removes a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) from a specified [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     * Removes a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) from a specified [access group](https://www.seam.co/docs/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
      *
      * @param string $acs_access_group_id ID of the access group from which you want to remove an access system user.
      * @param string $acs_user_id ID of the access system user that you want to remove from an access group.

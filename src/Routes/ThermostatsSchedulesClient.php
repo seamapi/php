@@ -26,14 +26,14 @@ class ThermostatsSchedulesClient
     }
 
     /**
-     * Creates a new [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     * Creates a new [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules) for a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats).
      *
-     * @param string $climate_preset_key Key of the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) to use for the new thermostat schedule.
+     * @param string $climate_preset_key Key of the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) to use for the new thermostat schedule.
      * @param string $device_id ID of the thermostat device for which you want to create a schedule.
      * @param string $ends_at Date and time at which the new thermostat schedule ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @param string $starts_at Date and time at which the new thermostat schedule starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
-     * @param bool $is_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings while the new schedule is active. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-     * @param int|NullValue $max_override_period_minutes Number of minutes for which a person at the thermostat or using the API can change the thermostat's settings after the activation of the scheduled climate preset. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+     * @param bool $is_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings while the new schedule is active. See also [Specifying Manual Override Permissions](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+     * @param int|NullValue $max_override_period_minutes Number of minutes for which a person at the thermostat or using the API can change the thermostat's settings after the activation of the scheduled climate preset. See also [Specifying Manual Override Permissions](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
      * @param string $name Name of the thermostat schedule.
      * @return ThermostatSchedule OK
      */
@@ -80,7 +80,7 @@ class ThermostatsSchedulesClient
     }
 
     /**
-     * Deletes a [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     * Deletes a [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules) for a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats).
      *
      * @param string $thermostat_schedule_id ID of the thermostat schedule that you want to delete.
      * @return void OK
@@ -97,7 +97,7 @@ class ThermostatsSchedulesClient
     }
 
     /**
-     * Returns a specified [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
+     * Returns a specified [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
      *
      * @param string $thermostat_schedule_id ID of the thermostat schedule that you want to get.
      * @return ThermostatSchedule OK
@@ -124,7 +124,7 @@ class ThermostatsSchedulesClient
     }
 
     /**
-     * Returns a list of all [thermostat schedules](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     * Returns a list of all [thermostat schedules](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules) for a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats).
      *
      * @param string $device_id ID of the thermostat device for which you want to list schedules.
      * @param string $user_identifier_key User identifier key by which to filter the list of returned thermostat schedules.
@@ -158,13 +158,13 @@ class ThermostatsSchedulesClient
     }
 
     /**
-     * Updates a specified [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
+     * Updates a specified [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
      *
      * @param string $thermostat_schedule_id ID of the thermostat schedule that you want to update.
-     * @param string $climate_preset_key Key of the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) to use for the thermostat schedule.
+     * @param string $climate_preset_key Key of the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) to use for the thermostat schedule.
      * @param string $ends_at Date and time at which the thermostat schedule ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
-     * @param bool $is_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings while the schedule is active. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-     * @param int|NullValue $max_override_period_minutes Number of minutes for which a person at the thermostat or using the API can change the thermostat's settings after the activation of the scheduled climate preset. See also [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+     * @param bool $is_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings while the schedule is active. See also [Specifying Manual Override Permissions](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+     * @param int|NullValue $max_override_period_minutes Number of minutes for which a person at the thermostat or using the API can change the thermostat's settings after the activation of the scheduled climate preset. See also [Specifying Manual Override Permissions](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
      * @param string $name Name of the thermostat schedule.
      * @param string $starts_at Date and time at which the thermostat schedule starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @return void OK

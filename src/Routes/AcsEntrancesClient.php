@@ -29,7 +29,7 @@ class AcsEntrancesClient
     }
 
     /**
-     * Returns a specified [access system entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+     * Returns a specified [access system entrance](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details).
      *
      * @param string $acs_entrance_id ID of the entrance that you want to get.
      * @return AcsEntrance OK
@@ -52,7 +52,7 @@ class AcsEntrancesClient
     }
 
     /**
-     * Grants a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) access to a specified [access system entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+     * Grants a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) access to a specified [access system entrance](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details).
      *
      * @param string $acs_entrance_id ID of the entrance to which you want to grant an access system user access.
      * @param string $acs_user_id ID of the access system user to whom you want to grant access to an entrance. You can only provide one of acs_user_id or user_identity_id.
@@ -80,7 +80,7 @@ class AcsEntrancesClient
     }
 
     /**
-     * Returns a list of all [access system entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+     * Returns a list of all [access system entrances](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details).
      *
      * @param string $access_method_id ID of the access method for which you want to retrieve all entrances to which it grants access.
      * @param string $acs_credential_id ID of the credential for which you want to retrieve all entrances.
@@ -163,7 +163,7 @@ class AcsEntrancesClient
     }
 
     /**
-     * Returns a list of all [credentials](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) with access to a specified [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+     * Returns a list of all [credentials](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) with access to a specified [entrance](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details).
      *
      * @param string $acs_entrance_id ID of the entrance for which you want to list all credentials that grant access.
      * @param list<string> $include_if Conditions that credentials must meet to be included in the returned list.
@@ -199,7 +199,7 @@ class AcsEntrancesClient
     }
 
     /**
-     * Remotely unlocks a specified [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) using a cloud_key credential. Returns an action attempt that tracks the progress of the unlock operation.
+     * Remotely unlocks a specified [entrance](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details) using a cloud_key credential. Returns an action attempt that tracks the progress of the unlock operation.
      *
      * @param string $acs_credential_id ID of the cloud_key credential to use for the unlock operation.
      * @param string $acs_entrance_id ID of the entrance to unlock.
