@@ -26,16 +26,16 @@ class AccessCodesUnmanagedClient
     }
 
     /**
-     * Converts an [unmanaged access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) to an [access code managed through Seam](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+     * Converts an [unmanaged access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) to an [access code managed through Seam](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes).
      *
      * An unmanaged access code has a limited set of operations that you can perform on it. Once you convert an unmanaged access code to a managed access code, the full set of access code operations and lifecycle events becomes available for it.
      *
      * Note that not all device providers support converting an unmanaged access code to a managed access code.
      *
      * @param string $access_code_id ID of the unmanaged access code that you want to convert to a managed access code.
-     * @param bool $allow_external_modification Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the access code is allowed.
+     * @param bool $allow_external_modification Indicates whether [external modification](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes#external-modification) of the access code is allowed.
      * @param bool $force Indicates whether to force the access code conversion. To switch management of an access code from one Seam workspace to another, set `force` to `true`.
-     * @param bool $is_external_modification_allowed Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the access code is allowed.
+     * @param bool $is_external_modification_allowed Indicates whether [external modification](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes#external-modification) of the access code is allowed.
      * @return void OK
      */
     public function convert_to_managed(
@@ -69,7 +69,7 @@ class AccessCodesUnmanagedClient
     }
 
     /**
-     * Deletes an [unmanaged access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
+     * Deletes an [unmanaged access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
      *
      * @param string $access_code_id ID of the unmanaged access code that you want to delete.
      * @return void OK
@@ -86,7 +86,7 @@ class AccessCodesUnmanagedClient
     }
 
     /**
-     * Returns a specified [unmanaged access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
+     * Returns a specified [unmanaged access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
      *
      * You must specify either `access_code_id` or both `device_id` and `code`.
      *
@@ -129,7 +129,7 @@ class AccessCodesUnmanagedClient
     }
 
     /**
-     * Returns a list of all [unmanaged access codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
+     * Returns a list of all [unmanaged access codes](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
      *
      * @param string $device_id ID of the device for which you want to list unmanaged access codes.
      * @param float $limit Numerical limit on the number of unmanaged access codes to return.
@@ -184,13 +184,13 @@ class AccessCodesUnmanagedClient
     }
 
     /**
-     * Updates a specified [unmanaged access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
+     * Updates a specified [unmanaged access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
      *
      * @param string $access_code_id ID of the unmanaged access code that you want to update.
      * @param bool $is_managed
-     * @param bool $allow_external_modification Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the code is allowed.
+     * @param bool $allow_external_modification Indicates whether [external modification](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes#external-modification) of the code is allowed.
      * @param bool $force Indicates whether to force the unmanaged access code update.
-     * @param bool $is_external_modification_allowed Indicates whether [external modification](https://docs.seam.co/low-level-apis/smart-locks/access-codes#external-modification) of the code is allowed.
+     * @param bool $is_external_modification_allowed Indicates whether [external modification](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes#external-modification) of the code is allowed.
      * @return void OK
      */
     public function update(

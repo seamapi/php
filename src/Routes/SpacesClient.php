@@ -27,7 +27,7 @@ class SpacesClient
     }
 
     /**
-     * Adds [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) to a specific space.
+     * Adds [entrances](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details) to a specific space.
      *
      * @param list<string> $acs_entrance_ids IDs of the entrances that you want to add to the space.
      * @param string $space_id ID of the space to which you want to add entrances.
@@ -48,7 +48,7 @@ class SpacesClient
     }
 
     /**
-     * Adds a [connected account](https://docs.seam.co/core-concepts/connected-accounts) to a specific space.
+     * Adds a [connected account](https://www.seam.co/docs/core-concepts/connected-accounts) to a specific space.
      *
      * @param string $connected_account_id ID of the connected account that you want to add to the space.
      * @param string $space_id ID of the space to which you want to add the connected account.
@@ -295,7 +295,7 @@ class SpacesClient
     }
 
     /**
-     * Removes [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) from a specific space.
+     * Removes [entrances](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details) from a specific space.
      *
      * @param list<string> $acs_entrance_ids IDs of the entrances that you want to remove from the space.
      * @param string $space_id ID of the space from which you want to remove entrances.
@@ -316,7 +316,7 @@ class SpacesClient
     }
 
     /**
-     * Removes a [connected account](https://docs.seam.co/core-concepts/connected-accounts) from a specific space.
+     * Removes a [connected account](https://www.seam.co/docs/core-concepts/connected-accounts) from a specific space.
      *
      * @param string $connected_account_id ID of the connected account that you want to remove from the space.
      * @param string $space_id ID of the space from which you want to remove the connected account.

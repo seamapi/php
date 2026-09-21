@@ -42,15 +42,15 @@ namespace Seam\Resources {
 
         public function __construct(
             /**
-             * Represents a smart lock [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+             * Represents a smart lock [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes).
              *
              * An access code is a code used for a keypad or pinpad device. Unlike physical keys, which can easily be lost or duplicated, PIN codes can be customized, tracked, and altered on the fly. Using the Seam Access Code API, you can easily generate access codes on the hundreds of door lock models with which we integrate.
              *
-             * Seam supports programming two types of access codes: [ongoing](https://docs.seam.co/low-level-apis/smart-locks/access-codes#ongoing-access-codes) and [time-bound](https://docs.seam.co/low-level-apis/smart-locks/access-codes#time-bound-access-codes). To differentiate between the two, refer to the `type` property of the access code. Ongoing codes display as `ongoing`, whereas time-bound codes are labeled `time_bound`. An ongoing access code is active, until it has been removed from the device. To specify an ongoing access code, leave both `starts_at` and `ends_at` empty. A time-bound access code will be programmed at the `starts_at` time and removed at the `ends_at` time.
+             * Seam supports programming two types of access codes: [ongoing](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes#ongoing-access-codes) and [time-bound](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes#time-bound-access-codes). To differentiate between the two, refer to the `type` property of the access code. Ongoing codes display as `ongoing`, whereas time-bound codes are labeled `time_bound`. An ongoing access code is active, until it has been removed from the device. To specify an ongoing access code, leave both `starts_at` and `ends_at` empty. A time-bound access code will be programmed at the `starts_at` time and removed at the `ends_at` time.
              *
-             * In addition, for certain devices, Seam also supports [offline access codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes#offline-access-codes). Offline access (PIN) codes are designed for door locks that might not always maintain an internet connection. For this type of access code, the device manufacturer uses encryption keys (tokens) to create server-based registries of algorithmically-generated offline PIN codes. Because the tokens remain synchronized with the managed devices, the locks do not require an active internet connection—and you do not need to be near the locks—to create an offline access code. Then, owners or managers can share these offline codes with users through a variety of mechanisms, such as messaging applications. That is, lock users do not need to install a smartphone application to receive an offline access code.
+             * In addition, for certain devices, Seam also supports [offline access codes](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes#offline-access-codes). Offline access (PIN) codes are designed for door locks that might not always maintain an internet connection. For this type of access code, the device manufacturer uses encryption keys (tokens) to create server-based registries of algorithmically-generated offline PIN codes. Because the tokens remain synchronized with the managed devices, the locks do not require an active internet connection—and you do not need to be near the locks—to create an offline access code. Then, owners or managers can share these offline codes with users through a variety of mechanisms, such as messaging applications. That is, lock users do not need to install a smartphone application to receive an offline access code.
              *
-             * For granting a person access to a space, [Access Grants](https://docs.seam.co/use-cases/granting-access) are the default and recommended approach and work across both standalone smart locks and access systems. Use the lower-level Access Codes API directly only when you specifically need to manage individual PIN codes.
+             * For granting a person access to a space, [Access Grants](https://www.seam.co/docs/use-cases/granting-access) are the default and recommended approach and work across both standalone smart locks and access systems. Use the lower-level Access Codes API directly only when you specifically need to manage individual PIN codes.
              */
             public mixed $access_codes = null,
             /**
@@ -64,23 +64,23 @@ namespace Seam\Resources {
             /**
              * Group that defines the entrances to which a set of users has access and, in some cases, the access schedule for these entrances and users.
              *
-             * Some access control systems use [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups), which are sets of users, combined with sets of permissions. These permissions include both the set of areas or assets that the users can access and the schedule during which the users can access these areas or assets. Instead of assigning access rights individually to each access control system user, which can be time-consuming and error-prone, administrators can assign users to an access group, thereby ensuring that the users inherit all the permissions associated with the access group. Using access groups streamlines the process of managing large numbers of access control system users, especially in bigger organizations or complexes.
+             * Some access control systems use [access group](https://www.seam.co/docs/low-level-apis/access-systems/user-management/assigning-users-to-access-groups), which are sets of users, combined with sets of permissions. These permissions include both the set of areas or assets that the users can access and the schedule during which the users can access these areas or assets. Instead of assigning access rights individually to each access control system user, which can be time-consuming and error-prone, administrators can assign users to an access group, thereby ensuring that the users inherit all the permissions associated with the access group. Using access groups streamlines the process of managing large numbers of access control system users, especially in bigger organizations or complexes.
              *
-             * To learn whether your access control system supports access groups, see the corresponding [system integration guide](https://docs.seam.co/device-and-system-integration-guides#access-control-systems).
+             * To learn whether your access control system supports access groups, see the corresponding [system integration guide](https://www.seam.co/docs/device-and-system-integration-guides#access-control-systems).
              */
             public mixed $acs_access_groups = null,
             /**
-             * Means by which an [access control system user](https://docs.seam.co/low-level-apis/access-systems/user-management) gains access at an [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details). The `acs_credential` object represents a [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) that provides an ACS user access within an [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * Means by which an [access control system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) gains access at an [entrance](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details). The `acs_credential` object represents a [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) that provides an ACS user access within an [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              *
              * An access control system generally uses digital means of access to authorize a user trying to get through a specific entrance. Examples of credentials include plastic key cards, mobile keys, biometric identifiers, and PIN codes. The electronic nature of these credentials, as well as the fact that access is centralized, enables both the rapid provisioning and rescinding of access and the ability to compile access audit logs.
              *
              * For each `acs_credential`, you define the access method. You can also specify additional properties, such as a PIN code, depending on the credential type.
              *
-             * For granting a person access to a space, [Access Grants](https://docs.seam.co/use-cases/granting-access) are the default and recommended approach. Use the lower-level ACS credential API directly only when you specifically need to manage individual credentials.
+             * For granting a person access to a space, [Access Grants](https://www.seam.co/docs/use-cases/granting-access) are the default and recommended approach. Use the lower-level ACS credential API directly only when you specifically need to manage individual credentials.
              */
             public mixed $acs_credentials = null,
             /**
-             * Represents a hardware device that encodes [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) data onto physical cards within an [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * Represents a hardware device that encodes [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) data onto physical cards within an [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              *
              * Some access control systems require credentials to be encoded onto plastic key cards using a card encoder. This process involves the following two key steps:
              *
@@ -91,31 +91,31 @@ namespace Seam\Resources {
              *
              * Separately, the Seam API also supports card scanning, which enables you to scan and read the encoded data on a card. You can use this action to confirm consistency with access control system records or diagnose discrepancies if needed.
              *
-             * See [Working with Card Encoders and Scanners](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+             * See [Working with Card Encoders and Scanners](https://www.seam.co/docs/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
              *
-             * To verify if your access control system requires a card encoder, see the corresponding [system integration guide](https://docs.seam.co/device-and-system-integration-guides#access-control-systems).
+             * To verify if your access control system requires a card encoder, see the corresponding [system integration guide](https://www.seam.co/docs/device-and-system-integration-guides#access-control-systems).
              */
             public mixed $acs_encoders = null,
             /**
-             * Represents an [entrance](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) within an [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * Represents an [entrance](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details) within an [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              *
              * In an access control system, an entrance is a secured door, gate, zone, or other method of entry. You can list details for all the `acs_entrance` resources in your workspace or get these details for a specific `acs_entrance`. You can also list all entrances associated with a specific credential, and you can list all credentials associated with a specific entrance.
              */
             public mixed $acs_entrances = null,
             /**
-             * Represents an [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * Represents an [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              *
-             * Within an `acs_system`, create [`acs_user`s](https://docs.seam.co/api/acs/users/object) and [`acs_credential`s](https://docs.seam.co/api/acs/credentials/object) to grant access to the `acs_user`s.
+             * Within an `acs_system`, create [`acs_user`s](https://www.seam.co/docs/api/acs/users/object) and [`acs_credential`s](https://www.seam.co/docs/api/acs/credentials/object) to grant access to the `acs_user`s.
              *
-             * For details about the resources associated with an access control system, see the [access control systems namespace](https://docs.seam.co/api/acs).
+             * For details about the resources associated with an access control system, see the [access control systems namespace](https://www.seam.co/docs/api/acs/object).
              */
             public mixed $acs_systems = null,
             /**
-             * Represents a [user](https://docs.seam.co/low-level-apis/access-systems/user-management) in an [access system](https://docs.seam.co/low-level-apis/access-systems).
+             * Represents a [user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) in an [access system](https://www.seam.co/docs/low-level-apis/access-systems).
              *
              * An access system user typically refers to an individual who requires access, like an employee or resident. Each user can possess multiple credentials that serve as their keys or identifiers for access. The type of credential can vary widely. For example, in the Salto system, a user can have a PIN code, a mobile app account, and a fob. In other platforms, it is not uncommon for a user to have more than one of the same credential type, such as multiple key cards. Additionally, these credentials can have a schedule or validity period.
              *
-             * For details about how to configure users in your access system, see the corresponding [system integration guide](https://docs.seam.co/device-and-system-integration-guides#access-control-systems).
+             * For details about how to configure users in your access system, see the corresponding [system integration guide](https://www.seam.co/docs/device-and-system-integration-guides#access-control-systems).
              */
             public mixed $acs_users = null,
             /**
@@ -123,11 +123,11 @@ namespace Seam\Resources {
              *
              * When you request for a device to perform an action, the Seam API immediately returns an action attempt object. In the background, the Seam API performs the action.
              *
-             * See also [Action Attempts](https://docs.seam.co/core-concepts/action-attempts).
+             * See also [Action Attempts](https://www.seam.co/docs/core-concepts/action-attempts).
              */
             public mixed $action_attempts = null,
             /**
-             * Represents a [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens). If you want to restrict your users' access to their own devices, use client sessions.
+             * Represents a [client session](https://www.seam.co/docs/core-concepts/authentication/client-session-tokens). If you want to restrict your users' access to their own devices, use client sessions.
              *
              * You create each client session with a custom `user_identifier_key`. Normally, the `user_identifier_key` is a user ID that your application provides.
              *
@@ -135,11 +135,11 @@ namespace Seam\Resources {
              *
              * A client session has a token that you can use with the Seam JavaScript SDK to make requests from the client (browser) directly to the Seam API. The token restricts the user's access to only the devices that they own.
              *
-             * See also [Get Started with React](https://docs.seam.co/ui-components/overview/getting-started-with-seam-components/get-started-with-react-components-and-client-session-tokens).
+             * See also [Get Started with React](https://www.seam.co/docs/ui-components/overview/getting-started-with-seam-components/get-started-with-react-components-and-client-session-tokens).
              */
             public mixed $client_sessions = null,
             /**
-             * Represents a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews).
+             * Represents a [Connect Webview](https://www.seam.co/docs/core-concepts/connect-webviews).
              *
              * Connect Webviews are fully-embedded client-side components that you add to your app. Your users interact with your embedded Connect Webviews to link their IoT device or system accounts to Seam. That is, Connect Webviews walk your users through the process of logging in to their device or system accounts. Seam handles all the authentication steps, and—once your user has completed the authorization through your app—you can access and control their devices or systems using the Seam API.
              *
@@ -153,11 +153,11 @@ namespace Seam\Resources {
              */
             public mixed $connect_webviews = null,
             /**
-             * Represents a [connected account](https://docs.seam.co/core-concepts/connected-accounts). A connected account is an external third-party account to which your user has authorized Seam to get access, for example, an August account with a list of door locks.
+             * Represents a [connected account](https://www.seam.co/docs/core-concepts/connected-accounts). A connected account is an external third-party account to which your user has authorized Seam to get access, for example, an August account with a list of door locks.
              */
             public mixed $connected_accounts = null,
             /**
-             * Represents a [device](https://docs.seam.co/core-concepts/devices) that has been connected to Seam.
+             * Represents a [device](https://www.seam.co/docs/core-concepts/devices) that has been connected to Seam.
              */
             public mixed $devices = null,
             /**
@@ -173,7 +173,7 @@ namespace Seam\Resources {
              */
             public mixed $instant_keys = null,
             /**
-             * Represents a [noise threshold](https://docs.seam.co/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://docs.seam.co/capability-guides/noise-sensors). Thresholds represent the limits of noise tolerated at a property, which can be customized for each hour of the day. Each device has its own default thresholds, but you can use the Seam API to modify them.
+             * Represents a [noise threshold](https://www.seam.co/docs/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://www.seam.co/docs/capability-guides/noise-sensors). Thresholds represent the limits of noise tolerated at a property, which can be customized for each hour of the day. Each device has its own default thresholds, but you can use the Seam API to modify them.
              */
             public mixed $noise_thresholds = null,
             /**
@@ -185,11 +185,11 @@ namespace Seam\Resources {
              */
             public mixed $thermostat_daily_programs = null,
             /**
-             * Represents a [thermostat schedule](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules) that activates a configured [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) on a [thermostat](https://docs.seam.co/capability-guides/thermostats) at a specified starting time and deactivates the climate preset at a specified ending time.
+             * Represents a [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules) that activates a configured [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) on a [thermostat](https://www.seam.co/docs/capability-guides/thermostats) at a specified starting time and deactivates the climate preset at a specified ending time.
              */
             public mixed $thermostat_schedules = null,
             /**
-             * Represents an [unmanaged smart lock access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
+             * Represents an [unmanaged smart lock access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
              *
              * An access code is a code used for a keypad or pinpad device. Unlike physical keys, which can easily be lost or duplicated, PIN codes can be customized, tracked, and altered on the fly.
              *
@@ -199,19 +199,19 @@ namespace Seam\Resources {
              *
              * Not all providers support unmanaged access codes. The following providers do not support unmanaged access codes:
              *
-             * - [Kwikset](https://docs.seam.co/device-and-system-integration-guides/kwikset-locks)
+             * - [Kwikset](https://www.seam.co/docs/device-and-system-integration-guides/kwikset-locks)
              */
             public mixed $unmanaged_access_codes = null,
             /**
-             * Represents an [unmanaged device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices). An unmanaged device has a limited set of visible properties and a subset of supported events. You cannot control an unmanaged device. Any [access codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) on an unmanaged device are unmanaged. To control an unmanaged device with Seam, [convert it to a managed device](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices#convert-an-unmanaged-device-to-managed).
+             * Represents an [unmanaged device](https://www.seam.co/docs/core-concepts/devices/managed-and-unmanaged-devices). An unmanaged device has a limited set of visible properties and a subset of supported events. You cannot control an unmanaged device. Any [access codes](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) on an unmanaged device are unmanaged. To control an unmanaged device with Seam, [convert it to a managed device](https://www.seam.co/docs/core-concepts/devices/managed-and-unmanaged-devices#convert-an-unmanaged-device-to-managed).
              */
             public mixed $unmanaged_devices = null,
             /**
-             * Represents a [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) associated with an application user account.
+             * Represents a [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) associated with an application user account.
              */
             public mixed $user_identities = null,
             /**
-             * Represents a Seam [workspace](https://docs.seam.co/core-concepts/workspaces). A workspace is a top-level entity that encompasses all other resources below it, such as devices, connected accounts, and Connect Webviews. Seam provides two types of workspaces. A [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces) is a special type of workspace designed for testing code. Sandbox workspaces offer test device accounts and virtual devices that you can connect and control. This ability to work with virtual devices is quite handy because it removes the need to own physical devices from multiple brands. To connect real devices and systems to Seam, use a [production workspace](https://docs.seam.co/core-concepts/workspaces#production-workspaces).
+             * Represents a Seam [workspace](https://www.seam.co/docs/core-concepts/workspaces). A workspace is a top-level entity that encompasses all other resources below it, such as devices, connected accounts, and Connect Webviews. Seam provides two types of workspaces. A [sandbox workspace](https://www.seam.co/docs/core-concepts/workspaces#sandbox-workspaces) is a special type of workspace designed for testing code. Sandbox workspaces offer test device accounts and virtual devices that you can connect and control. This ability to work with virtual devices is quite handy because it removes the need to own physical devices from multiple brands. To connect real devices and systems to Seam, use a [production workspace](https://www.seam.co/docs/core-concepts/workspaces#production-workspaces).
              */
             public mixed $workspaces = null,
         ) {}

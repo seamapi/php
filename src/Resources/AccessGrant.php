@@ -87,7 +87,7 @@ namespace Seam\Resources {
              */
             public string|null $ends_at,
             /**
-             * Errors associated with the [access grant](https://docs.seam.co/use-cases/granting-access).
+             * Errors associated with the [access grant](https://www.seam.co/docs/use-cases/granting-access).
              *
              * @var list<\Seam\Resources\AccessGrant\Errors>
              */
@@ -128,7 +128,7 @@ namespace Seam\Resources {
              */
             public string|null $user_identity_id,
             /**
-             * Warnings associated with the [access grant](https://docs.seam.co/use-cases/granting-access).
+             * Warnings associated with the [access grant](https://www.seam.co/docs/use-cases/granting-access).
              *
              * @var list<\Seam\Resources\AccessGrant\Warnings>
              */
@@ -163,7 +163,7 @@ namespace Seam\Resources {
 
 namespace Seam\Resources\AccessGrant {
     /**
-     * Errors associated with the [access grant](https://docs.seam.co/use-cases/granting-access). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
+     * Errors associated with the [access grant](https://www.seam.co/docs/use-cases/granting-access). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class Errors
     {
@@ -323,7 +323,7 @@ namespace Seam\Resources\AccessGrant {
     }
 
     /**
-     * Warnings associated with the [access grant](https://docs.seam.co/use-cases/granting-access). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
+     * Warnings associated with the [access grant](https://www.seam.co/docs/use-cases/granting-access). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class Warnings
     {
@@ -712,7 +712,7 @@ namespace Seam\Resources\AccessGrant\RequestedAccessMethods {
 
 namespace Seam\Resources\AccessGrant\Warnings {
     /**
-     * Indicates that the [access grant](https://docs.seam.co/use-cases/granting-access) is being deleted.
+     * Indicates that the [access grant](https://www.seam.co/docs/use-cases/granting-access) is being deleted.
      */
     final class BeingDeleted extends \Seam\Resources\AccessGrant\Warnings
     {
@@ -853,7 +853,7 @@ namespace Seam\Resources\AccessGrant\Warnings {
     }
 
     /**
-     * Indicates that the access times for this [access grant](https://docs.seam.co/use-cases/granting-access) are being updated.
+     * Indicates that the access times for this [access grant](https://www.seam.co/docs/use-cases/granting-access) are being updated.
      */
     final class UpdatingAccessTimes extends \Seam\Resources\AccessGrant\Warnings
     {

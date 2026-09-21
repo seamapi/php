@@ -30,7 +30,7 @@ class ConnectedAccountsClient
     }
 
     /**
-     * Deletes a specified [connected account](https://docs.seam.co/core-concepts/connected-accounts).
+     * Deletes a specified [connected account](https://www.seam.co/docs/core-concepts/connected-accounts).
      *
      * Deleting a connected account triggers a `connected_account.deleted` event and removes the connected account and all data associated with the connected account from Seam, including devices, events, access codes, and so on. For every deleted resource, Seam sends a corresponding deleted event, but the resource is not deleted from the provider.
      *
@@ -51,7 +51,7 @@ class ConnectedAccountsClient
     }
 
     /**
-     * Returns a specified [connected account](https://docs.seam.co/core-concepts/connected-accounts).
+     * Returns a specified [connected account](https://www.seam.co/docs/core-concepts/connected-accounts).
      *
      * @param string $connected_account_id ID of the connected account that you want to get.
      * @param string $email Email address associated with the connected account that you want to get.
@@ -87,7 +87,7 @@ class ConnectedAccountsClient
     }
 
     /**
-     * Returns a list of all [connected accounts](https://docs.seam.co/core-concepts/connected-accounts).
+     * Returns a list of all [connected accounts](https://www.seam.co/docs/core-concepts/connected-accounts).
      *
      * @param array<string, string|bool>|\stdClass $custom_metadata_has Custom metadata pairs by which you want to filter connected accounts. Returns connected accounts with `custom_metadata` that contains all of the provided key:value pairs. Key names cannot contain a period (.). Specify `null` to match a key that is unset. A key given an empty string is omitted from the filter.
      * @param string $customer_key Customer key by which you want to filter connected accounts.
@@ -154,7 +154,7 @@ class ConnectedAccountsClient
     }
 
     /**
-     * Request a [connected account](https://docs.seam.co/core-concepts/connected-accounts) sync attempt for the specified `connected_account_id`.
+     * Request a [connected account](https://www.seam.co/docs/core-concepts/connected-accounts) sync attempt for the specified `connected_account_id`.
      *
      * @param string $connected_account_id ID of the connected account that you want to sync.
      * @return void OK
@@ -171,12 +171,12 @@ class ConnectedAccountsClient
     }
 
     /**
-     * Updates a [connected account](https://docs.seam.co/core-concepts/connected-accounts).
+     * Updates a [connected account](https://www.seam.co/docs/core-concepts/connected-accounts).
      *
      * @param string $connected_account_id ID of the connected account that you want to update.
      * @param list<string> $accepted_capabilities List of accepted device capabilities that restrict the types of devices that can be connected through this connected account. Valid values are `lock`, `thermostat`, `noise_sensor`, and `access_control`.
-     * @param bool $automatically_manage_new_devices Indicates whether newly-added devices should appear as [managed devices](https://docs.seam.co/core-concepts/devices/managed-and-unmanaged-devices).
-     * @param array<string, string|bool>|\stdClass $custom_metadata Custom metadata that you want to associate with the connected account. Entirely replaces the existing custom metadata object. If a new Connect Webview contains custom metadata and is used to reconnect a connected account, the custom metadata from the Connect Webview will entirely replace the entire custom metadata object on the connected account. Supports up to 50 JSON key:value pairs, with key names up to 40 characters long that cannot contain a period (.). [Adding custom metadata to a connected account](https://docs.seam.co/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account) enables you to store custom information, like customer details or internal IDs from your application. Then, you can [filter connected accounts by the desired metadata](https://docs.seam.co/core-concepts/connected-accounts/filtering-connected-accounts-by-custom-metadata). Set a key to `null` or to an empty string to remove that key from the custom metadata.
+     * @param bool $automatically_manage_new_devices Indicates whether newly-added devices should appear as [managed devices](https://www.seam.co/docs/core-concepts/devices/managed-and-unmanaged-devices).
+     * @param array<string, string|bool>|\stdClass $custom_metadata Custom metadata that you want to associate with the connected account. Entirely replaces the existing custom metadata object. If a new Connect Webview contains custom metadata and is used to reconnect a connected account, the custom metadata from the Connect Webview will entirely replace the entire custom metadata object on the connected account. Supports up to 50 JSON key:value pairs, with key names up to 40 characters long that cannot contain a period (.). [Adding custom metadata to a connected account](https://www.seam.co/docs/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account) enables you to store custom information, like customer details or internal IDs from your application. Then, you can [filter connected accounts by the desired metadata](https://www.seam.co/docs/core-concepts/connected-accounts/filtering-connected-accounts-by-custom-metadata). Set a key to `null` or to an empty string to remove that key from the custom metadata.
      * @param string $customer_key The customer key to associate with this connected account. If provided, the connected account and all resources under the connected account will be moved to this customer. May only be provided if the connected account is not already associated with a customer.
      * @param string $display_name Human-readable name for the connected account, shown in the dashboard. For example, `Booking from Airbnb House 1`.
      * @return void OK

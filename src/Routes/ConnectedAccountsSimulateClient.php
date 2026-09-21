@@ -23,7 +23,7 @@ class ConnectedAccountsSimulateClient
     }
 
     /**
-     * Simulates a connected account becoming disconnected from Seam. Only applicable for [sandbox workspaces](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     * Simulates a connected account becoming disconnected from Seam. Only applicable for [sandbox workspaces](https://www.seam.co/docs/core-concepts/workspaces#sandbox-workspaces).
      *
      * @param string $connected_account_id ID of the connected account you want to simulate as disconnected.
      * @return void OK

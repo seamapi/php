@@ -2,11 +2,11 @@
 
 namespace Seam\Resources {
     /**
-     * Represents an [access control system](https://docs.seam.co/low-level-apis/access-systems).
+     * Represents an [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
      *
-     * Within an `acs_system`, create [`acs_user`s](https://docs.seam.co/api/acs/users/object) and [`acs_credential`s](https://docs.seam.co/api/acs/credentials/object) to grant access to the `acs_user`s.
+     * Within an `acs_system`, create [`acs_user`s](https://www.seam.co/docs/api/acs/users/object) and [`acs_credential`s](https://www.seam.co/docs/api/acs/credentials/object) to grant access to the `acs_user`s.
      *
-     * For details about the resources associated with an access control system, see the [access control systems namespace](https://docs.seam.co/api/acs).
+     * For details about the resources associated with an access control system, see the [access control systems namespace](https://www.seam.co/docs/api/acs/object).
      */
     class AcsSystem
     {
@@ -58,36 +58,36 @@ namespace Seam\Resources {
 
         public function __construct(
             /**
-             * ID of the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * ID of the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              */
             public string|null $acs_system_id,
             /**
-             * ID of the connected account associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * ID of the connected account associated with the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              */
             public string|null $connected_account_id,
             /**
-             * IDs of the [connected accounts](https://docs.seam.co/core-concepts/connected-accounts) associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * IDs of the [connected accounts](https://www.seam.co/docs/core-concepts/connected-accounts) associated with the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              *
              * @var list<string>|null
              * @deprecated Use `connected_account_id`.
              */
             public array|null $connected_account_ids,
             /**
-             * Date and time at which the [access control system](https://docs.seam.co/low-level-apis/access-systems) was created.
+             * Date and time at which the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) was created.
              */
             public string|null $created_at,
             /**
-             * Errors associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * Errors associated with the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              *
              * @var list<\Seam\Resources\AcsSystem\Errors>
              */
             public array $errors,
             /**
-             * Alternative text for the [access control system](https://docs.seam.co/low-level-apis/access-systems) image.
+             * Alternative text for the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) image.
              */
             public string|null $image_alt_text,
             /**
-             * URL for the image that represents the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * URL for the image that represents the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              */
             public string|null $image_url,
             /**
@@ -95,43 +95,43 @@ namespace Seam\Resources {
              */
             public bool|null $is_credential_manager,
             /**
-             * Location information for the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * Location information for the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              */
             public \Seam\Resources\AcsSystem\Location|null $location,
             /**
-             * Name of the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * Name of the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              */
             public string|null $name,
             /**
-             * Warnings associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * Warnings associated with the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              *
              * @var list<\Seam\Resources\AcsSystem\Warnings>
              */
             public array $warnings,
             /**
-             * ID of the workspace that contains the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * ID of the workspace that contains the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              */
             public string|null $workspace_id,
             /**
-             * Number of access groups in the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * Number of access groups in the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              */
             public float|null $acs_access_group_count = null,
             /**
-             * Number of users in the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * Number of users in the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              */
             public float|null $acs_user_count = null,
             /**
-             * ID of the default credential manager `acs_system` for this [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * ID of the default credential manager `acs_system` for this [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              */
             public string|null $default_credential_manager_acs_system_id = null,
             /**
-             * Brand-specific terminology for the [access control system](https://docs.seam.co/low-level-apis/access-systems) type.
+             * Brand-specific terminology for the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) type.
              *
              * @var value-of<\Seam\Resources\AcsSystem\ExternalType>|string|null
              */
             public string|null $external_type = null,
             /**
-             * Display name that corresponds to the brand-specific terminology for the [access control system](https://docs.seam.co/low-level-apis/access-systems) type.
+             * Display name that corresponds to the brand-specific terminology for the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) type.
              */
             public string|null $external_type_display_name = null,
             /**
@@ -144,7 +144,7 @@ namespace Seam\Resources {
              */
             public string|null $system_type_display_name = null,
             /**
-             * Visionline-specific metadata for the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+             * Visionline-specific metadata for the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              */
             public \Seam\Resources\AcsSystem\VisionlineMetadata|null $visionline_metadata = null,
         ) {}
@@ -153,7 +153,7 @@ namespace Seam\Resources {
 
 namespace Seam\Resources\AcsSystem {
     /**
-     * Errors associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
+     * Errors associated with the [access control system](https://www.seam.co/docs/low-level-apis/access-systems). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class Errors
     {
@@ -232,7 +232,7 @@ namespace Seam\Resources\AcsSystem {
     }
 
     /**
-     * Location information for the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+     * Location information for the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
      */
     class Location
     {
@@ -246,14 +246,14 @@ namespace Seam\Resources\AcsSystem {
 
         public function __construct(
             /**
-             * Time zone in which the [access control system](https://docs.seam.co/low-level-apis/access-systems) is located.
+             * Time zone in which the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) is located.
              */
             public string|null $time_zone,
         ) {}
     }
 
     /**
-     * Visionline-specific metadata for the [access control system](https://docs.seam.co/low-level-apis/access-systems).
+     * Visionline-specific metadata for the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
      */
     class VisionlineMetadata
     {
@@ -271,7 +271,7 @@ namespace Seam\Resources\AcsSystem {
 
         public function __construct(
             /**
-             * IP address or hostname of the main Visionline server relative to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge) on the local network.
+             * IP address or hostname of the main Visionline server relative to [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge) on the local network.
              */
             public string|null $lan_address = null,
             /**
@@ -286,7 +286,7 @@ namespace Seam\Resources\AcsSystem {
     }
 
     /**
-     * Warnings associated with the [access control system](https://docs.seam.co/low-level-apis/access-systems). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
+     * Warnings associated with the [access control system](https://www.seam.co/docs/low-level-apis/access-systems). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class Warnings
     {
@@ -389,9 +389,9 @@ namespace Seam\Resources\AcsSystem {
 
 namespace Seam\Resources\AcsSystem\Errors {
     /**
-     * Indicates that the Seam API cannot communicate with [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge), for example, if Seam Bridge executable has stopped or if the computer running the Seam Bridge executable is offline.
-     * This error might also occur if Seam Bridge is connected to the wrong [workspace](https://docs.seam.co/core-concepts/workspaces).
-     * See also [Troubleshooting Your Access Control System](https://docs.seam.co/low-level-apis/access-systems/troubleshooting-your-access-control-system#acs_system-errors-seam_bridge_disconnected).
+     * Indicates that the Seam API cannot communicate with [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge), for example, if Seam Bridge executable has stopped or if the computer running the Seam Bridge executable is offline.
+     * This error might also occur if Seam Bridge is connected to the wrong [workspace](https://www.seam.co/docs/core-concepts/workspaces).
+     * See also [Troubleshooting Your Access Control System](https://www.seam.co/docs/low-level-apis/access-systems/troubleshooting-your-access-control-system#acs_system-errors-seam_bridge_disconnected).
      */
     final class SeamBridgeDisconnected extends \Seam\Resources\AcsSystem\Errors
     {
@@ -433,8 +433,8 @@ namespace Seam\Resources\AcsSystem\Errors {
     }
 
     /**
-     * Indicates that the Seam API cannot communicate with [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge), for example, if Seam Bridge executable has stopped or if the computer running the Seam Bridge executable is offline.
-     * See also [Troubleshooting Your Access Control System](https://docs.seam.co/low-level-apis/access-systems/troubleshooting-your-access-control-system#acs_system-errors-seam_bridge_disconnected).
+     * Indicates that the Seam API cannot communicate with [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge), for example, if Seam Bridge executable has stopped or if the computer running the Seam Bridge executable is offline.
+     * See also [Troubleshooting Your Access Control System](https://www.seam.co/docs/low-level-apis/access-systems/troubleshooting-your-access-control-system#acs_system-errors-seam_bridge_disconnected).
      */
     final class BridgeDisconnected extends \Seam\Resources\AcsSystem\Errors
     {
@@ -467,7 +467,7 @@ namespace Seam\Resources\AcsSystem\Errors {
              */
             string|null $message,
             /**
-             * Indicates whether the error is related to the [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
+             * Indicates whether the error is related to the [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge).
              */
             public bool|null $is_bridge_error = null,
         ) {
@@ -480,9 +480,9 @@ namespace Seam\Resources\AcsSystem\Errors {
     }
 
     /**
-     * Indicates that [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge) is functioning correctly and the Seam API can communicate with Seam Bridge, but the Seam API cannot connect to the on-premises [Visionline access control system](https://docs.seam.co/device-and-system-integration-guides/assa-abloy-visionline-access-control-system).
-     * For example, the IP address of the on-premises access control system may be set incorrectly within the Seam [workspace](https://docs.seam.co/core-concepts/workspaces).
-     * See also [Troubleshooting Your Access Control System](https://docs.seam.co/low-level-apis/access-systems/troubleshooting-your-access-control-system#acs_system-errors-visionline_instance_unreachable).
+     * Indicates that [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge) is functioning correctly and the Seam API can communicate with Seam Bridge, but the Seam API cannot connect to the on-premises [Visionline access control system](https://www.seam.co/docs/device-and-system-integration-guides/assa-abloy-visionline-access-control-system).
+     * For example, the IP address of the on-premises access control system may be set incorrectly within the Seam [workspace](https://www.seam.co/docs/core-concepts/workspaces).
+     * See also [Troubleshooting Your Access Control System](https://www.seam.co/docs/low-level-apis/access-systems/troubleshooting-your-access-control-system#acs_system-errors-visionline_instance_unreachable).
      */
     final class VisionlineInstanceUnreachable extends
         \Seam\Resources\AcsSystem\Errors
@@ -568,7 +568,7 @@ namespace Seam\Resources\AcsSystem\Errors {
     }
 
     /**
-     * Indicates that Seam's integration user does not have sufficient permissions on the provider's system backing this [access control system](https://docs.seam.co/low-level-apis/access-systems). Access cannot be managed until permissions are restored. See the error message for specifics, then either reauthorize the connected account in Seam or grant the integration user the required permissions in the provider's system.
+     * Indicates that Seam's integration user does not have sufficient permissions on the provider's system backing this [access control system](https://www.seam.co/docs/low-level-apis/access-systems). Access cannot be managed until permissions are restored. See the error message for specifics, then either reauthorize the connected account in Seam or grant the integration user the required permissions in the provider's system.
      */
     final class InsufficientPermissions extends \Seam\Resources\AcsSystem\Errors
     {
@@ -610,7 +610,7 @@ namespace Seam\Resources\AcsSystem\Errors {
     }
 
     /**
-     * Indicates that the [access control system](https://docs.seam.co/low-level-apis/access-systems) has been disconnected. See [Troubleshooting Your Access Control System](https://docs.seam.co/low-level-apis/access-systems/troubleshooting-your-access-control-system) to resolve the issue.
+     * Indicates that the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) has been disconnected. See [Troubleshooting Your Access Control System](https://www.seam.co/docs/low-level-apis/access-systems/troubleshooting-your-access-control-system) to resolve the issue.
      */
     final class AcsSystemDisconnected extends \Seam\Resources\AcsSystem\Errors
     {
@@ -652,7 +652,7 @@ namespace Seam\Resources\AcsSystem\Errors {
     }
 
     /**
-     * Indicates that the login credentials are invalid. Reconnect the account using a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews) to restore access.
+     * Indicates that the login credentials are invalid. Reconnect the account using a [Connect Webview](https://www.seam.co/docs/core-concepts/connect-webviews) to restore access.
      */
     final class AccountDisconnected extends \Seam\Resources\AcsSystem\Errors
     {
@@ -693,7 +693,7 @@ namespace Seam\Resources\AcsSystem\Errors {
     }
 
     /**
-     * Indicates that the [access control system](https://docs.seam.co/low-level-apis/access-systems) has lost its Salto KS certification. Contact [support](mailto:support@seam.co) to regain access.
+     * Indicates that the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) has lost its Salto KS certification. Contact [support](mailto:support@seam.co) to regain access.
      */
     final class SaltoKsCertificationExpired extends
         \Seam\Resources\AcsSystem\Errors
@@ -837,7 +837,7 @@ namespace Seam\Resources\AcsSystem\Warnings {
     }
 
     /**
-     * Indicates the [access control system](https://docs.seam.co/low-level-apis/access-systems) time zone could not be determined because the reported physical location does not match the time zone configured on the physical [ACS entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details).
+     * Indicates the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) time zone could not be determined because the reported physical location does not match the time zone configured on the physical [ACS entrances](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details).
      */
     final class TimeZoneDoesNotMatchLocation extends
         \Seam\Resources\AcsSystem\Warnings
@@ -928,7 +928,7 @@ namespace Seam\Resources\AcsSystem\Warnings {
     }
 
     /**
-     * Indicates that Seam encountered an unexpected error while syncing this [access control system](https://docs.seam.co/low-level-apis/access-systems), so its users, credentials, and access groups may be out of date. Seam retries on every sync cycle and clears this warning once a sync succeeds; if it persists, contact [support](mailto:support@seam.co).
+     * Indicates that Seam encountered an unexpected error while syncing this [access control system](https://www.seam.co/docs/low-level-apis/access-systems), so its users, credentials, and access groups may be out of date. Seam retries on every sync cycle and clears this warning once a sync succeeds; if it persists, contact [support](mailto:support@seam.co).
      */
     final class UnknownIssueWithAcsSystem extends
         \Seam\Resources\AcsSystem\Warnings

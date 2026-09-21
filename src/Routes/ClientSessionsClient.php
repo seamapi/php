@@ -26,16 +26,16 @@ class ClientSessionsClient
     }
 
     /**
-     * Creates a new [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
+     * Creates a new [client session](https://www.seam.co/docs/core-concepts/authentication/client-session-tokens).
      *
-     * @param list<string> $connect_webview_ids IDs of the [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) for which you want to create a client session.
-     * @param list<string> $connected_account_ids IDs of the [connected accounts](https://docs.seam.co/core-concepts/connected-accounts) for which you want to create a client session.
+     * @param list<string> $connect_webview_ids IDs of the [Connect Webviews](https://www.seam.co/docs/core-concepts/connect-webviews) for which you want to create a client session.
+     * @param list<string> $connected_account_ids IDs of the [connected accounts](https://www.seam.co/docs/core-concepts/connected-accounts) for which you want to create a client session.
      * @param string $customer_id Customer ID that you want to associate with the new client session.
      * @param string $customer_key Customer key that you want to associate with the new client session.
      * @param string $expires_at Date and time at which the client session should expire, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @param string $user_identifier_key Your user ID for the user for whom you want to create a client session.
-     * @param string $user_identity_id ID of the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) for which you want to create a client session.
-     * @param list<string> $user_identity_ids IDs of the [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
+     * @param string $user_identity_id ID of the [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) for which you want to create a client session.
+     * @param list<string> $user_identity_ids IDs of the [user identities](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
      * @return ClientSession OK
      */
     public function create(
@@ -87,7 +87,7 @@ class ClientSessionsClient
     }
 
     /**
-     * Deletes a [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
+     * Deletes a [client session](https://www.seam.co/docs/core-concepts/authentication/client-session-tokens).
      *
      * @param string $client_session_id ID of the client session that you want to delete.
      * @return void OK
@@ -104,7 +104,7 @@ class ClientSessionsClient
     }
 
     /**
-     * Returns a specified [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
+     * Returns a specified [client session](https://www.seam.co/docs/core-concepts/authentication/client-session-tokens).
      *
      * @param string $client_session_id ID of the client session that you want to get.
      * @param string $user_identifier_key User identifier key associated with the client session that you want to get.
@@ -135,14 +135,14 @@ class ClientSessionsClient
     }
 
     /**
-     * Returns a [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens) with specific characteristics or creates a new client session with these characteristics if it does not yet exist.
+     * Returns a [client session](https://www.seam.co/docs/core-concepts/authentication/client-session-tokens) with specific characteristics or creates a new client session with these characteristics if it does not yet exist.
      *
-     * @param list<string> $connect_webview_ids IDs of the [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) that you want to associate with the client session (or that are already associated with the existing client session).
-     * @param list<string> $connected_account_ids IDs of the [connected accounts](https://docs.seam.co/api/connected_accounts) that you want to associate with the client session (or that are already associated with the existing client session).
+     * @param list<string> $connect_webview_ids IDs of the [Connect Webviews](https://www.seam.co/docs/core-concepts/connect-webviews) that you want to associate with the client session (or that are already associated with the existing client session).
+     * @param list<string> $connected_account_ids IDs of the [connected accounts](https://www.seam.co/docs/api/connected_accounts/object) that you want to associate with the client session (or that are already associated with the existing client session).
      * @param string $expires_at Date and time at which the client session should expire in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. If the client session already exists, this will update the expiration before returning it.
      * @param string $user_identifier_key Your user ID for the user that you want to associate with the client session (or that is already associated with the existing client session).
-     * @param string $user_identity_id ID of the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session (or that are already associated with the existing client session).
-     * @param list<string> $user_identity_ids IDs of the [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
+     * @param string $user_identity_id ID of the [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session (or that are already associated with the existing client session).
+     * @param list<string> $user_identity_ids IDs of the [user identities](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
      * @return ClientSession OK
      */
     public function get_or_create(
@@ -190,14 +190,14 @@ class ClientSessionsClient
     }
 
     /**
-     * Grants a [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens) access to one or more resources, such as [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews), [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity), and so on.
+     * Grants a [client session](https://www.seam.co/docs/core-concepts/authentication/client-session-tokens) access to one or more resources, such as [Connect Webviews](https://www.seam.co/docs/core-concepts/connect-webviews), [user identities](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity), and so on.
      *
      * @param string $client_session_id ID of the client session to which you want to grant access to resources.
-     * @param list<string> $connect_webview_ids IDs of the [Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews) that you want to associate with the client session.
-     * @param list<string> $connected_account_ids IDs of the [connected accounts](https://docs.seam.co/core-concepts/connected-accounts) that you want to associate with the client session.
+     * @param list<string> $connect_webview_ids IDs of the [Connect Webviews](https://www.seam.co/docs/core-concepts/connect-webviews) that you want to associate with the client session.
+     * @param list<string> $connected_account_ids IDs of the [connected accounts](https://www.seam.co/docs/core-concepts/connected-accounts) that you want to associate with the client session.
      * @param string $user_identifier_key Your user ID for the user that you want to associate with the client session.
-     * @param string $user_identity_id ID of the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
-     * @param list<string> $user_identity_ids IDs of the [user identities](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
+     * @param string $user_identity_id ID of the [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
+     * @param list<string> $user_identity_ids IDs of the [user identities](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
      * @return void OK
      */
     public function grant_access(
@@ -247,12 +247,12 @@ class ClientSessionsClient
     }
 
     /**
-     * Returns a list of all [client sessions](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
+     * Returns a list of all [client sessions](https://www.seam.co/docs/core-concepts/authentication/client-session-tokens).
      *
      * @param string $client_session_id ID of the client session that you want to retrieve.
-     * @param string|NullValue $connect_webview_id ID of the [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews) for which you want to retrieve client sessions. Specify `null` to retrieve client sessions that are not associated with a Connect Webview.
+     * @param string|NullValue $connect_webview_id ID of the [Connect Webview](https://www.seam.co/docs/core-concepts/connect-webviews) for which you want to retrieve client sessions. Specify `null` to retrieve client sessions that are not associated with a Connect Webview.
      * @param string $user_identifier_key Your user ID for the user by which you want to filter client sessions.
-     * @param string|NullValue $user_identity_id ID of the [user identity](https://docs.seam.co/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) for which you want to retrieve client sessions. Specify `null` to retrieve client sessions that are not associated with a user identity.
+     * @param string|NullValue $user_identity_id ID of the [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) for which you want to retrieve client sessions. Specify `null` to retrieve client sessions that are not associated with a user identity.
      * @param bool $without_user_identifier_key Indicates whether to retrieve only client sessions without associated user identifier keys.
      * @return array OK
      */
@@ -296,9 +296,9 @@ class ClientSessionsClient
     }
 
     /**
-     * Revokes a [client session](https://docs.seam.co/core-concepts/authentication/client-session-tokens).
+     * Revokes a [client session](https://www.seam.co/docs/core-concepts/authentication/client-session-tokens).
      *
-     * Note that [deleting a client session](https://docs.seam.co/api/client_sessions/delete) is a separate action.
+     * Note that [deleting a client session](https://www.seam.co/docs/api/client_sessions/delete) is a separate action.
      *
      * @param string $client_session_id ID of the client session that you want to revoke.
      * @return void OK

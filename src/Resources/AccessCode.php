@@ -2,15 +2,15 @@
 
 namespace Seam\Resources {
     /**
-     * Represents a smart lock [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+     * Represents a smart lock [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes).
      *
      * An access code is a code used for a keypad or pinpad device. Unlike physical keys, which can easily be lost or duplicated, PIN codes can be customized, tracked, and altered on the fly. Using the Seam Access Code API, you can easily generate access codes on the hundreds of door lock models with which we integrate.
      *
-     * Seam supports programming two types of access codes: [ongoing](https://docs.seam.co/low-level-apis/smart-locks/access-codes#ongoing-access-codes) and [time-bound](https://docs.seam.co/low-level-apis/smart-locks/access-codes#time-bound-access-codes). To differentiate between the two, refer to the `type` property of the access code. Ongoing codes display as `ongoing`, whereas time-bound codes are labeled `time_bound`. An ongoing access code is active, until it has been removed from the device. To specify an ongoing access code, leave both `starts_at` and `ends_at` empty. A time-bound access code will be programmed at the `starts_at` time and removed at the `ends_at` time.
+     * Seam supports programming two types of access codes: [ongoing](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes#ongoing-access-codes) and [time-bound](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes#time-bound-access-codes). To differentiate between the two, refer to the `type` property of the access code. Ongoing codes display as `ongoing`, whereas time-bound codes are labeled `time_bound`. An ongoing access code is active, until it has been removed from the device. To specify an ongoing access code, leave both `starts_at` and `ends_at` empty. A time-bound access code will be programmed at the `starts_at` time and removed at the `ends_at` time.
      *
-     * In addition, for certain devices, Seam also supports [offline access codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes#offline-access-codes). Offline access (PIN) codes are designed for door locks that might not always maintain an internet connection. For this type of access code, the device manufacturer uses encryption keys (tokens) to create server-based registries of algorithmically-generated offline PIN codes. Because the tokens remain synchronized with the managed devices, the locks do not require an active internet connection—and you do not need to be near the locks—to create an offline access code. Then, owners or managers can share these offline codes with users through a variety of mechanisms, such as messaging applications. That is, lock users do not need to install a smartphone application to receive an offline access code.
+     * In addition, for certain devices, Seam also supports [offline access codes](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes#offline-access-codes). Offline access (PIN) codes are designed for door locks that might not always maintain an internet connection. For this type of access code, the device manufacturer uses encryption keys (tokens) to create server-based registries of algorithmically-generated offline PIN codes. Because the tokens remain synchronized with the managed devices, the locks do not require an active internet connection—and you do not need to be near the locks—to create an offline access code. Then, owners or managers can share these offline codes with users through a variety of mechanisms, such as messaging applications. That is, lock users do not need to install a smartphone application to receive an offline access code.
      *
-     * For granting a person access to a space, [Access Grants](https://docs.seam.co/use-cases/granting-access) are the default and recommended approach and work across both standalone smart locks and access systems. Use the lower-level Access Codes API directly only when you specifically need to manage individual PIN codes.
+     * For granting a person access to a space, [Access Grants](https://www.seam.co/docs/use-cases/granting-access) are the default and recommended approach and work across both standalone smart locks and access systems. Use the lower-level Access Codes API directly only when you specifically need to manage individual PIN codes.
      */
     class AccessCode
     {
@@ -99,7 +99,7 @@ namespace Seam\Resources {
              */
             public string|null $display_status,
             /**
-             * Errors associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+             * Errors associated with the [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes).
              *
              * @var list<\Seam\Resources\AccessCode\Errors>
              */
@@ -135,7 +135,7 @@ namespace Seam\Resources {
              */
             public array $pending_mutations,
             /**
-             * Current status of the access code within the operational lifecycle. Values are `setting`, a transitional phase that indicates that the code is being configured or activated; `set`, which indicates that the code is active and operational; `unset`, which indicates a deactivated or unused state, either before activation or after deliberate deactivation; `removing`, which indicates a transitional period in which the code is being deleted or made inactive; and `unknown`, which indicates an indeterminate state, due to reasons such as system errors or incomplete data, that highlights a potential need for system review or troubleshooting. See also [Lifecycle of Access Codes](https://docs.seam.co/low-level-apis/smart-locks/access-codes/lifecycle-of-access-codes).
+             * Current status of the access code within the operational lifecycle. Values are `setting`, a transitional phase that indicates that the code is being configured or activated; `set`, which indicates that the code is active and operational; `unset`, which indicates a deactivated or unused state, either before activation or after deliberate deactivation; `removing`, which indicates a transitional period in which the code is being deleted or made inactive; and `unknown`, which indicates an indeterminate state, due to reasons such as system errors or incomplete data, that highlights a potential need for system review or troubleshooting. See also [Lifecycle of Access Codes](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/lifecycle-of-access-codes).
              *
              * @var value-of<\Seam\Resources\AccessCode\Status>|string|null
              * @deprecated Use `display_status` to show a person the code's state. To make decisions, read `pending_mutations`, `errors`, `warnings`, `starts_at`, and `ends_at`.
@@ -148,7 +148,7 @@ namespace Seam\Resources {
              */
             public string|null $type,
             /**
-             * Warnings associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+             * Warnings associated with the [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes).
              *
              * @var list<\Seam\Resources\AccessCode\Warnings>
              */
@@ -250,7 +250,7 @@ namespace Seam\Resources\AccessCode {
     }
 
     /**
-     * Errors associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
+     * Errors associated with the [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class Errors
     {
@@ -306,8 +306,8 @@ namespace Seam\Resources\AccessCode {
                     => \Seam\Resources\AccessCode\Errors\FailedToUpdate::from_json(
                     $json,
                 ),
-                \Seam\Resources\AccessCode\Errors\ErrorCode::FAILED_TO_EXPIRE
-                    => \Seam\Resources\AccessCode\Errors\FailedToExpire::from_json(
+                \Seam\Resources\AccessCode\Errors\ErrorCode::FAILED_TO_REMOVE
+                    => \Seam\Resources\AccessCode\Errors\FailedToRemove::from_json(
                     $json,
                 ),
                 \Seam\Resources\AccessCode\Errors\ErrorCode::ACCOUNT_DISCONNECTED
@@ -455,7 +455,7 @@ namespace Seam\Resources\AccessCode {
     }
 
     /**
-     * Warnings associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
+     * Warnings associated with the [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class Warnings
     {
@@ -1026,9 +1026,9 @@ namespace Seam\Resources\AccessCode\Errors {
     /**
      * This access code is still active on the device even though its `ends_at` has passed, so the recipient may still be able to unlock the device after their access window ended. Seam is attempting to remove it, and this error clears automatically once the access code is no longer active.
      */
-    final class FailedToExpire extends \Seam\Resources\AccessCode\Errors
+    final class FailedToRemove extends \Seam\Resources\AccessCode\Errors
     {
-        public static function from_json(mixed $json): FailedToExpire|null
+        public static function from_json(mixed $json): FailedToRemove|null
         {
             if (!$json) {
                 return null;
@@ -1097,7 +1097,7 @@ namespace Seam\Resources\AccessCode\Errors {
              */
             string|null $error_code,
             /**
-             * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
+             * Indicates that the error is a [connected account](https://www.seam.co/docs/api/connected_accounts/object) error.
              */
             public true|null $is_connected_account_error,
             /**
@@ -1147,7 +1147,7 @@ namespace Seam\Resources\AccessCode\Errors {
              */
             string|null $error_code,
             /**
-             * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
+             * Indicates that the error is a [connected account](https://www.seam.co/docs/api/connected_accounts/object) error.
              */
             public true|null $is_connected_account_error,
             /**
@@ -1197,7 +1197,7 @@ namespace Seam\Resources\AccessCode\Errors {
              */
             string|null $error_code,
             /**
-             * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
+             * Indicates that the error is a [connected account](https://www.seam.co/docs/api/connected_accounts/object) error.
              */
             public true|null $is_connected_account_error,
             /**
@@ -1247,7 +1247,7 @@ namespace Seam\Resources\AccessCode\Errors {
              */
             string|null $error_code,
             /**
-             * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
+             * Indicates that the error is a [connected account](https://www.seam.co/docs/api/connected_accounts/object) error.
              */
             public true|null $is_connected_account_error,
             /**
@@ -1432,7 +1432,7 @@ namespace Seam\Resources\AccessCode\Errors {
     }
 
     /**
-     * Indicates that the [backup access code pool](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes) is empty.
+     * Indicates that the [backup access code pool](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/backup-access-codes) is empty.
      */
     final class EmptyBackupAccessCodePool extends
         \Seam\Resources\AccessCode\Errors
@@ -1648,7 +1648,7 @@ namespace Seam\Resources\AccessCode\Errors {
     }
 
     /**
-     * Indicates that the Seam API cannot communicate with [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge), for example, if the Seam Bridge executable has stopped or if the computer running the Seam Bridge executable is offline. See also [Troubleshooting Your Access Control System](https://docs.seam.co/low-level-apis/access-systems/troubleshooting-your-access-control-system#acs_system-errors-seam_bridge_disconnected).
+     * Indicates that the Seam API cannot communicate with [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge), for example, if the Seam Bridge executable has stopped or if the computer running the Seam Bridge executable is offline. See also [Troubleshooting Your Access Control System](https://www.seam.co/docs/low-level-apis/access-systems/troubleshooting-your-access-control-system#acs_system-errors-seam_bridge_disconnected).
      */
     final class BridgeDisconnected extends \Seam\Resources\AccessCode\Errors
     {
@@ -1683,7 +1683,7 @@ namespace Seam\Resources\AccessCode\Errors {
              */
             string|null $message,
             /**
-             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
+             * Indicates whether the error is related to [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge).
              */
             public bool|null $is_bridge_error = null,
             /**
@@ -1707,7 +1707,7 @@ namespace Seam\Resources\AccessCode\Errors {
         case CODE_CONSTRAINTS_VIOLATED = "code_constraints_violated";
         case FAILED_TO_ISSUE = "failed_to_issue";
         case FAILED_TO_UPDATE = "failed_to_update";
-        case FAILED_TO_EXPIRE = "failed_to_expire";
+        case FAILED_TO_REMOVE = "failed_to_remove";
         case ACCOUNT_DISCONNECTED = "account_disconnected";
         case SALTO_KS_SUBSCRIPTION_LIMIT_EXCEEDED = "salto_ks_subscription_limit_exceeded";
         case INSUFFICIENT_PERMISSIONS = "insufficient_permissions";

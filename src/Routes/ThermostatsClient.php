@@ -36,7 +36,7 @@ class ThermostatsClient
     }
 
     /**
-     * Activates a specified [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     * Activates a specified [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) for a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats).
      *
      * @param string $climate_preset_key Climate preset key of the climate preset that you want to activate.
      * @param string $device_id ID of the thermostat device for which you want to activate a climate preset.
@@ -76,11 +76,11 @@ class ThermostatsClient
     }
 
     /**
-     * Sets a specified [thermostat](https://docs.seam.co/capability-guides/thermostats) to [cool mode](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings).
+     * Sets a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats) to [cool mode](https://www.seam.co/docs/capability-guides/thermostats/configure-current-climate-settings).
      *
      * @param string $device_id ID of the thermostat device that you want to set to cool mode.
-     * @param float $cooling_set_point_celsius [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
-     * @param float $cooling_set_point_fahrenheit [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
+     * @param float $cooling_set_point_celsius [Cooling set point](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
+     * @param float $cooling_set_point_fahrenheit [Cooling set point](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
      * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
@@ -121,20 +121,20 @@ class ThermostatsClient
     }
 
     /**
-     * Creates a [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     * Creates a [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) for a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats).
      *
-     * @param string $climate_preset_key Unique key to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
+     * @param string $climate_preset_key Unique key to identify the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets).
      * @param string $device_id ID of the thermostat device for which you want create a climate preset.
      * @param string $climate_preset_mode The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
-     * @param float $cooling_set_point_celsius Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
-     * @param float $cooling_set_point_fahrenheit Temperature to which the thermostat should cool (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param float $cooling_set_point_celsius Temperature to which the thermostat should cool (in °C). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param float $cooling_set_point_fahrenheit Temperature to which the thermostat should cool (in °F). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
      * @param mixed $ecobee_metadata Metadata specific to the Ecobee climate, if applicable.
-     * @param string $fan_mode_setting Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
-     * @param float $heating_set_point_celsius Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
-     * @param float $heating_set_point_fahrenheit Temperature to which the thermostat should heat (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
-     * @param string $hvac_mode_setting Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
+     * @param string $fan_mode_setting Desired [fan mode setting](https://www.seam.co/docs/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
+     * @param float $heating_set_point_celsius Temperature to which the thermostat should heat (in °C). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param float $heating_set_point_fahrenheit Temperature to which the thermostat should heat (in °F). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param string $hvac_mode_setting Desired [HVAC mode](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
      * @param bool $manual_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings.
-     * @param string|NullValue $name User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
+     * @param string|NullValue $name User-friendly name to identify the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets).
      * @return void OK
      */
     public function create_climate_preset(
@@ -202,7 +202,7 @@ class ThermostatsClient
     }
 
     /**
-     * Deletes a specified [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     * Deletes a specified [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) for a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats).
      *
      * @param string $climate_preset_key Climate preset key of the climate preset that you want to delete.
      * @param string $device_id ID of the thermostat device for which you want to delete a climate preset.
@@ -223,11 +223,11 @@ class ThermostatsClient
     }
 
     /**
-     * Sets a specified [thermostat](https://docs.seam.co/capability-guides/thermostats) to [heat mode](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings).
+     * Sets a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats) to [heat mode](https://www.seam.co/docs/capability-guides/thermostats/configure-current-climate-settings).
      *
      * @param string $device_id ID of the thermostat device that you want to set to heat mode.
-     * @param float $heating_set_point_celsius [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
-     * @param float $heating_set_point_fahrenheit [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @param float $heating_set_point_celsius [Heating set point](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @param float $heating_set_point_fahrenheit [Heating set point](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
      * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
@@ -268,13 +268,13 @@ class ThermostatsClient
     }
 
     /**
-     * Sets a specified [thermostat](https://docs.seam.co/capability-guides/thermostats) to [heat-cool ("auto") mode](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings).
+     * Sets a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats) to [heat-cool ("auto") mode](https://www.seam.co/docs/capability-guides/thermostats/configure-current-climate-settings).
      *
      * @param string $device_id ID of the thermostat device that you want to set to heat-cool mode.
-     * @param float $cooling_set_point_celsius [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
-     * @param float $cooling_set_point_fahrenheit [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
-     * @param float $heating_set_point_celsius [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
-     * @param float $heating_set_point_fahrenheit [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @param float $cooling_set_point_celsius [Cooling set point](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
+     * @param float $cooling_set_point_fahrenheit [Cooling set point](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
+     * @param float $heating_set_point_celsius [Heating set point](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @param float $heating_set_point_fahrenheit [Heating set point](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
      * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
@@ -327,7 +327,7 @@ class ThermostatsClient
     }
 
     /**
-     * Returns a list of all [thermostats](https://docs.seam.co/capability-guides/thermostats).
+     * Returns a list of all [thermostats](https://www.seam.co/docs/capability-guides/thermostats).
      *
      * @param string $connect_webview_id ID of the Connect Webview for which you want to list devices.
      * @param string $connected_account_id ID of the connected account for which you want to list devices.
@@ -379,7 +379,7 @@ class ThermostatsClient
     }
 
     /**
-     * Sets a specified [thermostat](https://docs.seam.co/capability-guides/thermostats) to ["off" mode](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings).
+     * Sets a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats) to ["off" mode](https://www.seam.co/docs/capability-guides/thermostats/configure-current-climate-settings).
      *
      * @param string $device_id ID of the thermostat device that you want to set to off mode.
      * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
@@ -410,7 +410,7 @@ class ThermostatsClient
     }
 
     /**
-     * Sets a specified [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) as the ["fallback"](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets/setting-the-fallback-climate-preset) preset for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     * Sets a specified [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) as the ["fallback"](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets/setting-the-fallback-climate-preset) preset for a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats).
      *
      * @param string $climate_preset_key Climate preset key of the climate preset that you want to set as the fallback climate preset.
      * @param string $device_id ID of the thermostat device for which you want to set the fallback climate preset.
@@ -433,11 +433,11 @@ class ThermostatsClient
     }
 
     /**
-     * Sets the [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     * Sets the [fan mode setting](https://www.seam.co/docs/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings) for a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats).
      *
      * @param string $device_id ID of the thermostat device for which you want to set the fan mode.
      * @param string $fan_mode Fan mode setting for the thermostat, such as `auto`, `on`, or `circulate`.
-     * @param string $fan_mode_setting [Fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings) that you want to set for the thermostat.
+     * @param string $fan_mode_setting [Fan mode setting](https://www.seam.co/docs/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings) that you want to set for the thermostat.
      * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
@@ -474,14 +474,14 @@ class ThermostatsClient
     }
 
     /**
-     * Sets the [HVAC mode](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     * Sets the [HVAC mode](https://www.seam.co/docs/capability-guides/thermostats/configure-current-climate-settings) for a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats).
      *
      * @param string $device_id ID of the thermostat device for which you want to set the HVAC mode.
      * @param string $hvac_mode_setting
-     * @param float $cooling_set_point_celsius [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
-     * @param float $cooling_set_point_fahrenheit [Cooling set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
-     * @param float $heating_set_point_celsius [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
-     * @param float $heating_set_point_fahrenheit [Heating set point](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @param float $cooling_set_point_celsius [Cooling set point](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
+     * @param float $cooling_set_point_fahrenheit [Cooling set point](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `cooling_set_point` parameters.
+     * @param float $heating_set_point_celsius [Heating set point](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °C that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
+     * @param float $heating_set_point_fahrenheit [Heating set point](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points) in °F that you want to set for the thermostat. You must set one of the `heating_set_point` parameters.
      * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
      */
@@ -540,7 +540,7 @@ class ThermostatsClient
     }
 
     /**
-     * Sets a [temperature threshold](https://docs.seam.co/capability-guides/thermostats/setting-and-monitoring-temperature-thresholds) for a specified thermostat. Seam emits a `thermostat.temperature_threshold_exceeded` event and adds a warning on a thermostat if it reports a temperature outside the threshold range.
+     * Sets a [temperature threshold](https://www.seam.co/docs/capability-guides/thermostats/setting-and-monitoring-temperature-thresholds) for a specified thermostat. Seam emits a `thermostat.temperature_threshold_exceeded` event and adds a warning on a thermostat if it reports a temperature outside the threshold range.
      *
      * @param string $device_id ID of the thermostat device for which you want to set a temperature threshold.
      * @param float|NullValue $lower_limit_celsius Lower temperature limit in in °C. Seam alerts you if the reported temperature is lower than this value. You can specify either `lower_limit` but not both.
@@ -584,20 +584,20 @@ class ThermostatsClient
     }
 
     /**
-     * Updates a specified [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets) for a specified [thermostat](https://docs.seam.co/capability-guides/thermostats).
+     * Updates a specified [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) for a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats).
      *
-     * @param string $climate_preset_key Unique key to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
+     * @param string $climate_preset_key Unique key to identify the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets).
      * @param string $device_id ID of the thermostat device for which you want to update a climate preset.
      * @param string $climate_preset_mode The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
-     * @param float $cooling_set_point_celsius Temperature to which the thermostat should cool (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
-     * @param float $cooling_set_point_fahrenheit Temperature to which the thermostat should cool (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param float $cooling_set_point_celsius Temperature to which the thermostat should cool (in °C). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param float $cooling_set_point_fahrenheit Temperature to which the thermostat should cool (in °F). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
      * @param mixed $ecobee_metadata Metadata specific to the Ecobee climate, if applicable.
-     * @param string $fan_mode_setting Desired [fan mode setting](https://docs.seam.co/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
-     * @param float $heating_set_point_celsius Temperature to which the thermostat should heat (in °C). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
-     * @param float $heating_set_point_fahrenheit Temperature to which the thermostat should heat (in °F). See also [Set Points](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
-     * @param string $hvac_mode_setting Desired [HVAC mode](https://docs.seam.co/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
-     * @param bool $manual_override_allowed Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-     * @param string|NullValue $name User-friendly name to identify the [climate preset](https://docs.seam.co/capability-guides/thermostats/creating-and-managing-climate-presets).
+     * @param string $fan_mode_setting Desired [fan mode setting](https://www.seam.co/docs/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
+     * @param float $heating_set_point_celsius Temperature to which the thermostat should heat (in °C). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param float $heating_set_point_fahrenheit Temperature to which the thermostat should heat (in °F). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
+     * @param string $hvac_mode_setting Desired [HVAC mode](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
+     * @param bool $manual_override_allowed Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
+     * @param string|NullValue $name User-friendly name to identify the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets).
      * @return void OK
      */
     public function update_climate_preset(

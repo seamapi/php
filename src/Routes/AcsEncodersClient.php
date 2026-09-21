@@ -29,7 +29,7 @@ class AcsEncodersClient
     }
 
     /**
-     * Encodes an existing [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) onto a plastic card placed on the specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners). Either provide an `acs_credential_id` or an `access_method_id`
+     * Encodes an existing [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) onto a plastic card placed on the specified [encoder](https://www.seam.co/docs/low-level-apis/access-systems/working-with-card-encoders-and-scanners). Either provide an `acs_credential_id` or an `access_method_id`
      *
      * @param string $acs_encoder_id ID of the `acs_encoder` to use to encode the `acs_credential`.
      * @param string $access_method_id ID of the `access_method` to encode onto a card.
@@ -74,7 +74,7 @@ class AcsEncodersClient
     }
 
     /**
-     * Returns a specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+     * Returns a specified [encoder](https://www.seam.co/docs/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
      *
      * @param string $acs_encoder_id ID of the encoder that you want to get.
      * @return AcsEncoder OK
@@ -97,7 +97,7 @@ class AcsEncodersClient
     }
 
     /**
-     * Returns a list of all [encoders](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+     * Returns a list of all [encoders](https://www.seam.co/docs/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
      *
      * @param list<string> $acs_encoder_ids IDs of the encoders that you want to retrieve.
      * @param string $acs_system_id ID of the access system for which you want to retrieve all encoders.
@@ -150,7 +150,7 @@ class AcsEncodersClient
     }
 
     /**
-     * Scans an encoded [acs_credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) from a plastic card placed on the specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
+     * Scans an encoded [acs_credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) from a plastic card placed on the specified [encoder](https://www.seam.co/docs/low-level-apis/access-systems/working-with-card-encoders-and-scanners).
      *
      * @param string $acs_encoder_id ID of the encoder to use for the scan.
      * @param mixed $salto_ks_metadata Salto KS-specific metadata for the scan action.
@@ -190,7 +190,7 @@ class AcsEncodersClient
     }
 
     /**
-     * Scans a physical card placed on the specified [encoder](https://docs.seam.co/low-level-apis/access-systems/working-with-card-encoders-and-scanners) and assigns the scanned credential to an ACS user. Provide either an `acs_user_id` or a `user_identity_id`.
+     * Scans a physical card placed on the specified [encoder](https://www.seam.co/docs/low-level-apis/access-systems/working-with-card-encoders-and-scanners) and assigns the scanned credential to an ACS user. Provide either an `acs_user_id` or a `user_identity_id`.
      *
      * @param string $acs_encoder_id ID of the `acs_encoder` to use to scan the credential.
      * @param string $acs_user_id ID of the `acs_user` to assign the scanned credential to.

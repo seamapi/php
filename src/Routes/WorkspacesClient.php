@@ -28,13 +28,13 @@ class WorkspacesClient
     }
 
     /**
-     * Creates a new [workspace](https://docs.seam.co/core-concepts/workspaces).
+     * Creates a new [workspace](https://www.seam.co/docs/core-concepts/workspaces).
      *
      * @param string $name Name of the new workspace.
      * @param string $company_name Company name for the new workspace.
      * @param string|NullValue $connect_partner_name Connect partner name for the new workspace.
-     * @param mixed $connect_webview_customization [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews) customizations for the new workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
-     * @param bool $is_sandbox Indicates whether the new workspace is a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     * @param mixed $connect_webview_customization [Connect Webview](https://www.seam.co/docs/core-concepts/connect-webviews) customizations for the new workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://www.seam.co/docs/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
+     * @param bool $is_sandbox Indicates whether the new workspace is a [sandbox workspace](https://www.seam.co/docs/core-concepts/workspaces#sandbox-workspaces).
      * @param string $organization_id ID of the organization to associate with the new workspace. If omitted, the new workspace is associated with the organization that you administer, if you administer exactly one. If you administer no organization, Seam creates one for you and associates the new workspace with it.
      * @param string $webview_logo_shape
      * @param string $webview_primary_button_color
@@ -105,7 +105,7 @@ class WorkspacesClient
     }
 
     /**
-     * Returns the [workspace](https://docs.seam.co/core-concepts/workspaces) associated with the authentication value.
+     * Returns the [workspace](https://www.seam.co/docs/core-concepts/workspaces) associated with the authentication value.
      *
      * @return Workspace OK
      */
@@ -119,7 +119,7 @@ class WorkspacesClient
     }
 
     /**
-     * Returns a list of [workspaces](https://docs.seam.co/core-concepts/workspaces) associated with the authentication value.
+     * Returns a list of [workspaces](https://www.seam.co/docs/core-concepts/workspaces) associated with the authentication value.
      *
      * @return array OK
      */
@@ -134,7 +134,7 @@ class WorkspacesClient
     }
 
     /**
-     * Resets the [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces) associated with the authentication value. Note that this endpoint is only available for sandbox workspaces.
+     * Resets the [sandbox workspace](https://www.seam.co/docs/core-concepts/workspaces#sandbox-workspaces) associated with the authentication value. Note that this endpoint is only available for sandbox workspaces.
      *
      * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
      * @return ActionAttempt OK
@@ -157,10 +157,10 @@ class WorkspacesClient
     }
 
     /**
-     * Updates the [workspace](https://docs.seam.co/core-concepts/workspaces) associated with the authentication value.
+     * Updates the [workspace](https://www.seam.co/docs/core-concepts/workspaces) associated with the authentication value.
      *
      * @param string $connect_partner_name Connect partner name for the workspace.
-     * @param mixed $connect_webview_customization [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews) customizations for the workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
+     * @param mixed $connect_webview_customization [Connect Webview](https://www.seam.co/docs/core-concepts/connect-webviews) customizations for the workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://www.seam.co/docs/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
      * @param bool $is_publishable_key_auth_enabled Indicates whether publishable key authentication is enabled for this workspace.
      * @param bool $is_suspended Indicates whether the workspace is suspended.
      * @param string $name Name of the workspace.

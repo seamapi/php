@@ -25,7 +25,7 @@ class AccessCodesSimulateClient
     }
 
     /**
-     * Simulates the creation of an [unmanaged access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) in a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
+     * Simulates the creation of an [unmanaged access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes) in a [sandbox workspace](https://www.seam.co/docs/core-concepts/workspaces#sandbox-workspaces).
      *
      * @param string $code Code of the simulated unmanaged access code.
      * @param string $device_id ID of the device for which you want to simulate the creation of an unmanaged access code.

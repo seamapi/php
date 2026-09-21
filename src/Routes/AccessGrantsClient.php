@@ -28,13 +28,13 @@ class AccessGrantsClient
     }
 
     /**
-     * Creates a new [Access Grant](https://docs.seam.co/use-cases/granting-access/access-grants). Access Grants are the default and recommended way to grant a user access to any physical space, irrespective of the locking hardware. They work with both standalone smart locks (using `device_ids`) and access control systems (using `acs_entrance_ids` or `space_ids`), and can issue PIN codes, key cards, and mobile keys through a single request.
+     * Creates a new [Access Grant](https://www.seam.co/docs/use-cases/granting-access). Access Grants are the default and recommended way to grant a user access to any physical space, irrespective of the locking hardware. They work with both standalone smart locks (using `device_ids`) and access control systems (using `acs_entrance_ids` or `space_ids`), and can issue PIN codes, key cards, and mobile keys through a single request.
      *
      * @param list<array<string, mixed>|\stdClass> $requested_access_methods
      * @param string $access_grant_key Unique key for the access grant within the workspace.
-     * @param list<string> $acs_entrance_ids Set of IDs of the [entrances](https://docs.seam.co/api/acs/systems/list) to which access is being granted.
+     * @param list<string> $acs_entrance_ids Set of IDs of the [entrances](https://www.seam.co/docs/api/acs/systems/list) to which access is being granted.
      * @param string $customization_profile_id ID of the customization profile to apply to the Access Grant and its access methods.
-     * @param list<string> $device_ids Set of IDs of the [devices](https://docs.seam.co/api/devices/list) to which access is being granted.
+     * @param list<string> $device_ids Set of IDs of the [devices](https://www.seam.co/docs/api/devices/list) to which access is being granted.
      * @param string|NullValue $ends_at Date and time at which the validity of the new grant ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
      * @param mixed $location
      * @param list<string> $location_ids

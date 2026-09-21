@@ -25,7 +25,7 @@ class EventsClient
     }
 
     /**
-     * Returns a specified event. This endpoint returns the same event that would be sent to a [webhook](https://docs.seam.co/developer-tools/webhooks), but it enables you to retrieve an event that already took place.
+     * Returns a specified event. This endpoint returns the same event that would be sent to a [webhook](https://www.seam.co/docs/developer-tools/webhooks), but it enables you to retrieve an event that already took place.
      *
      * @param string $event_id Unique identifier for the event that you want to get.
      * @param string $device_id Unique identifier for the device that triggered the event that you want to get.
@@ -64,7 +64,7 @@ class EventsClient
     }
 
     /**
-     * Returns a list of all events. This endpoint returns the same events that would be sent to a [webhook](https://docs.seam.co/developer-tools/webhooks), but it enables you to filter or see events that already took place.
+     * Returns a list of all events. This endpoint returns the same events that would be sent to a [webhook](https://www.seam.co/docs/developer-tools/webhooks), but it enables you to filter or see events that already took place.
      *
      * @param string $access_code_id ID of the access code for which you want to list events.
      * @param list<string> $access_code_ids IDs of the access codes for which you want to list events.

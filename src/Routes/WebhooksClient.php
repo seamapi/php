@@ -25,7 +25,7 @@ class WebhooksClient
     }
 
     /**
-     * Creates a new [webhook](https://docs.seam.co/developer-tools/webhooks).
+     * Creates a new [webhook](https://www.seam.co/docs/developer-tools/webhooks).
      *
      * @param string $url URL for the new webhook.
      * @param list<string> $event_types Types of events that you want the new webhook to receive.
@@ -52,7 +52,7 @@ class WebhooksClient
     }
 
     /**
-     * Deletes a specified [webhook](https://docs.seam.co/developer-tools/webhooks).
+     * Deletes a specified [webhook](https://www.seam.co/docs/developer-tools/webhooks).
      *
      * @param string $webhook_id ID of the webhook that you want to delete.
      * @return void OK
@@ -69,7 +69,7 @@ class WebhooksClient
     }
 
     /**
-     * Gets a specified [webhook](https://docs.seam.co/developer-tools/webhooks).
+     * Gets a specified [webhook](https://www.seam.co/docs/developer-tools/webhooks).
      *
      * @param string $webhook_id ID of the webhook that you want to get.
      * @return Webhook OK
@@ -90,7 +90,7 @@ class WebhooksClient
     }
 
     /**
-     * Returns a list of all [webhooks](https://docs.seam.co/developer-tools/webhooks).
+     * Returns a list of all [webhooks](https://www.seam.co/docs/developer-tools/webhooks).
      *
      * @return array OK
      */
@@ -105,7 +105,7 @@ class WebhooksClient
     }
 
     /**
-     * Updates a specified [webhook](https://docs.seam.co/developer-tools/webhooks).
+     * Updates a specified [webhook](https://www.seam.co/docs/developer-tools/webhooks).
      *
      * @param list<string> $event_types Types of events that you want the webhook to receive.
      * @param string $webhook_id ID of the webhook that you want to update.

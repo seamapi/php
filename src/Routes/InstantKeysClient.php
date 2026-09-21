@@ -25,7 +25,7 @@ class InstantKeysClient
     }
 
     /**
-     * Deletes a specified [Instant Key](https://docs.seam.co/capability-guides/instant-keys).
+     * Deletes a specified [Instant Key](https://www.seam.co/docs/use-cases/granting-access/using-instant-keys).
      *
      * @param string $instant_key_id ID of the Instant Key that you want to delete.
      * @return void OK
@@ -42,7 +42,7 @@ class InstantKeysClient
     }
 
     /**
-     * Gets an [instant key](https://docs.seam.co/capability-guides/instant-keys).
+     * Gets an [instant key](https://www.seam.co/docs/use-cases/granting-access/using-instant-keys).
      *
      * @param string $instant_key_id ID of the instant key to get.
      * @param string $instant_key_url URL of the instant key to get.
@@ -78,7 +78,7 @@ class InstantKeysClient
     }
 
     /**
-     * Returns a list of all [instant keys](https://docs.seam.co/capability-guides/instant-keys).
+     * Returns a list of all [instant keys](https://www.seam.co/docs/use-cases/granting-access/using-instant-keys).
      *
      * @param string $user_identity_id ID of the user identity by which you want to filter the list of Instant Keys.
      * @return array OK

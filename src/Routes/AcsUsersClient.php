@@ -27,7 +27,7 @@ class AcsUsersClient
     }
 
     /**
-     * Adds a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) to a specified [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     * Adds a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) to a specified [access group](https://www.seam.co/docs/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
      *
      * @param string $acs_access_group_id ID of the access group to which you want to add an access system user.
      * @param string $acs_user_id ID of the access system user that you want to add to an access group.
@@ -48,15 +48,15 @@ class AcsUsersClient
     }
 
     /**
-     * Creates a new [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * Creates a new [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
      *
      * @param string $acs_system_id ID of the access system to which you want to add the new access system user.
      * @param string $full_name Full name of the new access system user.
      * @param mixed $access_schedule `starts_at` and `ends_at` timestamps for the new access system user's access. If you specify an `access_schedule`, you may include both `starts_at` and `ends_at`. If you omit `starts_at`, it defaults to the current time. `ends_at` is optional and must be a time in the future and after `starts_at`.
      * @param list<string> $acs_access_group_ids Array of access group IDs to indicate the access groups to which you want to add the new access system user.
      * @param string $email
-     * @param string $email_address Email address of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
-     * @param string $phone_number Phone number of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
+     * @param string $email_address Email address of the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
+     * @param string $phone_number Phone number of the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
      * @param string $user_identity_id ID of the user identity with which you want to associate the new access system user.
      * @return AcsUser OK
      */
@@ -105,7 +105,7 @@ class AcsUsersClient
     }
 
     /**
-     * Deletes a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) and invalidates the access system user's [credentials](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Deletes a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) and invalidates the access system user's [credentials](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      *
      * @param string $acs_system_id ID of the access system that you want to delete. You must provide acs_system_id with user_identity_id.
      * @param string $acs_user_id ID of the access system user that you want to delete. You must provide either acs_user_id or user_identity_id
@@ -144,7 +144,7 @@ class AcsUsersClient
     }
 
     /**
-     * Returns a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * Returns a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
      *
      * @param string $acs_user_id ID of the access system user that you want to get. You can only provide acs_user_id or user_identity_id.
      * @param string $acs_system_id ID of the access system that you want to get. You can only provide acs_user_id or user_identity_id.
@@ -189,7 +189,7 @@ class AcsUsersClient
     }
 
     /**
-     * Returns a list of all [access system users](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * Returns a list of all [access system users](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
      *
      * @param string $acs_system_id ID of the `acs_system` for which you want to retrieve all access system users.
      * @param string $created_before Timestamp by which to limit returned access system users. Returns users created before this timestamp.
@@ -261,7 +261,7 @@ class AcsUsersClient
     }
 
     /**
-     * Lists the [entrances](https://docs.seam.co/api/acs/entrances) to which a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) has access.
+     * Lists the [entrances](https://www.seam.co/docs/api/acs/entrances/object) to which a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) has access.
      *
      * @param string $acs_system_id ID of the access system for which you want to list accessible entrances. You can only provide acs_system_id with user_identity_id.
      * @param string $acs_user_id ID of the access system user for whom you want to list accessible entrances. You can only provide acs_user_id or user_identity_id.
@@ -313,7 +313,7 @@ class AcsUsersClient
     }
 
     /**
-     * Removes a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) from a specified [access group](https://docs.seam.co/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
+     * Removes a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) from a specified [access group](https://www.seam.co/docs/low-level-apis/access-systems/user-management/assigning-users-to-access-groups).
      *
      * @param string $acs_access_group_id ID of the access group from which you want to remove an access system user.
      * @param string $acs_user_id ID of the access system user that you want to remove from an access group. You can only provide acs_user_id or user_identity_id.
@@ -343,7 +343,7 @@ class AcsUsersClient
     }
 
     /**
-     * Revokes access to all [entrances](https://docs.seam.co/api/acs/entrances) for a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * Revokes access to all [entrances](https://www.seam.co/docs/api/acs/entrances/object) for a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
      *
      * @param string $acs_system_id ID of the access system for which you want to revoke access. You can only provide acs_system_id with user_identity_id.
      * @param string $acs_user_id ID of the access system user for whom you want to revoke access. You can only provide acs_user_id or user_identity_id.
@@ -384,7 +384,7 @@ class AcsUsersClient
     }
 
     /**
-     * [Suspends](https://docs.seam.co/low-level-apis/access-systems/user-management/suspending-and-unsuspending-users#suspend-an-acs-user) a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management). Suspending an access system user revokes their access temporarily. To restore an access system user's access, you can [unsuspend](https://docs.seam.co/api/acs/users/unsuspend) them.
+     * [Suspends](https://www.seam.co/docs/low-level-apis/access-systems/user-management/suspending-and-unsuspending-users#suspend-an-acs-user) a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management). Suspending an access system user revokes their access temporarily. To restore an access system user's access, you can [unsuspend](https://www.seam.co/docs/api/acs/users/unsuspend) them.
      *
      * @param string $acs_system_id ID of the access system that you want to suspend. You can only provide acs_user_id or the combination of acs_system_id and user_identity_id.
      * @param string $acs_user_id ID of the access system user that you want to suspend. You can only provide acs_user_id or the combination of acs_system_id and user_identity_id.
@@ -423,7 +423,7 @@ class AcsUsersClient
     }
 
     /**
-     * [Unsuspends](https://docs.seam.co/low-level-apis/access-systems/user-management/suspending-and-unsuspending-users#unsuspend-an-acs-user) a specified suspended [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management). While [suspending an access system user](https://docs.seam.co/api/acs/users/suspend) revokes their access temporarily, unsuspending the access system user restores their access.
+     * [Unsuspends](https://www.seam.co/docs/low-level-apis/access-systems/user-management/suspending-and-unsuspending-users#unsuspend-an-acs-user) a specified suspended [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management). While [suspending an access system user](https://www.seam.co/docs/api/acs/users/suspend) revokes their access temporarily, unsuspending the access system user restores their access.
      *
      * @param string $acs_system_id ID of the access system of the user that you want to unsuspend. You can only provide acs_system_id with user_identity_id.
      * @param string $acs_user_id ID of the access system user that you want to unsuspend. You can only provide acs_user_id or the combination of acs_system_id and user_identity_id.
@@ -462,16 +462,16 @@ class AcsUsersClient
     }
 
     /**
-     * Updates the properties of a specified [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * Updates the properties of a specified [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
      *
      * @param mixed $access_schedule `starts_at` and `ends_at` timestamps for the access system user's access. If you specify an `access_schedule`, you may include both `starts_at` and `ends_at`. If you omit `starts_at`, it defaults to the current time. `ends_at` is optional and must be a time in the future and after `starts_at`.
      * @param string $acs_system_id ID of the access system that you want to update. You can only provide acs_system_id with user_identity_id.
      * @param string $acs_user_id ID of the access system user that you want to update. You can only provide acs_user_id or user_identity_id.
      * @param string $email
-     * @param string $email_address Email address of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
-     * @param string $full_name Full name of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management).
+     * @param string $email_address Email address of the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
+     * @param string $full_name Full name of the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
      * @param string $hid_acs_system_id ID of the HID access control system associated with the user.
-     * @param string $phone_number Phone number of the [access system user](https://docs.seam.co/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
+     * @param string $phone_number Phone number of the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
      * @param string $user_identity_id ID of the user identity that you want to update. You can only provide acs_user_id or user_identity_id. If you provide user_identity_id, you must also provide acs_system_id.
      * @return void OK
      */

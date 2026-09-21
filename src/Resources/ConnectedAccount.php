@@ -2,7 +2,7 @@
 
 namespace Seam\Resources {
     /**
-     * Represents a [connected account](https://docs.seam.co/core-concepts/connected-accounts). A connected account is an external third-party account to which your user has authorized Seam to get access, for example, an August account with a list of door locks.
+     * Represents a [connected account](https://www.seam.co/docs/core-concepts/connected-accounts). A connected account is an external third-party account to which your user has authorized Seam to get access, for example, an August account with a list of door locks.
      */
     class ConnectedAccount
     {
@@ -63,7 +63,7 @@ namespace Seam\Resources {
              */
             public string|null $account_type_display_name,
             /**
-             * Indicates whether Seam should [import all new devices](https://docs.seam.co/core-concepts/connect-webviews/customizing-connect-webviews#automatically_manage_new_devices) for the connected account to make these devices available for management by the Seam API.
+             * Indicates whether Seam should [import all new devices](https://www.seam.co/docs/core-concepts/connect-webviews/customizing-connect-webviews#automatically_manage_new_devices) for the connected account to make these devices available for management by the Seam API.
              */
             public bool|null $automatically_manage_new_devices,
             /**
@@ -71,7 +71,7 @@ namespace Seam\Resources {
              */
             public string|null $connected_account_id,
             /**
-             * Set of key:value pairs. Adding custom metadata to a resource, such as a [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews/attaching-custom-data-to-the-connect-webview), [connected account](https://docs.seam.co/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account), or [device](https://docs.seam.co/core-concepts/devices/adding-custom-metadata-to-a-device), enables you to store custom information, like customer details or internal IDs from your application. Keys set to `null` or to an empty string are omitted.
+             * Set of key:value pairs. Adding custom metadata to a resource, such as a [Connect Webview](https://www.seam.co/docs/core-concepts/connect-webviews/attaching-custom-data-to-the-connect-webview), [connected account](https://www.seam.co/docs/core-concepts/connected-accounts/adding-custom-metadata-to-a-connected-account), or [device](https://www.seam.co/docs/core-concepts/devices/adding-custom-metadata-to-a-device), enables you to store custom information, like customer details or internal IDs from your application. Keys set to `null` or to an empty string are omitted.
              *
              * @var array<string, string|bool>|\stdClass|null
              */
@@ -199,7 +199,7 @@ namespace Seam\Resources\ConnectedAccount {
              */
             public string|null $message,
             /**
-             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
+             * Indicates whether the error is related to [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge).
              */
             public bool|null $is_bridge_error = null,
             /**
@@ -368,7 +368,7 @@ namespace Seam\Resources\ConnectedAccount\Errors {
              */
             string|null $message,
             /**
-             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
+             * Indicates whether the error is related to [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge).
              */
             bool|null $is_bridge_error = null,
             /**
@@ -387,7 +387,7 @@ namespace Seam\Resources\ConnectedAccount\Errors {
     }
 
     /**
-     * Indicates that the Seam API cannot communicate with [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge), for example, if the Seam Bridge executable has stopped or if the computer running the Seam Bridge executable is offline. See also [Troubleshooting Your Access Control System](https://docs.seam.co/low-level-apis/access-systems/troubleshooting-your-access-control-system#acs_system-errors-seam_bridge_disconnected).
+     * Indicates that the Seam API cannot communicate with [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge), for example, if the Seam Bridge executable has stopped or if the computer running the Seam Bridge executable is offline. See also [Troubleshooting Your Access Control System](https://www.seam.co/docs/low-level-apis/access-systems/troubleshooting-your-access-control-system#acs_system-errors-seam_bridge_disconnected).
      */
     final class BridgeDisconnected extends
         \Seam\Resources\ConnectedAccount\Errors
@@ -423,7 +423,7 @@ namespace Seam\Resources\ConnectedAccount\Errors {
              */
             string|null $message,
             /**
-             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
+             * Indicates whether the error is related to [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge).
              */
             bool|null $is_bridge_error = null,
             /**
@@ -488,7 +488,7 @@ namespace Seam\Resources\ConnectedAccount\Errors {
              */
             public \Seam\Resources\ConnectedAccount\Errors\SaltoKsSubscriptionLimitExceeded\SaltoKsMetadata|null $salto_ks_metadata,
             /**
-             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
+             * Indicates whether the error is related to [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge).
              */
             bool|null $is_bridge_error = null,
             /**
@@ -544,7 +544,7 @@ namespace Seam\Resources\ConnectedAccount\Errors {
              */
             string|null $message,
             /**
-             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
+             * Indicates whether the error is related to [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge).
              */
             bool|null $is_bridge_error = null,
             /**

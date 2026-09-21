@@ -25,14 +25,14 @@ class NoiseSensorsNoiseThresholdsClient
     }
 
     /**
-     * Creates a new [noise threshold](https://docs.seam.co/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://docs.seam.co/capability-guides/noise-sensors). Thresholds represent the limits of noise tolerated at a property, which can be customized for each hour of the day. Each device has its own default thresholds, but you can use the Seam API to modify them.
+     * Creates a new [noise threshold](https://www.seam.co/docs/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://www.seam.co/docs/capability-guides/noise-sensors). Thresholds represent the limits of noise tolerated at a property, which can be customized for each hour of the day. Each device has its own default thresholds, but you can use the Seam API to modify them.
      *
      * @param string $device_id ID of the device for which you want to create a noise threshold.
      * @param string $ends_daily_at Time at which the new noise threshold should become inactive daily.
      * @param string $starts_daily_at Time at which the new noise threshold should become active daily.
      * @param string $name Name of the new noise threshold.
      * @param float $noise_threshold_decibels Noise level in decibels for the new noise threshold.
-     * @param float $noise_threshold_nrs Noise level in Noiseaware Noise Risk Score (NRS) for the new noise threshold. This parameter is only relevant for [Noiseaware sensors](https://docs.seam.co/device-and-system-integration-guides/noiseaware-sensors).
+     * @param float $noise_threshold_nrs Noise level in Noiseaware Noise Risk Score (NRS) for the new noise threshold. This parameter is only relevant for [Noiseaware sensors](https://www.seam.co/docs/device-and-system-integration-guides/noiseaware-sensors).
      * @return NoiseThreshold OK
      */
     public function create(
@@ -78,7 +78,7 @@ class NoiseSensorsNoiseThresholdsClient
     }
 
     /**
-     * Deletes a [noise threshold](https://docs.seam.co/capability-guides/noise-sensors/configure-noise-threshold-settings) from a [noise sensor](https://docs.seam.co/capability-guides/noise-sensors).
+     * Deletes a [noise threshold](https://www.seam.co/docs/capability-guides/noise-sensors/configure-noise-threshold-settings) from a [noise sensor](https://www.seam.co/docs/capability-guides/noise-sensors).
      *
      * @param string $device_id ID of the device that contains the noise threshold that you want to delete.
      * @param string $noise_threshold_id ID of the noise threshold that you want to delete.
@@ -99,7 +99,7 @@ class NoiseSensorsNoiseThresholdsClient
     }
 
     /**
-     * Returns a specified [noise threshold](https://docs.seam.co/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://docs.seam.co/capability-guides/noise-sensors).
+     * Returns a specified [noise threshold](https://www.seam.co/docs/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://www.seam.co/docs/capability-guides/noise-sensors).
      *
      * @param string $noise_threshold_id ID of the noise threshold that you want to get.
      * @return NoiseThreshold OK
@@ -128,7 +128,7 @@ class NoiseSensorsNoiseThresholdsClient
     }
 
     /**
-     * Returns a list of all [noise thresholds](https://docs.seam.co/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://docs.seam.co/capability-guides/noise-sensors).
+     * Returns a list of all [noise thresholds](https://www.seam.co/docs/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://www.seam.co/docs/capability-guides/noise-sensors).
      *
      * @param string $device_id ID of the device for which you want to list noise thresholds.
      * @return array OK
@@ -158,14 +158,14 @@ class NoiseSensorsNoiseThresholdsClient
     }
 
     /**
-     * Updates a [noise threshold](https://docs.seam.co/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://docs.seam.co/capability-guides/noise-sensors).
+     * Updates a [noise threshold](https://www.seam.co/docs/capability-guides/noise-sensors/configure-noise-threshold-settings) for a [noise sensor](https://www.seam.co/docs/capability-guides/noise-sensors).
      *
      * @param string $device_id ID of the device that contains the noise threshold that you want to update.
      * @param string $noise_threshold_id ID of the noise threshold that you want to update.
      * @param string $ends_daily_at Time at which the noise threshold should become inactive daily.
      * @param string $name Name of the noise threshold that you want to update.
      * @param float $noise_threshold_decibels Noise level in decibels for the noise threshold.
-     * @param float $noise_threshold_nrs Noise level in Noiseaware Noise Risk Score (NRS) for the noise threshold. This parameter is only relevant for [Noiseaware sensors](https://docs.seam.co/device-and-system-integration-guides/noiseaware-sensors).
+     * @param float $noise_threshold_nrs Noise level in Noiseaware Noise Risk Score (NRS) for the noise threshold. This parameter is only relevant for [Noiseaware sensors](https://www.seam.co/docs/device-and-system-integration-guides/noiseaware-sensors).
      * @param string $starts_daily_at Time at which the noise threshold should become active daily.
      * @return void OK
      */

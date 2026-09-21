@@ -2,7 +2,7 @@
 
 namespace Seam\Resources {
     /**
-     * Represents an [unmanaged smart lock access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
+     * Represents an [unmanaged smart lock access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/migrating-existing-access-codes).
      *
      * An access code is a code used for a keypad or pinpad device. Unlike physical keys, which can easily be lost or duplicated, PIN codes can be customized, tracked, and altered on the fly.
      *
@@ -12,7 +12,7 @@ namespace Seam\Resources {
      *
      * Not all providers support unmanaged access codes. The following providers do not support unmanaged access codes:
      *
-     * - [Kwikset](https://docs.seam.co/device-and-system-integration-guides/kwikset-locks)
+     * - [Kwikset](https://www.seam.co/docs/device-and-system-integration-guides/kwikset-locks)
      */
     class UnmanagedAccessCode
     {
@@ -85,7 +85,7 @@ namespace Seam\Resources {
              */
             public string|null $display_status,
             /**
-             * Errors associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+             * Errors associated with the [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes).
              *
              * @var list<\Seam\Resources\UnmanagedAccessCode\Errors>
              */
@@ -112,7 +112,7 @@ namespace Seam\Resources {
              */
             public string|null $type,
             /**
-             * Warnings associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes).
+             * Warnings associated with the [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes).
              *
              * @var list<\Seam\Resources\UnmanagedAccessCode\Warnings>
              */
@@ -206,7 +206,7 @@ namespace Seam\Resources\UnmanagedAccessCode {
     }
 
     /**
-     * Errors associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
+     * Errors associated with the [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class Errors
     {
@@ -262,8 +262,8 @@ namespace Seam\Resources\UnmanagedAccessCode {
                     => \Seam\Resources\UnmanagedAccessCode\Errors\FailedToUpdate::from_json(
                     $json,
                 ),
-                \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::FAILED_TO_EXPIRE
-                    => \Seam\Resources\UnmanagedAccessCode\Errors\FailedToExpire::from_json(
+                \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::FAILED_TO_REMOVE
+                    => \Seam\Resources\UnmanagedAccessCode\Errors\FailedToRemove::from_json(
                     $json,
                 ),
                 \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::ACCOUNT_DISCONNECTED
@@ -344,7 +344,7 @@ namespace Seam\Resources\UnmanagedAccessCode {
     }
 
     /**
-     * Warnings associated with the [access code](https://docs.seam.co/low-level-apis/smart-locks/access-codes). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
+     * Warnings associated with the [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes). Known warning_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class Warnings
     {
@@ -916,10 +916,10 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
     /**
      * This access code is still active on the device even though its `ends_at` has passed, so the recipient may still be able to unlock the device after their access window ended. Seam is attempting to remove it, and this error clears automatically once the access code is no longer active.
      */
-    final class FailedToExpire extends
+    final class FailedToRemove extends
         \Seam\Resources\UnmanagedAccessCode\Errors
     {
-        public static function from_json(mixed $json): FailedToExpire|null
+        public static function from_json(mixed $json): FailedToRemove|null
         {
             if (!$json) {
                 return null;
@@ -989,7 +989,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
              */
             string|null $error_code,
             /**
-             * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
+             * Indicates that the error is a [connected account](https://www.seam.co/docs/api/connected_accounts/object) error.
              */
             public true|null $is_connected_account_error,
             /**
@@ -1039,7 +1039,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
              */
             string|null $error_code,
             /**
-             * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
+             * Indicates that the error is a [connected account](https://www.seam.co/docs/api/connected_accounts/object) error.
              */
             public true|null $is_connected_account_error,
             /**
@@ -1089,7 +1089,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
              */
             string|null $error_code,
             /**
-             * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
+             * Indicates that the error is a [connected account](https://www.seam.co/docs/api/connected_accounts/object) error.
              */
             public true|null $is_connected_account_error,
             /**
@@ -1139,7 +1139,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
              */
             string|null $error_code,
             /**
-             * Indicates that the error is a [connected account](https://docs.seam.co/api/connected_accounts) error.
+             * Indicates that the error is a [connected account](https://www.seam.co/docs/api/connected_accounts/object) error.
              */
             public true|null $is_connected_account_error,
             /**
@@ -1326,7 +1326,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
     }
 
     /**
-     * Indicates that the [backup access code pool](https://docs.seam.co/low-level-apis/smart-locks/access-codes/backup-access-codes) is empty.
+     * Indicates that the [backup access code pool](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/backup-access-codes) is empty.
      */
     final class EmptyBackupAccessCodePool extends
         \Seam\Resources\UnmanagedAccessCode\Errors
@@ -1544,7 +1544,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
     }
 
     /**
-     * Indicates that the Seam API cannot communicate with [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge), for example, if the Seam Bridge executable has stopped or if the computer running the Seam Bridge executable is offline. See also [Troubleshooting Your Access Control System](https://docs.seam.co/low-level-apis/access-systems/troubleshooting-your-access-control-system#acs_system-errors-seam_bridge_disconnected).
+     * Indicates that the Seam API cannot communicate with [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge), for example, if the Seam Bridge executable has stopped or if the computer running the Seam Bridge executable is offline. See also [Troubleshooting Your Access Control System](https://www.seam.co/docs/low-level-apis/access-systems/troubleshooting-your-access-control-system#acs_system-errors-seam_bridge_disconnected).
      */
     final class BridgeDisconnected extends
         \Seam\Resources\UnmanagedAccessCode\Errors
@@ -1580,7 +1580,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
              */
             string|null $message,
             /**
-             * Indicates whether the error is related to [Seam Bridge](https://docs.seam.co/capability-guides/seam-bridge).
+             * Indicates whether the error is related to [Seam Bridge](https://www.seam.co/docs/capability-guides/seam-bridge).
              */
             public bool|null $is_bridge_error = null,
             /**
@@ -1604,7 +1604,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
         case CODE_CONSTRAINTS_VIOLATED = "code_constraints_violated";
         case FAILED_TO_ISSUE = "failed_to_issue";
         case FAILED_TO_UPDATE = "failed_to_update";
-        case FAILED_TO_EXPIRE = "failed_to_expire";
+        case FAILED_TO_REMOVE = "failed_to_remove";
         case ACCOUNT_DISCONNECTED = "account_disconnected";
         case SALTO_KS_SUBSCRIPTION_LIMIT_EXCEEDED = "salto_ks_subscription_limit_exceeded";
         case INSUFFICIENT_PERMISSIONS = "insufficient_permissions";

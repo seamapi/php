@@ -2078,15 +2078,15 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result {
 
         public function __construct(
             /**
-             * A number or string that physically identifies the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * A number or string that physically identifies the card associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $card_number,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was created.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) was created.
              */
             public string|null $created_at,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) will stop being usable.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) will stop being usable.
              */
             public string|null $ends_at,
             /**
@@ -2094,11 +2094,11 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result {
              */
             public bool|null $is_issued,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) becomes usable.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) becomes usable.
              */
             public string|null $starts_at,
             /**
-             * Visionline-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Visionline-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public \Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredentialOnEncoder\VisionlineMetadata|null $visionline_metadata = null,
         ) {}
@@ -2182,46 +2182,46 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result {
 
         public function __construct(
             /**
-             * Access method for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials). Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
+             * Access method for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials). Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
              *
              * @var value-of<\Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredentialOnSeam\AccessMethod>|string|null
              */
             public string|null $access_method,
             /**
-             * ID of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * ID of the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $acs_credential_id,
             /**
-             * ID of the [access control system](https://docs.seam.co/low-level-apis/access-systems) that contains the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * ID of the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) that contains the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $acs_system_id,
             /**
-             * ID of the [connected account](https://docs.seam.co/core-concepts/connected-accounts) to which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
+             * ID of the [connected account](https://www.seam.co/docs/core-concepts/connected-accounts) to which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) belongs.
              */
             public string|null $connected_account_id,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was created.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) was created.
              */
             public string|null $created_at,
             /**
-             * Display name that corresponds to the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type.
+             * Display name that corresponds to the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) type.
              */
             public string|null $display_name,
             /**
-             * Errors associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Errors associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              *
              * @var list<\Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredentialOnSeam\Errors>
              */
             public array $errors,
             public bool|null $is_managed,
             /**
-             * Warnings associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Warnings associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              *
              * @var list<\Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredentialOnSeam\Warnings>
              */
             public array $warnings,
             /**
-             * ID of the workspace that contains the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * ID of the workspace that contains the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $workspace_id,
             /**
@@ -2229,77 +2229,77 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result {
              */
             public string|null $acs_credential_pool_id = null,
             /**
-             * ID of the [ACS user](https://docs.seam.co/low-level-apis/access-systems/user-management) to whom the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
+             * ID of the [ACS user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) to whom the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) belongs.
              */
             public string|null $acs_user_id = null,
             /**
-             * Akiles-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Akiles-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public \Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredentialOnSeam\AkilesMetadata|null $akiles_metadata = null,
             /**
-             * Vostio-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Vostio-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public \Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredentialOnSeam\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata = null,
             /**
-             * Number of the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Number of the card associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $card_number = null,
             /**
-             * Access (PIN) code for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Access (PIN) code for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $code = null,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) validity ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) validity ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
              */
             public string|null $ends_at = null,
             /**
-             * Brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type. Supported values: `pti_card`, `brivo_credential`, `hid_credential`, `visionline_card`.
+             * Brand-specific terminology for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) type. Supported values: `pti_card`, `brivo_credential`, `hid_credential`, `visionline_card`.
              *
              * @var value-of<\Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredentialOnSeam\ExternalType>|string|null
              */
             public string|null $external_type = null,
             /**
-             * Display name that corresponds to the brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type.
+             * Display name that corresponds to the brand-specific terminology for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) type.
              */
             public string|null $external_type_display_name = null,
             /**
-             * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) has been encoded onto a card.
+             * Indicates whether the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) has been encoded onto a card.
              */
             public bool|null $is_issued = null,
             /**
-             * Indicates whether the latest state of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) has been synced from Seam to the provider.
+             * Indicates whether the latest state of the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) has been synced from Seam to the provider.
              */
             public bool|null $is_latest_desired_state_synced_with_provider = null,
             /**
-             * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is a [multi-phone sync credential](https://docs.seam.co/capability-guides/mobile-access/issuing-mobile-credentials-from-an-access-control-system#what-are-multi-phone-sync-credentials).
+             * Indicates whether the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) is a [multi-phone sync credential](https://www.seam.co/docs/capability-guides/mobile-access/issuing-mobile-credentials-from-an-access-control-system#what-are-multi-phone-sync-credentials).
              */
             public bool|null $is_multi_phone_sync_credential = null,
             /**
-             * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) can only be used once. If `true`, the code becomes invalid after the first use.
+             * Indicates whether the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) can only be used once. If `true`, the code becomes invalid after the first use.
              */
             public bool|null $is_one_time_use = null,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was encoded onto a card.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) was encoded onto a card.
              */
             public string|null $issued_at = null,
             /**
-             * Date and time at which the state of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was most recently synced from Seam to the provider.
+             * Date and time at which the state of the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) was most recently synced from Seam to the provider.
              */
             public string|null $latest_desired_state_synced_with_provider_at = null,
             /**
-             * ID of the parent [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * ID of the parent [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $parent_acs_credential_id = null,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) validity starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) validity starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
              */
             public string|null $starts_at = null,
             /**
-             * ID of the [user identity](https://docs.seam.co/api/user_identities) to whom the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
+             * ID of the [user identity](https://www.seam.co/docs/api/user_identities/object) to whom the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) belongs.
              */
             public string|null $user_identity_id = null,
             /**
-             * Visionline-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Visionline-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public \Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredentialOnSeam\VisionlineMetadata|null $visionline_metadata = null,
         ) {}
@@ -2338,7 +2338,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result {
 
 namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredentialOnEncoder {
     /**
-     * Visionline-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Visionline-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class VisionlineMetadata
     {
@@ -2365,57 +2365,57 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredenti
 
         public function __construct(
             /**
-             * Indicates whether the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is cancelled.
+             * Indicates whether the card associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) is cancelled.
              */
             public bool|null $cancelled = null,
             /**
-             * Format of the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Format of the card associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              *
              * @var value-of<\Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredentialOnEncoder\VisionlineMetadata\CardFormat>|string|null
              */
             public string|null $card_format = null,
             /**
-             * Holder of the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Holder of the card associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $card_holder = null,
             /**
-             * Card ID for the Visionline card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Card ID for the Visionline card associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $card_id = null,
             /**
-             * IDs of the common [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * IDs of the common [entrances](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details) for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              *
              * @var list<string>|null
              */
             public array|null $common_acs_entrance_ids = null,
             /**
-             * Indicates whether the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is discarded.
+             * Indicates whether the card associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) is discarded.
              */
             public bool|null $discarded = null,
             /**
-             * Indicates whether the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is expired.
+             * Indicates whether the card associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) is expired.
              */
             public bool|null $expired = null,
             /**
-             * IDs of the guest [entrances](https://docs.seam.co/low-level-apis/access-systems/retrieving-entrance-details) for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * IDs of the guest [entrances](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details) for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              *
              * @var list<string>|null
              */
             public array|null $guest_acs_entrance_ids = null,
             /**
-             * Number of issued cards associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Number of issued cards associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public float|null $number_of_issued_cards = null,
             /**
-             * Indicates whether the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is overridden.
+             * Indicates whether the card associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) is overridden.
              */
             public bool|null $overridden = null,
             /**
-             * Indicates whether the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is overwritten.
+             * Indicates whether the card associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) is overwritten.
              */
             public bool|null $overwritten = null,
             /**
-             * Indicates whether the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is pending auto-update.
+             * Indicates whether the card associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) is pending auto-update.
              */
             public bool|null $pending_auto_update = null,
         ) {}
@@ -2432,7 +2432,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredenti
 
 namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredentialOnSeam {
     /**
-     * Akiles-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Akiles-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class AkilesMetadata
     {
@@ -2453,7 +2453,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredenti
     }
 
     /**
-     * Vostio-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Vostio-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class AssaAbloyVostioMetadata
     {
@@ -2507,7 +2507,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredenti
     }
 
     /**
-     * Errors associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Errors associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class Errors
     {
@@ -2534,7 +2534,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredenti
     }
 
     /**
-     * Visionline-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Visionline-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class VisionlineMetadata
     {
@@ -2601,7 +2601,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredenti
     }
 
     /**
-     * Warnings associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Warnings associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class Warnings
     {
@@ -2975,46 +2975,46 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential\Success {
 
         public function __construct(
             /**
-             * Access method for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials). Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
+             * Access method for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials). Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
              *
              * @var value-of<\Seam\Resources\ActionAttempt\EncodeCredential\Success\Result\AccessMethod>|string|null
              */
             public string|null $access_method,
             /**
-             * ID of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * ID of the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $acs_credential_id,
             /**
-             * ID of the [access control system](https://docs.seam.co/low-level-apis/access-systems) that contains the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * ID of the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) that contains the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $acs_system_id,
             /**
-             * ID of the [connected account](https://docs.seam.co/core-concepts/connected-accounts) to which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
+             * ID of the [connected account](https://www.seam.co/docs/core-concepts/connected-accounts) to which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) belongs.
              */
             public string|null $connected_account_id,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was created.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) was created.
              */
             public string|null $created_at,
             /**
-             * Display name that corresponds to the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type.
+             * Display name that corresponds to the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) type.
              */
             public string|null $display_name,
             /**
-             * Errors associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Errors associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              *
              * @var list<\Seam\Resources\ActionAttempt\EncodeCredential\Success\Result\Errors>
              */
             public array $errors,
             public bool|null $is_managed,
             /**
-             * Warnings associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Warnings associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              *
              * @var list<\Seam\Resources\ActionAttempt\EncodeCredential\Success\Result\Warnings>
              */
             public array $warnings,
             /**
-             * ID of the workspace that contains the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * ID of the workspace that contains the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $workspace_id,
             /**
@@ -3022,77 +3022,77 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential\Success {
              */
             public string|null $acs_credential_pool_id = null,
             /**
-             * ID of the [ACS user](https://docs.seam.co/low-level-apis/access-systems/user-management) to whom the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
+             * ID of the [ACS user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) to whom the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) belongs.
              */
             public string|null $acs_user_id = null,
             /**
-             * Akiles-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Akiles-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public \Seam\Resources\ActionAttempt\EncodeCredential\Success\Result\AkilesMetadata|null $akiles_metadata = null,
             /**
-             * Vostio-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Vostio-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public \Seam\Resources\ActionAttempt\EncodeCredential\Success\Result\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata = null,
             /**
-             * Number of the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Number of the card associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $card_number = null,
             /**
-             * Access (PIN) code for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Access (PIN) code for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $code = null,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) validity ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) validity ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
              */
             public string|null $ends_at = null,
             /**
-             * Brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type. Supported values: `pti_card`, `brivo_credential`, `hid_credential`, `visionline_card`.
+             * Brand-specific terminology for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) type. Supported values: `pti_card`, `brivo_credential`, `hid_credential`, `visionline_card`.
              *
              * @var value-of<\Seam\Resources\ActionAttempt\EncodeCredential\Success\Result\ExternalType>|string|null
              */
             public string|null $external_type = null,
             /**
-             * Display name that corresponds to the brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type.
+             * Display name that corresponds to the brand-specific terminology for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) type.
              */
             public string|null $external_type_display_name = null,
             /**
-             * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) has been encoded onto a card.
+             * Indicates whether the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) has been encoded onto a card.
              */
             public bool|null $is_issued = null,
             /**
-             * Indicates whether the latest state of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) has been synced from Seam to the provider.
+             * Indicates whether the latest state of the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) has been synced from Seam to the provider.
              */
             public bool|null $is_latest_desired_state_synced_with_provider = null,
             /**
-             * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is a [multi-phone sync credential](https://docs.seam.co/capability-guides/mobile-access/issuing-mobile-credentials-from-an-access-control-system#what-are-multi-phone-sync-credentials).
+             * Indicates whether the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) is a [multi-phone sync credential](https://www.seam.co/docs/capability-guides/mobile-access/issuing-mobile-credentials-from-an-access-control-system#what-are-multi-phone-sync-credentials).
              */
             public bool|null $is_multi_phone_sync_credential = null,
             /**
-             * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) can only be used once. If `true`, the code becomes invalid after the first use.
+             * Indicates whether the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) can only be used once. If `true`, the code becomes invalid after the first use.
              */
             public bool|null $is_one_time_use = null,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was encoded onto a card.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) was encoded onto a card.
              */
             public string|null $issued_at = null,
             /**
-             * Date and time at which the state of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was most recently synced from Seam to the provider.
+             * Date and time at which the state of the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) was most recently synced from Seam to the provider.
              */
             public string|null $latest_desired_state_synced_with_provider_at = null,
             /**
-             * ID of the parent [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * ID of the parent [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $parent_acs_credential_id = null,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) validity starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) validity starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
              */
             public string|null $starts_at = null,
             /**
-             * ID of the [user identity](https://docs.seam.co/api/user_identities) to whom the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
+             * ID of the [user identity](https://www.seam.co/docs/api/user_identities/object) to whom the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) belongs.
              */
             public string|null $user_identity_id = null,
             /**
-             * Visionline-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Visionline-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public \Seam\Resources\ActionAttempt\EncodeCredential\Success\Result\VisionlineMetadata|null $visionline_metadata = null,
         ) {}
@@ -3101,7 +3101,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential\Success {
 
 namespace Seam\Resources\ActionAttempt\EncodeCredential\Success\Result {
     /**
-     * Akiles-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Akiles-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class AkilesMetadata
     {
@@ -3122,7 +3122,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential\Success\Result {
     }
 
     /**
-     * Vostio-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Vostio-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class AssaAbloyVostioMetadata
     {
@@ -3176,7 +3176,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential\Success\Result {
     }
 
     /**
-     * Errors associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Errors associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class Errors
     {
@@ -3203,7 +3203,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential\Success\Result {
     }
 
     /**
-     * Visionline-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Visionline-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class VisionlineMetadata
     {
@@ -3270,7 +3270,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential\Success\Result {
     }
 
     /**
-     * Warnings associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Warnings associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class Warnings
     {
@@ -3643,33 +3643,33 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Success {
 
         public function __construct(
             /**
-             * Access method for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials). Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
+             * Access method for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials). Supported values: `code`, `card`, `mobile_key`, `cloud_key`.
              *
              * @var value-of<\Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result\AccessMethod>|string|null
              */
             public string|null $access_method,
             /**
-             * ID of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * ID of the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $acs_credential_id,
             /**
-             * ID of the [access control system](https://docs.seam.co/low-level-apis/access-systems) that contains the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * ID of the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) that contains the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $acs_system_id,
             /**
-             * ID of the [connected account](https://docs.seam.co/core-concepts/connected-accounts) to which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
+             * ID of the [connected account](https://www.seam.co/docs/core-concepts/connected-accounts) to which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) belongs.
              */
             public string|null $connected_account_id,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was created.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) was created.
              */
             public string|null $created_at,
             /**
-             * Display name that corresponds to the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type.
+             * Display name that corresponds to the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) type.
              */
             public string|null $display_name,
             /**
-             * Errors associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Errors associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              *
              * @var list<\Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result\Errors>
              */
@@ -3679,13 +3679,13 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Success {
              */
             public true|null $is_managed,
             /**
-             * Warnings associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Warnings associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              *
              * @var list<\Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result\Warnings>
              */
             public array $warnings,
             /**
-             * ID of the workspace that contains the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * ID of the workspace that contains the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $workspace_id,
             /**
@@ -3693,77 +3693,77 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Success {
              */
             public string|null $acs_credential_pool_id = null,
             /**
-             * ID of the [ACS user](https://docs.seam.co/low-level-apis/access-systems/user-management) to whom the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
+             * ID of the [ACS user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) to whom the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) belongs.
              */
             public string|null $acs_user_id = null,
             /**
-             * Akiles-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Akiles-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public \Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result\AkilesMetadata|null $akiles_metadata = null,
             /**
-             * Vostio-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Vostio-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public \Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result\AssaAbloyVostioMetadata|null $assa_abloy_vostio_metadata = null,
             /**
-             * Number of the card associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Number of the card associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $card_number = null,
             /**
-             * Access (PIN) code for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Access (PIN) code for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $code = null,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) validity ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) validity ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
              */
             public string|null $ends_at = null,
             /**
-             * Brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type. Supported values: `pti_card`, `brivo_credential`, `hid_credential`, `visionline_card`.
+             * Brand-specific terminology for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) type. Supported values: `pti_card`, `brivo_credential`, `hid_credential`, `visionline_card`.
              *
              * @var value-of<\Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result\ExternalType>|string|null
              */
             public string|null $external_type = null,
             /**
-             * Display name that corresponds to the brand-specific terminology for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) type.
+             * Display name that corresponds to the brand-specific terminology for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) type.
              */
             public string|null $external_type_display_name = null,
             /**
-             * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) has been encoded onto a card.
+             * Indicates whether the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) has been encoded onto a card.
              */
             public bool|null $is_issued = null,
             /**
-             * Indicates whether the latest state of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) has been synced from Seam to the provider.
+             * Indicates whether the latest state of the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) has been synced from Seam to the provider.
              */
             public bool|null $is_latest_desired_state_synced_with_provider = null,
             /**
-             * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) is a [multi-phone sync credential](https://docs.seam.co/capability-guides/mobile-access/issuing-mobile-credentials-from-an-access-control-system#what-are-multi-phone-sync-credentials).
+             * Indicates whether the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) is a [multi-phone sync credential](https://www.seam.co/docs/capability-guides/mobile-access/issuing-mobile-credentials-from-an-access-control-system#what-are-multi-phone-sync-credentials).
              */
             public bool|null $is_multi_phone_sync_credential = null,
             /**
-             * Indicates whether the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) can only be used once. If `true`, the code becomes invalid after the first use.
+             * Indicates whether the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) can only be used once. If `true`, the code becomes invalid after the first use.
              */
             public bool|null $is_one_time_use = null,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was encoded onto a card.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) was encoded onto a card.
              */
             public string|null $issued_at = null,
             /**
-             * Date and time at which the state of the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) was most recently synced from Seam to the provider.
+             * Date and time at which the state of the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) was most recently synced from Seam to the provider.
              */
             public string|null $latest_desired_state_synced_with_provider_at = null,
             /**
-             * ID of the parent [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * ID of the parent [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public string|null $parent_acs_credential_id = null,
             /**
-             * Date and time at which the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) validity starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+             * Date and time at which the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) validity starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
              */
             public string|null $starts_at = null,
             /**
-             * ID of the [user identity](https://docs.seam.co/api/user_identities) to whom the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials) belongs.
+             * ID of the [user identity](https://www.seam.co/docs/api/user_identities/object) to whom the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials) belongs.
              */
             public string|null $user_identity_id = null,
             /**
-             * Visionline-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+             * Visionline-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
              */
             public \Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result\VisionlineMetadata|null $visionline_metadata = null,
         ) {}
@@ -3772,7 +3772,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Success {
 
 namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result {
     /**
-     * Akiles-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Akiles-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class AkilesMetadata
     {
@@ -3793,7 +3793,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result {
     }
 
     /**
-     * Vostio-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Vostio-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class AssaAbloyVostioMetadata
     {
@@ -3847,7 +3847,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result {
     }
 
     /**
-     * Errors associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Errors associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class Errors
     {
@@ -3874,7 +3874,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result {
     }
 
     /**
-     * Visionline-specific metadata for the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Visionline-specific metadata for the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class VisionlineMetadata
     {
@@ -3941,7 +3941,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result {
     }
 
     /**
-     * Warnings associated with the [credential](https://docs.seam.co/low-level-apis/access-systems/managing-credentials).
+     * Warnings associated with the [credential](https://www.seam.co/docs/low-level-apis/access-systems/managing-credentials).
      */
     class Warnings
     {
@@ -4299,7 +4299,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success {
              */
             public string|null $display_status,
             /**
-             * Errors associated with the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant).
+             * Errors associated with the [access method](https://www.seam.co/docs/use-cases/granting-access/creating-an-access-grant).
              *
              * @var list<\Seam\Resources\ActionAttempt\AssignCredential\Success\Result\Errors>
              */
@@ -4319,13 +4319,13 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success {
              */
             public string|null $mode,
             /**
-             * Pending mutations for the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant). Indicates operations that are in progress.
+             * Pending mutations for the [access method](https://www.seam.co/docs/use-cases/granting-access/creating-an-access-grant). Indicates operations that are in progress.
              *
              * @var list<\Seam\Resources\ActionAttempt\AssignCredential\Success\Result\PendingMutations>
              */
             public array $pending_mutations,
             /**
-             * Warnings associated with the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant).
+             * Warnings associated with the [access method](https://www.seam.co/docs/use-cases/granting-access/creating-an-access-grant).
              *
              * @var list<\Seam\Resources\ActionAttempt\AssignCredential\Success\Result\Warnings>
              */
@@ -4372,7 +4372,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success {
 
 namespace Seam\Resources\ActionAttempt\AssignCredential\Success\Result {
     /**
-     * Errors associated with the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant).
+     * Errors associated with the [access method](https://www.seam.co/docs/use-cases/granting-access/creating-an-access-grant).
      */
     class Errors
     {
@@ -4407,7 +4407,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success\Result {
     }
 
     /**
-     * Pending mutations for the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant). Indicates operations that are in progress.
+     * Pending mutations for the [access method](https://www.seam.co/docs/use-cases/granting-access/creating-an-access-grant). Indicates operations that are in progress.
      */
     class PendingMutations
     {
@@ -4460,7 +4460,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success\Result {
     }
 
     /**
-     * Warnings associated with the [access method](https://docs.seam.co/use-cases/granting-access/creating-an-access-grant).
+     * Warnings associated with the [access method](https://www.seam.co/docs/use-cases/granting-access/creating-an-access-grant).
      */
     class Warnings
     {
