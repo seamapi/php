@@ -262,8 +262,8 @@ namespace Seam\Resources\UnmanagedAccessCode {
                     => \Seam\Resources\UnmanagedAccessCode\Errors\FailedToUpdate::from_json(
                     $json,
                 ),
-                \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::FAILED_TO_REMOVE
-                    => \Seam\Resources\UnmanagedAccessCode\Errors\FailedToRemove::from_json(
+                \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::FAILED_TO_DELETE
+                    => \Seam\Resources\UnmanagedAccessCode\Errors\FailedToDelete::from_json(
                     $json,
                 ),
                 \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::ACCOUNT_DISCONNECTED
@@ -914,12 +914,12 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
     }
 
     /**
-     * This access code is still active on the device even though its `ends_at` has passed, so the recipient may still be able to unlock the device after their access window ended. Seam is attempting to remove it, and this error clears automatically once the access code is no longer active.
+     * This access code is still active on the device even though its `ends_at` has passed, so the recipient may still be able to unlock the device after their access window ended. Seam is attempting to delete it, and this error clears automatically once the access code is no longer active.
      */
-    final class FailedToRemove extends
+    final class FailedToDelete extends
         \Seam\Resources\UnmanagedAccessCode\Errors
     {
-        public static function from_json(mixed $json): FailedToRemove|null
+        public static function from_json(mixed $json): FailedToDelete|null
         {
             if (!$json) {
                 return null;
@@ -1604,7 +1604,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
         case CODE_CONSTRAINTS_VIOLATED = "code_constraints_violated";
         case FAILED_TO_ISSUE = "failed_to_issue";
         case FAILED_TO_UPDATE = "failed_to_update";
-        case FAILED_TO_REMOVE = "failed_to_remove";
+        case FAILED_TO_DELETE = "failed_to_delete";
         case ACCOUNT_DISCONNECTED = "account_disconnected";
         case SALTO_KS_SUBSCRIPTION_LIMIT_EXCEEDED = "salto_ks_subscription_limit_exceeded";
         case INSUFFICIENT_PERMISSIONS = "insufficient_permissions";

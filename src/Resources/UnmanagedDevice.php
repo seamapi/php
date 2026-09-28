@@ -659,6 +659,7 @@ namespace Seam\Resources\UnmanagedDevice {
         case ANDROID_PHONE = "android_phone";
         case RING_CAMERA = "ring_camera";
         case TAPO_CAMERA = "tapo_camera";
+        case ARLO_CAMERA = "arlo_camera";
     }
 }
 

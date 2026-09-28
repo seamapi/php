@@ -507,6 +507,11 @@ namespace Seam\Resources\Device {
                         $json->aqara_metadata,
                     )
                     : null,
+                arlo_metadata: isset($json->arlo_metadata)
+                    ? \Seam\Resources\Device\Properties\ArloMetadata::from_json(
+                        $json->arlo_metadata,
+                    )
+                    : null,
                 assa_abloy_credential_service_metadata: isset(
                     $json->assa_abloy_credential_service_metadata,
                 )
@@ -912,6 +917,10 @@ namespace Seam\Resources\Device {
              * Metadata for an Aqara device.
              */
             public \Seam\Resources\Device\Properties\AqaraMetadata|null $aqara_metadata = null,
+            /**
+             * Metadata for an Arlo camera.
+             */
+            public \Seam\Resources\Device\Properties\ArloMetadata|null $arlo_metadata = null,
             /**
              * ASSA ABLOY Credential Service metadata for the phone.
              */
@@ -1535,6 +1544,7 @@ namespace Seam\Resources\Device {
         case ANDROID_PHONE = "android_phone";
         case RING_CAMERA = "ring_camera";
         case TAPO_CAMERA = "tapo_camera";
+        case ARLO_CAMERA = "arlo_camera";
     }
 }
 
@@ -2529,6 +2539,49 @@ namespace Seam\Resources\Device\Properties {
              * Time zone reported for an Aqara device (e.g. GMT-07:00).
              */
             public string|null $time_zone = null,
+        ) {}
+    }
+
+    /**
+     * Metadata for an Arlo camera.
+     */
+    class ArloMetadata
+    {
+        public static function from_json(mixed $json): ArloMetadata|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                device_id: $json->device_id ?? null,
+                device_name: $json->device_name ?? null,
+                firmware_version: $json->firmware_version ?? null,
+                hardware_version: $json->hardware_version ?? null,
+                model_id: $json->model_id ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Device ID reported by Arlo.
+             */
+            public string|null $device_id = null,
+            /**
+             * Device name reported by Arlo.
+             */
+            public string|null $device_name = null,
+            /**
+             * Firmware version reported by Arlo.
+             */
+            public string|null $firmware_version = null,
+            /**
+             * Hardware version reported by Arlo.
+             */
+            public string|null $hardware_version = null,
+            /**
+             * Model ID reported by Arlo.
+             */
+            public string|null $model_id = null,
         ) {}
     }
 
