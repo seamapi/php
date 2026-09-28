@@ -212,6 +212,7 @@ namespace Seam\Resources\DeviceProvider {
         case THIRTY_THREE_LOCK = "thirty_three_lock";
         case RING = "ring";
         case TAPO = "tapo";
+        case ARLO = "arlo";
         case ICAL = "ical";
         case LODGIFY = "lodgify";
         case HOSTAWAY = "hostaway";
