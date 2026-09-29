@@ -76,6 +76,43 @@ class ThermostatsClient
     }
 
     /**
+     * Returns a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats) to its [weekly program](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-programs), the schedule that is configured on the device itself, releasing any hold that Seam has set. Seam stops managing the thermostat's climate until you [activate a climate preset](https://www.seam.co/docs/capability-guides/thermostats/configure-current-climate-settings), make a direct climate setting change, or one of the thermostat's [scheduled](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules) presets reaches its activation time.
+     *
+     * @param string $device_id ID of the thermostat device that you want to return to its weekly program.
+     * @param bool|array|null $wait_for_action_attempt Whether to wait for the action attempt to finish, optionally with timeout and polling_interval in seconds. Defaults to the value set on the client.
+     * @return ActionAttempt OK
+     */
+    public function activate_weekly_program(
+        string $device_id,
+        bool|array|null $wait_for_action_attempt = null,
+    ): ActionAttempt {
+        $request_payload = [];
+
+        $request_payload["device_id"] = $device_id;
+
+        $res = Body::decode(
+            $this->client->request(
+                "POST",
+                "/thermostats/activate_weekly_program",
+                ["json" => (object) $request_payload],
+            ),
+        );
+
+        return ResolveActionAttempt::resolve_action_attempt(
+            ActionAttempt::from_json(
+                Body::read(
+                    $res,
+                    "action_attempt",
+                    "/thermostats/activate_weekly_program",
+                ),
+            ),
+            $this->client,
+            $wait_for_action_attempt ??
+                $this->defaults["wait_for_action_attempt"],
+        );
+    }
+
+    /**
      * Sets a specified [thermostat](https://www.seam.co/docs/capability-guides/thermostats) to [cool mode](https://www.seam.co/docs/capability-guides/thermostats/configure-current-climate-settings).
      *
      * @param string $device_id ID of the thermostat device that you want to set to cool mode.

@@ -40,6 +40,8 @@ namespace Seam\Resources {
                     $json->warnings ?? [],
                 ),
                 workspace_id: $json->workspace_id ?? null,
+                can_activate_weekly_program: $json->can_activate_weekly_program ??
+                    null,
                 can_configure_auto_lock: $json->can_configure_auto_lock ?? null,
                 can_hvac_cool: $json->can_hvac_cool ?? null,
                 can_hvac_heat: $json->can_hvac_heat ?? null,
@@ -137,6 +139,10 @@ namespace Seam\Resources {
              * Unique identifier for the Seam workspace associated with the device.
              */
             public string|null $workspace_id,
+            /**
+             * Indicates whether the thermostat can be returned to its weekly program, the schedule that is configured on the device itself, releasing any hold that Seam has set.
+             */
+            public bool|null $can_activate_weekly_program = null,
             /**
              * Indicates whether the lock supports configuring automatic locking.
              */
