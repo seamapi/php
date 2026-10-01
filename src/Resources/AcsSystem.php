@@ -568,7 +568,7 @@ namespace Seam\Resources\AcsSystem\Errors {
     }
 
     /**
-     * Indicates that Seam's integration user does not have sufficient permissions on the provider's system backing this [access control system](https://www.seam.co/docs/low-level-apis/access-systems). Access cannot be managed until permissions are restored. See the error message for specifics, then either reauthorize the connected account in Seam or grant the integration user the required permissions in the provider's system.
+     * Indicates that the provider's system backing this [access control system](https://www.seam.co/docs/low-level-apis/access-systems) is not letting Seam act on it, so access cannot be managed until this is resolved. The error message says which of two causes applies. Either Seam's integration user does not have sufficient permissions on the provider's system, or has been suspended there: grant the integration user the required permissions in the provider's system, or reauthorize the connected account in Seam. Or the provider account or site does not have a valid subscription with the provider: set up or renew that subscription with the provider.
      */
     final class InsufficientPermissions extends \Seam\Resources\AcsSystem\Errors
     {

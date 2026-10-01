@@ -65,6 +65,7 @@ namespace Seam\Resources {
                 can_simulate_paid_subscription: $json->can_simulate_paid_subscription ??
                     null,
                 can_simulate_removal: $json->can_simulate_removal ?? null,
+                can_stream_live_video: $json->can_stream_live_video ?? null,
                 can_turn_off_hvac: $json->can_turn_off_hvac ?? null,
                 can_unlock_with_code: $json->can_unlock_with_code ?? null,
                 device_manufacturer: isset($json->device_manufacturer)
@@ -227,6 +228,10 @@ namespace Seam\Resources {
              * Indicates whether the device supports simulating removal in a sandbox.
              */
             public bool|null $can_simulate_removal = null,
+            /**
+             * Indicates whether the camera supports streaming live video through a camera live view session.
+             */
+            public bool|null $can_stream_live_video = null,
             /**
              * Indicates whether the thermostat can be turned off.
              */
@@ -760,6 +765,11 @@ namespace Seam\Resources\Device {
                     $json->online_time_frame_options ?? [],
                 ),
                 relative_humidity: $json->relative_humidity ?? null,
+                reolink_metadata: isset($json->reolink_metadata)
+                    ? \Seam\Resources\Device\Properties\ReolinkMetadata::from_json(
+                        $json->reolink_metadata,
+                    )
+                    : null,
                 ring_metadata: isset($json->ring_metadata)
                     ? \Seam\Resources\Device\Properties\RingMetadata::from_json(
                         $json->ring_metadata,
@@ -1229,6 +1239,10 @@ namespace Seam\Resources\Device {
              */
             public float|null $relative_humidity = null,
             /**
+             * Metadata for a Reolink camera.
+             */
+            public \Seam\Resources\Device\Properties\ReolinkMetadata|null $reolink_metadata = null,
+            /**
              * Metadata for a Ring device.
              */
             public \Seam\Resources\Device\Properties\RingMetadata|null $ring_metadata = null,
@@ -1551,6 +1565,7 @@ namespace Seam\Resources\Device {
         case RING_CAMERA = "ring_camera";
         case TAPO_CAMERA = "tapo_camera";
         case ARLO_CAMERA = "arlo_camera";
+        case REOLINK_CAMERA = "reolink_camera";
     }
 }
 
@@ -1662,7 +1677,7 @@ namespace Seam\Resources\Device\Errors {
     }
 
     /**
-     * Indicates that Seam's integration user does not have sufficient permissions on the provider's system to which this device belongs, so Seam cannot manage access codes or unlock the device. See the error message for specifics, then either reauthorize the connected account in Seam or grant the integration user the required permissions in the provider's system.
+     * Indicates that the provider's system to which this device belongs is not letting Seam act on it, so Seam cannot manage access codes or unlock the device. The error message says which of three causes applies. Seam's integration user may not have sufficient permissions on the provider's system, or may have been suspended there: grant the integration user the required permissions in the provider's system, or reauthorize the connected account in Seam. The provider account or site may not have a valid subscription with the provider: set up or renew that subscription with the provider. Or the provider may have rejected the credential Seam uses to operate the device's hub: contact Seam support to re-activate it.
      */
     final class InsufficientPermissions extends \Seam\Resources\Device\Errors
     {
@@ -3606,6 +3621,39 @@ namespace Seam\Resources\Device\Properties {
              * Static UTC offset of the Omnitec lock in milliseconds. Does not account for DST.
              */
             public float|null $timezone_raw_offset_ms = null,
+        ) {}
+    }
+
+    /**
+     * Metadata for a Reolink camera.
+     */
+    class ReolinkMetadata
+    {
+        public static function from_json(mixed $json): ReolinkMetadata|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                firmware_version: $json->firmware_version ?? null,
+                hardware_version: $json->hardware_version ?? null,
+                model: $json->model ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Firmware version reported by the camera.
+             */
+            public string|null $firmware_version = null,
+            /**
+             * Hardware version reported by the camera.
+             */
+            public string|null $hardware_version = null,
+            /**
+             * Model reported by the Reolink camera.
+             */
+            public string|null $model = null,
         ) {}
     }
 

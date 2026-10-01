@@ -10062,6 +10062,7 @@ namespace Seam\Resources\Event {
                 device_custom_metadata: $json->device_custom_metadata ?? null,
                 event_description: $json->event_description ?? null,
                 image_url: $json->image_url ?? null,
+                media_ids: $json->media_ids ?? null,
                 motion_sub_type: $json->motion_sub_type ?? null,
                 video_url: $json->video_url ?? null,
             );
@@ -10127,6 +10128,12 @@ namespace Seam\Resources\Event {
              */
             public string|null $image_url = null,
             /**
+             * IDs of the media, such as a video clip and a thumbnail image, captured for this activation. Use `/media/get` to retrieve each one.
+             *
+             * @var list<string>|null
+             */
+            public array|null $media_ids = null,
+            /**
              * Sub-type of motion detected, if available.
              *
              * @var value-of<\Seam\Resources\Event\CameraActivated\MotionSubType>|string|null
@@ -10172,6 +10179,7 @@ namespace Seam\Resources\Event {
                 device_custom_metadata: $json->device_custom_metadata ?? null,
                 event_description: $json->event_description ?? null,
                 image_url: $json->image_url ?? null,
+                media_ids: $json->media_ids ?? null,
                 video_url: $json->video_url ?? null,
             );
         }
@@ -10229,6 +10237,12 @@ namespace Seam\Resources\Event {
              * URL to a thumbnail image captured at the time the doorbell was pressed.
              */
             public string|null $image_url = null,
+            /**
+             * IDs of the media, such as a video clip and a thumbnail image, captured when the doorbell was pressed. Use `/media/get` to retrieve each one.
+             *
+             * @var list<string>|null
+             */
+            public array|null $media_ids = null,
             /**
              * URL to a short video clip captured at the time the doorbell was pressed.
              */
