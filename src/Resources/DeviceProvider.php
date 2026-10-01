@@ -43,6 +43,7 @@ namespace Seam\Resources {
                 can_simulate_paid_subscription: $json->can_simulate_paid_subscription ??
                     null,
                 can_simulate_removal: $json->can_simulate_removal ?? null,
+                can_stream_live_video: $json->can_stream_live_video ?? null,
                 can_turn_off_hvac: $json->can_turn_off_hvac ?? null,
                 can_unlock_with_code: $json->can_unlock_with_code ?? null,
             );
@@ -146,6 +147,10 @@ namespace Seam\Resources {
              */
             public bool|null $can_simulate_removal = null,
             /**
+             * Indicates whether the camera supports streaming live video through a camera live view session.
+             */
+            public bool|null $can_stream_live_video = null,
+            /**
              * Indicates whether the thermostat can be turned off.
              */
             public bool|null $can_turn_off_hvac = null,
@@ -219,6 +224,7 @@ namespace Seam\Resources\DeviceProvider {
         case RING = "ring";
         case TAPO = "tapo";
         case ARLO = "arlo";
+        case REOLINK = "reolink";
         case ICAL = "ical";
         case LODGIFY = "lodgify";
         case HOSTAWAY = "hostaway";

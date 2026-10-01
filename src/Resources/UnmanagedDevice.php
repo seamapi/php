@@ -70,6 +70,7 @@ namespace Seam\Resources {
                 can_simulate_paid_subscription: $json->can_simulate_paid_subscription ??
                     null,
                 can_simulate_removal: $json->can_simulate_removal ?? null,
+                can_stream_live_video: $json->can_stream_live_video ?? null,
                 can_turn_off_hvac: $json->can_turn_off_hvac ?? null,
                 can_unlock_with_code: $json->can_unlock_with_code ?? null,
                 location: isset($json->location)
@@ -215,6 +216,10 @@ namespace Seam\Resources {
              * Indicates whether the device supports simulating removal in a sandbox.
              */
             public bool|null $can_simulate_removal = null,
+            /**
+             * Indicates whether the camera supports streaming live video through a camera live view session.
+             */
+            public bool|null $can_stream_live_video = null,
             /**
              * Indicates whether the thermostat can be turned off.
              */
@@ -666,6 +671,7 @@ namespace Seam\Resources\UnmanagedDevice {
         case RING_CAMERA = "ring_camera";
         case TAPO_CAMERA = "tapo_camera";
         case ARLO_CAMERA = "arlo_camera";
+        case REOLINK_CAMERA = "reolink_camera";
     }
 }
 
@@ -778,7 +784,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
     }
 
     /**
-     * Indicates that Seam's integration user does not have sufficient permissions on the provider's system to which this device belongs, so Seam cannot manage access codes or unlock the device. See the error message for specifics, then either reauthorize the connected account in Seam or grant the integration user the required permissions in the provider's system.
+     * Indicates that the provider's system to which this device belongs is not letting Seam act on it, so Seam cannot manage access codes or unlock the device. The error message says which of three causes applies. Seam's integration user may not have sufficient permissions on the provider's system, or may have been suspended there: grant the integration user the required permissions in the provider's system, or reauthorize the connected account in Seam. The provider account or site may not have a valid subscription with the provider: set up or renew that subscription with the provider. Or the provider may have rejected the credential Seam uses to operate the device's hub: contact Seam support to re-activate it.
      */
     final class InsufficientPermissions extends
         \Seam\Resources\UnmanagedDevice\Errors

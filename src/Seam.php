@@ -7,6 +7,7 @@ use Seam\Routes\AccessGrantsClient;
 use Seam\Routes\AccessMethodsClient;
 use Seam\Routes\AcsClient;
 use Seam\Routes\ActionAttemptsClient;
+use Seam\Routes\CamerasClient;
 use Seam\Routes\ClientSessionsClient;
 use Seam\Routes\ConnectedAccountsClient;
 use Seam\Routes\ConnectWebviewsClient;
@@ -15,6 +16,7 @@ use Seam\Routes\DevicesClient;
 use Seam\Routes\EventsClient;
 use Seam\Routes\InstantKeysClient;
 use Seam\Routes\LocksClient;
+use Seam\Routes\MediaClient;
 use Seam\Routes\NoiseSensorsClient;
 use Seam\Routes\PhonesClient;
 use Seam\Routes\SpacesClient;
@@ -45,6 +47,7 @@ class Seam
     public AccessMethodsClient $access_methods;
     public AcsClient $acs;
     public ActionAttemptsClient $action_attempts;
+    public CamerasClient $cameras;
     public ClientSessionsClient $client_sessions;
     public ConnectWebviewsClient $connect_webviews;
     public ConnectedAccountsClient $connected_accounts;
@@ -53,6 +56,7 @@ class Seam
     public EventsClient $events;
     public InstantKeysClient $instant_keys;
     public LocksClient $locks;
+    public MediaClient $media;
     public NoiseSensorsClient $noise_sensors;
     public PhonesClient $phones;
     public SpacesClient $spaces;
@@ -144,6 +148,7 @@ class Seam
             $this->client,
             $this->defaults,
         );
+        $this->cameras = new CamerasClient($this->client, $this->defaults);
         $this->client_sessions = new ClientSessionsClient(
             $this->client,
             $this->defaults,
@@ -164,6 +169,7 @@ class Seam
             $this->defaults,
         );
         $this->locks = new LocksClient($this->client, $this->defaults);
+        $this->media = new MediaClient($this->client, $this->defaults);
         $this->noise_sensors = new NoiseSensorsClient(
             $this->client,
             $this->defaults,
