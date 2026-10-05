@@ -4,6 +4,7 @@ namespace Seam\Routes;
 
 use GuzzleHttp\ClientInterface;
 use Seam\Http\Body;
+use Seam\NullValue;
 use Seam\Resources\CustomerPortal;
 
 class CustomersClient
@@ -223,6 +224,7 @@ class CustomersClient
      * @param list<array<string, mixed>|\stdClass> $bookings List of bookings.
      * @param list<array<string, mixed>|\stdClass> $buildings List of buildings.
      * @param list<array<string, mixed>|\stdClass> $common_areas List of shared common areas.
+     * @param string|NullValue $customization_profile_id ID of the customization profile to use for this customer. Access grants that automations create for this customer use this profile. Pass `null` to remove the customer's customization profile.
      * @param list<array<string, mixed>|\stdClass> $facilities List of gym or fitness facilities.
      * @param list<array<string, mixed>|\stdClass> $guests List of guests.
      * @param list<array<string, mixed>|\stdClass> $listings List of property listings.
@@ -246,6 +248,7 @@ class CustomersClient
         ?array $bookings = null,
         ?array $buildings = null,
         ?array $common_areas = null,
+        string|NullValue|null $customization_profile_id = null,
         ?array $facilities = null,
         ?array $guests = null,
         ?array $listings = null,
@@ -276,6 +279,11 @@ class CustomersClient
         }
         if ($common_areas !== null) {
             $request_payload["common_areas"] = $common_areas;
+        }
+        if ($customization_profile_id !== null) {
+            $request_payload[
+                "customization_profile_id"
+            ] = $customization_profile_id;
         }
         if ($facilities !== null) {
             $request_payload["facilities"] = $facilities;
