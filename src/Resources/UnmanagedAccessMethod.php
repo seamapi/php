@@ -152,6 +152,10 @@ namespace Seam\Resources\UnmanagedAccessMethod {
                     => \Seam\Resources\UnmanagedAccessMethod\Errors\FailedToIssue::from_json(
                     $json,
                 ),
+                \Seam\Resources\UnmanagedAccessMethod\Errors\ErrorCode::ACCESS_NOT_PROVISIONED
+                    => \Seam\Resources\UnmanagedAccessMethod\Errors\AccessNotProvisioned::from_json(
+                    $json,
+                ),
                 default => new self(
                     created_at: $json->created_at ?? null,
                     error_code: $json->error_code ?? null,
@@ -352,9 +356,52 @@ namespace Seam\Resources\UnmanagedAccessMethod\Errors {
         }
     }
 
+    /**
+     * Indicates that the access system rejected the access that Seam tried to set up for this access method, so its credential cannot open the affected entrances, even after it is issued. For example, a hotel room may already be reserved or checked in for another guest. The message contains the reason that the access system gave. Seam keeps retrying, and this error clears automatically once the access system accepts the access.
+     */
+    final class AccessNotProvisioned extends
+        \Seam\Resources\UnmanagedAccessMethod\Errors
+    {
+        public static function from_json(mixed $json): AccessNotProvisioned|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessMethod\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
     enum ErrorCode: string
     {
         case FAILED_TO_ISSUE = "failed_to_issue";
+        case ACCESS_NOT_PROVISIONED = "access_not_provisioned";
     }
 }
 

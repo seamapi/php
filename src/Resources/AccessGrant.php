@@ -183,11 +183,14 @@ namespace Seam\Resources\AccessGrant {
                     => \Seam\Resources\AccessGrant\Errors\CannotCreateRequestedAccessMethods::from_json(
                     $json,
                 ),
+                \Seam\Resources\AccessGrant\Errors\ErrorCode::ACCESS_NOT_PROVISIONED
+                    => \Seam\Resources\AccessGrant\Errors\AccessNotProvisioned::from_json(
+                    $json,
+                ),
                 default => new self(
                     created_at: $json->created_at ?? null,
                     error_code: $json->error_code ?? null,
                     message: $json->message ?? null,
-                    missing_device_ids: $json->missing_device_ids ?? null,
                 ),
             };
         }
@@ -207,12 +210,6 @@ namespace Seam\Resources\AccessGrant {
              * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
              */
             public string|null $message,
-            /**
-             * IDs of the devices that did not receive an access code at grant creation. Use these to identify which specific devices failed when the message reports a partial failure.
-             *
-             * @var list<string>|null
-             */
-            public array|null $missing_device_ids = null,
         ) {}
     }
 
@@ -435,13 +432,53 @@ namespace Seam\Resources\AccessGrant\Errors {
              *
              * @var list<string>|null
              */
-            array|null $missing_device_ids = null,
+            public array|null $missing_device_ids = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
                 error_code: $error_code,
                 message: $message,
-                missing_device_ids: $missing_device_ids,
+            );
+        }
+    }
+
+    /**
+     * Indicates that the access system rejected the access that Seam tried to set up for this access grant, so its credentials cannot open the affected entrances. For example, a hotel room may already be reserved or checked in for another guest. The message contains the reason that the access system gave. Seam keeps retrying, and this error clears automatically once the access system accepts the access.
+     */
+    final class AccessNotProvisioned extends \Seam\Resources\AccessGrant\Errors
+    {
+        public static function from_json(mixed $json): AccessNotProvisioned|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
             );
         }
     }
@@ -449,6 +486,7 @@ namespace Seam\Resources\AccessGrant\Errors {
     enum ErrorCode: string
     {
         case CANNOT_CREATE_REQUESTED_ACCESS_METHODS = "cannot_create_requested_access_methods";
+        case ACCESS_NOT_PROVISIONED = "access_not_provisioned";
     }
 }
 
