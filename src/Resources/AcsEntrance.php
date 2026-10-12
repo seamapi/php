@@ -444,7 +444,7 @@ namespace Seam\Resources\AcsEntrance {
     }
 
     /**
-     * Errors associated with the [entrance](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details).
+     * Errors associated with the [entrance](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details). Known error_code values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class Errors
     {
@@ -453,11 +453,23 @@ namespace Seam\Resources\AcsEntrance {
             if (!$json) {
                 return null;
             }
-            return new self(
-                created_at: $json->created_at ?? null,
-                error_code: $json->error_code ?? null,
-                message: $json->message ?? null,
-            );
+            $discriminant = is_string($json->error_code ?? null)
+                ? \Seam\Resources\AcsEntrance\Errors\ErrorCode::tryFrom(
+                    $json->error_code,
+                )
+                : null;
+
+            return match ($discriminant) {
+                \Seam\Resources\AcsEntrance\Errors\ErrorCode::ENTRANCE_REMOVED
+                    => \Seam\Resources\AcsEntrance\Errors\EntranceRemoved::from_json(
+                    $json,
+                ),
+                default => new self(
+                    created_at: $json->created_at ?? null,
+                    error_code: $json->error_code ?? null,
+                    message: $json->message ?? null,
+                ),
+            };
         }
 
         public function __construct(
@@ -467,6 +479,8 @@ namespace Seam\Resources\AcsEntrance {
             public string|null $created_at,
             /**
              * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsEntrance\Errors\ErrorCode>|string|null
              */
             public string|null $error_code,
             /**
@@ -795,6 +809,54 @@ namespace Seam\Resources\AcsEntrance\AssaAbloyVostioMetadata {
         case ENTRANCE_DOOR = "EntranceDoor";
         case GUEST_DOOR = "GuestDoor";
         case ELEVATOR = "Elevator";
+    }
+}
+
+namespace Seam\Resources\AcsEntrance\Errors {
+    /**
+     * Indicates that the [entrance](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details) was removed from the connected account, so Seam can no longer sync it.
+     */
+    final class EntranceRemoved extends \Seam\Resources\AcsEntrance\Errors
+    {
+        public static function from_json(mixed $json): EntranceRemoved|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsEntrance\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    enum ErrorCode: string
+    {
+        case ENTRANCE_REMOVED = "entrance_removed";
     }
 }
 

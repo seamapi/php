@@ -134,7 +134,7 @@ namespace Seam\Resources {
              */
             public bool|null $is_ready_for_assignment = null,
             /**
-             * Indicates whether the access method is ready to be encoded. This is true when the credential has been created and the card has not yet been issued.
+             * Indicates whether the access method is ready to be encoded. This is true when the card has not yet been issued and the access system has received all the access the card needs. While it is false, `pending_mutations` contains `waiting_for_access_on_acs_system`.
              */
             public bool|null $is_ready_for_encoding = null,
         ) {}
@@ -220,6 +220,10 @@ namespace Seam\Resources\AccessMethod {
                 ),
                 \Seam\Resources\AccessMethod\PendingMutations\MutationCode::UPDATING_ACCESS_TIMES
                     => \Seam\Resources\AccessMethod\PendingMutations\UpdatingAccessTimes::from_json(
+                    $json,
+                ),
+                \Seam\Resources\AccessMethod\PendingMutations\MutationCode::WAITING_FOR_ACCESS_ON_ACS_SYSTEM
+                    => \Seam\Resources\AccessMethod\PendingMutations\WaitingForAccessOnAcsSystem::from_json(
                     $json,
                 ),
                 default => new self(
@@ -595,11 +599,55 @@ namespace Seam\Resources\AccessMethod\PendingMutations {
         }
     }
 
+    /**
+     * The access system has not yet received all the access this card needs. A card encoded now would carry only the access the system already has, so wait until this clears before encoding.
+     */
+    final class WaitingForAccessOnAcsSystem extends
+        \Seam\Resources\AccessMethod\PendingMutations
+    {
+        public static function from_json(
+            mixed $json,
+        ): WaitingForAccessOnAcsSystem|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                mutation_code: $json->mutation_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which the mutation was created.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the mutation.
+             */
+            string|null $message,
+            /**
+             * Mutation code to indicate that Seam is in the process of provisioning access for this access method on new devices.
+             *
+             * @var value-of<\Seam\Resources\AccessMethod\PendingMutations\MutationCode>|string|null
+             */
+            string|null $mutation_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                mutation_code: $mutation_code,
+            );
+        }
+    }
+
     enum MutationCode: string
     {
         case PROVISIONING_ACCESS = "provisioning_access";
         case REVOKING_ACCESS = "revoking_access";
         case UPDATING_ACCESS_TIMES = "updating_access_times";
+        case WAITING_FOR_ACCESS_ON_ACS_SYSTEM = "waiting_for_access_on_acs_system";
     }
 }
 
