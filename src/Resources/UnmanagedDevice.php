@@ -46,6 +46,10 @@ namespace Seam\Resources {
                 can_hvac_cool: $json->can_hvac_cool ?? null,
                 can_hvac_heat: $json->can_hvac_heat ?? null,
                 can_hvac_heat_cool: $json->can_hvac_heat_cool ?? null,
+                can_mute_speaker: $json->can_mute_speaker ?? null,
+                can_pause_speaker_playback: $json->can_pause_speaker_playback ??
+                    null,
+                can_play_speaker_chime: $json->can_play_speaker_chime ?? null,
                 can_program_offline_access_codes: $json->can_program_offline_access_codes ??
                     null,
                 can_program_online_access_codes: $json->can_program_online_access_codes ??
@@ -60,6 +64,7 @@ namespace Seam\Resources {
                 can_remotely_unlock: $json->can_remotely_unlock ?? null,
                 can_run_thermostat_programs: $json->can_run_thermostat_programs ??
                     null,
+                can_set_speaker_volume: $json->can_set_speaker_volume ?? null,
                 can_simulate_connection: $json->can_simulate_connection ?? null,
                 can_simulate_disconnection: $json->can_simulate_disconnection ??
                     null,
@@ -161,6 +166,18 @@ namespace Seam\Resources {
              */
             public bool|null $can_hvac_heat_cool = null,
             /**
+             * Indicates whether the speaker supports muting and unmuting.
+             */
+            public bool|null $can_mute_speaker = null,
+            /**
+             * Indicates whether the speaker supports pausing and resuming playback.
+             */
+            public bool|null $can_pause_speaker_playback = null,
+            /**
+             * Indicates whether the speaker supports playing a chime.
+             */
+            public bool|null $can_play_speaker_chime = null,
+            /**
              * Indicates whether the device supports programming offline access codes.
              */
             public bool|null $can_program_offline_access_codes = null,
@@ -192,6 +209,10 @@ namespace Seam\Resources {
              * Indicates whether the thermostat supports running climate programs.
              */
             public bool|null $can_run_thermostat_programs = null,
+            /**
+             * Indicates whether the speaker supports setting its volume.
+             */
+            public bool|null $can_set_speaker_volume = null,
             /**
              * Indicates whether the device supports simulating connection in a sandbox.
              */
@@ -672,6 +693,7 @@ namespace Seam\Resources\UnmanagedDevice {
         case TAPO_CAMERA = "tapo_camera";
         case ARLO_CAMERA = "arlo_camera";
         case REOLINK_CAMERA = "reolink_camera";
+        case SONOS_SPEAKER = "sonos_speaker";
     }
 }
 

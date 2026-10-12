@@ -108,6 +108,7 @@ class CustomersClient
     /**
      * Deletes customer data including resources like spaces, properties, rooms, users, etc.
      * This will delete the partner resources and any related Seam resources (user identities, access grants, spaces).
+     * Space keys also match spaces created directly with a `space_key` (for example, through `/spaces/create`).
      *
      * @param list<string> $access_grant_keys List of access grant keys to delete.
      * @param list<string> $booking_keys List of booking keys to delete.
@@ -228,6 +229,7 @@ class CustomersClient
      * @param list<array<string, mixed>|\stdClass> $facilities List of gym or fitness facilities.
      * @param list<array<string, mixed>|\stdClass> $guests List of guests.
      * @param list<array<string, mixed>|\stdClass> $listings List of property listings.
+     * @param float|NullValue $low_battery_alert_threshold Battery level, from 0 to 1, at or below which `device.low_battery` events fire for this customer's devices. Overrides the workspace and device defaults. Pass `null` to remove the customer's override.
      * @param list<array<string, mixed>|\stdClass> $properties List of short-term rental properties.
      * @param list<array<string, mixed>|\stdClass> $property_listings List of property listings.
      * @param list<array<string, mixed>|\stdClass> $reservations List of reservations.
@@ -252,6 +254,7 @@ class CustomersClient
         ?array $facilities = null,
         ?array $guests = null,
         ?array $listings = null,
+        float|NullValue|null $low_battery_alert_threshold = null,
         ?array $properties = null,
         ?array $property_listings = null,
         ?array $reservations = null,
@@ -293,6 +296,11 @@ class CustomersClient
         }
         if ($listings !== null) {
             $request_payload["listings"] = $listings;
+        }
+        if ($low_battery_alert_threshold !== null) {
+            $request_payload[
+                "low_battery_alert_threshold"
+            ] = $low_battery_alert_threshold;
         }
         if ($properties !== null) {
             $request_payload["properties"] = $properties;

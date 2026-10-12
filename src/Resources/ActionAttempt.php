@@ -80,6 +80,26 @@ namespace Seam\Resources {
                     => \Seam\Resources\ActionAttempt\ConvertAccessCodeToManaged::from_json(
                     $json,
                 ),
+                \Seam\Resources\ActionAttempt\ActionType::SET_SPEAKER_VOLUME
+                    => \Seam\Resources\ActionAttempt\SetSpeakerVolume::from_json(
+                    $json,
+                ),
+                \Seam\Resources\ActionAttempt\ActionType::SET_SPEAKER_MUTE
+                    => \Seam\Resources\ActionAttempt\SetSpeakerMute::from_json(
+                    $json,
+                ),
+                \Seam\Resources\ActionAttempt\ActionType::PAUSE_SPEAKER_PLAYBACK
+                    => \Seam\Resources\ActionAttempt\PauseSpeakerPlayback::from_json(
+                    $json,
+                ),
+                \Seam\Resources\ActionAttempt\ActionType::RESUME_SPEAKER_PLAYBACK
+                    => \Seam\Resources\ActionAttempt\ResumeSpeakerPlayback::from_json(
+                    $json,
+                ),
+                \Seam\Resources\ActionAttempt\ActionType::PLAY_SPEAKER_CHIME
+                    => \Seam\Resources\ActionAttempt\PlaySpeakerChime::from_json(
+                    $json,
+                ),
                 \Seam\Resources\ActionAttempt\ActionType::SYNC_ACCESS_CODES
                     => \Seam\Resources\ActionAttempt\SyncAccessCodes::from_json(
                     $json,
@@ -1089,6 +1109,302 @@ namespace Seam\Resources\ActionAttempt {
     }
 
     /**
+     * Setting the speaker volume is pending. Known status values use subclasses; unknown values use this base class and retain their raw discriminator.
+     */
+    class SetSpeakerVolume extends \Seam\Resources\ActionAttempt
+    {
+        public static function from_json(mixed $json): SetSpeakerVolume|null
+        {
+            if (!$json) {
+                return null;
+            }
+            $discriminant = is_string($json->status ?? null)
+                ? \Seam\Resources\ActionAttempt\Status::tryFrom($json->status)
+                : null;
+
+            return match ($discriminant) {
+                \Seam\Resources\ActionAttempt\Status::SUCCESS
+                    => \Seam\Resources\ActionAttempt\SetSpeakerVolume\Success::from_json(
+                    $json,
+                ),
+                \Seam\Resources\ActionAttempt\Status::PENDING
+                    => \Seam\Resources\ActionAttempt\SetSpeakerVolume\Pending::from_json(
+                    $json,
+                ),
+                \Seam\Resources\ActionAttempt\Status::ERROR
+                    => \Seam\Resources\ActionAttempt\SetSpeakerVolume\Error::from_json(
+                    $json,
+                ),
+                default => new self(
+                    action_attempt_id: $json->action_attempt_id ?? null,
+                    action_type: $json->action_type ?? null,
+                    status: $json->status ?? null,
+                ),
+            };
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
+     * Muting or unmuting the speaker is pending. Known status values use subclasses; unknown values use this base class and retain their raw discriminator.
+     */
+    class SetSpeakerMute extends \Seam\Resources\ActionAttempt
+    {
+        public static function from_json(mixed $json): SetSpeakerMute|null
+        {
+            if (!$json) {
+                return null;
+            }
+            $discriminant = is_string($json->status ?? null)
+                ? \Seam\Resources\ActionAttempt\Status::tryFrom($json->status)
+                : null;
+
+            return match ($discriminant) {
+                \Seam\Resources\ActionAttempt\Status::SUCCESS
+                    => \Seam\Resources\ActionAttempt\SetSpeakerMute\Success::from_json(
+                    $json,
+                ),
+                \Seam\Resources\ActionAttempt\Status::PENDING
+                    => \Seam\Resources\ActionAttempt\SetSpeakerMute\Pending::from_json(
+                    $json,
+                ),
+                \Seam\Resources\ActionAttempt\Status::ERROR
+                    => \Seam\Resources\ActionAttempt\SetSpeakerMute\Error::from_json(
+                    $json,
+                ),
+                default => new self(
+                    action_attempt_id: $json->action_attempt_id ?? null,
+                    action_type: $json->action_type ?? null,
+                    status: $json->status ?? null,
+                ),
+            };
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
+     * Pausing playback on the speaker is pending. Known status values use subclasses; unknown values use this base class and retain their raw discriminator.
+     */
+    class PauseSpeakerPlayback extends \Seam\Resources\ActionAttempt
+    {
+        public static function from_json(mixed $json): PauseSpeakerPlayback|null
+        {
+            if (!$json) {
+                return null;
+            }
+            $discriminant = is_string($json->status ?? null)
+                ? \Seam\Resources\ActionAttempt\Status::tryFrom($json->status)
+                : null;
+
+            return match ($discriminant) {
+                \Seam\Resources\ActionAttempt\Status::SUCCESS
+                    => \Seam\Resources\ActionAttempt\PauseSpeakerPlayback\Success::from_json(
+                    $json,
+                ),
+                \Seam\Resources\ActionAttempt\Status::PENDING
+                    => \Seam\Resources\ActionAttempt\PauseSpeakerPlayback\Pending::from_json(
+                    $json,
+                ),
+                \Seam\Resources\ActionAttempt\Status::ERROR
+                    => \Seam\Resources\ActionAttempt\PauseSpeakerPlayback\Error::from_json(
+                    $json,
+                ),
+                default => new self(
+                    action_attempt_id: $json->action_attempt_id ?? null,
+                    action_type: $json->action_type ?? null,
+                    status: $json->status ?? null,
+                ),
+            };
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
+     * Resuming playback on the speaker is pending. Known status values use subclasses; unknown values use this base class and retain their raw discriminator.
+     */
+    class ResumeSpeakerPlayback extends \Seam\Resources\ActionAttempt
+    {
+        public static function from_json(
+            mixed $json,
+        ): ResumeSpeakerPlayback|null {
+            if (!$json) {
+                return null;
+            }
+            $discriminant = is_string($json->status ?? null)
+                ? \Seam\Resources\ActionAttempt\Status::tryFrom($json->status)
+                : null;
+
+            return match ($discriminant) {
+                \Seam\Resources\ActionAttempt\Status::SUCCESS
+                    => \Seam\Resources\ActionAttempt\ResumeSpeakerPlayback\Success::from_json(
+                    $json,
+                ),
+                \Seam\Resources\ActionAttempt\Status::PENDING
+                    => \Seam\Resources\ActionAttempt\ResumeSpeakerPlayback\Pending::from_json(
+                    $json,
+                ),
+                \Seam\Resources\ActionAttempt\Status::ERROR
+                    => \Seam\Resources\ActionAttempt\ResumeSpeakerPlayback\Error::from_json(
+                    $json,
+                ),
+                default => new self(
+                    action_attempt_id: $json->action_attempt_id ?? null,
+                    action_type: $json->action_type ?? null,
+                    status: $json->status ?? null,
+                ),
+            };
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
+     * Playing a chime on the speaker is pending. Known status values use subclasses; unknown values use this base class and retain their raw discriminator.
+     */
+    class PlaySpeakerChime extends \Seam\Resources\ActionAttempt
+    {
+        public static function from_json(mixed $json): PlaySpeakerChime|null
+        {
+            if (!$json) {
+                return null;
+            }
+            $discriminant = is_string($json->status ?? null)
+                ? \Seam\Resources\ActionAttempt\Status::tryFrom($json->status)
+                : null;
+
+            return match ($discriminant) {
+                \Seam\Resources\ActionAttempt\Status::SUCCESS
+                    => \Seam\Resources\ActionAttempt\PlaySpeakerChime\Success::from_json(
+                    $json,
+                ),
+                \Seam\Resources\ActionAttempt\Status::PENDING
+                    => \Seam\Resources\ActionAttempt\PlaySpeakerChime\Pending::from_json(
+                    $json,
+                ),
+                \Seam\Resources\ActionAttempt\Status::ERROR
+                    => \Seam\Resources\ActionAttempt\PlaySpeakerChime\Error::from_json(
+                    $json,
+                ),
+                default => new self(
+                    action_attempt_id: $json->action_attempt_id ?? null,
+                    action_type: $json->action_type ?? null,
+                    status: $json->status ?? null,
+                ),
+            };
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
      * Known status values use subclasses; unknown values use this base class and retain their raw discriminator.
      */
     class SyncAccessCodes extends \Seam\Resources\ActionAttempt
@@ -1519,6 +1835,11 @@ namespace Seam\Resources\ActionAttempt {
         case PUSH_THERMOSTAT_PROGRAMS = "PUSH_THERMOSTAT_PROGRAMS";
         case CONFIGURE_AUTO_LOCK = "CONFIGURE_AUTO_LOCK";
         case CONVERT_ACCESS_CODE_TO_MANAGED = "CONVERT_ACCESS_CODE_TO_MANAGED";
+        case SET_SPEAKER_VOLUME = "SET_SPEAKER_VOLUME";
+        case SET_SPEAKER_MUTE = "SET_SPEAKER_MUTE";
+        case PAUSE_SPEAKER_PLAYBACK = "PAUSE_SPEAKER_PLAYBACK";
+        case RESUME_SPEAKER_PLAYBACK = "RESUME_SPEAKER_PLAYBACK";
+        case PLAY_SPEAKER_CHIME = "PLAY_SPEAKER_CHIME";
         case SYNC_ACCESS_CODES = "SYNC_ACCESS_CODES";
         case CREATE_ACCESS_CODE = "CREATE_ACCESS_CODE";
         case DELETE_ACCESS_CODE = "DELETE_ACCESS_CODE";
@@ -4493,7 +4814,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success {
              */
             public bool|null $is_ready_for_assignment = null,
             /**
-             * Indicates whether the access method is ready to be encoded. This is true when the credential has been created and the card has not yet been issued.
+             * Indicates whether the access method is ready to be encoded. This is true when the card has not yet been issued and the access system has received all the access the card needs. While it is false, `pending_mutations` contains `waiting_for_access_on_acs_system`.
              */
             public bool|null $is_ready_for_encoding = null,
         ) {}
@@ -4548,13 +4869,13 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success\Result {
             }
             return new self(
                 created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                mutation_code: $json->mutation_code ?? null,
                 from: isset($json->from)
                     ? \Seam\Resources\ActionAttempt\AssignCredential\Success\Result\PendingMutations\From::from_json(
                         $json->from,
                     )
                     : null,
-                message: $json->message ?? null,
-                mutation_code: $json->mutation_code ?? null,
                 to: isset($json->to)
                     ? \Seam\Resources\ActionAttempt\AssignCredential\Success\Result\PendingMutations\To::from_json(
                         $json->to,
@@ -4569,23 +4890,23 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success\Result {
              */
             public string|null $created_at,
             /**
-             * Previous access time configuration.
-             */
-            public \Seam\Resources\ActionAttempt\AssignCredential\Success\Result\PendingMutations\From|null $from,
-            /**
              * Detailed description of the mutation.
              */
             public string|null $message,
             /**
-             * Mutation code to indicate that Seam is in the process of updating the access times for this access method.
+             * Mutation code to indicate that the access system has not yet received all the access this card needs, so the card is not ready to be encoded.
              *
              * @var value-of<\Seam\Resources\ActionAttempt\AssignCredential\Success\Result\PendingMutations\MutationCode>|string|null
              */
             public string|null $mutation_code,
             /**
+             * Previous access time configuration.
+             */
+            public \Seam\Resources\ActionAttempt\AssignCredential\Success\Result\PendingMutations\From|null $from = null,
+            /**
              * New access time configuration.
              */
-            public \Seam\Resources\ActionAttempt\AssignCredential\Success\Result\PendingMutations\To|null $to,
+            public \Seam\Resources\ActionAttempt\AssignCredential\Success\Result\PendingMutations\To|null $to = null,
         ) {}
     }
 
@@ -4709,6 +5030,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success\Result\PendingMu
         case PROVISIONING_ACCESS = "provisioning_access";
         case REVOKING_ACCESS = "revoking_access";
         case UPDATING_ACCESS_TIMES = "updating_access_times";
+        case WAITING_FOR_ACCESS_ON_ACS_SYSTEM = "waiting_for_access_on_acs_system";
     }
 }
 
@@ -6644,6 +6966,1018 @@ namespace Seam\Resources\ActionAttempt\ConvertAccessCodeToManaged {
 }
 
 namespace Seam\Resources\ActionAttempt\ConvertAccessCodeToManaged\Error {
+    /**
+     * Error associated with the action.
+     */
+    class Error
+    {
+        public static function from_json(mixed $json): Error|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                message: $json->message ?? null,
+                type: $json->type ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
+             * Type of the error.
+             */
+            public string|null $type,
+        ) {}
+    }
+}
+
+namespace Seam\Resources\ActionAttempt\SetSpeakerVolume {
+    /**
+     * Setting the speaker volume is pending.
+     */
+    final class Success extends \Seam\Resources\ActionAttempt\SetSpeakerVolume
+    {
+        public static function from_json(mixed $json): Success|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: null,
+                result: $json->result ?? null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public null $error,
+            /**
+             * Result of the action.
+             */
+            public mixed $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
+     * Setting the speaker volume is pending.
+     */
+    final class Pending extends \Seam\Resources\ActionAttempt\SetSpeakerVolume
+    {
+        public static function from_json(mixed $json): Pending|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: null,
+                result: null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public null $error,
+            /**
+             * Result of the action.
+             */
+            public null $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
+     * Setting the speaker volume is pending.
+     */
+    final class Error extends \Seam\Resources\ActionAttempt\SetSpeakerVolume
+    {
+        public static function from_json(mixed $json): Error|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: isset($json->error)
+                    ? \Seam\Resources\ActionAttempt\SetSpeakerVolume\Error\Error::from_json(
+                        $json->error,
+                    )
+                    : null,
+                result: null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public \Seam\Resources\ActionAttempt\SetSpeakerVolume\Error\Error|null $error,
+            /**
+             * Result of the action.
+             */
+            public null $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+}
+
+namespace Seam\Resources\ActionAttempt\SetSpeakerVolume\Error {
+    /**
+     * Error associated with the action.
+     */
+    class Error
+    {
+        public static function from_json(mixed $json): Error|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                message: $json->message ?? null,
+                type: $json->type ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
+             * Type of the error.
+             */
+            public string|null $type,
+        ) {}
+    }
+}
+
+namespace Seam\Resources\ActionAttempt\SetSpeakerMute {
+    /**
+     * Muting or unmuting the speaker is pending.
+     */
+    final class Success extends \Seam\Resources\ActionAttempt\SetSpeakerMute
+    {
+        public static function from_json(mixed $json): Success|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: null,
+                result: $json->result ?? null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public null $error,
+            /**
+             * Result of the action.
+             */
+            public mixed $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
+     * Muting or unmuting the speaker is pending.
+     */
+    final class Pending extends \Seam\Resources\ActionAttempt\SetSpeakerMute
+    {
+        public static function from_json(mixed $json): Pending|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: null,
+                result: null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public null $error,
+            /**
+             * Result of the action.
+             */
+            public null $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
+     * Muting or unmuting the speaker is pending.
+     */
+    final class Error extends \Seam\Resources\ActionAttempt\SetSpeakerMute
+    {
+        public static function from_json(mixed $json): Error|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: isset($json->error)
+                    ? \Seam\Resources\ActionAttempt\SetSpeakerMute\Error\Error::from_json(
+                        $json->error,
+                    )
+                    : null,
+                result: null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public \Seam\Resources\ActionAttempt\SetSpeakerMute\Error\Error|null $error,
+            /**
+             * Result of the action.
+             */
+            public null $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+}
+
+namespace Seam\Resources\ActionAttempt\SetSpeakerMute\Error {
+    /**
+     * Error associated with the action.
+     */
+    class Error
+    {
+        public static function from_json(mixed $json): Error|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                message: $json->message ?? null,
+                type: $json->type ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
+             * Type of the error.
+             */
+            public string|null $type,
+        ) {}
+    }
+}
+
+namespace Seam\Resources\ActionAttempt\PauseSpeakerPlayback {
+    /**
+     * Pausing playback on the speaker is pending.
+     */
+    final class Success extends
+        \Seam\Resources\ActionAttempt\PauseSpeakerPlayback
+    {
+        public static function from_json(mixed $json): Success|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: null,
+                result: isset($json->result)
+                    ? \Seam\Resources\ActionAttempt\PauseSpeakerPlayback\Success\Result::from_json(
+                        $json->result,
+                    )
+                    : null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public null $error,
+            /**
+             * Result of the action.
+             */
+            public \Seam\Resources\ActionAttempt\PauseSpeakerPlayback\Success\Result|null $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
+     * Pausing playback on the speaker is pending.
+     */
+    final class Pending extends
+        \Seam\Resources\ActionAttempt\PauseSpeakerPlayback
+    {
+        public static function from_json(mixed $json): Pending|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: null,
+                result: null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public null $error,
+            /**
+             * Result of the action.
+             */
+            public null $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
+     * Pausing playback on the speaker is pending.
+     */
+    final class Error extends \Seam\Resources\ActionAttempt\PauseSpeakerPlayback
+    {
+        public static function from_json(mixed $json): Error|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: isset($json->error)
+                    ? \Seam\Resources\ActionAttempt\PauseSpeakerPlayback\Error\Error::from_json(
+                        $json->error,
+                    )
+                    : null,
+                result: null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public \Seam\Resources\ActionAttempt\PauseSpeakerPlayback\Error\Error|null $error,
+            /**
+             * Result of the action.
+             */
+            public null $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+}
+
+namespace Seam\Resources\ActionAttempt\PauseSpeakerPlayback\Success {
+    /**
+     * Result of the action.
+     */
+    class Result
+    {
+        public static function from_json(mixed $json): Result|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                affected_device_ids: $json->affected_device_ids ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * IDs of the speakers whose playback was paused, including speakers grouped with the requested speaker.
+             *
+             * @var list<string>|null
+             */
+            public array|null $affected_device_ids,
+        ) {}
+    }
+}
+
+namespace Seam\Resources\ActionAttempt\PauseSpeakerPlayback\Error {
+    /**
+     * Error associated with the action.
+     */
+    class Error
+    {
+        public static function from_json(mixed $json): Error|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                message: $json->message ?? null,
+                type: $json->type ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
+             * Type of the error.
+             */
+            public string|null $type,
+        ) {}
+    }
+}
+
+namespace Seam\Resources\ActionAttempt\ResumeSpeakerPlayback {
+    /**
+     * Resuming playback on the speaker is pending.
+     */
+    final class Success extends
+        \Seam\Resources\ActionAttempt\ResumeSpeakerPlayback
+    {
+        public static function from_json(mixed $json): Success|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: null,
+                result: isset($json->result)
+                    ? \Seam\Resources\ActionAttempt\ResumeSpeakerPlayback\Success\Result::from_json(
+                        $json->result,
+                    )
+                    : null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public null $error,
+            /**
+             * Result of the action.
+             */
+            public \Seam\Resources\ActionAttempt\ResumeSpeakerPlayback\Success\Result|null $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
+     * Resuming playback on the speaker is pending.
+     */
+    final class Pending extends
+        \Seam\Resources\ActionAttempt\ResumeSpeakerPlayback
+    {
+        public static function from_json(mixed $json): Pending|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: null,
+                result: null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public null $error,
+            /**
+             * Result of the action.
+             */
+            public null $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
+     * Resuming playback on the speaker is pending.
+     */
+    final class Error extends
+        \Seam\Resources\ActionAttempt\ResumeSpeakerPlayback
+    {
+        public static function from_json(mixed $json): Error|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: isset($json->error)
+                    ? \Seam\Resources\ActionAttempt\ResumeSpeakerPlayback\Error\Error::from_json(
+                        $json->error,
+                    )
+                    : null,
+                result: null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public \Seam\Resources\ActionAttempt\ResumeSpeakerPlayback\Error\Error|null $error,
+            /**
+             * Result of the action.
+             */
+            public null $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+}
+
+namespace Seam\Resources\ActionAttempt\ResumeSpeakerPlayback\Success {
+    /**
+     * Result of the action.
+     */
+    class Result
+    {
+        public static function from_json(mixed $json): Result|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                affected_device_ids: $json->affected_device_ids ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * IDs of the speakers whose playback was resumed, including speakers grouped with the requested speaker.
+             *
+             * @var list<string>|null
+             */
+            public array|null $affected_device_ids,
+        ) {}
+    }
+}
+
+namespace Seam\Resources\ActionAttempt\ResumeSpeakerPlayback\Error {
+    /**
+     * Error associated with the action.
+     */
+    class Error
+    {
+        public static function from_json(mixed $json): Error|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                message: $json->message ?? null,
+                type: $json->type ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
+             * Type of the error.
+             */
+            public string|null $type,
+        ) {}
+    }
+}
+
+namespace Seam\Resources\ActionAttempt\PlaySpeakerChime {
+    /**
+     * Playing a chime on the speaker is pending.
+     */
+    final class Success extends \Seam\Resources\ActionAttempt\PlaySpeakerChime
+    {
+        public static function from_json(mixed $json): Success|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: null,
+                result: $json->result ?? null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public null $error,
+            /**
+             * Result of the action.
+             */
+            public mixed $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
+     * Playing a chime on the speaker is pending.
+     */
+    final class Pending extends \Seam\Resources\ActionAttempt\PlaySpeakerChime
+    {
+        public static function from_json(mixed $json): Pending|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: null,
+                result: null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public null $error,
+            /**
+             * Result of the action.
+             */
+            public null $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+
+    /**
+     * Playing a chime on the speaker is pending.
+     */
+    final class Error extends \Seam\Resources\ActionAttempt\PlaySpeakerChime
+    {
+        public static function from_json(mixed $json): Error|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                action_attempt_id: $json->action_attempt_id ?? null,
+                action_type: $json->action_type ?? null,
+                error: isset($json->error)
+                    ? \Seam\Resources\ActionAttempt\PlaySpeakerChime\Error\Error::from_json(
+                        $json->error,
+                    )
+                    : null,
+                result: null,
+                status: $json->status ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the action attempt.
+             */
+            string|null $action_attempt_id,
+            /**
+             * Action attempt to track the status of locking a door.
+             *
+             * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
+             */
+            string|null $action_type,
+            /**
+             * Error associated with the action.
+             */
+            public \Seam\Resources\ActionAttempt\PlaySpeakerChime\Error\Error|null $error,
+            /**
+             * Result of the action.
+             */
+            public null $result,
+            /**
+             * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
+             */
+            string|null $status,
+        ) {
+            parent::__construct(
+                action_attempt_id: $action_attempt_id,
+                action_type: $action_type,
+                status: $status,
+            );
+        }
+    }
+}
+
+namespace Seam\Resources\ActionAttempt\PlaySpeakerChime\Error {
     /**
      * Error associated with the action.
      */

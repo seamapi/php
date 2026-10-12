@@ -1118,7 +1118,9 @@ namespace Seam\Resources\UnmanagedAccessGrant\Warnings\OverprovisionedAccess {
              */
             public string|null $device_id,
             /**
-             * Reason the access code could not be revoked (e.g. `offline_access_code_not_revocable`).
+             * Reason the access code could not be revoked.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessGrant\Warnings\OverprovisionedAccess\FailedDevices\ErrorCode>|string|null
              */
             public string|null $error_code,
             /**
@@ -1126,6 +1128,13 @@ namespace Seam\Resources\UnmanagedAccessGrant\Warnings\OverprovisionedAccess {
              */
             public string|null $message,
         ) {}
+    }
+}
+
+namespace Seam\Resources\UnmanagedAccessGrant\Warnings\OverprovisionedAccess\FailedDevices {
+    enum ErrorCode: string
+    {
+        case OFFLINE_ACCESS_CODE_NOT_REVOCABLE = "offline_access_code_not_revocable";
     }
 }
 
