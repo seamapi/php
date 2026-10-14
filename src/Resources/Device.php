@@ -4006,6 +4006,7 @@ namespace Seam\Resources\Device\Properties {
             }
             return new self(
                 bonded_member_models: $json->bonded_member_models ?? null,
+                color: $json->color ?? null,
                 household_id: $json->household_id ?? null,
                 model_display_name: $json->model_display_name ?? null,
                 player_id: $json->player_id ?? null,
@@ -4021,6 +4022,10 @@ namespace Seam\Resources\Device\Properties {
              * @var list<string>|null
              */
             public array|null $bonded_member_models = null,
+            /**
+             * Color of the speaker, as reported by Sonos.
+             */
+            public string|null $color = null,
             /**
              * ID of the Sonos household that the speaker belongs to.
              */

@@ -185,6 +185,10 @@ namespace Seam\Resources\AcsSystem {
                     => \Seam\Resources\AcsSystem\Errors\SaltoKsSubscriptionLimitExceeded::from_json(
                     $json,
                 ),
+                \Seam\Resources\AcsSystem\Errors\ErrorCode::USER_LICENSE_LIMIT_REACHED
+                    => \Seam\Resources\AcsSystem\Errors\UserLicenseLimitReached::from_json(
+                    $json,
+                ),
                 \Seam\Resources\AcsSystem\Errors\ErrorCode::INSUFFICIENT_PERMISSIONS
                     => \Seam\Resources\AcsSystem\Errors\InsufficientPermissions::from_json(
                     $json,
@@ -568,6 +572,48 @@ namespace Seam\Resources\AcsSystem\Errors {
     }
 
     /**
+     * Indicates that the access control system has reached the maximum number of users its license allows, so Seam cannot create new users on it and access for new guests is not provisioned. Remove unused users from the access control system or increase its license. The error clears once Seam can create users again.
+     */
+    final class UserLicenseLimitReached extends \Seam\Resources\AcsSystem\Errors
+    {
+        public static function from_json(
+            mixed $json,
+        ): UserLicenseLimitReached|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
      * Indicates that the provider's system backing this [access control system](https://www.seam.co/docs/low-level-apis/access-systems) is not letting Seam act on it, so access cannot be managed until this is resolved. The error message says which of two causes applies. Either Seam's integration user does not have sufficient permissions on the provider's system, or has been suspended there: grant the integration user the required permissions in the provider's system, or reauthorize the connected account in Seam. Or the provider account or site does not have a valid subscription with the provider: set up or renew that subscription with the provider.
      */
     final class InsufficientPermissions extends \Seam\Resources\AcsSystem\Errors
@@ -784,6 +830,7 @@ namespace Seam\Resources\AcsSystem\Errors {
         case BRIDGE_DISCONNECTED = "bridge_disconnected";
         case VISIONLINE_INSTANCE_UNREACHABLE = "visionline_instance_unreachable";
         case SALTO_KS_SUBSCRIPTION_LIMIT_EXCEEDED = "salto_ks_subscription_limit_exceeded";
+        case USER_LICENSE_LIMIT_REACHED = "user_license_limit_reached";
         case INSUFFICIENT_PERMISSIONS = "insufficient_permissions";
         case ACS_SYSTEM_DISCONNECTED = "acs_system_disconnected";
         case ACCOUNT_DISCONNECTED = "account_disconnected";
