@@ -3946,7 +3946,7 @@ namespace Seam\Resources\Device\Properties {
              */
             public string|null $device_name = null,
             /**
-             * Set to true when the device does not support the /dual-setpoints API endpoint.
+             * Deprecated. Seam no longer sets this field.
              */
             public bool|null $dual_setpoints_not_supported = null,
             /**
