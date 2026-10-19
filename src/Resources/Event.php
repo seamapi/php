@@ -12976,6 +12976,7 @@ namespace Seam\Resources\Event\LockAccessDenied\Reason {
         case TOO_MANY_ATTEMPTS = "too_many_attempts";
         case BLOCKED_BY_PRIVACY_MODE = "blocked_by_privacy_mode";
         case CREDENTIAL_ERROR = "credential_error";
+        case CONNECTION_ERROR = "connection_error";
     }
 }
 

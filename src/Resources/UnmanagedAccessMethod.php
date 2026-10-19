@@ -282,6 +282,10 @@ namespace Seam\Resources\UnmanagedAccessMethod {
                     => \Seam\Resources\UnmanagedAccessMethod\Warnings\UserIdentityMissingPhoneNumber::from_json(
                     $json,
                 ),
+                \Seam\Resources\UnmanagedAccessMethod\Warnings\WarningCode::REQUESTED_CODE_UNAVAILABLE
+                    => \Seam\Resources\UnmanagedAccessMethod\Warnings\RequestedCodeUnavailable::from_json(
+                    $json,
+                ),
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
@@ -1058,6 +1062,59 @@ namespace Seam\Resources\UnmanagedAccessMethod\Warnings {
         }
     }
 
+    /**
+     * Indicates that the access system could not use the PIN code requested for this [access method](https://www.seam.co/docs/use-cases/granting-access/creating-an-access-grant), for example because it did not meet the access system's PIN rules, so the access system assigned a different code. Give the recipient the assigned code.
+     */
+    final class RequestedCodeUnavailable extends
+        \Seam\Resources\UnmanagedAccessMethod\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): RequestedCodeUnavailable|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                new_code: $json->new_code ?? null,
+                original_code: $json->original_code ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * The PIN code that was assigned instead.
+             */
+            public string|null $new_code,
+            /**
+             * The originally requested PIN code that could not be used.
+             */
+            public string|null $original_code,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessMethod\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
     enum WarningCode: string
     {
         case BEING_DELETED = "being_deleted";
@@ -1066,5 +1123,6 @@ namespace Seam\Resources\UnmanagedAccessMethod\Warnings {
         case DELAY_IN_ISSUING = "delay_in_issuing";
         case USER_IDENTITY_MISSING_EMAIL_ADDRESS = "user_identity_missing_email_address";
         case USER_IDENTITY_MISSING_PHONE_NUMBER = "user_identity_missing_phone_number";
+        case REQUESTED_CODE_UNAVAILABLE = "requested_code_unavailable";
     }
 }

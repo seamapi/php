@@ -4924,8 +4924,10 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success\Result {
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
                 warning_code: $json->warning_code ?? null,
+                new_code: $json->new_code ?? null,
                 original_access_method_id: $json->original_access_method_id ??
                     null,
+                original_code: $json->original_code ?? null,
             );
         }
 
@@ -4945,9 +4947,17 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success\Result {
              */
             public string|null $warning_code,
             /**
+             * The PIN code that was assigned instead.
+             */
+            public string|null $new_code = null,
+            /**
              * ID of the original access method from which this backup access method was split, if applicable.
              */
             public string|null $original_access_method_id = null,
+            /**
+             * The originally requested PIN code that could not be used.
+             */
+            public string|null $original_code = null,
         ) {}
     }
 
@@ -5043,6 +5053,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success\Result\Warnings 
         case DELAY_IN_ISSUING = "delay_in_issuing";
         case USER_IDENTITY_MISSING_EMAIL_ADDRESS = "user_identity_missing_email_address";
         case USER_IDENTITY_MISSING_PHONE_NUMBER = "user_identity_missing_phone_number";
+        case REQUESTED_CODE_UNAVAILABLE = "requested_code_unavailable";
     }
 }
 

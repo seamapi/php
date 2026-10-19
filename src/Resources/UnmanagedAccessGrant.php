@@ -922,7 +922,7 @@ namespace Seam\Resources\UnmanagedAccessGrant\Warnings {
     }
 
     /**
-     * Indicates that the requested PIN code was already in use on a device, so a different code was assigned.
+     * Indicates that the requested PIN code could not be used, so a different code was assigned. For example, the code was already in use on a device, or the access system rejected it because it did not meet its PIN rules.
      */
     final class RequestedCodeUnavailable extends
         \Seam\Resources\UnmanagedAccessGrant\Warnings
@@ -935,11 +935,12 @@ namespace Seam\Resources\UnmanagedAccessGrant\Warnings {
             }
             return new self(
                 created_at: $json->created_at ?? null,
-                device_id: $json->device_id ?? null,
                 message: $json->message ?? null,
                 new_code: $json->new_code ?? null,
                 original_code: $json->original_code ?? null,
                 warning_code: $json->warning_code ?? null,
+                access_method_id: $json->access_method_id ?? null,
+                device_id: $json->device_id ?? null,
             );
         }
 
@@ -948,10 +949,6 @@ namespace Seam\Resources\UnmanagedAccessGrant\Warnings {
              * Date and time at which Seam created the warning.
              */
             string|null $created_at,
-            /**
-             * ID of the device where the requested code was unavailable.
-             */
-            public string|null $device_id,
             /**
              * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
              */
@@ -970,6 +967,14 @@ namespace Seam\Resources\UnmanagedAccessGrant\Warnings {
              * @var value-of<\Seam\Resources\UnmanagedAccessGrant\Warnings\WarningCode>|string|null
              */
             string|null $warning_code,
+            /**
+             * ID of the access method whose requested code was unavailable. Present when an access system, such as Salto KS, assigned a different code.
+             */
+            public string|null $access_method_id = null,
+            /**
+             * ID of the device where the requested code was unavailable. Present when the code was set directly on a device.
+             */
+            public string|null $device_id = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
