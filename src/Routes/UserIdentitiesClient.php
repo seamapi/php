@@ -70,6 +70,7 @@ class UserIdentitiesClient
      * Creates a new [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity).
      *
      * @param list<string> $acs_system_ids List of access system IDs to associate with the new user identity through access system users. If there's no user with the same email address or phone number in the specified access systems, a new access system user is created. If there is an existing user with the same email or phone number in the specified access systems, the user is linked to the user identity.
+     * @param string $customer_key Customer key of the customer that owns the new user identity. Set it when the user identity will be used in access grants created through that customer's client session or Customer Portal.
      * @param string|NullValue $email_address Unique email address for the new user identity.
      * @param string|NullValue $full_name Full name of the user associated with the new user identity.
      * @param string|NullValue $phone_number Unique phone number for the new user identity in E.164 format (for example, +15555550100).
@@ -78,6 +79,7 @@ class UserIdentitiesClient
      */
     public function create(
         ?array $acs_system_ids = null,
+        ?string $customer_key = null,
         string|NullValue|null $email_address = null,
         string|NullValue|null $full_name = null,
         string|NullValue|null $phone_number = null,
@@ -87,6 +89,9 @@ class UserIdentitiesClient
 
         if ($acs_system_ids !== null) {
             $request_payload["acs_system_ids"] = $acs_system_ids;
+        }
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($email_address !== null) {
             $request_payload["email_address"] = $email_address;
