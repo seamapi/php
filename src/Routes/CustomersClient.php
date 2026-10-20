@@ -33,7 +33,7 @@ class CustomersClient
      * @param string $customization_profile_id The ID of the customization profile to use for the portal.
      * @param mixed $deep_link Deep link target resource for initial redirect. When set, the portal will navigate directly to the specified resource.
      * @param bool $exclude_locale_picker Whether to exclude the option to select a locale within the portal UI.
-     * @param mixed $features
+     * @param mixed $features Features to include in the portal. Settings you omit use the portal's customization profile, then the Seam default. Settings you pass take precedence over the customization profile's, so changing the profile doesn't change them.
      * @param bool $is_embedded Whether the portal is embedded in another application.
      * @param mixed $landing_page Configuration for the landing page when the portal loads.
      * @param string $locale The locale to use for the portal.

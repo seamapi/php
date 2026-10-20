@@ -41,10 +41,6 @@ namespace Seam\Resources {
                 can_hvac_cool: $json->can_hvac_cool ?? null,
                 can_hvac_heat: $json->can_hvac_heat ?? null,
                 can_hvac_heat_cool: $json->can_hvac_heat_cool ?? null,
-                can_mute_speaker: $json->can_mute_speaker ?? null,
-                can_pause_speaker_playback: $json->can_pause_speaker_playback ??
-                    null,
-                can_play_speaker_chime: $json->can_play_speaker_chime ?? null,
                 can_program_offline_access_codes: $json->can_program_offline_access_codes ??
                     null,
                 can_program_online_access_codes: $json->can_program_online_access_codes ??
@@ -59,7 +55,6 @@ namespace Seam\Resources {
                 can_remotely_unlock: $json->can_remotely_unlock ?? null,
                 can_run_thermostat_programs: $json->can_run_thermostat_programs ??
                     null,
-                can_set_speaker_volume: $json->can_set_speaker_volume ?? null,
                 can_simulate_connection: $json->can_simulate_connection ?? null,
                 can_simulate_disconnection: $json->can_simulate_disconnection ??
                     null,
@@ -178,18 +173,6 @@ namespace Seam\Resources {
              */
             public bool|null $can_hvac_heat_cool = null,
             /**
-             * Indicates whether the speaker supports muting and unmuting.
-             */
-            public bool|null $can_mute_speaker = null,
-            /**
-             * Indicates whether the speaker supports pausing and resuming playback.
-             */
-            public bool|null $can_pause_speaker_playback = null,
-            /**
-             * Indicates whether the speaker supports playing a chime.
-             */
-            public bool|null $can_play_speaker_chime = null,
-            /**
              * Indicates whether the device supports programming offline access codes.
              */
             public bool|null $can_program_offline_access_codes = null,
@@ -221,10 +204,6 @@ namespace Seam\Resources {
              * Indicates whether the thermostat supports running climate programs.
              */
             public bool|null $can_run_thermostat_programs = null,
-            /**
-             * Indicates whether the speaker supports setting its volume.
-             */
-            public bool|null $can_set_speaker_volume = null,
             /**
              * Indicates whether the device supports simulating connection in a sandbox.
              */
@@ -834,16 +813,6 @@ namespace Seam\Resources\Device {
                         $json->smartthings_metadata,
                     )
                     : null,
-                sonos_metadata: isset($json->sonos_metadata)
-                    ? \Seam\Resources\Device\Properties\SonosMetadata::from_json(
-                        $json->sonos_metadata,
-                    )
-                    : null,
-                speaker: isset($json->speaker)
-                    ? \Seam\Resources\Device\Properties\Speaker::from_json(
-                        $json->speaker,
-                    )
-                    : null,
                 supported_code_lengths: $json->supported_code_lengths ?? null,
                 supports_accessory_keypad: $json->supports_accessory_keypad ??
                     null,
@@ -1311,14 +1280,6 @@ namespace Seam\Resources\Device {
              * Metadata for a SmartThings device.
              */
             public \Seam\Resources\Device\Properties\SmartthingsMetadata|null $smartthings_metadata = null,
-            /**
-             * Metadata for a Sonos speaker.
-             */
-            public \Seam\Resources\Device\Properties\SonosMetadata|null $sonos_metadata = null,
-            /**
-             * Audio state and capabilities of the speaker.
-             */
-            public \Seam\Resources\Device\Properties\Speaker|null $speaker = null,
             /**
              * Supported code lengths for access codes.
              *
@@ -3995,61 +3956,6 @@ namespace Seam\Resources\Device\Properties {
     }
 
     /**
-     * Metadata for a Sonos speaker.
-     */
-    class SonosMetadata
-    {
-        public static function from_json(mixed $json): SonosMetadata|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                bonded_member_models: $json->bonded_member_models ?? null,
-                color: $json->color ?? null,
-                household_id: $json->household_id ?? null,
-                model_display_name: $json->model_display_name ?? null,
-                player_id: $json->player_id ?? null,
-                player_name: $json->player_name ?? null,
-                software_version: $json->software_version ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Models of the speakers bonded to this speaker, such as surrounds or a subwoofer.
-             *
-             * @var list<string>|null
-             */
-            public array|null $bonded_member_models = null,
-            /**
-             * Color of the speaker, as reported by Sonos.
-             */
-            public string|null $color = null,
-            /**
-             * ID of the Sonos household that the speaker belongs to.
-             */
-            public string|null $household_id = null,
-            /**
-             * Model name of the speaker, as reported by Sonos.
-             */
-            public string|null $model_display_name = null,
-            /**
-             * ID of the Sonos player for the speaker.
-             */
-            public string|null $player_id = null,
-            /**
-             * Name of the speaker, as set in the Sonos app.
-             */
-            public string|null $player_name = null,
-            /**
-             * Software version running on the speaker.
-             */
-            public string|null $software_version = null,
-        ) {}
-    }
-
-    /**
      * Metadata for a tado° device.
      */
     class TadoMetadata
@@ -4603,87 +4509,6 @@ namespace Seam\Resources\Device\Properties {
              * IANA time zone for interpreting `time_pairs` and the date recurrence rules. Present only when the option fixes times or dates.
              */
             public string|null $time_zone = null,
-        ) {}
-    }
-
-    /**
-     * Audio state and capabilities of the speaker.
-     */
-    class Speaker
-    {
-        public static function from_json(mixed $json): Speaker|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                grouped_with_device_ids: $json->grouped_with_device_ids ?? null,
-                has_fixed_volume: $json->has_fixed_volume ?? null,
-                is_muted: $json->is_muted ?? null,
-                max_volume: $json->max_volume ?? null,
-                min_volume: $json->min_volume ?? null,
-                playback_state: $json->playback_state ?? null,
-                supports_chime: $json->supports_chime ?? null,
-                volume: $json->volume ?? null,
-                volume_step: $json->volume_step ?? null,
-                now_playing: isset($json->now_playing)
-                    ? \Seam\Resources\Device\Properties\Speaker\NowPlaying::from_json(
-                        $json->now_playing,
-                    )
-                    : null,
-                volume_reported_at: $json->volume_reported_at ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * IDs of the other speakers that are currently grouped with this speaker. Pausing or resuming playback on a speaker also affects the speakers in its group.
-             *
-             * @var list<string>|null
-             */
-            public array|null $grouped_with_device_ids,
-            /**
-             * Indicates whether the speaker's volume is fixed, for example, because the speaker's line-out level is controlled by an external amplifier. A speaker with a fixed volume cannot have its volume set through Seam.
-             */
-            public bool|null $has_fixed_volume,
-            /**
-             * Indicates whether the speaker is muted.
-             */
-            public bool|null $is_muted,
-            /**
-             * Maximum volume that you can set on the speaker. This is the ceiling of the speaker's native volume scale, not a limit configured for guests.
-             */
-            public float|null $max_volume,
-            /**
-             * Minimum volume that you can set on the speaker.
-             */
-            public float|null $min_volume,
-            /**
-             * Playback state of the speaker.
-             *
-             * @var value-of<\Seam\Resources\Device\Properties\Speaker\PlaybackState>|string|null
-             */
-            public string|null $playback_state,
-            /**
-             * Indicates whether the speaker can play a chime.
-             */
-            public bool|null $supports_chime,
-            /**
-             * Current volume of the speaker, on the speaker's native volume scale from `min_volume` to `max_volume`. This is the native volume setting, not a decibel level.
-             */
-            public float|null $volume,
-            /**
-             * Increment between the volume values that you can set on the speaker.
-             */
-            public float|null $volume_step,
-            /**
-             * Content that is currently playing on the speaker.
-             */
-            public \Seam\Resources\Device\Properties\Speaker\NowPlaying|null $now_playing = null,
-            /**
-             * Date and time at which the speaker first reported its current volume.
-             */
-            public string|null $volume_reported_at = null,
         ) {}
     }
 
@@ -5826,50 +5651,6 @@ namespace Seam\Resources\Device\Properties\OnlineTimeFrameOptions {
              */
             public string|null $start_time,
         ) {}
-    }
-}
-
-namespace Seam\Resources\Device\Properties\Speaker {
-    /**
-     * Content that is currently playing on the speaker.
-     */
-    class NowPlaying
-    {
-        public static function from_json(mixed $json): NowPlaying|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                album: $json->album ?? null,
-                artist: $json->artist ?? null,
-                title: $json->title ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Album of the content that is currently playing.
-             */
-            public string|null $album = null,
-            /**
-             * Artist of the content that is currently playing.
-             */
-            public string|null $artist = null,
-            /**
-             * Title of the content that is currently playing.
-             */
-            public string|null $title = null,
-        ) {}
-    }
-
-    enum PlaybackState: string
-    {
-        case PLAYING = "playing";
-        case PAUSED = "paused";
-        case IDLE = "idle";
-        case BUFFERING = "buffering";
-        case UNKNOWN = "unknown";
     }
 }
 
