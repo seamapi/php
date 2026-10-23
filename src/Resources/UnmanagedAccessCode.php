@@ -829,7 +829,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
     }
 
     /**
-     * Seam was unable to issue this access code before its start time, so the recipient may be unable to unlock the device. This usually points to a problem that needs attention, such as an offline or disconnected device. Seam keeps retrying, and this error clears automatically if the access code is eventually issued.
+     * Seam was unable to issue this access code before its start time, so the recipient may be unable to unlock the device. This usually points to a problem that needs attention, such as an offline or disconnected device. This error clears automatically if the access code is eventually issued.
      */
     final class FailedToIssue extends \Seam\Resources\UnmanagedAccessCode\Errors
     {

@@ -364,6 +364,10 @@ namespace Seam\Resources\AccessGrant {
                     => \Seam\Resources\AccessGrant\Warnings\DeviceTimeConstraintsViolated::from_json(
                     $json,
                 ),
+                \Seam\Resources\AccessGrant\Warnings\WarningCode::ACCESS_REVOKED
+                    => \Seam\Resources\AccessGrant\Warnings\AccessRevoked::from_json(
+                    $json,
+                ),
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
@@ -1104,6 +1108,52 @@ namespace Seam\Resources\AccessGrant\Warnings {
         }
     }
 
+    /**
+     * Indicates that one of this access grant's access methods no longer grants access because of a change outside Seam, for example its card was encoded again for another credential. Seam does not replace the access method; issue a new one if the user still needs it.
+     */
+    final class AccessRevoked extends \Seam\Resources\AccessGrant\Warnings
+    {
+        public static function from_json(mixed $json): AccessRevoked|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                access_method_id: $json->access_method_id ?? null,
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the access method whose access was revoked.
+             */
+            public string|null $access_method_id,
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AccessGrant\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
     enum WarningCode: string
     {
         case BEING_DELETED = "being_deleted";
@@ -1113,6 +1163,7 @@ namespace Seam\Resources\AccessGrant\Warnings {
         case REQUESTED_CODE_UNAVAILABLE = "requested_code_unavailable";
         case DEVICE_DOES_NOT_SUPPORT_ACCESS_CODES = "device_does_not_support_access_codes";
         case DEVICE_TIME_CONSTRAINTS_VIOLATED = "device_time_constraints_violated";
+        case ACCESS_REVOKED = "access_revoked";
     }
 }
 
