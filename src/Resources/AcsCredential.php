@@ -423,6 +423,10 @@ namespace Seam\Resources\AcsCredential {
                     => \Seam\Resources\AcsCredential\Warnings\RequestedCodeUnavailable::from_json(
                     $json,
                 ),
+                \Seam\Resources\AcsCredential\Warnings\WarningCode::SCHEDULE_ROUNDED_UP
+                    => \Seam\Resources\AcsCredential\Warnings\ScheduleRoundedUp::from_json(
+                    $json,
+                ),
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
@@ -788,6 +792,47 @@ namespace Seam\Resources\AcsCredential\Warnings {
         }
     }
 
+    /**
+     * Indicates that the access system can only end card access on fixed time marks, so access was extended past `ends_at` to the next mark. The message states when access actually ends.
+     */
+    final class ScheduleRoundedUp extends \Seam\Resources\AcsCredential\Warnings
+    {
+        public static function from_json(mixed $json): ScheduleRoundedUp|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsCredential\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
     enum WarningCode: string
     {
         case WAITING_TO_BE_ISSUED = "waiting_to_be_issued";
@@ -797,5 +842,6 @@ namespace Seam\Resources\AcsCredential\Warnings {
         case UNKNOWN_ISSUE_WITH_ACS_CREDENTIAL = "unknown_issue_with_acs_credential";
         case NEEDS_TO_BE_REISSUED = "needs_to_be_reissued";
         case REQUESTED_CODE_UNAVAILABLE = "requested_code_unavailable";
+        case SCHEDULE_ROUNDED_UP = "schedule_rounded_up";
     }
 }

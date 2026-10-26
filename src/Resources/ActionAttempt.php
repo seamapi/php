@@ -2820,6 +2820,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential\Success\Result\AcsCredenti
         case UNKNOWN_ISSUE_WITH_ACS_CREDENTIAL = "unknown_issue_with_acs_credential";
         case NEEDS_TO_BE_REISSUED = "needs_to_be_reissued";
         case REQUESTED_CODE_UNAVAILABLE = "requested_code_unavailable";
+        case SCHEDULE_ROUNDED_UP = "schedule_rounded_up";
     }
 }
 
@@ -3489,6 +3490,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential\Success\Result\Warnings 
         case UNKNOWN_ISSUE_WITH_ACS_CREDENTIAL = "unknown_issue_with_acs_credential";
         case NEEDS_TO_BE_REISSUED = "needs_to_be_reissued";
         case REQUESTED_CODE_UNAVAILABLE = "requested_code_unavailable";
+        case SCHEDULE_ROUNDED_UP = "schedule_rounded_up";
     }
 }
 
@@ -4160,6 +4162,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result\War
         case UNKNOWN_ISSUE_WITH_ACS_CREDENTIAL = "unknown_issue_with_acs_credential";
         case NEEDS_TO_BE_REISSUED = "needs_to_be_reissued";
         case REQUESTED_CODE_UNAVAILABLE = "requested_code_unavailable";
+        case SCHEDULE_ROUNDED_UP = "schedule_rounded_up";
     }
 }
 
@@ -4733,6 +4736,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential\Success\Result\Warnings 
         case USER_IDENTITY_MISSING_EMAIL_ADDRESS = "user_identity_missing_email_address";
         case USER_IDENTITY_MISSING_PHONE_NUMBER = "user_identity_missing_phone_number";
         case REQUESTED_CODE_UNAVAILABLE = "requested_code_unavailable";
+        case SCHEDULE_ROUNDED_UP = "schedule_rounded_up";
     }
 }
 

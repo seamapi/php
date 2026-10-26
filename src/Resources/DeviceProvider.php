@@ -233,6 +233,7 @@ namespace Seam\Resources\DeviceProvider {
         case OMNITEC = "omnitec";
         case KISI = "kisi";
         case AQARA = "aqara";
+        case EUFY = "eufy";
         case SONOS = "sonos";
     }
 }
