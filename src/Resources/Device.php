@@ -621,6 +621,11 @@ namespace Seam\Resources\Device {
                         $json->ecobee_metadata,
                     )
                     : null,
+                eufy_metadata: isset($json->eufy_metadata)
+                    ? \Seam\Resources\Device\Properties\EufyMetadata::from_json(
+                        $json->eufy_metadata,
+                    )
+                    : null,
                 fallback_climate_preset_key: $json->fallback_climate_preset_key ??
                     null,
                 fan_mode_setting: $json->fan_mode_setting ?? null,
@@ -1041,6 +1046,10 @@ namespace Seam\Resources\Device {
              * Metadata for an ecobee device.
              */
             public \Seam\Resources\Device\Properties\EcobeeMetadata|null $ecobee_metadata = null,
+            /**
+             * Metadata for a Eufy device.
+             */
+            public \Seam\Resources\Device\Properties\EufyMetadata|null $eufy_metadata = null,
             /**
              * Key of the [fallback climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets/setting-the-fallback-climate-preset) for the thermostat.
              */
@@ -1551,6 +1560,7 @@ namespace Seam\Resources\Device {
         case OMNITEC_LOCK = "omnitec_lock";
         case KISI_LOCK = "kisi_lock";
         case AQARA_LOCK = "aqara_lock";
+        case EUFY_LOCK = "eufy_lock";
         case KEYNEST_KEY = "keynest_key";
         case NOISEAWARE_ACTIVITY_ZONE = "noiseaware_activity_zone";
         case MINUT_SENSOR = "minut_sensor";
@@ -2940,6 +2950,30 @@ namespace Seam\Resources\Device\Properties {
              * Device ID for an ecobee device.
              */
             public string|null $ecobee_device_id = null,
+        ) {}
+    }
+
+    /**
+     * Metadata for a Eufy device.
+     */
+    class EufyMetadata
+    {
+        public static function from_json(mixed $json): EufyMetadata|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                device_id: $json->device_id ?? null,
+                device_name: $json->device_name ?? null,
+                model: $json->model ?? null,
+            );
+        }
+
+        public function __construct(
+            public string|null $device_id = null,
+            public string|null $device_name = null,
+            public string|null $model = null,
         ) {}
     }
 

@@ -657,6 +657,7 @@ namespace Seam\Resources\UnmanagedDevice {
         case OMNITEC_LOCK = "omnitec_lock";
         case KISI_LOCK = "kisi_lock";
         case AQARA_LOCK = "aqara_lock";
+        case EUFY_LOCK = "eufy_lock";
         case KEYNEST_KEY = "keynest_key";
         case NOISEAWARE_ACTIVITY_ZONE = "noiseaware_activity_zone";
         case MINUT_SENSOR = "minut_sensor";
