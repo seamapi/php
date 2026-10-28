@@ -4000,20 +4000,57 @@ namespace Seam\Resources\Device\Properties {
                 return null;
             }
             return new self(
+                device_serial_numbers: $json->device_serial_numbers ?? null,
                 device_type: $json->device_type ?? null,
+                home_generation: $json->home_generation ?? null,
+                home_id: $json->home_id ?? null,
+                home_name: $json->home_name ?? null,
                 serial_no: $json->serial_no ?? null,
+                zone_id: $json->zone_id ?? null,
+                zone_name: $json->zone_name ?? null,
+                zone_type: $json->zone_type ?? null,
             );
         }
 
         public function __construct(
             /**
-             * Device type for a tado° device.
+             * Serial numbers of all tado° devices in the zone.
+             *
+             * @var list<string>|null
+             */
+            public array|null $device_serial_numbers = null,
+            /**
+             * Device type of the main tado° device in the zone, such as `RU02`, `VA02` or `WR02`.
              */
             public string|null $device_type = null,
             /**
-             * Serial number for a tado° device.
+             * Generation of the tado° home, such as `PRE_LINE_X`.
+             */
+            public string|null $home_generation = null,
+            /**
+             * ID of the tado° home.
+             */
+            public string|null $home_id = null,
+            /**
+             * Name of the tado° home.
+             */
+            public string|null $home_name = null,
+            /**
+             * Serial number of the main tado° device in the zone, such as its wall thermostat or Smart AC Control.
              */
             public string|null $serial_no = null,
+            /**
+             * ID of the tado° zone within its home.
+             */
+            public string|null $zone_id = null,
+            /**
+             * Name of the tado° zone.
+             */
+            public string|null $zone_name = null,
+            /**
+             * Type of the tado° zone: `HEATING` or `AIR_CONDITIONING`.
+             */
+            public string|null $zone_type = null,
         ) {}
     }
 
