@@ -181,6 +181,10 @@ namespace Seam\Resources\Space {
                     => \Seam\Resources\Space\Warnings\BeingDeleted::from_json(
                     $json,
                 ),
+                \Seam\Resources\Space\Warnings\WarningCode::NOISE_SENSOR_CONFIGURATION_MISMATCH
+                    => \Seam\Resources\Space\Warnings\NoiseSensorConfigurationMismatch::from_json(
+                    $json,
+                ),
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
@@ -250,8 +254,59 @@ namespace Seam\Resources\Space\Warnings {
         }
     }
 
+    /**
+     * Indicates that Seam could not apply the noise sensor automation to one or more noise sensors in the space, for example because their settings keep changing back after Seam re-applies it, Seam does not know the sensor's time zone yet, or the sensor is shared with spaces that configure it differently.
+     */
+    final class NoiseSensorConfigurationMismatch extends
+        \Seam\Resources\Space\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): NoiseSensorConfigurationMismatch|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                device_ids: $json->device_ids ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * IDs of the noise sensors in the space that Seam could not bring in line with the noise sensor automation.
+             *
+             * @var list<string>|null
+             */
+            public array|null $device_ids,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Space\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
     enum WarningCode: string
     {
         case BEING_DELETED = "being_deleted";
+        case NOISE_SENSOR_CONFIGURATION_MISMATCH = "noise_sensor_configuration_mismatch";
     }
 }
