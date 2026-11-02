@@ -351,14 +351,14 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
     /**
      * Returns a list of all [access codes](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes).
      *
-     * Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
+     * Without `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`, returns access codes across the workspace, or across the customer when `customer_key` is set. Use `limit` and `page_cursor` to page through them.
      *
-     * @param list<string> $access_code_ids IDs of the access codes that you want to retrieve. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
-     * @param string $access_grant_id ID of the access grant for which you want to list access codes. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
-     * @param string $access_grant_key Key of the access grant for which you want to list access codes. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
-     * @param string $access_method_id ID of the access method for which you want to list access codes. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
+     * @param list<string> $access_code_ids IDs of the access codes that you want to retrieve.
+     * @param string $access_grant_id ID of the access grant for which you want to list access codes.
+     * @param string $access_grant_key Key of the access grant for which you want to list access codes.
+     * @param string $access_method_id ID of the access method for which you want to list access codes.
      * @param string $customer_key Customer key for which you want to list access codes.
-     * @param string $device_id ID of the device for which you want to list access codes. Specify `device_id`, `access_code_ids`, `access_method_id`, `access_grant_id`, or `access_grant_key`.
+     * @param string $device_id ID of the device for which you want to list access codes.
      * @param float $limit Numerical limit on the number of access codes to return.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned access codes to include all records that satisfy a partial match using `name`, `code` or `access_code_id`.
@@ -379,20 +379,6 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         ?string $user_identifier_key = null,
         ?callable $on_response = null,
     ): array {
-        if (
-            $access_code_ids === null &&
-            $access_grant_id === null &&
-            $access_grant_key === null &&
-            $access_method_id === null &&
-            $customer_key === null &&
-            $device_id === null &&
-            $search === null &&
-            $user_identifier_key === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_codes/list",
-            );
-        }
         $request_payload = [];
 
         if ($access_code_ids !== null) {

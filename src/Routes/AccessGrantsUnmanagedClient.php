@@ -53,6 +53,7 @@ class AccessGrantsUnmanagedClient
      *
      * @param string $acs_entrance_id ID of the entrance by which you want to filter the list of unmanaged Access Grants.
      * @param string $acs_system_id ID of the access system by which you want to filter the list of unmanaged Access Grants.
+     * @param string $customer_key Customer key for which you want to list unmanaged Access Grants.
      * @param float $limit Numerical limit on the number of unmanaged access grants to return.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $reservation_key Filter unmanaged Access Grants by reservation_key.
@@ -63,6 +64,7 @@ class AccessGrantsUnmanagedClient
     public function list(
         ?string $acs_entrance_id = null,
         ?string $acs_system_id = null,
+        ?string $customer_key = null,
         ?float $limit = null,
         string|NullValue|null $page_cursor = null,
         ?string $reservation_key = null,
@@ -76,6 +78,9 @@ class AccessGrantsUnmanagedClient
         }
         if ($acs_system_id !== null) {
             $request_payload["acs_system_id"] = $acs_system_id;
+        }
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;

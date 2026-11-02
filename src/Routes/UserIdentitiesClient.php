@@ -240,6 +240,7 @@ class UserIdentitiesClient
      *
      * @param string $created_before Timestamp by which to limit returned user identities. Returns user identities created before this timestamp.
      * @param string $credential_manager_acs_system_id `acs_system_id` of the credential manager by which you want to filter the list of user identities.
+     * @param string $customer_key Customer key for which you want to list user identities.
      * @param int $limit Maximum number of records to return per page.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned user identities to include all records that satisfy a partial match using `full_name`, `phone_number`, `email_address` or `user_identity_id`.
@@ -250,6 +251,7 @@ class UserIdentitiesClient
     public function list(
         ?string $created_before = null,
         ?string $credential_manager_acs_system_id = null,
+        ?string $customer_key = null,
         ?int $limit = null,
         string|NullValue|null $page_cursor = null,
         ?string $search = null,
@@ -265,6 +267,9 @@ class UserIdentitiesClient
             $request_payload[
                 "credential_manager_acs_system_id"
             ] = $credential_manager_acs_system_id;
+        }
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;

@@ -204,6 +204,7 @@ class AccessMethodsClient
      * @param string $access_grant_id ID of Access Grant to list access methods for.
      * @param string $access_grant_key Key of Access Grant to list access methods for.
      * @param string $acs_entrance_id ID of the entrance for which you want to retrieve all access methods that grant access to it.
+     * @param string $customer_key Customer key for which you want to list access methods.
      * @param string $device_id ID of the device by which to filter the returned access methods. Must be combined with `access_grant_id`, `access_grant_key`, or `acs_entrance_id`.
      * @param int $limit Maximum number of records to return per page.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
@@ -216,6 +217,7 @@ class AccessMethodsClient
         ?string $access_grant_id = null,
         ?string $access_grant_key = null,
         ?string $acs_entrance_id = null,
+        ?string $customer_key = null,
         ?string $device_id = null,
         ?int $limit = null,
         string|NullValue|null $page_cursor = null,
@@ -227,6 +229,7 @@ class AccessMethodsClient
             $access_grant_id === null &&
             $access_grant_key === null &&
             $acs_entrance_id === null &&
+            $customer_key === null &&
             $device_id === null &&
             $space_id === null
         ) {
@@ -247,6 +250,9 @@ class AccessMethodsClient
         }
         if ($acs_entrance_id !== null) {
             $request_payload["acs_entrance_id"] = $acs_entrance_id;
+        }
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;

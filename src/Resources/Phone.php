@@ -357,6 +357,10 @@ namespace Seam\Resources\Phone {
                     => \Seam\Resources\Phone\Warnings\MaxAccessCodesReached::from_json(
                     $json,
                 ),
+                \Seam\Resources\Phone\Warnings\WarningCode::CLOUD_RECORDING_NOT_ENABLED
+                    => \Seam\Resources\Phone\Warnings\CloudRecordingNotEnabled::from_json(
+                    $json,
+                ),
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
@@ -1776,7 +1780,7 @@ namespace Seam\Resources\Phone\Warnings {
     }
 
     /**
-     * Indicates that a change in the reported device model has been detected for this Salto KS lock, which may occur after an IQ hub reset. Access code support may be affected. See https://help.getseam.com/articles/5098842588-salto-ks-lock-loses-access-code-support for troubleshooting steps.
+     * Indicates that a change in the reported device model has been detected for this Salto KS lock, which may occur after an IQ hub reset. Access code support may be affected. See https://www.seam.co/help/salto-ks-lock-loses-access-code-support for troubleshooting steps.
      */
     final class SaltoKsLockAccessCodeSupportRemoved extends
         \Seam\Resources\Phone\Warnings
@@ -2376,6 +2380,48 @@ namespace Seam\Resources\Phone\Warnings {
         }
     }
 
+    /**
+     * Indicates that the camera's account plan does not include cloud recording, so event media such as motion clips is unavailable.
+     */
+    final class CloudRecordingNotEnabled extends \Seam\Resources\Phone\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): CloudRecordingNotEnabled|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Phone\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
     enum WarningCode: string
     {
         case PARTIAL_BACKUP_ACCESS_CODE_POOL = "partial_backup_access_code_pool";
@@ -2406,5 +2452,6 @@ namespace Seam\Resources\Phone\Warnings {
         case ACCESSORY_KEYPAD_LOW_BATTERY = "accessory_keypad_low_battery";
         case UNRELIABLE_ONLINE_STATUS = "unreliable_online_status";
         case MAX_ACCESS_CODES_REACHED = "max_access_codes_reached";
+        case CLOUD_RECORDING_NOT_ENABLED = "cloud_recording_not_enabled";
     }
 }
