@@ -153,11 +153,6 @@ class AccessGrantsClient
         ?string $access_grant_id = null,
         ?string $access_grant_key = null,
     ): AccessGrant {
-        if ($access_grant_id === null && $access_grant_key === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_grants/get",
-            );
-        }
         $request_payload = [];
 
         if ($access_grant_id !== null) {
@@ -166,6 +161,11 @@ class AccessGrantsClient
         if ($access_grant_key !== null) {
             $request_payload["access_grant_key"] = $access_grant_key;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/access_grants/get",
+            $request_payload,
+            ["access_grant_id", "access_grant_key"],
+        );
 
         $res = Body::decode(
             $this->client->request("GET", "/access_grants/get", [
@@ -193,16 +193,6 @@ class AccessGrantsClient
         ?array $exclude = null,
         ?array $include = null,
     ): Batch {
-        if (
-            $access_grant_ids === null &&
-            $access_grant_keys === null &&
-            $exclude === null &&
-            $include === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_grants/get_related",
-            );
-        }
         $request_payload = [];
 
         if ($access_grant_ids !== null) {
@@ -217,6 +207,11 @@ class AccessGrantsClient
         if ($include !== null) {
             $request_payload["include"] = $include;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/access_grants/get_related",
+            $request_payload,
+            ["access_grant_ids", "access_grant_keys", "exclude", "include"],
+        );
 
         $res = Body::decode(
             $this->client->request("GET", "/access_grants/get_related", [
@@ -379,17 +374,6 @@ class AccessGrantsClient
         string|NullValue|null $name = null,
         ?string $starts_at = null,
     ): void {
-        if (
-            $access_grant_id === null &&
-            $access_grant_key === null &&
-            $ends_at === null &&
-            $name === null &&
-            $starts_at === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_grants/update",
-            );
-        }
         $request_payload = [];
 
         if ($access_grant_id !== null) {
@@ -407,6 +391,17 @@ class AccessGrantsClient
         if ($starts_at !== null) {
             $request_payload["starts_at"] = $starts_at;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/access_grants/update",
+            $request_payload,
+            [
+                "access_grant_id",
+                "access_grant_key",
+                "ends_at",
+                "name",
+                "starts_at",
+            ],
+        );
 
         $this->client->request("PATCH", "/access_grants/update", [
             "json" => (object) $request_payload,

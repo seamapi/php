@@ -37,11 +37,6 @@ class EventsClient
         ?string $device_id = null,
         ?string $event_type = null,
     ): Event {
-        if ($event_id === null && $device_id === null && $event_type === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /events/get",
-            );
-        }
         $request_payload = [];
 
         if ($event_id !== null) {
@@ -53,6 +48,11 @@ class EventsClient
         if ($event_type !== null) {
             $request_payload["event_type"] = $event_type;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/events/get",
+            $request_payload,
+            ["event_id", "device_id", "event_type"],
+        );
 
         $res = Body::decode(
             $this->client->request("GET", "/events/get", [
@@ -126,39 +126,6 @@ class EventsClient
         ?float $unstable_offset = null,
         ?string $user_identity_id = null,
     ): array {
-        if (
-            $access_code_id === null &&
-            $access_code_ids === null &&
-            $access_grant_id === null &&
-            $access_grant_ids === null &&
-            $access_method_id === null &&
-            $access_method_ids === null &&
-            $acs_access_group_id === null &&
-            $acs_credential_id === null &&
-            $acs_encoder_id === null &&
-            $acs_entrance_id === null &&
-            $acs_system_id === null &&
-            $acs_system_ids === null &&
-            $acs_user_id === null &&
-            $between === null &&
-            $connect_webview_id === null &&
-            $connected_account_id === null &&
-            $customer_key === null &&
-            $device_id === null &&
-            $device_ids === null &&
-            $event_ids === null &&
-            $event_type === null &&
-            $event_types === null &&
-            $since === null &&
-            $space_id === null &&
-            $space_ids === null &&
-            $unstable_offset === null &&
-            $user_identity_id === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /events/list",
-            );
-        }
         $request_payload = [];
 
         if ($access_code_id !== null) {
@@ -245,6 +212,39 @@ class EventsClient
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/events/list",
+            $request_payload,
+            [
+                "access_code_id",
+                "access_code_ids",
+                "access_grant_id",
+                "access_grant_ids",
+                "access_method_id",
+                "access_method_ids",
+                "acs_access_group_id",
+                "acs_credential_id",
+                "acs_encoder_id",
+                "acs_entrance_id",
+                "acs_system_id",
+                "acs_system_ids",
+                "acs_user_id",
+                "between",
+                "connect_webview_id",
+                "connected_account_id",
+                "customer_key",
+                "device_id",
+                "device_ids",
+                "event_ids",
+                "event_type",
+                "event_types",
+                "since",
+                "space_id",
+                "space_ids",
+                "unstable_offset",
+                "user_identity_id",
+            ],
+        );
 
         $res = Body::decode(
             $this->client->request("GET", "/events/list", [

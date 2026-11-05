@@ -61,11 +61,6 @@ class ConnectedAccountsClient
         ?string $connected_account_id = null,
         ?string $email = null,
     ): ConnectedAccount {
-        if ($connected_account_id === null && $email === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /connected_accounts/get",
-            );
-        }
         $request_payload = [];
 
         if ($connected_account_id !== null) {
@@ -74,6 +69,11 @@ class ConnectedAccountsClient
         if ($email !== null) {
             $request_payload["email"] = $email;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/connected_accounts/get",
+            $request_payload,
+            ["connected_account_id", "email"],
+        );
 
         $res = Body::decode(
             $this->client->request("GET", "/connected_accounts/get", [

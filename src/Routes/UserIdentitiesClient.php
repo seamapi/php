@@ -187,11 +187,6 @@ class UserIdentitiesClient
         ?string $user_identity_id = null,
         ?string $user_identity_key = null,
     ): UserIdentity {
-        if ($user_identity_id === null && $user_identity_key === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /user_identities/get",
-            );
-        }
         $request_payload = [];
 
         if ($user_identity_id !== null) {
@@ -200,6 +195,11 @@ class UserIdentitiesClient
         if ($user_identity_key !== null) {
             $request_payload["user_identity_key"] = $user_identity_key;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/user_identities/get",
+            $request_payload,
+            ["user_identity_id", "user_identity_key"],
+        );
 
         $res = Body::decode(
             $this->client->request("GET", "/user_identities/get", [
@@ -437,16 +437,6 @@ class UserIdentitiesClient
         ?string $user_identity_id = null,
         ?string $user_identity_key = null,
     ): void {
-        if (
-            $merged_user_identity_ids === null &&
-            $merged_user_identity_keys === null &&
-            $user_identity_id === null &&
-            $user_identity_key === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /user_identities/merge",
-            );
-        }
         $request_payload = [];
 
         if ($merged_user_identity_ids !== null) {
@@ -465,6 +455,16 @@ class UserIdentitiesClient
         if ($user_identity_key !== null) {
             $request_payload["user_identity_key"] = $user_identity_key;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/user_identities/merge",
+            $request_payload,
+            [
+                "merged_user_identity_ids",
+                "merged_user_identity_keys",
+                "user_identity_id",
+                "user_identity_key",
+            ],
+        );
 
         $this->client->request("POST", "/user_identities/merge", [
             "json" => (object) $request_payload,

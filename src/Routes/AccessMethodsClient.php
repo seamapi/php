@@ -80,15 +80,6 @@ class AccessMethodsClient
         ?string $access_method_id = null,
         ?string $reservation_key = null,
     ): void {
-        if (
-            $access_grant_id === null &&
-            $access_method_id === null &&
-            $reservation_key === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_methods/delete",
-            );
-        }
         $request_payload = [];
 
         if ($access_grant_id !== null) {
@@ -100,6 +91,11 @@ class AccessMethodsClient
         if ($reservation_key !== null) {
             $request_payload["reservation_key"] = $reservation_key;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/access_methods/delete",
+            $request_payload,
+            ["access_grant_id", "access_method_id", "reservation_key"],
+        );
 
         $this->client->request("DELETE", "/access_methods/delete", [
             "query" => $request_payload,
@@ -224,19 +220,6 @@ class AccessMethodsClient
         ?string $space_id = null,
         ?callable $on_response = null,
     ): array {
-        if (
-            $access_code_id === null &&
-            $access_grant_id === null &&
-            $access_grant_key === null &&
-            $acs_entrance_id === null &&
-            $customer_key === null &&
-            $device_id === null &&
-            $space_id === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_methods/list",
-            );
-        }
         $request_payload = [];
 
         if ($access_code_id !== null) {
@@ -266,6 +249,19 @@ class AccessMethodsClient
         if ($space_id !== null) {
             $request_payload["space_id"] = $space_id;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/access_methods/list",
+            $request_payload,
+            [
+                "access_code_id",
+                "access_grant_id",
+                "access_grant_key",
+                "acs_entrance_id",
+                "customer_key",
+                "device_id",
+                "space_id",
+            ],
+        );
 
         $res = Body::decode(
             $this->client->request("GET", "/access_methods/list", [

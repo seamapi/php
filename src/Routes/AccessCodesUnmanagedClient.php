@@ -100,11 +100,6 @@ class AccessCodesUnmanagedClient
         ?string $code = null,
         ?string $device_id = null,
     ): UnmanagedAccessCode {
-        if ($access_code_id === null && $code === null && $device_id === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_codes/unmanaged/get",
-            );
-        }
         $request_payload = [];
 
         if ($access_code_id !== null) {
@@ -116,6 +111,11 @@ class AccessCodesUnmanagedClient
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/access_codes/unmanaged/get",
+            $request_payload,
+            ["access_code_id", "code", "device_id"],
+        );
 
         $res = Body::decode(
             $this->client->request("GET", "/access_codes/unmanaged/get", [

@@ -82,11 +82,6 @@ class LocksClient
      */
     public function get(?string $device_id = null, ?string $name = null): Device
     {
-        if ($device_id === null && $name === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /locks/get",
-            );
-        }
         $request_payload = [];
 
         if ($device_id !== null) {
@@ -95,6 +90,11 @@ class LocksClient
         if ($name !== null) {
             $request_payload["name"] = $name;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/locks/get",
+            $request_payload,
+            ["device_id", "name"],
+        );
 
         $res = Body::decode(
             $this->client->request("GET", "/locks/get", [
