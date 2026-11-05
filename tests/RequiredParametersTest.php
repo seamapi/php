@@ -5,37 +5,23 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use Seam\Seam;
-use Tests\Support\RecordingClient;
+use Seam\Http\RequestParameters;
+use Seam\NullValue;
+use Seam\Paginator;
 
 final class RequiredParametersTest extends TestCase
 {
-    /**
-     * @return array{0: Seam, 1: RecordingClient}
-     */
-    private function recorded(): array
-    {
-        $recorder = new RecordingClient([
-            RecordingClient::json(200, ["access_codes" => [], "events" => []]),
-        ]);
-
-        return [
-            Seam::from_api_key(
-                "seam_apikey_token",
-                endpoint: "https://example.com",
-                guzzle_options: $recorder->guzzle_options(),
-                retries: 0,
-            ),
-            $recorder,
-        ];
-    }
-
-    private function assertRejected(callable $call, string $path): void
-    {
-        [$seam, $recorder] = $this->recorded();
-
+    private function assertRejected(
+        array $parameters,
+        string $path,
+        array $parameterNames,
+    ): void {
         try {
-            $call($seam);
+            RequestParameters::requireAtLeastOne(
+                $path,
+                $parameters,
+                $parameterNames,
+            );
             $this->fail("Expected InvalidArgumentException for $path");
         } catch (\InvalidArgumentException $error) {
             $this->assertSame(
@@ -43,51 +29,47 @@ final class RequiredParametersTest extends TestCase
                 $error->getMessage(),
             );
         }
-
-        $this->assertSame(0, $recorder->request_count());
     }
 
     public function testRejectsACallThatNamesNothing(): void
     {
-        $this->assertRejected(
-            fn(Seam $seam) => $seam->access_codes->list(),
-            "/access_codes/list",
-        );
+        $this->assertRejected([], "/test/list", ["device_id"]);
     }
 
     /**
      * @dataProvider paginationOnlyCalls
      */
     public function testPaginationParamsAloneDoNotSatisfyTheGuard(
-        callable $call,
+        array $parameters,
         string $path,
+        array $parameterNames,
     ): void {
-        $this->assertRejected($call, $path);
+        $this->assertRejected($parameters, $path, $parameterNames);
     }
 
     public static function paginationOnlyCalls(): array
     {
         return [
-            "limit" => [
-                fn(Seam $seam) => $seam->access_codes->list(limit: 20),
-                "/access_codes/list",
-            ],
+            "limit" => [["limit" => 20], "/test/list", ["device_id"]],
             "page cursor" => [
-                fn(Seam $seam) => $seam->access_codes->list(
-                    page_cursor: "cursor",
-                ),
-                "/access_codes/list",
+                ["page_cursor" => "cursor"],
+                "/test/list",
+                ["device_id"],
             ],
             "limit and page cursor" => [
-                fn(Seam $seam) => $seam->access_codes->list(
-                    limit: 20,
-                    page_cursor: "cursor",
-                ),
-                "/access_codes/list",
+                ["limit" => 20, "page_cursor" => "cursor"],
+                "/test/list",
+                ["device_id"],
             ],
             "limit on an unpaginated list" => [
-                fn(Seam $seam) => $seam->events->list(limit: 20),
-                "/events/list",
+                ["limit" => 20],
+                "/test/unpaginated_list",
+                ["event_type"],
+            ],
+            "null filter" => [
+                ["device_id" => null, "limit" => 20],
+                "/test/list",
+                ["device_id"],
             ],
         ];
     }
@@ -96,52 +78,58 @@ final class RequiredParametersTest extends TestCase
      * @dataProvider filteredCalls
      */
     public function testAcceptsACallThatNamesAFilter(
-        callable $call,
-        string $expected_query,
+        array $parameters,
+        array $parameterNames,
     ): void {
-        [$seam, $recorder] = $this->recorded();
-
-        $call($seam);
-
-        $this->assertSame(1, $recorder->request_count());
-        $this->assertStringContainsString(
-            $expected_query,
-            $recorder->request()->getUri()->getQuery(),
+        RequestParameters::requireAtLeastOne(
+            "/test/list",
+            $parameters,
+            $parameterNames,
         );
+
+        $this->addToAssertionCount(1);
     }
 
     public static function filteredCalls(): array
     {
         return [
-            "a filter" => [
-                fn(Seam $seam) => $seam->access_codes->list(
-                    device_id: "device-1",
-                ),
-                "device_id=device-1",
-            ],
+            "a filter" => [["device_id" => "device-1"], ["device_id"]],
             "a filter alongside pagination" => [
-                fn(Seam $seam) => $seam->access_codes->list(
-                    device_id: "device-1",
-                    limit: 20,
-                ),
-                "device_id=device-1",
+                ["device_id" => "device-1", "limit" => 20],
+                ["device_id"],
             ],
             "a filter on an unpaginated list" => [
-                fn(Seam $seam) => $seam->events->list(
-                    event_type: "device.connected",
-                ),
-                "event_type=device.connected",
+                ["event_type" => "device.connected"],
+                ["event_type"],
+            ],
+            "a second filter" => [
+                ["device_id" => null, "other_id" => "other-1"],
+                ["device_id", "other_id"],
+            ],
+            "false" => [["filter" => false], ["filter"]],
+            "zero" => [["filter" => 0], ["filter"]],
+            "empty string" => [["filter" => ""], ["filter"]],
+            "empty array" => [["filter" => []], ["filter"]],
+            "explicit null sentinel" => [
+                ["filter" => NullValue::NULL],
+                ["filter"],
             ],
         ];
     }
 
     public function testAPaginatorOverAnUnfilteredListIsRejectedThroughout(): void
     {
-        [$seam] = $this->recorded();
+        $requestCount = 0;
+        $pages = new Paginator(function (array $parameters) use (
+            &$requestCount,
+        ): array {
+            RequestParameters::requireAtLeastOne("/test/list", $parameters, [
+                "device_id",
+            ]);
 
-        $pages = $seam->createPaginator(
-            fn($params) => $seam->access_codes->list(...$params),
-        );
+            $requestCount++;
+            return [];
+        });
 
         foreach (
             [
@@ -156,10 +144,12 @@ final class RequiredParametersTest extends TestCase
                 $this->fail("Expected InvalidArgumentException");
             } catch (\InvalidArgumentException $error) {
                 $this->assertSame(
-                    "At least one parameter is required for /access_codes/list",
+                    "At least one parameter is required for /test/list",
                     $error->getMessage(),
                 );
             }
         }
+
+        $this->assertSame(0, $requestCount);
     }
 }
