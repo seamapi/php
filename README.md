@@ -453,6 +453,16 @@ $seam = new Seam\Seam(retries: 5);
 $seam = new Seam\Seam(retries: 0);
 ```
 
+Retries are configured per client. If your application has its own retry
+behavior for some calls, create a second client with retries disabled and send
+those calls through it, while other calls keep the default retries:
+
+```php
+$seam = new Seam\Seam(api_key: "your-api-key");
+
+$seamWithoutRetries = new Seam\Seam(api_key: "your-api-key", retries: 0);
+```
+
 #### Using the underlying client
 
 `$seam->client` already carries the endpoint, authorization, error mapping,
