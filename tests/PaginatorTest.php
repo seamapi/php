@@ -6,9 +6,7 @@ namespace Tests;
 
 use Seam\Pagination;
 use Seam\Paginator;
-use Seam\Seam;
 use Tests\Support\FakeSeamConnectTestCase;
-use Tests\Support\RecordingClient;
 
 final class PaginatorTest extends FakeSeamConnectTestCase
 {
@@ -84,14 +82,14 @@ final class PaginatorTest extends FakeSeamConnectTestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("next_page_cursor");
 
-        $this->paginator()->nextPage(null);
+        (new Paginator(fn() => []))->nextPage(null);
     }
 
     public function testNextPageRejectsAnEmptyCursor(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $this->paginator()->nextPage("");
+        (new Paginator(fn() => []))->nextPage("");
     }
 
     public function testLastPageHasNoNextPage(): void
@@ -128,42 +126,37 @@ final class PaginatorTest extends FakeSeamConnectTestCase
 
     public function testEndpointWithoutPaginationIsRejected(): void
     {
-        $seam = $this->seam();
-
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("unpaginated endpoint");
 
-        $seam
-            ->createPaginator(fn($p) => $seam->workspaces->list())
-            ->firstPage();
+        (new Paginator(fn() => []))->firstPage();
     }
 
     private function pinned_cursor_paginator(string $cursor): Paginator
     {
-        $recorder = RecordingClient::repeating(
-            RecordingClient::json(200, [
-                "connected_accounts" => [
-                    ["connected_account_id" => "ca_1"],
-                    ["connected_account_id" => "ca_2"],
-                ],
-                "pagination" => [
-                    "has_next_page" => true,
-                    "next_page_cursor" => $cursor,
-                ],
-                "ok" => true,
-            ]),
-            times: 200,
-        );
+        $requests = 0;
 
-        $seam = Seam::from_api_key(
-            "seam_apikey_token",
-            endpoint: "https://example.com",
-            guzzle_options: $recorder->guzzle_options(),
-            retries: 0,
-        );
+        return new Paginator(
+            function (array $params) use ($cursor, &$requests): array {
+                $this->assertLessThan(
+                    200,
+                    ++$requests,
+                    "paginator did not terminate",
+                );
+                $params["on_response"](
+                    (object) [
+                        "pagination" => (object) [
+                            "has_next_page" => true,
+                            "next_page_cursor" => $cursor,
+                        ],
+                    ],
+                );
 
-        return $seam->createPaginator(
-            fn($p) => $seam->connected_accounts->list(...$p),
+                return [
+                    (object) ["id" => "item-1"],
+                    (object) ["id" => "item-2"],
+                ];
+            },
             ["limit" => 2],
         );
     }
@@ -180,7 +173,7 @@ final class PaginatorTest extends FakeSeamConnectTestCase
         $ids = [];
 
         foreach ($this->pinned_cursor_paginator("stuck")->flatten() as $item) {
-            $ids[] = $item->connected_account_id;
+            $ids[] = $item->id;
             $this->assertLessThan(10, count($ids), "flatten did not terminate");
         }
 

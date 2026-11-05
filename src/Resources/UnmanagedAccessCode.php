@@ -404,6 +404,10 @@ namespace Seam\Resources\UnmanagedAccessCode {
                     => \Seam\Resources\UnmanagedAccessCode\Warnings\BeingDeleted::from_json(
                     $json,
                 ),
+                \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::DEVICE_UNREACHABLE_FOR_EXTENDED_PERIOD
+                    => \Seam\Resources\UnmanagedAccessCode\Warnings\DeviceUnreachableForExtendedPeriod::from_json(
+                    $json,
+                ),
                 \Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode::UNKNOWN_ISSUE_WITH_ACCESS_CODE
                     => \Seam\Resources\UnmanagedAccessCode\Warnings\UnknownIssueWithAccessCode::from_json(
                     $json,
@@ -2157,6 +2161,55 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
     }
 
     /**
+     * Seam had been unable to reach the device for an extended period when this access code was created, so the code is unlikely to be set until the device reconnects. Check the device's connection. This warning clears automatically when the device comes back online or the code is set on the device.
+     */
+    final class DeviceUnreachableForExtendedPeriod extends
+        \Seam\Resources\UnmanagedAccessCode\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): DeviceUnreachableForExtendedPeriod|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                device_unreachable_since: $json->device_unreachable_since ??
+                    null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+                created_at: $json->created_at ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time since which Seam has been unable to reach the device.
+             */
+            public string|null $device_unreachable_since,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at = null,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
      * An unknown issue occurred with the access code.
      */
     final class UnknownIssueWithAccessCode extends
@@ -2212,6 +2265,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
         case MANAGEMENT_TRANSFERRED = "management_transferred";
         case USING_BACKUP_ACCESS_CODE = "using_backup_access_code";
         case BEING_DELETED = "being_deleted";
+        case DEVICE_UNREACHABLE_FOR_EXTENDED_PERIOD = "device_unreachable_for_extended_period";
         case UNKNOWN_ISSUE_WITH_ACCESS_CODE = "unknown_issue_with_access_code";
     }
 }

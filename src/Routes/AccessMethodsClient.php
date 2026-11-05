@@ -80,15 +80,6 @@ class AccessMethodsClient
         ?string $access_method_id = null,
         ?string $reservation_key = null,
     ): void {
-        if (
-            $access_grant_id === null &&
-            $access_method_id === null &&
-            $reservation_key === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_methods/delete",
-            );
-        }
         $request_payload = [];
 
         if ($access_grant_id !== null) {
@@ -100,6 +91,11 @@ class AccessMethodsClient
         if ($reservation_key !== null) {
             $request_payload["reservation_key"] = $reservation_key;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/access_methods/delete",
+            $request_payload,
+            ["access_grant_id", "access_method_id", "reservation_key"],
+        );
 
         $this->client->request("DELETE", "/access_methods/delete", [
             "query" => $request_payload,
@@ -204,6 +200,7 @@ class AccessMethodsClient
      * @param string $access_grant_id ID of Access Grant to list access methods for.
      * @param string $access_grant_key Key of Access Grant to list access methods for.
      * @param string $acs_entrance_id ID of the entrance for which you want to retrieve all access methods that grant access to it.
+     * @param string $customer_key Customer key for which you want to list access methods.
      * @param string $device_id ID of the device by which to filter the returned access methods. Must be combined with `access_grant_id`, `access_grant_key`, or `acs_entrance_id`.
      * @param int $limit Maximum number of records to return per page.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
@@ -216,24 +213,13 @@ class AccessMethodsClient
         ?string $access_grant_id = null,
         ?string $access_grant_key = null,
         ?string $acs_entrance_id = null,
+        ?string $customer_key = null,
         ?string $device_id = null,
         ?int $limit = null,
         string|NullValue|null $page_cursor = null,
         ?string $space_id = null,
         ?callable $on_response = null,
     ): array {
-        if (
-            $access_code_id === null &&
-            $access_grant_id === null &&
-            $access_grant_key === null &&
-            $acs_entrance_id === null &&
-            $device_id === null &&
-            $space_id === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /access_methods/list",
-            );
-        }
         $request_payload = [];
 
         if ($access_code_id !== null) {
@@ -248,6 +234,9 @@ class AccessMethodsClient
         if ($acs_entrance_id !== null) {
             $request_payload["acs_entrance_id"] = $acs_entrance_id;
         }
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
+        }
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;
         }
@@ -260,6 +249,19 @@ class AccessMethodsClient
         if ($space_id !== null) {
             $request_payload["space_id"] = $space_id;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/access_methods/list",
+            $request_payload,
+            [
+                "access_code_id",
+                "access_grant_id",
+                "access_grant_key",
+                "acs_entrance_id",
+                "customer_key",
+                "device_id",
+                "space_id",
+            ],
+        );
 
         $res = Body::decode(
             $this->client->request("GET", "/access_methods/list", [

@@ -187,11 +187,6 @@ class UserIdentitiesClient
         ?string $user_identity_id = null,
         ?string $user_identity_key = null,
     ): UserIdentity {
-        if ($user_identity_id === null && $user_identity_key === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /user_identities/get",
-            );
-        }
         $request_payload = [];
 
         if ($user_identity_id !== null) {
@@ -200,6 +195,11 @@ class UserIdentitiesClient
         if ($user_identity_key !== null) {
             $request_payload["user_identity_key"] = $user_identity_key;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/user_identities/get",
+            $request_payload,
+            ["user_identity_id", "user_identity_key"],
+        );
 
         $res = Body::decode(
             $this->client->request("GET", "/user_identities/get", [
@@ -240,6 +240,7 @@ class UserIdentitiesClient
      *
      * @param string $created_before Timestamp by which to limit returned user identities. Returns user identities created before this timestamp.
      * @param string $credential_manager_acs_system_id `acs_system_id` of the credential manager by which you want to filter the list of user identities.
+     * @param string $customer_key Customer key for which you want to list user identities.
      * @param int $limit Maximum number of records to return per page.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned user identities to include all records that satisfy a partial match using `full_name`, `phone_number`, `email_address` or `user_identity_id`.
@@ -250,6 +251,7 @@ class UserIdentitiesClient
     public function list(
         ?string $created_before = null,
         ?string $credential_manager_acs_system_id = null,
+        ?string $customer_key = null,
         ?int $limit = null,
         string|NullValue|null $page_cursor = null,
         ?string $search = null,
@@ -265,6 +267,9 @@ class UserIdentitiesClient
             $request_payload[
                 "credential_manager_acs_system_id"
             ] = $credential_manager_acs_system_id;
+        }
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
         }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;
@@ -432,16 +437,6 @@ class UserIdentitiesClient
         ?string $user_identity_id = null,
         ?string $user_identity_key = null,
     ): void {
-        if (
-            $merged_user_identity_ids === null &&
-            $merged_user_identity_keys === null &&
-            $user_identity_id === null &&
-            $user_identity_key === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /user_identities/merge",
-            );
-        }
         $request_payload = [];
 
         if ($merged_user_identity_ids !== null) {
@@ -460,6 +455,16 @@ class UserIdentitiesClient
         if ($user_identity_key !== null) {
             $request_payload["user_identity_key"] = $user_identity_key;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/user_identities/merge",
+            $request_payload,
+            [
+                "merged_user_identity_ids",
+                "merged_user_identity_keys",
+                "user_identity_id",
+                "user_identity_key",
+            ],
+        );
 
         $this->client->request("POST", "/user_identities/merge", [
             "json" => (object) $request_payload,

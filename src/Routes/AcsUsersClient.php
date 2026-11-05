@@ -117,15 +117,6 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
-        if (
-            $acs_system_id === null &&
-            $acs_user_id === null &&
-            $user_identity_id === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/users/delete",
-            );
-        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -137,6 +128,11 @@ class AcsUsersClient
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/acs/users/delete",
+            $request_payload,
+            ["acs_system_id", "acs_user_id", "user_identity_id"],
+        );
 
         $this->client->request("DELETE", "/acs/users/delete", [
             "query" => $request_payload,
@@ -156,15 +152,6 @@ class AcsUsersClient
         ?string $acs_system_id = null,
         ?string $user_identity_id = null,
     ): AcsUser {
-        if (
-            $acs_user_id === null &&
-            $acs_system_id === null &&
-            $user_identity_id === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/users/get",
-            );
-        }
         $request_payload = [];
 
         if ($acs_user_id !== null) {
@@ -176,6 +163,11 @@ class AcsUsersClient
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/acs/users/get",
+            $request_payload,
+            ["acs_user_id", "acs_system_id", "user_identity_id"],
+        );
 
         $res = Body::decode(
             $this->client->request("GET", "/acs/users/get", [
@@ -273,15 +265,6 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): array {
-        if (
-            $acs_system_id === null &&
-            $acs_user_id === null &&
-            $user_identity_id === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/users/list_accessible_entrances",
-            );
-        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -293,6 +276,11 @@ class AcsUsersClient
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/acs/users/list_accessible_entrances",
+            $request_payload,
+            ["acs_system_id", "acs_user_id", "user_identity_id"],
+        );
 
         $res = Body::decode(
             $this->client->request(
@@ -355,15 +343,6 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
-        if (
-            $acs_system_id === null &&
-            $acs_user_id === null &&
-            $user_identity_id === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/users/revoke_access_to_all_entrances",
-            );
-        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -375,6 +354,11 @@ class AcsUsersClient
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/acs/users/revoke_access_to_all_entrances",
+            $request_payload,
+            ["acs_system_id", "acs_user_id", "user_identity_id"],
+        );
 
         $this->client->request(
             "POST",
@@ -396,15 +380,6 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
-        if (
-            $acs_system_id === null &&
-            $acs_user_id === null &&
-            $user_identity_id === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/users/suspend",
-            );
-        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -416,6 +391,11 @@ class AcsUsersClient
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/acs/users/suspend",
+            $request_payload,
+            ["acs_system_id", "acs_user_id", "user_identity_id"],
+        );
 
         $this->client->request("POST", "/acs/users/suspend", [
             "json" => (object) $request_payload,
@@ -435,15 +415,6 @@ class AcsUsersClient
         ?string $acs_user_id = null,
         ?string $user_identity_id = null,
     ): void {
-        if (
-            $acs_system_id === null &&
-            $acs_user_id === null &&
-            $user_identity_id === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/users/unsuspend",
-            );
-        }
         $request_payload = [];
 
         if ($acs_system_id !== null) {
@@ -455,6 +426,11 @@ class AcsUsersClient
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/acs/users/unsuspend",
+            $request_payload,
+            ["acs_system_id", "acs_user_id", "user_identity_id"],
+        );
 
         $this->client->request("POST", "/acs/users/unsuspend", [
             "json" => (object) $request_payload,
@@ -486,21 +462,6 @@ class AcsUsersClient
         ?string $phone_number = null,
         ?string $user_identity_id = null,
     ): void {
-        if (
-            $access_schedule === null &&
-            $acs_system_id === null &&
-            $acs_user_id === null &&
-            $email === null &&
-            $email_address === null &&
-            $full_name === null &&
-            $hid_acs_system_id === null &&
-            $phone_number === null &&
-            $user_identity_id === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /acs/users/update",
-            );
-        }
         $request_payload = [];
 
         if ($access_schedule !== null) {
@@ -530,6 +491,21 @@ class AcsUsersClient
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/acs/users/update",
+            $request_payload,
+            [
+                "access_schedule",
+                "acs_system_id",
+                "acs_user_id",
+                "email",
+                "email_address",
+                "full_name",
+                "hid_acs_system_id",
+                "phone_number",
+                "user_identity_id",
+            ],
+        );
 
         $this->client->request("PATCH", "/acs/users/update", [
             "json" => (object) $request_payload,

@@ -167,11 +167,6 @@ class SpacesClient
         ?string $space_id = null,
         ?string $space_key = null,
     ): Space {
-        if ($space_id === null && $space_key === null) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /spaces/get",
-            );
-        }
         $request_payload = [];
 
         if ($space_id !== null) {
@@ -180,6 +175,11 @@ class SpacesClient
         if ($space_key !== null) {
             $request_payload["space_key"] = $space_key;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/spaces/get",
+            $request_payload,
+            ["space_id", "space_key"],
+        );
 
         $res = Body::decode(
             $this->client->request("GET", "/spaces/get", [
@@ -205,16 +205,6 @@ class SpacesClient
         ?array $space_ids = null,
         ?array $space_keys = null,
     ): Batch {
-        if (
-            $exclude === null &&
-            $include === null &&
-            $space_ids === null &&
-            $space_keys === null
-        ) {
-            throw new \InvalidArgumentException(
-                "At least one parameter is required for /spaces/get_related",
-            );
-        }
         $request_payload = [];
 
         if ($exclude !== null) {
@@ -229,6 +219,11 @@ class SpacesClient
         if ($space_keys !== null) {
             $request_payload["space_keys"] = $space_keys;
         }
+        \Seam\Http\RequestParameters::requireAtLeastOne(
+            "/spaces/get_related",
+            $request_payload,
+            ["exclude", "include", "space_ids", "space_keys"],
+        );
 
         $res = Body::decode(
             $this->client->request("GET", "/spaces/get_related", [
