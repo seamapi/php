@@ -229,7 +229,7 @@ namespace Seam\Resources {
              */
             public bool|null $can_simulate_removal = null,
             /**
-             * Indicates whether the camera supports streaming live video through a camera live view session.
+             * Indicates whether the camera can stream live video through a camera live view session. `false` while the camera is offline.
              */
             public bool|null $can_stream_live_video = null,
             /**
@@ -879,6 +879,11 @@ namespace Seam\Resources\Device {
                         $json->ultraloq_metadata,
                     )
                     : null,
+                unifi_protect_metadata: isset($json->unifi_protect_metadata)
+                    ? \Seam\Resources\Device\Properties\UnifiProtectMetadata::from_json(
+                        $json->unifi_protect_metadata,
+                    )
+                    : null,
                 visionline_metadata: isset($json->visionline_metadata)
                     ? \Seam\Resources\Device\Properties\VisionlineMetadata::from_json(
                         $json->visionline_metadata,
@@ -1358,6 +1363,10 @@ namespace Seam\Resources\Device {
              */
             public \Seam\Resources\Device\Properties\UltraloqMetadata|null $ultraloq_metadata = null,
             /**
+             * Metadata for a UniFi Protect camera.
+             */
+            public \Seam\Resources\Device\Properties\UnifiProtectMetadata|null $unifi_protect_metadata = null,
+            /**
              * Metadata for an ASSA ABLOY Visionline system.
              */
             public \Seam\Resources\Device\Properties\VisionlineMetadata|null $visionline_metadata = null,
@@ -1580,6 +1589,7 @@ namespace Seam\Resources\Device {
         case TAPO_CAMERA = "tapo_camera";
         case ARLO_CAMERA = "arlo_camera";
         case REOLINK_CAMERA = "reolink_camera";
+        case UNIFI_PROTECT_CAMERA = "unifi_protect_camera";
         case SONOS_SPEAKER = "sonos_speaker";
     }
 }
@@ -4273,6 +4283,54 @@ namespace Seam\Resources\Device\Properties {
              * IANA timezone for the Ultraloq device.
              */
             public string|null $time_zone = null,
+        ) {}
+    }
+
+    /**
+     * Metadata for a UniFi Protect camera.
+     */
+    class UnifiProtectMetadata
+    {
+        public static function from_json(mixed $json): UnifiProtectMetadata|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                camera_id: $json->camera_id ?? null,
+                camera_name: $json->camera_name ?? null,
+                has_mic: $json->has_mic ?? null,
+                mac: $json->mac ?? null,
+                model: $json->model ?? null,
+                nvr_name: $json->nvr_name ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Camera ID reported by UniFi Protect.
+             */
+            public string|null $camera_id = null,
+            /**
+             * Camera name reported by UniFi Protect.
+             */
+            public string|null $camera_name = null,
+            /**
+             * Whether the camera has a microphone.
+             */
+            public bool|null $has_mic = null,
+            /**
+             * MAC address reported by the UniFi Protect camera.
+             */
+            public string|null $mac = null,
+            /**
+             * Model reported by the UniFi Protect camera.
+             */
+            public string|null $model = null,
+            /**
+             * Name of the UniFi Protect console that manages the camera.
+             */
+            public string|null $nvr_name = null,
         ) {}
     }
 
