@@ -10038,7 +10038,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A camera was activated, for example, by motion detection.
+     * A camera was activated, for example, by motion detection. For Ring cameras, this event is available only in the Seam Console, not through the API or webhooks.
      */
     final class CameraActivated extends \Seam\Resources\Event
     {
@@ -10156,7 +10156,7 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A doorbell button was pressed on a device.
+     * A doorbell button was pressed on a device. For Ring cameras, this event is available only in the Seam Console, not through the API or webhooks.
      */
     final class DeviceDoorbellRang extends \Seam\Resources\Event
     {

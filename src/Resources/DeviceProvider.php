@@ -147,7 +147,7 @@ namespace Seam\Resources {
              */
             public bool|null $can_simulate_removal = null,
             /**
-             * Indicates whether the camera supports streaming live video through a camera live view session.
+             * Indicates whether the camera can stream live video through a camera live view session. `false` while the camera is offline.
              */
             public bool|null $can_stream_live_video = null,
             /**
@@ -225,6 +225,7 @@ namespace Seam\Resources\DeviceProvider {
         case TAPO = "tapo";
         case ARLO = "arlo";
         case REOLINK = "reolink";
+        case UNIFI_PROTECT = "unifi_protect";
         case ICAL = "ical";
         case LODGIFY = "lodgify";
         case HOSTAWAY = "hostaway";
