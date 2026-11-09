@@ -176,6 +176,8 @@ namespace Seam\Resources\DeviceProvider {
         case SCHLAGE = "schlage";
         case SMARTTHINGS = "smartthings";
         case YALE = "yale";
+        case YALE_ACCESS = "yale_access";
+        case YALE_HOME = "yale_home";
         case GENIE = "genie";
         case DOORKING = "doorking";
         case SALTO = "salto";
@@ -226,6 +228,7 @@ namespace Seam\Resources\DeviceProvider {
         case ARLO = "arlo";
         case REOLINK = "reolink";
         case UNIFI_PROTECT = "unifi_protect";
+        case YALE_CONNECT = "yale_connect";
         case ICAL = "ical";
         case LODGIFY = "lodgify";
         case HOSTAWAY = "hostaway";
