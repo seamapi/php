@@ -107,7 +107,7 @@ namespace Seam\Resources {
              */
             public string|null $device_id,
             /**
-             * Type of the device.
+             * Type of the device. The `august_lock` and `yale_lock` values are deprecated. Use `yale_access_lock` in place of `august_lock`, and `yale_access_lock` or `yale_home_lock` in place of `yale_lock`.
              *
              * @var value-of<\Seam\Resources\UnmanagedDevice\DeviceType>|string|null
              */
@@ -647,6 +647,9 @@ namespace Seam\Resources\UnmanagedDevice {
         case SMARTTHINGS_LOCK = "smartthings_lock";
         case WYZE_LOCK = "wyze_lock";
         case YALE_LOCK = "yale_lock";
+        case YALE_ACCESS_LOCK = "yale_access_lock";
+        case YALE_HOME_LOCK = "yale_home_lock";
+        case YALE_CONNECT_LOCK = "yale_connect_lock";
         case TWO_N_INTERCOM = "two_n_intercom";
         case CONTROLBYWEB_DEVICE = "controlbyweb_device";
         case TTLOCK_LOCK = "ttlock_lock";

@@ -113,7 +113,7 @@ namespace Seam\Resources {
              */
             public string|null $device_id,
             /**
-             * Type of the device.
+             * Type of the device. The `august_lock` and `yale_lock` values are deprecated. Use `yale_access_lock` in place of `august_lock`, and `yale_access_lock` or `yale_home_lock` in place of `yale_lock`.
              *
              * @var value-of<\Seam\Resources\Device\DeviceType>|string|null
              */
@@ -899,6 +899,11 @@ namespace Seam\Resources\Device {
                         $json->yacan_metadata,
                     )
                     : null,
+                yale_connect_metadata: isset($json->yale_connect_metadata)
+                    ? \Seam\Resources\Device\Properties\YaleConnectMetadata::from_json(
+                        $json->yale_connect_metadata,
+                    )
+                    : null,
             );
         }
 
@@ -1378,6 +1383,10 @@ namespace Seam\Resources\Device {
              * Metadata for a Yacan device.
              */
             public \Seam\Resources\Device\Properties\YacanMetadata|null $yacan_metadata = null,
+            /**
+             * Metadata for a Yale Connect lock.
+             */
+            public \Seam\Resources\Device\Properties\YaleConnectMetadata|null $yale_connect_metadata = null,
         ) {}
     }
 
@@ -1559,6 +1568,9 @@ namespace Seam\Resources\Device {
         case SMARTTHINGS_LOCK = "smartthings_lock";
         case WYZE_LOCK = "wyze_lock";
         case YALE_LOCK = "yale_lock";
+        case YALE_ACCESS_LOCK = "yale_access_lock";
+        case YALE_HOME_LOCK = "yale_home_lock";
+        case YALE_CONNECT_LOCK = "yale_connect_lock";
         case TWO_N_INTERCOM = "two_n_intercom";
         case CONTROLBYWEB_DEVICE = "controlbyweb_device";
         case TTLOCK_LOCK = "ttlock_lock";
@@ -4448,6 +4460,54 @@ namespace Seam\Resources\Device\Properties {
              * Serial number for a Yacan device.
              */
             public string|null $serial_number = null,
+        ) {}
+    }
+
+    /**
+     * Metadata for a Yale Connect lock.
+     */
+    class YaleConnectMetadata
+    {
+        public static function from_json(mixed $json): YaleConnectMetadata|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                device_id: $json->device_id ?? null,
+                device_name: $json->device_name ?? null,
+                firmware_version: $json->firmware_version ?? null,
+                home_name: $json->home_name ?? null,
+                model: $json->model ?? null,
+                time_zone_description: $json->time_zone_description ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Device ID for a Yale Connect lock.
+             */
+            public string|null $device_id = null,
+            /**
+             * Device name for a Yale Connect lock.
+             */
+            public string|null $device_name = null,
+            /**
+             * Firmware version reported by the Yale Connect lock.
+             */
+            public string|null $firmware_version = null,
+            /**
+             * Name of the Yale Connect home that contains the lock.
+             */
+            public string|null $home_name = null,
+            /**
+             * Model reported by the Yale Connect lock.
+             */
+            public string|null $model = null,
+            /**
+             * Time zone of the Yale Connect home, as Yale reports it.
+             */
+            public string|null $time_zone_description = null,
         ) {}
     }
 

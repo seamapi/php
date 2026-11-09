@@ -251,17 +251,25 @@ class ClientSessionsClient
      *
      * @param string $client_session_id ID of the client session that you want to retrieve.
      * @param string|NullValue $connect_webview_id ID of the [Connect Webview](https://www.seam.co/docs/core-concepts/connect-webviews) for which you want to retrieve client sessions. Specify `null` to retrieve client sessions that are not associated with a Connect Webview.
+     * @param string $customer_key Customer key for which you want to list client sessions.
+     * @param int $limit Maximum number of records to return per page.
+     * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $user_identifier_key Your user ID for the user by which you want to filter client sessions.
      * @param string|NullValue $user_identity_id ID of the [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) for which you want to retrieve client sessions. Specify `null` to retrieve client sessions that are not associated with a user identity.
      * @param bool $without_user_identifier_key Indicates whether to retrieve only client sessions without associated user identifier keys.
+     * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
      */
     public function list(
         ?string $client_session_id = null,
         string|NullValue|null $connect_webview_id = null,
+        ?string $customer_key = null,
+        ?int $limit = null,
+        string|NullValue|null $page_cursor = null,
         ?string $user_identifier_key = null,
         string|NullValue|null $user_identity_id = null,
         ?bool $without_user_identifier_key = null,
+        ?callable $on_response = null,
     ): array {
         $request_payload = [];
 
@@ -270,6 +278,15 @@ class ClientSessionsClient
         }
         if ($connect_webview_id !== null) {
             $request_payload["connect_webview_id"] = $connect_webview_id;
+        }
+        if ($customer_key !== null) {
+            $request_payload["customer_key"] = $customer_key;
+        }
+        if ($limit !== null) {
+            $request_payload["limit"] = $limit;
+        }
+        if ($page_cursor !== null) {
+            $request_payload["page_cursor"] = $page_cursor;
         }
         if ($user_identifier_key !== null) {
             $request_payload["user_identifier_key"] = $user_identifier_key;
@@ -288,6 +305,10 @@ class ClientSessionsClient
                 "query" => $request_payload,
             ]),
         );
+
+        if ($on_response !== null) {
+            $on_response($res);
+        }
 
         return array_map(
             fn($r) => ClientSession::from_json($r),
