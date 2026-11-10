@@ -21,7 +21,7 @@ Metalsmith(rootDir)
   .source('./content')
   .destination('../')
   .clean(false)
-  .use(blueprint({ types, omitUndocumented: true }))
+  .use(blueprint({ types, omitUndocumented: true, omitEndOfLife: true }))
   .use(routes)
   .use(
     layouts({
