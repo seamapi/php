@@ -368,6 +368,12 @@ namespace Seam\Resources {
                     => \Seam\Resources\Event\LockUnlocked::from_json($json),
                 \Seam\Resources\Event\EventType::LOCK_ACCESS_DENIED
                     => \Seam\Resources\Event\LockAccessDenied::from_json($json),
+                \Seam\Resources\Event\EventType::LOCK_JAMMED
+                    => \Seam\Resources\Event\LockJammed::from_json($json),
+                \Seam\Resources\Event\EventType::LOCK_DOOR_OPENED
+                    => \Seam\Resources\Event\LockDoorOpened::from_json($json),
+                \Seam\Resources\Event\EventType::LOCK_DOOR_CLOSED
+                    => \Seam\Resources\Event\LockDoorClosed::from_json($json),
                 \Seam\Resources\Event\EventType::THERMOSTAT_CLIMATE_PRESET_ACTIVATED
                     => \Seam\Resources\Event\ThermostatClimatePresetActivated::from_json(
                     $json,
@@ -9262,6 +9268,267 @@ namespace Seam\Resources\Event {
     }
 
     /**
+     * The [lock](https://www.seam.co/docs/low-level-apis/smart-locks) reported that its bolt is jammed.
+     */
+    final class LockJammed extends \Seam\Resources\Event
+    {
+        public static function from_json(mixed $json): LockJammed|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                connected_account_id: $json->connected_account_id ?? null,
+                created_at: $json->created_at ?? null,
+                device_id: $json->device_id ?? null,
+                event_id: $json->event_id ?? null,
+                event_type: $json->event_type ?? null,
+                occurred_at: $json->occurred_at ?? null,
+                workspace_id: $json->workspace_id ?? null,
+                connected_account_custom_metadata: $json->connected_account_custom_metadata ??
+                    null,
+                customer_key: $json->customer_key ?? null,
+                device_custom_metadata: $json->device_custom_metadata ?? null,
+                event_description: $json->event_description ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the connected account associated with the event.
+             */
+            public string|null $connected_account_id,
+            /**
+             * Date and time at which the event was created.
+             */
+            string|null $created_at,
+            /**
+             * ID of the affected device.
+             */
+            public string|null $device_id,
+            /**
+             * ID of the event.
+             */
+            string|null $event_id,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
+            /**
+             * Date and time at which the event occurred.
+             */
+            string|null $occurred_at,
+            /**
+             * ID of the workspace associated with the event.
+             */
+            string|null $workspace_id,
+            /**
+             * Custom metadata of the connected account, present when connected_account_id is provided.
+             *
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $connected_account_custom_metadata = null,
+            /**
+             * The customer key associated with the device, if any.
+             */
+            public string|null $customer_key = null,
+            /**
+             * Custom metadata of the device, present when device_id is provided.
+             *
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $device_custom_metadata = null,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description = null,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                event_description: $event_description,
+                event_id: $event_id,
+                event_type: $event_type,
+                occurred_at: $occurred_at,
+                workspace_id: $workspace_id,
+            );
+        }
+    }
+
+    /**
+     * The door sensor of the [lock](https://www.seam.co/docs/low-level-apis/smart-locks) reported that the door was opened.
+     */
+    final class LockDoorOpened extends \Seam\Resources\Event
+    {
+        public static function from_json(mixed $json): LockDoorOpened|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                connected_account_id: $json->connected_account_id ?? null,
+                created_at: $json->created_at ?? null,
+                device_id: $json->device_id ?? null,
+                event_id: $json->event_id ?? null,
+                event_type: $json->event_type ?? null,
+                occurred_at: $json->occurred_at ?? null,
+                workspace_id: $json->workspace_id ?? null,
+                connected_account_custom_metadata: $json->connected_account_custom_metadata ??
+                    null,
+                customer_key: $json->customer_key ?? null,
+                device_custom_metadata: $json->device_custom_metadata ?? null,
+                event_description: $json->event_description ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the connected account associated with the event.
+             */
+            public string|null $connected_account_id,
+            /**
+             * Date and time at which the event was created.
+             */
+            string|null $created_at,
+            /**
+             * ID of the affected device.
+             */
+            public string|null $device_id,
+            /**
+             * ID of the event.
+             */
+            string|null $event_id,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
+            /**
+             * Date and time at which the event occurred.
+             */
+            string|null $occurred_at,
+            /**
+             * ID of the workspace associated with the event.
+             */
+            string|null $workspace_id,
+            /**
+             * Custom metadata of the connected account, present when connected_account_id is provided.
+             *
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $connected_account_custom_metadata = null,
+            /**
+             * The customer key associated with the device, if any.
+             */
+            public string|null $customer_key = null,
+            /**
+             * Custom metadata of the device, present when device_id is provided.
+             *
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $device_custom_metadata = null,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description = null,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                event_description: $event_description,
+                event_id: $event_id,
+                event_type: $event_type,
+                occurred_at: $occurred_at,
+                workspace_id: $workspace_id,
+            );
+        }
+    }
+
+    /**
+     * The door sensor of the [lock](https://www.seam.co/docs/low-level-apis/smart-locks) reported that the door was closed.
+     */
+    final class LockDoorClosed extends \Seam\Resources\Event
+    {
+        public static function from_json(mixed $json): LockDoorClosed|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                connected_account_id: $json->connected_account_id ?? null,
+                created_at: $json->created_at ?? null,
+                device_id: $json->device_id ?? null,
+                event_id: $json->event_id ?? null,
+                event_type: $json->event_type ?? null,
+                occurred_at: $json->occurred_at ?? null,
+                workspace_id: $json->workspace_id ?? null,
+                connected_account_custom_metadata: $json->connected_account_custom_metadata ??
+                    null,
+                customer_key: $json->customer_key ?? null,
+                device_custom_metadata: $json->device_custom_metadata ?? null,
+                event_description: $json->event_description ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the connected account associated with the event.
+             */
+            public string|null $connected_account_id,
+            /**
+             * Date and time at which the event was created.
+             */
+            string|null $created_at,
+            /**
+             * ID of the affected device.
+             */
+            public string|null $device_id,
+            /**
+             * ID of the event.
+             */
+            string|null $event_id,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
+            /**
+             * Date and time at which the event occurred.
+             */
+            string|null $occurred_at,
+            /**
+             * ID of the workspace associated with the event.
+             */
+            string|null $workspace_id,
+            /**
+             * Custom metadata of the connected account, present when connected_account_id is provided.
+             *
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $connected_account_custom_metadata = null,
+            /**
+             * The customer key associated with the device, if any.
+             */
+            public string|null $customer_key = null,
+            /**
+             * Custom metadata of the device, present when device_id is provided.
+             *
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $device_custom_metadata = null,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description = null,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                event_description: $event_description,
+                event_id: $event_id,
+                event_type: $event_type,
+                occurred_at: $occurred_at,
+                workspace_id: $workspace_id,
+            );
+        }
+    }
+
+    /**
      * A thermostat [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) was activated.
      */
     final class ThermostatClimatePresetActivated extends \Seam\Resources\Event
@@ -10669,6 +10936,9 @@ namespace Seam\Resources\Event {
         case LOCK_LOCKED = "lock.locked";
         case LOCK_UNLOCKED = "lock.unlocked";
         case LOCK_ACCESS_DENIED = "lock.access_denied";
+        case LOCK_JAMMED = "lock.jammed";
+        case LOCK_DOOR_OPENED = "lock.door_opened";
+        case LOCK_DOOR_CLOSED = "lock.door_closed";
         case THERMOSTAT_CLIMATE_PRESET_ACTIVATED = "thermostat.climate_preset_activated";
         case THERMOSTAT_MANUALLY_ADJUSTED = "thermostat.manually_adjusted";
         case THERMOSTAT_TEMPERATURE_THRESHOLD_EXCEEDED = "thermostat.temperature_threshold_exceeded";
