@@ -229,6 +229,7 @@ namespace Seam\Resources\DeviceProvider {
         case REOLINK = "reolink";
         case UNIFI_PROTECT = "unifi_protect";
         case YALE_CONNECT = "yale_connect";
+        case ALERTIFY = "alertify";
         case ICAL = "ical";
         case LODGIFY = "lodgify";
         case HOSTAWAY = "hostaway";

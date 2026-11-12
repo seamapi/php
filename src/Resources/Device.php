@@ -508,6 +508,7 @@ namespace Seam\Resources\Device {
                     : null,
                 active_thermostat_schedule_id: $json->active_thermostat_schedule_id ??
                     null,
+                air_quality_index: $json->air_quality_index ?? null,
                 akiles_metadata: isset($json->akiles_metadata)
                     ? \Seam\Resources\Device\Properties\AkilesMetadata::from_json(
                         $json->akiles_metadata,
@@ -576,6 +577,8 @@ namespace Seam\Resources\Device {
                         $json->brivo_metadata,
                     )
                     : null,
+                co_ppm: $json->co_ppm ?? null,
+                co2_ppm: $json->co2_ppm ?? null,
                 code_constraints: array_map(
                     fn(
                         $c,
@@ -663,6 +666,8 @@ namespace Seam\Resources\Device {
                 is_cooling: $json->is_cooling ?? null,
                 is_fan_running: $json->is_fan_running ?? null,
                 is_heating: $json->is_heating ?? null,
+                is_occupied: $json->is_occupied ?? null,
+                is_smoking_detected: $json->is_smoking_detected ?? null,
                 is_temporary_manual_override_active: $json->is_temporary_manual_override_active ??
                     null,
                 keynest_metadata: isset($json->keynest_metadata)
@@ -728,12 +733,22 @@ namespace Seam\Resources\Device {
                         $json->minut_metadata,
                     )
                     : null,
+                mold_risk_level: $json->mold_risk_level ?? null,
+                named_sensors: array_map(
+                    fn(
+                        $n,
+                    ) => \Seam\Resources\Device\Properties\NamedSensors::from_json(
+                        $n,
+                    ),
+                    $json->named_sensors ?? [],
+                ),
                 nest_metadata: isset($json->nest_metadata)
                     ? \Seam\Resources\Device\Properties\NestMetadata::from_json(
                         $json->nest_metadata,
                     )
                     : null,
                 noise_level_decibels: $json->noise_level_decibels ?? null,
+                noise_level_nrs: $json->noise_level_nrs ?? null,
                 noiseaware_metadata: isset($json->noiseaware_metadata)
                     ? \Seam\Resources\Device\Properties\NoiseawareMetadata::from_json(
                         $json->noiseaware_metadata,
@@ -744,6 +759,7 @@ namespace Seam\Resources\Device {
                         $json->nuki_metadata,
                     )
                     : null,
+                occupant_count: $json->occupant_count ?? null,
                 offline_access_codes_enabled: $json->offline_access_codes_enabled ??
                     null,
                 offline_time_frame_options: array_map(
@@ -941,6 +957,10 @@ namespace Seam\Resources\Device {
              */
             public string|null $active_thermostat_schedule_id = null,
             /**
+             * Air quality index, if the device measures it. `null` until the first value arrives.
+             */
+            public float|null $air_quality_index = null,
+            /**
              * Metadata for an Akiles device.
              */
             public \Seam\Resources\Device\Properties\AkilesMetadata|null $akiles_metadata = null,
@@ -1016,6 +1036,14 @@ namespace Seam\Resources\Device {
              * Metadata for a Brivo device.
              */
             public \Seam\Resources\Device\Properties\BrivoMetadata|null $brivo_metadata = null,
+            /**
+             * Carbon monoxide concentration in parts per million, if the device measures it. `null` until the first value arrives.
+             */
+            public float|null $co_ppm = null,
+            /**
+             * Carbon dioxide concentration in parts per million, if the device measures it. `null` until the first value arrives.
+             */
+            public float|null $co2_ppm = null,
             /**
              * Constraints on access codes for the device. Seam represents each constraint as an object with a `constraint_type` property. Depending on the constraint type, there may also be additional properties. Note that some constraints are manufacturer- or device-specific.
              *
@@ -1118,6 +1146,14 @@ namespace Seam\Resources\Device {
              */
             public bool|null $is_heating = null,
             /**
+             * Indicates whether the device detects that the space is occupied, if the device measures occupancy. `null` until the first value arrives.
+             */
+            public bool|null $is_occupied = null,
+            /**
+             * Indicates whether the device detects smoking, if the device measures it. `null` until the first value arrives.
+             */
+            public bool|null $is_smoking_detected = null,
+            /**
              * Indicates whether the current thermostat settings differ from the most recent active program or schedule that Seam activated. For this condition to occur, `current_climate_setting.manual_override_allowed` must also be `true`.
              */
             public bool|null $is_temporary_manual_override_active = null,
@@ -1210,6 +1246,16 @@ namespace Seam\Resources\Device {
              */
             public \Seam\Resources\Device\Properties\MinutMetadata|null $minut_metadata = null,
             /**
+             * Mold risk level as reported by the device, if the device measures it. `null` until the first value arrives.
+             */
+            public string|null $mold_risk_level = null,
+            /**
+             * Additional sensors of the same kind on the device, each with a stable `sensor_name`. Present only when the device has more than one sensor of a kind or no single main sensor.
+             *
+             * @var list<\Seam\Resources\Device\Properties\NamedSensors>|null
+             */
+            public array|null $named_sensors = null,
+            /**
              * Metadata for a Google Nest device.
              */
             public \Seam\Resources\Device\Properties\NestMetadata|null $nest_metadata = null,
@@ -1218,6 +1264,10 @@ namespace Seam\Resources\Device {
              */
             public float|null $noise_level_decibels = null,
             /**
+             * Noise level as a Noise Risk Score (NRS), if the device reports one. `null` until the first value arrives.
+             */
+            public float|null $noise_level_nrs = null,
+            /**
              * Metadata for a NoiseAware device.
              */
             public \Seam\Resources\Device\Properties\NoiseawareMetadata|null $noiseaware_metadata = null,
@@ -1225,6 +1275,10 @@ namespace Seam\Resources\Device {
              * Metadata for a Nuki device.
              */
             public \Seam\Resources\Device\Properties\NukiMetadata|null $nuki_metadata = null,
+            /**
+             * Number of occupants the device detects, if the device counts occupants. `null` until the first value arrives.
+             */
+            public float|null $occupant_count = null,
             /**
              * Indicates whether it is currently possible to use offline access codes for the device.
              *
@@ -1603,6 +1657,7 @@ namespace Seam\Resources\Device {
         case REOLINK_CAMERA = "reolink_camera";
         case UNIFI_PROTECT_CAMERA = "unifi_protect_camera";
         case SONOS_SPEAKER = "sonos_speaker";
+        case ALERTIFY_SENSOR = "alertify_sensor";
     }
 }
 
@@ -2446,6 +2501,94 @@ namespace Seam\Resources\Device\Properties {
              * @deprecated use device.can_program_online_access_codes.
              */
             public bool|null $online_access_codes_supported = null,
+        ) {}
+    }
+
+    /**
+     * Additional sensors of the same kind on the device, each with a stable `sensor_name`. Present only when the device has more than one sensor of a kind or no single main sensor.
+     */
+    class NamedSensors
+    {
+        public static function from_json(mixed $json): NamedSensors|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                display_name: $json->display_name ?? null,
+                sensor_name: $json->sensor_name ?? null,
+                air_quality_index: $json->air_quality_index ?? null,
+                co_ppm: $json->co_ppm ?? null,
+                co2_ppm: $json->co2_ppm ?? null,
+                is_occupied: $json->is_occupied ?? null,
+                is_smoking_detected: $json->is_smoking_detected ?? null,
+                mold_risk_level: $json->mold_risk_level ?? null,
+                noise_level_decibels: $json->noise_level_decibels ?? null,
+                noise_level_nrs: $json->noise_level_nrs ?? null,
+                occupant_count: $json->occupant_count ?? null,
+                relative_humidity: $json->relative_humidity ?? null,
+                temperature_celsius: $json->temperature_celsius ?? null,
+                temperature_fahrenheit: $json->temperature_fahrenheit ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Display name of the sensor. Defaults to `sensor_name`.
+             */
+            public string|null $display_name,
+            /**
+             * Stable, hardware-defined name of the sensor, such as a port number.
+             */
+            public string|null $sensor_name,
+            /**
+             * Air quality index, if the device measures it. `null` until the first value arrives.
+             */
+            public float|null $air_quality_index = null,
+            /**
+             * Carbon monoxide concentration in parts per million, if the device measures it. `null` until the first value arrives.
+             */
+            public float|null $co_ppm = null,
+            /**
+             * Carbon dioxide concentration in parts per million, if the device measures it. `null` until the first value arrives.
+             */
+            public float|null $co2_ppm = null,
+            /**
+             * Indicates whether the device detects that the space is occupied, if the device measures occupancy. `null` until the first value arrives.
+             */
+            public bool|null $is_occupied = null,
+            /**
+             * Indicates whether the device detects smoking, if the device measures it. `null` until the first value arrives.
+             */
+            public bool|null $is_smoking_detected = null,
+            /**
+             * Mold risk level as reported by the device, if the device measures it. `null` until the first value arrives.
+             */
+            public string|null $mold_risk_level = null,
+            /**
+             * Noise level in decibels. `null` until the first value arrives.
+             */
+            public float|null $noise_level_decibels = null,
+            /**
+             * Noise level as a Noise Risk Score (NRS), if the device reports one. `null` until the first value arrives.
+             */
+            public float|null $noise_level_nrs = null,
+            /**
+             * Number of occupants the device detects, if the device counts occupants. `null` until the first value arrives.
+             */
+            public float|null $occupant_count = null,
+            /**
+             * Reported relative humidity, as a value between 0 and 1, inclusive. `null` until the first value arrives.
+             */
+            public float|null $relative_humidity = null,
+            /**
+             * Reported temperature in °C. `null` until the first value arrives.
+             */
+            public float|null $temperature_celsius = null,
+            /**
+             * Reported temperature in °F. `null` until the first value arrives.
+             */
+            public float|null $temperature_fahrenheit = null,
         ) {}
     }
 
