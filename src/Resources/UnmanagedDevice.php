@@ -682,6 +682,7 @@ namespace Seam\Resources\UnmanagedDevice {
         case REOLINK_CAMERA = "reolink_camera";
         case UNIFI_PROTECT_CAMERA = "unifi_protect_camera";
         case SONOS_SPEAKER = "sonos_speaker";
+        case ALERTIFY_SENSOR = "alertify_sensor";
     }
 }
 
