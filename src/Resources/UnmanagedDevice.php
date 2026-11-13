@@ -26,11 +26,6 @@ namespace Seam\Resources {
                     $json->errors ?? [],
                 ),
                 is_managed: $json->is_managed ?? null,
-                properties: isset($json->properties)
-                    ? \Seam\Resources\UnmanagedDevice\Properties::from_json(
-                        $json->properties,
-                    )
-                    : null,
                 warnings: array_map(
                     fn(
                         $w,
@@ -76,6 +71,11 @@ namespace Seam\Resources {
                 location: isset($json->location)
                     ? \Seam\Resources\UnmanagedDevice\Location::from_json(
                         $json->location,
+                    )
+                    : null,
+                properties: isset($json->properties)
+                    ? \Seam\Resources\UnmanagedDevice\Properties::from_json(
+                        $json->properties,
                     )
                     : null,
             );
@@ -126,10 +126,6 @@ namespace Seam\Resources {
              * Indicates that Seam does not manage the device.
              */
             public false|null $is_managed,
-            /**
-             * properties of the device.
-             */
-            public \Seam\Resources\UnmanagedDevice\Properties|null $properties,
             /**
              * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
              *
@@ -232,6 +228,10 @@ namespace Seam\Resources {
              * Location information for the device.
              */
             public \Seam\Resources\UnmanagedDevice\Location|null $location = null,
+            /**
+             * properties of the device.
+             */
+            public \Seam\Resources\UnmanagedDevice\Properties|null $properties = null,
         ) {}
     }
 }
