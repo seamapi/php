@@ -36,8 +36,6 @@ class AccessGrantsClient
      * @param string $customization_profile_id ID of the customization profile to apply to the Access Grant and its access methods.
      * @param list<string> $device_ids Set of IDs of the [devices](https://www.seam.co/docs/api/devices/list) to which access is being granted.
      * @param string|NullValue $ends_at Date and time at which the validity of the new grant ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. Must be a time in the future and after `starts_at`.
-     * @param mixed $location
-     * @param list<string> $location_ids
      * @param string|NullValue $name Name for the access grant.
      * @param string $reservation_key Reservation key for the access grant.
      * @param list<string> $space_ids Set of IDs of existing spaces to which access is being granted.
@@ -54,8 +52,6 @@ class AccessGrantsClient
         ?string $customization_profile_id = null,
         ?array $device_ids = null,
         string|NullValue|null $ends_at = null,
-        mixed $location = null,
-        ?array $location_ids = null,
         string|NullValue|null $name = null,
         ?string $reservation_key = null,
         ?array $space_ids = null,
@@ -85,12 +81,6 @@ class AccessGrantsClient
         }
         if ($ends_at !== null) {
             $request_payload["ends_at"] = $ends_at;
-        }
-        if ($location !== null) {
-            $request_payload["location"] = $location;
-        }
-        if ($location_ids !== null) {
-            $request_payload["location_ids"] = $location_ids;
         }
         if ($name !== null) {
             $request_payload["name"] = $name;
@@ -235,7 +225,6 @@ class AccessGrantsClient
      * @param string $customer_key Customer key for which you want to list access grants.
      * @param string $device_id ID of the device by which you want to filter the list of Access Grants.
      * @param float $limit Numerical limit on the number of access grants to return.
-     * @param string $location_id
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $reservation_key Filter Access Grants by reservation_key.
      * @param string $search String for which to search. Filters returned Access Grants to include all records that satisfy a partial match using `name`, `access_grant_key`, `reservation_key`, `access_grant_id`, `user_identity_id`, `user_identity_full_name`, `user_identity_email_address` or `user_identity_phone_number`.
@@ -253,7 +242,6 @@ class AccessGrantsClient
         ?string $customer_key = null,
         ?string $device_id = null,
         ?float $limit = null,
-        ?string $location_id = null,
         string|NullValue|null $page_cursor = null,
         ?string $reservation_key = null,
         ?string $search = null,
@@ -286,9 +274,6 @@ class AccessGrantsClient
         }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;
-        }
-        if ($location_id !== null) {
-            $request_payload["location_id"] = $location_id;
         }
         if ($page_cursor !== null) {
             $request_payload["page_cursor"] = $page_cursor;

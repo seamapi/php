@@ -18,7 +18,6 @@ namespace Seam\Resources {
             return new self(
                 acs_system_id: $json->acs_system_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                connected_account_ids: $json->connected_account_ids ?? null,
                 created_at: $json->created_at ?? null,
                 errors: array_map(
                     fn($e) => \Seam\Resources\AcsSystem\Errors::from_json($e),
@@ -45,9 +44,6 @@ namespace Seam\Resources {
                 external_type: $json->external_type ?? null,
                 external_type_display_name: $json->external_type_display_name ??
                     null,
-                system_type: $json->system_type ?? null,
-                system_type_display_name: $json->system_type_display_name ??
-                    null,
                 visionline_metadata: isset($json->visionline_metadata)
                     ? \Seam\Resources\AcsSystem\VisionlineMetadata::from_json(
                         $json->visionline_metadata,
@@ -65,13 +61,6 @@ namespace Seam\Resources {
              * ID of the connected account associated with the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              */
             public string|null $connected_account_id,
-            /**
-             * IDs of the [connected accounts](https://www.seam.co/docs/core-concepts/connected-accounts) associated with the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
-             *
-             * @var list<string>|null
-             * @deprecated Use `connected_account_id`.
-             */
-            public array|null $connected_account_ids,
             /**
              * Date and time at which the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) was created.
              */
@@ -134,15 +123,6 @@ namespace Seam\Resources {
              * Display name that corresponds to the brand-specific terminology for the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) type.
              */
             public string|null $external_type_display_name = null,
-            /**
-             * @var value-of<\Seam\Resources\AcsSystem\SystemType>|string|null
-             * @deprecated Use `external_type`.
-             */
-            public string|null $system_type = null,
-            /**
-             * @deprecated Use `external_type_display_name`.
-             */
-            public string|null $system_type_display_name = null,
             /**
              * Visionline-specific metadata for the [access control system](https://www.seam.co/docs/low-level-apis/access-systems).
              */
@@ -310,6 +290,10 @@ namespace Seam\Resources\AcsSystem {
                     => \Seam\Resources\AcsSystem\Warnings\SaltoKsSubscriptionLimitAlmostReached::from_json(
                     $json,
                 ),
+                \Seam\Resources\AcsSystem\Warnings\WarningCode::SALTO_KS_CUSTOM_PINS_NOT_SUPPORTED
+                    => \Seam\Resources\AcsSystem\Warnings\SaltoKsCustomPinsNotSupported::from_json(
+                    $json,
+                ),
                 \Seam\Resources\AcsSystem\Warnings\WarningCode::TIME_ZONE_DOES_NOT_MATCH_LOCATION
                     => \Seam\Resources\AcsSystem\Warnings\TimeZoneDoesNotMatchLocation::from_json(
                     $json,
@@ -349,27 +333,6 @@ namespace Seam\Resources\AcsSystem {
     }
 
     enum ExternalType: string
-    {
-        case PTI_SITE = "pti_site";
-        case AVIGILON_ALTA_ORG = "avigilon_alta_org";
-        case SALTO_KS_SITE = "salto_ks_site";
-        case SALTO_SPACE_SYSTEM = "salto_space_system";
-        case BRIVO_ACCOUNT = "brivo_account";
-        case HID_CREDENTIAL_MANAGER_ORGANIZATION = "hid_credential_manager_organization";
-        case VISIONLINE_SYSTEM = "visionline_system";
-        case ASSA_ABLOY_CREDENTIAL_SERVICE = "assa_abloy_credential_service";
-        case LATCH_BUILDING = "latch_building";
-        case DORMAKABA_COMMUNITY_SITE = "dormakaba_community_site";
-        case DORMAKABA_AMBIANCE_SITE = "dormakaba_ambiance_site";
-        case LEGIC_CONNECT_CREDENTIAL_SERVICE = "legic_connect_credential_service";
-        case ASSA_ABLOY_VOSTIO = "assa_abloy_vostio";
-        case ASSA_ABLOY_VOSTIO_CREDENTIAL_SERVICE = "assa_abloy_vostio_credential_service";
-        case HOTEK_SITE = "hotek_site";
-        case KISI_ORGANIZATION = "kisi_organization";
-        case AKILES_ORGANIZATION = "akiles_organization";
-    }
-
-    enum SystemType: string
     {
         case PTI_SITE = "pti_site";
         case AVIGILON_ALTA_ORG = "avigilon_alta_org";
@@ -884,14 +847,14 @@ namespace Seam\Resources\AcsSystem\Warnings {
     }
 
     /**
-     * Indicates the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) time zone could not be determined because the reported physical location does not match the time zone configured on the physical [ACS entrances](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details).
+     * Indicates that the Salto KS site does not accept custom PIN codes, either because its Salto subscription does not include the Custom PIN feature or because Custom PIN is turned off in the site's settings. Salto KS generates every PIN on the site, so a PIN code requested on an access grant or reservation is replaced with a Salto-generated one. The message says which of the two applies.
      */
-    final class TimeZoneDoesNotMatchLocation extends
+    final class SaltoKsCustomPinsNotSupported extends
         \Seam\Resources\AcsSystem\Warnings
     {
         public static function from_json(
             mixed $json,
-        ): TimeZoneDoesNotMatchLocation|null {
+        ): SaltoKsCustomPinsNotSupported|null {
             if (!$json) {
                 return null;
             }
@@ -899,8 +862,6 @@ namespace Seam\Resources\AcsSystem\Warnings {
                 created_at: $json->created_at ?? null,
                 message: $json->message ?? null,
                 warning_code: $json->warning_code ?? null,
-                misconfigured_acs_entrance_ids: $json->misconfigured_acs_entrance_ids ??
-                    null,
             );
         }
 
@@ -919,11 +880,49 @@ namespace Seam\Resources\AcsSystem\Warnings {
              * @var value-of<\Seam\Resources\AcsSystem\Warnings\WarningCode>|string|null
              */
             string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
+     * Indicates the [access control system](https://www.seam.co/docs/low-level-apis/access-systems) time zone could not be determined because the reported physical location does not match the time zone configured on the physical [ACS entrances](https://www.seam.co/docs/low-level-apis/access-systems/retrieving-entrance-details).
+     */
+    final class TimeZoneDoesNotMatchLocation extends
+        \Seam\Resources\AcsSystem\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): TimeZoneDoesNotMatchLocation|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
             /**
-             * @var list<string>|null
-             * @deprecated this field is deprecated.
+             * Date and time at which Seam created the warning.
              */
-            public array|null $misconfigured_acs_entrance_ids = null,
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\AcsSystem\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1020,6 +1019,7 @@ namespace Seam\Resources\AcsSystem\Warnings {
     enum WarningCode: string
     {
         case SALTO_KS_SUBSCRIPTION_LIMIT_ALMOST_REACHED = "salto_ks_subscription_limit_almost_reached";
+        case SALTO_KS_CUSTOM_PINS_NOT_SUPPORTED = "salto_ks_custom_pins_not_supported";
         case TIME_ZONE_DOES_NOT_MATCH_LOCATION = "time_zone_does_not_match_location";
         case SETUP_REQUIRED = "setup_required";
         case UNKNOWN_ISSUE_WITH_ACS_SYSTEM = "unknown_issue_with_acs_system";

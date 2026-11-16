@@ -89,7 +89,6 @@ class AcsEntrancesClient
      * @param string $connected_account_id ID of the connected account for which you want to retrieve all entrances.
      * @param string $customer_key Customer key for which you want to list entrances.
      * @param int $limit Maximum number of records to return per page.
-     * @param string|NullValue $location_id
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned entrances to include all records that satisfy a partial match using `display_name`.
      * @param string $space_id ID of the space for which you want to list entrances.
@@ -104,7 +103,6 @@ class AcsEntrancesClient
         ?string $connected_account_id = null,
         ?string $customer_key = null,
         ?int $limit = null,
-        string|NullValue|null $location_id = null,
         string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?string $space_id = null,
@@ -132,9 +130,6 @@ class AcsEntrancesClient
         }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;
-        }
-        if ($location_id !== null) {
-            $request_payload["location_id"] = $location_id;
         }
         if ($page_cursor !== null) {
             $request_payload["page_cursor"] = $page_cursor;

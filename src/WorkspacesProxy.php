@@ -30,7 +30,6 @@ class WorkspacesProxy
      * Creates a new [workspace](https://docs.seam.co/core-concepts/workspaces).
      *
      * @param string $name Name of the new workspace.
-     * @param string $company_name Company name for the new workspace.
      * @param string|NullValue $connect_partner_name Connect partner name for the new workspace.
      * @param mixed $connect_webview_customization [Connect Webview](https://docs.seam.co/core-concepts/connect-webviews) customizations for the new workspace.
      * @param bool $is_sandbox Indicates whether the new workspace is a [sandbox workspace](https://docs.seam.co/core-concepts/workspaces#sandbox-workspaces).
@@ -39,30 +38,20 @@ class WorkspacesProxy
      */
     public function create(
         string $name,
-        ?string $company_name = null,
         string|NullValue|null $connect_partner_name = null,
         mixed $connect_webview_customization = null,
         ?bool $is_sandbox = null,
         ?string $organization_id = null,
-        ?string $webview_logo_shape = null,
-        ?string $webview_primary_button_color = null,
-        ?string $webview_primary_button_text_color = null,
-        ?string $webview_success_message = null,
     ): Workspace {
         // Forwarded by name: the generated parameter order follows the API
         // definition, so a positional call could silently shift after a
         // regeneration.
         return $this->workspaces->create(
             name: $name,
-            company_name: $company_name,
             connect_partner_name: $connect_partner_name,
             connect_webview_customization: $connect_webview_customization,
             is_sandbox: $is_sandbox,
             organization_id: $organization_id,
-            webview_logo_shape: $webview_logo_shape,
-            webview_primary_button_color: $webview_primary_button_color,
-            webview_primary_button_text_color: $webview_primary_button_text_color,
-            webview_success_message: $webview_success_message,
         );
     }
 }

@@ -12,7 +12,6 @@ namespace Seam\Resources {
                 return null;
             }
             return new self(
-                company_name: $json->company_name ?? null,
                 connect_partner_name: $json->connect_partner_name ?? null,
                 connect_webview_customization: isset(
                     $json->connect_webview_customization,
@@ -33,12 +32,6 @@ namespace Seam\Resources {
         }
 
         public function __construct(
-            /**
-             * Company name associated with the [workspace](https://www.seam.co/docs/core-concepts/workspaces).
-             *
-             * @deprecated Use `connect_partner_name` instead.
-             */
-            public string|null $company_name,
             /**
              * Seam Connect partner name associated with the [workspace](https://www.seam.co/docs/core-concepts/workspaces).
              */

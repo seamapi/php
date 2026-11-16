@@ -43,11 +43,6 @@ namespace Seam\Resources {
                 ical_url: $json->ical_url ?? null,
                 image_url: $json->image_url ?? null,
                 time_zone: $json->time_zone ?? null,
-                user_identifier: isset($json->user_identifier)
-                    ? \Seam\Resources\ConnectedAccount\UserIdentifier::from_json(
-                        $json->user_identifier,
-                    )
-                    : null,
             );
         }
 
@@ -128,12 +123,6 @@ namespace Seam\Resources {
              * IANA time zone (e.g. America/Los_Angeles) for this connected account. Sourced from the connector configuration.
              */
             public string|null $time_zone = null,
-            /**
-             * User identifier associated with the connected account.
-             *
-             * @deprecated Use `display_name` instead.
-             */
-            public \Seam\Resources\ConnectedAccount\UserIdentifier|null $user_identifier = null,
         ) {}
     }
 }
@@ -206,51 +195,6 @@ namespace Seam\Resources\ConnectedAccount {
              * Indicates whether the error is related specifically to the connected account.
              */
             public bool|null $is_connected_account_error = null,
-        ) {}
-    }
-
-    /**
-     * User identifier associated with the connected account.
-     *
-     * @deprecated Use `display_name` instead.
-     */
-    class UserIdentifier
-    {
-        public static function from_json(mixed $json): UserIdentifier|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                api_url: $json->api_url ?? null,
-                email: $json->email ?? null,
-                exclusive: $json->exclusive ?? null,
-                phone: $json->phone ?? null,
-                username: $json->username ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * API URL for the user identifier associated with the connected account.
-             */
-            public string|null $api_url = null,
-            /**
-             * Email address of the user identifier associated with the connected account.
-             */
-            public string|null $email = null,
-            /**
-             * Indicates whether the user identifier associated with the connected account is exclusive.
-             */
-            public bool|null $exclusive = null,
-            /**
-             * Phone number of the user identifier associated with the connected account.
-             */
-            public string|null $phone = null,
-            /**
-             * Username of the user identifier associated with the connected account.
-             */
-            public string|null $username = null,
         ) {}
     }
 

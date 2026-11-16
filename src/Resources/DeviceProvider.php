@@ -214,6 +214,7 @@ namespace Seam\Resources\DeviceProvider {
         case TADO = "tado";
         case SALTO_SPACE = "salto_space";
         case SENSI = "sensi";
+        case SENSIBO = "sensibo";
         case KEYNEST = "keynest";
         case KORELOCK = "korelock";
         case KEYINCODE = "keyincode";
@@ -240,5 +241,7 @@ namespace Seam\Resources\DeviceProvider {
         case AQARA = "aqara";
         case EUFY = "eufy";
         case SONOS = "sonos";
+        case HAYWARD_OMNILOGIC = "hayward_omnilogic";
+        case TUYA = "tuya";
     }
 }

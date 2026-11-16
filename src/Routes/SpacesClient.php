@@ -356,6 +356,7 @@ class SpacesClient
      * @param list<string> $acs_entrance_ids IDs of the entrances that you want to set for the space. If specified, this will replace all existing entrances.
      * @param mixed $customer_data Reservation/stay-related defaults for the space. Only the keys you provide are updated; omit a key to leave it unchanged. Pass null on a key to clear it.
      * @param list<string> $device_ids IDs of the devices that you want to set for the space. If specified, this will replace all existing devices.
+     * @param mixed $geolocation Geographic coordinates of the space. Pass null to clear them. Seam keeps this value until the connected PMS reports different coordinates for the space.
      * @param string $name Name of the space.
      * @param string $space_id ID of the space that you want to update.
      * @param string $space_key Unique key of the space that you want to update.
@@ -365,6 +366,7 @@ class SpacesClient
         ?array $acs_entrance_ids = null,
         mixed $customer_data = null,
         ?array $device_ids = null,
+        mixed $geolocation = null,
         ?string $name = null,
         ?string $space_id = null,
         ?string $space_key = null,
@@ -379,6 +381,9 @@ class SpacesClient
         }
         if ($device_ids !== null) {
             $request_payload["device_ids"] = $device_ids;
+        }
+        if ($geolocation !== null) {
+            $request_payload["geolocation"] = $geolocation;
         }
         if ($name !== null) {
             $request_payload["name"] = $name;

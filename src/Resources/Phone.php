@@ -333,6 +333,10 @@ namespace Seam\Resources\Phone {
                     => \Seam\Resources\Phone\Warnings\HubRequiredForAdditionalCapabilities::from_json(
                     $json,
                 ),
+                \Seam\Resources\Phone\Warnings\WarningCode::SERVICE_MODE
+                    => \Seam\Resources\Phone\Warnings\ServiceMode::from_json(
+                    $json,
+                ),
                 \Seam\Resources\Phone\Warnings\WarningCode::PROVIDER_ISSUE
                     => \Seam\Resources\Phone\Warnings\ProviderIssue::from_json(
                     $json,
@@ -355,6 +359,10 @@ namespace Seam\Resources\Phone {
                 ),
                 \Seam\Resources\Phone\Warnings\WarningCode::MAX_ACCESS_CODES_REACHED
                     => \Seam\Resources\Phone\Warnings\MaxAccessCodesReached::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Phone\Warnings\WarningCode::SUBSCRIPTION_REQUIRED_FOR_ADDITIONAL_CAPABILITIES
+                    => \Seam\Resources\Phone\Warnings\SubscriptionRequiredForAdditionalCapabilities::from_json(
                     $json,
                 ),
                 \Seam\Resources\Phone\Warnings\WarningCode::CLOUD_RECORDING_NOT_ENABLED
@@ -2117,6 +2125,47 @@ namespace Seam\Resources\Phone\Warnings {
     }
 
     /**
+     * Indicates that a technician has put the pool controller in service mode. Schedules and remote changes will not run until it is switched back.
+     */
+    final class ServiceMode extends \Seam\Resources\Phone\Warnings
+    {
+        public static function from_json(mixed $json): ServiceMode|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Phone\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
      * Indicates a provider-specific issue that may affect device functionality.
      */
     final class ProviderIssue extends \Seam\Resources\Phone\Warnings
@@ -2381,6 +2430,49 @@ namespace Seam\Resources\Phone\Warnings {
     }
 
     /**
+     * Indicates that a third-party subscription is required to enable additional device capabilities.
+     */
+    final class SubscriptionRequiredForAdditionalCapabilities extends
+        \Seam\Resources\Phone\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): SubscriptionRequiredForAdditionalCapabilities|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Phone\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
      * Indicates that the camera's account plan does not include cloud recording, so event media such as motion clips is unavailable.
      */
     final class CloudRecordingNotEnabled extends \Seam\Resources\Phone\Warnings
@@ -2446,12 +2538,14 @@ namespace Seam\Resources\Phone\Warnings {
         case TIME_ZONE_MISMATCH = "time_zone_mismatch";
         case TWO_N_DEVICE_MISSING_TIMEZONE = "two_n_device_missing_timezone";
         case HUB_REQUIRED_FOR_ADDITIONAL_CAPABILITIES = "hub_required_for_additional_capabilities";
+        case SERVICE_MODE = "service_mode";
         case PROVIDER_ISSUE = "provider_issue";
         case KEYNEST_UNSUPPORTED_LOCKER = "keynest_unsupported_locker";
         case ACCESSORY_KEYPAD_SETUP_REQUIRED = "accessory_keypad_setup_required";
         case ACCESSORY_KEYPAD_LOW_BATTERY = "accessory_keypad_low_battery";
         case UNRELIABLE_ONLINE_STATUS = "unreliable_online_status";
         case MAX_ACCESS_CODES_REACHED = "max_access_codes_reached";
+        case SUBSCRIPTION_REQUIRED_FOR_ADDITIONAL_CAPABILITIES = "subscription_required_for_additional_capabilities";
         case CLOUD_RECORDING_NOT_ENABLED = "cloud_recording_not_enabled";
     }
 }

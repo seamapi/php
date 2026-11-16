@@ -350,7 +350,6 @@ namespace Seam\Resources\UnmanagedDevice {
                 location_name: $json->location_name ?? null,
                 room_name: $json->room_name ?? null,
                 time_zone: $json->time_zone ?? null,
-                timezone: $json->timezone ?? null,
             );
         }
 
@@ -367,12 +366,6 @@ namespace Seam\Resources\UnmanagedDevice {
              * Time zone of the device location.
              */
             public string|null $time_zone = null,
-            /**
-             * Time zone of the device location.
-             *
-             * @deprecated Use `time_zone` instead.
-             */
-            public string|null $timezone = null,
         ) {}
     }
 
@@ -408,10 +401,6 @@ namespace Seam\Resources\UnmanagedDevice {
                 image_alt_text: $json->image_alt_text ?? null,
                 image_url: $json->image_url ?? null,
                 manufacturer: $json->manufacturer ?? null,
-                offline_access_codes_enabled: $json->offline_access_codes_enabled ??
-                    null,
-                online_access_codes_enabled: $json->online_access_codes_enabled ??
-                    null,
             );
         }
 
@@ -454,18 +443,6 @@ namespace Seam\Resources\UnmanagedDevice {
              * Manufacturer of the device. When a device, such as a smart lock, is connected through a smart hub, the manufacturer of the device might be different from that of the smart hub.
              */
             public string|null $manufacturer = null,
-            /**
-             * Indicates whether it is currently possible to use offline access codes for the device.
-             *
-             * @deprecated use device.can_program_offline_access_codes
-             */
-            public bool|null $offline_access_codes_enabled = null,
-            /**
-             * Indicates whether it is currently possible to use online access codes for the device.
-             *
-             * @deprecated use device.can_program_online_access_codes
-             */
-            public bool|null $online_access_codes_enabled = null,
         ) {}
     }
 
@@ -574,6 +551,10 @@ namespace Seam\Resources\UnmanagedDevice {
                     => \Seam\Resources\UnmanagedDevice\Warnings\HubRequiredForAdditionalCapabilities::from_json(
                     $json,
                 ),
+                \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::SERVICE_MODE
+                    => \Seam\Resources\UnmanagedDevice\Warnings\ServiceMode::from_json(
+                    $json,
+                ),
                 \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::PROVIDER_ISSUE
                     => \Seam\Resources\UnmanagedDevice\Warnings\ProviderIssue::from_json(
                     $json,
@@ -596,6 +577,10 @@ namespace Seam\Resources\UnmanagedDevice {
                 ),
                 \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::MAX_ACCESS_CODES_REACHED
                     => \Seam\Resources\UnmanagedDevice\Warnings\MaxAccessCodesReached::from_json(
+                    $json,
+                ),
+                \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::SUBSCRIPTION_REQUIRED_FOR_ADDITIONAL_CAPABILITIES
+                    => \Seam\Resources\UnmanagedDevice\Warnings\SubscriptionRequiredForAdditionalCapabilities::from_json(
                     $json,
                 ),
                 \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::CLOUD_RECORDING_NOT_ENABLED
@@ -664,6 +649,7 @@ namespace Seam\Resources\UnmanagedDevice {
         case OMNITEC_LOCK = "omnitec_lock";
         case KISI_LOCK = "kisi_lock";
         case AQARA_LOCK = "aqara_lock";
+        case TUYA_LOCK = "tuya_lock";
         case EUFY_LOCK = "eufy_lock";
         case KEYNEST_KEY = "keynest_key";
         case NOISEAWARE_ACTIVITY_ZONE = "noiseaware_activity_zone";
@@ -673,6 +659,7 @@ namespace Seam\Resources\UnmanagedDevice {
         case HONEYWELL_RESIDEO_THERMOSTAT = "honeywell_resideo_thermostat";
         case TADO_THERMOSTAT = "tado_thermostat";
         case SENSI_THERMOSTAT = "sensi_thermostat";
+        case SENSIBO_THERMOSTAT = "sensibo_thermostat";
         case SMARTTHINGS_THERMOSTAT = "smartthings_thermostat";
         case IOS_PHONE = "ios_phone";
         case ANDROID_PHONE = "android_phone";
@@ -683,6 +670,8 @@ namespace Seam\Resources\UnmanagedDevice {
         case UNIFI_PROTECT_CAMERA = "unifi_protect_camera";
         case SONOS_SPEAKER = "sonos_speaker";
         case ALERTIFY_SENSOR = "alertify_sensor";
+        case HAYWARD_POOL_SYSTEM = "hayward_pool_system";
+        case HAYWARD_POOL = "hayward_pool";
     }
 }
 
@@ -1474,15 +1463,9 @@ namespace Seam\Resources\UnmanagedDevice\Properties {
                 display_name: $json->display_name ?? null,
                 manufacturer_display_name: $json->manufacturer_display_name ??
                     null,
-                accessory_keypad_supported: $json->accessory_keypad_supported ??
-                    null,
                 can_connect_accessory_keypad: $json->can_connect_accessory_keypad ??
                     null,
                 has_built_in_keypad: $json->has_built_in_keypad ?? null,
-                offline_access_codes_supported: $json->offline_access_codes_supported ??
-                    null,
-                online_access_codes_supported: $json->online_access_codes_supported ??
-                    null,
             );
         }
 
@@ -1496,10 +1479,6 @@ namespace Seam\Resources\UnmanagedDevice\Properties {
              */
             public string|null $manufacturer_display_name,
             /**
-             * @deprecated use device.properties.model.can_connect_accessory_keypad
-             */
-            public bool|null $accessory_keypad_supported = null,
-            /**
              * Indicates whether the device can connect a accessory keypad.
              */
             public bool|null $can_connect_accessory_keypad = null,
@@ -1507,14 +1486,6 @@ namespace Seam\Resources\UnmanagedDevice\Properties {
              * Indicates whether the device has a built in accessory keypad.
              */
             public bool|null $has_built_in_keypad = null,
-            /**
-             * @deprecated use device.can_program_offline_access_codes.
-             */
-            public bool|null $offline_access_codes_supported = null,
-            /**
-             * @deprecated use device.can_program_online_access_codes.
-             */
-            public bool|null $online_access_codes_supported = null,
         ) {}
     }
 }
@@ -2486,6 +2457,47 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
     }
 
     /**
+     * Indicates that a technician has put the pool controller in service mode. Schedules and remote changes will not run until it is switched back.
+     */
+    final class ServiceMode extends \Seam\Resources\UnmanagedDevice\Warnings
+    {
+        public static function from_json(mixed $json): ServiceMode|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
      * Indicates a provider-specific issue that may affect device functionality.
      */
     final class ProviderIssue extends \Seam\Resources\UnmanagedDevice\Warnings
@@ -2754,6 +2766,49 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
     }
 
     /**
+     * Indicates that a third-party subscription is required to enable additional device capabilities.
+     */
+    final class SubscriptionRequiredForAdditionalCapabilities extends
+        \Seam\Resources\UnmanagedDevice\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): SubscriptionRequiredForAdditionalCapabilities|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
      * Indicates that the camera's account plan does not include cloud recording, so event media such as motion clips is unavailable.
      */
     final class CloudRecordingNotEnabled extends
@@ -2820,12 +2875,14 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
         case TIME_ZONE_MISMATCH = "time_zone_mismatch";
         case TWO_N_DEVICE_MISSING_TIMEZONE = "two_n_device_missing_timezone";
         case HUB_REQUIRED_FOR_ADDITIONAL_CAPABILITIES = "hub_required_for_additional_capabilities";
+        case SERVICE_MODE = "service_mode";
         case PROVIDER_ISSUE = "provider_issue";
         case KEYNEST_UNSUPPORTED_LOCKER = "keynest_unsupported_locker";
         case ACCESSORY_KEYPAD_SETUP_REQUIRED = "accessory_keypad_setup_required";
         case ACCESSORY_KEYPAD_LOW_BATTERY = "accessory_keypad_low_battery";
         case UNRELIABLE_ONLINE_STATUS = "unreliable_online_status";
         case MAX_ACCESS_CODES_REACHED = "max_access_codes_reached";
+        case SUBSCRIPTION_REQUIRED_FOR_ADDITIONAL_CAPABILITIES = "subscription_required_for_additional_capabilities";
         case CLOUD_RECORDING_NOT_ENABLED = "cloud_recording_not_enabled";
     }
 }

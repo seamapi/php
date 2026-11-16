@@ -31,35 +31,22 @@ class WorkspacesClient
      * Creates a new [workspace](https://www.seam.co/docs/core-concepts/workspaces).
      *
      * @param string $name Name of the new workspace.
-     * @param string $company_name Company name for the new workspace.
      * @param string|NullValue $connect_partner_name Connect partner name for the new workspace.
      * @param mixed $connect_webview_customization [Connect Webview](https://www.seam.co/docs/core-concepts/connect-webviews) customizations for the new workspace. See also [Customize the Look and Feel of Your Connect Webviews](https://www.seam.co/docs/core-concepts/connect-webviews/customizing-connect-webviews#customize-the-look-and-feel-of-your-connect-webviews).
      * @param bool $is_sandbox Indicates whether the new workspace is a [sandbox workspace](https://www.seam.co/docs/core-concepts/workspaces#sandbox-workspaces).
      * @param string $organization_id ID of the organization to associate with the new workspace. If omitted, the new workspace is associated with the organization that you administer, if you administer exactly one. If you administer no organization, Seam creates one for you and associates the new workspace with it.
-     * @param string $webview_logo_shape
-     * @param string $webview_primary_button_color
-     * @param string $webview_primary_button_text_color
-     * @param string $webview_success_message
      * @return Workspace OK
      */
     public function create(
         string $name,
-        ?string $company_name = null,
         string|NullValue|null $connect_partner_name = null,
         mixed $connect_webview_customization = null,
         ?bool $is_sandbox = null,
         ?string $organization_id = null,
-        ?string $webview_logo_shape = null,
-        ?string $webview_primary_button_color = null,
-        ?string $webview_primary_button_text_color = null,
-        ?string $webview_success_message = null,
     ): Workspace {
         $request_payload = [];
 
         $request_payload["name"] = $name;
-        if ($company_name !== null) {
-            $request_payload["company_name"] = $company_name;
-        }
         if ($connect_partner_name !== null) {
             $request_payload["connect_partner_name"] = $connect_partner_name;
         }
@@ -73,24 +60,6 @@ class WorkspacesClient
         }
         if ($organization_id !== null) {
             $request_payload["organization_id"] = $organization_id;
-        }
-        if ($webview_logo_shape !== null) {
-            $request_payload["webview_logo_shape"] = $webview_logo_shape;
-        }
-        if ($webview_primary_button_color !== null) {
-            $request_payload[
-                "webview_primary_button_color"
-            ] = $webview_primary_button_color;
-        }
-        if ($webview_primary_button_text_color !== null) {
-            $request_payload[
-                "webview_primary_button_text_color"
-            ] = $webview_primary_button_text_color;
-        }
-        if ($webview_success_message !== null) {
-            $request_payload[
-                "webview_success_message"
-            ] = $webview_success_message;
         }
 
         $res = Body::decode(
