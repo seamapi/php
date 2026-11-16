@@ -80,7 +80,6 @@ class DevicesClient
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
      * @param string $search String for which to search. Filters returned devices to include all records that satisfy a partial match using `device_id` (full or partial UUID prefix, minimum 4 characters), `connected_account_id`, `display_name`, `custom_metadata` or `location.location_name`.
      * @param string $space_id ID of the space for which you want to list devices.
-     * @param string|NullValue $unstable_location_id
      * @param string $user_identifier_key Your own internal user ID for the user for which you want to list devices.
      * @param callable|null $on_response Called with the raw response envelope, used by the paginator to read the pagination metadata.
      * @return array OK
@@ -100,7 +99,6 @@ class DevicesClient
         string|NullValue|null $page_cursor = null,
         ?string $search = null,
         ?string $space_id = null,
-        string|NullValue|null $unstable_location_id = null,
         ?string $user_identifier_key = null,
         ?callable $on_response = null,
     ): array {
@@ -147,9 +145,6 @@ class DevicesClient
         }
         if ($space_id !== null) {
             $request_payload["space_id"] = $space_id;
-        }
-        if ($unstable_location_id !== null) {
-            $request_payload["unstable_location_id"] = $unstable_location_id;
         }
         if ($user_identifier_key !== null) {
             $request_payload["user_identifier_key"] = $user_identifier_key;

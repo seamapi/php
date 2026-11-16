@@ -36,7 +36,6 @@ namespace Seam\Resources {
                         $json->access_schedule,
                     )
                     : null,
-                email: $json->email ?? null,
                 email_address: $json->email_address ?? null,
                 external_type: $json->external_type ?? null,
                 external_type_display_name: $json->external_type_display_name ??
@@ -117,10 +116,6 @@ namespace Seam\Resources {
              * `starts_at` and `ends_at` timestamps for the [access system user's](https://www.seam.co/docs/low-level-apis/access-systems/user-management) access.
              */
             public \Seam\Resources\AcsUser\AccessSchedule|null $access_schedule = null,
-            /**
-             * @deprecated use email_address.
-             */
-            public string|null $email = null,
             /**
              * Email address of the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
              */

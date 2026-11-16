@@ -52,7 +52,6 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
      * @param float $preferred_code_length Preferred code length. Only applicable if you do not specify a `code`. If the affected device does not support the preferred code length, Seam reverts to using the shortest supported code length.
      * @param string $starts_at Date and time at which the validity of the new access code starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @param bool $use_backup_access_code_pool Indicates whether to use a [backup access code pool](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/backup-access-codes) provided by Seam. If `true`, you can use [`/access_codes/pull_backup_access_code`](https://www.seam.co/docs/api/access_codes/pull_backup_access_code).
-     * @param bool $use_offline_access_code
      * @return AccessCode OK
      */
     public function create(
@@ -71,7 +70,6 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
         ?float $preferred_code_length = null,
         ?string $starts_at = null,
         ?bool $use_backup_access_code_pool = null,
-        ?bool $use_offline_access_code = null,
     ): AccessCode {
         $request_payload = [];
 
@@ -129,11 +127,6 @@ To help your users identify codes set by Seam, Seam provides the name exactly as
             $request_payload[
                 "use_backup_access_code_pool"
             ] = $use_backup_access_code_pool;
-        }
-        if ($use_offline_access_code !== null) {
-            $request_payload[
-                "use_offline_access_code"
-            ] = $use_offline_access_code;
         }
 
         $res = Body::decode(

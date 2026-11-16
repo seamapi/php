@@ -54,7 +54,6 @@ class AcsUsersClient
      * @param string $full_name Full name of the new access system user.
      * @param mixed $access_schedule `starts_at` and `ends_at` timestamps for the new access system user's access. If you specify an `access_schedule`, you may include both `starts_at` and `ends_at`. If you omit `starts_at`, it defaults to the current time. `ends_at` is optional and must be a time in the future and after `starts_at`.
      * @param list<string> $acs_access_group_ids Array of access group IDs to indicate the access groups to which you want to add the new access system user.
-     * @param string $email
      * @param string $email_address Email address of the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
      * @param string $phone_number Phone number of the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management) in E.164 format (for example, `+15555550100`).
      * @param string $user_identity_id ID of the user identity with which you want to associate the new access system user.
@@ -65,7 +64,6 @@ class AcsUsersClient
         string $full_name,
         mixed $access_schedule = null,
         ?array $acs_access_group_ids = null,
-        ?string $email = null,
         ?string $email_address = null,
         ?string $phone_number = null,
         ?string $user_identity_id = null,
@@ -79,9 +77,6 @@ class AcsUsersClient
         }
         if ($acs_access_group_ids !== null) {
             $request_payload["acs_access_group_ids"] = $acs_access_group_ids;
-        }
-        if ($email !== null) {
-            $request_payload["email"] = $email;
         }
         if ($email_address !== null) {
             $request_payload["email_address"] = $email_address;
@@ -443,7 +438,6 @@ class AcsUsersClient
      * @param mixed $access_schedule `starts_at` and `ends_at` timestamps for the access system user's access. If you specify an `access_schedule`, you may include both `starts_at` and `ends_at`. If you omit `starts_at`, it defaults to the current time. `ends_at` is optional and must be a time in the future and after `starts_at`.
      * @param string $acs_system_id ID of the access system that you want to update. You can only provide acs_system_id with user_identity_id.
      * @param string $acs_user_id ID of the access system user that you want to update. You can only provide acs_user_id or user_identity_id.
-     * @param string $email
      * @param string $email_address Email address of the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
      * @param string $full_name Full name of the [access system user](https://www.seam.co/docs/low-level-apis/access-systems/user-management).
      * @param string $hid_acs_system_id ID of the HID access control system associated with the user.
@@ -455,7 +449,6 @@ class AcsUsersClient
         mixed $access_schedule = null,
         ?string $acs_system_id = null,
         ?string $acs_user_id = null,
-        ?string $email = null,
         ?string $email_address = null,
         ?string $full_name = null,
         ?string $hid_acs_system_id = null,
@@ -472,9 +465,6 @@ class AcsUsersClient
         }
         if ($acs_user_id !== null) {
             $request_payload["acs_user_id"] = $acs_user_id;
-        }
-        if ($email !== null) {
-            $request_payload["email"] = $email;
         }
         if ($email_address !== null) {
             $request_payload["email_address"] = $email_address;
@@ -498,7 +488,6 @@ class AcsUsersClient
                 "access_schedule",
                 "acs_system_id",
                 "acs_user_id",
-                "email",
                 "email_address",
                 "full_name",
                 "hid_acs_system_id",

@@ -35,7 +35,6 @@ class ClientSessionsClient
      * @param string $expires_at Date and time at which the client session should expire, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
      * @param string $user_identifier_key Your user ID for the user for whom you want to create a client session. When you authenticate with a publishable key, the `user_identifier_key` must be a high-entropy secret that only the user knows, such as a UUIDv4 or a salted hash. Do not use an email address, name, phone number, or other guessable value, because anyone who knows the `user_identifier_key` can retrieve the client session.
      * @param string $user_identity_id ID of the [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) for which you want to create a client session.
-     * @param list<string> $user_identity_ids IDs of the [user identities](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
      * @return ClientSession OK
      */
     public function create(
@@ -46,7 +45,6 @@ class ClientSessionsClient
         ?string $expires_at = null,
         ?string $user_identifier_key = null,
         ?string $user_identity_id = null,
-        ?array $user_identity_ids = null,
     ): ClientSession {
         $request_payload = [];
 
@@ -70,9 +68,6 @@ class ClientSessionsClient
         }
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
-        }
-        if ($user_identity_ids !== null) {
-            $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
         $res = Body::decode(
@@ -142,7 +137,6 @@ class ClientSessionsClient
      * @param string $expires_at Date and time at which the client session should expire in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format. If the client session already exists, this will update the expiration before returning it.
      * @param string $user_identifier_key Your user ID for the user that you want to associate with the client session (or that is already associated with the existing client session). When you authenticate with a publishable key, the `user_identifier_key` must be a high-entropy secret that only the user knows, such as a UUIDv4 or a salted hash. Do not use an email address, name, phone number, or other guessable value, because anyone who knows the `user_identifier_key` can retrieve the client session.
      * @param string $user_identity_id ID of the [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session (or that are already associated with the existing client session).
-     * @param list<string> $user_identity_ids IDs of the [user identities](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
      * @return ClientSession OK
      */
     public function get_or_create(
@@ -151,7 +145,6 @@ class ClientSessionsClient
         ?string $expires_at = null,
         ?string $user_identifier_key = null,
         ?string $user_identity_id = null,
-        ?array $user_identity_ids = null,
     ): ClientSession {
         $request_payload = [];
 
@@ -169,9 +162,6 @@ class ClientSessionsClient
         }
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
-        }
-        if ($user_identity_ids !== null) {
-            $request_payload["user_identity_ids"] = $user_identity_ids;
         }
 
         $res = Body::decode(
@@ -197,7 +187,6 @@ class ClientSessionsClient
      * @param list<string> $connected_account_ids IDs of the [connected accounts](https://www.seam.co/docs/core-concepts/connected-accounts) that you want to associate with the client session.
      * @param string $user_identifier_key Your user ID for the user that you want to associate with the client session.
      * @param string $user_identity_id ID of the [user identity](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
-     * @param list<string> $user_identity_ids IDs of the [user identities](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) that you want to associate with the client session.
      * @return void OK
      */
     public function grant_access(
@@ -206,7 +195,6 @@ class ClientSessionsClient
         ?array $connected_account_ids = null,
         ?string $user_identifier_key = null,
         ?string $user_identity_id = null,
-        ?array $user_identity_ids = null,
     ): void {
         $request_payload = [];
 
@@ -225,9 +213,6 @@ class ClientSessionsClient
         if ($user_identity_id !== null) {
             $request_payload["user_identity_id"] = $user_identity_id;
         }
-        if ($user_identity_ids !== null) {
-            $request_payload["user_identity_ids"] = $user_identity_ids;
-        }
         \Seam\Http\RequestParameters::requireAtLeastOne(
             "/client_sessions/grant_access",
             $request_payload,
@@ -237,7 +222,6 @@ class ClientSessionsClient
                 "connected_account_ids",
                 "user_identifier_key",
                 "user_identity_id",
-                "user_identity_ids",
             ],
         );
 

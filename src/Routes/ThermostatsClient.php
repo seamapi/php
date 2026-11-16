@@ -170,7 +170,6 @@ class ThermostatsClient
      * @param float $heating_set_point_celsius Temperature to which the thermostat should heat (in °C). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
      * @param float $heating_set_point_fahrenheit Temperature to which the thermostat should heat (in °F). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
      * @param string $hvac_mode_setting Desired [HVAC mode](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
-     * @param bool $manual_override_allowed Indicates whether a person at the thermostat or using the API can change the thermostat's settings.
      * @param string|NullValue $name User-friendly name to identify the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets).
      * @return void OK
      */
@@ -185,7 +184,6 @@ class ThermostatsClient
         ?float $heating_set_point_celsius = null,
         ?float $heating_set_point_fahrenheit = null,
         ?string $hvac_mode_setting = null,
-        ?bool $manual_override_allowed = null,
         string|NullValue|null $name = null,
     ): void {
         $request_payload = [];
@@ -223,11 +221,6 @@ class ThermostatsClient
         }
         if ($hvac_mode_setting !== null) {
             $request_payload["hvac_mode_setting"] = $hvac_mode_setting;
-        }
-        if ($manual_override_allowed !== null) {
-            $request_payload[
-                "manual_override_allowed"
-            ] = $manual_override_allowed;
         }
         if ($name !== null) {
             $request_payload["name"] = $name;
@@ -633,7 +626,6 @@ class ThermostatsClient
      * @param float $heating_set_point_celsius Temperature to which the thermostat should heat (in °C). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
      * @param float $heating_set_point_fahrenheit Temperature to which the thermostat should heat (in °F). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
      * @param string $hvac_mode_setting Desired [HVAC mode](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
-     * @param bool $manual_override_allowed Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
      * @param string|NullValue $name User-friendly name to identify the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets).
      * @return void OK
      */
@@ -648,7 +640,6 @@ class ThermostatsClient
         ?float $heating_set_point_celsius = null,
         ?float $heating_set_point_fahrenheit = null,
         ?string $hvac_mode_setting = null,
-        ?bool $manual_override_allowed = null,
         string|NullValue|null $name = null,
     ): void {
         $request_payload = [];
@@ -686,11 +677,6 @@ class ThermostatsClient
         }
         if ($hvac_mode_setting !== null) {
             $request_payload["hvac_mode_setting"] = $hvac_mode_setting;
-        }
-        if ($manual_override_allowed !== null) {
-            $request_payload[
-                "manual_override_allowed"
-            ] = $manual_override_allowed;
         }
         if ($name !== null) {
             $request_payload["name"] = $name;

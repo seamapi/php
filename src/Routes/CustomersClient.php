@@ -31,7 +31,6 @@ class CustomersClient
      * @param mixed $customer_data
      * @param list<array<string, mixed>|\stdClass> $customer_resources_filters Filter configuration for resources based on their custom_metadata. Each filter specifies a field, operation, and value to match against resource custom_metadata.
      * @param string $customization_profile_id The ID of the customization profile to use for the portal.
-     * @param mixed $deep_link Deep link target resource for initial redirect. When set, the portal will navigate directly to the specified resource.
      * @param bool $exclude_locale_picker Whether to exclude the option to select a locale within the portal UI.
      * @param mixed $features Features to include in the portal. Settings you omit use the portal's customization profile, then the Seam default. Settings you pass take precedence over the customization profile's, so changing the profile doesn't change them.
      * @param bool $is_embedded Whether the portal is embedded in another application.
@@ -45,7 +44,6 @@ class CustomersClient
         mixed $customer_data = null,
         ?array $customer_resources_filters = null,
         ?string $customization_profile_id = null,
-        mixed $deep_link = null,
         ?bool $exclude_locale_picker = null,
         mixed $features = null,
         ?bool $is_embedded = null,
@@ -68,9 +66,6 @@ class CustomersClient
             $request_payload[
                 "customization_profile_id"
             ] = $customization_profile_id;
-        }
-        if ($deep_link !== null) {
-            $request_payload["deep_link"] = $deep_link;
         }
         if ($exclude_locale_picker !== null) {
             $request_payload["exclude_locale_picker"] = $exclude_locale_picker;

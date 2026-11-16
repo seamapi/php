@@ -28,7 +28,6 @@ namespace Seam\Resources {
                 expires_at: $json->expires_at ?? null,
                 token: $json->token ?? null,
                 user_identifier_key: $json->user_identifier_key ?? null,
-                user_identity_ids: $json->user_identity_ids ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 customer_key: $json->customer_key ?? null,
                 user_identity_id: $json->user_identity_id ?? null,
@@ -72,13 +71,6 @@ namespace Seam\Resources {
              * Your user ID for the user associated with the [client session](https://www.seam.co/docs/core-concepts/authentication/client-session-tokens).
              */
             public string|null $user_identifier_key,
-            /**
-             * IDs of the [user identities](https://www.seam.co/docs/capability-guides/mobile-access/managing-mobile-app-user-accounts-with-user-identities#what-is-a-user-identity) associated with the client session.
-             *
-             * @var list<string>|null
-             * @deprecated Use `user_identity_id` instead.
-             */
-            public array|null $user_identity_ids,
             /**
              * ID of the workspace associated with the client session.
              */

@@ -22,7 +22,6 @@ namespace Seam\Resources {
                     fn($e) => \Seam\Resources\AccessGrant\Errors::from_json($e),
                     $json->errors ?? [],
                 ),
-                location_ids: $json->location_ids ?? null,
                 name: $json->name ?? null,
                 pending_mutations: array_map(
                     fn(
@@ -92,11 +91,6 @@ namespace Seam\Resources {
              * @var list<\Seam\Resources\AccessGrant\Errors>
              */
             public array $errors,
-            /**
-             * @var list<string>|null
-             * @deprecated Use `space_ids`.
-             */
-            public array|null $location_ids,
             /**
              * Name of the Access Grant. If not provided, the display name will be computed.
              */

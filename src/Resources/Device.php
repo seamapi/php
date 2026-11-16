@@ -76,7 +76,9 @@ namespace Seam\Resources {
                         $json->device_provider,
                     )
                     : null,
-                is_occupied: $json->is_occupied ?? null,
+                estimated_occupant_count: $json->estimated_occupant_count ??
+                    null,
+                is_occupancy_detected: $json->is_occupancy_detected ?? null,
                 is_smoking_detected: $json->is_smoking_detected ?? null,
                 location: isset($json->location)
                     ? \Seam\Resources\Device\Location::from_json(
@@ -93,7 +95,6 @@ namespace Seam\Resources {
                 nickname: $json->nickname ?? null,
                 noise_level_decibels: $json->noise_level_decibels ?? null,
                 noise_level_nrs: $json->noise_level_nrs ?? null,
-                occupant_count: $json->occupant_count ?? null,
                 properties: isset($json->properties)
                     ? \Seam\Resources\Device\Properties::from_json(
                         $json->properties,
@@ -275,9 +276,13 @@ namespace Seam\Resources {
              */
             public \Seam\Resources\Device\DeviceProvider|null $device_provider = null,
             /**
-             * Indicates whether the device detects that the space is occupied, if the device measures occupancy.
+             * Estimated number of occupants detected by the device.
              */
-            public bool|null $is_occupied = null,
+            public float|null $estimated_occupant_count = null,
+            /**
+             * Indicates whether the device detects occupancy.
+             */
+            public bool|null $is_occupancy_detected = null,
             /**
              * Indicates whether the device detects smoking, if the device measures it.
              */
@@ -308,10 +313,6 @@ namespace Seam\Resources {
              * Noise level as a Noise Risk Score (NRS), if the device reports one.
              */
             public float|null $noise_level_nrs = null,
-            /**
-             * Number of occupants the device detects, if the device counts occupants.
-             */
-            public float|null $occupant_count = null,
             /**
              * Properties of the device.
              */
@@ -517,7 +518,6 @@ namespace Seam\Resources\Device {
                 location_name: $json->location_name ?? null,
                 room_name: $json->room_name ?? null,
                 time_zone: $json->time_zone ?? null,
-                timezone: $json->timezone ?? null,
             );
         }
 
@@ -534,12 +534,6 @@ namespace Seam\Resources\Device {
              * Time zone of the device location.
              */
             public string|null $time_zone = null,
-            /**
-             * Time zone of the device location.
-             *
-             * @deprecated Use `time_zone` instead.
-             */
-            public string|null $timezone = null,
         ) {}
     }
 
@@ -559,12 +553,13 @@ namespace Seam\Resources\Device {
                 air_quality_index: $json->air_quality_index ?? null,
                 co_ppm: $json->co_ppm ?? null,
                 co2_ppm: $json->co2_ppm ?? null,
-                is_occupied: $json->is_occupied ?? null,
+                estimated_occupant_count: $json->estimated_occupant_count ??
+                    null,
+                is_occupancy_detected: $json->is_occupancy_detected ?? null,
                 is_smoking_detected: $json->is_smoking_detected ?? null,
                 mold_risk_level: $json->mold_risk_level ?? null,
                 noise_level_decibels: $json->noise_level_decibels ?? null,
                 noise_level_nrs: $json->noise_level_nrs ?? null,
-                occupant_count: $json->occupant_count ?? null,
                 relative_humidity: $json->relative_humidity ?? null,
                 temperature_celsius: $json->temperature_celsius ?? null,
                 temperature_fahrenheit: $json->temperature_fahrenheit ?? null,
@@ -593,9 +588,13 @@ namespace Seam\Resources\Device {
              */
             public float|null $co2_ppm = null,
             /**
-             * Indicates whether the device detects that the space is occupied, if the device measures occupancy.
+             * Estimated number of occupants detected by the device.
              */
-            public bool|null $is_occupied = null,
+            public float|null $estimated_occupant_count = null,
+            /**
+             * Indicates whether the device detects occupancy.
+             */
+            public bool|null $is_occupancy_detected = null,
             /**
              * Indicates whether the device detects smoking, if the device measures it.
              */
@@ -612,10 +611,6 @@ namespace Seam\Resources\Device {
              * Noise level as a Noise Risk Score (NRS), if the device reports one.
              */
             public float|null $noise_level_nrs = null,
-            /**
-             * Number of occupants the device detects, if the device counts occupants.
-             */
-            public float|null $occupant_count = null,
             /**
              * Relative humidity, as a value between 0 and 1, inclusive, if the device measures humidity.
              */
@@ -657,13 +652,6 @@ namespace Seam\Resources\Device {
                 accessory_keypad: isset($json->accessory_keypad)
                     ? \Seam\Resources\Device\Properties\AccessoryKeypad::from_json(
                         $json->accessory_keypad,
-                    )
-                    : null,
-                active_thermostat_schedule: isset(
-                    $json->active_thermostat_schedule,
-                )
-                    ? \Seam\Resources\Device\Properties\ActiveThermostatSchedule::from_json(
-                        $json->active_thermostat_schedule,
                     )
                     : null,
                 active_thermostat_schedule_id: $json->active_thermostat_schedule_id ??
@@ -756,11 +744,6 @@ namespace Seam\Resources\Device {
                     : null,
                 currently_triggering_noise_threshold_ids: $json->currently_triggering_noise_threshold_ids ??
                     null,
-                default_climate_setting: isset($json->default_climate_setting)
-                    ? \Seam\Resources\Device\Properties\DefaultClimateSetting::from_json(
-                        $json->default_climate_setting,
-                    )
-                    : null,
                 door_open: $json->door_open ?? null,
                 dormakaba_oracode_iho_metadata: isset(
                     $json->dormakaba_oracode_iho_metadata,
@@ -788,7 +771,6 @@ namespace Seam\Resources\Device {
                     : null,
                 fallback_climate_preset_key: $json->fallback_climate_preset_key ??
                     null,
-                fan_mode_setting: $json->fan_mode_setting ?? null,
                 four_suites_metadata: isset($json->four_suites_metadata)
                     ? \Seam\Resources\Device\Properties\FourSuitesMetadata::from_json(
                         $json->four_suites_metadata,
@@ -904,8 +886,6 @@ namespace Seam\Resources\Device {
                         $json->nuki_metadata,
                     )
                     : null,
-                offline_access_codes_enabled: $json->offline_access_codes_enabled ??
-                    null,
                 offline_time_frame_options: array_map(
                     fn(
                         $o,
@@ -919,8 +899,6 @@ namespace Seam\Resources\Device {
                         $json->omnitec_metadata,
                     )
                     : null,
-                online_access_codes_enabled: $json->online_access_codes_enabled ??
-                    null,
                 online_time_frame_options: array_map(
                     fn(
                         $o,
@@ -945,11 +923,6 @@ namespace Seam\Resources\Device {
                         $json->salto_ks_metadata,
                     )
                     : null,
-                salto_metadata: isset($json->salto_metadata)
-                    ? \Seam\Resources\Device\Properties\SaltoMetadata::from_json(
-                        $json->salto_metadata,
-                    )
-                    : null,
                 salto_space_credential_service_metadata: isset(
                     $json->salto_space_credential_service_metadata,
                 )
@@ -972,6 +945,11 @@ namespace Seam\Resources\Device {
                         $json->sensi_metadata,
                     )
                     : null,
+                sensibo_metadata: isset($json->sensibo_metadata)
+                    ? \Seam\Resources\Device\Properties\SensiboMetadata::from_json(
+                        $json->sensibo_metadata,
+                    )
+                    : null,
                 serial_number: $json->serial_number ?? null,
                 smartthings_metadata: isset($json->smartthings_metadata)
                     ? \Seam\Resources\Device\Properties\SmartthingsMetadata::from_json(
@@ -979,11 +957,7 @@ namespace Seam\Resources\Device {
                     )
                     : null,
                 supported_code_lengths: $json->supported_code_lengths ?? null,
-                supports_accessory_keypad: $json->supports_accessory_keypad ??
-                    null,
                 supports_backup_access_code_pool: $json->supports_backup_access_code_pool ??
-                    null,
-                supports_offline_access_codes: $json->supports_offline_access_codes ??
                     null,
                 tado_metadata: isset($json->tado_metadata)
                     ? \Seam\Resources\Device\Properties\TadoMetadata::from_json(
@@ -1027,6 +1001,11 @@ namespace Seam\Resources\Device {
                 ttlock_metadata: isset($json->ttlock_metadata)
                     ? \Seam\Resources\Device\Properties\TtlockMetadata::from_json(
                         $json->ttlock_metadata,
+                    )
+                    : null,
+                tuya_metadata: isset($json->tuya_metadata)
+                    ? \Seam\Resources\Device\Properties\TuyaMetadata::from_json(
+                        $json->tuya_metadata,
                     )
                     : null,
                 two_n_metadata: isset($json->two_n_metadata)
@@ -1090,12 +1069,6 @@ namespace Seam\Resources\Device {
              * Accessory keypad properties and state.
              */
             public \Seam\Resources\Device\Properties\AccessoryKeypad|null $accessory_keypad = null,
-            /**
-             * Active [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
-             *
-             * @deprecated Use `active_thermostat_schedule_id` with `/thermostats/schedules/get` instead.
-             */
-            public \Seam\Resources\Device\Properties\ActiveThermostatSchedule|null $active_thermostat_schedule = null,
             /**
              * ID of the active [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
              */
@@ -1197,10 +1170,6 @@ namespace Seam\Resources\Device {
              */
             public array|null $currently_triggering_noise_threshold_ids = null,
             /**
-             * @deprecated use fallback_climate_preset_key to specify a fallback climate preset instead.
-             */
-            public \Seam\Resources\Device\Properties\DefaultClimateSetting|null $default_climate_setting = null,
-            /**
              * Indicates whether the door is open.
              */
             public bool|null $door_open = null,
@@ -1224,11 +1193,6 @@ namespace Seam\Resources\Device {
              * Key of the [fallback climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets/setting-the-fallback-climate-preset) for the thermostat.
              */
             public string|null $fallback_climate_preset_key = null,
-            /**
-             * @var value-of<\Seam\Resources\Device\Properties\FanModeSetting>|string|null
-             * @deprecated Use `current_climate_setting.fan_mode_setting` instead.
-             */
-            public string|null $fan_mode_setting = null,
             /**
              * Metadata for a 4SUITES device.
              */
@@ -1386,12 +1350,6 @@ namespace Seam\Resources\Device {
              */
             public \Seam\Resources\Device\Properties\NukiMetadata|null $nuki_metadata = null,
             /**
-             * Indicates whether it is currently possible to use offline access codes for the device.
-             *
-             * @deprecated use device.can_program_offline_access_codes
-             */
-            public bool|null $offline_access_codes_enabled = null,
-            /**
              * Time frames that may be requested when creating an offline access code, expressed as a list of options. The caller picks one option (by matching the requested duration when the options' duration ranges do not overlap, or by `display_name` when they do) and satisfies that one option's rules. When `undefined`, any time frame works.
              *
              * @var list<\Seam\Resources\Device\Properties\OfflineTimeFrameOptions>|null
@@ -1401,12 +1359,6 @@ namespace Seam\Resources\Device {
              * Metadata for an Omnitec device.
              */
             public \Seam\Resources\Device\Properties\OmnitecMetadata|null $omnitec_metadata = null,
-            /**
-             * Indicates whether it is currently possible to use online access codes for the device.
-             *
-             * @deprecated use device.can_program_online_access_codes
-             */
-            public bool|null $online_access_codes_enabled = null,
             /**
              * Time frames that may be requested when creating an online access code, expressed as a list of options. The caller picks one option (by matching the requested duration when the options' duration ranges do not overlap, or by `display_name` when they do) and satisfies that one option's rules. When `undefined`, any time frame works.
              *
@@ -1430,12 +1382,6 @@ namespace Seam\Resources\Device {
              */
             public \Seam\Resources\Device\Properties\SaltoKsMetadata|null $salto_ks_metadata = null,
             /**
-             * Metada for a Salto device.
-             *
-             * @deprecated Use `salto_ks_metadata` instead.
-             */
-            public \Seam\Resources\Device\Properties\SaltoMetadata|null $salto_metadata = null,
-            /**
              * Salto Space credential service metadata for the phone.
              */
             public \Seam\Resources\Device\Properties\SaltoSpaceCredentialServiceMetadata|null $salto_space_credential_service_metadata = null,
@@ -1452,6 +1398,10 @@ namespace Seam\Resources\Device {
              */
             public \Seam\Resources\Device\Properties\SensiMetadata|null $sensi_metadata = null,
             /**
+             * Metadata for a Sensibo device.
+             */
+            public \Seam\Resources\Device\Properties\SensiboMetadata|null $sensibo_metadata = null,
+            /**
              * Serial number of the device.
              */
             public string|null $serial_number = null,
@@ -1466,17 +1416,9 @@ namespace Seam\Resources\Device {
              */
             public array|null $supported_code_lengths = null,
             /**
-             * @deprecated use device.properties.model.can_connect_accessory_keypad
-             */
-            public bool|null $supports_accessory_keypad = null,
-            /**
              * Indicates whether the device supports a [backup access code pool](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes/backup-access-codes).
              */
             public bool|null $supports_backup_access_code_pool = null,
-            /**
-             * @deprecated use offline_access_codes_enabled
-             */
-            public bool|null $supports_offline_access_codes = null,
             /**
              * Metadata for a tado° device.
              */
@@ -1519,6 +1461,10 @@ namespace Seam\Resources\Device {
              * Metadata for a TTLock device.
              */
             public \Seam\Resources\Device\Properties\TtlockMetadata|null $ttlock_metadata = null,
+            /**
+             * Metadata for a Tuya device.
+             */
+            public \Seam\Resources\Device\Properties\TuyaMetadata|null $tuya_metadata = null,
             /**
              * Metadata for a 2N device.
              */
@@ -1655,6 +1601,10 @@ namespace Seam\Resources\Device {
                     => \Seam\Resources\Device\Warnings\HubRequiredForAdditionalCapabilities::from_json(
                     $json,
                 ),
+                \Seam\Resources\Device\Warnings\WarningCode::SERVICE_MODE
+                    => \Seam\Resources\Device\Warnings\ServiceMode::from_json(
+                    $json,
+                ),
                 \Seam\Resources\Device\Warnings\WarningCode::PROVIDER_ISSUE
                     => \Seam\Resources\Device\Warnings\ProviderIssue::from_json(
                     $json,
@@ -1677,6 +1627,10 @@ namespace Seam\Resources\Device {
                 ),
                 \Seam\Resources\Device\Warnings\WarningCode::MAX_ACCESS_CODES_REACHED
                     => \Seam\Resources\Device\Warnings\MaxAccessCodesReached::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Warnings\WarningCode::SUBSCRIPTION_REQUIRED_FOR_ADDITIONAL_CAPABILITIES
+                    => \Seam\Resources\Device\Warnings\SubscriptionRequiredForAdditionalCapabilities::from_json(
                     $json,
                 ),
                 \Seam\Resources\Device\Warnings\WarningCode::CLOUD_RECORDING_NOT_ENABLED
@@ -1745,6 +1699,7 @@ namespace Seam\Resources\Device {
         case OMNITEC_LOCK = "omnitec_lock";
         case KISI_LOCK = "kisi_lock";
         case AQARA_LOCK = "aqara_lock";
+        case TUYA_LOCK = "tuya_lock";
         case EUFY_LOCK = "eufy_lock";
         case KEYNEST_KEY = "keynest_key";
         case NOISEAWARE_ACTIVITY_ZONE = "noiseaware_activity_zone";
@@ -1754,6 +1709,7 @@ namespace Seam\Resources\Device {
         case HONEYWELL_RESIDEO_THERMOSTAT = "honeywell_resideo_thermostat";
         case TADO_THERMOSTAT = "tado_thermostat";
         case SENSI_THERMOSTAT = "sensi_thermostat";
+        case SENSIBO_THERMOSTAT = "sensibo_thermostat";
         case SMARTTHINGS_THERMOSTAT = "smartthings_thermostat";
         case IOS_PHONE = "ios_phone";
         case ANDROID_PHONE = "android_phone";
@@ -1764,6 +1720,8 @@ namespace Seam\Resources\Device {
         case UNIFI_PROTECT_CAMERA = "unifi_protect_camera";
         case SONOS_SPEAKER = "sonos_speaker";
         case ALERTIFY_SENSOR = "alertify_sensor";
+        case HAYWARD_POOL_SYSTEM = "hayward_pool_system";
+        case HAYWARD_POOL = "hayward_pool";
     }
 }
 
@@ -2566,15 +2524,9 @@ namespace Seam\Resources\Device\Properties {
                 display_name: $json->display_name ?? null,
                 manufacturer_display_name: $json->manufacturer_display_name ??
                     null,
-                accessory_keypad_supported: $json->accessory_keypad_supported ??
-                    null,
                 can_connect_accessory_keypad: $json->can_connect_accessory_keypad ??
                     null,
                 has_built_in_keypad: $json->has_built_in_keypad ?? null,
-                offline_access_codes_supported: $json->offline_access_codes_supported ??
-                    null,
-                online_access_codes_supported: $json->online_access_codes_supported ??
-                    null,
             );
         }
 
@@ -2588,10 +2540,6 @@ namespace Seam\Resources\Device\Properties {
              */
             public string|null $manufacturer_display_name,
             /**
-             * @deprecated use device.properties.model.can_connect_accessory_keypad
-             */
-            public bool|null $accessory_keypad_supported = null,
-            /**
              * Indicates whether the device can connect a accessory keypad.
              */
             public bool|null $can_connect_accessory_keypad = null,
@@ -2599,14 +2547,6 @@ namespace Seam\Resources\Device\Properties {
              * Indicates whether the device has a built in accessory keypad.
              */
             public bool|null $has_built_in_keypad = null,
-            /**
-             * @deprecated use device.can_program_offline_access_codes.
-             */
-            public bool|null $offline_access_codes_supported = null,
-            /**
-             * @deprecated use device.can_program_online_access_codes.
-             */
-            public bool|null $online_access_codes_supported = null,
         ) {}
     }
 
@@ -3067,7 +3007,6 @@ namespace Seam\Resources\Device\Properties {
                     ),
                     $json->predefined_time_slots ?? [],
                 ),
-                site_id: $json->site_id ?? null,
                 site_name: $json->site_name ?? null,
             );
         }
@@ -3099,12 +3038,6 @@ namespace Seam\Resources\Device\Properties {
              * @var list<\Seam\Resources\Device\Properties\DormakabaOracodeMetadata\PredefinedTimeSlots>|null
              */
             public array|null $predefined_time_slots = null,
-            /**
-             * Site ID for a dormakaba Oracode device.
-             *
-             * @deprecated Previously marked as "@DEPRECATED."
-             */
-            public float|null $site_id = null,
             /**
              * Site name for a dormakaba Oracode device.
              */
@@ -3972,66 +3905,6 @@ namespace Seam\Resources\Device\Properties {
     }
 
     /**
-     * Metada for a Salto device.
-     *
-     * @deprecated Use `salto_ks_metadata` instead.
-     */
-    class SaltoMetadata
-    {
-        public static function from_json(mixed $json): SaltoMetadata|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                battery_level: $json->battery_level ?? null,
-                customer_reference: $json->customer_reference ?? null,
-                lock_id: $json->lock_id ?? null,
-                lock_type: $json->lock_type ?? null,
-                locked_state: $json->locked_state ?? null,
-                model: $json->model ?? null,
-                site_id: $json->site_id ?? null,
-                site_name: $json->site_name ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Battery level for a Salto device.
-             */
-            public string|null $battery_level = null,
-            /**
-             * Customer reference for a Salto device.
-             */
-            public string|null $customer_reference = null,
-            /**
-             * Lock ID for a Salto device.
-             */
-            public string|null $lock_id = null,
-            /**
-             * Lock type for a Salto device.
-             */
-            public string|null $lock_type = null,
-            /**
-             * Locked state for a Salto device.
-             */
-            public string|null $locked_state = null,
-            /**
-             * Model for a Salto device.
-             */
-            public string|null $model = null,
-            /**
-             * Site ID for the Salto KS site to which the device belongs.
-             */
-            public string|null $site_id = null,
-            /**
-             * Site name for the Salto KS site to which the device belongs.
-             */
-            public string|null $site_name = null,
-        ) {}
-    }
-
-    /**
      * Metadata for a Schlage device.
      */
     class SchlageMetadata
@@ -4112,8 +3985,6 @@ namespace Seam\Resources\Device\Properties {
             return new self(
                 device_id: $json->device_id ?? null,
                 device_name: $json->device_name ?? null,
-                dual_setpoints_not_supported: $json->dual_setpoints_not_supported ??
-                    null,
                 product_type: $json->product_type ?? null,
             );
         }
@@ -4128,13 +3999,62 @@ namespace Seam\Resources\Device\Properties {
              */
             public string|null $device_name = null,
             /**
-             * Deprecated. Seam no longer sets this field.
-             */
-            public bool|null $dual_setpoints_not_supported = null,
-            /**
              * Product type for a Sensi device.
              */
             public string|null $product_type = null,
+        ) {}
+    }
+
+    /**
+     * Metadata for a Sensibo device.
+     */
+    class SensiboMetadata
+    {
+        public static function from_json(mixed $json): SensiboMetadata|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                firmware_version: $json->firmware_version ?? null,
+                mac_address: $json->mac_address ?? null,
+                pod_id: $json->pod_id ?? null,
+                product_model: $json->product_model ?? null,
+                room_name: $json->room_name ?? null,
+                serial_number: $json->serial_number ?? null,
+                temperature_unit: $json->temperature_unit ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Firmware version of the Sensibo device.
+             */
+            public string|null $firmware_version = null,
+            /**
+             * MAC address of the Sensibo device.
+             */
+            public string|null $mac_address = null,
+            /**
+             * ID of the Sensibo device, which Sensibo calls a pod.
+             */
+            public string|null $pod_id = null,
+            /**
+             * Product model of the Sensibo device, such as `skyv2` or `air`.
+             */
+            public string|null $product_model = null,
+            /**
+             * Name of the room that the Sensibo device is in.
+             */
+            public string|null $room_name = null,
+            /**
+             * Serial number of the Sensibo device.
+             */
+            public string|null $serial_number = null,
+            /**
+             * Temperature unit that the Sensibo device displays: `C` or `F`.
+             */
+            public string|null $temperature_unit = null,
         ) {}
     }
 
@@ -4390,6 +4310,59 @@ namespace Seam\Resources\Device\Properties {
              * @var list<\Seam\Resources\Device\Properties\TtlockMetadata\WirelessKeypads>|null
              */
             public array|null $wireless_keypads = null,
+        ) {}
+    }
+
+    /**
+     * Metadata for a Tuya device.
+     */
+    class TuyaMetadata
+    {
+        public static function from_json(mixed $json): TuyaMetadata|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                category: $json->category ?? null,
+                device_id: $json->device_id ?? null,
+                device_name: $json->device_name ?? null,
+                model: $json->model ?? null,
+                product_id: $json->product_id ?? null,
+                product_name: $json->product_name ?? null,
+                time_zone: $json->time_zone ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Tuya product category code for the device (e.g. ms).
+             */
+            public string|null $category = null,
+            /**
+             * Device ID for a Tuya device.
+             */
+            public string|null $device_id = null,
+            /**
+             * Device name for a Tuya device.
+             */
+            public string|null $device_name = null,
+            /**
+             * Model reported for a Tuya device.
+             */
+            public string|null $model = null,
+            /**
+             * Tuya product ID for the device.
+             */
+            public string|null $product_id = null,
+            /**
+             * Tuya product name for the device.
+             */
+            public string|null $product_name = null,
+            /**
+             * Time zone reported for a Tuya device (e.g. +08:00).
+             */
+            public string|null $time_zone = null,
         ) {}
     }
 
@@ -4867,92 +4840,6 @@ namespace Seam\Resources\Device\Properties {
     }
 
     /**
-     * Active [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
-     *
-     * @deprecated Use `active_thermostat_schedule_id` with `/thermostats/schedules/get` instead.
-     */
-    class ActiveThermostatSchedule
-    {
-        public static function from_json(
-            mixed $json,
-        ): ActiveThermostatSchedule|null {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                climate_preset_key: $json->climate_preset_key ?? null,
-                created_at: $json->created_at ?? null,
-                device_id: $json->device_id ?? null,
-                ends_at: $json->ends_at ?? null,
-                errors: array_map(
-                    fn(
-                        $e,
-                    ) => \Seam\Resources\Device\Properties\ActiveThermostatSchedule\Errors::from_json(
-                        $e,
-                    ),
-                    $json->errors ?? [],
-                ),
-                name: $json->name ?? null,
-                starts_at: $json->starts_at ?? null,
-                thermostat_schedule_id: $json->thermostat_schedule_id ?? null,
-                workspace_id: $json->workspace_id ?? null,
-                is_override_allowed: $json->is_override_allowed ?? null,
-                max_override_period_minutes: $json->max_override_period_minutes ??
-                    null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Key of the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) to use for the [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
-             */
-            public string|null $climate_preset_key,
-            /**
-             * Date and time at which the [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules) was created.
-             */
-            public string|null $created_at,
-            /**
-             * ID of the desired [thermostat](https://www.seam.co/docs/capability-guides/thermostats) device.
-             */
-            public string|null $device_id,
-            /**
-             * Date and time at which the [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules) ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
-             */
-            public string|null $ends_at,
-            /**
-             * Errors associated with the [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
-             *
-             * @var list<\Seam\Resources\Device\Properties\ActiveThermostatSchedule\Errors>
-             */
-            public array $errors,
-            /**
-             * User-friendly name to identify the [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
-             */
-            public string|null $name,
-            /**
-             * Date and time at which the [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules) starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
-             */
-            public string|null $starts_at,
-            /**
-             * ID of the [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
-             */
-            public string|null $thermostat_schedule_id,
-            /**
-             * ID of the workspace that contains the thermostat schedule.
-             */
-            public string|null $workspace_id,
-            /**
-             * Indicates whether a person at the thermostat can change the thermostat's settings after the [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules) starts.
-             */
-            public bool|null $is_override_allowed = null,
-            /**
-             * Number of minutes for which a person at the thermostat can change the thermostat's settings after the activation of the scheduled [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets). See also [Specifying Manual Override Permissions](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-             */
-            public int|null $max_override_period_minutes = null,
-        ) {}
-    }
-
-    /**
      * Available [climate presets](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) for the thermostat.
      */
     class AvailableClimatePresets
@@ -4970,7 +4857,6 @@ namespace Seam\Resources\Device\Properties {
                     null,
                 climate_preset_key: $json->climate_preset_key ?? null,
                 display_name: $json->display_name ?? null,
-                manual_override_allowed: $json->manual_override_allowed ?? null,
                 climate_preset_mode: $json->climate_preset_mode ?? null,
                 cooling_set_point_celsius: $json->cooling_set_point_celsius ??
                     null,
@@ -5012,12 +4898,6 @@ namespace Seam\Resources\Device\Properties {
              * Display name for the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets).
              */
             public string|null $display_name,
-            /**
-             * Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-             *
-             * @deprecated Use 'thermostat_schedule.is_override_allowed'
-             */
-            public bool|null $manual_override_allowed,
             /**
              * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
              *
@@ -5097,7 +4977,6 @@ namespace Seam\Resources\Device\Properties {
                 heating_set_point_fahrenheit: $json->heating_set_point_fahrenheit ??
                     null,
                 hvac_mode_setting: $json->hvac_mode_setting ?? null,
-                manual_override_allowed: $json->manual_override_allowed ?? null,
                 name: $json->name ?? null,
             );
         }
@@ -5161,123 +5040,6 @@ namespace Seam\Resources\Device\Properties {
              * @var value-of<\Seam\Resources\Device\Properties\CurrentClimateSetting\HvacModeSetting>|string|null
              */
             public string|null $hvac_mode_setting = null,
-            /**
-             * Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-             *
-             * @deprecated Use 'thermostat_schedule.is_override_allowed'
-             */
-            public bool|null $manual_override_allowed = null,
-            /**
-             * User-friendly name to identify the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets).
-             */
-            public string|null $name = null,
-        ) {}
-    }
-
-    /**
-     * @deprecated use fallback_climate_preset_key to specify a fallback climate preset instead.
-     */
-    class DefaultClimateSetting
-    {
-        public static function from_json(
-            mixed $json,
-        ): DefaultClimateSetting|null {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                can_delete: $json->can_delete ?? null,
-                can_edit: $json->can_edit ?? null,
-                can_use_with_thermostat_daily_programs: $json->can_use_with_thermostat_daily_programs ??
-                    null,
-                climate_preset_key: $json->climate_preset_key ?? null,
-                climate_preset_mode: $json->climate_preset_mode ?? null,
-                cooling_set_point_celsius: $json->cooling_set_point_celsius ??
-                    null,
-                cooling_set_point_fahrenheit: $json->cooling_set_point_fahrenheit ??
-                    null,
-                display_name: $json->display_name ?? null,
-                ecobee_metadata: isset($json->ecobee_metadata)
-                    ? \Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata::from_json(
-                        $json->ecobee_metadata,
-                    )
-                    : null,
-                fan_mode_setting: $json->fan_mode_setting ?? null,
-                heating_set_point_celsius: $json->heating_set_point_celsius ??
-                    null,
-                heating_set_point_fahrenheit: $json->heating_set_point_fahrenheit ??
-                    null,
-                hvac_mode_setting: $json->hvac_mode_setting ?? null,
-                manual_override_allowed: $json->manual_override_allowed ?? null,
-                name: $json->name ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Indicates whether the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) key can be deleted.
-             */
-            public bool|null $can_delete = null,
-            /**
-             * Indicates whether the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) key can be edited.
-             */
-            public bool|null $can_edit = null,
-            /**
-             * Indicates whether the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) key can be programmed in a thermostat daily program.
-             */
-            public bool|null $can_use_with_thermostat_daily_programs = null,
-            /**
-             * Unique key to identify the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets).
-             */
-            public string|null $climate_preset_key = null,
-            /**
-             * The climate preset mode for the thermostat, based on the available climate preset modes reported by the device.
-             *
-             * @var value-of<\Seam\Resources\Device\Properties\DefaultClimateSetting\ClimatePresetMode>|string|null
-             */
-            public string|null $climate_preset_mode = null,
-            /**
-             * Temperature to which the thermostat should cool (in °C). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
-             */
-            public float|null $cooling_set_point_celsius = null,
-            /**
-             * Temperature to which the thermostat should cool (in °F). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
-             */
-            public float|null $cooling_set_point_fahrenheit = null,
-            /**
-             * Display name for the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets).
-             */
-            public string|null $display_name = null,
-            /**
-             * Metadata specific to the Ecobee climate, if applicable.
-             */
-            public \Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata|null $ecobee_metadata = null,
-            /**
-             * Desired [fan mode setting](https://www.seam.co/docs/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
-             *
-             * @var value-of<\Seam\Resources\Device\Properties\DefaultClimateSetting\FanModeSetting>|string|null
-             */
-            public string|null $fan_mode_setting = null,
-            /**
-             * Temperature to which the thermostat should heat (in °C). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
-             */
-            public float|null $heating_set_point_celsius = null,
-            /**
-             * Temperature to which the thermostat should heat (in °F). See also [Set Points](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/set-points).
-             */
-            public float|null $heating_set_point_fahrenheit = null,
-            /**
-             * Desired [HVAC mode](https://www.seam.co/docs/capability-guides/thermostats/understanding-thermostat-concepts/hvac-mode) setting, such as `heat`, `cool`, `heat_cool`, or `off`.
-             *
-             * @var value-of<\Seam\Resources\Device\Properties\DefaultClimateSetting\HvacModeSetting>|string|null
-             */
-            public string|null $hvac_mode_setting = null,
-            /**
-             * Indicates whether a person at the thermostat can change the thermostat's settings. See [Specifying Manual Override Permissions](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules#specifying-manual-override-permissions).
-             *
-             * @deprecated Use 'thermostat_schedule.is_override_allowed'
-             */
-            public bool|null $manual_override_allowed = null,
             /**
              * User-friendly name to identify the [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets).
              */
@@ -5439,13 +5201,6 @@ namespace Seam\Resources\Device\Properties {
              */
             public string|null $wednesday_program_id,
         ) {}
-    }
-
-    enum FanModeSetting: string
-    {
-        case AUTO = "auto";
-        case ON = "on";
-        case CIRCULATE = "circulate";
     }
 }
 
@@ -6008,41 +5763,6 @@ namespace Seam\Resources\Device\Properties\OnlineTimeFrameOptions {
     }
 }
 
-namespace Seam\Resources\Device\Properties\ActiveThermostatSchedule {
-    /**
-     * Errors associated with the [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules).
-     */
-    class Errors
-    {
-        public static function from_json(mixed $json): Errors|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                created_at: $json->created_at ?? null,
-                error_code: $json->error_code ?? null,
-                message: $json->message ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Date and time at which Seam created the error.
-             */
-            public string|null $created_at,
-            /**
-             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
-             */
-            public string|null $error_code,
-            /**
-             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
-             */
-            public string|null $message,
-        ) {}
-    }
-}
-
 namespace Seam\Resources\Device\Properties\AvailableClimatePresets {
     /**
      * Metadata specific to the Ecobee climate, if applicable.
@@ -6178,77 +5898,6 @@ namespace Seam\Resources\Device\Properties\CurrentClimateSetting {
 }
 
 namespace Seam\Resources\Device\Properties\CurrentClimateSetting\EcobeeMetadata {
-    enum Owner: string
-    {
-        case USER = "user";
-        case SYSTEM = "system";
-    }
-}
-
-namespace Seam\Resources\Device\Properties\DefaultClimateSetting {
-    /**
-     * Metadata specific to the Ecobee climate, if applicable.
-     */
-    class EcobeeMetadata
-    {
-        public static function from_json(mixed $json): EcobeeMetadata|null
-        {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                climate_ref: $json->climate_ref ?? null,
-                is_optimized: $json->is_optimized ?? null,
-                owner: $json->owner ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * Reference to the Ecobee climate, if applicable.
-             */
-            public string|null $climate_ref = null,
-            /**
-             * Indicates if the climate preset is optimized by Ecobee.
-             */
-            public bool|null $is_optimized = null,
-            /**
-             * Indicates whether the climate preset is owned by the user or the system.
-             *
-             * @var value-of<\Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata\Owner>|string|null
-             */
-            public string|null $owner = null,
-        ) {}
-    }
-
-    enum ClimatePresetMode: string
-    {
-        case HOME = "home";
-        case AWAY = "away";
-        case WAKE = "wake";
-        case SLEEP = "sleep";
-        case OCCUPIED = "occupied";
-        case UNOCCUPIED = "unoccupied";
-    }
-
-    enum FanModeSetting: string
-    {
-        case AUTO = "auto";
-        case ON = "on";
-        case CIRCULATE = "circulate";
-    }
-
-    enum HvacModeSetting: string
-    {
-        case OFF = "off";
-        case HEAT = "heat";
-        case COOL = "cool";
-        case HEAT_COOL = "heat_cool";
-        case ECO = "eco";
-    }
-}
-
-namespace Seam\Resources\Device\Properties\DefaultClimateSetting\EcobeeMetadata {
     enum Owner: string
     {
         case USER = "user";
@@ -7217,6 +6866,47 @@ namespace Seam\Resources\Device\Warnings {
     }
 
     /**
+     * Indicates that a technician has put the pool controller in service mode. Schedules and remote changes will not run until it is switched back.
+     */
+    final class ServiceMode extends \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(mixed $json): ServiceMode|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
      * Indicates a provider-specific issue that may affect device functionality.
      */
     final class ProviderIssue extends \Seam\Resources\Device\Warnings
@@ -7482,6 +7172,49 @@ namespace Seam\Resources\Device\Warnings {
     }
 
     /**
+     * Indicates that a third-party subscription is required to enable additional device capabilities.
+     */
+    final class SubscriptionRequiredForAdditionalCapabilities extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): SubscriptionRequiredForAdditionalCapabilities|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
      * Indicates that the camera's account plan does not include cloud recording, so event media such as motion clips is unavailable.
      */
     final class CloudRecordingNotEnabled extends \Seam\Resources\Device\Warnings
@@ -7547,12 +7280,14 @@ namespace Seam\Resources\Device\Warnings {
         case TIME_ZONE_MISMATCH = "time_zone_mismatch";
         case TWO_N_DEVICE_MISSING_TIMEZONE = "two_n_device_missing_timezone";
         case HUB_REQUIRED_FOR_ADDITIONAL_CAPABILITIES = "hub_required_for_additional_capabilities";
+        case SERVICE_MODE = "service_mode";
         case PROVIDER_ISSUE = "provider_issue";
         case KEYNEST_UNSUPPORTED_LOCKER = "keynest_unsupported_locker";
         case ACCESSORY_KEYPAD_SETUP_REQUIRED = "accessory_keypad_setup_required";
         case ACCESSORY_KEYPAD_LOW_BATTERY = "accessory_keypad_low_battery";
         case UNRELIABLE_ONLINE_STATUS = "unreliable_online_status";
         case MAX_ACCESS_CODES_REACHED = "max_access_codes_reached";
+        case SUBSCRIPTION_REQUIRED_FOR_ADDITIONAL_CAPABILITIES = "subscription_required_for_additional_capabilities";
         case CLOUD_RECORDING_NOT_ENABLED = "cloud_recording_not_enabled";
     }
 }

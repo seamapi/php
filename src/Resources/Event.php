@@ -218,10 +218,6 @@ namespace Seam\Resources {
                     => \Seam\Resources\Event\ConnectedAccountCreated::from_json(
                     $json,
                 ),
-                \Seam\Resources\Event\EventType::CONNECTED_ACCOUNT_SUCCESSFUL_LOGIN
-                    => \Seam\Resources\Event\ConnectedAccountSuccessfulLogin::from_json(
-                    $json,
-                ),
                 \Seam\Resources\Event\EventType::CONNECTED_ACCOUNT_DISCONNECTED
                     => \Seam\Resources\Event\ConnectedAccountDisconnected::from_json(
                     $json,
@@ -5230,82 +5226,6 @@ namespace Seam\Resources\Event {
     }
 
     /**
-     * A connected account had a successful login using a Connect Webview.
-     */
-    final class ConnectedAccountSuccessfulLogin extends \Seam\Resources\Event
-    {
-        public static function from_json(
-            mixed $json,
-        ): ConnectedAccountSuccessfulLogin|null {
-            if (!$json) {
-                return null;
-            }
-            return new self(
-                connect_webview_id: $json->connect_webview_id ?? null,
-                connected_account_id: $json->connected_account_id ?? null,
-                created_at: $json->created_at ?? null,
-                event_id: $json->event_id ?? null,
-                event_type: $json->event_type ?? null,
-                occurred_at: $json->occurred_at ?? null,
-                workspace_id: $json->workspace_id ?? null,
-                connected_account_custom_metadata: $json->connected_account_custom_metadata ??
-                    null,
-                event_description: $json->event_description ?? null,
-            );
-        }
-
-        public function __construct(
-            /**
-             * ID of the Connect Webview associated with the event.
-             */
-            public string|null $connect_webview_id,
-            /**
-             * ID of the affected connected account.
-             */
-            public string|null $connected_account_id,
-            /**
-             * Date and time at which the event was created.
-             */
-            string|null $created_at,
-            /**
-             * ID of the event.
-             */
-            string|null $event_id,
-            /**
-             * @var value-of<\Seam\Resources\Event\EventType>|string|null
-             */
-            string|null $event_type,
-            /**
-             * Date and time at which the event occurred.
-             */
-            string|null $occurred_at,
-            /**
-             * ID of the workspace associated with the event.
-             */
-            string|null $workspace_id,
-            /**
-             * Custom metadata of the connected account, present when connected_account_id is provided.
-             *
-             * @var array<string, string|bool>|\stdClass|null
-             */
-            public array|\stdClass|null $connected_account_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
-        ) {
-            parent::__construct(
-                created_at: $created_at,
-                event_description: $event_description,
-                event_id: $event_id,
-                event_type: $event_type,
-                occurred_at: $occurred_at,
-                workspace_id: $workspace_id,
-            );
-        }
-    }
-
-    /**
      * A connected account was disconnected.
      */
     final class ConnectedAccountDisconnected extends \Seam\Resources\Event
@@ -7372,7 +7292,6 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                battery_level: $json->battery_level ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
@@ -7392,12 +7311,6 @@ namespace Seam\Resources\Event {
         }
 
         public function __construct(
-            /**
-             * Number in the range 0 to 1.0 indicating the level of the battery whose drop triggered this event.
-             *
-             * @deprecated Use device_battery_level and accessory_keypad_battery_level, which distinguish the device's own battery from a paired accessory keypad's battery.
-             */
-            public float|null $battery_level,
             /**
              * ID of the connected account associated with the event.
              */
@@ -10315,7 +10228,6 @@ namespace Seam\Resources\Event {
                 return null;
             }
             return new self(
-                activation_reason: $json->activation_reason ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
@@ -10329,6 +10241,7 @@ namespace Seam\Resources\Event {
                 device_custom_metadata: $json->device_custom_metadata ?? null,
                 event_description: $json->event_description ?? null,
                 image_url: $json->image_url ?? null,
+                is_motion_detected: $json->is_motion_detected ?? null,
                 media_ids: $json->media_ids ?? null,
                 motion_sub_type: $json->motion_sub_type ?? null,
                 video_url: $json->video_url ?? null,
@@ -10336,12 +10249,6 @@ namespace Seam\Resources\Event {
         }
 
         public function __construct(
-            /**
-             * The reason the camera was activated.
-             *
-             * @var value-of<\Seam\Resources\Event\CameraActivated\ActivationReason>|string|null
-             */
-            public string|null $activation_reason,
             /**
              * ID of the connected account associated with the event.
              */
@@ -10394,6 +10301,10 @@ namespace Seam\Resources\Event {
              * URL to a thumbnail image captured at the time of activation.
              */
             public string|null $image_url = null,
+            /**
+             * Whether motion detection activated the camera, if known.
+             */
+            public bool|null $is_motion_detected = null,
             /**
              * IDs of the media, such as a video clip and a thumbnail image, captured for this activation. Use `/media/get` to retrieve each one.
              *
@@ -10894,7 +10805,6 @@ namespace Seam\Resources\Event {
         case CLIENT_SESSION_DELETED = "client_session.deleted";
         case CONNECTED_ACCOUNT_CONNECTED = "connected_account.connected";
         case CONNECTED_ACCOUNT_CREATED = "connected_account.created";
-        case CONNECTED_ACCOUNT_SUCCESSFUL_LOGIN = "connected_account.successful_login";
         case CONNECTED_ACCOUNT_DISCONNECTED = "connected_account.disconnected";
         case CONNECTED_ACCOUNT_COMPLETED_FIRST_SYNC = "connected_account.completed_first_sync";
         case CONNECTED_ACCOUNT_DELETED = "connected_account.deleted";
@@ -13275,11 +13185,6 @@ namespace Seam\Resources\Event\ThermostatManuallyAdjusted {
 }
 
 namespace Seam\Resources\Event\CameraActivated {
-    enum ActivationReason: string
-    {
-        case MOTION_DETECTED = "motion_detected";
-    }
-
     enum MotionSubType: string
     {
         case HUMAN = "human";

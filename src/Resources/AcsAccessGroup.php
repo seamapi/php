@@ -16,9 +16,6 @@ namespace Seam\Resources {
                 return null;
             }
             return new self(
-                access_group_type: $json->access_group_type ?? null,
-                access_group_type_display_name: $json->access_group_type_display_name ??
-                    null,
                 acs_access_group_id: $json->acs_access_group_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
@@ -59,15 +56,6 @@ namespace Seam\Resources {
         }
 
         public function __construct(
-            /**
-             * @var value-of<\Seam\Resources\AcsAccessGroup\AccessGroupType>|string|null
-             * @deprecated Use `external_type`.
-             */
-            public string|null $access_group_type,
-            /**
-             * @deprecated Use `external_type_display_name`.
-             */
-            public string|null $access_group_type_display_name,
             /**
              * ID of the access group.
              */
@@ -320,20 +308,6 @@ namespace Seam\Resources\AcsAccessGroup {
              */
             public string|null $warning_code,
         ) {}
-    }
-
-    enum AccessGroupType: string
-    {
-        case PTI_UNIT = "pti_unit";
-        case PTI_ACCESS_LEVEL = "pti_access_level";
-        case SALTO_KS_ACCESS_GROUP = "salto_ks_access_group";
-        case BRIVO_GROUP = "brivo_group";
-        case SALTO_SPACE_GROUP = "salto_space_group";
-        case DORMAKABA_COMMUNITY_ACCESS_GROUP = "dormakaba_community_access_group";
-        case DORMAKABA_AMBIANCE_ACCESS_GROUP = "dormakaba_ambiance_access_group";
-        case AVIGILON_ALTA_GROUP = "avigilon_alta_group";
-        case KISI_ACCESS_GROUP = "kisi_access_group";
-        case AKILES_MEMBER_GROUP = "akiles_member_group";
     }
 
     enum ExternalType: string
