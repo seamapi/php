@@ -343,10 +343,11 @@ $workspace = $seam->workspaces->create(
 
 Seam delivers webhooks with [Svix]. Verify and parse an incoming request with
 `SeamWebhook`, which returns the typed event.
-Omit the secret (or pass `null`) to read `SEAM_WEBHOOK_SECRET` from the process
+Omit the secret to read `SEAM_WEBHOOK_SECRET` from the process
 environment at construction time. An explicit secret takes precedence, including
 an empty string: missing, empty, or decoded-empty secrets raise
-`Seam\InvalidOptionsError` before verification.
+`Seam\InvalidOptionsError` before verification. Explicit `null` and other non-string
+values raise `TypeError`.
 
 [Svix]: https://www.svix.com/
 

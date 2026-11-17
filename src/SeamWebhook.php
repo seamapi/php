@@ -20,12 +20,17 @@ class SeamWebhook
     private Webhook $webhook;
 
     /**
-     * @param string|null $secret Defaults to SEAM_WEBHOOK_SECRET when omitted or null.
+     * @param string $secret Defaults to SEAM_WEBHOOK_SECRET only when omitted.
      * @throws InvalidOptionsError When the secret is missing or decodes to an empty key.
      */
-    public function __construct(?string $secret = null)
+    public function __construct(mixed $secret = null)
     {
-        $secret ??= Options::get_env("SEAM_WEBHOOK_SECRET") ?? "";
+        if (func_num_args() === 0) {
+            $secret = Options::get_env("SEAM_WEBHOOK_SECRET") ?? "";
+        }
+        if (!is_string($secret)) {
+            throw new \TypeError("The webhook secret must be a string.");
+        }
         $encoded_key = str_starts_with($secret, Webhook::SECRET_PREFIX)
             ? substr($secret, strlen(Webhook::SECRET_PREFIX))
             : $secret;

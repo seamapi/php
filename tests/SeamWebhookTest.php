@@ -40,17 +40,39 @@ final class SeamWebhookTest extends TestCase
         parent::tearDown();
     }
 
-    public function testOmittedOrNullSecretUsesTheEnvironment(): void
+    public function testOmittedSecretUsesTheEnvironment(): void
     {
         putenv("SEAM_WEBHOOK_SECRET=" . self::SECRET);
         $payload = $this->payload();
         $headers = $this->signed_headers($payload);
 
-        foreach ([new SeamWebhook(), new SeamWebhook(null)] as $webhook) {
-            $event = $webhook->verify($payload, $headers);
-            $this->assertInstanceOf(DeviceConnected::class, $event);
-            $this->assertSame("device.connected", $event->event_type);
-        }
+        $event = (new SeamWebhook())->verify($payload, $headers);
+        $this->assertInstanceOf(DeviceConnected::class, $event);
+        $this->assertSame("device.connected", $event->event_type);
+    }
+
+    /**
+     * @dataProvider invalidSecrets
+     */
+    public function testExplicitNonStringSecretIsRejected(mixed $secret): void
+    {
+        putenv("SEAM_WEBHOOK_SECRET=" . self::SECRET);
+        $this->expectException(\TypeError::class);
+
+        new SeamWebhook(secret: $secret);
+    }
+
+    public static function invalidSecrets(): array
+    {
+        return [[null], [false], [123], [1.5], [[]], [new \stdClass()]];
+    }
+
+    public function testExplicitNullPositionalSecretIsRejected(): void
+    {
+        putenv("SEAM_WEBHOOK_SECRET=" . self::SECRET);
+        $this->expectException(\TypeError::class);
+
+        new SeamWebhook(null);
     }
 
     public function testExplicitSecretOverridesTheEnvironment(): void
@@ -89,13 +111,17 @@ final class SeamWebhookTest extends TestCase
         $this->expectException(InvalidOptionsError::class);
         $this->expectExceptionMessage("non-empty signing key");
 
-        new SeamWebhook($secret);
+        if ($secret === null) {
+            new SeamWebhook();
+        } else {
+            new SeamWebhook($secret);
+        }
     }
 
     public static function emptySecrets(): array
     {
         return [
-            "unset env and null" => [false, null],
+            "unset env and omitted secret" => [false, null],
             "empty env" => ["", null],
             "explicit empty overrides env" => [self::SECRET, ""],
             "prefix-only env" => ["whsec_", null],
