@@ -19,8 +19,31 @@ class SeamWebhook
 {
     private Webhook $webhook;
 
-    public function __construct(string $secret)
+    /**
+     * The secret must be a string; defaults to SEAM_WEBHOOK_SECRET only when omitted.
+     *
+     * @throws InvalidOptionsError When the secret is missing or decodes to an empty key.
+     */
+    public function __construct(mixed $secret = null)
     {
+        if (func_num_args() === 0) {
+            $secret = Options::get_env("SEAM_WEBHOOK_SECRET") ?? "";
+        }
+        if (!is_string($secret)) {
+            throw new \TypeError("The webhook secret must be a string.");
+        }
+        $encoded_key = str_starts_with($secret, Webhook::SECRET_PREFIX)
+            ? substr($secret, strlen(Webhook::SECRET_PREFIX))
+            : $secret;
+
+        // Svix accepts decoded-empty keys; reject them before verification.
+        if (base64_decode($encoded_key) === "") {
+            throw new InvalidOptionsError(
+                "Provide a non-empty webhook secret or set SEAM_WEBHOOK_SECRET; " .
+                    "the secret must decode to a non-empty signing key.",
+            );
+        }
+
         $this->webhook = new Webhook($secret);
     }
 
