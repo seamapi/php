@@ -20,7 +20,8 @@ class SeamWebhook
     private Webhook $webhook;
 
     /**
-     * @param string $secret Defaults to SEAM_WEBHOOK_SECRET only when omitted.
+     * The secret must be a string; defaults to SEAM_WEBHOOK_SECRET only when omitted.
+     *
      * @throws InvalidOptionsError When the secret is missing or decodes to an empty key.
      */
     public function __construct(mixed $secret = null)
