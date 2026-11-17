@@ -1251,6 +1251,8 @@ namespace Seam\Resources\Device {
             public \Seam\Resources\Device\Properties\KeynestMetadata|null $keynest_metadata = null,
             /**
              * Keypad battery status.
+             *
+             * @deprecated Use `accessory_keypad.battery` instead.
              */
             public \Seam\Resources\Device\Properties\KeypadBattery|null $keypad_battery = null,
             /**
@@ -1720,7 +1722,7 @@ namespace Seam\Resources\Device {
         case UNIFI_PROTECT_CAMERA = "unifi_protect_camera";
         case SONOS_SPEAKER = "sonos_speaker";
         case ALERTIFY_SENSOR = "alertify_sensor";
-        case HAYWARD_POOL_SYSTEM = "hayward_pool_system";
+        case HAYWARD_POOL_CONTROLLER = "hayward_pool_controller";
         case HAYWARD_POOL = "hayward_pool";
     }
 }
@@ -4680,6 +4682,8 @@ namespace Seam\Resources\Device\Properties {
 
     /**
      * Keypad battery status.
+     *
+     * @deprecated Use `accessory_keypad.battery` instead.
      */
     class KeypadBattery
     {
