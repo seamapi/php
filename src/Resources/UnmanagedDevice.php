@@ -670,7 +670,7 @@ namespace Seam\Resources\UnmanagedDevice {
         case UNIFI_PROTECT_CAMERA = "unifi_protect_camera";
         case SONOS_SPEAKER = "sonos_speaker";
         case ALERTIFY_SENSOR = "alertify_sensor";
-        case HAYWARD_POOL_SYSTEM = "hayward_pool_system";
+        case HAYWARD_POOL_CONTROLLER = "hayward_pool_controller";
         case HAYWARD_POOL = "hayward_pool";
     }
 }
