@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
+use Seam\InvalidOptionsError;
 use Seam\InvalidWebhookPayloadError;
 use Seam\Resources\Event;
 use Seam\Resources\Event\AccessCodeCreated;
@@ -18,6 +19,116 @@ use Svix\Webhook;
 final class SeamWebhookTest extends TestCase
 {
     private const SECRET = "whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw";
+    private const OTHER_SECRET = "whsec_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+
+    private string|false $original_secret;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->original_secret = getenv("SEAM_WEBHOOK_SECRET");
+        putenv("SEAM_WEBHOOK_SECRET");
+    }
+
+    protected function tearDown(): void
+    {
+        putenv(
+            $this->original_secret === false
+                ? "SEAM_WEBHOOK_SECRET"
+                : "SEAM_WEBHOOK_SECRET=" . $this->original_secret,
+        );
+        parent::tearDown();
+    }
+
+    public function testOmittedOrNullSecretUsesTheEnvironment(): void
+    {
+        putenv("SEAM_WEBHOOK_SECRET=" . self::SECRET);
+        $payload = $this->payload();
+        $headers = $this->signed_headers($payload);
+
+        foreach ([new SeamWebhook(), new SeamWebhook(null)] as $webhook) {
+            $event = $webhook->verify($payload, $headers);
+            $this->assertInstanceOf(DeviceConnected::class, $event);
+            $this->assertSame("device.connected", $event->event_type);
+        }
+    }
+
+    public function testExplicitSecretOverridesTheEnvironment(): void
+    {
+        putenv("SEAM_WEBHOOK_SECRET=" . self::OTHER_SECRET);
+        $payload = $this->payload();
+
+        $event = (new SeamWebhook(secret: self::SECRET))->verify(
+            $payload,
+            $this->signed_headers($payload),
+        );
+
+        $this->assertInstanceOf(DeviceConnected::class, $event);
+    }
+
+    public function testMissingEnvironmentAndOmittedSecretFailsAtConstruction(): void
+    {
+        $this->expectException(InvalidOptionsError::class);
+        $this->expectExceptionMessage("SEAM_WEBHOOK_SECRET");
+
+        new SeamWebhook();
+    }
+
+    /**
+     * @dataProvider emptySecrets
+     */
+    public function testEmptyEffectiveSecretFailsAtConstruction(
+        string|false $environment,
+        ?string $secret,
+    ): void {
+        putenv(
+            $environment === false
+                ? "SEAM_WEBHOOK_SECRET"
+                : "SEAM_WEBHOOK_SECRET=" . $environment,
+        );
+        $this->expectException(InvalidOptionsError::class);
+        $this->expectExceptionMessage("non-empty signing key");
+
+        new SeamWebhook($secret);
+    }
+
+    public static function emptySecrets(): array
+    {
+        return [
+            "unset env and null" => [false, null],
+            "empty env" => ["", null],
+            "explicit empty overrides env" => [self::SECRET, ""],
+            "prefix-only env" => ["whsec_", null],
+            "prefix-only explicit" => [self::SECRET, "whsec_"],
+            "whitespace env" => [" \t\n", null],
+            "undecodable env" => ["whsec_!!!", null],
+        ];
+    }
+
+    public function testEnvironmentIsReadForEachConstruction(): void
+    {
+        putenv("SEAM_WEBHOOK_SECRET=" . self::SECRET);
+        $first = new SeamWebhook();
+        putenv("SEAM_WEBHOOK_SECRET=" . self::OTHER_SECRET);
+        $second = new SeamWebhook();
+        putenv("SEAM_WEBHOOK_SECRET");
+        $payload = $this->payload();
+
+        $this->assertInstanceOf(
+            DeviceConnected::class,
+            $first->verify($payload, $this->signed_headers($payload)),
+        );
+        $this->assertInstanceOf(
+            DeviceConnected::class,
+            $second->verify(
+                $payload,
+                $this->signed_headers($payload, secret: self::OTHER_SECRET),
+            ),
+        );
+
+        $this->expectException(WebhookVerificationException::class);
+        $second->verify($payload, $this->signed_headers($payload));
+    }
 
     private function payload(): string
     {
@@ -34,16 +145,15 @@ final class SeamWebhookTest extends TestCase
     /**
      * @return array<string, string>
      */
-    private function signed_headers(string $payload, ?int $at = null): array
-    {
+    private function signed_headers(
+        string $payload,
+        ?int $at = null,
+        string $secret = self::SECRET,
+    ): array {
         $id = "msg_test";
         $timestamp = (string) ($at ?? time());
 
-        $signature = (new Webhook(self::SECRET))->sign(
-            $id,
-            $timestamp,
-            $payload,
-        );
+        $signature = (new Webhook($secret))->sign($id, $timestamp, $payload);
 
         return [
             "svix-id" => $id,
