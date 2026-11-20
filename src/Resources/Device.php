@@ -4022,6 +4022,7 @@ namespace Seam\Resources\Device\Properties {
                 mac_address: $json->mac_address ?? null,
                 pod_id: $json->pod_id ?? null,
                 product_model: $json->product_model ?? null,
+                product_name: $json->product_name ?? null,
                 room_name: $json->room_name ?? null,
                 serial_number: $json->serial_number ?? null,
                 temperature_unit: $json->temperature_unit ?? null,
@@ -4042,9 +4043,13 @@ namespace Seam\Resources\Device\Properties {
              */
             public string|null $pod_id = null,
             /**
-             * Product model of the Sensibo device, such as `skyv2` or `air`.
+             * Product model of the Sensibo device, such as `skyv2` or `skyplus`.
              */
             public string|null $product_model = null,
+            /**
+             * Product name of the Sensibo device, such as `Sensibo Sky` or `Sensibo Air`.
+             */
+            public string|null $product_name = null,
             /**
              * Name of the room that the Sensibo device is in.
              */
