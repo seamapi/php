@@ -724,6 +724,11 @@ namespace Seam\Resources\Device {
                         $json->brivo_metadata,
                     )
                     : null,
+                cielo_metadata: isset($json->cielo_metadata)
+                    ? \Seam\Resources\Device\Properties\CieloMetadata::from_json(
+                        $json->cielo_metadata,
+                    )
+                    : null,
                 code_constraints: array_map(
                     fn(
                         $c,
@@ -1149,6 +1154,10 @@ namespace Seam\Resources\Device {
              * Metadata for a Brivo device.
              */
             public \Seam\Resources\Device\Properties\BrivoMetadata|null $brivo_metadata = null,
+            /**
+             * Metadata for a Cielo device.
+             */
+            public \Seam\Resources\Device\Properties\CieloMetadata|null $cielo_metadata = null,
             /**
              * Constraints on access codes for the device. Seam represents each constraint as an object with a `constraint_type` property. Depending on the constraint type, there may also be additional properties. Note that some constraints are manufacturer- or device-specific.
              *
@@ -1712,6 +1721,7 @@ namespace Seam\Resources\Device {
         case TADO_THERMOSTAT = "tado_thermostat";
         case SENSI_THERMOSTAT = "sensi_thermostat";
         case SENSIBO_THERMOSTAT = "sensibo_thermostat";
+        case CIELO_THERMOSTAT = "cielo_thermostat";
         case SMARTTHINGS_THERMOSTAT = "smartthings_thermostat";
         case IOS_PHONE = "ios_phone";
         case ANDROID_PHONE = "android_phone";
@@ -2900,6 +2910,49 @@ namespace Seam\Resources\Device\Properties {
              * Device name for a Brivo device.
              */
             public string|null $device_name = null,
+        ) {}
+    }
+
+    /**
+     * Metadata for a Cielo device.
+     */
+    class CieloMetadata
+    {
+        public static function from_json(mixed $json): CieloMetadata|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                appliance_id: $json->appliance_id ?? null,
+                cielo_device_type: $json->cielo_device_type ?? null,
+                device_name: $json->device_name ?? null,
+                mac_address: $json->mac_address ?? null,
+                temperature_unit: $json->temperature_unit ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the air conditioner or heat pump model that the Cielo device is set up to control.
+             */
+            public string|null $appliance_id = null,
+            /**
+             * Device type that Cielo reports, such as `Thermostat` for a Cielo thermostat.
+             */
+            public string|null $cielo_device_type = null,
+            /**
+             * Name of the device in the Cielo Home app.
+             */
+            public string|null $device_name = null,
+            /**
+             * MAC address of the Cielo device.
+             */
+            public string|null $mac_address = null,
+            /**
+             * Temperature unit that the Cielo device displays: `C` or `F`.
+             */
+            public string|null $temperature_unit = null,
         ) {}
     }
 

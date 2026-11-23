@@ -215,6 +215,7 @@ namespace Seam\Resources\DeviceProvider {
         case SALTO_SPACE = "salto_space";
         case SENSI = "sensi";
         case SENSIBO = "sensibo";
+        case CIELO = "cielo";
         case KEYNEST = "keynest";
         case KORELOCK = "korelock";
         case KEYINCODE = "keyincode";

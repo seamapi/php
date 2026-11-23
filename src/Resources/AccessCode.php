@@ -1871,6 +1871,7 @@ namespace Seam\Resources\AccessCode\PendingMutations {
             }
             return new self(
                 created_at: $json->created_at ?? null,
+                is_code_usable: $json->is_code_usable ?? null,
                 message: $json->message ?? null,
                 mutation_code: $json->mutation_code ?? null,
             );
@@ -1881,6 +1882,10 @@ namespace Seam\Resources\AccessCode\PendingMutations {
              * Date and time at which the mutation was created.
              */
             string|null $created_at,
+            /**
+             * Indicates whether the access code may still unlock the device while Seam removes it, based on the last state Seam observed. `false` means the device has already stopped accepting the code, for example, because a natively scheduled code passed its `ends_at`, and only cleanup remains.
+             */
+            public bool|null $is_code_usable,
             /**
              * Detailed description of the mutation.
              */

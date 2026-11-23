@@ -660,6 +660,7 @@ namespace Seam\Resources\UnmanagedDevice {
         case TADO_THERMOSTAT = "tado_thermostat";
         case SENSI_THERMOSTAT = "sensi_thermostat";
         case SENSIBO_THERMOSTAT = "sensibo_thermostat";
+        case CIELO_THERMOSTAT = "cielo_thermostat";
         case SMARTTHINGS_THERMOSTAT = "smartthings_thermostat";
         case IOS_PHONE = "ios_phone";
         case ANDROID_PHONE = "android_phone";
