@@ -416,11 +416,11 @@ namespace Seam\Resources {
                     => \Seam\Resources\Event\SpaceDeleted::from_json($json),
                 default => new self(
                     created_at: $json->created_at ?? null,
+                    event_description: $json->event_description ?? null,
                     event_id: $json->event_id ?? null,
                     event_type: $json->event_type ?? null,
                     occurred_at: $json->occurred_at ?? null,
                     workspace_id: $json->workspace_id ?? null,
-                    event_description: $json->event_description ?? null,
                 ),
             };
         }
@@ -430,6 +430,10 @@ namespace Seam\Resources {
              * Date and time at which the event was created.
              */
             public string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            public string|null $event_description,
             /**
              * ID of the event.
              */
@@ -446,10 +450,6 @@ namespace Seam\Resources {
              * ID of the workspace associated with the event.
              */
             public string|null $workspace_id,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            public string|null $event_description = null,
         ) {}
     }
 }
@@ -470,6 +470,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -477,7 +478,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -498,6 +498,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -526,10 +530,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -557,6 +557,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -573,7 +574,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -594,6 +594,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -632,10 +636,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -665,6 +665,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 description: $json->description ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 from: isset($json->from)
@@ -682,7 +683,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -707,6 +707,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -743,10 +747,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -776,6 +776,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 description: $json->description ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 from: isset($json->from)
@@ -793,7 +794,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -818,6 +818,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -854,10 +858,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -887,6 +887,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 description: $json->description ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 from: isset($json->from)
@@ -904,7 +905,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -929,6 +929,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -965,10 +969,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -997,6 +997,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -1012,7 +1013,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -1033,6 +1033,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -1067,10 +1071,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1100,6 +1100,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -1107,7 +1108,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -1132,6 +1132,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -1160,10 +1164,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1193,6 +1193,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -1200,7 +1201,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -1225,6 +1225,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -1253,10 +1257,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1285,6 +1285,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -1292,7 +1293,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -1313,6 +1313,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -1341,10 +1345,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1421,6 +1421,7 @@ namespace Seam\Resources\Event {
                     ),
                     $json->device_warnings ?? [],
                 ),
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -1428,7 +1429,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -1486,6 +1486,10 @@ namespace Seam\Resources\Event {
              */
             public array $device_warnings,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -1513,10 +1517,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1593,6 +1593,7 @@ namespace Seam\Resources\Event {
                     ),
                     $json->device_warnings ?? [],
                 ),
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -1600,7 +1601,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -1658,6 +1658,10 @@ namespace Seam\Resources\Event {
              */
             public array $device_warnings,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -1685,10 +1689,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1717,6 +1717,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -1724,7 +1725,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -1749,6 +1749,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -1777,10 +1781,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -1858,6 +1858,7 @@ namespace Seam\Resources\Event {
                     ),
                     $json->device_warnings ?? [],
                 ),
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -1865,7 +1866,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -1923,6 +1923,10 @@ namespace Seam\Resources\Event {
              */
             public array $device_warnings,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -1950,10 +1954,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2030,6 +2030,7 @@ namespace Seam\Resources\Event {
                     ),
                     $json->device_warnings ?? [],
                 ),
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -2037,7 +2038,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -2095,6 +2095,10 @@ namespace Seam\Resources\Event {
              */
             public array $device_warnings,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -2122,10 +2126,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2154,6 +2154,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -2161,7 +2162,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -2182,6 +2182,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -2210,10 +2214,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2242,6 +2242,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -2249,7 +2250,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -2270,6 +2270,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -2298,10 +2302,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2331,6 +2331,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -2338,7 +2339,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -2363,6 +2363,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -2391,10 +2395,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2424,6 +2424,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -2431,7 +2432,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -2452,6 +2452,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -2480,10 +2484,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2561,6 +2561,7 @@ namespace Seam\Resources\Event {
                     ),
                     $json->device_warnings ?? [],
                 ),
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -2568,7 +2569,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -2626,6 +2626,10 @@ namespace Seam\Resources\Event {
              */
             public array $device_warnings,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -2653,10 +2657,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2685,6 +2685,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -2692,7 +2693,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -2713,6 +2713,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -2741,10 +2745,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2773,6 +2773,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -2780,7 +2781,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -2801,6 +2801,10 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the affected access code.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -2829,10 +2833,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2858,11 +2858,11 @@ namespace Seam\Resources\Event {
             return new self(
                 access_grant_id: $json->access_grant_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -2875,6 +2875,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -2891,10 +2895,6 @@ namespace Seam\Resources\Event {
              * ID of the workspace associated with the event.
              */
             string|null $workspace_id,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2920,11 +2920,11 @@ namespace Seam\Resources\Event {
             return new self(
                 access_grant_id: $json->access_grant_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -2937,6 +2937,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -2953,10 +2957,6 @@ namespace Seam\Resources\Event {
              * ID of the workspace associated with the event.
              */
             string|null $workspace_id,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -2983,11 +2983,11 @@ namespace Seam\Resources\Event {
             return new self(
                 access_grant_id: $json->access_grant_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -3000,6 +3000,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -3016,10 +3020,6 @@ namespace Seam\Resources\Event {
              * ID of the workspace associated with the event.
              */
             string|null $workspace_id,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -3047,11 +3047,11 @@ namespace Seam\Resources\Event {
                 access_grant_id: $json->access_grant_id ?? null,
                 acs_entrance_id: $json->acs_entrance_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -3069,6 +3069,10 @@ namespace Seam\Resources\Event {
              */
             string|null $created_at,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -3084,10 +3088,6 @@ namespace Seam\Resources\Event {
              * ID of the workspace associated with the event.
              */
             string|null $workspace_id,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -3115,11 +3115,11 @@ namespace Seam\Resources\Event {
                 access_grant_id: $json->access_grant_id ?? null,
                 acs_entrance_id: $json->acs_entrance_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -3137,6 +3137,10 @@ namespace Seam\Resources\Event {
              */
             string|null $created_at,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -3152,10 +3156,6 @@ namespace Seam\Resources\Event {
              * ID of the workspace associated with the event.
              */
             string|null $workspace_id,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -3182,13 +3182,13 @@ namespace Seam\Resources\Event {
             return new self(
                 access_grant_id: $json->access_grant_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_key: $json->access_grant_key ?? null,
                 ends_at: $json->ends_at ?? null,
-                event_description: $json->event_description ?? null,
                 starts_at: $json->starts_at ?? null,
             );
         }
@@ -3202,6 +3202,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -3226,10 +3230,6 @@ namespace Seam\Resources\Event {
              * The new end time for the access grant.
              */
             public string|null $ends_at = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
             /**
              * The new start time for the access grant.
              */
@@ -3262,11 +3262,11 @@ namespace Seam\Resources\Event {
                 access_grant_id: $json->access_grant_id ?? null,
                 created_at: $json->created_at ?? null,
                 error_message: $json->error_message ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
-                event_description: $json->event_description ?? null,
                 missing_device_ids: $json->missing_device_ids ?? null,
             );
         }
@@ -3285,6 +3285,10 @@ namespace Seam\Resources\Event {
              */
             public string|null $error_message,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -3300,10 +3304,6 @@ namespace Seam\Resources\Event {
              * ID of the workspace associated with the event.
              */
             string|null $workspace_id,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
             /**
              * IDs of the devices that did not receive a requested access method. Use these to identify which specific devices failed without having to fetch the Access Grant.
              *
@@ -3336,13 +3336,13 @@ namespace Seam\Resources\Event {
                 access_grant_ids: $json->access_grant_ids ?? null,
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
                 code: $json->code ?? null,
-                event_description: $json->event_description ?? null,
                 is_backup_code: $json->is_backup_code ?? null,
             );
         }
@@ -3362,6 +3362,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -3388,10 +3392,6 @@ namespace Seam\Resources\Event {
              * The actual PIN code for code access methods (only present when mode is 'code').
              */
             public string|null $code = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
             /**
              * Indicates whether the code is a backup code (only present when mode is 'code' and a backup code was used).
              */
@@ -3422,12 +3422,12 @@ namespace Seam\Resources\Event {
                 access_grant_ids: $json->access_grant_ids ?? null,
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -3446,6 +3446,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -3468,10 +3472,6 @@ namespace Seam\Resources\Event {
              * @var list<string>|null
              */
             public array|null $access_grant_keys = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -3499,12 +3499,12 @@ namespace Seam\Resources\Event {
                 access_grant_ids: $json->access_grant_ids ?? null,
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -3523,6 +3523,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -3545,10 +3549,6 @@ namespace Seam\Resources\Event {
              * @var list<string>|null
              */
             public array|null $access_grant_keys = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -3575,12 +3575,12 @@ namespace Seam\Resources\Event {
                 access_grant_ids: $json->access_grant_ids ?? null,
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -3599,6 +3599,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -3621,10 +3625,6 @@ namespace Seam\Resources\Event {
              * @var list<string>|null
              */
             public array|null $access_grant_keys = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -3651,13 +3651,13 @@ namespace Seam\Resources\Event {
                 access_grant_ids: $json->access_grant_ids ?? null,
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
                 code: $json->code ?? null,
-                event_description: $json->event_description ?? null,
                 is_backup_code: $json->is_backup_code ?? null,
             );
         }
@@ -3677,6 +3677,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -3703,10 +3707,6 @@ namespace Seam\Resources\Event {
              * The actual PIN code for code access methods (only present when mode is 'code').
              */
             public string|null $code = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
             /**
              * Indicates whether the code is a backup code (only present when mode is 'code' and a backup code was used).
              */
@@ -3737,12 +3737,12 @@ namespace Seam\Resources\Event {
                 access_grant_ids: $json->access_grant_ids ?? null,
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -3761,6 +3761,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -3783,10 +3787,6 @@ namespace Seam\Resources\Event {
              * @var list<string>|null
              */
             public array|null $access_grant_keys = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -3814,12 +3814,12 @@ namespace Seam\Resources\Event {
                 access_grant_ids: $json->access_grant_ids ?? null,
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -3838,6 +3838,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -3860,10 +3864,6 @@ namespace Seam\Resources\Event {
              * @var list<string>|null
              */
             public array|null $access_grant_keys = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -3891,12 +3891,12 @@ namespace Seam\Resources\Event {
                 access_grant_ids: $json->access_grant_ids ?? null,
                 access_method_id: $json->access_method_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -3915,6 +3915,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -3937,10 +3941,6 @@ namespace Seam\Resources\Event {
              * @var list<string>|null
              */
             public array|null $access_grant_keys = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -3966,12 +3966,12 @@ namespace Seam\Resources\Event {
             return new self(
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -3984,6 +3984,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -4004,10 +4008,6 @@ namespace Seam\Resources\Event {
              * ID of the connected account.
              */
             public string|null $connected_account_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -4033,12 +4033,12 @@ namespace Seam\Resources\Event {
             return new self(
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -4051,6 +4051,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -4071,10 +4075,6 @@ namespace Seam\Resources\Event {
              * ID of the connected account.
              */
             public string|null $connected_account_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -4133,12 +4133,12 @@ namespace Seam\Resources\Event {
                     $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -4176,6 +4176,10 @@ namespace Seam\Resources\Event {
              */
             string|null $created_at,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -4195,10 +4199,6 @@ namespace Seam\Resources\Event {
              * ID of the connected account.
              */
             public string|null $connected_account_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -4225,12 +4225,12 @@ namespace Seam\Resources\Event {
                 acs_credential_id: $json->acs_credential_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -4247,6 +4247,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -4267,10 +4271,6 @@ namespace Seam\Resources\Event {
              * ID of the connected account.
              */
             public string|null $connected_account_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -4297,12 +4297,12 @@ namespace Seam\Resources\Event {
                 acs_credential_id: $json->acs_credential_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -4319,6 +4319,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -4339,10 +4343,6 @@ namespace Seam\Resources\Event {
              * ID of the connected account.
              */
             public string|null $connected_account_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -4370,12 +4370,12 @@ namespace Seam\Resources\Event {
                 acs_credential_id: $json->acs_credential_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -4392,6 +4392,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -4412,10 +4416,6 @@ namespace Seam\Resources\Event {
              * ID of the connected account.
              */
             public string|null $connected_account_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -4443,12 +4443,12 @@ namespace Seam\Resources\Event {
                 acs_credential_id: $json->acs_credential_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -4465,6 +4465,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -4485,10 +4489,6 @@ namespace Seam\Resources\Event {
              * ID of the connected account.
              */
             public string|null $connected_account_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -4515,12 +4515,12 @@ namespace Seam\Resources\Event {
                 acs_system_id: $json->acs_system_id ?? null,
                 acs_user_id: $json->acs_user_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -4537,6 +4537,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -4557,10 +4561,6 @@ namespace Seam\Resources\Event {
              * ID of the connected account.
              */
             public string|null $connected_account_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -4587,12 +4587,12 @@ namespace Seam\Resources\Event {
                 acs_system_id: $json->acs_system_id ?? null,
                 acs_user_id: $json->acs_user_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -4609,6 +4609,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -4629,10 +4633,6 @@ namespace Seam\Resources\Event {
              * ID of the connected account.
              */
             public string|null $connected_account_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -4659,12 +4659,12 @@ namespace Seam\Resources\Event {
                 acs_encoder_id: $json->acs_encoder_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -4681,6 +4681,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -4701,10 +4705,6 @@ namespace Seam\Resources\Event {
              * ID of the connected account.
              */
             public string|null $connected_account_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -4731,12 +4731,12 @@ namespace Seam\Resources\Event {
                 acs_encoder_id: $json->acs_encoder_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -4753,6 +4753,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -4773,10 +4777,6 @@ namespace Seam\Resources\Event {
              * ID of the connected account.
              */
             public string|null $connected_account_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -4804,12 +4804,12 @@ namespace Seam\Resources\Event {
                 acs_access_group_id: $json->acs_access_group_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -4826,6 +4826,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -4846,10 +4850,6 @@ namespace Seam\Resources\Event {
              * ID of the connected account.
              */
             public string|null $connected_account_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -4876,12 +4876,12 @@ namespace Seam\Resources\Event {
                 acs_entrance_id: $json->acs_entrance_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -4898,6 +4898,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -4918,10 +4922,6 @@ namespace Seam\Resources\Event {
              * ID of the connected account.
              */
             public string|null $connected_account_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -4948,12 +4948,12 @@ namespace Seam\Resources\Event {
                 acs_entrance_id: $json->acs_entrance_id ?? null,
                 acs_system_id: $json->acs_system_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -4970,6 +4970,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -4990,10 +4994,6 @@ namespace Seam\Resources\Event {
              * ID of the connected account.
              */
             public string|null $connected_account_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5019,11 +5019,11 @@ namespace Seam\Resources\Event {
             return new self(
                 client_session_id: $json->client_session_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -5036,6 +5036,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -5052,10 +5056,6 @@ namespace Seam\Resources\Event {
              * ID of the workspace associated with the event.
              */
             string|null $workspace_id,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5082,6 +5082,7 @@ namespace Seam\Resources\Event {
             return new self(
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -5090,7 +5091,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 customer_key: $json->customer_key ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -5103,6 +5103,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -5133,10 +5137,6 @@ namespace Seam\Resources\Event {
              * The customer key associated with this connected account, if any.
              */
             public string|null $customer_key = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5164,13 +5164,13 @@ namespace Seam\Resources\Event {
                 connect_webview_id: $json->connect_webview_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -5187,6 +5187,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -5209,10 +5213,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $connected_account_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5255,13 +5255,13 @@ namespace Seam\Resources\Event {
                     $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -5287,6 +5287,10 @@ namespace Seam\Resources\Event {
              */
             string|null $created_at,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -5308,10 +5312,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $connected_account_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5338,13 +5338,13 @@ namespace Seam\Resources\Event {
             return new self(
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -5357,6 +5357,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -5379,10 +5383,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $connected_account_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5409,6 +5409,7 @@ namespace Seam\Resources\Event {
             return new self(
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -5416,7 +5417,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 customer_key: $json->customer_key ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -5429,6 +5429,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -5455,10 +5459,6 @@ namespace Seam\Resources\Event {
              * The customer key associated with this connected account, if any.
              */
             public string|null $customer_key = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5486,13 +5486,13 @@ namespace Seam\Resources\Event {
             return new self(
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -5505,6 +5505,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -5527,10 +5531,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $connected_account_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5574,13 +5574,13 @@ namespace Seam\Resources\Event {
                     $json->connected_account_warnings ?? [],
                 ),
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -5606,6 +5606,10 @@ namespace Seam\Resources\Event {
              */
             string|null $created_at,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -5627,10 +5631,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $connected_account_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5658,6 +5658,7 @@ namespace Seam\Resources\Event {
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -5665,7 +5666,6 @@ namespace Seam\Resources\Event {
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
                 device_id: $json->device_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -5682,6 +5682,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -5710,10 +5714,6 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the action attempt, if applicable.
              */
             public string|null $device_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5741,6 +5741,7 @@ namespace Seam\Resources\Event {
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -5748,7 +5749,6 @@ namespace Seam\Resources\Event {
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
                 device_id: $json->device_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -5765,6 +5765,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -5793,10 +5797,6 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the action attempt, if applicable.
              */
             public string|null $device_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5824,6 +5824,7 @@ namespace Seam\Resources\Event {
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -5831,7 +5832,6 @@ namespace Seam\Resources\Event {
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
                 device_id: $json->device_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -5848,6 +5848,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -5876,10 +5880,6 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the action attempt, if applicable.
              */
             public string|null $device_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5907,6 +5907,7 @@ namespace Seam\Resources\Event {
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -5914,7 +5915,6 @@ namespace Seam\Resources\Event {
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
                 device_id: $json->device_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -5931,6 +5931,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -5959,10 +5963,6 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the action attempt, if applicable.
              */
             public string|null $device_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -5991,6 +5991,7 @@ namespace Seam\Resources\Event {
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -5998,7 +5999,6 @@ namespace Seam\Resources\Event {
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
                 device_id: $json->device_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -6015,6 +6015,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -6043,10 +6047,6 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the action attempt, if applicable.
              */
             public string|null $device_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6075,6 +6075,7 @@ namespace Seam\Resources\Event {
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -6082,7 +6083,6 @@ namespace Seam\Resources\Event {
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
                 device_id: $json->device_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -6099,6 +6099,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -6127,10 +6131,6 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the action attempt, if applicable.
              */
             public string|null $device_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6159,6 +6159,7 @@ namespace Seam\Resources\Event {
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -6166,7 +6167,6 @@ namespace Seam\Resources\Event {
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
                 device_id: $json->device_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -6183,6 +6183,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -6211,10 +6215,6 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the action attempt, if applicable.
              */
             public string|null $device_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6243,6 +6243,7 @@ namespace Seam\Resources\Event {
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -6250,7 +6251,6 @@ namespace Seam\Resources\Event {
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
                 device_id: $json->device_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -6267,6 +6267,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -6295,10 +6299,6 @@ namespace Seam\Resources\Event {
              * ID of the device associated with the action attempt, if applicable.
              */
             public string|null $device_id = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6326,6 +6326,7 @@ namespace Seam\Resources\Event {
                 connect_webview_id: $json->connect_webview_id ?? null,
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -6333,7 +6334,6 @@ namespace Seam\Resources\Event {
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
                 customer_key: $json->customer_key ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -6350,6 +6350,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -6376,10 +6380,6 @@ namespace Seam\Resources\Event {
              * The customer key associated with this connect webview, if any.
              */
             public string|null $customer_key = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6406,11 +6406,11 @@ namespace Seam\Resources\Event {
             return new self(
                 connect_webview_id: $json->connect_webview_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -6423,6 +6423,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -6439,10 +6443,6 @@ namespace Seam\Resources\Event {
              * ID of the workspace associated with the event.
              */
             string|null $workspace_id,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6469,6 +6469,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -6477,7 +6478,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -6494,6 +6494,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -6526,10 +6530,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6556,6 +6556,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -6564,7 +6565,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -6581,6 +6581,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -6613,10 +6617,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6644,6 +6644,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -6652,7 +6653,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -6669,6 +6669,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -6701,10 +6705,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6732,6 +6732,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -6740,7 +6741,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -6757,6 +6757,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -6789,10 +6793,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6820,6 +6820,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -6828,7 +6829,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -6845,6 +6845,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -6877,10 +6881,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -6940,6 +6940,7 @@ namespace Seam\Resources\Event {
                     $json->device_warnings ?? [],
                 ),
                 error_code: $json->error_code ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -6948,7 +6949,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -6996,6 +6996,10 @@ namespace Seam\Resources\Event {
              */
             public string|null $error_code,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -7027,10 +7031,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -7091,6 +7091,7 @@ namespace Seam\Resources\Event {
                     $json->device_warnings ?? [],
                 ),
                 error_code: $json->error_code ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -7099,7 +7100,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -7147,6 +7147,10 @@ namespace Seam\Resources\Event {
              */
             public string|null $error_code,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -7178,10 +7182,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -7208,6 +7208,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -7216,7 +7217,9 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
+                is_casing_tampered_with: $json->is_casing_tampered_with ?? null,
+                is_detached_from_mounting_plate: $json->is_detached_from_mounting_plate ??
+                    null,
             );
         }
 
@@ -7233,6 +7236,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -7266,9 +7273,13 @@ namespace Seam\Resources\Event {
              */
             public array|\stdClass|null $device_custom_metadata = null,
             /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             * Whether the device casing was tampered with at the time of the event. Omitted when the provider did not report this state.
              */
-            string|null $event_description = null,
+            public bool|null $is_casing_tampered_with = null,
+            /**
+             * Whether the device was detached from its mounting plate at the time of the event. Omitted when the provider did not report this state.
+             */
+            public bool|null $is_detached_from_mounting_plate = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -7295,6 +7306,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -7306,7 +7318,6 @@ namespace Seam\Resources\Event {
                 customer_key: $json->customer_key ?? null,
                 device_battery_level: $json->device_battery_level ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -7323,6 +7334,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -7363,10 +7378,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -7396,6 +7407,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -7404,7 +7416,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -7432,6 +7443,10 @@ namespace Seam\Resources\Event {
              */
             public string|null $device_id,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -7463,10 +7478,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -7493,6 +7504,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -7501,7 +7513,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -7518,6 +7529,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -7550,10 +7565,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -7580,6 +7591,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -7589,7 +7601,6 @@ namespace Seam\Resources\Event {
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
                 device_name: $json->device_name ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -7606,6 +7617,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -7642,10 +7657,6 @@ namespace Seam\Resources\Event {
              * Name of the deleted device, captured at deletion time. The device record no longer exists when this event fires, so the name is preserved here. Null when the device had no resolvable name.
              */
             public string|null $device_name = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -7674,6 +7685,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -7682,7 +7694,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -7699,6 +7710,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -7731,10 +7746,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -7763,6 +7774,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -7771,7 +7783,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -7788,6 +7799,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -7820,10 +7835,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -7851,6 +7862,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -7859,7 +7871,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -7876,6 +7887,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -7908,10 +7923,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -7939,6 +7950,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -7947,7 +7959,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -7964,6 +7975,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -7996,10 +8011,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -8059,6 +8070,7 @@ namespace Seam\Resources\Event {
                     ),
                     $json->device_warnings ?? [],
                 ),
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -8067,7 +8079,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -8109,6 +8120,10 @@ namespace Seam\Resources\Event {
              */
             public array $device_warnings,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -8140,10 +8155,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -8171,6 +8182,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -8179,7 +8191,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -8196,6 +8207,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -8228,10 +8243,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -8291,6 +8302,7 @@ namespace Seam\Resources\Event {
                     ),
                     $json->device_warnings ?? [],
                 ),
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -8299,7 +8311,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -8341,6 +8352,10 @@ namespace Seam\Resources\Event {
              */
             public array $device_warnings,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -8372,10 +8387,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -8404,6 +8415,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -8412,7 +8424,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -8429,6 +8440,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -8461,10 +8476,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -8492,6 +8503,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -8500,7 +8512,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -8517,6 +8528,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -8549,10 +8564,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -8612,6 +8623,7 @@ namespace Seam\Resources\Event {
                     ),
                     $json->device_warnings ?? [],
                 ),
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -8620,7 +8632,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -8662,6 +8673,10 @@ namespace Seam\Resources\Event {
              */
             public array $device_warnings,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -8693,10 +8708,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -8724,6 +8735,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -8732,7 +8744,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
                 minut_metadata: $json->minut_metadata ?? null,
                 noise_level_decibels: $json->noise_level_decibels ?? null,
                 noise_level_nrs: $json->noise_level_nrs ?? null,
@@ -8755,6 +8766,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -8787,10 +8802,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
             /**
              * Metadata from Minut.
              *
@@ -8845,6 +8856,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 method: $json->method ?? null,
@@ -8858,7 +8870,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
                 is_via_bluetooth: $json->is_via_bluetooth ?? null,
                 is_via_nfc: $json->is_via_nfc ?? null,
             );
@@ -8877,6 +8888,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -8932,10 +8947,6 @@ namespace Seam\Resources\Event {
              */
             public array|\stdClass|null $device_custom_metadata = null,
             /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
-            /**
              * Whether the lock action was performed over Bluetooth by a remote client (such as the provider's mobile app), rather than a direct physical interaction or a Seam-initiated remote action.
              */
             public bool|null $is_via_bluetooth = null,
@@ -8968,6 +8979,7 @@ namespace Seam\Resources\Event {
             return new self(
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 method: $json->method ?? null,
@@ -8982,7 +8994,6 @@ namespace Seam\Resources\Event {
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
                 device_id: $json->device_id ?? null,
-                event_description: $json->event_description ?? null,
                 is_via_bluetooth: $json->is_via_bluetooth ?? null,
                 is_via_nfc: $json->is_via_nfc ?? null,
             );
@@ -8997,6 +9008,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -9056,10 +9071,6 @@ namespace Seam\Resources\Event {
              */
             public string|null $device_id = null,
             /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
-            /**
              * Whether the unlock action was performed over Bluetooth by a remote client (such as the provider's mobile app), rather than a direct physical interaction or a Seam-initiated remote action.
              */
             public bool|null $is_via_bluetooth = null,
@@ -9092,6 +9103,7 @@ namespace Seam\Resources\Event {
             return new self(
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -9102,7 +9114,6 @@ namespace Seam\Resources\Event {
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
                 device_id: $json->device_id ?? null,
-                event_description: $json->event_description ?? null,
                 reason: isset($json->reason)
                     ? \Seam\Resources\Event\LockAccessDenied\Reason::from_json(
                         $json->reason,
@@ -9120,6 +9131,10 @@ namespace Seam\Resources\Event {
              * Date and time at which the event was created.
              */
             string|null $created_at,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -9161,10 +9176,6 @@ namespace Seam\Resources\Event {
              */
             public string|null $device_id = null,
             /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
-            /**
              * Why access was denied, when the provider reports a determinable cause. Omitted when unknown.
              */
             public \Seam\Resources\Event\LockAccessDenied\Reason|null $reason = null,
@@ -9194,6 +9205,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -9202,7 +9214,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -9219,6 +9230,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -9251,10 +9266,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -9281,6 +9292,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -9289,7 +9301,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -9306,6 +9317,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -9338,10 +9353,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -9368,6 +9379,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -9376,7 +9388,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -9393,6 +9404,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -9425,10 +9440,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -9457,6 +9468,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 is_fallback_climate_preset: $json->is_fallback_climate_preset ??
@@ -9468,7 +9480,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -9489,6 +9500,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -9529,10 +9544,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -9560,6 +9571,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 method: $json->method ?? null,
@@ -9573,7 +9585,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
                 fan_mode_setting: $json->fan_mode_setting ?? null,
                 heating_set_point_celsius: $json->heating_set_point_celsius ??
                     null,
@@ -9596,6 +9607,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -9642,10 +9657,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
             /**
              * Desired [fan mode setting](https://www.seam.co/docs/capability-guides/thermostats/configure-current-climate-settings#fan-mode-settings), such as `on`, `auto`, or `circulate`.
              *
@@ -9694,6 +9705,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 lower_limit_celsius: $json->lower_limit_celsius ?? null,
@@ -9708,7 +9720,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -9725,6 +9736,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -9781,10 +9796,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -9813,6 +9824,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 lower_limit_celsius: $json->lower_limit_celsius ?? null,
@@ -9827,7 +9839,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -9844,6 +9855,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -9900,10 +9915,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -9932,6 +9943,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -9946,7 +9958,6 @@ namespace Seam\Resources\Event {
                 desired_temperature_fahrenheit: $json->desired_temperature_fahrenheit ??
                     null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -9963,6 +9974,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -10011,10 +10026,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -10042,6 +10053,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -10052,7 +10064,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -10069,6 +10080,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -10109,10 +10124,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -10140,6 +10151,7 @@ namespace Seam\Resources\Event {
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
                 device_name: $json->device_name ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -10148,7 +10160,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -10169,6 +10180,10 @@ namespace Seam\Resources\Event {
              * The new name of the affected device.
              */
             public string|null $device_name,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -10201,10 +10216,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -10231,6 +10242,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -10239,7 +10251,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
                 image_url: $json->image_url ?? null,
                 is_motion_detected: $json->is_motion_detected ?? null,
                 media_ids: $json->media_ids ?? null,
@@ -10261,6 +10272,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -10293,10 +10308,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
             /**
              * URL to a thumbnail image captured at the time of activation.
              */
@@ -10347,6 +10358,7 @@ namespace Seam\Resources\Event {
                 connected_account_id: $json->connected_account_id ?? null,
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
@@ -10355,7 +10367,6 @@ namespace Seam\Resources\Event {
                     null,
                 customer_key: $json->customer_key ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
                 image_url: $json->image_url ?? null,
                 media_ids: $json->media_ids ?? null,
                 video_url: $json->video_url ?? null,
@@ -10375,6 +10386,10 @@ namespace Seam\Resources\Event {
              * ID of the affected device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -10407,10 +10422,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
             /**
              * URL to a thumbnail image captured at the time the doorbell was pressed.
              */
@@ -10450,12 +10461,12 @@ namespace Seam\Resources\Event {
             return new self(
                 created_at: $json->created_at ?? null,
                 device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
-                event_description: $json->event_description ?? null,
             );
         }
 
@@ -10468,6 +10479,10 @@ namespace Seam\Resources\Event {
              * ID of the affected phone device.
              */
             public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
             /**
              * ID of the event.
              */
@@ -10490,10 +10505,6 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $device_custom_metadata = null,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -10521,12 +10532,12 @@ namespace Seam\Resources\Event {
                 acs_entrance_ids: $json->acs_entrance_ids ?? null,
                 created_at: $json->created_at ?? null,
                 device_ids: $json->device_ids ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 space_id: $json->space_id ?? null,
                 workspace_id: $json->workspace_id ?? null,
-                event_description: $json->event_description ?? null,
                 space_key: $json->space_key ?? null,
             );
         }
@@ -10549,6 +10560,10 @@ namespace Seam\Resources\Event {
              */
             public array|null $device_ids,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -10568,10 +10583,6 @@ namespace Seam\Resources\Event {
              * ID of the workspace associated with the event.
              */
             string|null $workspace_id,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
             /**
              * Unique key for the space within the workspace.
              */
@@ -10602,12 +10613,12 @@ namespace Seam\Resources\Event {
                 acs_entrance_ids: $json->acs_entrance_ids ?? null,
                 created_at: $json->created_at ?? null,
                 device_ids: $json->device_ids ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 space_id: $json->space_id ?? null,
                 workspace_id: $json->workspace_id ?? null,
-                event_description: $json->event_description ?? null,
                 space_key: $json->space_key ?? null,
             );
         }
@@ -10630,6 +10641,10 @@ namespace Seam\Resources\Event {
              */
             public array|null $device_ids,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -10649,10 +10664,6 @@ namespace Seam\Resources\Event {
              * ID of the workspace associated with the event.
              */
             string|null $workspace_id,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
             /**
              * Unique key for the space within the workspace.
              */
@@ -10683,12 +10694,12 @@ namespace Seam\Resources\Event {
                 acs_entrance_ids: $json->acs_entrance_ids ?? null,
                 created_at: $json->created_at ?? null,
                 device_ids: $json->device_ids ?? null,
+                event_description: $json->event_description ?? null,
                 event_id: $json->event_id ?? null,
                 event_type: $json->event_type ?? null,
                 occurred_at: $json->occurred_at ?? null,
                 space_id: $json->space_id ?? null,
                 workspace_id: $json->workspace_id ?? null,
-                event_description: $json->event_description ?? null,
                 space_key: $json->space_key ?? null,
             );
         }
@@ -10711,6 +10722,10 @@ namespace Seam\Resources\Event {
              */
             public array|null $device_ids,
             /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
              * ID of the event.
              */
             string|null $event_id,
@@ -10730,10 +10745,6 @@ namespace Seam\Resources\Event {
              * ID of the workspace associated with the event.
              */
             string|null $workspace_id,
-            /**
-             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
-             */
-            string|null $event_description = null,
             /**
              * Unique key for the space within the workspace.
              */
@@ -12525,6 +12536,7 @@ namespace Seam\Resources\Event\DeviceDisconnected {
         case ACCOUNT_DISCONNECTED = "account_disconnected";
         case HUB_DISCONNECTED = "hub_disconnected";
         case DEVICE_DISCONNECTED = "device_disconnected";
+        case BRIDGE_DISCONNECTED = "bridge_disconnected";
     }
 }
 
@@ -12668,6 +12680,7 @@ namespace Seam\Resources\Event\DeviceUnmanagedDisconnected {
         case ACCOUNT_DISCONNECTED = "account_disconnected";
         case HUB_DISCONNECTED = "hub_disconnected";
         case DEVICE_DISCONNECTED = "device_disconnected";
+        case BRIDGE_DISCONNECTED = "bridge_disconnected";
     }
 }
 
