@@ -306,6 +306,10 @@ namespace Seam\Resources\UnmanagedAccessCode {
                     => \Seam\Resources\UnmanagedAccessCode\Errors\AugustLockNotAuthorized::from_json(
                     $json,
                 ),
+                \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::LOW_BATTERY
+                    => \Seam\Resources\UnmanagedAccessCode\Errors\LowBattery::from_json(
+                    $json,
+                ),
                 \Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode::MISSING_DEVICE_CREDENTIALS
                     => \Seam\Resources\UnmanagedAccessCode\Errors\MissingDeviceCredentials::from_json(
                     $json,
@@ -918,7 +922,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
     }
 
     /**
-     * This access code is still active on the device even though its `ends_at` has passed, so the recipient may still be able to unlock the device after their access window ended. Seam is attempting to delete it, and this error clears automatically once the access code is no longer active.
+     * Seam was unable to remove this access code from the device in time after it was deleted or its `ends_at` passed, so the recipient may still be able to unlock the device. Seam keeps trying to delete it, and this error clears automatically once the access code is no longer usable on the device.
      */
     final class FailedToDelete extends
         \Seam\Resources\UnmanagedAccessCode\Errors
@@ -1418,6 +1422,48 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
     }
 
     /**
+     * Indicates that the lock has about one week, two days, or a critically low amount of battery life remaining. Replace the lock's batteries promptly to avoid losing access.
+     */
+    final class LowBattery extends \Seam\Resources\UnmanagedAccessCode\Errors
+    {
+        public static function from_json(mixed $json): LowBattery|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            public string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a device error.
+             */
+            public true|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(error_code: $error_code, message: $message);
+        }
+    }
+
+    /**
      * Indicates that device credentials are missing.
      */
     final class MissingDeviceCredentials extends
@@ -1619,6 +1665,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
         case DEVICE_DISCONNECTED = "device_disconnected";
         case EMPTY_BACKUP_ACCESS_CODE_POOL = "empty_backup_access_code_pool";
         case AUGUST_LOCK_NOT_AUTHORIZED = "august_lock_not_authorized";
+        case LOW_BATTERY = "low_battery";
         case MISSING_DEVICE_CREDENTIALS = "missing_device_credentials";
         case AUXILIARY_HEAT_RUNNING = "auxiliary_heat_running";
         case SUBSCRIPTION_REQUIRED = "subscription_required";
@@ -2119,7 +2166,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
     }
 
     /**
-     * Access code is being deleted.
+     * Access code is being deleted, because it was deleted or passed its `ends_at`. It can no longer be updated.
      */
     final class BeingDeleted extends
         \Seam\Resources\UnmanagedAccessCode\Warnings

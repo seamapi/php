@@ -60,6 +60,10 @@ namespace Seam\Resources {
                     => \Seam\Resources\Event\AccessCodeFailedToSetOnDevice::from_json(
                     $json,
                 ),
+                \Seam\Resources\Event\EventType::ACCESS_CODE_FAILED_TO_DELETE
+                    => \Seam\Resources\Event\AccessCodeFailedToDelete::from_json(
+                    $json,
+                ),
                 \Seam\Resources\Event\EventType::ACCESS_CODE_DELETED
                     => \Seam\Resources\Event\AccessCodeDeleted::from_json(
                     $json,
@@ -1655,6 +1659,178 @@ namespace Seam\Resources\Event {
              * Warnings associated with the device.
              *
              * @var list<\Seam\Resources\Event\AccessCodeFailedToSetOnDevice\DeviceWarnings>
+             */
+            public array $device_warnings,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
+             * ID of the event.
+             */
+            string|null $event_id,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
+            /**
+             * Date and time at which the event occurred.
+             */
+            string|null $occurred_at,
+            /**
+             * ID of the workspace associated with the event.
+             */
+            string|null $workspace_id,
+            /**
+             * Custom metadata of the connected account, present when connected_account_id is provided.
+             *
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $connected_account_custom_metadata = null,
+            /**
+             * Custom metadata of the device, present when device_id is provided.
+             *
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $device_custom_metadata = null,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                event_description: $event_description,
+                event_id: $event_id,
+                event_type: $event_type,
+                occurred_at: $occurred_at,
+                workspace_id: $workspace_id,
+            );
+        }
+    }
+
+    /**
+     * Seam was unable to remove an [access code](https://www.seam.co/docs/low-level-apis/smart-locks/access-codes) from the device in time after it was deleted or its `ends_at` passed, so the recipient may still be able to unlock the device. Seam keeps trying to delete it, and the accompanying `failed_to_delete` error clears automatically once the access code is no longer usable on the device.
+     */
+    final class AccessCodeFailedToDelete extends \Seam\Resources\Event
+    {
+        public static function from_json(
+            mixed $json,
+        ): AccessCodeFailedToDelete|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                access_code_errors: array_map(
+                    fn(
+                        $a,
+                    ) => \Seam\Resources\Event\AccessCodeFailedToDelete\AccessCodeErrors::from_json(
+                        $a,
+                    ),
+                    $json->access_code_errors ?? [],
+                ),
+                access_code_id: $json->access_code_id ?? null,
+                access_code_warnings: array_map(
+                    fn(
+                        $a,
+                    ) => \Seam\Resources\Event\AccessCodeFailedToDelete\AccessCodeWarnings::from_json(
+                        $a,
+                    ),
+                    $json->access_code_warnings ?? [],
+                ),
+                connected_account_errors: array_map(
+                    fn(
+                        $c,
+                    ) => \Seam\Resources\Event\AccessCodeFailedToDelete\ConnectedAccountErrors::from_json(
+                        $c,
+                    ),
+                    $json->connected_account_errors ?? [],
+                ),
+                connected_account_id: $json->connected_account_id ?? null,
+                connected_account_warnings: array_map(
+                    fn(
+                        $c,
+                    ) => \Seam\Resources\Event\AccessCodeFailedToDelete\ConnectedAccountWarnings::from_json(
+                        $c,
+                    ),
+                    $json->connected_account_warnings ?? [],
+                ),
+                created_at: $json->created_at ?? null,
+                device_errors: array_map(
+                    fn(
+                        $d,
+                    ) => \Seam\Resources\Event\AccessCodeFailedToDelete\DeviceErrors::from_json(
+                        $d,
+                    ),
+                    $json->device_errors ?? [],
+                ),
+                device_id: $json->device_id ?? null,
+                device_warnings: array_map(
+                    fn(
+                        $d,
+                    ) => \Seam\Resources\Event\AccessCodeFailedToDelete\DeviceWarnings::from_json(
+                        $d,
+                    ),
+                    $json->device_warnings ?? [],
+                ),
+                event_description: $json->event_description ?? null,
+                event_id: $json->event_id ?? null,
+                event_type: $json->event_type ?? null,
+                occurred_at: $json->occurred_at ?? null,
+                workspace_id: $json->workspace_id ?? null,
+                connected_account_custom_metadata: $json->connected_account_custom_metadata ??
+                    null,
+                device_custom_metadata: $json->device_custom_metadata ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Errors associated with the access code.
+             *
+             * @var list<\Seam\Resources\Event\AccessCodeFailedToDelete\AccessCodeErrors>
+             */
+            public array $access_code_errors,
+            /**
+             * ID of the affected access code.
+             */
+            public string|null $access_code_id,
+            /**
+             * Warnings associated with the access code.
+             *
+             * @var list<\Seam\Resources\Event\AccessCodeFailedToDelete\AccessCodeWarnings>
+             */
+            public array $access_code_warnings,
+            /**
+             * Errors associated with the connected account.
+             *
+             * @var list<\Seam\Resources\Event\AccessCodeFailedToDelete\ConnectedAccountErrors>
+             */
+            public array $connected_account_errors,
+            /**
+             * ID of the connected account associated with the affected access code.
+             */
+            public string|null $connected_account_id,
+            /**
+             * Warnings associated with the connected account.
+             *
+             * @var list<\Seam\Resources\Event\AccessCodeFailedToDelete\ConnectedAccountWarnings>
+             */
+            public array $connected_account_warnings,
+            /**
+             * Date and time at which the event was created.
+             */
+            string|null $created_at,
+            /**
+             * Errors associated with the device.
+             *
+             * @var list<\Seam\Resources\Event\AccessCodeFailedToDelete\DeviceErrors>
+             */
+            public array $device_errors,
+            /**
+             * ID of the device associated with the affected access code.
+             */
+            public string|null $device_id,
+            /**
+             * Warnings associated with the device.
+             *
+             * @var list<\Seam\Resources\Event\AccessCodeFailedToDelete\DeviceWarnings>
              */
             public array $device_warnings,
             /**
@@ -10774,6 +10950,7 @@ namespace Seam\Resources\Event {
         case ACCESS_CODE_REMOVED_FROM_DEVICE = "access_code.removed_from_device";
         case ACCESS_CODE_DELAY_IN_SETTING_ON_DEVICE = "access_code.delay_in_setting_on_device";
         case ACCESS_CODE_FAILED_TO_SET_ON_DEVICE = "access_code.failed_to_set_on_device";
+        case ACCESS_CODE_FAILED_TO_DELETE = "access_code.failed_to_delete";
         case ACCESS_CODE_DELETED = "access_code.deleted";
         case ACCESS_CODE_DELAY_IN_REMOVING_FROM_DEVICE = "access_code.delay_in_removing_from_device";
         case ACCESS_CODE_FAILED_TO_REMOVE_FROM_DEVICE = "access_code.failed_to_remove_from_device";
@@ -11313,6 +11490,208 @@ namespace Seam\Resources\Event\AccessCodeDelayInSettingOnDevice {
 }
 
 namespace Seam\Resources\Event\AccessCodeFailedToSetOnDevice {
+    /**
+     * Errors associated with the access code.
+     */
+    class AccessCodeErrors
+    {
+        public static function from_json(mixed $json): AccessCodeErrors|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            public string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $error_code,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+        ) {}
+    }
+
+    /**
+     * Warnings associated with the access code.
+     */
+    class AccessCodeWarnings
+    {
+        public static function from_json(mixed $json): AccessCodeWarnings|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            public string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $warning_code,
+        ) {}
+    }
+
+    /**
+     * Errors associated with the connected account.
+     */
+    class ConnectedAccountErrors
+    {
+        public static function from_json(
+            mixed $json,
+        ): ConnectedAccountErrors|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            public string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $error_code,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+        ) {}
+    }
+
+    /**
+     * Warnings associated with the connected account.
+     */
+    class ConnectedAccountWarnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): ConnectedAccountWarnings|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            public string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $warning_code,
+        ) {}
+    }
+
+    /**
+     * Errors associated with the device.
+     */
+    class DeviceErrors
+    {
+        public static function from_json(mixed $json): DeviceErrors|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            public string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $error_code,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+        ) {}
+    }
+
+    /**
+     * Warnings associated with the device.
+     */
+    class DeviceWarnings
+    {
+        public static function from_json(mixed $json): DeviceWarnings|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            public string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $warning_code,
+        ) {}
+    }
+}
+
+namespace Seam\Resources\Event\AccessCodeFailedToDelete {
     /**
      * Errors associated with the access code.
      */

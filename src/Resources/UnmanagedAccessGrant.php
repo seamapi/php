@@ -342,6 +342,10 @@ namespace Seam\Resources\UnmanagedAccessGrant {
                     => \Seam\Resources\UnmanagedAccessGrant\Warnings\AccessRevoked::from_json(
                     $json,
                 ),
+                \Seam\Resources\UnmanagedAccessGrant\Warnings\WarningCode::MOBILE_KEY_WITHHELD
+                    => \Seam\Resources\UnmanagedAccessGrant\Warnings\MobileKeyWithheld::from_json(
+                    $json,
+                ),
                 default => new self(
                     created_at: $json->created_at ?? null,
                     message: $json->message ?? null,
@@ -1132,6 +1136,48 @@ namespace Seam\Resources\UnmanagedAccessGrant\Warnings {
         }
     }
 
+    /**
+     * Indicates that Seam did not issue the mobile key requested for this access grant, because the user's email address or phone number belongs to other user identities and Seam cannot tell which person's app should receive it. The other requested access methods were issued.
+     */
+    final class MobileKeyWithheld extends
+        \Seam\Resources\UnmanagedAccessGrant\Warnings
+    {
+        public static function from_json(mixed $json): MobileKeyWithheld|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedAccessGrant\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
     enum WarningCode: string
     {
         case BEING_DELETED = "being_deleted";
@@ -1142,6 +1188,7 @@ namespace Seam\Resources\UnmanagedAccessGrant\Warnings {
         case DEVICE_DOES_NOT_SUPPORT_ACCESS_CODES = "device_does_not_support_access_codes";
         case DEVICE_TIME_CONSTRAINTS_VIOLATED = "device_time_constraints_violated";
         case ACCESS_REVOKED = "access_revoked";
+        case MOBILE_KEY_WITHHELD = "mobile_key_withheld";
     }
 }
 

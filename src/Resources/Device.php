@@ -24,6 +24,7 @@ namespace Seam\Resources {
                     $json->errors ?? [],
                 ),
                 is_managed: $json->is_managed ?? null,
+                is_online: $json->is_online ?? null,
                 space_ids: $json->space_ids ?? null,
                 warnings: array_map(
                     fn($w) => \Seam\Resources\Device\Warnings::from_json($w),
@@ -77,6 +78,9 @@ namespace Seam\Resources {
                     )
                     : null,
                 estimated_occupant_count: $json->estimated_occupant_count ??
+                    null,
+                is_casing_tampered_with: $json->is_casing_tampered_with ?? null,
+                is_detached_from_mounting_plate: $json->is_detached_from_mounting_plate ??
                     null,
                 is_occupancy_detected: $json->is_occupancy_detected ?? null,
                 is_smoking_detected: $json->is_smoking_detected ?? null,
@@ -151,6 +155,10 @@ namespace Seam\Resources {
              * Indicates whether Seam manages the device. See also [Managed and Unmanaged Devices](https://www.seam.co/docs/core-concepts/devices/managed-and-unmanaged-devices).
              */
             public true|null $is_managed,
+            /**
+             * Indicates whether the device is online.
+             */
+            public bool|null $is_online,
             /**
              * IDs of the spaces the device is in.
              *
@@ -279,6 +287,14 @@ namespace Seam\Resources {
              * Estimated number of occupants detected by the device.
              */
             public float|null $estimated_occupant_count = null,
+            /**
+             * Indicates whether the device was last reported as having its casing opened or tampered with. Omitted when the provider reports no casing state, including when the device does not support casing tamper detection. This is independent of `is_detached_from_mounting_plate`.
+             */
+            public bool|null $is_casing_tampered_with = null,
+            /**
+             * Indicates whether the device was last reported as detached from its mounting plate. Omitted when Seam has no accepted observation, including when the device does not support mounting plate detection, reports an unknown status, or is offline. This is the last accepted provider observation, not a guarantee of current hardware state; check `is_online` before acting on it.
+             */
+            public bool|null $is_detached_from_mounting_plate = null,
             /**
              * Indicates whether the device detects occupancy.
              */
@@ -460,6 +476,10 @@ namespace Seam\Resources\Device {
                 ),
                 \Seam\Resources\Device\Errors\ErrorCode::AUGUST_LOCK_NOT_AUTHORIZED
                     => \Seam\Resources\Device\Errors\AugustLockNotAuthorized::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Device\Errors\ErrorCode::LOW_BATTERY
+                    => \Seam\Resources\Device\Errors\LowBattery::from_json(
                     $json,
                 ),
                 \Seam\Resources\Device\Errors\ErrorCode::MISSING_DEVICE_CREDENTIALS
@@ -1632,6 +1652,10 @@ namespace Seam\Resources\Device {
                     => \Seam\Resources\Device\Warnings\AccessoryKeypadLowBattery::from_json(
                     $json,
                 ),
+                \Seam\Resources\Device\Warnings\WarningCode::BATTERY_REPLACEMENT_RECOMMENDED
+                    => \Seam\Resources\Device\Warnings\BatteryReplacementRecommended::from_json(
+                    $json,
+                ),
                 \Seam\Resources\Device\Warnings\WarningCode::UNRELIABLE_ONLINE_STATUS
                     => \Seam\Resources\Device\Warnings\UnreliableOnlineStatus::from_json(
                     $json,
@@ -2229,6 +2253,52 @@ namespace Seam\Resources\Device\Errors {
     }
 
     /**
+     * Indicates that the lock has about one week, two days, or a critically low amount of battery life remaining. Replace the lock's batteries promptly to avoid losing access.
+     */
+    final class LowBattery extends \Seam\Resources\Device\Errors
+    {
+        public static function from_json(mixed $json): LowBattery|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a device error.
+             */
+            public true|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
      * Indicates that device credentials are missing.
      */
     final class MissingDeviceCredentials extends \Seam\Resources\Device\Errors
@@ -2431,6 +2501,7 @@ namespace Seam\Resources\Device\Errors {
         case DEVICE_DISCONNECTED = "device_disconnected";
         case EMPTY_BACKUP_ACCESS_CODE_POOL = "empty_backup_access_code_pool";
         case AUGUST_LOCK_NOT_AUTHORIZED = "august_lock_not_authorized";
+        case LOW_BATTERY = "low_battery";
         case MISSING_DEVICE_CREDENTIALS = "missing_device_credentials";
         case AUXILIARY_HEAT_RUNNING = "auxiliary_heat_running";
         case SUBSCRIPTION_REQUIRED = "subscription_required";
@@ -7138,6 +7209,49 @@ namespace Seam\Resources\Device\Warnings {
     }
 
     /**
+     * Indicates that the lock has about two weeks of battery life remaining or the provider otherwise recommends replacing the lock's batteries soon.
+     */
+    final class BatteryReplacementRecommended extends
+        \Seam\Resources\Device\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): BatteryReplacementRecommended|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Device\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
      * Indicates that the device may optimistically be reported as online because the provider does not reliably report its online status.
      */
     final class UnreliableOnlineStatus extends \Seam\Resources\Device\Warnings
@@ -7347,6 +7461,7 @@ namespace Seam\Resources\Device\Warnings {
         case KEYNEST_UNSUPPORTED_LOCKER = "keynest_unsupported_locker";
         case ACCESSORY_KEYPAD_SETUP_REQUIRED = "accessory_keypad_setup_required";
         case ACCESSORY_KEYPAD_LOW_BATTERY = "accessory_keypad_low_battery";
+        case BATTERY_REPLACEMENT_RECOMMENDED = "battery_replacement_recommended";
         case UNRELIABLE_ONLINE_STATUS = "unreliable_online_status";
         case MAX_ACCESS_CODES_REACHED = "max_access_codes_reached";
         case SUBSCRIPTION_REQUIRED_FOR_ADDITIONAL_CAPABILITIES = "subscription_required_for_additional_capabilities";
