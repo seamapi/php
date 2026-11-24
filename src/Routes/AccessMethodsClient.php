@@ -74,6 +74,7 @@ class AccessMethodsClient
      * @param string $access_method_id ID of access method to delete.
      * @param string $reservation_key Reservation key of the access grant whose access methods should be deleted.
      * @return void OK
+     * @deprecated Access methods are managed by their access grant. Some workflows still need this endpoint today; access grant routes will replace it for them soon.
      */
     public function delete(
         ?string $access_grant_id = null,

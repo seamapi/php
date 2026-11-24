@@ -26,6 +26,7 @@ namespace Seam\Resources {
                     $json->errors ?? [],
                 ),
                 is_managed: $json->is_managed ?? null,
+                is_online: $json->is_online ?? null,
                 warnings: array_map(
                     fn(
                         $w,
@@ -126,6 +127,10 @@ namespace Seam\Resources {
              * Indicates that Seam does not manage the device.
              */
             public false|null $is_managed,
+            /**
+             * Indicates whether the device is online.
+             */
+            public bool|null $is_online,
             /**
              * Array of warnings associated with the device. Each warning object within the array contains two fields: `warning_code` and `message`. `warning_code` is a string that uniquely identifies the type of warning, enabling quick recognition and categorization of the issue. `message` provides a more detailed description of the warning, offering insights into the issue and potentially how to rectify it.
              *
@@ -292,6 +297,10 @@ namespace Seam\Resources\UnmanagedDevice {
                 ),
                 \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::AUGUST_LOCK_NOT_AUTHORIZED
                     => \Seam\Resources\UnmanagedDevice\Errors\AugustLockNotAuthorized::from_json(
+                    $json,
+                ),
+                \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::LOW_BATTERY
+                    => \Seam\Resources\UnmanagedDevice\Errors\LowBattery::from_json(
                     $json,
                 ),
                 \Seam\Resources\UnmanagedDevice\Errors\ErrorCode::MISSING_DEVICE_CREDENTIALS
@@ -569,6 +578,10 @@ namespace Seam\Resources\UnmanagedDevice {
                 ),
                 \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::ACCESSORY_KEYPAD_LOW_BATTERY
                     => \Seam\Resources\UnmanagedDevice\Warnings\AccessoryKeypadLowBattery::from_json(
+                    $json,
+                ),
+                \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::BATTERY_REPLACEMENT_RECOMMENDED
+                    => \Seam\Resources\UnmanagedDevice\Warnings\BatteryReplacementRecommended::from_json(
                     $json,
                 ),
                 \Seam\Resources\UnmanagedDevice\Warnings\WarningCode::UNRELIABLE_ONLINE_STATUS
@@ -1174,6 +1187,52 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
     }
 
     /**
+     * Indicates that the lock has about one week, two days, or a critically low amount of battery life remaining. Replace the lock's batteries promptly to avoid losing access.
+     */
+    final class LowBattery extends \Seam\Resources\UnmanagedDevice\Errors
+    {
+        public static function from_json(mixed $json): LowBattery|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a device error.
+             */
+            public true|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
      * Indicates that device credentials are missing.
      */
     final class MissingDeviceCredentials extends
@@ -1380,6 +1439,7 @@ namespace Seam\Resources\UnmanagedDevice\Errors {
         case DEVICE_DISCONNECTED = "device_disconnected";
         case EMPTY_BACKUP_ACCESS_CODE_POOL = "empty_backup_access_code_pool";
         case AUGUST_LOCK_NOT_AUTHORIZED = "august_lock_not_authorized";
+        case LOW_BATTERY = "low_battery";
         case MISSING_DEVICE_CREDENTIALS = "missing_device_credentials";
         case AUXILIARY_HEAT_RUNNING = "auxiliary_heat_running";
         case SUBSCRIPTION_REQUIRED = "subscription_required";
@@ -2669,6 +2729,49 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
     }
 
     /**
+     * Indicates that the lock has about two weeks of battery life remaining or the provider otherwise recommends replacing the lock's batteries soon.
+     */
+    final class BatteryReplacementRecommended extends
+        \Seam\Resources\UnmanagedDevice\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): BatteryReplacementRecommended|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\UnmanagedDevice\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
      * Indicates that the device may optimistically be reported as online because the provider does not reliably report its online status.
      */
     final class UnreliableOnlineStatus extends
@@ -2881,6 +2984,7 @@ namespace Seam\Resources\UnmanagedDevice\Warnings {
         case KEYNEST_UNSUPPORTED_LOCKER = "keynest_unsupported_locker";
         case ACCESSORY_KEYPAD_SETUP_REQUIRED = "accessory_keypad_setup_required";
         case ACCESSORY_KEYPAD_LOW_BATTERY = "accessory_keypad_low_battery";
+        case BATTERY_REPLACEMENT_RECOMMENDED = "battery_replacement_recommended";
         case UNRELIABLE_ONLINE_STATUS = "unreliable_online_status";
         case MAX_ACCESS_CODES_REACHED = "max_access_codes_reached";
         case SUBSCRIPTION_REQUIRED_FOR_ADDITIONAL_CAPABILITIES = "subscription_required_for_additional_capabilities";

@@ -146,6 +146,10 @@ namespace Seam\Resources\Phone {
                     => \Seam\Resources\Phone\Errors\AugustLockNotAuthorized::from_json(
                     $json,
                 ),
+                \Seam\Resources\Phone\Errors\ErrorCode::LOW_BATTERY
+                    => \Seam\Resources\Phone\Errors\LowBattery::from_json(
+                    $json,
+                ),
                 \Seam\Resources\Phone\Errors\ErrorCode::MISSING_DEVICE_CREDENTIALS
                     => \Seam\Resources\Phone\Errors\MissingDeviceCredentials::from_json(
                     $json,
@@ -351,6 +355,10 @@ namespace Seam\Resources\Phone {
                 ),
                 \Seam\Resources\Phone\Warnings\WarningCode::ACCESSORY_KEYPAD_LOW_BATTERY
                     => \Seam\Resources\Phone\Warnings\AccessoryKeypadLowBattery::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Phone\Warnings\WarningCode::BATTERY_REPLACEMENT_RECOMMENDED
+                    => \Seam\Resources\Phone\Warnings\BatteryReplacementRecommended::from_json(
                     $json,
                 ),
                 \Seam\Resources\Phone\Warnings\WarningCode::UNRELIABLE_ONLINE_STATUS
@@ -894,6 +902,52 @@ namespace Seam\Resources\Phone\Errors {
     }
 
     /**
+     * Indicates that the lock has about one week, two days, or a critically low amount of battery life remaining. Replace the lock's batteries promptly to avoid losing access.
+     */
+    final class LowBattery extends \Seam\Resources\Phone\Errors
+    {
+        public static function from_json(mixed $json): LowBattery|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                is_device_error: $json->is_device_error ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Phone\Errors\ErrorCode>|string|null
+             */
+            string|null $error_code,
+            /**
+             * Indicates that the error is a device error.
+             */
+            public true|null $is_device_error,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                error_code: $error_code,
+                message: $message,
+            );
+        }
+    }
+
+    /**
      * Indicates that device credentials are missing.
      */
     final class MissingDeviceCredentials extends \Seam\Resources\Phone\Errors
@@ -1096,6 +1150,7 @@ namespace Seam\Resources\Phone\Errors {
         case DEVICE_DISCONNECTED = "device_disconnected";
         case EMPTY_BACKUP_ACCESS_CODE_POOL = "empty_backup_access_code_pool";
         case AUGUST_LOCK_NOT_AUTHORIZED = "august_lock_not_authorized";
+        case LOW_BATTERY = "low_battery";
         case MISSING_DEVICE_CREDENTIALS = "missing_device_credentials";
         case AUXILIARY_HEAT_RUNNING = "auxiliary_heat_running";
         case SUBSCRIPTION_REQUIRED = "subscription_required";
@@ -2334,6 +2389,49 @@ namespace Seam\Resources\Phone\Warnings {
     }
 
     /**
+     * Indicates that the lock has about two weeks of battery life remaining or the provider otherwise recommends replacing the lock's batteries soon.
+     */
+    final class BatteryReplacementRecommended extends
+        \Seam\Resources\Phone\Warnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): BatteryReplacementRecommended|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             *
+             * @var value-of<\Seam\Resources\Phone\Warnings\WarningCode>|string|null
+             */
+            string|null $warning_code,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                message: $message,
+                warning_code: $warning_code,
+            );
+        }
+    }
+
+    /**
      * Indicates that the device may optimistically be reported as online because the provider does not reliably report its online status.
      */
     final class UnreliableOnlineStatus extends \Seam\Resources\Phone\Warnings
@@ -2543,6 +2641,7 @@ namespace Seam\Resources\Phone\Warnings {
         case KEYNEST_UNSUPPORTED_LOCKER = "keynest_unsupported_locker";
         case ACCESSORY_KEYPAD_SETUP_REQUIRED = "accessory_keypad_setup_required";
         case ACCESSORY_KEYPAD_LOW_BATTERY = "accessory_keypad_low_battery";
+        case BATTERY_REPLACEMENT_RECOMMENDED = "battery_replacement_recommended";
         case UNRELIABLE_ONLINE_STATUS = "unreliable_online_status";
         case MAX_ACCESS_CODES_REACHED = "max_access_codes_reached";
         case SUBSCRIPTION_REQUIRED_FOR_ADDITIONAL_CAPABILITIES = "subscription_required_for_additional_capabilities";
