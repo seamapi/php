@@ -75,6 +75,8 @@ class DevicesClient
      * @param list<string> $device_ids Array of device IDs for which you want to list devices.
      * @param string $device_type Device type for which you want to list devices.
      * @param list<string> $device_types Array of device types for which you want to list devices.
+     * @param list<string> $has_error_or_warning_codes Array of error and warning codes. Returns devices that have at least one error or warning with any of these codes.
+     * @param bool $has_errors_or_warnings Filters devices by whether they have any errors or warnings. Specify `true` to list only devices with at least one error or warning, or `false` to list only devices with none.
      * @param float $limit Numerical limit on the number of devices to return.
      * @param string $manufacturer Manufacturer for which you want to list devices.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
@@ -94,6 +96,8 @@ class DevicesClient
         ?array $device_ids = null,
         ?string $device_type = null,
         ?array $device_types = null,
+        ?array $has_error_or_warning_codes = null,
+        ?bool $has_errors_or_warnings = null,
         ?float $limit = null,
         ?string $manufacturer = null,
         string|NullValue|null $page_cursor = null,
@@ -130,6 +134,16 @@ class DevicesClient
         }
         if ($device_types !== null) {
             $request_payload["device_types"] = $device_types;
+        }
+        if ($has_error_or_warning_codes !== null) {
+            $request_payload[
+                "has_error_or_warning_codes"
+            ] = $has_error_or_warning_codes;
+        }
+        if ($has_errors_or_warnings !== null) {
+            $request_payload[
+                "has_errors_or_warnings"
+            ] = $has_errors_or_warnings;
         }
         if ($limit !== null) {
             $request_payload["limit"] = $limit;

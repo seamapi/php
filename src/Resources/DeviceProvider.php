@@ -243,6 +243,7 @@ namespace Seam\Resources\DeviceProvider {
         case EUFY = "eufy";
         case SONOS = "sonos";
         case HAYWARD_OMNILOGIC = "hayward_omnilogic";
+        case JANDY_IAQUALINK = "jandy_iaqualink";
         case TUYA = "tuya";
     }
 }

@@ -729,7 +729,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors {
              */
             string|null $message,
             /**
-             * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device.
+             * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device. `deactivated` means the code is still on the device but was disabled or suspended.
              *
              * @var value-of<\Seam\Resources\UnmanagedAccessCode\Errors\ConflictingExternalModification\ChangeType>|string|null
              */
@@ -1711,6 +1711,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Errors\ConflictingExternalModificat
     {
         case MODIFIED = "modified";
         case REMOVED = "removed";
+        case DEACTIVATED = "deactivated";
     }
 }
 
@@ -1841,7 +1842,7 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings {
              */
             string|null $warning_code,
             /**
-             * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device.
+             * Indicates the type of external modification. `modified` means the code's PIN or schedule was changed. `removed` means the code was deleted from the device. `deactivated` means the code is still on the device but was disabled or suspended.
              *
              * @var value-of<\Seam\Resources\UnmanagedAccessCode\Warnings\ExternalModificationInEffect\ChangeType>|string|null
              */
@@ -2355,5 +2356,6 @@ namespace Seam\Resources\UnmanagedAccessCode\Warnings\ExternalModificationInEffe
     {
         case MODIFIED = "modified";
         case REMOVED = "removed";
+        case DEACTIVATED = "deactivated";
     }
 }

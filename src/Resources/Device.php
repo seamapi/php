@@ -89,7 +89,8 @@ namespace Seam\Resources {
                         $json->location,
                     )
                     : null,
-                mold_risk_level: $json->mold_risk_level ?? null,
+                mold_display_risk: $json->mold_display_risk ?? null,
+                mold_risk_index: $json->mold_risk_index ?? null,
                 named_sensors: array_map(
                     fn($n) => \Seam\Resources\Device\NamedSensors::from_json(
                         $n,
@@ -308,9 +309,13 @@ namespace Seam\Resources {
              */
             public \Seam\Resources\Device\Location|null $location = null,
             /**
-             * Mold risk level as reported by the device, if the device measures it.
+             * Display wording for the current mold risk, as reported by the provider or derived by Seam. The values are not stable and are only for display; use mold_risk_index for logic.
              */
-            public string|null $mold_risk_level = null,
+            public string|null $mold_display_risk = null,
+            /**
+             * Mold risk index from 0 (no risk) to 1 (high risk), if the device measures it. Seam defines this scale and maps each provider onto it: 0 = low, 0.5 = medium, 1 = high for providers that report levels.
+             */
+            public float|null $mold_risk_index = null,
             /**
              * Additional sensors of the same kind on the device, each with a stable `sensor_name`. Present only when the device has more than one sensor of a kind or no single main sensor.
              *
@@ -577,7 +582,8 @@ namespace Seam\Resources\Device {
                     null,
                 is_occupancy_detected: $json->is_occupancy_detected ?? null,
                 is_smoking_detected: $json->is_smoking_detected ?? null,
-                mold_risk_level: $json->mold_risk_level ?? null,
+                mold_display_risk: $json->mold_display_risk ?? null,
+                mold_risk_index: $json->mold_risk_index ?? null,
                 noise_level_decibels: $json->noise_level_decibels ?? null,
                 noise_level_nrs: $json->noise_level_nrs ?? null,
                 relative_humidity: $json->relative_humidity ?? null,
@@ -620,9 +626,13 @@ namespace Seam\Resources\Device {
              */
             public bool|null $is_smoking_detected = null,
             /**
-             * Mold risk level as reported by the device, if the device measures it.
+             * Display wording for the current mold risk, as reported by the provider or derived by Seam. The values are not stable and are only for display; use mold_risk_index for logic.
              */
-            public string|null $mold_risk_level = null,
+            public string|null $mold_display_risk = null,
+            /**
+             * Mold risk index from 0 (no risk) to 1 (high risk), if the device measures it. Seam defines this scale and maps each provider onto it: 0 = low, 0.5 = medium, 1 = high for providers that report levels.
+             */
+            public float|null $mold_risk_index = null,
             /**
              * Noise level in decibels, if the device measures noise.
              */
@@ -1757,7 +1767,9 @@ namespace Seam\Resources\Device {
         case SONOS_SPEAKER = "sonos_speaker";
         case ALERTIFY_SENSOR = "alertify_sensor";
         case HAYWARD_POOL_CONTROLLER = "hayward_pool_controller";
+        case JANDY_POOL_CONTROLLER = "jandy_pool_controller";
         case HAYWARD_POOL = "hayward_pool";
+        case JANDY_POOL = "jandy_pool";
     }
 }
 

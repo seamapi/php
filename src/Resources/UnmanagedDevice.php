@@ -685,7 +685,9 @@ namespace Seam\Resources\UnmanagedDevice {
         case SONOS_SPEAKER = "sonos_speaker";
         case ALERTIFY_SENSOR = "alertify_sensor";
         case HAYWARD_POOL_CONTROLLER = "hayward_pool_controller";
+        case JANDY_POOL_CONTROLLER = "jandy_pool_controller";
         case HAYWARD_POOL = "hayward_pool";
+        case JANDY_POOL = "jandy_pool";
     }
 }
 
