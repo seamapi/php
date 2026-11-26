@@ -58,9 +58,10 @@ class ActionAttemptsClient
     }
 
     /**
-     * Returns a list of the [action attempts](https://www.seam.co/docs/core-concepts/action-attempts) that you specify as an array of `action_attempt_id`s.
+     * Returns a list of the [action attempts](https://www.seam.co/docs/core-concepts/action-attempts) that you specify as an array of `action_attempt_id`s or by `device_id`, newest first.
      *
      * @param list<string> $action_attempt_ids IDs of the action attempts that you want to retrieve.
+     * @param list<string> $action_types Types of the action attempts that you want to list, such as `LOCK_DOOR` and `UNLOCK_DOOR`.
      * @param string $device_id ID of the device to filter action attempts by.
      * @param int $limit Maximum number of records to return per page.
      * @param string|NullValue $page_cursor Identifies the specific page of results to return, obtained from the previous page's `next_page_cursor`.
@@ -69,6 +70,7 @@ class ActionAttemptsClient
      */
     public function list(
         ?array $action_attempt_ids = null,
+        ?array $action_types = null,
         ?string $device_id = null,
         ?int $limit = null,
         string|NullValue|null $page_cursor = null,
@@ -78,6 +80,9 @@ class ActionAttemptsClient
 
         if ($action_attempt_ids !== null) {
             $request_payload["action_attempt_ids"] = $action_attempt_ids;
+        }
+        if ($action_types !== null) {
+            $request_payload["action_types"] = $action_types;
         }
         if ($device_id !== null) {
             $request_payload["device_id"] = $device_id;

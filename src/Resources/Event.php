@@ -308,6 +308,10 @@ namespace Seam\Resources {
                 ),
                 \Seam\Resources\Event\EventType::DEVICE_TAMPERED
                     => \Seam\Resources\Event\DeviceTampered::from_json($json),
+                \Seam\Resources\Event\EventType::SENSOR_SMOKING_DETECTED
+                    => \Seam\Resources\Event\SensorSmokingDetected::from_json(
+                    $json,
+                ),
                 \Seam\Resources\Event\EventType::DEVICE_LOW_BATTERY
                     => \Seam\Resources\Event\DeviceLowBattery::from_json($json),
                 \Seam\Resources\Event\EventType::DEVICE_BATTERY_STATUS_CHANGED
@@ -380,6 +384,10 @@ namespace Seam\Resources {
                 ),
                 \Seam\Resources\Event\EventType::THERMOSTAT_MANUALLY_ADJUSTED
                     => \Seam\Resources\Event\ThermostatManuallyAdjusted::from_json(
+                    $json,
+                ),
+                \Seam\Resources\Event\EventType::THERMOSTAT_SCHEDULE_CLIMATE_PRESET_ACTIVATION_MAY_FAIL
+                    => \Seam\Resources\Event\ThermostatScheduleClimatePresetActivationMayFail::from_json(
                     $json,
                 ),
                 \Seam\Resources\Event\EventType::THERMOSTAT_TEMPERATURE_THRESHOLD_EXCEEDED
@@ -1900,6 +1908,7 @@ namespace Seam\Resources\Event {
                 workspace_id: $json->workspace_id ?? null,
                 connected_account_custom_metadata: $json->connected_account_custom_metadata ??
                     null,
+                description: $json->description ?? null,
                 device_custom_metadata: $json->device_custom_metadata ?? null,
             );
         }
@@ -1951,6 +1960,10 @@ namespace Seam\Resources\Event {
              * @var array<string, string|bool>|\stdClass|null
              */
             public array|\stdClass|null $connected_account_custom_metadata = null,
+            /**
+             * Human-readable description of the deletion and its source.
+             */
+            public string|null $description = null,
             /**
              * Custom metadata of the device, present when device_id is provided.
              *
@@ -3757,6 +3770,8 @@ namespace Seam\Resources\Event {
                 occurred_at: $json->occurred_at ?? null,
                 workspace_id: $json->workspace_id ?? null,
                 access_grant_keys: $json->access_grant_keys ?? null,
+                failed_to_delete_access_code_ids: $json->failed_to_delete_access_code_ids ??
+                    null,
             );
         }
 
@@ -3801,6 +3816,12 @@ namespace Seam\Resources\Event {
              * @var list<string>|null
              */
             public array|null $access_grant_keys = null,
+            /**
+             * IDs of the access codes that were still set on a device when the access method was deleted. Access may still be possible with these codes until Seam removes them from the device. Each access code keeps its own deletion lifecycle, so watch it for `access_code.deleted` or `access_code.failed_to_delete`. Only present when at least one access code was still set on a device.
+             *
+             * @var list<string>|null
+             */
+            public array|null $failed_to_delete_access_code_ids = null,
         ) {
             parent::__construct(
                 created_at: $created_at,
@@ -7469,6 +7490,94 @@ namespace Seam\Resources\Event {
     }
 
     /**
+     * A sensor reported smoking. Emitted once when `is_smoking_detected` becomes true. No event is emitted when it returns to false; re-read the device for the current value.
+     */
+    final class SensorSmokingDetected extends \Seam\Resources\Event
+    {
+        public static function from_json(
+            mixed $json,
+        ): SensorSmokingDetected|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                connected_account_id: $json->connected_account_id ?? null,
+                created_at: $json->created_at ?? null,
+                device_id: $json->device_id ?? null,
+                event_description: $json->event_description ?? null,
+                event_id: $json->event_id ?? null,
+                event_type: $json->event_type ?? null,
+                occurred_at: $json->occurred_at ?? null,
+                workspace_id: $json->workspace_id ?? null,
+                connected_account_custom_metadata: $json->connected_account_custom_metadata ??
+                    null,
+                customer_key: $json->customer_key ?? null,
+                device_custom_metadata: $json->device_custom_metadata ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * ID of the connected account associated with the event.
+             */
+            public string|null $connected_account_id,
+            /**
+             * Date and time at which the event was created.
+             */
+            string|null $created_at,
+            /**
+             * ID of the affected device.
+             */
+            public string|null $device_id,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
+             * ID of the event.
+             */
+            string|null $event_id,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
+            /**
+             * Date and time at which the event occurred.
+             */
+            string|null $occurred_at,
+            /**
+             * ID of the workspace associated with the event.
+             */
+            string|null $workspace_id,
+            /**
+             * Custom metadata of the connected account, present when connected_account_id is provided.
+             *
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $connected_account_custom_metadata = null,
+            /**
+             * The customer key associated with the device, if any.
+             */
+            public string|null $customer_key = null,
+            /**
+             * Custom metadata of the device, present when device_id is provided.
+             *
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $device_custom_metadata = null,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                event_description: $event_description,
+                event_id: $event_id,
+                event_type: $event_type,
+                occurred_at: $occurred_at,
+                workspace_id: $workspace_id,
+            );
+        }
+    }
+
+    /**
      * A device battery level dropped below the low threshold.
      */
     final class DeviceLowBattery extends \Seam\Resources\Event
@@ -9866,6 +9975,168 @@ namespace Seam\Resources\Event {
     }
 
     /**
+     * A [thermostat](https://www.seam.co/docs/capability-guides/thermostats) may fail to activate a [climate preset](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-climate-presets) when a [thermostat schedule](https://www.seam.co/docs/capability-guides/thermostats/creating-and-managing-thermostat-schedules) starts or ends, because the thermostat was offline shortly before the scheduled time. While the thermostat stays offline, the thermostat schedule carries a `climate_preset_activation_may_fail` warning until the scheduled time.
+     */
+    final class ThermostatScheduleClimatePresetActivationMayFail extends
+        \Seam\Resources\Event
+    {
+        public static function from_json(
+            mixed $json,
+        ): ThermostatScheduleClimatePresetActivationMayFail|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                connected_account_errors: array_map(
+                    fn(
+                        $c,
+                    ) => \Seam\Resources\Event\ThermostatScheduleClimatePresetActivationMayFail\ConnectedAccountErrors::from_json(
+                        $c,
+                    ),
+                    $json->connected_account_errors ?? [],
+                ),
+                connected_account_id: $json->connected_account_id ?? null,
+                connected_account_warnings: array_map(
+                    fn(
+                        $c,
+                    ) => \Seam\Resources\Event\ThermostatScheduleClimatePresetActivationMayFail\ConnectedAccountWarnings::from_json(
+                        $c,
+                    ),
+                    $json->connected_account_warnings ?? [],
+                ),
+                created_at: $json->created_at ?? null,
+                device_errors: array_map(
+                    fn(
+                        $d,
+                    ) => \Seam\Resources\Event\ThermostatScheduleClimatePresetActivationMayFail\DeviceErrors::from_json(
+                        $d,
+                    ),
+                    $json->device_errors ?? [],
+                ),
+                device_id: $json->device_id ?? null,
+                device_warnings: array_map(
+                    fn(
+                        $d,
+                    ) => \Seam\Resources\Event\ThermostatScheduleClimatePresetActivationMayFail\DeviceWarnings::from_json(
+                        $d,
+                    ),
+                    $json->device_warnings ?? [],
+                ),
+                event_description: $json->event_description ?? null,
+                event_id: $json->event_id ?? null,
+                event_type: $json->event_type ?? null,
+                occurred_at: $json->occurred_at ?? null,
+                thermostat_schedule_ends_at: $json->thermostat_schedule_ends_at ??
+                    null,
+                thermostat_schedule_id: $json->thermostat_schedule_id ?? null,
+                thermostat_schedule_starts_at: $json->thermostat_schedule_starts_at ??
+                    null,
+                workspace_id: $json->workspace_id ?? null,
+                connected_account_custom_metadata: $json->connected_account_custom_metadata ??
+                    null,
+                customer_key: $json->customer_key ?? null,
+                device_custom_metadata: $json->device_custom_metadata ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Errors associated with the connected account.
+             *
+             * @var list<\Seam\Resources\Event\ThermostatScheduleClimatePresetActivationMayFail\ConnectedAccountErrors>
+             */
+            public array $connected_account_errors,
+            /**
+             * ID of the connected account associated with the event.
+             */
+            public string|null $connected_account_id,
+            /**
+             * Warnings associated with the connected account.
+             *
+             * @var list<\Seam\Resources\Event\ThermostatScheduleClimatePresetActivationMayFail\ConnectedAccountWarnings>
+             */
+            public array $connected_account_warnings,
+            /**
+             * Date and time at which the event was created.
+             */
+            string|null $created_at,
+            /**
+             * Errors associated with the device.
+             *
+             * @var list<\Seam\Resources\Event\ThermostatScheduleClimatePresetActivationMayFail\DeviceErrors>
+             */
+            public array $device_errors,
+            /**
+             * ID of the affected device.
+             */
+            public string|null $device_id,
+            /**
+             * Warnings associated with the device.
+             *
+             * @var list<\Seam\Resources\Event\ThermostatScheduleClimatePresetActivationMayFail\DeviceWarnings>
+             */
+            public array $device_warnings,
+            /**
+             * Human-readable description of the event. Persisted when the event is created (so the creating code, including a provider, can supply a tailored description) and otherwise derived from the event.
+             */
+            string|null $event_description,
+            /**
+             * ID of the event.
+             */
+            string|null $event_id,
+            /**
+             * @var value-of<\Seam\Resources\Event\EventType>|string|null
+             */
+            string|null $event_type,
+            /**
+             * Date and time at which the event occurred.
+             */
+            string|null $occurred_at,
+            /**
+             * Date and time at which the thermostat schedule ends, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+             */
+            public string|null $thermostat_schedule_ends_at,
+            /**
+             * ID of the thermostat schedule whose climate preset activation may fail.
+             */
+            public string|null $thermostat_schedule_id,
+            /**
+             * Date and time at which the thermostat schedule starts, in [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) format.
+             */
+            public string|null $thermostat_schedule_starts_at,
+            /**
+             * ID of the workspace associated with the event.
+             */
+            string|null $workspace_id,
+            /**
+             * Custom metadata of the connected account, present when connected_account_id is provided.
+             *
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $connected_account_custom_metadata = null,
+            /**
+             * The customer key associated with the device, if any.
+             */
+            public string|null $customer_key = null,
+            /**
+             * Custom metadata of the device, present when device_id is provided.
+             *
+             * @var array<string, string|bool>|\stdClass|null
+             */
+            public array|\stdClass|null $device_custom_metadata = null,
+        ) {
+            parent::__construct(
+                created_at: $created_at,
+                event_description: $event_description,
+                event_id: $event_id,
+                event_type: $event_type,
+                occurred_at: $occurred_at,
+                workspace_id: $workspace_id,
+            );
+        }
+    }
+
+    /**
      * A [thermostat's](https://www.seam.co/docs/capability-guides/thermostats) temperature reading exceeded the set [threshold](https://www.seam.co/docs/capability-guides/thermostats/setting-and-monitoring-temperature-thresholds).
      */
     final class ThermostatTemperatureThresholdExceeded extends
@@ -11016,6 +11287,7 @@ namespace Seam\Resources\Event {
         case DEVICE_DISCONNECTED = "device.disconnected";
         case DEVICE_UNMANAGED_DISCONNECTED = "device.unmanaged.disconnected";
         case DEVICE_TAMPERED = "device.tampered";
+        case SENSOR_SMOKING_DETECTED = "sensor.smoking_detected";
         case DEVICE_LOW_BATTERY = "device.low_battery";
         case DEVICE_BATTERY_STATUS_CHANGED = "device.battery_status_changed";
         case DEVICE_REMOVED = "device.removed";
@@ -11039,6 +11311,7 @@ namespace Seam\Resources\Event {
         case LOCK_DOOR_CLOSED = "lock.door_closed";
         case THERMOSTAT_CLIMATE_PRESET_ACTIVATED = "thermostat.climate_preset_activated";
         case THERMOSTAT_MANUALLY_ADJUSTED = "thermostat.manually_adjusted";
+        case THERMOSTAT_SCHEDULE_CLIMATE_PRESET_ACTIVATION_MAY_FAIL = "thermostat_schedule.climate_preset_activation_may_fail";
         case THERMOSTAT_TEMPERATURE_THRESHOLD_EXCEEDED = "thermostat.temperature_threshold_exceeded";
         case THERMOSTAT_TEMPERATURE_THRESHOLD_NO_LONGER_EXCEEDED = "thermostat.temperature_threshold_no_longer_exceeded";
         case THERMOSTAT_TEMPERATURE_REACHED_SET_POINT = "thermostat.temperature_reached_set_point";
@@ -13573,6 +13846,142 @@ namespace Seam\Resources\Event\ThermostatManuallyAdjusted {
     {
         case SEAM = "seam";
         case EXTERNAL = "external";
+    }
+}
+
+namespace Seam\Resources\Event\ThermostatScheduleClimatePresetActivationMayFail {
+    /**
+     * Errors associated with the connected account.
+     */
+    class ConnectedAccountErrors
+    {
+        public static function from_json(
+            mixed $json,
+        ): ConnectedAccountErrors|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            public string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $error_code,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+        ) {}
+    }
+
+    /**
+     * Warnings associated with the connected account.
+     */
+    class ConnectedAccountWarnings
+    {
+        public static function from_json(
+            mixed $json,
+        ): ConnectedAccountWarnings|null {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            public string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $warning_code,
+        ) {}
+    }
+
+    /**
+     * Errors associated with the device.
+     */
+    class DeviceErrors
+    {
+        public static function from_json(mixed $json): DeviceErrors|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                error_code: $json->error_code ?? null,
+                message: $json->message ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the error.
+             */
+            public string|null $created_at,
+            /**
+             * Unique identifier of the type of error. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $error_code,
+            /**
+             * Detailed description of the error. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+        ) {}
+    }
+
+    /**
+     * Warnings associated with the device.
+     */
+    class DeviceWarnings
+    {
+        public static function from_json(mixed $json): DeviceWarnings|null
+        {
+            if (!$json) {
+                return null;
+            }
+            return new self(
+                created_at: $json->created_at ?? null,
+                message: $json->message ?? null,
+                warning_code: $json->warning_code ?? null,
+            );
+        }
+
+        public function __construct(
+            /**
+             * Date and time at which Seam created the warning.
+             */
+            public string|null $created_at,
+            /**
+             * Detailed description of the warning. Provides insights into the issue and potentially how to rectify it.
+             */
+            public string|null $message,
+            /**
+             * Unique identifier of the type of warning. Enables quick recognition and categorization of the issue.
+             */
+            public string|null $warning_code,
+        ) {}
     }
 }
 

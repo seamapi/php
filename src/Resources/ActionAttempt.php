@@ -111,6 +111,7 @@ namespace Seam\Resources {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -127,6 +128,10 @@ namespace Seam\Resources {
              * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
             public string|null $action_type,
+            /**
+             * Date and time at which the action attempt was created.
+             */
+            public string|null $created_at,
             /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
@@ -166,6 +171,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -183,6 +189,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -190,6 +200,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -225,6 +236,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -242,6 +254,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -249,6 +265,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -284,6 +301,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -301,6 +319,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -308,6 +330,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -343,6 +366,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -360,6 +384,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -367,6 +395,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -403,6 +432,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -420,6 +450,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -427,6 +461,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -462,6 +497,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -479,6 +515,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -486,6 +526,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -522,6 +563,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -539,6 +581,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -546,6 +592,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -581,6 +628,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -598,6 +646,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -605,6 +657,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -640,6 +693,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -657,6 +711,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -664,6 +722,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -700,6 +759,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -717,6 +777,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -724,6 +788,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -760,6 +825,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -777,6 +843,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -784,6 +854,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -820,6 +891,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -837,6 +909,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -844,6 +920,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -880,6 +957,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -897,6 +975,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -904,6 +986,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -940,6 +1023,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -957,6 +1041,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -964,6 +1052,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -999,6 +1088,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -1016,6 +1106,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -1023,6 +1117,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1059,6 +1154,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -1076,6 +1172,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -1083,6 +1183,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1118,6 +1219,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -1135,6 +1237,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -1142,6 +1248,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1177,6 +1284,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -1194,6 +1302,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -1201,6 +1313,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1236,6 +1349,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -1253,6 +1367,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -1260,6 +1378,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1295,6 +1414,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -1312,6 +1432,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -1319,6 +1443,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1354,6 +1479,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -1371,6 +1497,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -1378,6 +1508,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1413,6 +1544,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -1430,6 +1562,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -1437,6 +1573,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1472,6 +1609,7 @@ namespace Seam\Resources\ActionAttempt {
                 default => new self(
                     action_attempt_id: $json->action_attempt_id ?? null,
                     action_type: $json->action_type ?? null,
+                    created_at: $json->created_at ?? null,
                     status: $json->status ?? null,
                 ),
             };
@@ -1489,6 +1627,10 @@ namespace Seam\Resources\ActionAttempt {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * @var value-of<\Seam\Resources\ActionAttempt\Status>|string|null
              */
             string|null $status,
@@ -1496,6 +1638,7 @@ namespace Seam\Resources\ActionAttempt {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1550,6 +1693,7 @@ namespace Seam\Resources\ActionAttempt\LockDoor {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: isset($json->result)
                     ? \Seam\Resources\ActionAttempt\LockDoor\Success\Result::from_json(
@@ -1572,6 +1716,10 @@ namespace Seam\Resources\ActionAttempt\LockDoor {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -1587,6 +1735,7 @@ namespace Seam\Resources\ActionAttempt\LockDoor {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1605,6 +1754,7 @@ namespace Seam\Resources\ActionAttempt\LockDoor {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -1623,6 +1773,10 @@ namespace Seam\Resources\ActionAttempt\LockDoor {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -1638,6 +1792,7 @@ namespace Seam\Resources\ActionAttempt\LockDoor {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1656,6 +1811,7 @@ namespace Seam\Resources\ActionAttempt\LockDoor {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\LockDoor\Error\Error::from_json(
                         $json->error,
@@ -1678,6 +1834,10 @@ namespace Seam\Resources\ActionAttempt\LockDoor {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\LockDoor\Error\Error|null $error,
@@ -1693,6 +1853,7 @@ namespace Seam\Resources\ActionAttempt\LockDoor {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1768,6 +1929,7 @@ namespace Seam\Resources\ActionAttempt\UnlockDoor {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: isset($json->result)
                     ? \Seam\Resources\ActionAttempt\UnlockDoor\Success\Result::from_json(
@@ -1790,6 +1952,10 @@ namespace Seam\Resources\ActionAttempt\UnlockDoor {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -1805,6 +1971,7 @@ namespace Seam\Resources\ActionAttempt\UnlockDoor {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1823,6 +1990,7 @@ namespace Seam\Resources\ActionAttempt\UnlockDoor {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -1841,6 +2009,10 @@ namespace Seam\Resources\ActionAttempt\UnlockDoor {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -1856,6 +2028,7 @@ namespace Seam\Resources\ActionAttempt\UnlockDoor {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1874,6 +2047,7 @@ namespace Seam\Resources\ActionAttempt\UnlockDoor {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\UnlockDoor\Error\Error::from_json(
                         $json->error,
@@ -1896,6 +2070,10 @@ namespace Seam\Resources\ActionAttempt\UnlockDoor {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\UnlockDoor\Error\Error|null $error,
@@ -1911,6 +2089,7 @@ namespace Seam\Resources\ActionAttempt\UnlockDoor {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -1986,6 +2165,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: isset($json->result)
                     ? \Seam\Resources\ActionAttempt\ScanCredential\Success\Result::from_json(
@@ -2007,6 +2187,10 @@ namespace Seam\Resources\ActionAttempt\ScanCredential {
              * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
             string|null $action_type,
+            /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
             public null $error,
             /**
              * Result of scanning a card. If the attempt was successful, includes a snapshot of credential data read from the physical encoder, the corresponding data stored on Seam and the access system, and any associated warnings.
@@ -2020,6 +2204,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -2038,6 +2223,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -2055,6 +2241,10 @@ namespace Seam\Resources\ActionAttempt\ScanCredential {
              * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
             string|null $action_type,
+            /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
             public null $error,
             /**
              * Result of scanning a card. If the attempt was successful, includes a snapshot of credential data read from the physical encoder, the corresponding data stored on Seam and the access system, and any associated warnings.
@@ -2068,6 +2258,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -2086,6 +2277,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\ScanCredential\Error\Error::from_json(
                         $json->error,
@@ -2107,6 +2299,10 @@ namespace Seam\Resources\ActionAttempt\ScanCredential {
              * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
             string|null $action_type,
+            /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
             public \Seam\Resources\ActionAttempt\ScanCredential\Error\Error|null $error,
             /**
              * Result of scanning a card. If the attempt was successful, includes a snapshot of credential data read from the physical encoder, the corresponding data stored on Seam and the access system, and any associated warnings.
@@ -2120,6 +2316,7 @@ namespace Seam\Resources\ActionAttempt\ScanCredential {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -2887,6 +3084,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: isset($json->result)
                     ? \Seam\Resources\ActionAttempt\EncodeCredential\Success\Result::from_json(
@@ -2908,6 +3106,10 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential {
              * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
             string|null $action_type,
+            /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
             public null $error,
             /**
              * Result of an encoding attempt. If the attempt was successful, includes the credential data that was encoded onto the card.
@@ -2921,6 +3123,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -2939,6 +3142,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -2956,6 +3160,10 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential {
              * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
             string|null $action_type,
+            /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
             public null $error,
             /**
              * Result of an encoding attempt. If the attempt was successful, includes the credential data that was encoded onto the card.
@@ -2969,6 +3177,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -2987,6 +3196,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\EncodeCredential\Error\Error::from_json(
                         $json->error,
@@ -3008,6 +3218,10 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential {
              * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
             string|null $action_type,
+            /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
             public \Seam\Resources\ActionAttempt\EncodeCredential\Error\Error|null $error,
             /**
              * Result of an encoding attempt. If the attempt was successful, includes the credential data that was encoded onto the card.
@@ -3021,6 +3235,7 @@ namespace Seam\Resources\ActionAttempt\EncodeCredential {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -3554,6 +3769,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: isset($json->result)
                     ? \Seam\Resources\ActionAttempt\ScanToAssignCredential\Success\Result::from_json(
@@ -3575,6 +3791,10 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential {
              * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
             string|null $action_type,
+            /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
             public null $error,
             /**
              * Result of a scan to assign attempt. If the attempt was successful, includes the credential data that was scanned and assigned.
@@ -3588,6 +3808,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -3607,6 +3828,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -3624,6 +3846,10 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential {
              * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
             string|null $action_type,
+            /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
             public null $error,
             /**
              * Result of a scan to assign attempt. If the attempt was successful, includes the credential data that was scanned and assigned.
@@ -3637,6 +3863,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -3656,6 +3883,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\ScanToAssignCredential\Error\Error::from_json(
                         $json->error,
@@ -3677,6 +3905,10 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential {
              * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
             string|null $action_type,
+            /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
             public \Seam\Resources\ActionAttempt\ScanToAssignCredential\Error\Error|null $error,
             /**
              * Result of a scan to assign attempt. If the attempt was successful, includes the credential data that was scanned and assigned.
@@ -3690,6 +3922,7 @@ namespace Seam\Resources\ActionAttempt\ScanToAssignCredential {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -4218,6 +4451,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: isset($json->result)
                     ? \Seam\Resources\ActionAttempt\AssignCredential\Success\Result::from_json(
@@ -4239,6 +4473,10 @@ namespace Seam\Resources\ActionAttempt\AssignCredential {
              * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
             string|null $action_type,
+            /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
             public null $error,
             /**
              * Result of assigning a credential. If successful, includes the updated access method with the assigned credential.
@@ -4252,6 +4490,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -4270,6 +4509,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -4287,6 +4527,10 @@ namespace Seam\Resources\ActionAttempt\AssignCredential {
              * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
             string|null $action_type,
+            /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
             public null $error,
             /**
              * Result of assigning a credential. If successful, includes the updated access method with the assigned credential.
@@ -4300,6 +4544,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -4318,6 +4563,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\AssignCredential\Error\Error::from_json(
                         $json->error,
@@ -4339,6 +4585,10 @@ namespace Seam\Resources\ActionAttempt\AssignCredential {
              * @var value-of<\Seam\Resources\ActionAttempt\ActionType>|string|null
              */
             string|null $action_type,
+            /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
             public \Seam\Resources\ActionAttempt\AssignCredential\Error\Error|null $error,
             /**
              * Result of assigning a credential. If successful, includes the updated access method with the assigned credential.
@@ -4352,6 +4602,7 @@ namespace Seam\Resources\ActionAttempt\AssignCredential {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -4793,6 +5044,7 @@ namespace Seam\Resources\ActionAttempt\ResetSandboxWorkspace {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: $json->result ?? null,
                 status: $json->status ?? null,
@@ -4811,6 +5063,10 @@ namespace Seam\Resources\ActionAttempt\ResetSandboxWorkspace {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -4826,6 +5082,7 @@ namespace Seam\Resources\ActionAttempt\ResetSandboxWorkspace {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -4845,6 +5102,7 @@ namespace Seam\Resources\ActionAttempt\ResetSandboxWorkspace {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -4863,6 +5121,10 @@ namespace Seam\Resources\ActionAttempt\ResetSandboxWorkspace {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -4878,6 +5140,7 @@ namespace Seam\Resources\ActionAttempt\ResetSandboxWorkspace {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -4897,6 +5160,7 @@ namespace Seam\Resources\ActionAttempt\ResetSandboxWorkspace {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\ResetSandboxWorkspace\Error\Error::from_json(
                         $json->error,
@@ -4919,6 +5183,10 @@ namespace Seam\Resources\ActionAttempt\ResetSandboxWorkspace {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\ResetSandboxWorkspace\Error\Error|null $error,
@@ -4934,6 +5202,7 @@ namespace Seam\Resources\ActionAttempt\ResetSandboxWorkspace {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -4984,6 +5253,7 @@ namespace Seam\Resources\ActionAttempt\SetFanMode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: $json->result ?? null,
                 status: $json->status ?? null,
@@ -5002,6 +5272,10 @@ namespace Seam\Resources\ActionAttempt\SetFanMode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -5017,6 +5291,7 @@ namespace Seam\Resources\ActionAttempt\SetFanMode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5035,6 +5310,7 @@ namespace Seam\Resources\ActionAttempt\SetFanMode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -5053,6 +5329,10 @@ namespace Seam\Resources\ActionAttempt\SetFanMode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -5068,6 +5348,7 @@ namespace Seam\Resources\ActionAttempt\SetFanMode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5086,6 +5367,7 @@ namespace Seam\Resources\ActionAttempt\SetFanMode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\SetFanMode\Error\Error::from_json(
                         $json->error,
@@ -5108,6 +5390,10 @@ namespace Seam\Resources\ActionAttempt\SetFanMode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\SetFanMode\Error\Error|null $error,
@@ -5123,6 +5409,7 @@ namespace Seam\Resources\ActionAttempt\SetFanMode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5173,6 +5460,7 @@ namespace Seam\Resources\ActionAttempt\SetHvacMode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: $json->result ?? null,
                 status: $json->status ?? null,
@@ -5191,6 +5479,10 @@ namespace Seam\Resources\ActionAttempt\SetHvacMode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -5206,6 +5498,7 @@ namespace Seam\Resources\ActionAttempt\SetHvacMode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5224,6 +5517,7 @@ namespace Seam\Resources\ActionAttempt\SetHvacMode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -5242,6 +5536,10 @@ namespace Seam\Resources\ActionAttempt\SetHvacMode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -5257,6 +5555,7 @@ namespace Seam\Resources\ActionAttempt\SetHvacMode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5275,6 +5574,7 @@ namespace Seam\Resources\ActionAttempt\SetHvacMode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\SetHvacMode\Error\Error::from_json(
                         $json->error,
@@ -5297,6 +5597,10 @@ namespace Seam\Resources\ActionAttempt\SetHvacMode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\SetHvacMode\Error\Error|null $error,
@@ -5312,6 +5616,7 @@ namespace Seam\Resources\ActionAttempt\SetHvacMode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5363,6 +5668,7 @@ namespace Seam\Resources\ActionAttempt\ActivateClimatePreset {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: $json->result ?? null,
                 status: $json->status ?? null,
@@ -5381,6 +5687,10 @@ namespace Seam\Resources\ActionAttempt\ActivateClimatePreset {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -5396,6 +5706,7 @@ namespace Seam\Resources\ActionAttempt\ActivateClimatePreset {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5415,6 +5726,7 @@ namespace Seam\Resources\ActionAttempt\ActivateClimatePreset {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -5433,6 +5745,10 @@ namespace Seam\Resources\ActionAttempt\ActivateClimatePreset {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -5448,6 +5764,7 @@ namespace Seam\Resources\ActionAttempt\ActivateClimatePreset {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5467,6 +5784,7 @@ namespace Seam\Resources\ActionAttempt\ActivateClimatePreset {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\ActivateClimatePreset\Error\Error::from_json(
                         $json->error,
@@ -5489,6 +5807,10 @@ namespace Seam\Resources\ActionAttempt\ActivateClimatePreset {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\ActivateClimatePreset\Error\Error|null $error,
@@ -5504,6 +5826,7 @@ namespace Seam\Resources\ActionAttempt\ActivateClimatePreset {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5555,6 +5878,7 @@ namespace Seam\Resources\ActionAttempt\ActivateWeeklyProgram {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: $json->result ?? null,
                 status: $json->status ?? null,
@@ -5573,6 +5897,10 @@ namespace Seam\Resources\ActionAttempt\ActivateWeeklyProgram {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -5588,6 +5916,7 @@ namespace Seam\Resources\ActionAttempt\ActivateWeeklyProgram {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5607,6 +5936,7 @@ namespace Seam\Resources\ActionAttempt\ActivateWeeklyProgram {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -5625,6 +5955,10 @@ namespace Seam\Resources\ActionAttempt\ActivateWeeklyProgram {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -5640,6 +5974,7 @@ namespace Seam\Resources\ActionAttempt\ActivateWeeklyProgram {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5659,6 +5994,7 @@ namespace Seam\Resources\ActionAttempt\ActivateWeeklyProgram {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\ActivateWeeklyProgram\Error\Error::from_json(
                         $json->error,
@@ -5681,6 +6017,10 @@ namespace Seam\Resources\ActionAttempt\ActivateWeeklyProgram {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\ActivateWeeklyProgram\Error\Error|null $error,
@@ -5696,6 +6036,7 @@ namespace Seam\Resources\ActionAttempt\ActivateWeeklyProgram {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5747,6 +6088,7 @@ namespace Seam\Resources\ActionAttempt\SimulateKeypadCodeEntry {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: $json->result ?? null,
                 status: $json->status ?? null,
@@ -5765,6 +6107,10 @@ namespace Seam\Resources\ActionAttempt\SimulateKeypadCodeEntry {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -5780,6 +6126,7 @@ namespace Seam\Resources\ActionAttempt\SimulateKeypadCodeEntry {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5799,6 +6146,7 @@ namespace Seam\Resources\ActionAttempt\SimulateKeypadCodeEntry {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -5817,6 +6165,10 @@ namespace Seam\Resources\ActionAttempt\SimulateKeypadCodeEntry {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -5832,6 +6184,7 @@ namespace Seam\Resources\ActionAttempt\SimulateKeypadCodeEntry {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5851,6 +6204,7 @@ namespace Seam\Resources\ActionAttempt\SimulateKeypadCodeEntry {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\SimulateKeypadCodeEntry\Error\Error::from_json(
                         $json->error,
@@ -5873,6 +6227,10 @@ namespace Seam\Resources\ActionAttempt\SimulateKeypadCodeEntry {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\SimulateKeypadCodeEntry\Error\Error|null $error,
@@ -5888,6 +6246,7 @@ namespace Seam\Resources\ActionAttempt\SimulateKeypadCodeEntry {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5939,6 +6298,7 @@ namespace Seam\Resources\ActionAttempt\SimulateManualLockViaKeypad {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: $json->result ?? null,
                 status: $json->status ?? null,
@@ -5957,6 +6317,10 @@ namespace Seam\Resources\ActionAttempt\SimulateManualLockViaKeypad {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -5972,6 +6336,7 @@ namespace Seam\Resources\ActionAttempt\SimulateManualLockViaKeypad {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -5991,6 +6356,7 @@ namespace Seam\Resources\ActionAttempt\SimulateManualLockViaKeypad {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -6009,6 +6375,10 @@ namespace Seam\Resources\ActionAttempt\SimulateManualLockViaKeypad {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -6024,6 +6394,7 @@ namespace Seam\Resources\ActionAttempt\SimulateManualLockViaKeypad {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6043,6 +6414,7 @@ namespace Seam\Resources\ActionAttempt\SimulateManualLockViaKeypad {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\SimulateManualLockViaKeypad\Error\Error::from_json(
                         $json->error,
@@ -6065,6 +6437,10 @@ namespace Seam\Resources\ActionAttempt\SimulateManualLockViaKeypad {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\SimulateManualLockViaKeypad\Error\Error|null $error,
@@ -6080,6 +6456,7 @@ namespace Seam\Resources\ActionAttempt\SimulateManualLockViaKeypad {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6131,6 +6508,7 @@ namespace Seam\Resources\ActionAttempt\PushThermostatPrograms {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: $json->result ?? null,
                 status: $json->status ?? null,
@@ -6149,6 +6527,10 @@ namespace Seam\Resources\ActionAttempt\PushThermostatPrograms {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -6164,6 +6546,7 @@ namespace Seam\Resources\ActionAttempt\PushThermostatPrograms {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6183,6 +6566,7 @@ namespace Seam\Resources\ActionAttempt\PushThermostatPrograms {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -6201,6 +6585,10 @@ namespace Seam\Resources\ActionAttempt\PushThermostatPrograms {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -6216,6 +6604,7 @@ namespace Seam\Resources\ActionAttempt\PushThermostatPrograms {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6235,6 +6624,7 @@ namespace Seam\Resources\ActionAttempt\PushThermostatPrograms {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\PushThermostatPrograms\Error\Error::from_json(
                         $json->error,
@@ -6257,6 +6647,10 @@ namespace Seam\Resources\ActionAttempt\PushThermostatPrograms {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\PushThermostatPrograms\Error\Error|null $error,
@@ -6272,6 +6666,7 @@ namespace Seam\Resources\ActionAttempt\PushThermostatPrograms {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6322,6 +6717,7 @@ namespace Seam\Resources\ActionAttempt\ConfigureAutoLock {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: $json->result ?? null,
                 status: $json->status ?? null,
@@ -6340,6 +6736,10 @@ namespace Seam\Resources\ActionAttempt\ConfigureAutoLock {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -6355,6 +6755,7 @@ namespace Seam\Resources\ActionAttempt\ConfigureAutoLock {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6373,6 +6774,7 @@ namespace Seam\Resources\ActionAttempt\ConfigureAutoLock {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -6391,6 +6793,10 @@ namespace Seam\Resources\ActionAttempt\ConfigureAutoLock {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -6406,6 +6812,7 @@ namespace Seam\Resources\ActionAttempt\ConfigureAutoLock {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6424,6 +6831,7 @@ namespace Seam\Resources\ActionAttempt\ConfigureAutoLock {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\ConfigureAutoLock\Error\Error::from_json(
                         $json->error,
@@ -6446,6 +6854,10 @@ namespace Seam\Resources\ActionAttempt\ConfigureAutoLock {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\ConfigureAutoLock\Error\Error|null $error,
@@ -6461,6 +6873,7 @@ namespace Seam\Resources\ActionAttempt\ConfigureAutoLock {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6512,6 +6925,7 @@ namespace Seam\Resources\ActionAttempt\ConvertAccessCodeToManaged {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: $json->result ?? null,
                 status: $json->status ?? null,
@@ -6530,6 +6944,10 @@ namespace Seam\Resources\ActionAttempt\ConvertAccessCodeToManaged {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -6545,6 +6963,7 @@ namespace Seam\Resources\ActionAttempt\ConvertAccessCodeToManaged {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6564,6 +6983,7 @@ namespace Seam\Resources\ActionAttempt\ConvertAccessCodeToManaged {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -6582,6 +7002,10 @@ namespace Seam\Resources\ActionAttempt\ConvertAccessCodeToManaged {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -6597,6 +7021,7 @@ namespace Seam\Resources\ActionAttempt\ConvertAccessCodeToManaged {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6616,6 +7041,7 @@ namespace Seam\Resources\ActionAttempt\ConvertAccessCodeToManaged {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\ConvertAccessCodeToManaged\Error\Error::from_json(
                         $json->error,
@@ -6638,6 +7064,10 @@ namespace Seam\Resources\ActionAttempt\ConvertAccessCodeToManaged {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\ConvertAccessCodeToManaged\Error\Error|null $error,
@@ -6653,6 +7083,7 @@ namespace Seam\Resources\ActionAttempt\ConvertAccessCodeToManaged {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6700,6 +7131,7 @@ namespace Seam\Resources\ActionAttempt\SyncAccessCodes {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: $json->result ?? null,
                 status: $json->status ?? null,
@@ -6718,6 +7150,10 @@ namespace Seam\Resources\ActionAttempt\SyncAccessCodes {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -6733,6 +7169,7 @@ namespace Seam\Resources\ActionAttempt\SyncAccessCodes {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6748,6 +7185,7 @@ namespace Seam\Resources\ActionAttempt\SyncAccessCodes {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -6766,6 +7204,10 @@ namespace Seam\Resources\ActionAttempt\SyncAccessCodes {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -6781,6 +7223,7 @@ namespace Seam\Resources\ActionAttempt\SyncAccessCodes {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6796,6 +7239,7 @@ namespace Seam\Resources\ActionAttempt\SyncAccessCodes {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\SyncAccessCodes\Error\Error::from_json(
                         $json->error,
@@ -6818,6 +7262,10 @@ namespace Seam\Resources\ActionAttempt\SyncAccessCodes {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\SyncAccessCodes\Error\Error|null $error,
@@ -6833,6 +7281,7 @@ namespace Seam\Resources\ActionAttempt\SyncAccessCodes {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6880,6 +7329,7 @@ namespace Seam\Resources\ActionAttempt\CreateAccessCode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: isset($json->result)
                     ? \Seam\Resources\ActionAttempt\CreateAccessCode\Success\Result::from_json(
@@ -6902,6 +7352,10 @@ namespace Seam\Resources\ActionAttempt\CreateAccessCode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -6917,6 +7371,7 @@ namespace Seam\Resources\ActionAttempt\CreateAccessCode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6932,6 +7387,7 @@ namespace Seam\Resources\ActionAttempt\CreateAccessCode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -6950,6 +7406,10 @@ namespace Seam\Resources\ActionAttempt\CreateAccessCode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -6965,6 +7425,7 @@ namespace Seam\Resources\ActionAttempt\CreateAccessCode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -6980,6 +7441,7 @@ namespace Seam\Resources\ActionAttempt\CreateAccessCode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\CreateAccessCode\Error\Error::from_json(
                         $json->error,
@@ -7002,6 +7464,10 @@ namespace Seam\Resources\ActionAttempt\CreateAccessCode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\CreateAccessCode\Error\Error|null $error,
@@ -7017,6 +7483,7 @@ namespace Seam\Resources\ActionAttempt\CreateAccessCode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7089,6 +7556,7 @@ namespace Seam\Resources\ActionAttempt\DeleteAccessCode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: $json->result ?? null,
                 status: $json->status ?? null,
@@ -7107,6 +7575,10 @@ namespace Seam\Resources\ActionAttempt\DeleteAccessCode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -7122,6 +7594,7 @@ namespace Seam\Resources\ActionAttempt\DeleteAccessCode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7137,6 +7610,7 @@ namespace Seam\Resources\ActionAttempt\DeleteAccessCode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -7155,6 +7629,10 @@ namespace Seam\Resources\ActionAttempt\DeleteAccessCode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -7170,6 +7648,7 @@ namespace Seam\Resources\ActionAttempt\DeleteAccessCode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7185,6 +7664,7 @@ namespace Seam\Resources\ActionAttempt\DeleteAccessCode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\DeleteAccessCode\Error\Error::from_json(
                         $json->error,
@@ -7207,6 +7687,10 @@ namespace Seam\Resources\ActionAttempt\DeleteAccessCode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\DeleteAccessCode\Error\Error|null $error,
@@ -7222,6 +7706,7 @@ namespace Seam\Resources\ActionAttempt\DeleteAccessCode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7269,6 +7754,7 @@ namespace Seam\Resources\ActionAttempt\UpdateAccessCode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: isset($json->result)
                     ? \Seam\Resources\ActionAttempt\UpdateAccessCode\Success\Result::from_json(
@@ -7291,6 +7777,10 @@ namespace Seam\Resources\ActionAttempt\UpdateAccessCode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -7306,6 +7796,7 @@ namespace Seam\Resources\ActionAttempt\UpdateAccessCode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7321,6 +7812,7 @@ namespace Seam\Resources\ActionAttempt\UpdateAccessCode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -7339,6 +7831,10 @@ namespace Seam\Resources\ActionAttempt\UpdateAccessCode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -7354,6 +7850,7 @@ namespace Seam\Resources\ActionAttempt\UpdateAccessCode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7369,6 +7866,7 @@ namespace Seam\Resources\ActionAttempt\UpdateAccessCode {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\UpdateAccessCode\Error\Error::from_json(
                         $json->error,
@@ -7391,6 +7889,10 @@ namespace Seam\Resources\ActionAttempt\UpdateAccessCode {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\UpdateAccessCode\Error\Error|null $error,
@@ -7406,6 +7908,7 @@ namespace Seam\Resources\ActionAttempt\UpdateAccessCode {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7479,6 +7982,7 @@ namespace Seam\Resources\ActionAttempt\CreateNoiseThreshold {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: isset($json->result)
                     ? \Seam\Resources\ActionAttempt\CreateNoiseThreshold\Success\Result::from_json(
@@ -7501,6 +8005,10 @@ namespace Seam\Resources\ActionAttempt\CreateNoiseThreshold {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -7516,6 +8024,7 @@ namespace Seam\Resources\ActionAttempt\CreateNoiseThreshold {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7532,6 +8041,7 @@ namespace Seam\Resources\ActionAttempt\CreateNoiseThreshold {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -7550,6 +8060,10 @@ namespace Seam\Resources\ActionAttempt\CreateNoiseThreshold {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -7565,6 +8079,7 @@ namespace Seam\Resources\ActionAttempt\CreateNoiseThreshold {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7580,6 +8095,7 @@ namespace Seam\Resources\ActionAttempt\CreateNoiseThreshold {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\CreateNoiseThreshold\Error\Error::from_json(
                         $json->error,
@@ -7602,6 +8118,10 @@ namespace Seam\Resources\ActionAttempt\CreateNoiseThreshold {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\CreateNoiseThreshold\Error\Error|null $error,
@@ -7617,6 +8137,7 @@ namespace Seam\Resources\ActionAttempt\CreateNoiseThreshold {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7690,6 +8211,7 @@ namespace Seam\Resources\ActionAttempt\DeleteNoiseThreshold {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: $json->result ?? null,
                 status: $json->status ?? null,
@@ -7708,6 +8230,10 @@ namespace Seam\Resources\ActionAttempt\DeleteNoiseThreshold {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -7723,6 +8249,7 @@ namespace Seam\Resources\ActionAttempt\DeleteNoiseThreshold {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7739,6 +8266,7 @@ namespace Seam\Resources\ActionAttempt\DeleteNoiseThreshold {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -7757,6 +8285,10 @@ namespace Seam\Resources\ActionAttempt\DeleteNoiseThreshold {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -7772,6 +8304,7 @@ namespace Seam\Resources\ActionAttempt\DeleteNoiseThreshold {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7787,6 +8320,7 @@ namespace Seam\Resources\ActionAttempt\DeleteNoiseThreshold {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\DeleteNoiseThreshold\Error\Error::from_json(
                         $json->error,
@@ -7809,6 +8343,10 @@ namespace Seam\Resources\ActionAttempt\DeleteNoiseThreshold {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\DeleteNoiseThreshold\Error\Error|null $error,
@@ -7824,6 +8362,7 @@ namespace Seam\Resources\ActionAttempt\DeleteNoiseThreshold {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7872,6 +8411,7 @@ namespace Seam\Resources\ActionAttempt\UpdateNoiseThreshold {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: isset($json->result)
                     ? \Seam\Resources\ActionAttempt\UpdateNoiseThreshold\Success\Result::from_json(
@@ -7894,6 +8434,10 @@ namespace Seam\Resources\ActionAttempt\UpdateNoiseThreshold {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -7909,6 +8453,7 @@ namespace Seam\Resources\ActionAttempt\UpdateNoiseThreshold {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7925,6 +8470,7 @@ namespace Seam\Resources\ActionAttempt\UpdateNoiseThreshold {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: null,
                 result: null,
                 status: $json->status ?? null,
@@ -7943,6 +8489,10 @@ namespace Seam\Resources\ActionAttempt\UpdateNoiseThreshold {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public null $error,
@@ -7958,6 +8508,7 @@ namespace Seam\Resources\ActionAttempt\UpdateNoiseThreshold {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
@@ -7973,6 +8524,7 @@ namespace Seam\Resources\ActionAttempt\UpdateNoiseThreshold {
             return new self(
                 action_attempt_id: $json->action_attempt_id ?? null,
                 action_type: $json->action_type ?? null,
+                created_at: $json->created_at ?? null,
                 error: isset($json->error)
                     ? \Seam\Resources\ActionAttempt\UpdateNoiseThreshold\Error\Error::from_json(
                         $json->error,
@@ -7995,6 +8547,10 @@ namespace Seam\Resources\ActionAttempt\UpdateNoiseThreshold {
              */
             string|null $action_type,
             /**
+             * Date and time at which the action attempt was created.
+             */
+            string|null $created_at,
+            /**
              * Error associated with the action.
              */
             public \Seam\Resources\ActionAttempt\UpdateNoiseThreshold\Error\Error|null $error,
@@ -8010,6 +8566,7 @@ namespace Seam\Resources\ActionAttempt\UpdateNoiseThreshold {
             parent::__construct(
                 action_attempt_id: $action_attempt_id,
                 action_type: $action_type,
+                created_at: $created_at,
                 status: $status,
             );
         }
